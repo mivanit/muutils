@@ -1,131 +1,592 @@
 import functools
+import json
 import pdb
-from typing import *
-from dataclasses import is_dataclass, asdict
+from typing import Any, Dict, List, Optional, Tuple, Type, Union, Callable, Literal, Iterable
+from dataclasses import dataclass, is_dataclass, asdict
 from collections import namedtuple
 import inspect
+import typing
+import warnings
+
+
+_NUMPY_WORKING: bool
+try:
+    import numpy as np
+    _NUMPY_WORKING = True
+except ImportError:
+    warnings.warn("numpy not found, cannot serialize numpy arrays!")
+    _NUMPY_WORKING = False
+
+JSONitem = Union[bool, int, float, str, list, dict, None]
+Hashableitem = Union[bool, int, float, str, tuple]
+
+
+class UniversalContainer:
+    """contains everything -- `x in UniversalContainer()` is always True"""
+    def __contains__(self, x: Any) -> bool:
+        return True
 
 
 def isinstance_namedtuple(x):
-	"""checks if `x` is a `namedtuple`
+    """checks if `x` is a `namedtuple`
 
-	credit to https://stackoverflow.com/questions/2166818/how-to-check-if-an-object-is-an-instance-of-a-namedtuple
-	"""
-	t = type(x)
-	b = t.__bases__
-	if len(b) != 1 or b[0] != tuple:
-		return False
-	f = getattr(t, "_fields", None)
-	if not isinstance(f, tuple):
-		return False
-	return all(type(n) == str for n in f)
+    credit to https://stackoverflow.com/questions/2166818/how-to-check-if-an-object-is-an-instance-of-a-namedtuple
+    """
+    t = type(x)
+    b = t.__bases__
+    if len(b) != 1 or b[0] != tuple:
+        return False
+    f = getattr(t, "_fields", None)
+    if not isinstance(f, tuple):
+        return False
+    return all(type(n) == str for n in f)
 
 
 def try_catch(func: Callable):
+    @functools.wraps(func)
+    def newfunc(*args, **kwargs):
+        try:
+            return func(*args, **kwargs)
+        except Exception as e:
+            return f"{e.__class__.__name__}: {e}"
 
-	@functools.wraps(func)
-	def newfunc(*args, **kwargs):
-		try:
-			return func(*args, **kwargs)
-		except Exception as e:
-			return f'{e.__class__.__name__}: {e}'
-	
-	return newfunc
+    return newfunc
+
 
 SERIALIZER_SPECIAL_KEYS: List[str] = [
-	"__name__",
-	"__doc__",
-	"__module__",
-	"__class__",
-	"__dict__",
-	"__annotations__",
+    "__name__",
+    "__doc__",
+    "__module__",
+    "__class__",
+    "__dict__",
+    "__annotations__",
 ]
 
 SERIALIZER_SPECIAL_FUNCS: Dict[str, Callable] = {
-	"str": str,
-	"type": try_catch(lambda x: type(x).__name__),
-	"repr": try_catch(lambda x: repr(x)),
-	"code": try_catch(lambda x: inspect.getsource(x)),
-	"sourcefile": try_catch(lambda x: inspect.getsourcefile(x)),
+    "str": str,
+    "type": try_catch(lambda x: type(x).__name__),
+    "repr": try_catch(lambda x: repr(x)),
+    "code": try_catch(lambda x: inspect.getsource(x)),
+    "sourcefile": try_catch(lambda x: inspect.getsourcefile(x)),
 }
+
+ErrorMode = Literal["ignore", "warn", "except"]
+
+ArrayMode = Literal["list", "array_list_meta", "array_hex_meta"]
+
+
+def serialize_array(arr: Any, array_mode: ArrayMode = "array_list_meta") -> JSONitem:
+    """serialize an array"""
+    if array_mode == "array_list_meta":
+        return {
+            "__format__": "array_list_meta",
+            "shape": arr.shape,
+            "dtype": str(arr.dtype),
+            "data": arr.tolist(),
+        }
+    elif array_mode == "list":
+        return arr.tolist()
+    elif array_mode == "array_hex_meta":
+        return {
+            "__format__": "array_hex_meta",
+            "shape": arr.shape,
+            "dtype": str(arr.dtype),
+            "data": arr.tobytes().hex(),
+        }
+    else:
+        raise ValueError(f"invalid array_mode: {array_mode}")
+
+def infer_array_mode(arr: JSONitem) -> ArrayMode:
+    if isinstance(arr, dict):
+        fmt: Optional[str] = arr.get("__format__", None)
+        if fmt == "array_list_meta":
+            if type(arr["data"]) != list:
+                raise ValueError(f"invalid list format: {arr}")
+            return fmt
+        elif fmt == "array_hex_meta":
+            if type(arr["data"]) != str:
+                raise ValueError(f"invalid hex format: {arr}")
+            return fmt
+        else:
+            raise ValueError(f"invalid format: {arr}")
+
+    elif isinstance(arr, list):
+        return "list"
+    else:
+        raise ValueError(f"cannot infer array_mode from {arr}")
+
+def load_array(arr: JSONitem, array_mode: Optional[ArrayMode] = None) -> Any:
+    # try to infer the array_mode
+    array_mode_inferred: ArrayMode = infer_array_mode(arr)
+    if array_mode is None:
+        array_mode = array_mode_inferred
+    elif array_mode != array_mode_inferred:
+        warnings.warn(f"array_mode {array_mode} does not match inferred array_mode {array_mode_inferred}")        
+
+    # actually load the array
+    if array_mode == "array_list_meta":
+        data = np.array(arr["data"], dtype=arr["dtype"])
+        if tuple(arr["shape"]) != tuple(data.shape):
+            raise ValueError(f"invalid shape: {arr}")
+        return data
+    elif array_mode == "array_hex_meta":
+        data = np.frombuffer(bytes.fromhex(arr["data"]), dtype=arr["dtype"])
+        return data.reshape(arr["shape"])
+    elif array_mode == "list":
+        return np.array(arr)
+    else:
+        raise ValueError(f"invalid array_mode: {array_mode}")
+
 
 
 def json_serialize(
-	obj: Any,
-	depth: int = -1,
-	do_numpy: bool = True,
-	do_torch: bool = True,
-	except_mode: Literal["ignore", "warn", "except"] = "except",
-) -> Any:
+    obj: Any,
+    depth: int = -1,
+    array_mode: ArrayMode = "array_list_meta",
+    error_mode: ErrorMode = "except",
+    **kwargs,
+) -> JSONitem:
 
-	newdepth: int = depth - 1
-	try:
-		# check for special `serialize` method
-		if hasattr(obj, "serialize"):
-			# print(f'\n### using custom serialize: {str(obj) = }\n')
-			return json_serialize(obj.serialize())
+    if len(kwargs) > 0:
+        warnings.warn(f"unused kwargs: {kwargs}")
 
-		# if `None`, return `None`
-		if obj is None:
-			return None
+    newdepth: int = depth - 1
+    try:
+        # check for special `serialize` method
+        if hasattr(obj, "serialize"):
+            # print(f'\n### using custom serialize: {str(obj) = }\n')
+            return json_serialize(obj.serialize())
 
-		# if primitive type, just add it
-		if isinstance(obj, (bool, int, float, str)):
-			return obj
+        # if `None`, return `None`
+        if obj is None:
+            return None
 
-		# if max depth is reached, return the object as a string and dont recurse
-		if depth == 0:
-			return str(obj)
+        # if primitive type, just add it
+        if isinstance(obj, (bool, int, float, str)):
+            return obj
 
-		if isinstance(obj, dict):
-			# print(f'\n### reading obj as dict: {str(obj)}')
-			# if dict, recurse
-			out_dict: Dict[str, Any] = dict()
-			for k, v in obj.items():
-				out_dict[str(k)] = json_serialize(v, newdepth)
-			return out_dict
+        # if max depth is reached, return the object as a string and dont recurse
+        if depth == 0:
+            return str(obj)
 
-		elif isinstance_namedtuple(obj):
-			# if namedtuple, treat as dict
-			return json_serialize(dict(obj._asdict()), newdepth)
+        if isinstance(obj, dict):
+            # print(f'\n### reading obj as dict: {str(obj)}')
+            # if dict, recurse
+            out_dict: Dict[str, JSONitem] = dict()
+            for k, v in obj.items():
+                out_dict[str(k)] = json_serialize(v, newdepth)
+            return out_dict
 
-		elif is_dataclass(obj):
-			# if dataclass, treat as dict
-			# print(f'\n### reading obj as dataclass: {str(obj)}')
-			return {k: json_serialize(getattr(obj, k)) for k in obj.__dataclass_fields__}
+        elif isinstance_namedtuple(obj):
+            # if namedtuple, treat as dict
+            return json_serialize(dict(obj._asdict()), newdepth)
 
-		elif isinstance(obj, (set, list, tuple)) or isinstance(obj, Iterable):
-			# if iterable, recurse
-			# print(f'\n### reading obj as iterable: {str(obj)}')
-			return [json_serialize(x, newdepth) for x in obj]
-		else:
-			# check for numpy and torch
-			if do_numpy:
-				try:
-					import numpy as np
+        elif is_dataclass(obj):
+            # if dataclass, treat as dict
+            # print(f'\n### reading obj as dataclass: {str(obj)}')
+            return {
+                k: json_serialize(getattr(obj, k)) 
+                for k in obj.__dataclass_fields__
+            }
 
-					if isinstance(obj, np.ndarray):
-						return obj.tolist()
-				except ImportError:
-					pass
-			if do_torch:
-				try:
-					import torch
+        elif isinstance(obj, (set, list, tuple)) or isinstance(obj, Iterable):
+            # if iterable, recurse
+            # print(f'\n### reading obj as iterable: {str(obj)}')
+            return [json_serialize(x, newdepth) for x in obj]            
+        elif type(obj) == "<class 'numpy.ndarray'>":
+            # try serializing numpy arrays
+            return serialize_array(obj, array_mode)
+        elif type(obj) == "<class 'torch.Tensor'>":
+            return serialize_array(obj.detach().cpu().numpy())
+        else:
+            # if not basic type, serialize it however we can
+            return {
+                **{k: str(getattr(obj, k, None)) for k in SERIALIZER_SPECIAL_KEYS},
+                **{k: str(f(obj)) for k, f in SERIALIZER_SPECIAL_FUNCS.items()},
+            }
+    except Exception as e:
+        if error_mode == "except":
+            raise e
+        elif error_mode == "warn":
+            warnings.warn(f"error serializing, will return as string\n{obj = }\nexception = {e}")
 
-					if isinstance(obj, torch.Tensor):
-						return obj.detach().cpu().numpy().tolist()
-				except ImportError:
-					pass
+        return str(obj)
 
-			# if not basic type, serialize it however we can
-			return {
-				**{k: str(getattr(obj, k, None)) for k in SERIALIZER_SPECIAL_KEYS},
-				**{k: str(f(obj)) for k, f in SERIALIZER_SPECIAL_FUNCS.items()},
-			}
-	except Exception as e:
-		if except_mode == "except":
-			raise e
-		elif except_mode == "warn":
-			print(f"!!! error serializing {obj}: {e}")
 
-		return str(obj)
+def _recursive_hashify(obj: Any, force: bool = True) -> Hashableitem:
+    if isinstance(obj, dict):
+        return tuple(sorted(
+            (k, _recursive_hashify(v)) 
+            for k, v in obj.items()
+        ))
+    elif isinstance(obj, (tuple, list, Iterable)):
+        return tuple(
+            _recursive_hashify(v)
+            for v in obj
+        )
+    elif isinstance(obj, (bool, int, float, str)):
+        return obj
+    else:
+        if force:
+            return str(obj)
+        else:
+            raise ValueError(f"cannot hashify:\n{obj}")        
+
+
+def hashify(obj: Any, force: bool = True) -> Hashableitem:
+    """hashify an object"""
+    data = json_serialize(obj, depth=-1)
+
+    # recursive hashify, turning dicts and lists into tuples
+    return _recursive_hashify(data, force=force)
+
+
+def serialize_torch_module(
+        obj: "torch.nn.Module", 
+        *,
+        member_typecasts: Dict[str, Callable],
+        array_mode: ArrayMode = "array_list_meta",
+    ) -> JSONitem:
+    """serialize a torch.nn.Module"""
+    return {
+        "__format__": "torch_module",
+        "name": obj.__class__.__name__,
+        "state_dict": {
+            k : serialize_array(v.cpu().numpy(), array_mode=array_mode)
+            for k, v in obj.state_dict().items()
+        },
+        "members_dict": {
+            k : (
+                json_serialize(v)
+                if k not in member_typecasts
+                else json_serialize(member_typecasts[k](v))
+            )
+            for k, v in obj.__dict__.items()
+            if not k.startswith("_")
+        },
+    }
+
+def load_torch_module_factory(
+        cls, 
+        *,
+        members_exclude: List[str],
+        typecasts: Dict[str, Callable],
+    ) -> Callable[[Any, JSONitem], "torch.nn.Module"]:
+    import torch
+
+    @classmethod
+    def load(cls, item: JSONitem) -> "torch.nn.Module":
+        assert item["__format__"] == "torch_module"
+        assert item["name"] == cls.__name__
+
+        module_obj = cls(
+            **{
+                k: (
+                    v 
+                    if k not in typecasts 
+                    else typecasts[k](v)
+                )
+                for k, v in item["members_dict"].items()
+                if k not in members_exclude
+            }
+        )
+        module_obj.load_state_dict(
+            {
+                k: torch.from_numpy(load_array(v))
+                for k, v in item["state_dict"].items()
+            },
+        )
+        return module_obj
+
+    return load
+
+
+
+def dataclass_serializer_factory(
+        cls, 
+        special_serializers: Optional[dict[str, Callable]] = None,
+        fields_exclude: Optional[Iterable[str]] = None,
+    ) -> Callable[[Any], JSONitem]:
+    """outputs a `.serialize` method for a dataclass,
+    where fields present in `special_serializers` are serialized using the corresponding function.
+
+    each function in `special_serializers` should take the class itself as an argument, and return a JSONitem.
+    """
+    # make it an empty dict if not provided
+    if special_serializers is None:
+        special_serializers = dict()
+
+    if fields_exclude is None:
+        fields_exclude = list()
+
+    def serialize(self):
+        # get the base outputs for all keys in the dataclass but which dont have a special serializer
+        base_output: dict[str, JSONitem] = {
+            k: (
+                json_serialize(getattr(self, k))
+            )
+            for k in self.__dataclass_fields__
+            if (
+                (k not in special_serializers)
+                and (k not in fields_exclude)
+            )
+        }
+
+        # update with the special serializers
+        return {
+            **base_output,
+            **{
+                k: special_serializers[k](self)
+                for k in special_serializers
+                if k not in fields_exclude
+            },
+        }
+
+    return serialize
+
+TypeErrorMode = Union[ErrorMode, Literal["try_convert"]]
+
+
+def loader_typecheck_factory(
+        key: str,
+        expected_type: type, 
+        error_mode: TypeErrorMode = "except",
+    ) -> Callable[[JSONitem], Any]:
+    """outputs a loader function, which checks the type of the argument
+    
+    if the argument `data` to the loader is not of the expected type:
+    - if `error_mode == "except"`, raises a TypeError 
+    - if `error_mode == "try_convert"` return `expected_type(data)`. this might raise further exceptions
+    - if `error_mode == "warn"`, print a warning and return `data`
+    - if `error_mode == "ignore"`, return `data`
+
+    TODO: perhaps an option to warn, but try to convert?
+    """
+
+    origin_type: type = typing.get_origin(expected_type)
+    if origin_type is None:
+        # set it back if `get_origin()` returns `None`
+        origin_type = expected_type
+
+    type_args: Tuple[type, ...] = typing.get_args(expected_type)
+    return_raw: bool = False
+
+    try:
+        if origin_type is Union:
+            pass
+        elif isinstance(None, origin_type):
+            pass
+    except TypeError as e:
+        warnings.warn(f"error processing {origin_type = } for {key = }, loader will return raw data\n\t{e}")
+        return_raw = True
+
+    def loader(data: JSONitem) -> Any:
+        if key not in data:
+            raise KeyError(f"while executing `.load(data)`, key {key} not found in data: {data = }")
+
+        if return_raw:
+            return data[key]
+
+        # TODO: make unions work correctly
+        if (origin_type is Union) or isinstance(data[key], origin_type):
+                return data[key]
+        else:
+            if error_mode == "warn":
+                warnings.warn(f"error loading, will return raw data")
+                return data[key]
+            elif error_mode == "except":
+                raise TypeError(f"expected {origin_type} for {key = }, got {type(data)}")
+            elif error_mode == "try_convert":
+                return origin_type(data)
+            elif error_mode == "ignore":
+                return data[key]
+            else:
+                raise ValueError(f"error mode {error_mode} not recognized")
+
+    return loader
+
+
+def dataclass_loader_factory(
+        cls,
+        special_loaders: Optional[dict[str, Callable[[JSONitem], Any]]] = None,
+        loader_types_override: Optional[dict[str, type]] = None,
+        # key_error_mode: ErrorMode = "except",
+        type_error_mode: TypeErrorMode = "except",
+    ) -> Callable[[JSONitem], Any]:
+    """returns a `.load()` method for a dataclass, recursively calling loader functions if found
+    
+    where arguments present in `special_loaders` are loaded using the corresponding function
+    functions in `special_loaders` should take a JSONitem (the whole dataset) and return an item
+    
+
+    `type_error_mode` determines how to handle the JSON item type not matching the type hint of the dataclass field.
+
+    ```
+    (not working) 
+    `key_error_mode` determines how to handle not being able to find the key in the JSONitem.
+    for "warn" or "ignore", a `None` value is given to the key, unless a default exists~
+    ```
+    """
+
+    # make it an empty dict if not provided
+    if special_loaders is None:
+        special_loaders = dict()
+    
+    if loader_types_override is None:
+        loader_types_override = dict()
+
+    # check all loaders make sense
+    for key in special_loaders:
+        if key not in cls.__dataclass_fields__:
+            raise ValueError(f"{key} is not a field of {cls}")
+
+    # assemble actual loaders
+    type_hints: dict[str, Any] = typing.get_type_hints(cls)
+
+    loader_funcs: dict[str, Callable[[JSONitem], Any]] = dict()
+
+    for k in cls.__dataclass_fields__:
+        # first, use the special loader
+        if k in special_loaders:
+            loader_funcs[k] = special_loaders[k]
+
+        # get the type hint for the field
+        elif k in type_hints:
+            # if it is a class with a `.load()` method, use that
+            if isinstance(type_hints[k], type) and hasattr(type_hints[k], "load"):
+                k_loader: Callable = lambda data: type_hints[k].load(data[k])
+                # check the `load()` has the correct signature
+                k_loader_signature: inspect.Signature = inspect.signature(k_loader)
+                if len([
+                    True
+                    for p_name, p_cls in k_loader_signature.parameters.items()
+                    if p_cls.default == inspect._empty
+                ]) != 1:
+                    raise TypeError(f"`.load()` method for {k} has incorrect signature, expected exactly 1 argument without a default value:\n\t{k = }\n\t{k_loader = }\n\t{k_loader_signature = }\n\t{k_loader_signature.parameters = }")
+
+                # set the load function if everything works
+                loader_funcs[k] = k_loader
+            else:
+                # attempt to create a loader function for the type hint
+                typehint_k = type_hints[k]
+                if k in loader_types_override:
+                    typehint_k = loader_types_override[k]
+                loader_funcs[k] = loader_typecheck_factory(
+                    key=k,
+                    expected_type=typehint_k,
+                    error_mode=type_error_mode,
+                )
+
+        # otherwise, use the identity function
+        else:
+            loader_funcs[k] = lambda data: data[k]
+
+    def load(data: JSONitem):
+        # get the base outputs for all keys in the dataclass but which dont have a special loader
+        output: dict[str, Any] = dict()
+
+        # if an element is missing from data, then dont pass it and the error will be handled by the class
+        for k in data:
+            if k in loader_funcs:
+                output[k] = loader_funcs[k](data)
+
+        loaded = cls(**output)
+
+        if not isinstance(loaded, cls):
+            raise TypeError(f"expected {cls}, got {type(loaded)}")
+
+        return loaded
+
+    return load
+
+
+
+
+def augement_dataclass_serializer_loader(
+        cls: Any = None,
+        /, *,
+        special_serializers: Optional[dict[str, Callable]] = None,
+        special_loaders: Optional[dict[str, Callable[[JSONitem], Any]]] = None,
+        load_type_error_mode: TypeErrorMode = "except",
+    ) -> Any:
+    """adds a `.serialize()` and `.load()` method to a dataclass,
+    using `dataclass_serializer_factory` and `dataclass_loader_factory`
+
+    TODO: dynamically added methods dont show up as attributes during linting, and this makes the decorator suck.
+    """
+
+    def wrap(cls):
+        cls.serialize = dataclass_serializer_factory(
+            cls,
+            special_serializers=special_serializers,
+        )
+        cls.load = dataclass_loader_factory(
+            cls,
+            special_loaders=special_loaders,
+            type_error_mode=load_type_error_mode,
+        )
+
+        return cls
+
+    # See if we're being called as `@augement_dataclass_serializer_loader` 
+    # or `@augement_dataclass_serializer_loader()`.
+    if cls is None:
+        # We're called with parens.
+        return wrap
+
+    # We're called as `@augement_dataclass_serializer_loader` without parens.
+    return wrap(cls)
+
+def _test():
+
+    # @augement_dataclass_serializer_loader(
+    #     special_serializers=dict(rand_data=lambda self: str(self.rand_data)),
+    # )
+    @dataclass
+    class TestClass:
+        a: int
+        b: str
+        c: float
+        rand_data: Any = None
+    
+    TestClass.serialize = dataclass_serializer_factory(
+        TestClass,
+        special_serializers=dict(rand_data=lambda self: str(self.rand_data)),
+    )
+    TestClass.load = dataclass_loader_factory(TestClass)
+    
+    # @augement_dataclass_serializer_loader
+    @dataclass
+    class OuterTestClass:
+        a2: int
+        b2: str
+        c2: float
+        d2: TestClass
+
+    OuterTestClass.serialize = dataclass_serializer_factory(OuterTestClass)
+    OuterTestClass.load = dataclass_loader_factory(OuterTestClass)
+
+    item_a: TestClass = TestClass(a=1, b="x", c=3.0)
+    item_b: OuterTestClass = OuterTestClass(a2=2, b2="y", c2=4.0, d2=item_a)
+
+    print(f"{item_a = }")
+    print(f"{item_a.serialize() = }")
+    print(f"{item_b = }")
+    print(f"{item_b.serialize() = }")
+    
+    item_b_ser: JSONitem = item_b.serialize()
+
+    item_b_loaded: OuterTestClass = OuterTestClass.load(item_b_ser)
+
+    # assert item_b_loaded == item_b
+    # assert item_b_loaded.d2 == item_a
+
+    print(f"{item_b_loaded = }")
+    print(f"{item_b_loaded.serialize() = }")
+
+if __name__ == '__main__':
+    print('# running tests')
+    _test()
+
+
+    

@@ -37,17 +37,12 @@ def universal_flatten(arr: Sequence, require_rectangular: bool = True) -> Sequen
 def compute_rsquared(actual: np.ndarray, predicted: np.ndarray) -> float:
     assert actual.shape == predicted.shape
 
-    s_res: float = np.sum( np.power(
-        actual - predicted,
-        2.0,
-    ) )
+    actual_mean: float = np.mean(actual)
 
-    s_tot: float = np.sum( np.power(
-        actual - np.mean(actual),
-        2.0,
-    ) )
-    
-    return (1 - s_res / s_tot)
+    ss_res: float = np.sum((actual - predicted) ** 2.0)
+    ss_tot: float = np.sum((actual - actual_mean) ** 2.0)
+
+    return (1 - ss_res / ss_tot)
 
 # StatCounter
 # ==================================================

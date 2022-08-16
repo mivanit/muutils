@@ -42,6 +42,10 @@ def isinstance_namedtuple(x):
 
 
 def try_catch(func: Callable):
+    """wraps the function to catch exceptions, returns serialized error message on exception
+    
+    returned func will return normal result on success, or error message on exception
+    """
     @functools.wraps(func)
     def newfunc(*args, **kwargs):
         try:
@@ -75,7 +79,36 @@ ArrayMode = Literal["list", "array_list_meta", "array_hex_meta"]
 
 
 def serialize_array(arr: Any, array_mode: ArrayMode = "array_list_meta") -> JSONitem:
-    """serialize an array"""
+    """serialize a numpy or pytorch array in one of several modes
+
+    `array_mode: ArrayMode` can be one of:
+    - `list`: serialize as a list of values, no metadata (equivalent to `arr.tolist()`)
+    - `array_list_meta`: serialize dict with metadata, actual list under the key `data`
+    - `array_hex_meta`: serialize dict with metadata, actual hex string under the key `data`
+
+    for the latter two, the output will look like
+    ```
+    {
+        "__format__": <array_list_meta|array_hex_meta>,
+        "shape": arr.shape,
+        "dtype": str(arr.dtype),
+        "data": <arr.tolist()|arr.tobytes().hex()>,
+    }
+    ```
+
+    # Parameters:
+     - `arr : Any` array to serialize
+     - `array_mode : ArrayMode` mode in which to serialize the array  
+       (defaults to `"array_list_meta"`)  
+    
+    # Returns:
+     - `JSONitem` 
+       json serialized array
+    
+    # Raises:
+     - `KeyError` : if the array mode is not valid
+    """    
+    
     if array_mode == "array_list_meta":
         return {
             "__format__": "array_list_meta",
@@ -93,9 +126,13 @@ def serialize_array(arr: Any, array_mode: ArrayMode = "array_list_meta") -> JSON
             "data": arr.tobytes().hex(),
         }
     else:
-        raise ValueError(f"invalid array_mode: {array_mode}")
+        raise KeyError(f"invalid array_mode: {array_mode}")
 
 def infer_array_mode(arr: JSONitem) -> ArrayMode:
+    """given a serialized array, infer the mode
+    
+    assumes the array was serialized via `serialize_array()`
+    """
     if isinstance(arr, dict):
         fmt: Optional[str] = arr.get("__format__", None)
         if fmt == "array_list_meta":
@@ -115,6 +152,7 @@ def infer_array_mode(arr: JSONitem) -> ArrayMode:
         raise ValueError(f"cannot infer array_mode from {arr}")
 
 def load_array(arr: JSONitem, array_mode: Optional[ArrayMode] = None) -> Any:
+    """load a json-serialized array, infer the mode if not specified"""
     # try to infer the array_mode
     array_mode_inferred: ArrayMode = infer_array_mode(arr)
     if array_mode is None:
@@ -145,6 +183,24 @@ def json_serialize(
     error_mode: ErrorMode = "except",
     **kwargs,
 ) -> JSONitem:
+    """serialize __any__ python object to json, not guaranteed to be recoverable
+    
+    in general, tries the following (recursive) serialization:
+    - try to call a `.serialize()` method on the object (if present)
+    - serialize as a base type (bool, int, float, str)
+    - recursively serialize dicts
+    - if a namedtuple, serialize as a dict with the namedtuple fields as keys
+    - if a dataclass, serialize as a dict with the dataclass fields as keys ( but call this function recursively, not just `asdict(obj)` )
+    - if an iterable, call this function recursively on each element and return a list
+    - if numpy or torch array, call `serialize_array()`
+    - if none of the above, serialize as a dict with 
+      - the items at `SERIALIZER_SPECIAL_KEYS` as keys
+      - the results of calling `SERIALIZER_SPECIAL_FUNCS` as values
+    - if there is an exception in the above
+      - if `error_mode == "ignore"`, ignore the exception and return `repr(obj)`
+      - if `error_mode == "warn"`, warn and return `repr(obj)`
+      - if `error_mode == "except"`, raise the exception
+    """
 
     if len(kwargs) > 0:
         warnings.warn(f"unused kwargs: {kwargs}")
@@ -209,15 +265,15 @@ def json_serialize(
         elif error_mode == "warn":
             warnings.warn(f"error serializing, will return as string\n{obj = }\nexception = {e}")
 
-        return str(obj)
+        return repr(obj)
 
 
 def _recursive_hashify(obj: Any, force: bool = True) -> Hashableitem:
     if isinstance(obj, dict):
-        return tuple(sorted(
+        return tuple(
             (k, _recursive_hashify(v)) 
             for k, v in obj.items()
-        ))
+        )
     elif isinstance(obj, (tuple, list, Iterable)):
         return tuple(
             _recursive_hashify(v)
@@ -233,7 +289,7 @@ def _recursive_hashify(obj: Any, force: bool = True) -> Hashableitem:
 
 
 def hashify(obj: Any, force: bool = True) -> Hashableitem:
-    """hashify an object"""
+    """try to turn any object into something hashable"""
     data = json_serialize(obj, depth=-1)
 
     # recursive hashify, turning dicts and lists into tuples
@@ -246,7 +302,13 @@ def serialize_torch_module(
         member_typecasts: Dict[str, Callable],
         array_mode: ArrayMode = "array_list_meta",
     ) -> JSONitem:
-    """serialize a torch.nn.Module"""
+    """serialize an instance of `torch.nn.Module`
+    
+    you'll need to specify `member_typecasts`, which is a dict mapping
+    member names to functions to call on the member value before serializing it
+
+    the state dict will be saved separately under `state_dict`
+    """
     return {
         "__format__": "torch_module",
         "name": obj.__class__.__name__,
@@ -271,6 +333,11 @@ def load_torch_module_factory(
         members_exclude: List[str],
         typecasts: Dict[str, Callable],
     ) -> Callable[[Any, JSONitem], "torch.nn.Module"]:
+    """create a function which allows for loading a torch module from `JSONitem`
+
+    - everything from the `members_dict` not in `members_exclude` will be passed to the `__init__` method of the module
+    - everything from the `state_dict` will be passed to the `load_state_dict` method of the module
+    """
     import torch
 
     @classmethod

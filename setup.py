@@ -10,7 +10,6 @@ setuptools.setup(
     version=__version__,
     author="mivanit",
     author_email="mivanits@umich.edu",
-    version=__version__,
     description=__description__,
     long_description=long_description,
     long_description_content_type="text/markdown",

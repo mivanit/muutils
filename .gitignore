@@ -5,3 +5,5 @@ __pycache__/
 build/
 dist/
 muutils.egg-info/
+
+setup_build.sh

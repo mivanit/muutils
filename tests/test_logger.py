@@ -6,7 +6,9 @@ logger = Logger()
 
 
 logger.log('hello')
+
 logger["test_stream"]("hello test stream")
+
 logger.mystream("hello mystream")
 logger.mystream("hello mystream, again")
 

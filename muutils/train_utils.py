@@ -1,9 +1,8 @@
 from functools import partial
-from io import FileIO
 import sys
 import json
 import time
-from typing import Any, Callable
+from typing import TextIO, Any, Callable
 
 from muutils.misc import sanitize_fname
 from muutils.json_serialize import JSONitem, json_serialize
@@ -30,7 +29,7 @@ class SimpleLogger:
 	def __init__(
 			self, 
 			log_path: str|None = None, 
-			log_file: FileIO|None = None, 
+			log_file: TextIO|None = None, 
 			timestamp: bool = True,
 		):
 
@@ -79,16 +78,16 @@ class SimpleLogger:
 # takes message, level, other data, and outputs message with appropriate header
 HeaderFunction = Callable[[str, int, Any], str]
 
-def md_header_function(msg: str, lvl: int, stream: str|None, **kwargs) -> str:
+def md_header_function(msg: str, lvl: int, stream: str|None = None, **kwargs) -> str:
 	"""standard header function. will output
 	
 	- `# {msg}`
 		
-		for levels in [0, 10]
+		for levels in [0, 9]
 
 	- `## {msg}`
 		
-		for levels in [11, 20], and so on
+		for levels in [10, 19], and so on
 
 	- `[{stream}] # {msg}`
 
@@ -96,11 +95,11 @@ def md_header_function(msg: str, lvl: int, stream: str|None, **kwargs) -> str:
 
 	- `!WARNING! [{stream}] {msg}`
 		
-		for level in [-10, -1]
+		for level in [-9, -1]
 
 	- `!!WARNING!! [{stream}] {msg}`
 		
-		for level in [-20, -11] and so on
+		for level in [-19, -10] and so on
 	
 	"""
 	stream_prefix: str = ''
@@ -108,9 +107,9 @@ def md_header_function(msg: str, lvl: int, stream: str|None, **kwargs) -> str:
 		stream_prefix = f'[{stream}] '
 
 	if lvl >= 0:
-		return f"{stream_prefix}#{'#' * ((lvl-1)/10) if lvl else ''} {msg}"
+		return f"{stream_prefix}#{'#' * (lvl // 10) if lvl else ''} {msg}"
 	else:
-		exclamation_pts: str = '!' * ((abs(lvl) - 1) / 10)
+		exclamation_pts: str = '!' * (abs(lvl) // 10)
 		return f"{exclamation_pts}WARNING{exclamation_pts} {stream_prefix}{msg}"
 
 
@@ -119,27 +118,31 @@ class Logger(SimpleLogger):
 	def __init__(
 			self, 
 			log_path: str|None = None, 
-			log_file: FileIO|None = None, 
+			log_file: TextIO|None = None,
 			timestamp: bool = True,
+			default_level: int = 0,
 			console_print_threshold: int = 50,
 			level_header: HeaderFunction = md_header_function,
-			stream_files: None|dict[str, str|bool|FileIO] = None
+			stream_files: None|dict[str, str|bool|TextIO] = None,
+			stream_default_levels: None|dict[str, int] = None,
 		):
 		super().__init__(log_file = log_file, log_path = log_path, timestamp = timestamp)
 		self._console_print_threshold = console_print_threshold
+		self._default_level = default_level
 		self._level_header = level_header
 		self._stream_files = stream_files if stream_files else dict()
+		self._stream_default_levels = stream_default_levels if stream_default_levels else dict()
 
 		# add the stderr stream
-		self._stream_handles = {'stderr': sys.stderr}
+		self._stream_handles: dict[str, TextIO] = {'stderr': sys.stderr}
 
 		for stream_name, stream_handler_info in self._stream_files.items():
 			if isinstance(stream_handler_info, str):
 				# if its a string, open a file
-				self._stream_handles[stream_name] = open(stream_handler_info, 'w')
+				self._stream_handles[stream_name] = open(stream_handler_info, 'w', encoding = 'utf-8')
 			elif isinstance(stream_handler_info, bool) and stream_handler_info:
 				# if its a bool and true, open a file with the same name as the stream (in the current dir)
-				self._stream_handles[stream_name] = open(f"{sanitize_fname(stream_name)}.log.jsonl", "w")
+				self._stream_handles[stream_name] = open(f"{sanitize_fname(stream_name)}.log.jsonl", "w", encoding = 'utf-8')
 			else:
 				# if its neither, check it has a `.write()` method
 				if not hasattr(stream_handler_info, 'write'):
@@ -174,12 +177,23 @@ class Logger(SimpleLogger):
 		   (defaults to `None`)
 		"""		
 
+		# set default level
+		if lvl is None:
+			if stream is None:
+				lvl = self._default_level
+			else:
+				if stream in self._stream_default_levels:
+					lvl = self._stream_default_levels[stream]
+				else:
+					lvl = self._default_level			
+
 		# print to console with formatting
-		if console_print or (
-			(lvl is not None)
-			and (lvl <= self._console_print_threshold)
+		if (
+			console_print 
+			or (lvl is None) 
+			or (lvl <= self._console_print_threshold)
 		):
-			print(self._level_header(msg, lvl))
+			print(self._level_header(msg, lvl, stream))
 		
 		# add metadata
 		if not isinstance(msg, dict):

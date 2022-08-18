@@ -17,5 +17,3 @@ There are a couple work-in-progress utilities in [`_wip`](https://github.com/miv
 ```
 pip install muutils
 ```
-
-no dependencies outside of the standard library!

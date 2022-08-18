@@ -127,11 +127,11 @@ class Logger(SimpleLogger):
 			stream_default_levels: None|dict[str, int] = None,
 		):
 		super().__init__(log_file = log_file, log_path = log_path, timestamp = timestamp)
-		self._console_print_threshold = console_print_threshold
-		self._default_level = default_level
-		self._level_header = level_header
-		self._stream_files = stream_files if stream_files else dict()
-		self._stream_default_levels = stream_default_levels if stream_default_levels else dict()
+		self._console_print_threshold: int = console_print_threshold
+		self._default_level: int = default_level
+		self._level_header: HeaderFunction = level_header
+		self._stream_files: dict[str, str] = stream_files if stream_files else dict()
+		self._stream_default_levels: dict[str, int] = stream_default_levels if stream_default_levels else dict()
 
 		# add the stderr stream
 		self._stream_handles: dict[str, TextIO] = {'stderr': sys.stderr}
@@ -234,6 +234,7 @@ class TimerContext:
 	def __init__(self):
 		self.start_time: float = None
 		self.end_time: float = None
+		self.elapsed_time: float = None
 	
 	def __enter__(self):
 		self.start_time = time.time()

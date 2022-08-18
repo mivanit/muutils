@@ -12,6 +12,7 @@ import sys
 import json
 import time
 from typing import TextIO, Any, Callable
+from muutils.jsonlines import jsonl_load
 
 from muutils.misc import sanitize_fname
 from muutils.json_serialize import JSONitem, json_serialize
@@ -135,7 +136,45 @@ def md_header_function(msg: str, lvl: int, stream: str|None = None, **kwargs) ->
 
 
 class Logger(SimpleLogger):
-	"""logger with more features, including log levels and streams"""
+	"""logger with more features, including log levels and streams
+		
+		### Parameters:
+		 - `log_path : str | None`   
+		   default log file path
+		   (defaults to `None`)
+		 - `log_file : AnyIO | None`   
+		   default log io, should have a `.write()` method (pass only this or `log_path`, not both)
+		   (defaults to `None`)
+		 - `timestamp : bool`   
+		   whether to add timestamps to every log message (under the `_timestamp` key)
+		   (defaults to `True`)
+		 - `default_level : int`   
+		   default log level for streams/messages that don't specify a level
+		   (defaults to `0`)
+		 - `console_print_threshold : int`   
+		   log level at which to print to the console, anything greater will not be printed unless overridden by `console_print`
+		   (defaults to `50`)
+		 - `level_header : HeaderFunction`   
+		   function for formatting log messages when printing to console
+		   (defaults to `md_header_function`)
+		 - `stream_files : None | dict[str, str | bool | AnyIO]`   
+		   where to send each stream. 
+		   	- if `True`, will create a new file for each stream with the stream name
+			- if `False`, will not write this stream to a file (using `NullIO`)
+			- if is `str`, will create a new file with the given path
+			- if is `AnyIO`, will use the given io
+		   (defaults to `None`)
+		 - `stream_default_levels : None | dict[str, int]`   
+		   default levels for each stream, will use `default_level` if not specified
+		   (defaults to `None`)
+		- `keep_last_msg_time : bool`
+		   whether to keep the last message time 
+		   (defaults to `True`)
+
+		
+		### Raises:
+		 - `ValueError` : _description_
+		"""		
 	def __init__(
 			self, 
 			log_path: str|None = None, 
@@ -146,7 +185,10 @@ class Logger(SimpleLogger):
 			level_header: HeaderFunction = md_header_function,
 			stream_files: None|dict[str, str|bool|AnyIO] = None,
 			stream_default_levels: None|dict[str, int] = None,
+			keep_last_msg_time: bool = True,
 		):
+		
+
 		super().__init__(log_file = log_file, log_path = log_path, timestamp = timestamp)
 		self._console_print_threshold: int = console_print_threshold
 		self._default_level: int = default_level
@@ -157,6 +199,9 @@ class Logger(SimpleLogger):
 			if stream_default_levels 
 			else dict()
 		)
+		self._keep_last_msg_time: bool = keep_last_msg_time
+		# TODO: maybe handle this individually for each stream?
+		self._last_msg_time: float|None = time.time() if keep_last_msg_time else None
 
 		# add the stderr stream
 		self._stream_handles: dict[str, AnyIO] = {'stderr': sys.stderr}
@@ -169,13 +214,16 @@ class Logger(SimpleLogger):
 					'w', 
 					encoding = 'utf-8',
 				)
-			elif isinstance(stream_handler_info, bool) and stream_handler_info:
+			elif isinstance(stream_handler_info, bool):
 				# if its a bool and true, open a file with the same name as the stream (in the current dir)
-				self._stream_handles[stream_name] = open(
-					f"{sanitize_fname(stream_name)}.log.jsonl", 
-					"w", 
-					encoding = 'utf-8',
-				)
+				if stream_handler_info:
+					self._stream_handles[stream_name] = open(
+						f"{sanitize_fname(stream_name)}.log.jsonl", 
+						"w", 
+						encoding = 'utf-8',
+					)
+				else:
+					self._stream_handles[stream_name] = NullIO()
 			else:
 				# if its neither, check it has a `.write()` method
 				if not hasattr(stream_handler_info, 'write'):
@@ -233,11 +281,21 @@ class Logger(SimpleLogger):
 			or (lvl is None) 
 			or (lvl <= self._console_print_threshold)
 		):
+			msg_for_console: str
+			if isinstance(msg, str):
+				msg_for_console = msg
+			else:
+				msg_for_console = json.dumps(json_serialize(msg))
+
 			print(self._level_header(
-				json.dumps(json_serialize(msg)), 
+				msg_for_console, 
 				lvl, 
 				stream,
 			))
+
+			# store the last message time
+			if self._last_msg_time is not None:
+				self._last_msg_time = time.time()
 		
 		# add metadata
 		if not isinstance(msg, dict):
@@ -263,6 +321,26 @@ class Logger(SimpleLogger):
 			# otherwise, write to the stream
 			self._stream_handles[stream].write(logfile_msg)
 
+	def log_elapsed_last(
+			self,
+			lvl: int|None = None, 
+			stream: str|None = None,
+			console_print: bool = True,
+			**kwargs,
+		) -> float:
+		"""logs the time elapsed since the last message was printed to the console (in any stream)"""
+		if self._last_msg_time is None:
+			raise ValueError("no last message time!")
+		else:
+			return self.log(
+				f"elapsed_time: {time.time() - self._last_msg_time}", 
+				lvl if lvl is not None else self._console_print_threshold,
+				stream,
+				console_print,
+				**kwargs,
+			)
+			
+
 	def __getattr__(self, stream: str) -> Callable:
 		return partial(self.log, stream = stream)
 
@@ -271,6 +349,35 @@ class Logger(SimpleLogger):
 
 	def __call__(self, *args, **kwargs):
 		return self.log(*args, **kwargs)
+
+
+
+
+
+
+
+def gather_val(
+		file: str, 
+		stream: str, 
+		keys: tuple[str], 
+		allow_skip: bool = True,
+	) -> list[JSONitem]:
+	"""by default, skips any items in which any of the keys is missing"""
+	data: list[JSONitem] = jsonl_load(file)
+
+	output: list[tuple] = list()
+
+	for item in data:
+		# select for the stream
+		if ("_stream" in item) and (item["_stream"] == stream):
+			# select for the keys
+			if all(k in item for k in keys):
+				output.append(tuple(item[k] for k in keys))
+			elif not allow_skip:
+				raise ValueError(f"missing keys '{keys = }' in '{item = }'")
+	
+	return output
+
 
 
 

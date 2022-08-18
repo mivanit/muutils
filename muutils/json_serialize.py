@@ -1,5 +1,6 @@
 import functools
 import json
+from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple, Type, Union, Callable, Literal, Iterable
 from dataclasses import dataclass, is_dataclass, asdict
 from collections import namedtuple
@@ -67,7 +68,8 @@ SERIALIZER_SPECIAL_KEYS: List[str] = [
 
 SERIALIZER_SPECIAL_FUNCS: Dict[str, Callable] = {
     "str": str,
-    "type": try_catch(lambda x: type(x).__name__),
+    "dir": dir,
+    "type": try_catch(lambda x: str(type(x).__name__)),
     "repr": try_catch(lambda x: repr(x)),
     "code": try_catch(lambda x: inspect.getsource(x)),
     "sourcefile": try_catch(lambda x: inspect.getsourcefile(x)),
@@ -80,6 +82,8 @@ ArrayMode = Literal["list", "array_list_meta", "array_hex_meta"]
 
 def serialize_array(arr: Any, array_mode: ArrayMode = "array_list_meta") -> JSONitem:
     """serialize a numpy or pytorch array in one of several modes
+
+    if the object is zero-dimensional, simply get the unique item
 
     `array_mode: ArrayMode` can be one of:
     - `list`: serialize as a list of values, no metadata (equivalent to `arr.tolist()`)
@@ -108,6 +112,9 @@ def serialize_array(arr: Any, array_mode: ArrayMode = "array_list_meta") -> JSON
     # Raises:
      - `KeyError` : if the array mode is not valid
     """    
+
+    if len(arr.shape) == 0:
+        return arr.item()
     
     if array_mode == "array_list_meta":
         return {
@@ -207,11 +214,15 @@ def json_serialize(
 
     newdepth: int = depth - 1
     try:
+        # special
+        # ==================================================
         # check for special `serialize` method
         if hasattr(obj, "serialize"):
             # print(f'\n### using custom serialize: {str(obj) = }\n')
             return json_serialize(obj.serialize())
 
+        # basics
+        # ==================================================
         # if `None`, return `None`
         if obj is None:
             return None
@@ -232,6 +243,8 @@ def json_serialize(
                 out_dict[str(k)] = json_serialize(v, newdepth)
             return out_dict
 
+        # common structures
+        # ==================================================
         elif isinstance_namedtuple(obj):
             # if namedtuple, treat as dict
             return json_serialize(dict(obj._asdict()), newdepth)
@@ -243,21 +256,26 @@ def json_serialize(
                 k: json_serialize(getattr(obj, k)) 
                 for k in obj.__dataclass_fields__
             }
+        elif isinstance(obj, Path):
+            return obj.as_posix()
 
+        # iterables
+        # ==================================================
+        elif str(type(obj)) == "<class 'numpy.ndarray'>":
+            # try serializing numpy arrays
+            return serialize_array(obj, array_mode)
+        elif str(type(obj)) == "<class 'torch.Tensor'>":
+            # same for torch tensors
+            return serialize_array(obj.detach().cpu().numpy())
         elif isinstance(obj, (set, list, tuple)) or isinstance(obj, Iterable):
             # if iterable, recurse
             # print(f'\n### reading obj as iterable: {str(obj)}')
             return [json_serialize(x, newdepth) for x in obj]            
-        elif type(obj) == "<class 'numpy.ndarray'>":
-            # try serializing numpy arrays
-            return serialize_array(obj, array_mode)
-        elif type(obj) == "<class 'torch.Tensor'>":
-            return serialize_array(obj.detach().cpu().numpy())
         else:
             # if not basic type, serialize it however we can
             return {
                 **{k: str(getattr(obj, k, None)) for k in SERIALIZER_SPECIAL_KEYS},
-                **{k: str(f(obj)) for k, f in SERIALIZER_SPECIAL_FUNCS.items()},
+                **{k: f(obj) for k, f in SERIALIZER_SPECIAL_FUNCS.items()},
             }
     except Exception as e:
         if error_mode == "except":

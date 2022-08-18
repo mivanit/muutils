@@ -1,4 +1,4 @@
-from muutils.train_utils import SimpleLogger, Logger
+from muutils.logger import SimpleLogger, Logger
 
 
 

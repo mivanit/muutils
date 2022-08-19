@@ -276,6 +276,7 @@ class Logger(SimpleLogger):
 					lvl = self._default_level			
 
 		# print to console with formatting
+		_printed: bool = False
 		if (
 			console_print 
 			or (lvl is None) 
@@ -296,6 +297,9 @@ class Logger(SimpleLogger):
 			# store the last message time
 			if self._last_msg_time is not None:
 				self._last_msg_time = time.time()
+
+			_printed = True
+
 		
 		# add metadata
 		if not isinstance(msg, dict):
@@ -320,6 +324,10 @@ class Logger(SimpleLogger):
 		else:
 			# otherwise, write to the stream
 			self._stream_handles[stream].write(logfile_msg)
+		
+		# if it was important enough to print, flush all streams
+		if _printed:
+			self.flush_all()
 
 	def log_elapsed_last(
 			self,
@@ -339,6 +347,14 @@ class Logger(SimpleLogger):
 				console_print,
 				**kwargs,
 			)
+
+	def flush_all(self):
+		"""flush all streams"""
+
+		self._log_file_handle.flush()
+
+		for stream_handle in self._stream_handles.values():
+			stream_handle.flush()
 			
 
 	def __getattr__(self, stream: str) -> Callable:

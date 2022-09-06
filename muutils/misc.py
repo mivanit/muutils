@@ -1,3 +1,4 @@
+import typing
 
 def sanitize_fname(fname: str) -> str:
 	"""sanitize a filename for use in a path"""
@@ -11,3 +12,13 @@ def sanitize_fname(fname: str) -> str:
 			fname_sanitized += ""
 
 	return fname_sanitized
+
+
+def freeze(obj: typing.Any) -> typing.Any:
+
+	def new_setattr(self, name, value):
+		raise AttributeError(f"{self.__class__.__name__} is frozen")
+	
+	obj.__setattr__ = new_setattr
+
+	return obj 

@@ -181,7 +181,9 @@ def load_array(arr: JSONitem, array_mode: Optional[ArrayMode] = None) -> Any:
     else:
         raise ValueError(f"invalid array_mode: {array_mode}")
 
-
+SERIALIZE_DIRECT_AS_STR: set[str] = {
+    "<class 'torch.device'>", "<class 'torch.dtype'>",
+}
 
 def json_serialize(
     obj: Any,
@@ -214,6 +216,7 @@ def json_serialize(
 
     newdepth: int = depth - 1
     try:
+        str_type_obj: str = str(type(obj))
         # special
         # ==================================================
         # check for special `serialize` method
@@ -259,12 +262,15 @@ def json_serialize(
         elif isinstance(obj, Path):
             return obj.as_posix()
 
+        elif str_type_obj in SERIALIZE_DIRECT_AS_STR:
+            return str(obj)
+
         # iterables
         # ==================================================
-        elif str(type(obj)) == "<class 'numpy.ndarray'>":
+        elif str_type_obj == "<class 'numpy.ndarray'>":
             # try serializing numpy arrays
             return serialize_array(obj, array_mode)
-        elif str(type(obj)) == "<class 'torch.Tensor'>":
+        elif str_type_obj == "<class 'torch.Tensor'>":
             # same for torch tensors
             return serialize_array(obj.detach().cpu().numpy())
         elif isinstance(obj, (set, list, tuple)) or isinstance(obj, Iterable):

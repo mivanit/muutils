@@ -102,7 +102,7 @@ class SimpleLogger:
 # takes message, level, other data, and outputs message with appropriate header
 HeaderFunction = Callable[[str, int, Any], str]
 
-def md_header_function(msg: str, lvl: int, stream: str|None = None, **kwargs) -> str:
+def md_header_function(msg: Any, lvl: int, stream: str|None = None, indent_lvl: str = "  ", extra_indent: str = "", **kwargs) -> str:
 	"""standard header function. will output
 	
 	- `# {msg}`
@@ -130,11 +130,22 @@ def md_header_function(msg: str, lvl: int, stream: str|None = None, **kwargs) ->
 	if stream is not None:
 		stream_prefix = f'[{stream}] '
 
+	lvl_div_10: int = lvl // 10
+
+	msg_processed: str
+	if isinstance(msg, dict):
+		msg_processed = ", ".join([
+			f"{k}: {json_serialize(v)}" 
+			for k, v in msg.items()
+		])
+	else:
+		msg_processed = json_serialize(msg)
+
 	if lvl >= 0:
-		return f"{stream_prefix}#{'#' * (lvl // 10) if lvl else ''} {msg}"
+		return f"{extra_indent}{indent_lvl * (lvl_div_10 - 1)}{stream_prefix}#{'#' * lvl_div_10 if lvl else ''} {msg_processed}"
 	else:
 		exclamation_pts: str = '!' * (abs(lvl) // 10)
-		return f"{exclamation_pts}WARNING{exclamation_pts} {stream_prefix}{msg}"
+		return f"{extra_indent}{exclamation_pts}WARNING{exclamation_pts} {stream_prefix} {msg_processed}"
 
 
 class Logger(SimpleLogger):
@@ -187,27 +198,46 @@ class Logger(SimpleLogger):
 			level_header: HeaderFunction = md_header_function,
 			stream_files: None|dict[str, str|bool|AnyIO] = None,
 			stream_default_levels: None|dict[str, int] = None,
+			stream_default_contents: None|dict[str, dict[str, Callable[[], Any]]] = None,
 			keep_last_msg_time: bool = True,
 		):
+		# TODO: cleaner to pass a set of `Stream` classes, rather than these multiple dicts?
 		
-
+		# init BaseLogger
 		super().__init__(log_file = log_file, log_path = log_path, timestamp = timestamp)
+		# level-related
 		self._console_print_threshold: int = console_print_threshold
 		self._default_level: int = default_level
-		self._level_header: HeaderFunction = level_header
-		self._stream_files: dict[str, str|bool|AnyIO] = stream_files if stream_files else dict()
 		self._stream_default_levels: dict[str, int] = (
 			stream_default_levels 
 			if stream_default_levels 
 			else dict()
 		)
-		self._keep_last_msg_time: bool = keep_last_msg_time
-		# TODO: maybe handle this individually for each stream?
-		self._last_msg_time: float|None = time.time() if keep_last_msg_time else None
+
+		# print formatting
+		self._level_header: HeaderFunction = level_header
+
+		# stream-related
+		self._stream_names: set[str] = set([
+			*(
+				list() 
+				if stream_files is None 
+				else [stream for stream in stream_files.keys()]
+			),
+			*(
+				list() 
+				if stream_default_contents is None 
+				else [stream for stream in stream_default_contents.keys()]
+			),
+			*[stream for stream in self._stream_default_levels.keys()]
+		])
+
+		self._stream_files: dict[str, str|bool|AnyIO] = stream_files if stream_files else dict()
 
 		# add the stderr stream
-		self._stream_handles: dict[str, AnyIO] = {'stderr': sys.stderr}
+		self._stream_handles: dict[str, AnyIO] = dict(stderr = sys.stderr)
 
+		# stream handles
 		for stream_name, stream_handler_info in self._stream_files.items():
 			if isinstance(stream_handler_info, str):
 				# if its a string, open a file
@@ -234,6 +264,27 @@ class Logger(SimpleLogger):
 				# assume the user knows what they're doing
 				self._stream_handles[stream_name] = stream_handler_info # type: ignore 
 
+		# default contents
+		# TODO: use weakrefs?
+		self._stream_default_contents: dict[str, Callable[[], Any]] = (
+			stream_default_contents
+			if stream_default_contents
+			else {
+				k : dict()
+				for k in self._stream_names
+			}
+		)
+		# augment defaults with timing
+		if self._timestamp:
+			for s_name, s_default in self._stream_default_contents.items():
+				s_default['_timestamp'] = lambda : time.time()
+
+		# timing compares
+		self._keep_last_msg_time: bool = keep_last_msg_time
+		# TODO: handle per stream?
+		self._last_msg_time: float|None = time.time()
+
+
 
 	def __del__(self):
 		self._log_file_handle.flush()
@@ -245,10 +296,11 @@ class Logger(SimpleLogger):
 
 	def log( # type: ignore # yes, the signatures are different here.
 			self, 
-			msg: JSONitem, 
+			msg: JSONitem = None,
 			lvl: int|None = None, 
 			stream: str|None = None,
 			console_print: bool = False,
+			extra_indent: str = "",
 			**kwargs,
 		):
 		"""logging function
@@ -267,7 +319,8 @@ class Logger(SimpleLogger):
 		   (defaults to `None`)
 		"""		
 
-		# set default level
+		# set default level to either global or stream-specific default level
+		# ========================================
 		if lvl is None:
 			if stream is None:
 				lvl = self._default_level
@@ -278,22 +331,19 @@ class Logger(SimpleLogger):
 					lvl = self._default_level			
 
 		# print to console with formatting
+		# ========================================
 		_printed: bool = False
 		if (
 			console_print 
 			or (lvl is None) 
 			or (lvl <= self._console_print_threshold)
 		):
-			msg_for_console: str
-			if isinstance(msg, str):
-				msg_for_console = msg
-			else:
-				msg_for_console = json.dumps(json_serialize(msg))
-
+			# add some formatting
 			print(self._level_header(
-				msg_for_console, 
-				lvl, 
-				stream,
+				msg=msg, 
+				lvl=lvl, 
+				stream=stream,
+				extra_indent=extra_indent,
 			))
 
 			# store the last message time
@@ -303,28 +353,42 @@ class Logger(SimpleLogger):
 			_printed = True
 
 		
-		# add metadata
+		# convert and add data
+		# ========================================
+		# converting to dict
+		msg_dict: dict
 		if not isinstance(msg, dict):
-			msg = {"_msg": msg}
+			msg_dict = {"_msg": msg}
+		else:
+			msg_dict = msg
 		
+		# level+stream metadata
 		if lvl is not None:
-			msg["_lvl"] = lvl
+			msg_dict["_lvl"] = lvl
 
-		msg["_stream"] = stream
-	
+		msg_dict["_stream"] = stream
+
+		# extra data in kwargs
 		if len(kwargs) > 0:
-			msg["_kwargs"] = kwargs
+			msg_dict["_kwargs"] = kwargs
 
-		if self._timestamp:
-			msg["_timestamp"] = time.time()
+		# add default contents (timing, etc)
+		msg_dict = {
+			**{
+				k : v()
+				for k,v in self._stream_default_contents.get(stream, dict()).items()
+			},
+			**msg_dict,
+		}
 		
 		# write
-		logfile_msg: str = json.dumps(json_serialize(msg)) + '\n'
+		# ========================================
+		logfile_msg: str = json.dumps(json_serialize(msg_dict)) + '\n'
 		if (stream is None) or (stream not in self._stream_handles):
 			# write to the main log file if no stream is specified
 			self._log_file_handle.write(logfile_msg)
 		else:
-			# otherwise, write to the stream
+			# otherwise, write to the stream-specific file
 			self._stream_handles[stream].write(logfile_msg)
 		
 		# if it was important enough to print, flush all streams
@@ -343,10 +407,10 @@ class Logger(SimpleLogger):
 			raise ValueError("no last message time!")
 		else:
 			return self.log(
-				f"elapsed_time: {time.time() - self._last_msg_time}", 
-				lvl if lvl is not None else self._console_print_threshold,
-				stream,
-				console_print,
+				{"elapsed_time": round(time.time() - self._last_msg_time, 6)}, 
+				lvl=(lvl if lvl is not None else self._console_print_threshold),
+				stream=stream,
+				console_print=console_print,
 				**kwargs,
 			)
 

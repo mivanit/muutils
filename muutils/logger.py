@@ -11,7 +11,7 @@ from functools import partial
 import sys
 import json
 import time
-from typing import TextIO, Any, Callable
+from typing import Sequence, TextIO, Any, Callable
 from datetime import timedelta
 
 
@@ -196,6 +196,7 @@ class Logger(SimpleLogger):
 			default_level: int = 0,
 			console_print_threshold: int = 50,
 			level_header: HeaderFunction = md_header_function,
+			stream_names: Sequence[str] = (),
 			stream_files: None|dict[str, str|bool|AnyIO] = None,
 			stream_default_levels: None|dict[str, int] = None,
 			stream_default_contents: None|dict[str, dict[str, Callable[[], Any]]] = None,
@@ -219,6 +220,8 @@ class Logger(SimpleLogger):
 
 		# stream-related
 		self._stream_names: set[str] = set([
+			None,
+			*stream_names,
 			*(
 				list() 
 				if stream_files is None 
@@ -317,7 +320,13 @@ class Logger(SimpleLogger):
 		 - `stream : str | None`   
 		   whether to log to a stream (defaults to `None`), which logs to the default `None` stream
 		   (defaults to `None`)
-		"""		
+		"""
+
+		# add to known stream names if not present
+		if stream not in self._stream_names:
+			self._stream_names.add(stream)
+		if stream not in self._stream_default_contents:
+			self._stream_default_contents[stream] = dict(_timestamp = lambda : time.time()) if self._timestamp else dict()
 
 		# set default level to either global or stream-specific default level
 		# ========================================
@@ -376,7 +385,7 @@ class Logger(SimpleLogger):
 		msg_dict = {
 			**{
 				k : v()
-				for k,v in self._stream_default_contents.get(stream, dict()).items()
+				for k,v in self._stream_default_contents[stream].items()
 			},
 			**msg_dict,
 		}
@@ -433,10 +442,28 @@ class Logger(SimpleLogger):
 		return self.log(*args, **kwargs)
 
 
+def get_any_from_stream(stream: list[dict], key: str) -> None:
+	"""get the first value of a key from a stream. errors if not found"""
+	for msg in stream:
+		if key in msg:
+			return msg[key]
+
+	raise KeyError(f"key '{key}' not found in stream")
 
 
+def gather_stream(
+		file: str, 
+		stream: str, 
+	) -> list[JSONitem]:
+	data: list[JSONitem] = jsonl_load(file)
 
+	output: list[tuple] = list()
 
+	for item in data:
+		# select for the stream
+		if ("_stream" in item) and (item["_stream"] == stream):
+			output.append(item)
+	return output
 
 def gather_val(
 		file: str, 
@@ -444,7 +471,7 @@ def gather_val(
 		keys: tuple[str], 
 		allow_skip: bool = True,
 	) -> list[JSONitem]:
-	"""by default, skips any items in which any of the keys is missing"""
+	"""gather specific keys from a specific stream in a log file"""
 	data: list[JSONitem] = jsonl_load(file)
 
 	output: list[tuple] = list()

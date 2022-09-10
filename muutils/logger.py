@@ -7,6 +7,7 @@
 - `TimerContext` is a context manager that can be used to time the duration of a block of code
 """
 
+from dataclasses import dataclass, field
 from functools import partial
 import sys
 import json
@@ -148,6 +149,47 @@ def md_header_function(msg: Any, lvl: int, stream: str|None = None, indent_lvl: 
 		return f"{extra_indent}{exclamation_pts}WARNING{exclamation_pts} {stream_prefix} {msg_processed}"
 
 
+@dataclass
+class LoggingStream:
+	"""properties of a logging stream
+	
+	- `name: str` name of the stream
+	- `aliases: set[str]` aliases for the stream
+		(calls to these names will be redirected to this stream. duplicate alises will result in errors)
+		TODO: perhaps duplicate alises should result in duplicate writes?
+	- `file: str|bool|AnyIO|None` file to write to
+		- if `None`, will write to standard log
+		- if `True`, will write to `name + ".log"`
+		- if `False` will "write" to `NullIO` (throw it away)
+		- if a string, will write to that file
+		- if a fileIO type object, will write to that object
+	- `default_level: int|None` default level for this stream
+	- `default_contents: dict[str, Callable[[], Any]]` default contents for this stream
+	- `last_msg: tuple[float, Any]|None` last message written to this stream (timestamp, message)
+	"""
+	name: str
+	aliases: set[str] = field(default_factory=tuple)
+	file: str|bool|AnyIO|None = None
+	default_level: int|None = None
+	default_contents: dict[str, Callable[[], Any]] = field(default_factory=dict)
+	
+	# TODO: implement last-message caching
+	# last_msg: tuple[float, Any]|None = None 
+
+	def __post_init__(self):
+		self.aliases = set(self.aliases)
+		if any(x.startswith('_') for x in self.aliases):
+			raise ValueError("stream names or aliases cannot start with an underscore, sorry")
+		self.aliases.add(self.name)
+		self.default_contents["_timestamp"] = time.time
+		self.default_contents["_stream"] = lambda: self.name
+
+	
+	def __str__(self) -> str:
+		return f"LoggingStream()"
+
+	
+
 class Logger(SimpleLogger):
 	"""logger with more features, including log levels and streams
 		
@@ -170,16 +212,6 @@ class Logger(SimpleLogger):
 		 - `level_header : HeaderFunction`   
 		   function for formatting log messages when printing to console
 		   (defaults to `md_header_function`)
-		 - `stream_files : None | dict[str, str | bool | AnyIO]`   
-		   where to send each stream. 
-		   	- if `True`, will create a new file for each stream with the stream name
-			- if `False`, will not write this stream to a file (using `NullIO`)
-			- if is `str`, will create a new file with the given path
-			- if is `AnyIO`, will use the given io
-		   (defaults to `None`)
-		 - `stream_default_levels : None | dict[str, int]`   
-		   default levels for each stream, will use `default_level` if not specified
-		   (defaults to `None`)
 		- `keep_last_msg_time : bool`
 		   whether to keep the last message time 
 		   (defaults to `True`)
@@ -187,107 +219,113 @@ class Logger(SimpleLogger):
 		
 		### Raises:
 		 - `ValueError` : _description_
-		"""		
+		"""
 	def __init__(
 			self, 
 			log_path: str|None = None, 
 			log_file: AnyIO|None = None,
-			timestamp: bool = True,
 			default_level: int = 0,
 			console_print_threshold: int = 50,
 			level_header: HeaderFunction = md_header_function,
-			stream_names: Sequence[str] = (),
-			stream_files: None|dict[str, str|bool|AnyIO] = None,
-			stream_default_levels: None|dict[str, int] = None,
-			stream_default_contents: None|dict[str, dict[str, Callable[[], Any]]] = None,
+			streams: dict[str, LoggingStream]|Sequence[LoggingStream] = (),
 			keep_last_msg_time: bool = True,
+			# junk args
+			timestamp: bool = True,
+			**kwargs,
 		):
-		# TODO: cleaner to pass a set of `Stream` classes, rather than these multiple dicts?
+
+		# junk arg checking
+		# ==================================================
+		if len(kwargs) > 0:
+			raise ValueError(f"unrecognized kwargs: {kwargs}")
 		
+		if not timestamp:
+			raise ValueError("timestamp must be True -- why would you not want timestamps?")
+		
+		# basic setup
+		# ==================================================
 		# init BaseLogger
 		super().__init__(log_file = log_file, log_path = log_path, timestamp = timestamp)
+
 		# level-related
 		self._console_print_threshold: int = console_print_threshold
 		self._default_level: int = default_level
-		self._stream_default_levels: dict[str, int] = (
-			stream_default_levels 
-			if stream_default_levels 
-			else dict()
-		)
+
+		# set up streams
+		self._streams: dict[str, LoggingStream] = streams if isinstance(streams, dict) else {s.name: s for s in streams}
+		# default strerr stream
+		if "stderr" not in self._streams:
+			self._streams["stderr"] = LoggingStream("stderr", aliases = {"error", "err"})
+
+		# check alias duplicates
+		alias_set: set[str] = set()
+		for stream in self._streams.values():
+			for alias in stream.aliases:
+				if alias in alias_set:
+					raise ValueError(f"alias {alias} is already in use")
+				alias_set.add(alias)
+
+		# add aliases
+		for stream in tuple(self._streams.values()):
+			for alias in stream.aliases:
+				if alias not in self._streams:
+					self._streams[alias] = stream
 
 		# print formatting
 		self._level_header: HeaderFunction = level_header
 
-		# stream-related
-		self._stream_names: set[str] = set([
-			None,
-			*stream_names,
-			*(
-				list() 
-				if stream_files is None 
-				else [stream for stream in stream_files.keys()]
-			),
-			*(
-				list() 
-				if stream_default_contents is None 
-				else [stream for stream in stream_default_contents.keys()]
-			),
-			*[stream for stream in self._stream_default_levels.keys()]
-		])
-
-		self._stream_files: dict[str, str|bool|AnyIO] = stream_files if stream_files else dict()
-
-		# add the stderr stream
-		self._stream_handles: dict[str, AnyIO] = dict(stderr = sys.stderr)
+		print({k : str(v) for k,v in self._streams.items()})
 
 		# stream handles
-		for stream_name, stream_handler_info in self._stream_files.items():
-			if isinstance(stream_handler_info, str):
-				# if its a string, open a file
-				self._stream_handles[stream_name] = open(
-					stream_handler_info, 
-					'w', 
-					encoding = 'utf-8',
-				)
-			elif isinstance(stream_handler_info, bool):
-				# if its a bool and true, open a file with the same name as the stream (in the current dir)
-				if stream_handler_info:
-					self._stream_handles[stream_name] = open(
-						f"{sanitize_fname(stream_name)}.log.jsonl", 
-						"w", 
-						encoding = 'utf-8',
-					)
-				else:
-					self._stream_handles[stream_name] = NullIO()
-			else:
-				# if its neither, check it has a `.write()` method
-				if not hasattr(stream_handler_info, 'write'):
-					raise ValueError(f"stream {stream_name} has invalid handler {stream_handler_info}")
-				# ignore type check because we know it has a .write() method, 
-				# assume the user knows what they're doing
-				self._stream_handles[stream_name] = stream_handler_info # type: ignore 
+		# ==================================================
+		self._stream_handles: dict[str, AnyIO] = dict()
+		for stream_alias, stream_obj in self._streams.items():
+			handler: AnyIO|None = self.process_handler(stream_obj)
+			if handler is not None:
+				self._stream_handles[stream_alias] = handler
 
-		# default contents
-		# TODO: use weakrefs?
-		self._stream_default_contents: dict[str, Callable[[], Any]] = (
-			stream_default_contents
-			if stream_default_contents
-			else {
-				k : dict()
-				for k in self._stream_names
-			}
-		)
-		# augment defaults with timing
-		if self._timestamp:
-			for s_name, s_default in self._stream_default_contents.items():
-				s_default['_timestamp'] = lambda : time.time()
-
+		# timing
+		# ==================================================
 		# timing compares
 		self._keep_last_msg_time: bool = keep_last_msg_time
 		# TODO: handle per stream?
 		self._last_msg_time: float|None = time.time()
 
-
+	@staticmethod
+	def process_handler(stream_obj: LoggingStream) -> AnyIO:
+		if stream_obj.file is None:
+			return None
+		elif isinstance(stream_obj.file, str):
+			# if its a string, open a file
+			return open(
+				stream_obj.file, 
+				'w', 
+				encoding = 'utf-8',
+			)
+		elif isinstance(stream_obj.file, bool):
+			# if its a bool and true, open a file with the same name as the stream (in the current dir)
+			if stream_obj.file:
+				return open(
+					f"{sanitize_fname(stream_obj.name)}.log.jsonl", 
+					"w", 
+					encoding = 'utf-8',
+				)
+			else:
+				return NullIO()
+		else:
+			# if its neither, check it has `.write()` and `.flush()` methods
+			if (
+					(not hasattr(stream_obj.file, 'write')
+					or (not callable(stream_obj.file.write))
+					or (not hasattr(stream_obj.file, 'flush'))
+					or (not callable(stream_obj.file.flush)))
+					or (not hasattr(stream_obj.file, 'close'))
+					or (not callable(stream_obj.file.close))
+				):
+				raise ValueError(f"stream {stream_obj.name} has invalid handler {stream_obj.file}")
+			# ignore type check because we know it has a .write() method, 
+			# assume the user knows what they're doing
+			return stream_obj.file # type: ignore 
 
 	def __del__(self):
 		self._log_file_handle.flush()
@@ -323,10 +361,8 @@ class Logger(SimpleLogger):
 		"""
 
 		# add to known stream names if not present
-		if stream not in self._stream_names:
-			self._stream_names.add(stream)
-		if stream not in self._stream_default_contents:
-			self._stream_default_contents[stream] = dict(_timestamp = lambda : time.time()) if self._timestamp else dict()
+		if stream not in self._streams:
+			self._streams[stream] = LoggingStream(stream)
 
 		# set default level to either global or stream-specific default level
 		# ========================================
@@ -334,8 +370,8 @@ class Logger(SimpleLogger):
 			if stream is None:
 				lvl = self._default_level
 			else:
-				if stream in self._stream_default_levels:
-					lvl = self._stream_default_levels[stream]
+				if self._streams[stream].default_level is not None:
+					lvl = self._streams[stream].default_level
 				else:
 					lvl = self._default_level			
 
@@ -375,7 +411,7 @@ class Logger(SimpleLogger):
 		if lvl is not None:
 			msg_dict["_lvl"] = lvl
 
-		msg_dict["_stream"] = stream
+		# msg_dict["_stream"] = stream # moved to LoggingStream
 
 		# extra data in kwargs
 		if len(kwargs) > 0:
@@ -385,7 +421,7 @@ class Logger(SimpleLogger):
 		msg_dict = {
 			**{
 				k : v()
-				for k,v in self._stream_default_contents[stream].items()
+				for k,v in self._streams[stream].default_contents.items()
 			},
 			**msg_dict,
 		}
@@ -433,6 +469,8 @@ class Logger(SimpleLogger):
 			
 
 	def __getattr__(self, stream: str) -> Callable:
+		if stream.startswith("_"):
+			raise AttributeError(f"invalid stream name {stream} (no underscores)")
 		return partial(self.log, stream = stream)
 
 	def __getitem__(self, stream: str):

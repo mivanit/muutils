@@ -1,7 +1,8 @@
 import functools
 import json
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple, Type, Union, Callable, Literal, Iterable
+import types
+from typing import Any, Dict, List, NamedTuple, Optional, Tuple, Type, Union, Callable, Literal, Iterable
 from dataclasses import dataclass, is_dataclass, asdict
 from collections import namedtuple
 import inspect
@@ -111,6 +112,8 @@ def serialize_array(arr: Any, array_mode: ArrayMode = "array_list_meta") -> JSON
     
     # Raises:
      - `KeyError` : if the array mode is not valid
+
+    # TODO: allow external-file storage of large arrays?
     """    
 
     if len(arr.shape) == 0:
@@ -181,15 +184,16 @@ def load_array(arr: JSONitem, array_mode: Optional[ArrayMode] = None) -> Any:
     else:
         raise ValueError(f"invalid array_mode: {array_mode}")
 
-SERIALIZE_DIRECT_AS_STR: set[str] = {
+SERIALIZE_DIRECT_AS_STR: set[str] = (
     "<class 'torch.device'>", "<class 'torch.dtype'>",
-}
+)
 
 def json_serialize(
     obj: Any,
     depth: int = -1,
     array_mode: ArrayMode = "array_list_meta",
     error_mode: ErrorMode = "except",
+    direct_as_str: tuple[str] = SERIALIZE_DIRECT_AS_STR,
     **kwargs,
 ) -> JSONitem:
     """serialize __any__ python object to json, not guaranteed to be recoverable
@@ -262,7 +266,7 @@ def json_serialize(
         elif isinstance(obj, Path):
             return obj.as_posix()
 
-        elif str_type_obj in SERIALIZE_DIRECT_AS_STR:
+        elif str_type_obj in direct_as_str:
             return str(obj)
 
         # iterables
@@ -462,7 +466,8 @@ def loader_typecheck_factory(
     return_raw: bool = False
 
     try:
-        if origin_type is Union:
+        if origin_type in (Union, types.UnionType, Optional):
+            # TODO: this is incomplete
             pass
         elif isinstance(None, origin_type):
             pass
@@ -478,14 +483,18 @@ def loader_typecheck_factory(
             return data[key]
 
         # TODO: make unions work correctly
-        if (origin_type is Union) or isinstance(data[key], origin_type):
+        if (
+                (origin_type is Union) 
+                or (origin_type is types.UnionType)
+                or isinstance(data[key], origin_type)
+            ):
                 return data[key]
         else:
             if error_mode == "warn":
                 warnings.warn(f"error loading, will return raw data")
                 return data[key]
             elif error_mode == "except":
-                raise TypeError(f"expected {origin_type} for {key = }, got {type(data)}")
+                raise TypeError(f"expected {origin_type} for {key = }, got {type(data)}\n\t{data = }")
             elif error_mode == "try_convert":
                 return origin_type(data)
             elif error_mode == "ignore":
@@ -569,7 +578,8 @@ def dataclass_loader_factory(
 
         # otherwise, use the identity function
         else:
-            loader_funcs[k] = lambda data: data[k]
+            # note here that we cant just use k because it's defined in the loop
+            loader_funcs[k] = lambda data, _k=k: data[_k]
 
     def load(data: JSONitem):
         # get the base outputs for all keys in the dataclass but which dont have a special loader

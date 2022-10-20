@@ -77,6 +77,24 @@ DTYPE_MAP: dict[str, torch.dtype] = {
 }
 
 
+
+TORCH_OPTIMIZERS_MAP: dict[str, torch.optim.Optimizer] = {
+    "Adagrad" : torch.optim.Adagrad,
+    "Adam" : torch.optim.Adam,
+    "AdamW" : torch.optim.AdamW,
+    "SparseAdam" : torch.optim.SparseAdam,
+    "Adamax" : torch.optim.Adamax,
+    "ASGD" : torch.optim.ASGD,
+    "LBFGS" : torch.optim.LBFGS,
+    "NAdam" : torch.optim.NAdam,
+    "RAdam" : torch.optim.RAdam,
+    "RMSprop" : torch.optim.RMSprop,
+    "Rprop" : torch.optim.Rprop,
+    "SGD" : torch.optim.SGD,
+}
+    
+
+
 def lpad_tensor(tensor: torch.Tensor, padded_length: int, pad_value: float = 0.0) -> torch.Tensor:
 	"""pad a 1-d tensor on the left with pad_value to length `padded_length`"""
 	return torch.cat([

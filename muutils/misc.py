@@ -56,3 +56,17 @@ def shorten_numerical_to_str(num: int|float, small_as_decimal: bool = True) -> s
 				return f"{int(round(num / val))}{suffix}"
 
 	return f"{num}"
+
+
+def list_split(lst: list, val) -> list[list]:
+	"""split a list into n sublists. similar to str().split(val)"""
+	
+	output: list[list] = [ [], ]
+
+	for x in lst:
+		if x == val:
+			output.append([])
+		else:
+			output[-1].append(x)
+	return output
+

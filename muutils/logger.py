@@ -14,6 +14,7 @@ import json
 import time
 from typing import Sequence, TextIO, Any, Callable
 from datetime import timedelta
+from pip._internal.operations.freeze import freeze
 
 
 from muutils.jsonlines import jsonl_load
@@ -21,6 +22,127 @@ from muutils.misc import sanitize_fname
 from muutils.json_serialize import JSONitem, json_serialize
 
 # pylint: disable=arguments-differ, bad-indentation, trailing-whitespace, trailing-newlines, unnecessary-pass, consider-using-with, use-dict-literal
+
+
+
+
+class SysInfo:
+	"""getters for various information about the system"""
+	@staticmethod
+	def get_python() -> dict:
+		"""details about python version"""
+		ver_tup = sys.version_info
+		return {
+			"version": sys.version,
+			"major": ver_tup[0],
+			"minor": ver_tup[1],
+			"micro": ver_tup[2],
+			"releaselevel": ver_tup[3],
+			"serial": ver_tup[4],
+		}
+
+	@staticmethod
+	def get_pip() -> dict:
+		"""installed packages info"""
+		pckgs: list[str] = [x for x in freeze(local_only=True)]
+		return {
+			"n_packages": len(pckgs),
+			"packages": pckgs,
+		}
+
+	@staticmethod
+	def get_pytorch() -> dict:
+		"""pytorch and cuda information"""
+		try:
+			import torch
+		except Exception as e:
+			return {
+				"importable": False,
+				"error": str(e),
+			}
+
+		output: dict = {"importable": True}
+
+		output["torch.__version__"] = torch.__version__
+		output["torch.version.cuda"] = torch.version.cuda
+		output["torch.version.debug"] = torch.version.debug
+		output["torch.version.git_version"] = torch.version.git_version
+		output["torch.version.hip"] = torch.version.hip
+		output["torch.cuda.is_available()"] = torch.cuda.is_available()
+		output["torch.cuda.device_count()"] = torch.cuda.device_count()
+		output["torch.cuda.is_initialized()"] = torch.cuda.is_initialized()
+
+		if torch.cuda.is_available():
+			import os
+			cuda_version_nvcc : str = os.popen("nvcc --version").read()
+			output["nvcc --version"] = cuda_version_nvcc.split('\n')
+
+			if torch.cuda.device_count() > 0:
+				n_devices: int = torch.cuda.device_count()
+				output["torch.cuda.current_device()"] = torch.cuda.current_device()
+				output["torch devices"] = []
+				for current_device in range(n_devices):
+					try:
+						# print(f'checking current device {current_device} of {torch.cuda.device_count()} devices')
+						# print(f'\tdevice {current_device}')
+						# dev_prop = torch.cuda.get_device_properties(torch.device(0))
+						# print(f'\t    name:                   {dev_prop.name}')
+						# print(f'\t    version:                {dev_prop.major}.{dev_prop.minor}')
+						# print(f'\t    total_memory:           {dev_prop.total_memory}')
+						# print(f'\t    multi_processor_count:  {dev_prop.multi_processor_count}')
+						# print(f'\t')
+						dev_prop = torch.cuda.get_device_properties(current_device)
+						output["torch devices"].append({
+							"device": current_device,
+							"name": dev_prop.name,
+							"version": {f"major": dev_prop.major, "minor": dev_prop.minor},
+							"total_memory": dev_prop.total_memory,
+							"multi_processor_count": dev_prop.multi_processor_count,
+						})
+					except Exception as e:
+						output["torch devices"].append({
+							"device": current_device,
+							"error": str(e),
+						})
+		return output
+
+	@staticmethod
+	def get_platform() -> dict:
+		import platform
+		items = [
+			"platform",
+			"machine",
+			"processor",
+			"system",
+			"version",
+			"architecture",
+			"uname",
+			"node",
+			"python_branch",
+			"python_build",
+			"python_compiler",
+			"python_implementation",
+		]
+
+		return {
+			x: getattr(platform, x)()
+			for x in items
+		}
+
+	@classmethod
+	def get_all(cls) -> dict:
+		return {
+			"python": cls.get_python(),
+			"pip": cls.get_pip(),
+			"pytorch": cls.get_pytorch(),
+			"platform": cls.get_platform(),
+		}
+
+if __name__ == "__main__":
+	print(json.dumps(json_serialize(SysInfo.get_all()), indent=2))
+
+
+
 
 class NullIO:
 	"""null IO class"""
@@ -58,7 +180,7 @@ class SimpleLogger:
 
 		if (log_path is None) and (log_file is None):
 			print("[logger_internal] # no log file specified, will only write to console", sys.stderr)
-			self._log_file_handle = NullIO()
+			self._log_file_handle = sys.stdout
 
 		elif (log_path is not None) and (log_file is not None):
 			raise ValueError("cannot specify both log_path and log_file, use streams in `SimpleLogger`")
@@ -188,7 +310,6 @@ class LoggingStream:
 	def __str__(self) -> str:
 		return f"LoggingStream()"
 
-	
 
 class Logger(SimpleLogger):
 	"""logger with more features, including log levels and streams
@@ -253,9 +374,9 @@ class Logger(SimpleLogger):
 
 		# set up streams
 		self._streams: dict[str, LoggingStream] = streams if isinstance(streams, dict) else {s.name: s for s in streams}
-		# default strerr stream
-		if "stderr" not in self._streams:
-			self._streams["stderr"] = LoggingStream("stderr", aliases = {"error", "err"})
+		# default error stream
+		if "error" not in self._streams:
+			self._streams["error"] = LoggingStream("error", aliases = {"err",})
 
 		# check alias duplicates
 		alias_set: set[str] = set()
@@ -606,11 +727,11 @@ class ProgressEstimator:
 		return f"{percent_str}% {self.get_pbar(i)}"
 
 
-def _test():
-	with TimerContext() as timer:
-		time.sleep(1)
-	print(timer.elapsed_time)
+# def _test():
+# 	with TimerContext() as timer:
+# 		time.sleep(1)
+# 	print(timer.elapsed_time)
 
-if __name__ == "__main__":
-	_test()
+# if __name__ == "__main__":
+# 	_test()
 

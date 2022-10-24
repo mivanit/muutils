@@ -9,7 +9,8 @@ import inspect
 import typing
 import warnings
 
-from muutils._wip.json_serialize.util import JSONitem, Hashableitem, MonoTuple, UniversalContainer, isinstance_namedtuple, try_catch
+from muutils._wip.json_serialize.util import JSONitem, Hashableitem, MonoTuple, UniversalContainer, ArrayMode, ErrorMode, isinstance_namedtuple, try_catch, _recursive_hashify
+from muutils._wip.json_serialize.array import serialize_array
 
 
 SERIALIZER_SPECIAL_KEYS: List[str] = [
@@ -37,93 +38,129 @@ SERIALIZE_DIRECT_AS_STR: set[str] = {
 }
 
 SerializerHandler = NamedTuple("SerializerHandler", [
-    ("check", Callable[[Any], bool]), # whether to use this handler
+    # (self_config, object) -> whether to use this handler
+    ("check", Callable[["JsonSerializer", Any], bool]), 
     ("serialize", Callable[
-		[Any, int, ArrayMode, ErrorMode, MonoTuple["SerializerHandler"]], # object, depth, array_mode, error_mode, handlers  
+        # (self_config, object, depth) -> serialized object  
+		["JsonSerializer", Any, int], 
 		JSONitem
-	]), # how to serialize
+	]),
+    ("desc", str),
 ])
 
 DEFAULT_HANDLERS: MonoTuple[SerializerHandler] = (
-    # base types
+    # TODO: allow for custom serialization handler name
     SerializerHandler(
-        lambda obj: isinstance(obj, (bool, int, float, str)),
-        lambda obj: obj,
+        check = lambda self, obj: hasattr(obj, "serialize") and callable(obj.serialize),
+        serialize = lambda self, obj: obj.serialize(),
+        desc = ".serialize override",
     ),
     SerializerHandler(
-        lambda obj: isinstance(obj, dict),
-        lambda obj: {str(k): json_serialize_handled(v) for k, v in obj.items()},
+        check = lambda self, obj: isinstance(obj, (bool, int, float, str)),
+        serialize = lambda self, obj: obj,
+        desc = "base types",
     ),
     SerializerHandler(
-        isinstance_namedtuple,
-        lambda obj: json_serialize_handled(dict(obj._asdict())),
+        check = lambda self, obj: isinstance(obj, dict),
+        serialize = lambda self, obj: {str(k): self.json_serialize(v) for k, v in obj.items()},
+        desc = "dictionaries",
     ),
     SerializerHandler(
-        is_dataclass,
-        lambda obj: {
-            k: json_serialize_handled(getattr(obj, k)) 
+        check = lambda self, obj: isinstance_namedtuple(obj),
+        serialize = lambda self, obj: self.json_serialize(dict(obj._asdict())),
+        desc = "namedtuple -> dict",
+    ),
+    SerializerHandler(
+        check = lambda self, obj: is_dataclass(obj),
+        serialize = lambda self, obj: {
+            k: self.json_serialize(getattr(obj, k))
             for k in obj.__dataclass_fields__
         },
+        desc = "dataclass -> dict",
     ),
     SerializerHandler(
-        lambda obj: isinstance(obj, Path),
-        lambda obj: obj.as_posix(),
+        check = lambda self, obj: isinstance(obj, Path),
+        serialize = lambda self, obj: obj.as_posix(),
+        desc = "path -> str",
     ),
     SerializerHandler(
-        lambda obj: str(type(obj)) in SERIALIZE_DIRECT_AS_STR,
-        lambda obj: str(obj),
+        check = lambda self, obj: str(type(obj)) in SERIALIZE_DIRECT_AS_STR,
+        serialize = lambda self, obj: str(obj),
+        desc = "obj -> str(obj)",
     ),
     SerializerHandler(
-        lambda obj: str(type(obj)) == "<class 'numpy.ndarray'>",
-        lambda obj: serialize_array(obj),
+        check = lambda self, obj: str(type(obj)) == "<class 'numpy.ndarray'>",
+        serialize = lambda self, obj: serialize_array(self, obj),
+        desc = "numpy.ndarray",
     ),
     SerializerHandler(
-        lambda obj: str(type(obj)) == "<class 'torch.Tensor'>",
-        lambda obj: serialize_array(obj.detach().cpu().numpy()),
+        check = lambda self, obj: str(type(obj)) == "<class 'torch.Tensor'>",
+        serialize = lambda self, obj: serialize_array(self, obj.detach().cpu().numpy()),
+        desc = "torch.Tensor",
     ),
     SerializerHandler(
-        lambda obj: isinstance(obj, (set, list, tuple)) or isinstance(obj, Iterable),
-        lambda obj: [json_serialize_handled(x) for x in obj],
+        check = lambda self, obj: isinstance(obj, (set, list, tuple)) or isinstance(obj, Iterable),
+        serialize = lambda self, obj: [self.json_serialize(x) for x in obj],
+        desc = "(set, list, tuple, Iterable) -> list",
     ),
     SerializerHandler(
-        lambda obj: True,
-        lambda obj: {
+        check = lambda self, obj: True,
+        serialize = lambda self, obj: {
             **{k: str(getattr(obj, k, None)) for k in SERIALIZER_SPECIAL_KEYS},
             **{k: f(obj) for k, f in SERIALIZER_SPECIAL_FUNCS.items()},
         },
+        desc = "fallback",
     ),
 )
 
 
-@dataclass
 class JsonSerializer:
-    pass
-    
+    """Json serialization class (holds configs)"""
 
-
-def json_serialize_handled(
-    obj: Any,
-    depth: int = -1,
-    array_mode: ArrayMode = "array_list_meta",
-    error_mode: ErrorMode = "except",
-    handlers: tuple[SerializerHandler, ...] = tuple(),
-    **kwargs,
-) -> JSONitem:
-
-
-    if len(kwargs) > 0:
-        warnings.warn(f"unused kwargs: {kwargs}")
-
-    newdepth: int = depth - 1
-    try:
-        handlers
+    def __init__(
+            self,
+            array_mode: ArrayMode = "array_list_meta",
+            error_mode: ErrorMode = "except",
+            handlers_default: MonoTuple[SerializerHandler] = DEFAULT_HANDLERS,
+            handlers_pre: MonoTuple[SerializerHandler] = tuple(),
+            handlers_post: MonoTuple[SerializerHandler] = tuple(),
+        ):
         
-    except Exception as e:
-        if error_mode == "except":
-            raise e
-        elif error_mode == "warn":
-            warnings.warn(f"error serializing, will return as string\n{obj = }\nexception = {e}")
+        self.array_mode: ArrayMode = array_mode
+        self.error_mode: ErrorMode = error_mode
+        # join up the handlers
+        self.handlers: MonoTuple[SerializerHandler] = handlers_pre + handlers_default + handlers_post
+    
+    def json_serialize(
+        self,
+        obj: Any,
+        depth: int = -1,
+    ) -> JSONitem:
 
-        return repr(obj)
+        newdepth: int = depth - 1
+        try:
+            for handler in self.handlers:
+                if handler.check(self, obj):
+                    return handler.serialize(self, obj, newdepth)
+
+            raise ValueError(f"no handler found for object with {type(obj) = }")
+
+        except Exception as e:
+            if self.error_mode == "except":
+                raise e
+            elif self.error_mode == "warn":
+                warnings.warn(f"error serializing, will return as string\n{obj = }\nexception = {e}")
+
+            return repr(obj)
+
+    def hashify(self, obj: Any, force: bool = True) -> Hashableitem:
+        """try to turn any object into something hashable"""
+        data = self.json_serialize(obj, depth=-1)
+
+        # recursive hashify, turning dicts and lists into tuples
+        return _recursive_hashify(data, force=force)
 
 
+def json_serialize(obj: Any) -> JSONitem:
+    """serialize object to json-serializable object with default config"""
+    return JsonSerializer().json_serialize(obj)

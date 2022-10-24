@@ -75,3 +75,32 @@ def try_catch(func: Callable):
             return f"{e.__class__.__name__}: {e}"
 
     return newfunc
+
+
+
+def _recursive_hashify(obj: Any, force: bool = True) -> Hashableitem:
+    if isinstance(obj, dict):
+        return tuple(
+            (k, _recursive_hashify(v)) 
+            for k, v in obj.items()
+        )
+    elif isinstance(obj, (tuple, list, Iterable)):
+        return tuple(
+            _recursive_hashify(v)
+            for v in obj
+        )
+    elif isinstance(obj, (bool, int, float, str)):
+        return obj
+    else:
+        if force:
+            return str(obj)
+        else:
+            raise ValueError(f"cannot hashify:\n{obj}")        
+
+
+def hashify(obj: Any, force: bool = True) -> Hashableitem:
+    """try to turn any object into something hashable"""
+    data = json_serialize(obj, depth=-1)
+
+    # recursive hashify, turning dicts and lists into tuples
+    return _recursive_hashify(data, force=force)

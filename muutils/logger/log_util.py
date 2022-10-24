@@ -10,10 +10,25 @@ def get_any_from_stream(stream: list[dict], key: str) -> None:
 	raise KeyError(f"key '{key}' not found in stream")
 
 
+def gather_log(file: str) -> dict[str, list[dict]]:
+	"""gathers and sorts all streams from a log"""
+	data: list[JSONitem] = jsonl_load(file)
+	output: dict[str, list[dict]] = dict()
+
+	for item in data:
+		stream: str = item.get("_stream", None)
+		if stream not in output:
+			output[stream] = list()
+		output[stream].append(item)
+	
+	return output
+
+
 def gather_stream(
 		file: str, 
 		stream: str, 
 	) -> list[JSONitem]:
+	"""gets all entries from a specific stream in a log file"""
 	data: list[JSONitem] = jsonl_load(file)
 
 	output: list[tuple] = list()

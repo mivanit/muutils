@@ -25,7 +25,9 @@ def annotated_array_factory(
 
         @typing._tp_cache
         def __class_getitem__(cls, params):
-            if len(params) == 0:
+            if isinstance(params, type):
+                return typing._AnnotatedAlias(array_type, {"type": params})
+            elif len(params) == 0:
                 return array_type
             else:
                 return typing._AnnotatedAlias(array_type, params)

@@ -90,6 +90,13 @@ class Logger(SimpleLogger):
 		if not timestamp:
 			raise ValueError("timestamp must be True -- why would you not want timestamps?")
 		
+		# timing
+		# ==================================================
+		# timing compares
+		self._keep_last_msg_time: bool = keep_last_msg_time
+		# TODO: handle per stream?
+		self._last_msg_time: float|None = time.time()
+
 		# basic setup
 		# ==================================================
 		# init BaseLogger
@@ -124,28 +131,14 @@ class Logger(SimpleLogger):
 
 		print({k : str(v) for k,v in self._streams.items()})
 
-		# stream handles
-		# ==================================================
-		self._stream_handles: dict[str, AnyIO] = dict()
-		for stream_alias, stream_obj in self._streams.items():
-			handler: AnyIO|None = self.process_handler(stream_obj)
-			if handler is not None:
-				self._stream_handles[stream_alias] = handler
-
-		# timing
-		# ==================================================
-		# timing compares
-		self._keep_last_msg_time: bool = keep_last_msg_time
-		# TODO: handle per stream?
-		self._last_msg_time: float|None = time.time()
-
 	def __del__(self):
 		self._log_file_handle.flush()
 		self._log_file_handle.close()
 
-		for stream_handler in self._stream_handles.values():
-			stream_handler.flush()
-			stream_handler.close()
+		for stream in self._streams.values():
+			if stream.handler is not None:
+				stream.handler.flush()
+				stream.handler.close()
 
 	def _exception_context(
 			self, 
@@ -252,12 +245,12 @@ class Logger(SimpleLogger):
 		# write
 		# ========================================
 		logfile_msg: str = json.dumps(json_serialize(msg_dict)) + '\n'
-		if (stream is None) or (stream not in self._stream_handles):
+		if (stream is None) or (stream not in self._streams) or (self._streams[stream].handler is None):
 			# write to the main log file if no stream is specified
 			self._log_file_handle.write(logfile_msg)
 		else:
 			# otherwise, write to the stream-specific file
-			self._stream_handles[stream].write(logfile_msg)
+			self._streams[stream].handler.write(logfile_msg)
 		
 		# if it was important enough to print, flush all streams
 		if _printed:
@@ -287,9 +280,9 @@ class Logger(SimpleLogger):
 
 		self._log_file_handle.flush()
 
-		for stream_handle in self._stream_handles.values():
-			stream_handle.flush()
-			
+		for stream in self._streams.values():
+			if stream.handler is not None:
+				stream.handler.flush()
 
 	def __getattr__(self, stream: str) -> Callable:
 		if stream.startswith("_"):

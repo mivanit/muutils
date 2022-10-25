@@ -9,13 +9,15 @@ import inspect
 import typing
 import warnings
 
+import numpy as np
+
 from muutils._wip.json_serialize.util import JSONitem, Hashableitem, MonoTuple, UniversalContainer, isinstance_namedtuple, try_catch
+from muutils.tensor_utils import NDArray
 
 
-ArrayMode = Literal["list", "array_list_meta", "array_hex_meta"]
+ArrayMode = Literal["list", "array_list_meta", "array_hex_meta", "external"]
 
-
-def serialize_array(arr: Any, array_mode: ArrayMode = "array_list_meta") -> JSONitem:
+def serialize_array(arr: NDArray, array_mode: ArrayMode = "array_list_meta") -> JSONitem:
     """serialize a numpy or pytorch array in one of several modes
 
     if the object is zero-dimensional, simply get the unique item
@@ -24,8 +26,9 @@ def serialize_array(arr: Any, array_mode: ArrayMode = "array_list_meta") -> JSON
     - `list`: serialize as a list of values, no metadata (equivalent to `arr.tolist()`)
     - `array_list_meta`: serialize dict with metadata, actual list under the key `data`
     - `array_hex_meta`: serialize dict with metadata, actual hex string under the key `data`
+	# - `external`: reference to external file
 
-    for the latter two, the output will look like
+    for `array_list_meta` and `array_hex_meta`, the output will look like
     ```
     {
         "__format__": <array_list_meta|array_hex_meta>,
@@ -43,7 +46,7 @@ def serialize_array(arr: Any, array_mode: ArrayMode = "array_list_meta") -> JSON
     # Returns:
      - `JSONitem` 
        json serialized array
-    
+
     # Raises:
      - `KeyError` : if the array mode is not valid
     """    
@@ -84,6 +87,10 @@ def infer_array_mode(arr: JSONitem) -> ArrayMode:
         elif fmt == "array_hex_meta":
             if type(arr["data"]) != str:
                 raise ValueError(f"invalid hex format: {arr}")
+            return fmt
+        elif fmt == "external":
+            if ("$ref" not in arr) or (type(arr["$ref"]) != str):
+                raise ValueError(f"invalid external format: {arr}")
             return fmt
         else:
             raise ValueError(f"invalid format: {arr}")

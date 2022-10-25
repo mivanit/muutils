@@ -95,12 +95,4 @@ def _recursive_hashify(obj: Any, force: bool = True) -> Hashableitem:
         if force:
             return str(obj)
         else:
-            raise ValueError(f"cannot hashify:\n{obj}")        
-
-
-def hashify(obj: Any, force: bool = True) -> Hashableitem:
-    """try to turn any object into something hashable"""
-    data = json_serialize(obj, depth=-1)
-
-    # recursive hashify, turning dicts and lists into tuples
-    return _recursive_hashify(data, force=force)
+            raise ValueError(f"cannot hashify:\n{obj}")

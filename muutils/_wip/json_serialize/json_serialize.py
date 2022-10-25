@@ -9,8 +9,8 @@ import inspect
 import typing
 import warnings
 
-from muutils._wip.json_serialize.util import JSONitem, Hashableitem, MonoTuple, UniversalContainer, ArrayMode, ErrorMode, isinstance_namedtuple, try_catch, _recursive_hashify
-from muutils._wip.json_serialize.array import serialize_array
+from muutils._wip.json_serialize.util import JSONitem, Hashableitem, MonoTuple, UniversalContainer, ErrorMode, isinstance_namedtuple, try_catch, _recursive_hashify
+from muutils._wip.json_serialize.array import serialize_array, ArrayMode
 
 
 SERIALIZER_SPECIAL_KEYS: List[str] = [
@@ -37,16 +37,32 @@ SERIALIZE_DIRECT_AS_STR: set[str] = {
     "<class 'torch.device'>", "<class 'torch.dtype'>",
 }
 
-SerializerHandler = NamedTuple("SerializerHandler", [
+# SerializerHandler = NamedTuple("SerializerHandler", [
+#     # (self_config, object) -> whether to use this handler
+#     ("check", Callable[["JsonSerializer", Any], bool]), 
+#     ("serialize", Callable[
+#         # (self_config, object, depth) -> serialized object  
+# 		["JsonSerializer", Any, int], 
+# 		JSONitem
+# 	]),
+#     ("desc", str),
+# ])
+
+@dataclass
+class SerializerHandler:
+    """a handler for a specific type of object
+    
+    # Parameters:
+        - `check : Callable[[JsonSerializer, Any], bool]` takes a JsonSerializer and an object, returns whether to use this handler
+        - `serialize : Callable[[JsonSerializer, Any, int], JSONitem]` takes a JsonSerializer, an object, and the current depth, returns the serialized object
+        - `desc : str` description of the handler (optional)
+    """    
+
     # (self_config, object) -> whether to use this handler
-    ("check", Callable[["JsonSerializer", Any], bool]), 
-    ("serialize", Callable[
-        # (self_config, object, depth) -> serialized object  
-		["JsonSerializer", Any, int], 
-		JSONitem
-	]),
-    ("desc", str),
-])
+    check: Callable[["JsonSerializer", Any], bool]
+    # (self_config, object, depth) -> serialized object
+    serialize: Callable[["JsonSerializer", Any, int], JSONitem]
+    desc: str = "(no description)"
 
 DEFAULT_HANDLERS: MonoTuple[SerializerHandler] = (
     # TODO: allow for custom serialization handler name
@@ -119,17 +135,20 @@ class JsonSerializer:
 
     def __init__(
             self,
+            *args,
             array_mode: ArrayMode = "array_list_meta",
             error_mode: ErrorMode = "except",
-            handlers_default: MonoTuple[SerializerHandler] = DEFAULT_HANDLERS,
             handlers_pre: MonoTuple[SerializerHandler] = tuple(),
-            handlers_post: MonoTuple[SerializerHandler] = tuple(),
+            handlers_default: MonoTuple[SerializerHandler] = DEFAULT_HANDLERS,
         ):
+
+        if len(args) > 0:
+            raise ValueError(f"JsonSerializer takes no positional arguments!\n{args = }")
         
         self.array_mode: ArrayMode = array_mode
         self.error_mode: ErrorMode = error_mode
         # join up the handlers
-        self.handlers: MonoTuple[SerializerHandler] = handlers_pre + handlers_default + handlers_post
+        self.handlers: MonoTuple[SerializerHandler] = handlers_pre + handlers_default
     
     def json_serialize(
         self,
@@ -159,6 +178,7 @@ class JsonSerializer:
 
         # recursive hashify, turning dicts and lists into tuples
         return _recursive_hashify(data, force=force)
+
 
 
 def json_serialize(obj: Any) -> JSONitem:

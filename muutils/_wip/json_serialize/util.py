@@ -96,3 +96,8 @@ def _recursive_hashify(obj: Any, force: bool = True) -> Hashableitem:
             return str(obj)
         else:
             raise ValueError(f"cannot hashify:\n{obj}")
+
+
+
+class SerializationException(Exception):
+    pass

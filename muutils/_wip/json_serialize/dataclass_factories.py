@@ -1,7 +1,7 @@
 import functools
 import json
 from pathlib import Path
-from types import GenericAlias
+from types import GenericAlias, UnionType
 from typing import Any, Dict, List, NamedTuple, Optional, Tuple, Type, Union, Callable, Literal, Iterable
 from dataclasses import dataclass, is_dataclass, asdict
 from collections import namedtuple
@@ -9,7 +9,11 @@ import inspect
 import typing
 import warnings
 
-from muutils._wip.json_serialize.util import JSONitem, Hashableitem, MonoTuple, UniversalContainer, isinstance_namedtuple, try_catch
+from muutils._wip.json_serialize.util import JSONitem, Hashableitem, MonoTuple, UniversalContainer, isinstance_namedtuple, try_catch, ErrorMode
+from muutils._wip.json_serialize.json_serialize import JsonSerializer
+
+
+# pylint: disable=pointless-string-statement, unreachable, import-outside-toplevel
 
 
 def serialize_torch_module(
@@ -25,6 +29,8 @@ def serialize_torch_module(
 
     the state dict will be saved separately under `state_dict`
     """
+    # TODO: add paths to serializer
+    raise NotImplementedError()
     return {
         "__format__": "torch_module",
         "name": obj.__class__.__name__,
@@ -54,6 +60,8 @@ def load_torch_module_factory(
     - everything from the `members_dict` not in `members_exclude` will be passed to the `__init__` method of the module
     - everything from the `state_dict` will be passed to the `load_state_dict` method of the module
     """
+    raise NotImplementedError()
+
     import torch
 
     @classmethod
@@ -101,28 +109,44 @@ def dataclass_serializer_factory(
     if fields_exclude is None:
         fields_exclude = list()
 
-    def serialize(self):
+    special_serializers_1arg: dict[str, Callable] = dict()
+    special_serializers_3arg: dict[str, Callable] = dict()
+    # TODO: deprecate this??
+
+    # augment special serializers if they are missing `jser` and `path` arguments
+    spec_ser: Callable
+    for key, spec_ser in special_serializers.items():
+        args: list[str] = inspect.getfullargspec(spec_ser).args
+        if len(args) == 1:
+            # if there is only one argument, it is the class itself
+            # so we can just add the `jser` and `path` arguments
+            # special_serializers_processed[key] = lambda cls, jser=None, path=None: spec_ser(cls)
+            # this doesnt work since spec_ser is defined in the loop, so access via key
+            # special_serializers_processed[key] = lambda self, jser=None, path=None: special_serializers[key](self)
+            raise NotImplementedError()
+
+        else:
+            # here, we assume the args are (self, jser, path)
+            assert len(args) == 3, f"special serializer for field {key} should have 1 or 3 arguments"
+            special_serializers_processed[key] = 
+
+    def serialize(self, jser: JsonSerializer, path: tuple[str|int] = tuple()) -> JSONitem:
         # get the base outputs for all keys in the dataclass but which dont have a special serializer
         base_output: dict[str, JSONitem] = {
             k: (
-                json_serialize(getattr(self, k))
+                jser.json_serialize(getattr(self, k), path=path + (k,))
             )
             for k in self.__dataclass_fields__
             if (
-                (k not in special_serializers)
+                (k not in special_serializers_processed)
                 and (k not in fields_exclude)
             )
         }
 
         # update with the special serializers
-        return {
-            **base_output,
-            **{
-                k: special_serializers[k](self)
-                for k in special_serializers
-                if k not in fields_exclude
-            },
-        }
+        for k in special_serializers_processed:
+            if k not in fields_exclude:
+                base_output[k] = special_serializers_processed[k](self, jser, path=path + (k,))
 
     return serialize
 

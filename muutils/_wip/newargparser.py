@@ -52,19 +52,19 @@ class FunctionSignature:
 	"""signature and metadata about a function"""
 	name : str
 	doc : str
-	args : List[ArgumentSignature]
+	args : list[ArgumentSignature]
 	return_type : type
 
 	@property
-	def args_positional(self) -> List[ArgumentSignature]:
+	def args_positional(self) -> list[ArgumentSignature]:
 		return [a for a in self.args if not a.keyword_only]
 	
 	@property
-	def args_pos_only(self) -> List[ArgumentSignature]:
+	def args_pos_only(self) -> list[ArgumentSignature]:
 		return [x for x in self.args if x.positional_only]
 	
 	@property
-	def args_kw_only(self) -> List[ArgumentSignature]:
+	def args_kw_only(self) -> list[ArgumentSignature]:
 		return [x for x in self.args if x.keyword_only]
 
 
@@ -85,7 +85,7 @@ def process_signature(func : Callable) -> None:
 	argspec: inspect.FullArgSpec = inspect.getfullargspec(func)
 
 	# print(json.dumps(json_serialize(argspec), indent=4))
-	args_all_names: List[str] = argspec.args
+	args_all_names: list[str] = argspec.args
 	if argspec.varargs is not None:
 		args_all_names.append('*' + argspec.varargs)
 	args_all_names.extend(argspec.kwonlyargs)
@@ -100,7 +100,7 @@ def process_signature(func : Callable) -> None:
 	# ==============================
 	args_defaults : dict[str, Any] = dict()
 	# chop the values without default values from `argspec.args`
-	ordered_args_with_defaults : List[str] = deepcopy(argspec.args[:-len(argspec.defaults)])
+	ordered_args_with_defaults : list[str] = deepcopy(argspec.args[:-len(argspec.defaults)])
 	# zip them up with defaults and add them to dict
 	for arg, default in zip(ordered_args_with_defaults, argspec.defaults):
 		args_defaults[arg] = default
@@ -123,7 +123,7 @@ def process_signature(func : Callable) -> None:
 	# ==============================
 	args_descriptions : dict[str, Description] = dict()
 	for k,v in args_annotations.items():
-		desc_items : List[str] = [
+		desc_items : list[str] = [
 			x
 			for x in v
 			if isinstance(x, (str, Description))
@@ -140,7 +140,7 @@ def process_signature(func : Callable) -> None:
 			args_processors[k] = v
 
 
-	args: List[ArgumentSignature] = [
+	args: list[ArgumentSignature] = [
 		ArgumentSignature(
 			name = arg,
 			keyword_only = arg in argspec.kwonlyargs,
@@ -236,10 +236,10 @@ def main_third(
 JSONData = Union[bool, int, float, str, list, dict]
 
 
-def substring_mask(data: str, quote_symbol:str = "'") -> List[bool]:
+def substring_mask(data: str, quote_symbol:str = "'") -> list[bool]:
 	"""iterate over a string, returning a list of bools on whether each character is within quotes"""
 
-	output: List[bool] = list()
+	output: list[bool] = list()
 	
 	# start by assuming we're not in a string
 	in_string_current: bool = False
@@ -276,11 +276,11 @@ def substring_mask(data: str, quote_symbol:str = "'") -> List[bool]:
 	return output
 
 
-def split_Lmask(data: str, mask: bool) -> Tuple[List[str], List[bool]]:
+def split_Lmask(data: str, mask: bool) -> tuple[list[str], list[bool]]:
 	"""given a mask, split the data into runs of strings which either are or are not masked"""
 
-	output_strings: List[str] = list()
-	output_masks: List[bool] = list()
+	output_strings: list[str] = list()
+	output_masks: list[bool] = list()
 	
 	prev_mask: Optional[bool] = None
 
@@ -304,7 +304,7 @@ def split_Lmask(data: str, mask: bool) -> Tuple[List[str], List[bool]]:
 
 	return output_strings, output_masks
 
-def invert_mask(mask: List[bool]) -> List[bool]:
+def invert_mask(mask: list[bool]) -> list[bool]:
 	"""invert a mask"""
 	return [not x for x in mask]
 
@@ -318,14 +318,14 @@ def display_str_with_mask(data: str) -> None:
 
 
 def apply_replace_within_Lmask(
-		data: List[str], 
-		mask: List[bool], 
+		data: list[str], 
+		mask: list[bool], 
 		replace_from: str,
 		replace_to: str,
 	) -> str:
 	"""apply a replace to a string, but only within a mask"""
 	
-	output: List[str] = list()
+	output: list[str] = list()
 
 	for (c,m) in zip(data, mask):
 		if m:

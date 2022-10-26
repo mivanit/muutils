@@ -70,7 +70,7 @@ class SerializerHandler:
     # optional description of how this serializer works
     desc: str = "(no description)"
 
-DEFAULT_HANDLERS: MonoTuple[SerializerHandler] = (
+DEFAULT_HANDLERS: Monotuple[SerializerHandler] = (
     SerializerHandler(
         # TODO: allow for custom serialization handler name
         check = lambda self, obj, path: hasattr(obj, "serialize") and callable(obj.serialize),
@@ -147,8 +147,8 @@ class JsonSerializer:
             *args,
             array_mode: ArrayMode = "array_list_meta",
             error_mode: ErrorMode = "except",
-            handlers_pre: MonoTuple[SerializerHandler] = tuple(),
-            handlers_default: MonoTuple[SerializerHandler] = DEFAULT_HANDLERS,
+            handlers_pre: Monotuple[SerializerHandler] = tuple(),
+            handlers_default: Monotuple[SerializerHandler] = DEFAULT_HANDLERS,
         ):
 
         if len(args) > 0:
@@ -157,7 +157,7 @@ class JsonSerializer:
         self.array_mode: ArrayMode = array_mode
         self.error_mode: ErrorMode = error_mode
         # join up the handlers
-        self.handlers: MonoTuple[SerializerHandler] = handlers_pre + handlers_default
+        self.handlers: Monotuple[SerializerHandler] = handlers_pre + handlers_default
     
     def json_serialize(
         self,

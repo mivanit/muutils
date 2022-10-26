@@ -54,14 +54,14 @@ class ZANJ():
 		self,
 		error_mode: ErrorMode = "except",
 		array_threshold: int = 256,
-		handlers_pre: MonoTuple[SerializerHandler] = tuple(),
-		handlers_default: MonoTuple[SerializerHandler] = DEFAULT_HANDLERS,	
+		handlers_pre: Monotuple[SerializerHandler] = tuple(),
+		handlers_default: Monotuple[SerializerHandler] = DEFAULT_HANDLERS,	
 	) -> None:
 
 		self.error_mode: ErrorMode = error_mode
 		self.array_threshold: int = array_threshold
-		self.handlers_pre: MonoTuple[SerializerHandler] = handlers_pre
-		self.handlers_default: MonoTuple[SerializerHandler] = handlers_default
+		self.handlers_pre: Monotuple[SerializerHandler] = handlers_pre
+		self.handlers_default: Monotuple[SerializerHandler] = handlers_default
 
 	
 	def create(self, cls: type) -> type:

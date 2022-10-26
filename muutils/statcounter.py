@@ -88,7 +88,7 @@ class StatCounter(Counter):
         if p < 0 or p > 1:
             raise ValueError(f"percentile must be between 0 and 1: {p}")
         # flip for speed
-        sorted_keys: List[float] = [float(x) for x in self.keys_sorted]
+        sorted_keys: list[float] = [float(x) for x in self.keys_sorted]
         sort: int = 1
         if p > 0.51:
             sort = -1
@@ -147,8 +147,8 @@ class StatCounter(Counter):
             self, 
             typecast: Callable = lambda x: x,
             *,
-            extra_percentiles: Optional[List[float]] = None,
-        ) -> Dict[str, Union[float, int]]:
+            extra_percentiles: Optional[list[float]] = None,
+        ) -> dict[str, Union[float, int]]:
 
         # common stats that always work
         output: dict = dict(
@@ -187,7 +187,7 @@ class StatCounter(Counter):
             self, 
             typecast: Callable = lambda x: x,
             *,
-            extra_percentiles: Optional[List[float]] = None,
+            extra_percentiles: Optional[list[float]] = None,
         ) -> dict:
         return {
             "StatCounter": {
@@ -231,7 +231,7 @@ class StatCounter(Counter):
 # testing
 # ==================================================
 
-def _compute_err(a: float, b: float, /) -> Tuple[dict]:
+def _compute_err(a: float, b: float, /) -> tuple[dict]:
     return dict(
         num_a=float(a),
         num_b=float(b),
@@ -240,7 +240,7 @@ def _compute_err(a: float, b: float, /) -> Tuple[dict]:
     )
 
 
-def _compare_np_custom(arr: np.ndarray) -> Dict[str, dict]:
+def _compare_np_custom(arr: np.ndarray) -> dict[str, dict]:
     counter: StatCounter = StatCounter(arr)
     return dict(
         mean=_compute_err(counter.mean(), np.mean(arr)),
@@ -255,7 +255,7 @@ def _compare_np_custom(arr: np.ndarray) -> Dict[str, dict]:
 
 def _test_statscounter():
 
-    arrs: List[np.ndarray] = [
+    arrs: list[np.ndarray] = [
         np.array([0, 1]),
         np.array([1, 2]),
         np.random.randint(0, 10, size=100),

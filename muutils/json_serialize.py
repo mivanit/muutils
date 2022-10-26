@@ -58,7 +58,7 @@ def try_catch(func: Callable):
     return newfunc
 
 
-SERIALIZER_SPECIAL_KEYS: List[str] = [
+SERIALIZER_SPECIAL_KEYS: list[str] = [
     "__name__",
     "__doc__",
     "__module__",
@@ -67,7 +67,7 @@ SERIALIZER_SPECIAL_KEYS: List[str] = [
     "__annotations__",
 ]
 
-SERIALIZER_SPECIAL_FUNCS: Dict[str, Callable] = {
+SERIALIZER_SPECIAL_FUNCS: dict[str, Callable] = {
     "str": str,
     "dir": dir,
     "type": try_catch(lambda x: str(type(x).__name__)),
@@ -245,7 +245,7 @@ def json_serialize(
         if isinstance(obj, dict):
             # print(f'\n### reading obj as dict: {str(obj)}')
             # if dict, recurse
-            out_dict: Dict[str, JSONitem] = dict()
+            out_dict: dict[str, JSONitem] = dict()
             for k, v in obj.items():
                 out_dict[str(k)] = json_serialize(v, newdepth)
             return out_dict
@@ -327,7 +327,7 @@ def hashify(obj: Any, force: bool = True) -> Hashableitem:
 def serialize_torch_module(
         obj: "torch.nn.Module", 
         *,
-        member_typecasts: Dict[str, Callable],
+        member_typecasts: dict[str, Callable],
         array_mode: ArrayMode = "array_list_meta",
     ) -> JSONitem:
     """serialize an instance of `torch.nn.Module`
@@ -358,8 +358,8 @@ def serialize_torch_module(
 def load_torch_module_factory(
         cls, 
         *,
-        members_exclude: List[str],
-        typecasts: Dict[str, Callable],
+        members_exclude: list[str],
+        typecasts: dict[str, Callable],
     ) -> Callable[[Any, JSONitem], "torch.nn.Module"]:
     """create a function which allows for loading a torch module from `JSONitem`
 
@@ -462,7 +462,7 @@ def loader_typecheck_factory(
         # set it back if `get_origin()` returns `None`
         origin_type = expected_type
 
-    type_args: Tuple[type, ...] = typing.get_args(expected_type)
+    type_args: tuple[type, ...] = typing.get_args(expected_type)
     return_raw: bool = False
 
     try:

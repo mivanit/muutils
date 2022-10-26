@@ -2,12 +2,12 @@ from typing import Optional, Tuple, List, Dict, Callable, Union, Literal
 
 def dataclass_validator_factory(
         cls,
-        checks: Optional[List[Tuple[
+        checks: Optional[list[tuple[
             Callable[[object], bool], # method taking self as argument and returning True if valid
             Optional[str], # error message
         ]]] = None,
         default_throw_except : bool = False,
-        field_check_types : Union[bool, List[str]] = True,
+        field_check_types : Union[bool, list[str]] = True,
         type_strictness : Literal['except', 'check', 'ignore'] = 'except',
     ) -> Callable:
     """validate dataclass through type checking and a list of checks
@@ -16,7 +16,7 @@ def dataclass_validator_factory(
     - cls: dataclass to validate (so, define MyClass.validate outside of the class defn. see example)
     - `checks`: a list of tuples of the form (method, error_message). the method should take self as argument and return True if valid
     - `default_throw_except: bool` : if True, will throw an exception if any check in `checks` fails. does not apply to type checking
-    - `field_check_types: Union[bool, List[str]]`: if True, will check the type of each field. if a list, will check the type of only the fields in the list. if False, will not check the type of any field.
+    - `field_check_types: Union[bool, list[str]]`: if True, will check the type of each field. if a list, will check the type of only the fields in the list. if False, will not check the type of any field.
     - `type_strictness: Literal['except', 'check', 'ignore']` : if 'except', will throw an exception if any type is incorrect. if 'check', will return false if a type check fails, but will not raise an exception. if 'ignore', will not check type at all.
     
     # Returns
@@ -56,7 +56,7 @@ def dataclass_validator_factory(
     # filter and convert the fields and their types
     fields_types : dict[str, type] = {
         key: (
-            # if complex type, list `List[int]`, get `list`
+            # if complex type, list `list[int]`, get `list`
             field.type.__origin__ 
             if hasattr(field.type, '__origin__')
             else field.type

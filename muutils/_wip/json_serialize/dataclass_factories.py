@@ -53,7 +53,7 @@ def serialize_torch_module(
 def load_torch_module_factory(
         cls, 
         *,
-        members_exclude: List[str],
+        members_exclude: list[str],
         typecasts: dict[str, Callable],
     ) -> Callable[[Any, JSONitem], "torch.nn.Module"]:
     """create a function which allows for loading a torch module from `JSONitem`
@@ -172,7 +172,7 @@ def loader_typecheck_factory(
         # set it back if `get_origin()` returns `None`
         origin_type = expected_type
 
-    type_args: Tuple[type, ...] = typing.get_args(expected_type)
+    type_args: tuple[type, ...] = typing.get_args(expected_type)
     return_raw: bool = False
 
     try:

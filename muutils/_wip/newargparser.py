@@ -94,11 +94,11 @@ def process_signature(func : Callable) -> None:
 	
 	# get the base type signatures
 	# ==============================
-	args_types : Dict[str,type] = get_type_hints(func)
+	args_types : dict[str,type] = get_type_hints(func)
 
 	# get default values
 	# ==============================
-	args_defaults : Dict[str, Any] = dict()
+	args_defaults : dict[str, Any] = dict()
 	# chop the values without default values from `argspec.args`
 	ordered_args_with_defaults : List[str] = deepcopy(argspec.args[:-len(argspec.defaults)])
 	# zip them up with defaults and add them to dict
@@ -113,7 +113,7 @@ def process_signature(func : Callable) -> None:
 	
 	# get the annotations
 	# ==============================
-	args_annotations : Dict[str,tuple] = {
+	args_annotations : dict[str,tuple] = {
 		k : v.__metadata__
 		for k,v in get_type_hints(func, include_extras=True).items()
 		if hasattr(v, '__metadata__')
@@ -121,7 +121,7 @@ def process_signature(func : Callable) -> None:
 
 	# get the descriptions, by getting all strings in the annotation
 	# ==============================
-	args_descriptions : Dict[str, Description] = dict()
+	args_descriptions : dict[str, Description] = dict()
 	for k,v in args_annotations.items():
 		desc_items : List[str] = [
 			x
@@ -134,7 +134,7 @@ def process_signature(func : Callable) -> None:
 
 	# get the processors, by getting only things marked as `ArgProcessor`
 	# ==============================
-	args_processors : Dict[str,ArgProcessor] = dict()
+	args_processors : dict[str,ArgProcessor] = dict()
 	for k,v in args_annotations.items():
 		if isinstance(v, ArgProcessor):
 			args_processors[k] = v

@@ -54,7 +54,7 @@ def dataclass_validator_factory(
         field_check_types = list(cls.__dataclass_fields__.keys())
 
     # filter and convert the fields and their types
-    fields_types : Dict[str, type] = {
+    fields_types : dict[str, type] = {
         key: (
             # if complex type, list `List[int]`, get `list`
             field.type.__origin__ 

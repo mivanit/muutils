@@ -2,21 +2,25 @@ import functools
 import json
 from pathlib import Path
 from types import GenericAlias
-from typing import Any, Dict, List, NamedTuple, Optional, Tuple, Type, Union, Callable, Literal, Iterable
+import typing
+from typing import Any, Callable, Literal, Iterable
 from dataclasses import dataclass, is_dataclass, asdict
 from collections import namedtuple
 import inspect
-import typing
 import warnings
 
-from muutils._wip.json_serialize.util import JSONitem, Hashableitem, MonoTuple, UniversalContainer, ErrorMode, isinstance_namedtuple, try_catch, _recursive_hashify, SerializationException
+from muutils._wip.json_serialize.util import (
+    JSONitem, Hashableitem, MonoTuple, UniversalContainer, ErrorMode, 
+    isinstance_namedtuple, try_catch, _recursive_hashify, 
+    SerializationException,
+)
 from muutils._wip.json_serialize.array import serialize_array, ArrayMode
 
 
 
 
 
-SERIALIZER_SPECIAL_KEYS: List[str] = [
+SERIALIZER_SPECIAL_KEYS: list[str] = [
     "__name__",
     "__doc__",
     "__module__",
@@ -25,7 +29,7 @@ SERIALIZER_SPECIAL_KEYS: List[str] = [
     "__annotations__",
 ]
 
-SERIALIZER_SPECIAL_FUNCS: Dict[str, Callable] = {
+SERIALIZER_SPECIAL_FUNCS: dict[str, Callable] = {
     "str": str,
     "dir": dir,
     "type": try_catch(lambda x: str(type(x).__name__)),
@@ -33,8 +37,6 @@ SERIALIZER_SPECIAL_FUNCS: Dict[str, Callable] = {
     "code": try_catch(lambda x: inspect.getsource(x)),
     "sourcefile": try_catch(lambda x: inspect.getsourcefile(x)),
 }
-
-ErrorMode = Literal["ignore", "warn", "except"]
 
 SERIALIZE_DIRECT_AS_STR: set[str] = {
     "<class 'torch.device'>", "<class 'torch.dtype'>",
@@ -65,11 +67,12 @@ class SerializerHandler:
     check: Callable[["JsonSerializer", Any], bool]
     # (self_config, object, depth) -> serialized object
     serialize: Callable[["JsonSerializer", Any, tuple[str|int]], JSONitem]
+    # optional description of how this serializer works
     desc: str = "(no description)"
 
 DEFAULT_HANDLERS: MonoTuple[SerializerHandler] = (
-    # TODO: allow for custom serialization handler name
     SerializerHandler(
+        # TODO: allow for custom serialization handler name
         check = lambda self, obj, path: hasattr(obj, "serialize") and callable(obj.serialize),
         serialize = lambda self, obj, path: obj.serialize(),
         desc = ".serialize override",

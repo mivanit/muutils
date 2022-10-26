@@ -18,6 +18,10 @@ except ImportError:
     warnings.warn("numpy not found, cannot serialize numpy arrays!")
     _NUMPY_WORKING = False
 
+ErrorMode = Literal["ignore", "warn", "except"]
+TypeErrorMode = Union[ErrorMode, Literal["try_convert"]]
+
+
 JSONitem = Union[bool, int, float, str, list, dict, None]
 Hashableitem = Union[bool, int, float, str, tuple]
 

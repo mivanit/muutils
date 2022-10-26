@@ -8,8 +8,9 @@ from collections import namedtuple
 import inspect
 import typing
 import warnings
+from muutils._wip.json_serialize.array import ArrayMode
 
-from muutils._wip.json_serialize.util import JSONitem, Hashableitem, MonoTuple, UniversalContainer, isinstance_namedtuple, try_catch, ErrorMode
+from muutils._wip.json_serialize.util import JSONitem, Hashableitem, MonoTuple, TypeErrorMode, UniversalContainer, isinstance_namedtuple, try_catch, ErrorMode
 from muutils._wip.json_serialize.json_serialize import JsonSerializer
 
 
@@ -19,7 +20,7 @@ from muutils._wip.json_serialize.json_serialize import JsonSerializer
 def serialize_torch_module(
         obj: "torch.nn.Module", 
         *,
-        member_typecasts: Dict[str, Callable],
+        member_typecasts: dict[str, Callable],
         array_mode: ArrayMode = "array_list_meta",
     ) -> JSONitem:
     """serialize an instance of `torch.nn.Module`
@@ -53,7 +54,7 @@ def load_torch_module_factory(
         cls, 
         *,
         members_exclude: List[str],
-        typecasts: Dict[str, Callable],
+        typecasts: dict[str, Callable],
     ) -> Callable[[Any, JSONitem], "torch.nn.Module"]:
     """create a function which allows for loading a torch module from `JSONitem`
 
@@ -109,26 +110,19 @@ def dataclass_serializer_factory(
     if fields_exclude is None:
         fields_exclude = list()
 
-    special_serializers_1arg: dict[str, Callable] = dict()
-    special_serializers_3arg: dict[str, Callable] = dict()
-    # TODO: deprecate this??
+    sfuncs_simple: dict[str, Callable] = dict() # TODO: deprecate simple serializers? check if they output a nested structure or simple type? idk
+    sfuncs_full: dict[str, Callable] = dict()
 
     # augment special serializers if they are missing `jser` and `path` arguments
     spec_ser: Callable
     for key, spec_ser in special_serializers.items():
         args: list[str] = inspect.getfullargspec(spec_ser).args
         if len(args) == 1:
-            # if there is only one argument, it is the class itself
-            # so we can just add the `jser` and `path` arguments
-            # special_serializers_processed[key] = lambda cls, jser=None, path=None: spec_ser(cls)
-            # this doesnt work since spec_ser is defined in the loop, so access via key
-            # special_serializers_processed[key] = lambda self, jser=None, path=None: special_serializers[key](self)
-            raise NotImplementedError()
-
+            sfuncs_simple[key] = spec_ser
+        elif len(args) == 3:
+            sfuncs_full[key] = spec_ser
         else:
-            # here, we assume the args are (self, jser, path)
-            assert len(args) == 3, f"special serializer for field {key} should have 1 or 3 arguments"
-            special_serializers_processed[key] = 
+            raise ValueError(f"special serializer function `{spec_ser}` has {len(args)} arguments {args = }, but should have 1 or 3")
 
     def serialize(self, jser: JsonSerializer, path: tuple[str|int] = tuple()) -> JSONitem:
         # get the base outputs for all keys in the dataclass but which dont have a special serializer
@@ -138,19 +132,23 @@ def dataclass_serializer_factory(
             )
             for k in self.__dataclass_fields__
             if (
-                (k not in special_serializers_processed)
+                (k not in sfuncs_simple) 
+                and (k not in sfuncs_full)
                 and (k not in fields_exclude)
             )
         }
 
         # update with the special serializers
-        for k in special_serializers_processed:
+        for k in sfuncs_simple:
             if k not in fields_exclude:
-                base_output[k] = special_serializers_processed[k](self, jser, path=path + (k,))
+                base_output[k] = sfuncs_simple[k](self)
+        for k in sfuncs_full:
+            if k not in fields_exclude:
+                base_output[k] = sfuncs_full[k](self, jser = jser, path = path)
 
     return serialize
 
-TypeErrorMode = Union[ErrorMode, Literal["try_convert"]]
+
 
 
 def loader_typecheck_factory(
@@ -349,49 +347,3 @@ def augement_dataclass_serializer_loader(
     # We're called as `@augement_dataclass_serializer_loader` without parens.
     return wrap(cls)
 
-def _test():
-
-    # @augement_dataclass_serializer_loader(
-    #     special_serializers=dict(rand_data=lambda self: str(self.rand_data)),
-    # )
-    @dataclass
-    class TestClass:
-        a: int
-        b: str
-        c: float
-        rand_data: Any = None
-    
-    TestClass.serialize = dataclass_serializer_factory(
-        TestClass,
-        special_serializers=dict(rand_data=lambda self: str(self.rand_data)),
-    )
-    TestClass.load = dataclass_loader_factory(TestClass)
-    
-    # @augement_dataclass_serializer_loader
-    @dataclass
-    class OuterTestClass:
-        a2: int
-        b2: str
-        c2: float
-        d2: TestClass
-
-    OuterTestClass.serialize = dataclass_serializer_factory(OuterTestClass)
-    OuterTestClass.load = dataclass_loader_factory(OuterTestClass)
-
-    item_a: TestClass = TestClass(a=1, b="x", c=3.0)
-    item_b: OuterTestClass = OuterTestClass(a2=2, b2="y", c2=4.0, d2=item_a)
-
-    print(f"{item_a = }")
-    print(f"{item_a.serialize() = }")
-    print(f"{item_b = }")
-    print(f"{item_b.serialize() = }")
-    
-    item_b_ser: JSONitem = item_b.serialize()
-
-    item_b_loaded: OuterTestClass = OuterTestClass.load(item_b_ser)
-
-    # assert item_b_loaded == item_b
-    # assert item_b_loaded.d2 == item_a
-
-    print(f"{item_b_loaded = }")
-    print(f"{item_b_loaded.serialize() = }")

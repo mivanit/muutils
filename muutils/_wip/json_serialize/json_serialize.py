@@ -16,10 +16,6 @@ from muutils._wip.json_serialize.util import (
 )
 from muutils._wip.json_serialize.array import serialize_array, ArrayMode
 
-
-
-
-
 SERIALIZER_SPECIAL_KEYS: list[str] = [
     "__name__",
     "__doc__",
@@ -42,16 +38,7 @@ SERIALIZE_DIRECT_AS_STR: set[str] = {
     "<class 'torch.device'>", "<class 'torch.dtype'>",
 }
 
-# SerializerHandler = NamedTuple("SerializerHandler", [
-#     # (self_config, object) -> whether to use this handler
-#     ("check", Callable[["JsonSerializer", Any], bool]), 
-#     ("serialize", Callable[
-#         # (self_config, object, depth) -> serialized object  
-# 		["JsonSerializer", Any, int], 
-# 		JSONitem
-# 	]),
-#     ("desc", str),
-# ])
+ObjectPath = ObjectPath
 
 @dataclass
 class SerializerHandler:
@@ -59,18 +46,18 @@ class SerializerHandler:
     
     # Parameters:
         - `check : Callable[[JsonSerializer, Any], bool]` takes a JsonSerializer and an object, returns whether to use this handler
-        - `serialize : Callable[[JsonSerializer, Any, tuple[str|int]], JSONitem]` takes a JsonSerializer, an object, and the current path, returns the serialized object
+        - `serialize : Callable[[JsonSerializer, Any, ObjectPath], JSONitem]` takes a JsonSerializer, an object, and the current path, returns the serialized object
         - `desc : str` description of the handler (optional)
     """    
 
     # (self_config, object) -> whether to use this handler
     check: Callable[["JsonSerializer", Any], bool]
-    # (self_config, object, depth) -> serialized object
-    serialize: Callable[["JsonSerializer", Any, tuple[str|int]], JSONitem]
+    # (self_config, object, path) -> serialized object
+    serialize: Callable[["JsonSerializer", Any, ObjectPath], JSONitem]
     # optional description of how this serializer works
     desc: str = "(no description)"
 
-DEFAULT_HANDLERS: Monotuple[SerializerHandler] = (
+DEFAULT_HANDLERS: MonoTuple[SerializerHandler] = (
     SerializerHandler(
         # TODO: allow for custom serialization handler name
         check = lambda self, obj, path: hasattr(obj, "serialize") and callable(obj.serialize),
@@ -115,12 +102,12 @@ DEFAULT_HANDLERS: Monotuple[SerializerHandler] = (
     ),
     SerializerHandler(
         check = lambda self, obj, path: str(type(obj)) == "<class 'numpy.ndarray'>",
-        serialize = lambda self, obj, path: serialize_array(self, obj),
+        serialize = lambda self, obj, path: serialize_array(self, obj, path=path),
         desc = "numpy.ndarray",
     ),
     SerializerHandler(
         check = lambda self, obj, path: str(type(obj)) == "<class 'torch.Tensor'>",
-        serialize = lambda self, obj, path: serialize_array(self, obj.detach().cpu().numpy()),
+        serialize = lambda self, obj, path: serialize_array(self, obj.detach().cpu().numpy(), path=path),
         desc = "torch.Tensor",
     ),
     SerializerHandler(
@@ -147,8 +134,8 @@ class JsonSerializer:
             *args,
             array_mode: ArrayMode = "array_list_meta",
             error_mode: ErrorMode = "except",
-            handlers_pre: Monotuple[SerializerHandler] = tuple(),
-            handlers_default: Monotuple[SerializerHandler] = DEFAULT_HANDLERS,
+            handlers_pre: MonoTuple[SerializerHandler] = tuple(),
+            handlers_default: MonoTuple[SerializerHandler] = DEFAULT_HANDLERS,
         ):
 
         if len(args) > 0:
@@ -157,12 +144,12 @@ class JsonSerializer:
         self.array_mode: ArrayMode = array_mode
         self.error_mode: ErrorMode = error_mode
         # join up the handlers
-        self.handlers: Monotuple[SerializerHandler] = handlers_pre + handlers_default
+        self.handlers: MonoTuple[SerializerHandler] = handlers_pre + handlers_default
     
     def json_serialize(
         self,
         obj: Any,
-        path: tuple[str|int] = tuple(),
+        path: ObjectPath = tuple(),
     ) -> JSONitem:
 
         try:
@@ -183,7 +170,7 @@ class JsonSerializer:
     def hashify(
             self, 
             obj: Any, 
-            path: tuple[str|int] = tuple(), 
+            path: ObjectPath = tuple(), 
             force: bool = True,
         ) -> Hashableitem:
         """try to turn any object into something hashable"""
@@ -194,6 +181,6 @@ class JsonSerializer:
 
 
 
-def json_serialize(obj: Any, path: tuple[str|int] = tuple()) -> JSONitem:
+def json_serialize(obj: Any, path: ObjectPath = tuple()) -> JSONitem:
     """serialize object to json-serializable object with default config"""
     return JsonSerializer().json_serialize(obj, path=path)

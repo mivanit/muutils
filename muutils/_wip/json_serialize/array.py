@@ -17,7 +17,12 @@ from muutils.tensor_utils import NDArray
 
 ArrayMode = Literal["list", "array_list_meta", "array_hex_meta", "external"]
 
-def serialize_array(arr: NDArray, array_mode: ArrayMode = "array_list_meta") -> JSONitem:
+def serialize_array(
+        jser: "JsonSerializer", 
+        arr: NDArray, 
+        path: str, 
+        array_mode: ArrayMode|None = None,
+    ) -> JSONitem:
     """serialize a numpy or pytorch array in one of several modes
 
     if the object is zero-dimensional, simply get the unique item
@@ -41,7 +46,7 @@ def serialize_array(arr: NDArray, array_mode: ArrayMode = "array_list_meta") -> 
     # Parameters:
      - `arr : Any` array to serialize
      - `array_mode : ArrayMode` mode in which to serialize the array  
-       (defaults to `"array_list_meta"`)  
+       (defaults to `None` and inheriting from `jser: JsonSerializer`)  
     
     # Returns:
      - `JSONitem` 
@@ -53,6 +58,9 @@ def serialize_array(arr: NDArray, array_mode: ArrayMode = "array_list_meta") -> 
 
     if len(arr.shape) == 0:
         return arr.item()
+    
+    if array_mode is None:
+        array_mode = jser.array_mode
     
     if array_mode == "array_list_meta":
         return {

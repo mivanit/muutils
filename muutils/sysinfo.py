@@ -1,5 +1,21 @@
+import os
 import sys
+import typing
+import subprocess
 from pip._internal.operations.freeze import freeze
+
+
+def _popen(cmd: list[str], split_out: bool = False) -> dict[str, typing.Any]:
+	p: subprocess.Popen = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+
+	p_out: str|list[str] = p.stdout.read().decode("utf-8")
+	if split_out:
+		p_out = p_out.strip().split("\n")
+	return {
+		"stdout": p_out,
+		"stderr": p.stderr.read().decode("utf-8"),
+		"returncode": p.returncode if p.returncode is None else int(p.returncode),
+	}
 
 class SysInfo:
 	"""getters for various information about the system"""
@@ -104,6 +120,23 @@ class SysInfo:
 			for x in items
 		}
 
+	@staticmethod
+	def get_git_info() -> dict:
+		git_version: dict = _popen(["git", "version"])
+		git_status: dict = _popen(["git", "status"])
+		if git_status["stderr"].startswith("fatal: not a git repository"):
+			return {
+				"git version": git_version["stdout"],
+				"git status": git_status,
+			}
+		else:
+			return {
+				"git status": git_status,
+				"git branch": _popen(["git", "branch"], split_out=True),
+				"git remote -v": _popen(["git", "remote", "-v"], split_out=True),
+				"git log": _popen(["git", "log"]),
+			}
+
 	@classmethod
 	def get_all(cls) -> dict:
 		return {
@@ -111,4 +144,5 @@ class SysInfo:
 			"pip": cls.get_pip(),
 			"pytorch": cls.get_pytorch(),
 			"platform": cls.get_platform(),
+			"git": cls.get_git_info(),
 		}

@@ -29,95 +29,6 @@ from muutils.tensor_utils import NDArray
 from muutils.sysinfo import SysInfo
 
 
-ExternalItemType = Literal["nparray", "jsonl"]
-
-ExternalItem = NamedTuple(
-	"ExternalItem",
-	[
-		("item_type", ExternalItemType),
-		("data", Any),
-	],
-)
-
-EXTERNAL_ITEMS_EXTENSIONS: dict[ExternalItemType, str] = {
-	"nparray": "npy",
-	"jsonl": "jsonl",
-}
-
-
-
-def store_nparray(self, fp: IO[bytes], data: NDArray) -> None:
-	np.lib.format.write_array(
-		fp = fp, 
-		array = np.asanyarray(data),
-		allow_pickle=False,
-	)
-
-def store_jsonl(self, fp: IO[bytes], data: Sequence[JSONitem]) -> None:
-
-	if isinstance(data, pd.DataFrame):
-		data_new = data.to_dict(orient="records")
-	else:
-		data_new = data
-
-	for item in data_new:
-		fp.write(json.dumps(item).encode("utf-8"))
-		fp.write("\n".encode("utf-8"))
-
-EXTERNAL_STORE_FUNCS: dict[ExternalItemType, Callable[[IO[bytes], Any], None]] = {
-	"nparray": store_nparray,
-	"jsonl": store_jsonl,
-}
-
-
-def load_nparray(self, fp: IO[bytes]) -> NDArray:
-	return np.load(fp)
-
-def load_jsonl(self, fp: IO[bytes]) -> Iterable[JSONitem]:
-	for line in fp:
-		yield json.loads(line)
-
-EXTERNAL_LOAD_FUNCS: dict[ExternalItemType, Callable[[IO[bytes]], Any]] = {
-	"nparray": load_nparray,
-	"jsonl": load_jsonl,
-}
-
-
-
-
-def _external_serialize(
-		jser: "ZANJ", 
-		arr: NDArray, 
-		path: MonoTuple[str|int],
-		item_type: ExternalItemType,
-	) -> JSONitem:
-	"""_summary_
-	
-	
-	
-	# Parameters:
-	 - `jser : ZANJ`
-	 - `arr : NDArray`
-	
-	# Returns:
-	 - `JSONitem` 
-	   json data with reference
-
-	# Modifies:
-	 - modifies `jser._externals`
-	"""	
-
-	joined_path: str = "/".join([str(p) for p in path])
-
-	if joined_path in jser._externals:
-		raise ValueError(f"external path {joined_path} already exists!")
-	
-	jser._externals[joined_path] = ExternalItem(item_type, arr)
-
-	return {
-		"__format__": "external.",
-		"$ref": joined_path,
-	}
 
 
 ZANJ_MAIN: str = "zanj.json"
@@ -267,6 +178,7 @@ class ZANJ(JsonSerializer):
 
 	def read(path: Union[str, Path], mmap_mode: str|None = None):
 		"""load the object from a ZANJ archive"""
+		raise NotImplementedError()
 
 
 

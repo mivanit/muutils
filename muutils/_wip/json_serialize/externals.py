@@ -1,19 +1,15 @@
-from dataclasses import dataclass
+"""for storing/retrieving an item externally in a ZANJ archive"""
+
 import json
 import typing
 from typing import Literal, NamedTuple, Sequence, IO, Callable, Any, Iterable
-import zipfile
 
 import numpy as np
 import pandas as pd
 
-from muutils._wip.json_serialize.util import JSONitem, Hashableitem, MonoTuple, UniversalContainer, ArrayMode, ErrorMode, isinstance_namedtuple, try_catch, _recursive_hashify
-from muutils._wip.json_serialize.array import serialize_array
-from muutils._wip.json_serialize.json_serialize import JsonSerializer, json_serialize, SerializerHandler, DEFAULT_HANDLERS
+from muutils._wip.json_serialize.util import JSONitem 
 from muutils.tensor_utils import NDArray
 
-
-# pylint: disable=protected-access
 
 ExternalItemType = Literal["nparray", "jsonl"]
 
@@ -22,6 +18,7 @@ ExternalItem = NamedTuple(
 	[
 		("item_type", ExternalItemType),
 		("data", Any),
+		("path", list[str|int])
 	],
 )
 
@@ -68,34 +65,3 @@ EXTERNAL_LOAD_FUNCS: dict[ExternalItemType, Callable[[IO[bytes]], Any]] = {
 }
 
 
-def _external_serialize(
-		jser: "ZANJ", 
-		arr: NDArray, 
-		path: MonoTuple[str|int],
-		item_type: ExternalItemType,
-	) -> JSONitem:
-	"""_summary_
-	
-	# Parameters:
-	 - `jser : ZANJ`
-	 - `arr : NDArray`
-	
-	# Returns:
-	 - `JSONitem` 
-	   json data with reference
-
-	# Modifies:
-	 - modifies `jser._externals`
-	"""	
-
-	joined_path: str = "/".join([str(p) for p in path])
-
-	if joined_path in jser._externals:
-		raise ValueError(f"external path {joined_path} already exists!")
-	
-	jser._externals[joined_path] = ExternalItem(item_type, arr)
-
-	return {
-		"__format__": "external+npy",
-		"$ref": joined_path,
-	}

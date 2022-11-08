@@ -26,23 +26,25 @@ JSONitem = Union[bool, int, float, str, list, dict, None]
 Hashableitem = Union[bool, int, float, str, tuple]
 
 class MonoTuple:
-	"""tuple type hint, but for a tuple of any length with all the same type"""
-	__slots__ = ()
+    """tuple type hint, but for a tuple of any length with all the same type"""
+    __slots__ = ()
 
-	def __new__(cls, *args, **kwargs):
-		raise TypeError("Type MonoTuple cannot be instantiated.")
+    def __new__(cls, *args, **kwargs):
+        raise TypeError("Type MonoTuple cannot be instantiated.")
 
-	def __init_subclass__(cls, *args, **kwargs):
-		raise TypeError(f"Cannot subclass {cls.__module__}")
+    def __init_subclass__(cls, *args, **kwargs):
+        raise TypeError(f"Cannot subclass {cls.__module__}")
 
-	@typing._tp_cache
-	def __class_getitem__(cls, params):
-		if len(params) == 0:
-			return tuple
-		elif len(params) == 1:
-			return GenericAlias(tuple, (params[0], Ellipsis))
-		else:
-			raise TypeError(f"MonoTuple expects 1 type argument, got {len(params) = } \n\t{params = }")
+    @typing._tp_cache
+    def __class_getitem__(cls, params):
+        if isinstance(params, types.UnionType):
+            return GenericAlias(tuple, (params, Ellipsis))
+        elif len(params) == 0:
+            return tuple
+        elif len(params) == 1:
+            return GenericAlias(tuple, (params[0], Ellipsis))
+        else:
+            raise TypeError(f"MonoTuple expects 1 type argument, got {len(params) = } \n\t{params = }")
 
 
 class UniversalContainer:

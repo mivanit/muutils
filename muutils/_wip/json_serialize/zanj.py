@@ -22,34 +22,145 @@ import zipfile
 import numpy as np
 import pandas as pd
 
-from muutils._wip.json_serialize.util import JSONitem, Hashableitem, MonoTuple, UniversalContainer, ArrayMode, ErrorMode, isinstance_namedtuple, try_catch, _recursive_hashify
-from muutils._wip.json_serialize.array import serialize_array
-from muutils._wip.json_serialize.json_serialize import JsonSerializer, json_serialize, SerializerHandler, DEFAULT_HANDLERS
+from muutils._wip.json_serialize.util import JSONitem, Hashableitem, MonoTuple, UniversalContainer, ErrorMode, isinstance_namedtuple, try_catch, _recursive_hashify
+from muutils._wip.json_serialize.array import serialize_array, ArrayMode
+from muutils._wip.json_serialize.json_serialize import JsonSerializer, json_serialize, SerializerHandler, DEFAULT_HANDLERS, ObjectPath
+from muutils._wip.json_serialize.externals import ExternalItemType, ExternalItem, EXTERNAL_ITEMS_EXTENSIONS, EXTERNAL_STORE_FUNCS, EXTERNAL_LOAD_FUNCS
 from muutils.tensor_utils import NDArray
 from muutils.sysinfo import SysInfo
 
+# pylint: disable=protected-access
 
+def zanj_external_serialize(
+		jser: "ZANJ", 
+		arr: NDArray, 
+		path: MonoTuple[str|int],
+		item_type: ExternalItemType,
+	) -> JSONitem:
+	"""stores a numpy array externally in a ZANJ object
+	
+	# Parameters:
+	 - `jser : ZANJ`
+	 - `arr : NDArray`
+	
+	# Returns:
+	 - `JSONitem` 
+	   json data with reference
 
+	# Modifies:
+	 - modifies `jser._externals`
+	"""	
+
+	joined_path: str = "/".join([str(p) for p in path])
+
+	if joined_path in jser._externals:
+		raise ValueError(f"external path {joined_path} already exists!")
+	
+	jser._externals[joined_path] = ExternalItem(
+		item_type=item_type,
+		data=arr,
+		path=path,
+	)
+
+	return {
+		"__format__": f"external:{EXTERNAL_ITEMS_EXTENSIONS[item_type]}",
+		"$ref": joined_path,
+	}
 
 ZANJ_MAIN: str = "zanj.json"
 ZANJ_META: str = "__zanj_meta__.json"
 
 
-DEFAULT_HANDLERS_ZANJ: MonoTuple[SerializerHandler] = (
+DEFAULT_SERIALIZER_HANDLERS_ZANJ: MonoTuple[SerializerHandler] = (
 	(
 		SerializerHandler(
 			check = lambda self, obj, path: isinstance(obj, np.ndarray) and obj.size >= self.array_threshold,
-			serialize = lambda self, obj, path: _external_serialize(self, obj, path, "nparray"),
+			serialize = lambda self, obj, path: zanj_external_serialize(self, obj, path, "nparray"),
 			desc = "external.nparray",
 		),
 		SerializerHandler(
 			check = lambda self, obj, path: isinstance(obj, (list, tuple, pd.DataFrame)) and len(obj) >= self.table_threshold,
-			serialize = lambda self, obj, path: _external_serialize(self, obj, path, "jsonl"),
+			serialize = lambda self, obj, path: zanj_external_serialize(self, obj, path, "jsonl"),
 			desc = "external.jsonl",
 		),
 	)
 	+ DEFAULT_HANDLERS
 )
+
+
+
+
+@dataclass
+class LoaderHandler:
+	"""handler for loading an object from a json file"""
+	# (json_data, path) -> whether to use this handler
+	check: Callable[[JSONitem, ObjectPath], bool]
+	# function to load the object
+	load: Callable[[JSONitem, ObjectPath], Any]
+	# description of the handler
+	desc: str = "(no description)"
+
+@dataclass
+class ZANJLoaderHandler:
+	"""handler for loading an object from a ZANJ archive (takes ZANJ object as first arg)"""
+	# (zanj_obi, json_data, path) -> whether to use this handler
+	check: Callable[["ZANJ", JSONitem, ObjectPath], bool]
+	# function to load the object (zanj_obj, json_data, path) -> loaded_obj
+	load: Callable[["ZANJ", JSONitem, ObjectPath], Any]
+	# description of the handler
+	desc: str = "(no description)"
+
+	@classmethod
+	def from_LoaderHandler(cls, lh: LoaderHandler):
+		"""wrap a standard LoaderHandler to make it compatible with ZANJ"""
+		return cls(
+			check = lambda zanj, json_item, path: lh.check(json_item, path),
+			load = lambda zanj, json_item, path: lh.load(json_item, path),
+			desc = lh.desc,
+		)
+
+DEFAULT_LOADER_HANDLERS: tuple[LoaderHandler] = (
+	LoaderHandler(
+		check = lambda json_item, path: (
+			isinstance(json_item, dict)
+			and "__format__" in json_item
+			and json_item["__format__"] == "array_list_meta"
+		),
+		load = lambda json_item, path: (
+			np.array(json_item["data"], dtype=json_item["dtype"]).reshape(json_item["shape"])
+		),
+		desc = "array_list_meta loader",
+	),
+	LoaderHandler(
+		check = lambda json_item, path: (
+			isinstance(json_item, dict)
+			and "__format__" in json_item
+			and json_item["__format__"] == "array_hex_meta"
+		),
+		load = lambda json_item, path: (
+			np.frombuffer(bytes.fromhex(json_item["data"]), dtype=json_item["dtype"]).reshape(json_item["shape"])
+		),
+		desc = "array_hex_meta loader",
+	),
+)
+
+
+DEFAULT_LOADER_HANDLERS_ZANJ: tuple[ZANJLoaderHandler] = (
+	ZANJLoaderHandler(
+		check = lambda zanj, json_item, path: (
+			isinstance(json_item, dict)
+			and "__format__" in json_item
+			and json_item["__format__"].startswith("external:")
+		),
+		load = lambda zanj, json_item, path: (
+			zanj._externals[json_item["key"]]
+		)
+	),
+) + tuple(
+	ZANJLoaderHandler.from_LoaderHandler(lh) 
+	for lh in DEFAULT_LOADER_HANDLERS
+)
+
 
 
 class ZANJ(JsonSerializer):
@@ -176,15 +287,15 @@ class ZANJ(JsonSerializer):
 
 		return file_path
 
-	def read(path: Union[str, Path], mmap_mode: str|None = None):
+	def read(self, path: Union[str, Path], mmap_mode: str|None = None):
 		"""load the object from a ZANJ archive"""
 		raise NotImplementedError()
 
 
 
 @dataclass
-class ReferenceLoader:
-	"""acts like a regular dictionary or list, but catches references
+class ZANJLoaderTreeNode:
+	"""acts like a regular dictionary or list, but applies loaders to items
 	
 	does this by passing `_parent` down the stack, whenever you get an item from the container.
 	"""
@@ -209,12 +320,15 @@ class ReferenceLoader:
 			val = self._data[key]
 
 		if isinstance(val, (dict,list)):
-			return ReferenceLoader(_parent=self._parent, _data=val)
+			return ZANJLoaderTreeNode(_parent=self._parent, _data=val)
 		else:
 			return val
 
 class LazyExternalLoader:
-	"""lazy load np arrays or jsonl files, similar tp NpzFile from np.lib"""
+	"""lazy load np arrays or jsonl files, similar tp NpzFile from np.lib
+	
+	initialize with zipfile object and zanj metadata (for list of externals)
+	"""
 
 	def __init__(
 			self,
@@ -229,13 +343,18 @@ class LazyExternalLoader:
 			for key, val in zanj_meta["externals_info"].items()
 		}
 
+		# validate by checking each external file exists
+		for key, item_type in self._externals_types.items():
+			fname: str = f"{key}.{EXTERNAL_ITEMS_EXTENSIONS[item_type]}"
+			if fname not in zipf.namelist():
+				raise ValueError(f"external file {fname} not found in archive")
+
+
 	def __getitem__(self, key: str) -> Any:
-		if key in self._externals_list:
+		if key in self._externals_types:
 			path, item_type = key
 			with self._zipf.open(path, "rb") as fp:
 				return EXTERNAL_LOAD_FUNCS[item_type](fp)
-
-
 
 
 
@@ -247,6 +366,7 @@ class LoadedZANJ:
 		path: str|Path,
 		zanj: ZANJ,
 		mmap_mode: str|None,
+		loader_handlers: MonoTuple[ZANJLoaderHandler],
 	) -> None:
 
 		self._path: str = str(path)
@@ -256,7 +376,7 @@ class LoadedZANJ:
 
 		self._meta: JSONitem = json.load(self._zipf.open(ZANJ_META, "rt"))
 
-		self._json_data: ReferenceLoader = ReferenceLoader(
+		self._json_data: ZANJLoaderTreeNode = ZANJLoaderTreeNode(
 			_parent = self,
 			_data = json.load(self._zipf.open(ZANJ_MAIN, "rt"))
 		)
@@ -269,4 +389,4 @@ class LoadedZANJ:
 		"""get the value of the given key"""
 
 
-	
+

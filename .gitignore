@@ -1,3 +1,4 @@
+tests/junk_data/**
 .pypi-token
 __pycache__/
 **/__pycache__/

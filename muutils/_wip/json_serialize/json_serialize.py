@@ -1,5 +1,5 @@
-import functools
 import json
+import functools
 from pathlib import Path
 from types import GenericAlias
 import typing
@@ -16,14 +16,14 @@ from muutils._wip.json_serialize.util import (
 )
 from muutils._wip.json_serialize.array import serialize_array, ArrayMode
 
-SERIALIZER_SPECIAL_KEYS: list[str] = [
+SERIALIZER_SPECIAL_KEYS: tuple[str] = (
     "__name__",
     "__doc__",
     "__module__",
     "__class__",
     "__dict__",
     "__annotations__",
-]
+)
 
 SERIALIZER_SPECIAL_FUNCS: dict[str, Callable] = {
     "str": str,
@@ -38,7 +38,7 @@ SERIALIZE_DIRECT_AS_STR: set[str] = {
     "<class 'torch.device'>", "<class 'torch.dtype'>",
 }
 
-ObjectPath = ObjectPath
+ObjectPath = MonoTuple[str|int]
 
 @dataclass
 class SerializerHandler:
@@ -56,6 +56,8 @@ class SerializerHandler:
     serialize: Callable[["JsonSerializer", Any, ObjectPath], JSONitem]
     # optional description of how this serializer works
     desc: str = "(no description)"
+
+
 
 DEFAULT_HANDLERS: MonoTuple[SerializerHandler] = (
     SerializerHandler(

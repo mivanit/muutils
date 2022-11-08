@@ -2,6 +2,13 @@
 an HDF5/exdir file alternative, which uses json for attributes, allows serialization of arbitrary data
 
 for large arrays, the output is a .tar.gz file with most data in a json file, but with sufficiently large arrays stored in binary .npy files
+
+
+"ZANJ" is an acronym that the AI tool [Elicit](https://elicit.org) came up with for me. not to be confused with:
+
+- https://en.wikipedia.org/wiki/Zanj
+- https://www.plutojournals.com/zanj/
+
 """
 
 from dataclasses import dataclass
@@ -181,6 +188,28 @@ class ZANJ(JsonSerializer):
 		# create the externals, leave it empty
 		self._externals: dict[str, ExternalItem] = dict()
 
+	def externals_info(self) -> dict[dict]:
+		"""return information about the current externals"""
+		output: dict[dict] = dict()
+
+		key: str; item: ExternalItem
+		for key, item in self._externals:
+			data = item.data
+			output[key] = {
+				"item_type": item.item_type,
+				"type(data)": type(data),
+				"len(data)": len(data),
+			}
+
+			if item.item_type == "nparray":
+				output[key]["data.shape"] = data.shape
+				output[key]["data.dtype"] = data.dtype
+				output[key]["data.size"] = item.size
+			elif item.item_type == "jsonl":
+				output[key]["data[0]"] = data[0]
+		
+		return output
+
 	def meta(self) -> JSONitem:
 		"""return the metadata of the ZANJ archive"""
 
@@ -195,15 +224,18 @@ class ZANJ(JsonSerializer):
 			),
 			# system info (python, pip packages, torch & cuda, platform info, git info)
 			sysinfo = SysInfo.get_all(),
+			externals_info = self.externals_info(),
 		)
 
 
 	def save(self, file_path: str|Path, obj: Any) -> str:
 		"""save the object to a ZANJ archive. returns the path to the archive"""
 
+		# make a path
 		file_path: str = f"{file_path}.zanj"
 
-		self._externals: dict[str, Any] = dict()
+		# clear the externals!
+		self._externals = dict()
 
 		# serialize the object -- this will populate self._externals
 		json_data: JSONitem = self.json_serialize(obj, path=tuple())
@@ -228,15 +260,71 @@ class ZANJ(JsonSerializer):
 
 		zipf.close()
 
-		# clear the externals
+		# clear the externals, again
 		self._externals: dict[str, Any] = dict()
 
 		return file_path
 
 	def read(path: Union[str, Path], mmap_mode: str|None = None):
 		"""load the object from a ZANJ archive"""
-		
-		
+
+
+
+@dataclass
+class ReferenceLoader:
+	"""acts like a regular dictionary or list, but catches references
+	
+	does this by passing `_parent` down the stack, whenever you get an item from the container.
+	"""
+	_parent: "LoadedZANJ"
+	_data: dict[str, JSONitem]|list[JSONitem]
+
+	def __getitem__(self, key: str|int) -> Any:
+		# get value, check key types
+		val: JSONitem
+		if (
+				(isinstance(self._data, list) and isinstance(key, int))
+				and (isinstance(self._data, dict) and isinstance(key, str))
+			):
+			val = self._data[key]
+		else:
+			raise KeyError(f"invalid key type {type(key) = }, {key = } for {self._data = } with {type(self._data) = }")
+
+		# get value or dereference
+		if key == "$ref":
+			val = self._parent._externals[val]
+		else:
+			val = self._data[key]
+
+		if isinstance(val, (dict,list)):
+			return ReferenceLoader(_parent=self._parent, _data=val)
+		else:
+			return val
+
+class LazyExternalLoader:
+	"""lazy load np arrays or jsonl files, similar tp NpzFile from np.lib"""
+
+	def __init__(
+			self,
+			zipf: zipfile.ZipFile,
+			zanj_meta: JSONitem,
+		):
+		self._zipf: zipfile.ZipFile = zipf
+		self._zanj_meta: JSONitem = zanj_meta
+		# (path, item_type) pairs
+		self._externals_types: dict[str, str] = {
+			key : val.item_type
+			for key, val in zanj_meta["externals_info"].items()
+		}
+
+	def __getitem__(self, key: str) -> Any:
+		if key in self._externals_list:
+			path, item_type = key
+			with self._zipf.open(path, "rb") as fp:
+				return EXTERNAL_LOAD_FUNCS[item_type](fp)
+
+
+
 
 
 class LoadedZANJ:
@@ -255,8 +343,15 @@ class LoadedZANJ:
 		self._mmap_mode: str|None = mmap_mode
 
 		self._meta: JSONitem = json.load(self._zipf.open(ZANJ_META, "rt"))
-		self._json_data: JSONitem = json.load(self._zipf.open(ZANJ_MAIN, "rt"))
-		self._externals: dict[str, Any] = dict()
+
+		self._json_data: ReferenceLoader = ReferenceLoader(
+			_parent = self,
+			_data = json.load(self._zipf.open(ZANJ_MAIN, "rt"))
+		)
+		self._externals: np.lib.format.NpzFile = np.lib.format.NpzFile(
+
+		)
+		
 	
 	def __getitem__(self, key: str) -> Any:
 		"""get the value of the given key"""

@@ -67,19 +67,19 @@ def zanj_external_serialize(
 		"$ref": joined_path,
 	}
 
-ZANJ_MAIN: str = "zanj.json"
+ZANJ_MAIN: str = "__zanj__.json"
 ZANJ_META: str = "__zanj_meta__.json"
 
 
 DEFAULT_SERIALIZER_HANDLERS_ZANJ: MonoTuple[SerializerHandler] = (
 	(
 		SerializerHandler(
-			check = lambda self, obj, path: isinstance(obj, np.ndarray) and obj.size >= self.array_threshold,
+			check = lambda self, obj, path: isinstance(obj, np.ndarray) and obj.size >= self.external_array_threshold,
 			serialize = lambda self, obj, path: zanj_external_serialize(self, obj, path, "nparray"),
 			desc = "external.nparray",
 		),
 		SerializerHandler(
-			check = lambda self, obj, path: isinstance(obj, (list, tuple, pd.DataFrame)) and len(obj) >= self.table_threshold,
+			check = lambda self, obj, path: isinstance(obj, (list, tuple, pd.DataFrame)) and len(obj) >= self.external_table_threshold,
 			serialize = lambda self, obj, path: zanj_external_serialize(self, obj, path, "jsonl"),
 			desc = "external.jsonl",
 		),
@@ -183,21 +183,22 @@ class ZANJ(JsonSerializer):
 	def __init__(
 		self,
 		error_mode: ErrorMode = "except",
-		array_threshold: int = 256,
-		table_threshold: int = 256,
+		internal_array_mode: ArrayMode = "array_list_meta",
+		external_array_threshold: int = 256,
+		external_table_threshold: int = 256,
 		compress: bool|int = True,
 		handlers_pre: MonoTuple[SerializerHandler] = tuple(),
-		handlers_default: MonoTuple[SerializerHandler] = DEFAULT_HANDLERS,	
+		handlers_default: MonoTuple[SerializerHandler] = DEFAULT_SERIALIZER_HANDLERS_ZANJ,	
 	) -> None:
 		super().__init__(
-			array_mode = "external",
+			array_mode = internal_array_mode,		
 			error_mode = error_mode,
 			handlers_pre = handlers_pre,
 			handlers_default = handlers_default,
 		)
 
-		self.array_threshold: int = array_threshold
-		self.table_threshold: int = table_threshold
+		self.external_array_threshold: int = external_array_threshold
+		self.external_table_threshold: int = external_table_threshold
 
 		# process compression to int if bool given
 		self.compress = compress
@@ -215,7 +216,7 @@ class ZANJ(JsonSerializer):
 		output: dict[dict] = dict()
 
 		key: str; item: ExternalItem
-		for key, item in self._externals:
+		for key, item in self._externals.items():
 			data = item.data
 			output[key] = {
 				"item_type": item.item_type,
@@ -226,7 +227,7 @@ class ZANJ(JsonSerializer):
 			if item.item_type == "nparray":
 				output[key]["data.shape"] = data.shape
 				output[key]["data.dtype"] = data.dtype
-				output[key]["data.size"] = item.size
+				output[key]["data.size"] = data.size
 			elif item.item_type == "jsonl":
 				output[key]["data[0]"] = data[0]
 		
@@ -235,50 +236,49 @@ class ZANJ(JsonSerializer):
 	def meta(self) -> JSONitem:
 		"""return the metadata of the ZANJ archive"""
 
-		return dict(
+		return json_serialize(dict(
 			# configuration of this ZANJ instance
 			zanj_cfg = dict(
 				error_mode = str(self.error_mode),
-				array_threshold = self.array_threshold,
-				table_threshold = self.table_threshold,
+				array_mode = str(self.array_mode),
+				external_array_threshold = self.external_array_threshold,
+				external_table_threshold = self.external_table_threshold,
 				compress = self.compress,
 				handlers_desc = [str(h.desc) for h in self.handlers],
 			),
 			# system info (python, pip packages, torch & cuda, platform info, git info)
 			sysinfo = SysInfo.get_all(),
 			externals_info = self.externals_info(),
-		)
+		))
 
 
-	def save(self, file_path: str|Path, obj: Any) -> str:
+	def save(self, obj: Any, file_path: str|Path) -> str:
 		"""save the object to a ZANJ archive. returns the path to the archive"""
 
-		# make a path
-		file_path: str = f"{file_path}.zanj"
+		# adjust extension
+		file_path = str(file_path)
+		if not file_path.endswith(".zanj"):
+			file_path += ".zanj"
 
 		# clear the externals!
 		self._externals = dict()
 
 		# serialize the object -- this will populate self._externals
-		json_data: JSONitem = self.json_serialize(obj, path=tuple())
+		json_data: JSONitem = self.json_serialize(obj)
 
 		# open the zip file
 		zipf: zipfile.ZipFile = zipfile.ZipFile(file=file_path, mode="w", compression=self.compress)
 
-		# store json data
-		with zipf.open(ZANJ_MAIN, "wt") as fp:
-			json.dump(json_data, fp, indent="\t")
-		
-		# store zanj metadata
-		with zipf.open(ZANJ_META, "wt") as fp:
-			json.dump(self.meta(), fp, indent="\t")
+		# store base json data and metadata
+		zipf.writestr(ZANJ_MAIN, json.dumps(json_data, indent="\t"))
+		zipf.writestr(ZANJ_META, json.dumps(self.meta(), indent="\t"))
 
 		# store externals
-		for key, (ext_type, ext_data) in self._externals.items():
+		for key, (ext_type, ext_data, ext_path) in self._externals.items():
 			fname: str = f"{key}.{EXTERNAL_ITEMS_EXTENSIONS[ext_type]}"
 			# why force zip64? numpy.savez does it
-			with zipf.open(fname, 'wb', force_zip64=True) as fp:
-				EXTERNAL_STORE_FUNCS[ext_type](fp, ext_data)
+			with zipf.open(fname, 'w', force_zip64=True) as fp:
+				EXTERNAL_STORE_FUNCS[ext_type](self, fp, ext_data)
 
 		zipf.close()
 

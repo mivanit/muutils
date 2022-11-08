@@ -51,7 +51,7 @@ class SerializerHandler:
     """    
 
     # (self_config, object) -> whether to use this handler
-    check: Callable[["JsonSerializer", Any], bool]
+    check: Callable[["JsonSerializer", Any, ObjectPath], bool]
     # (self_config, object, path) -> serialized object
     serialize: Callable[["JsonSerializer", Any, ObjectPath], JSONitem]
     # optional description of how this serializer works
@@ -156,14 +156,14 @@ class JsonSerializer:
 
         try:
             for handler in self.handlers:
-                if handler.check(self, obj):
+                if handler.check(self, obj, path):
                     return handler.serialize(self, obj, path)
 
             raise ValueError(f"no handler found for object with {type(obj) = }")
 
         except Exception as e:
             if self.error_mode == "except":                
-                raise SerializationException(f"error serializing at {path = }") from e
+                raise SerializationException(f"error serializing at {path = } with last handler desc: '{handler.desc}'\n{e}") from e
             elif self.error_mode == "warn":
                 warnings.warn(f"error serializing at {path = }, will return as string\n{obj = }\nexception = {e}")
 

@@ -1,7 +1,7 @@
 import functools
 import json
 from pathlib import Path
-from types import GenericAlias
+import types
 from typing import Any, Dict, List, NamedTuple, Optional, Tuple, Type, Union, Callable, Literal, Iterable
 from dataclasses import dataclass, is_dataclass, asdict
 from collections import namedtuple
@@ -37,12 +37,14 @@ class MonoTuple:
 
     @typing._tp_cache
     def __class_getitem__(cls, params):
-        if isinstance(params, types.UnionType):
-            return GenericAlias(tuple, (params, Ellipsis))
-        elif len(params) == 0:
-            return tuple
-        elif len(params) == 1:
-            return GenericAlias(tuple, (params[0], Ellipsis))
+        if isinstance(params, (type, types.UnionType)):
+            return types.GenericAlias(tuple, (params, Ellipsis))
+        # test if has len and is iterable
+        elif isinstance(params, Iterable):
+            if len(params) == 0:
+                return tuple
+            elif len(params) == 1:
+                return types.GenericAlias(tuple, (params[0], Ellipsis))
         else:
             raise TypeError(f"MonoTuple expects 1 type argument, got {len(params) = } \n\t{params = }")
 

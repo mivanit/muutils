@@ -11,7 +11,7 @@ from muutils._wip.json_serialize.util import JSONitem
 from muutils.tensor_utils import NDArray
 
 
-ExternalItemType = Literal["nparray", "jsonl"]
+ExternalItemType = Literal["ndarray", "jsonl"]
 
 ExternalItem = NamedTuple(
 	"ExternalItem",
@@ -23,12 +23,12 @@ ExternalItem = NamedTuple(
 )
 
 EXTERNAL_ITEMS_EXTENSIONS: dict[ExternalItemType, str] = {
-	"nparray": "npy",
+	"ndarray": "npy",
 	"jsonl": "jsonl",
 }
 
 
-def store_nparray(self, fp: IO[bytes], data: NDArray) -> None:
+def store_ndarray(self, fp: IO[bytes], data: NDArray) -> None:
 	np.lib.format.write_array(
 		fp = fp, 
 		array = np.asanyarray(data),
@@ -37,22 +37,17 @@ def store_nparray(self, fp: IO[bytes], data: NDArray) -> None:
 
 def store_jsonl(self, fp: IO[bytes], data: Sequence[JSONitem]) -> None:
 
-	if isinstance(data, pd.DataFrame):
-		data_new = data.to_dict(orient="records")
-	else:
-		data_new = data
-
-	for item in data_new:
+	for item in data:
 		fp.write(json.dumps(item).encode("utf-8"))
 		fp.write("\n".encode("utf-8"))
 
 EXTERNAL_STORE_FUNCS: dict[ExternalItemType, Callable[[IO[bytes], Any], None]] = {
-	"nparray": store_nparray,
+	"ndarray": store_ndarray,
 	"jsonl": store_jsonl,
 }
 
 
-def load_nparray(self, fp: IO[bytes]) -> NDArray:
+def load_ndarray(self, fp: IO[bytes]) -> NDArray:
 	return np.load(fp)
 
 def load_jsonl(self, fp: IO[bytes]) -> Iterable[JSONitem]:
@@ -60,7 +55,7 @@ def load_jsonl(self, fp: IO[bytes]) -> Iterable[JSONitem]:
 		yield json.loads(line)
 
 EXTERNAL_LOAD_FUNCS: dict[ExternalItemType, Callable[[IO[bytes]], Any]] = {
-	"nparray": load_nparray,
+	"ndarray": load_ndarray,
 	"jsonl": load_jsonl,
 }
 

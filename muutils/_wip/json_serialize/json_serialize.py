@@ -113,6 +113,11 @@ DEFAULT_HANDLERS: MonoTuple[SerializerHandler] = (
         desc = "torch.Tensor",
     ),
     SerializerHandler(
+        check = lambda self, obj, path: str(type(obj)) == "<class 'pandas.core.frame.DataFrame'>",
+        serialize = lambda self, obj, path: obj.to_dict(orient="records"),
+        desc = "pandas.DataFrame",
+    ),
+    SerializerHandler(
         check = lambda self, obj, path: isinstance(obj, (set, list, tuple)) or isinstance(obj, Iterable),
         serialize = lambda self, obj, path: [self.json_serialize(x, path + (i,)) for i, x in enumerate(obj)],
         desc = "(set, list, tuple, Iterable) -> list",
@@ -163,7 +168,7 @@ class JsonSerializer:
 
         except Exception as e:
             if self.error_mode == "except":                
-                raise SerializationException(f"error serializing at {path = } with last handler desc: '{handler.desc}'\n{e}") from e
+                raise SerializationException(f"error serializing at {path = } with last handler desc: '{handler.desc}'\nfrom: {e}") from e
             elif self.error_mode == "warn":
                 warnings.warn(f"error serializing at {path = }, will return as string\n{obj = }\nexception = {e}")
 

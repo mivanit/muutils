@@ -17,6 +17,17 @@ from muutils.tensor_utils import NDArray
 
 ArrayMode = Literal["list", "array_list_meta", "array_hex_meta", "external"]
 
+
+def arr_metadata(arr: NDArray) -> Dict[str, Any]:
+    """get metadata for a numpy array"""
+    return {
+        "shape": arr.shape,
+        "dtype": str(arr.dtype),
+        "size": arr.size,
+    }
+
+
+
 def serialize_array(
         jser: "JsonSerializer", 
         arr: NDArray, 
@@ -65,18 +76,16 @@ def serialize_array(
     if array_mode == "array_list_meta":
         return {
             "__format__": "array_list_meta",
-            "shape": arr.shape,
-            "dtype": str(arr.dtype),
             "data": arr.tolist(),
+            **arr_metadata(arr),
         }
     elif array_mode == "list":
         return arr.tolist()
     elif array_mode == "array_hex_meta":
         return {
             "__format__": "array_hex_meta",
-            "shape": arr.shape,
-            "dtype": str(arr.dtype),
-            "data": arr.tobytes().hex(),
+            "data": arr.tobytes().hex(), 
+            **arr_metadata(arr),
         }
     else:
         raise KeyError(f"invalid array_mode: {array_mode}")

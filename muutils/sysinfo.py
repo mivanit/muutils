@@ -20,7 +20,7 @@ def _popen(cmd: list[str], split_out: bool = False) -> dict[str, typing.Any]:
 class SysInfo:
 	"""getters for various information about the system"""
 	@staticmethod
-	def get_python() -> dict:
+	def python() -> dict:
 		"""details about python version"""
 		ver_tup = sys.version_info
 		return {
@@ -33,7 +33,7 @@ class SysInfo:
 		}
 
 	@staticmethod
-	def get_pip() -> dict:
+	def pip() -> dict:
 		"""installed packages info"""
 		pckgs: list[str] = [x for x in freeze(local_only=True)]
 		return {
@@ -42,7 +42,7 @@ class SysInfo:
 		}
 
 	@staticmethod
-	def get_pytorch() -> dict:
+	def pytorch() -> dict:
 		"""pytorch and cuda information"""
 		try:
 			import torch
@@ -98,7 +98,7 @@ class SysInfo:
 		return output
 
 	@staticmethod
-	def get_platform() -> dict:
+	def platform() -> dict:
 		import platform
 		items = [
 			"platform",
@@ -121,7 +121,7 @@ class SysInfo:
 		}
 
 	@staticmethod
-	def get_git_info() -> dict:
+	def git_info() -> dict:
 		git_version: dict = _popen(["git", "version"])
 		git_status: dict = _popen(["git", "status"])
 		if git_status["stderr"].startswith("fatal: not a git repository"):
@@ -138,11 +138,26 @@ class SysInfo:
 			}
 
 	@classmethod
-	def get_all(cls) -> dict:
+	def get_all(
+			cls, 
+			include: tuple[str, ...]|None = None, 
+			exclude: tuple[str, ...] = tuple(),
+		) -> dict:
+
+		include_meta: tuple[str, ...]
+		if include is None:
+			include_meta = tuple(cls.__dict__.keys())
+		else:
+			include_meta = include
+
 		return {
-			"python": cls.get_python(),
-			"pip": cls.get_pip(),
-			"pytorch": cls.get_pytorch(),
-			"platform": cls.get_platform(),
-			"git": cls.get_git_info(),
+			x: getattr(cls, x)()
+			for x in include_meta
+			if all([
+				not x.startswith("_"),
+				x not in exclude,
+				callable(getattr(cls, x)),
+				x != "get_all",
+				x in include if include is not None else True,
+			])
 		}

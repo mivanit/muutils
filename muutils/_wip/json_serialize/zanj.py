@@ -23,7 +23,7 @@ import numpy as np
 import pandas as pd
 
 from muutils._wip.json_serialize.util import JSONitem, Hashableitem, MonoTuple, UniversalContainer, ErrorMode, isinstance_namedtuple, try_catch, _recursive_hashify
-from muutils._wip.json_serialize.array import serialize_array, ArrayMode
+from muutils._wip.json_serialize.array import serialize_array, ArrayMode, arr_metadata
 from muutils._wip.json_serialize.json_serialize import JsonSerializer, json_serialize, SerializerHandler, DEFAULT_HANDLERS, ObjectPath
 from muutils._wip.json_serialize.externals import ExternalItemType, ExternalItem, EXTERNAL_ITEMS_EXTENSIONS, EXTERNAL_STORE_FUNCS, EXTERNAL_LOAD_FUNCS
 from muutils.tensor_utils import NDArray
@@ -31,13 +31,20 @@ from muutils.sysinfo import SysInfo
 
 # pylint: disable=protected-access
 
+def jsonl_metadata(data: list[JSONitem]) -> dict:
+	return {
+		"data[0]": data[0],
+		"len(data)": len(data),
+	}
+
+
 def zanj_external_serialize(
 		jser: "ZANJ", 
-		arr: NDArray, 
-		path: MonoTuple[str|int],
+		data: Any, 
+		path: ObjectPath,
 		item_type: ExternalItemType,
 	) -> JSONitem:
-	"""stores a numpy array externally in a ZANJ object
+	"""stores a numpy array or jsonl externally in a ZANJ object
 	
 	# Parameters:
 	 - `jser : ZANJ`
@@ -50,22 +57,52 @@ def zanj_external_serialize(
 	# Modifies:
 	 - modifies `jser._externals`
 	"""	
-
+	# get the path, make sure its unique
 	joined_path: str = "/".join([str(p) for p in path])
-
 	if joined_path in jser._externals:
 		raise ValueError(f"external path {joined_path} already exists!")
-	
-	jser._externals[joined_path] = ExternalItem(
-		item_type=item_type,
-		data=arr,
-		path=path,
-	)
 
-	return {
+	# process the data if needed, assemble metadata
+	data_new: Any = data
+	output: dict = {
 		"__format__": f"external:{EXTERNAL_ITEMS_EXTENSIONS[item_type]}",
 		"$ref": joined_path,
 	}
+	if item_type == "ndarray":
+		# check type
+		data_type_str: str = str(type(data))
+		if data_type_str == "<class 'torch.Tensor'>":
+			# detach and convert
+			data_new = data.detach().cpu().numpy()		
+		elif data_type_str == "<class 'numpy.ndarray'>":
+			pass
+		else:
+			# if not a numpy array, except
+			raise TypeError(f"expected numpy.ndarray, got {data_type_str}")
+		# get metadata
+		output.update(arr_metadata(data))
+	elif item_type.startswith("jsonl"):
+		if isinstance(data, pd.DataFrame):
+			output["columns"] = data.columns.tolist()
+			data_new = data.to_dict(orient="records")
+		elif isinstance(data, (list, tuple, Iterable)):
+			data_new = [
+				jser.json_serialize(item, path + (i,))
+				for i, item in enumerate(data)
+			]
+		else:
+			raise TypeError(f"expected list or pd.DataFrame, got {type(data)}")
+			
+		output.update(jsonl_metadata(data_new))
+			
+	# store the item for external serialization
+	jser._externals[joined_path] = ExternalItem(
+		item_type=item_type,
+		data=data_new,
+		path=path,
+	)
+
+	return output
 
 ZANJ_MAIN: str = "__zanj__.json"
 ZANJ_META: str = "__zanj_meta__.json"
@@ -75,13 +112,13 @@ DEFAULT_SERIALIZER_HANDLERS_ZANJ: MonoTuple[SerializerHandler] = (
 	(
 		SerializerHandler(
 			check = lambda self, obj, path: isinstance(obj, np.ndarray) and obj.size >= self.external_array_threshold,
-			serialize = lambda self, obj, path: zanj_external_serialize(self, obj, path, "nparray"),
-			desc = "external.nparray",
+			serialize = lambda self, obj, path: zanj_external_serialize(self, obj, path, item_type="ndarray"),
+			desc = "external:ndarray",
 		),
 		SerializerHandler(
 			check = lambda self, obj, path: isinstance(obj, (list, tuple, pd.DataFrame)) and len(obj) >= self.external_table_threshold,
-			serialize = lambda self, obj, path: zanj_external_serialize(self, obj, path, "jsonl"),
-			desc = "external.jsonl",
+			serialize = lambda self, obj, path: zanj_external_serialize(self, obj, path, item_type="jsonl"),
+			desc = "external:jsonl",
 		),
 	)
 	+ DEFAULT_HANDLERS
@@ -184,8 +221,8 @@ class ZANJ(JsonSerializer):
 		self,
 		error_mode: ErrorMode = "except",
 		internal_array_mode: ArrayMode = "array_list_meta",
-		external_array_threshold: int = 256,
-		external_table_threshold: int = 256,
+		external_array_threshold: int = 64,
+		external_table_threshold: int = 64,
 		compress: bool|int = True,
 		handlers_pre: MonoTuple[SerializerHandler] = tuple(),
 		handlers_default: MonoTuple[SerializerHandler] = DEFAULT_SERIALIZER_HANDLERS_ZANJ,	
@@ -220,15 +257,14 @@ class ZANJ(JsonSerializer):
 			data = item.data
 			output[key] = {
 				"item_type": item.item_type,
-				"type(data)": type(data),
+				"path": item.path,
+				"type(data)": str(type(data)),
 				"len(data)": len(data),
 			}
 
-			if item.item_type == "nparray":
-				output[key]["data.shape"] = data.shape
-				output[key]["data.dtype"] = data.dtype
-				output[key]["data.size"] = data.size
-			elif item.item_type == "jsonl":
+			if item.item_type == "ndarray":
+				output[key].update(arr_metadata(data))
+			elif item.item_type.startswith("jsonl"):
 				output[key]["data[0]"] = data[0]
 		
 		return output
@@ -247,7 +283,7 @@ class ZANJ(JsonSerializer):
 				handlers_desc = [str(h.desc) for h in self.handlers],
 			),
 			# system info (python, pip packages, torch & cuda, platform info, git info)
-			sysinfo = SysInfo.get_all(),
+			sysinfo = SysInfo.get_all(include=("python", "pytorch")),
 			externals_info = self.externals_info(),
 		))
 
@@ -307,7 +343,7 @@ class ZANJLoaderTreeNode:
 		val: JSONitem
 		if (
 				(isinstance(self._data, list) and isinstance(key, int))
-				and (isinstance(self._data, dict) and isinstance(key, str))
+				or (isinstance(self._data, dict) and isinstance(key, str))
 			):
 			val = self._data[key]
 		else:

@@ -109,3 +109,12 @@ def _recursive_hashify(obj: Any, force: bool = True) -> Hashableitem:
 
 class SerializationException(Exception):
     pass
+
+
+def string_as_lines(s: str) -> list[str]:
+    """for easier reading of long strings in json, split up by newlines
+    
+    sort of like how jupyter notebooks do it
+    """
+
+    return s.splitlines(keepends=False)

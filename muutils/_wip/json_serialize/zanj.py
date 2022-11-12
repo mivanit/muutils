@@ -18,11 +18,12 @@ from pathlib import Path
 import typing
 from typing import IO, Any, Dict, List, NamedTuple, Optional, Sequence, Tuple, Type, Union, Callable, Literal, Iterable
 import zipfile
+import inspect
 
 import numpy as np
 import pandas as pd
 
-from muutils._wip.json_serialize.util import JSONitem, Hashableitem, MonoTuple, UniversalContainer, ErrorMode, isinstance_namedtuple, try_catch, _recursive_hashify
+from muutils._wip.json_serialize.util import JSONitem, Hashableitem, MonoTuple, UniversalContainer, ErrorMode, isinstance_namedtuple, try_catch, _recursive_hashify, string_as_lines
 from muutils._wip.json_serialize.array import serialize_array, ArrayMode, arr_metadata
 from muutils._wip.json_serialize.json_serialize import JsonSerializer, json_serialize, SerializerHandler, DEFAULT_HANDLERS, ObjectPath
 from muutils._wip.json_serialize.externals import ExternalItemType, ExternalItem, EXTERNAL_ITEMS_EXTENSIONS, EXTERNAL_STORE_FUNCS, EXTERNAL_LOAD_FUNCS
@@ -106,7 +107,7 @@ def zanj_external_serialize(
 
 def zanj_serialize_torchmodule(
 		jser: "ZANJ",
-		data: Any,
+		data: "torch.nn.Module",
 		path: ObjectPath,
 	) -> JSONitem:
 	"""serialize a torch module to zanj
@@ -123,10 +124,10 @@ def zanj_serialize_torchmodule(
 	output: dict = {
 		"__format__" : "torchmodule",
 		"__class__" : str(data.__class__.__name__),
-		"__doc__" : str(data.__doc__),
+		"__doc__" : string_as_lines(data.__doc__),
 		"__mro__" : [str(c.__name__) for c in data.__class__.__mro__],
-		"__init__" : str(data.__init__.__code__.co_code),
-		"forward" : str(data.forward.__code__.co_code),
+		"__init__" : string_as_lines(inspect.getsource(data.__init__)),
+		"forward" : string_as_lines(inspect.getsource(data.forward)),
 		"state_dict" : jser.json_serialize(data.state_dict(), path + ("state_dict",)),
 		"_modules" : {k: str(v) for k, v in data._modules.items()},
 		"__dict__" : {k: str(v) for k, v in data.__dict__.items()},

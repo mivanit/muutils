@@ -17,12 +17,12 @@ from muutils.tensor_utils import NDArray
 
 ArrayMode = Literal["list", "array_list_meta", "array_hex_meta", "external"]
 
-def array_n_elements(arr: "torch.Tensor"|np.ndarray) -> int:
+def array_n_elements(arr: typing.Union["torch.Tensor", "np.ndarray"]) -> int:
     """get the number of elements in an array"""
     if isinstance(arr, np.ndarray):
         return arr.size
     elif str(type(arr)) == "<class 'torch.Tensor'>":
-        return arr.numel()
+        return arr.nelement()
     else:
         raise TypeError(f"invalid type: {type(arr)}")
 
@@ -31,7 +31,7 @@ def arr_metadata(arr: NDArray) -> Dict[str, Any]:
     return {
         "shape": arr.shape,
         "dtype": str(arr.dtype),
-        "size": arr.size,
+        "n_elements": array_n_elements(arr),
     }
 
 

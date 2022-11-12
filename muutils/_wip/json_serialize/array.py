@@ -17,6 +17,14 @@ from muutils.tensor_utils import NDArray
 
 ArrayMode = Literal["list", "array_list_meta", "array_hex_meta", "external"]
 
+def array_n_elements(arr: "torch.Tensor"|np.ndarray) -> int:
+    """get the number of elements in an array"""
+    if isinstance(arr, np.ndarray):
+        return arr.size
+    elif str(type(arr)) == "<class 'torch.Tensor'>":
+        return arr.numel()
+    else:
+        raise TypeError(f"invalid type: {type(arr)}")
 
 def arr_metadata(arr: NDArray) -> Dict[str, Any]:
     """get metadata for a numpy array"""

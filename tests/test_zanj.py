@@ -44,6 +44,9 @@ def test_torch():
 
 	print(f"{dir(SimpleNetwork) = }")
 
+	print(f"{SimpleNetwork.__class__ = }")
+	print(f"{[str(x) for x in SimpleNetwork.__class__.__bases__] = }")
+
 
 	ZANJ().save(SimpleNetwork, "junk_data/test_torch.zanj")
 

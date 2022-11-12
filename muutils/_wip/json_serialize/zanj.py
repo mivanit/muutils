@@ -104,6 +104,37 @@ def zanj_external_serialize(
 
 	return output
 
+def zanj_serialize_torchmodule(
+		jser: "ZANJ",
+		data: Any,
+		path: ObjectPath,
+	) -> JSONitem:
+	"""serialize a torch module to zanj
+	
+	we want to save:
+	- class name, docstring, __mro__
+	- code of `.forward()` method
+	- code of `.__init__()` method
+	- state dict, in accordance with zanj parameters for storing arrays
+	- `_modules` with modules as strings
+	- __dict__ with values printed (not fully serialized)
+	"""
+
+	output: dict = {
+		"__format__" : "torchmodule",
+		"__class__" : str(data.__class__.__name__),
+		"__doc__" : str(data.__doc__),
+		"__mro__" : [str(c.__name__) for c in data.__class__.__mro__],
+		"__init__" : str(data.__init__.__code__.co_code),
+		"forward" : str(data.forward.__code__.co_code),
+		"state_dict" : jser.json_serialize(data.state_dict(), path + ("state_dict",)),
+		"_modules" : {k: str(v) for k, v in data._modules.items()},
+		"__dict__" : {k: str(v) for k, v in data.__dict__.items()},
+	}
+
+	return jser.json_serialize(output)
+
+
 ZANJ_MAIN: str = "__zanj__.json"
 ZANJ_META: str = "__zanj_meta__.json"
 
@@ -111,20 +142,34 @@ ZANJ_META: str = "__zanj_meta__.json"
 DEFAULT_SERIALIZER_HANDLERS_ZANJ: MonoTuple[SerializerHandler] = (
 	(
 		SerializerHandler(
-			check = lambda self, obj, path: isinstance(obj, np.ndarray) and obj.size >= self.external_array_threshold,
+			check = lambda self, obj, path: (
+				isinstance(obj, np.ndarray) 
+				and obj.size >= self.external_array_threshold
+			),
 			serialize = lambda self, obj, path: zanj_external_serialize(self, obj, path, item_type="ndarray"),
 			desc = "external:ndarray",
+		),
+		SerializerHandler(
+			check = lambda self, obj, path: (
+				str(type(obj)) == "<class 'torch.Tensor'>" 
+				and int(obj.nelement()) >= self.external_array_threshold
+			),
+			serialize = lambda self, obj, path: zanj_external_serialize(self, obj, path, item_type="ndarray"),
+			desc = "external:ndarray:torchtensor",
 		),
 		SerializerHandler(
 			check = lambda self, obj, path: isinstance(obj, (list, tuple, pd.DataFrame)) and len(obj) >= self.external_table_threshold,
 			serialize = lambda self, obj, path: zanj_external_serialize(self, obj, path, item_type="jsonl"),
 			desc = "external:jsonl",
 		),
+		SerializerHandler(
+			check = lambda self, obj, path: "<class 'torch.nn.modules.module.Module'>" in [str(t) for t in obj.__class__.__mro__],
+			serialize = lambda self, obj, path: zanj_serialize_torchmodule(self, obj, path),
+			desc = "torch.nn.Module",
+		),
 	)
 	+ DEFAULT_HANDLERS
 )
-
-
 
 
 @dataclass
@@ -144,6 +189,7 @@ class ZANJLoaderHandler:
 	check: Callable[["ZANJ", JSONitem, ObjectPath], bool]
 	# function to load the object (zanj_obj, json_data, path) -> loaded_obj
 	load: Callable[["ZANJ", JSONitem, ObjectPath], Any]
+	# TODO: add name/unique identifier, `desc` should be human-readable and more detailed
 	# description of the handler
 	desc: str = "(no description)"
 

@@ -32,6 +32,16 @@ from muutils.sysinfo import SysInfo
 
 # pylint: disable=protected-access
 
+ZANJitem = Union[
+	JSONitem,
+	NDArray,
+	pd.DataFrame,
+]
+
+ExternalsLoadingMode = Literal["lazy", "full"]
+
+
+
 def jsonl_metadata(data: list[JSONitem]) -> dict:
 	return {
 		"data[0]": data[0],
@@ -370,9 +380,9 @@ class ZANJ(JsonSerializer):
 
 		return file_path
 
-	def read(self, path: Union[str, Path], mmap_mode: str|None = None):
+	def read(self, path: Union[str, Path], externals_mode: ExternalsLoadingMode = "lazy") -> Any:
 		"""load the object from a ZANJ archive"""
-		raise NotImplementedError()
+		
 
 
 
@@ -406,6 +416,7 @@ class ZANJLoaderTreeNode:
 			return ZANJLoaderTreeNode(_parent=self._parent, _data=val)
 		else:
 			return val
+
 
 class LazyExternalLoader:
 	"""lazy load np arrays or jsonl files, similar tp NpzFile from np.lib
@@ -448,24 +459,34 @@ class LoadedZANJ:
 		# config
 		path: str|Path,
 		zanj: ZANJ,
-		mmap_mode: str|None,
 		loader_handlers: MonoTuple[ZANJLoaderHandler],
+		externals_mode: ExternalsLoadingMode = "lazy",
 	) -> None:
 
 		self._path: str = str(path)
 		self._zanj: ZANJ = zanj
+		self._externals_mode: ExternalsLoadingMode = externals_mode
+
 		self._zipf: zipfile.ZipFile = zipfile.ZipFile(file=self._path, mode="r")
-		self._mmap_mode: str|None = mmap_mode
 
 		self._meta: JSONitem = json.load(self._zipf.open(ZANJ_META, "rt"))
-
 		self._json_data: ZANJLoaderTreeNode = ZANJLoaderTreeNode(
 			_parent = self,
 			_data = json.load(self._zipf.open(ZANJ_MAIN, "rt"))
 		)
-		self._externals: np.lib.format.NpzFile = np.lib.format.NpzFile(
 
-		)
+		self._externals: LazyExternalLoader|dict
+		if externals_mode == "lazy":
+			self._externals = LazyExternalLoader(
+				zipf=self._zipf,
+				zanj_meta=self._meta,
+			)
+		elif externals_mode == "full":
+			self._externals = {
+				key : self._load_external(key, val)
+				for key, val in self._meta["externals_info"].items()
+			}
+
 		
 	
 	def __getitem__(self, key: str) -> Any:

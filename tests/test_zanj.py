@@ -4,7 +4,7 @@ from dataclasses import asdict, dataclass
 import numpy as np
 import pandas as pd
 
-from muutils._wip.json_serialize.zanj import ZANJ
+from muutils.json_serialize.zanj import ZANJ
 
 np.random.seed(0)
 
@@ -55,7 +55,7 @@ def test_torch_simple():
 def test_torch_configmodel():
 	import torch
 
-	from muutils._wip.json_serialize.torchutil import ModelConfig, ConfiguredModel
+	from muutils.json_serialize.torchutil import ModelConfig, ConfiguredModel
 
 	@dataclass
 	class MyGPTConfig(ModelConfig):

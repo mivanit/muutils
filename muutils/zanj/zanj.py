@@ -23,12 +23,12 @@ import inspect
 import numpy as np
 import pandas as pd
 
-from muutils._wip.json_serialize.util import JSONitem, Hashableitem, MonoTuple, UniversalContainer, ErrorMode, isinstance_namedtuple, try_catch, _recursive_hashify, string_as_lines
-from muutils._wip.json_serialize.array import serialize_array, ArrayMode, arr_metadata
-from muutils._wip.json_serialize.json_serialize import JsonSerializer, json_serialize, SerializerHandler, DEFAULT_HANDLERS, ObjectPath
-from muutils._wip.json_serialize.externals import ExternalItemType, ExternalItem, EXTERNAL_ITEMS_EXTENSIONS, EXTERNAL_STORE_FUNCS, EXTERNAL_LOAD_FUNCS
+from muutils.json_serialize.util import JSONitem, Hashableitem, MonoTuple, UniversalContainer, ErrorMode, isinstance_namedtuple, try_catch, _recursive_hashify, string_as_lines
+from muutils.json_serialize.array import serialize_array, ArrayMode, arr_metadata
+from muutils.json_serialize.json_serialize import JsonSerializer, json_serialize, SerializerHandler, DEFAULT_HANDLERS, ObjectPath
 from muutils.tensor_utils import NDArray
 from muutils.sysinfo import SysInfo
+from muutils.zanj.externals import ExternalItemType, ExternalItem, EXTERNAL_ITEMS_EXTENSIONS, EXTERNAL_STORE_FUNCS, EXTERNAL_LOAD_FUNCS
 
 # pylint: disable=protected-access
 

@@ -5,7 +5,7 @@ from dataclasses import dataclass
 import torch
 
 from muutils.json_serialize import JSONitem
-from muutils._wip.json_serialize.zanj import ZANJ
+from muutils.zanj import ZANJ
 
 
 def num_params(m: torch.nn.Module, only_trainable: bool = True):

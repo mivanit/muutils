@@ -7,7 +7,7 @@ from typing import Literal, NamedTuple, Sequence, IO, Callable, Any, Iterable
 import numpy as np
 import pandas as pd
 
-from muutils._wip.json_serialize.util import JSONitem 
+from muutils.json_serialize.util import JSONitem 
 from muutils.tensor_utils import NDArray
 
 

@@ -9,12 +9,12 @@ from collections import namedtuple
 import inspect
 import warnings
 
-from muutils._wip.json_serialize.util import (
+from muutils.json_serialize.util import (
     JSONitem, Hashableitem, MonoTuple, UniversalContainer, ErrorMode, 
     isinstance_namedtuple, try_catch, _recursive_hashify, 
     SerializationException,
 )
-from muutils._wip.json_serialize.array import serialize_array, ArrayMode
+from muutils.json_serialize.array import serialize_array, ArrayMode
 
 SERIALIZER_SPECIAL_KEYS: tuple[str] = (
     "__name__",

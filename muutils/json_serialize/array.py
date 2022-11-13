@@ -11,7 +11,7 @@ import warnings
 
 import numpy as np
 
-from muutils._wip.json_serialize.util import JSONitem, Hashableitem, MonoTuple, UniversalContainer, isinstance_namedtuple, try_catch
+from muutils.json_serialize.util import JSONitem, Hashableitem, MonoTuple, UniversalContainer, isinstance_namedtuple, try_catch
 from muutils.tensor_utils import NDArray
 
 

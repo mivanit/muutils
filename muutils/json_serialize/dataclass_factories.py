@@ -8,10 +8,10 @@ from collections import namedtuple
 import inspect
 import typing
 import warnings
-from muutils._wip.json_serialize.array import ArrayMode
+from muutils.json_serialize.array import ArrayMode
 
-from muutils._wip.json_serialize.util import JSONitem, Hashableitem, MonoTuple, TypeErrorMode, UniversalContainer, isinstance_namedtuple, try_catch, ErrorMode
-from muutils._wip.json_serialize.json_serialize import JsonSerializer
+from muutils.json_serialize.util import JSONitem, Hashableitem, MonoTuple, TypeErrorMode, UniversalContainer, isinstance_namedtuple, try_catch, ErrorMode
+from muutils.json_serialize.json_serialize import JsonSerializer
 
 
 # pylint: disable=pointless-string-statement, unreachable, import-outside-toplevel

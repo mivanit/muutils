@@ -28,35 +28,4 @@ EXTERNAL_ITEMS_EXTENSIONS: dict[ExternalItemType, str] = {
 }
 
 
-def store_ndarray(self, fp: IO[bytes], data: NDArray) -> None:
-	np.lib.format.write_array(
-		fp = fp, 
-		array = np.asanyarray(data),
-		allow_pickle=False,
-	)
-
-def store_jsonl(self, fp: IO[bytes], data: Sequence[JSONitem]) -> None:
-
-	for item in data:
-		fp.write(json.dumps(item).encode("utf-8"))
-		fp.write("\n".encode("utf-8"))
-
-EXTERNAL_STORE_FUNCS: dict[ExternalItemType, Callable[[IO[bytes], Any], None]] = {
-	"ndarray": store_ndarray,
-	"jsonl": store_jsonl,
-}
-
-
-def load_ndarray(self, fp: IO[bytes]) -> NDArray:
-	return np.load(fp)
-
-def load_jsonl(self, fp: IO[bytes]) -> Iterable[JSONitem]:
-	for line in fp:
-		yield json.loads(line)
-
-EXTERNAL_LOAD_FUNCS: dict[ExternalItemType, Callable[[IO[bytes]], Any]] = {
-	"ndarray": load_ndarray,
-	"jsonl": load_jsonl,
-}
-
 

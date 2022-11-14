@@ -15,13 +15,37 @@ from muutils.json_serialize.array import serialize_array, ArrayMode, arr_metadat
 from muutils.json_serialize.json_serialize import JsonSerializer, json_serialize, SerializerHandler, DEFAULT_HANDLERS, ObjectPath
 from muutils.tensor_utils import NDArray
 from muutils.sysinfo import SysInfo
-from muutils.zanj.externals import ExternalItemType, ExternalItem, EXTERNAL_ITEMS_EXTENSIONS, EXTERNAL_STORE_FUNCS, EXTERNAL_LOAD_FUNCS
+from muutils.zanj.externals import ExternalItemType, ExternalItem, EXTERNAL_ITEMS_EXTENSIONS
 
 def jsonl_metadata(data: list[JSONitem]) -> dict:
+	"""metadata about a jsonl object"""
 	return {
 		"data[0]": data[0],
 		"len(data)": len(data),
 	}
+
+
+def store_ndarray(self, fp: IO[bytes], data: NDArray) -> None:
+	"""store numpy array to given file as .npy"""
+	np.lib.format.write_array(
+		fp = fp, 
+		array = np.asanyarray(data),
+		allow_pickle=False,
+	)
+
+def store_jsonl(self, fp: IO[bytes], data: Sequence[JSONitem]) -> None:
+	"""store sequence to given file as .jsonl"""
+
+	for item in data:
+		fp.write(json.dumps(item).encode("utf-8"))
+		fp.write("\n".encode("utf-8"))
+
+EXTERNAL_STORE_FUNCS: dict[ExternalItemType, Callable[[IO[bytes], Any], None]] = {
+	"ndarray": store_ndarray,
+	"jsonl": store_jsonl,
+}
+
+
 
 
 def zanj_external_serialize(
@@ -90,6 +114,9 @@ def zanj_external_serialize(
 
 	return output
 
+
+
+
 def zanj_serialize_torchmodule(
 		jser: "ZANJ",
 		data: "torch.nn.Module",
@@ -119,6 +146,9 @@ def zanj_serialize_torchmodule(
 	}
 
 	return jser.json_serialize(output)
+
+
+
 
 DEFAULT_SERIALIZER_HANDLERS_ZANJ: MonoTuple[SerializerHandler] = (
 	(

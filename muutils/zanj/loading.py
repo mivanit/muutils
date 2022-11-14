@@ -15,7 +15,24 @@ from muutils.json_serialize.array import serialize_array, ArrayMode, arr_metadat
 from muutils.json_serialize.json_serialize import JsonSerializer, json_serialize, SerializerHandler, DEFAULT_HANDLERS, ObjectPath
 from muutils.tensor_utils import NDArray
 from muutils.sysinfo import SysInfo
-from muutils.zanj.externals import ExternalItemType, ExternalItem, EXTERNAL_ITEMS_EXTENSIONS, EXTERNAL_STORE_FUNCS, EXTERNAL_LOAD_FUNCS
+from muutils.zanj.externals import ExternalItemType, ExternalItem, EXTERNAL_ITEMS_EXTENSIONS
+
+ExternalsLoadingMode = Literal["lazy", "full"]
+
+
+def load_ndarray(self, fp: IO[bytes]) -> NDArray:
+	return np.load(fp)
+
+def load_jsonl(self, fp: IO[bytes]) -> list[JSONitem]:
+	return [
+		json.loads(line) 
+		for line in fp
+	]
+
+EXTERNAL_LOAD_FUNCS: dict[ExternalItemType, Callable[[IO[bytes]], Any]] = {
+	"ndarray": load_ndarray,
+	"jsonl": load_jsonl,
+}
 
 
 @dataclass

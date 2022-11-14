@@ -28,7 +28,9 @@ from muutils.json_serialize.array import serialize_array, ArrayMode, arr_metadat
 from muutils.json_serialize.json_serialize import JsonSerializer, json_serialize, SerializerHandler, DEFAULT_HANDLERS, ObjectPath
 from muutils.tensor_utils import NDArray
 from muutils.sysinfo import SysInfo
-from muutils.zanj.externals import ExternalItemType, ExternalItem, EXTERNAL_ITEMS_EXTENSIONS, EXTERNAL_STORE_FUNCS, EXTERNAL_LOAD_FUNCS
+from muutils.zanj.externals import ExternalItemType, ExternalItem, EXTERNAL_ITEMS_EXTENSIONS,
+from muutils.zanj.serializing import EXTERNAL_STORE_FUNCS
+from muutils.zanj.loading import EXTERNAL_LOAD_FUNCS, LoaderHandler, ZANJLoaderHandler, DEFAULT_LOADER_HANDLERS, DEFAULT_LOADER_HANDLERS_ZANJ, ZANJLoaderTreeNode, LazyExternalLoader, LoadedZANJ, ExternalsLoadingMode
 
 # pylint: disable=protected-access
 
@@ -37,8 +39,6 @@ ZANJitem = Union[
 	NDArray,
 	pd.DataFrame,
 ]
-
-ExternalsLoadingMode = Literal["lazy", "full"]
 
 ZANJ_MAIN: str = "__zanj__.json"
 ZANJ_META: str = "__zanj_meta__.json"

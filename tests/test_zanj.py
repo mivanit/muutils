@@ -4,7 +4,7 @@ from dataclasses import asdict, dataclass
 import numpy as np
 import pandas as pd
 
-from muutils.json_serialize.zanj import ZANJ
+from muutils.zanj import ZANJ
 
 np.random.seed(0)
 
@@ -55,7 +55,7 @@ def test_torch_simple():
 def test_torch_configmodel():
 	import torch
 
-	from muutils.json_serialize.torchutil import ModelConfig, ConfiguredModel
+	from muutils.zanj.torchutil import ModelConfig, ConfiguredModel
 
 	@dataclass
 	class MyGPTConfig(ModelConfig):
@@ -111,7 +111,7 @@ def test_torch_configmodel():
 	print(f"{model.config = }")
 
 	# try to load the model
-	model2: MyGPT = ZANJ().read(fname)
+	model2: MyGPT = MyGPT.load_file(fname)
 	print(f"loaded model from {fname}")
 	print(f"{model2.config = }")
 

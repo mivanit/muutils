@@ -91,9 +91,9 @@ class ConfiguredModel(torch.nn.Module, typing.Generic[T_config], metaclass=abc.A
 		model.load_state_dict(obj["model"]["state_dict"])
 
 	@classmethod
-	def load_file(cls, file_path: str, zanj: ZANJ|None) -> "ConfiguredModel":
+	def load_file(cls, file_path: str, zanj: ZANJ|None = None) -> "ConfiguredModel":
 		"""load a model from a file"""
 		if zanj is None:
 			zanj = ZANJ()
 		
-		return cls.load(zanj.read(file_path))
+		return cls.load(zanj.read(file_path, externals_mode="full"))

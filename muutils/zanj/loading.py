@@ -15,7 +15,7 @@ from muutils.json_serialize.array import serialize_array, ArrayMode, arr_metadat
 from muutils.json_serialize.json_serialize import JsonSerializer, json_serialize, SerializerHandler, DEFAULT_HANDLERS, ObjectPath
 from muutils.tensor_utils import NDArray
 from muutils.sysinfo import SysInfo
-from muutils.zanj.externals import ExternalItemType, ExternalItem, EXTERNAL_ITEMS_EXTENSIONS
+from muutils.zanj.externals import ExternalItemType, ExternalItem, EXTERNAL_ITEMS_EXTENSIONS, ZANJ_MAIN, ZANJ_META, EXTERNAL_ITEMS_EXTENSIONS_INV
 
 ExternalsLoadingMode = Literal["lazy", "full"]
 
@@ -182,21 +182,21 @@ class LoadedZANJ:
 		self,
 		# config
 		path: str|Path,
-		zanj: ZANJ,
+		zanj: "ZANJ",
 		loader_handlers: MonoTuple[ZANJLoaderHandler],
 		externals_mode: ExternalsLoadingMode = "lazy",
 	) -> None:
 
 		self._path: str = str(path)
-		self._zanj: ZANJ = zanj
+		self._zanj: "ZANJ" = zanj
 		self._externals_mode: ExternalsLoadingMode = externals_mode
 
 		self._zipf: zipfile.ZipFile = zipfile.ZipFile(file=self._path, mode="r")
 
-		self._meta: JSONitem = json.load(self._zipf.open(ZANJ_META, "rt"))
+		self._meta: JSONitem = json.load(self._zipf.open(ZANJ_META, "r"))
 		self._json_data: ZANJLoaderTreeNode = ZANJLoaderTreeNode(
 			_parent = self,
-			_data = json.load(self._zipf.open(ZANJ_MAIN, "rt"))
+			_data = json.load(self._zipf.open(ZANJ_MAIN, "r"))
 		)
 
 		self._externals: LazyExternalLoader|dict
@@ -206,13 +206,13 @@ class LoadedZANJ:
 				zanj_meta=self._meta,
 			)
 		elif externals_mode == "full":
-			self._externals = {
-				key : self._load_external(key, val)
-				for key, val in self._meta["externals_info"].items()
-			}
-
-		
+			self._externals = dict()
+			
+			for fname, val in self._meta["externals_info"].items():
+				item_type: str = val["item_type"]
+				with self._zipf.open(fname, "rb") as fp:
+					self._externals[fname] = EXTERNAL_LOAD_FUNCS[item_type](fp)
 	
 	def __getitem__(self, key: str) -> Any:
 		"""get the value of the given key"""
-		pass
+		return self._json_data[key]

@@ -69,14 +69,18 @@ def zanj_external_serialize(
 	"""	
 	# get the path, make sure its unique
 	joined_path: str = "/".join([str(p) for p in path])
-	if joined_path in jser._externals:
-		raise ValueError(f"external path {joined_path} already exists!")
+	archive_path: str = f"{joined_path}.{EXTERNAL_ITEMS_EXTENSIONS[item_type]}"
+
+	if archive_path in jser._externals:
+		raise ValueError(f"external path {archive_path} already exists!")
+	if any([p.startswith(joined_path) for p in jser._externals.keys()]):
+		raise ValueError(f"external path {joined_path} is a prefix of another path!")
 
 	# process the data if needed, assemble metadata
 	data_new: Any = data
 	output: dict = {
 		"__format__": f"external:{EXTERNAL_ITEMS_EXTENSIONS[item_type]}",
-		"$ref": joined_path,
+		"$ref": archive_path,
 	}
 	if item_type == "ndarray":
 		# check type
@@ -106,7 +110,7 @@ def zanj_external_serialize(
 		output.update(jsonl_metadata(data_new))
 			
 	# store the item for external serialization
-	jser._externals[joined_path] = ExternalItem(
+	jser._externals[archive_path] = ExternalItem(
 		item_type=item_type,
 		data=data_new,
 		path=path,

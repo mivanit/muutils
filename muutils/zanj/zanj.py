@@ -28,8 +28,8 @@ from muutils.json_serialize.array import serialize_array, ArrayMode, arr_metadat
 from muutils.json_serialize.json_serialize import JsonSerializer, json_serialize, SerializerHandler, DEFAULT_HANDLERS, ObjectPath
 from muutils.tensor_utils import NDArray
 from muutils.sysinfo import SysInfo
-from muutils.zanj.externals import ExternalItemType, ExternalItem, EXTERNAL_ITEMS_EXTENSIONS,
-from muutils.zanj.serializing import EXTERNAL_STORE_FUNCS
+from muutils.zanj.externals import ExternalItemType, ExternalItem, EXTERNAL_ITEMS_EXTENSIONS, ZANJ_MAIN, ZANJ_META
+from muutils.zanj.serializing import EXTERNAL_STORE_FUNCS, DEFAULT_SERIALIZER_HANDLERS_ZANJ
 from muutils.zanj.loading import EXTERNAL_LOAD_FUNCS, LoaderHandler, ZANJLoaderHandler, DEFAULT_LOADER_HANDLERS, DEFAULT_LOADER_HANDLERS_ZANJ, ZANJLoaderTreeNode, LazyExternalLoader, LoadedZANJ, ExternalsLoadingMode
 
 # pylint: disable=protected-access
@@ -39,9 +39,6 @@ ZANJitem = Union[
 	NDArray,
 	pd.DataFrame,
 ]
-
-ZANJ_MAIN: str = "__zanj__.json"
-ZANJ_META: str = "__zanj_meta__.json"
 
 class ZANJ(JsonSerializer):
 	"""Zip up: Arrays in Numpy, JSON for everything else
@@ -166,6 +163,17 @@ class ZANJ(JsonSerializer):
 
 		return file_path
 
-	def read(self, path: Union[str, Path], externals_mode: ExternalsLoadingMode = "lazy") -> Any:
+	def read(
+			self, 
+			path: Union[str, Path], 
+			externals_mode: ExternalsLoadingMode = "lazy",
+			loader_handlers: MonoTuple[ZANJLoaderHandler] = DEFAULT_LOADER_HANDLERS_ZANJ,
+		) -> LoadedZANJ:
 		"""load the object from a ZANJ archive"""
-		pass
+		return LoadedZANJ(
+			path = path,
+			zanj = self,
+			externals_mode = externals_mode,
+			loader_handlers = loader_handlers,
+		)
+		

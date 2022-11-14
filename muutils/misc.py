@@ -70,3 +70,21 @@ def list_split(lst: list, val) -> list[list]:
 			output[-1].append(x)
 	return output
 
+def list_join(lst: list, factory: typing.Callable) -> list:
+	"""add a *new* instance of `val` between each element of `lst`
+
+	```
+	>>> list_join([1,2,3], lambda : 0)
+	[1,0,2,0,3]
+	>>> list_join([1,2,3], lambda: [time.sleep(0.1), time.time()][1])
+	[1, 1600000000.0, 2, 1600000000.1, 3]
+	```
+	"""
+
+	output: list = [lst[0], ]
+
+	for x in lst[1:]:
+		output.append(factory())
+		output.append(x)
+
+	return output

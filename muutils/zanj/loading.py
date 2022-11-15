@@ -20,16 +20,16 @@ from muutils.zanj.externals import ExternalItemType, ExternalItem, EXTERNAL_ITEM
 ExternalsLoadingMode = Literal["lazy", "full"]
 
 
-def load_ndarray(self, fp: IO[bytes]) -> NDArray:
+def load_ndarray(zanj: "LoadedZANJ", fp: IO[bytes]) -> NDArray:
 	return np.load(fp)
 
-def load_jsonl(self, fp: IO[bytes]) -> list[JSONitem]:
+def load_jsonl(zanj: "LoadedZANJ", fp: IO[bytes]) -> list[JSONitem]:
 	return [
 		json.loads(line) 
 		for line in fp
 	]
 
-EXTERNAL_LOAD_FUNCS: dict[ExternalItemType, Callable[[IO[bytes]], Any]] = {
+EXTERNAL_LOAD_FUNCS: dict[ExternalItemType, Callable[["ZANJ", IO[bytes]], Any]] = {
 	"ndarray": load_ndarray,
 	"jsonl": load_jsonl,
 }
@@ -152,6 +152,7 @@ class LazyExternalLoader:
 			self,
 			zipf: zipfile.ZipFile,
 			zanj_meta: JSONitem,
+			loaded_zanj: "LoadedZANJ",
 		):
 		self._zipf: zipfile.ZipFile = zipf
 		self._zanj_meta: JSONitem = zanj_meta
@@ -171,8 +172,8 @@ class LazyExternalLoader:
 	def __getitem__(self, key: str) -> Any:
 		if key in self._externals_types:
 			path, item_type = key
-			with self._zipf.open(path, "rb") as fp:
-				return EXTERNAL_LOAD_FUNCS[item_type](fp)
+			with self._zipf.open(path, "r") as fp:
+				return EXTERNAL_LOAD_FUNCS[item_type](loaded_zanj, fp)
 
 
 
@@ -210,8 +211,8 @@ class LoadedZANJ:
 			
 			for fname, val in self._meta["externals_info"].items():
 				item_type: str = val["item_type"]
-				with self._zipf.open(fname, "rb") as fp:
-					self._externals[fname] = EXTERNAL_LOAD_FUNCS[item_type](fp)
+				with self._zipf.open(fname, "r") as fp:
+					self._externals[fname] = EXTERNAL_LOAD_FUNCS[item_type](self, fp)
 	
 	def __getitem__(self, key: str) -> Any:
 		"""get the value of the given key"""

@@ -48,12 +48,18 @@ class ModelConfig(metaclass=abc.ABCMeta):
 		raise NotImplementedError
 
 T_config = typing.TypeVar("T_config", bound=ModelConfig)
-class ConfiguredModel(torch.nn.Module, typing.Generic[T_config], metaclass=abc.ABCMeta):
+class ConfiguredModel(
+		torch.nn.Module, 
+		typing.Generic[T_config], 
+		metaclass=abc.ABCMeta,
+	):
 	"""a model that has a configuration
 	
 	`__init__()` must initialize the model from a config object only, and call
 	`super().__init__(config)`
 	"""
+	
+
 
 	def __init__(self, config: T_config):
 		super().__init__()

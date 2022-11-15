@@ -151,9 +151,8 @@ class ZANJ(JsonSerializer):
 
 		# store externals
 		for key, (ext_type, ext_data, ext_path) in self._externals.items():
-			fname: str = f"{key}.{EXTERNAL_ITEMS_EXTENSIONS[ext_type]}"
 			# why force zip64? numpy.savez does it
-			with zipf.open(fname, 'w', force_zip64=True) as fp:
+			with zipf.open(key, 'w', force_zip64=True) as fp:
 				EXTERNAL_STORE_FUNCS[ext_type](self, fp, ext_data)
 
 		zipf.close()

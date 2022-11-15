@@ -60,7 +60,6 @@ class ConfiguredModel(
 	"""
 	
 
-
 	def __init__(self, config: T_config):
 		super().__init__()
 		self.config: T_config = config

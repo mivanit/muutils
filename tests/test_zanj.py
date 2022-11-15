@@ -73,7 +73,7 @@ def test_torch_configmodel():
 		@classmethod
 		def load(cls, obj: dict) -> "MyGPTConfig":
 			"""load the model from a path"""
-			return cls(**data)
+			return cls(**obj)
 
 	class MyGPT(ConfiguredModel[MyGPTConfig]):
 		"""basic GPT model"""

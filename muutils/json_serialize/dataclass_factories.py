@@ -1,7 +1,7 @@
 import functools
 import json
 from pathlib import Path
-from types import GenericAlias, UnionType
+import types
 from typing import Any, Dict, List, NamedTuple, Optional, Tuple, Type, Union, Callable, Literal, Iterable
 from dataclasses import dataclass, is_dataclass, asdict
 from collections import namedtuple
@@ -124,8 +124,12 @@ def dataclass_serializer_factory(
         else:
             raise ValueError(f"special serializer function `{spec_ser}` has {len(args)} arguments {args = }, but should have 1 or 3")
 
-    def serialize(self, jser: JsonSerializer, path: tuple[str|int] = tuple()) -> JSONitem:
+    def serialize(self, jser: JsonSerializer|None = None, path: tuple[str|int] = tuple()) -> JSONitem:
         # get the base outputs for all keys in the dataclass but which dont have a special serializer
+
+        if jser is None:
+            jser = JsonSerializer()
+
         base_output: dict[str, JSONitem] = {
             k: (
                 jser.json_serialize(getattr(self, k), path=path + (k,))
@@ -145,6 +149,8 @@ def dataclass_serializer_factory(
         for k in sfuncs_full:
             if k not in fields_exclude:
                 base_output[k] = sfuncs_full[k](self, jser = jser, path = path)
+
+        return base_output
 
     return serialize
 

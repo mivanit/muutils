@@ -111,7 +111,7 @@ DEFAULT_LOADER_HANDLERS_ZANJ: tuple[ZANJLoaderHandler] = (
 
 
 @dataclass
-class ZANJLoaderTreeNode:
+class ZANJLoaderTreeNode(typing.Mapping):
 	"""acts like a regular dictionary or list, but applies loaders to items
 	
 	does this by passing `_parent` down the stack, whenever you get an item from the container.
@@ -140,6 +140,12 @@ class ZANJLoaderTreeNode:
 			return ZANJLoaderTreeNode(_parent=self._parent, _data=val)
 		else:
 			return val
+
+	def __iter__(self):
+		return iter(self._data)
+	
+	def __len__(self):
+		return len(self._data)
 
 
 class LazyExternalLoader:
@@ -177,7 +183,7 @@ class LazyExternalLoader:
 
 
 
-class LoadedZANJ:
+class LoadedZANJ(typing.Mapping):
 	"""object loaded from ZANJ archive. acts like a dict."""
 	def __init__(
 		self,
@@ -217,3 +223,9 @@ class LoadedZANJ:
 	def __getitem__(self, key: str) -> Any:
 		"""get the value of the given key"""
 		return self._json_data[key]
+	
+	def __iter__(self):
+		return iter(self._json_data)
+	
+	def __len__(self):
+		return len(self._json_data)

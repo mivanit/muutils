@@ -7,6 +7,7 @@ import torch
 from muutils.json_serialize import JSONitem
 from muutils.zanj import ZANJ
 
+# pylint: disable=protected-access
 
 def num_params(m: torch.nn.Module, only_trainable: bool = True):
 	"""return total number of parameters in a model
@@ -34,6 +35,8 @@ class ModelConfig(metaclass=abc.ABCMeta):
 	- more consistent reproducibility of models
 
 	used in `ConfiguredModel` class
+
+	TODO: automatic mapping of loss functions and optimizers (string to class)
 	"""
 
 	@classmethod
@@ -59,9 +62,17 @@ class ConfiguredModel(
 	`super().__init__(config)`
 	"""
 	
+	_config_class: type|None = None
+	config_class = property(lambda self: type(self)._config_class)
 
 	def __init__(self, config: T_config):
 		super().__init__()
+		print(f"{self.config_class = } {type(self.config_class) = }")
+		if self.config_class is None:
+			raise NotImplementedError("you need to set `config_class` for your model")
+		if not isinstance(config, self.config_class):
+			raise TypeError(f"config must be an instance of {self.config_class = }, got {type(config) = }")
+
 		self.config: T_config = config
 
 	def save(self, file_path: str, zanj: ZANJ|None) -> None:
@@ -87,7 +98,7 @@ class ConfiguredModel(
 		"""load a model from a serialized object"""
 		
 		# get the config
-		config: T_config = T_config.load(obj["config"])
+		config: T_config = cls.config_class.load(obj["config"])
 
 		# initialize the model
 		model: "ConfiguredModel" = cls(config)
@@ -102,3 +113,16 @@ class ConfiguredModel(
 			zanj = ZANJ()
 		
 		return cls.load(zanj.read(file_path, externals_mode="full"))
+
+def set_config_class( 
+		config_class: type,
+	) -> typing.Callable[[type], type]:
+
+	if not issubclass(config_class, ModelConfig):
+		raise TypeError(f"{config_class} must be a subclass of ModelConfig")
+
+	def wrapper(cls: type) -> type:
+		cls._config_class = config_class
+		return cls
+
+	return wrapper

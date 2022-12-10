@@ -55,7 +55,7 @@ def test_torch_simple():
 def test_torch_configmodel():
 	import torch
 
-	from muutils.zanj.torchutil import ModelConfig, ConfiguredModel
+	from muutils.zanj.torchutil import ModelConfig, ConfiguredModel, set_config_class
 
 	@dataclass
 	class MyGPTConfig(ModelConfig):
@@ -75,6 +75,7 @@ def test_torch_configmodel():
 			"""load the model from a path"""
 			return cls(**obj)
 
+	@set_config_class(MyGPTConfig)
 	class MyGPT(ConfiguredModel[MyGPTConfig]):
 		"""basic GPT model"""
 		def __init__(self, config: MyGPTConfig):

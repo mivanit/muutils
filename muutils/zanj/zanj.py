@@ -11,6 +11,7 @@ for large arrays, the output is a .tar.gz file with most data in a json file, bu
 
 """
 
+import os
 from dataclasses import dataclass
 import functools
 import json
@@ -135,6 +136,9 @@ class ZANJ(JsonSerializer):
 		file_path = str(file_path)
 		if not file_path.endswith(".zanj"):
 			file_path += ".zanj"
+
+		# make directory
+		os.makedirs(os.path.dirname(file_path), exist_ok=True)
 
 		# clear the externals!
 		self._externals = dict()

@@ -142,7 +142,7 @@ class ZANJLoaderTreeNode(typing.Mapping):
 			return val
 
 	def __iter__(self):
-		return iter(self._data)
+		yield from self._data
 	
 	def __len__(self):
 		return len(self._data)
@@ -179,7 +179,7 @@ class LazyExternalLoader:
 		if key in self._externals_types:
 			path, item_type = key
 			with self._zipf.open(path, "r") as fp:
-				return EXTERNAL_LOAD_FUNCS[item_type](loaded_zanj, fp)
+				return EXTERNAL_LOAD_FUNCS[item_type](self.loaded_zanj, fp)
 
 
 
@@ -211,6 +211,7 @@ class LoadedZANJ(typing.Mapping):
 			self._externals = LazyExternalLoader(
 				zipf=self._zipf,
 				zanj_meta=self._meta,
+				loaded_zanj=self,
 			)
 		elif externals_mode == "full":
 			self._externals = dict()

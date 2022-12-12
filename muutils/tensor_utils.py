@@ -1,5 +1,7 @@
+import sys
 import json
 import typing
+
 
 import numpy as np
 import torch
@@ -41,18 +43,22 @@ class ATensor(torch.Tensor):
     def __class_getitem__(cls, params):
         raise NotImplementedError()
 
+ATensor = annotated_array_factory(torch.Tensor, "ATensor")
+
 class NDArray(np.ndarray):
     @typing._tp_cache
     def __class_getitem__(cls, params):
         raise NotImplementedError()
 
-ATensor = annotated_array_factory(torch.Tensor, "ATensor")
 NDArray = annotated_array_factory(np.ndarray, "NDArray")
 
-DTYPE_MAP: dict[str, torch.dtype] = {
-    str(x) : x
-    for x in [
+
+
+DTYPE_LIST: list = [
+    *[
         bool, int, float,
+    ],
+    *[
         # ----------
         # pytorch
         # ----------
@@ -64,6 +70,8 @@ DTYPE_MAP: dict[str, torch.dtype] = {
         torch.int, torch.int8, torch.int16, torch.int32, torch.int64, torch.long, torch.short,
         # simplest
         torch.uint8, torch.bool,
+    ],
+    *[
         # ----------
         # numpy
         # ----------
@@ -76,6 +84,11 @@ DTYPE_MAP: dict[str, torch.dtype] = {
         # simplest
         np.uint8, np.bool,
     ]
+]
+
+DTYPE_MAP: dict = {
+    str(x) : x
+    for x in DTYPE_LIST
 }
 
 
@@ -98,18 +111,18 @@ TORCH_OPTIMIZERS_MAP: dict[str, torch.optim.Optimizer] = {
 
 
 def lpad_tensor(tensor: torch.Tensor, padded_length: int, pad_value: float = 0.0) -> torch.Tensor:
-	"""pad a 1-d tensor on the left with pad_value to length `padded_length`"""
-	return torch.cat([
-		torch.full((padded_length - tensor.shape[0],), pad_value, dtype=tensor.dtype, device=tensor.device),
-		tensor,
-	])
+    """pad a 1-d tensor on the left with pad_value to length `padded_length`"""
+    return torch.cat([
+        torch.full((padded_length - tensor.shape[0],), pad_value, dtype=tensor.dtype, device=tensor.device),
+        tensor,
+    ])
 
 def rpad_tensor(tensor: torch.Tensor, pad_length: int, pad_value: float = 0.0) -> torch.Tensor:
-	"""pad a 1-d tensor on the right with pad_value to length `pad_length`"""
-	return torch.cat([
-		tensor,
-		torch.full((pad_length - tensor.shape[0],), pad_value, dtype=tensor.dtype, device=tensor.device),
-	])
+    """pad a 1-d tensor on the right with pad_value to length `pad_length`"""
+    return torch.cat([
+        tensor,
+        torch.full((pad_length - tensor.shape[0],), pad_value, dtype=tensor.dtype, device=tensor.device),
+    ])
 
 def lpad_array(array: ATensor["token"], padded_length: int, pad_value: float = 0.0) -> NDArray:
     """pad a 1-d array on the left with pad_value to length `padded_length`"""
@@ -129,11 +142,11 @@ def rpad_array(array: ATensor["token"], pad_length: int, pad_value: float = 0.0)
 
 
 def split_sequences(
-		sequences: typing.Iterator[ATensor["token"]],
-		min_length: int = 1,
-		max_length: int|None = None,
+        sequences: typing.Iterator[ATensor["token"]],
+        min_length: int = 1,
+        max_length: int|None = None,
         lpad_to: int|None = None,
-	) -> typing.Iterator[ATensor["token"]]:
+    ) -> typing.Iterator[ATensor["token"]]:
     """split a list of sequences into a list of sequences with length in [min_length, max_length]
     
     mostly for feeding data into transformers"""

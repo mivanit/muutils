@@ -1,10 +1,11 @@
 import abc
 import typing
+from typing import Callable, Iterable, Any
 from dataclasses import dataclass
 
 import torch
 
-from muutils.json_serialize import JSONitem
+from muutils.json_serialize import JSONitem, JsonSerializer, BASE_HANDLERS
 from muutils.zanj import ZANJ
 
 # pylint: disable=protected-access
@@ -22,6 +23,135 @@ def num_params(m: torch.nn.Module, only_trainable: bool = True):
 		parameters = [p for p in parameters if p.requires_grad]
 	unique: list[torch.nn.Parameter] = {p.data_ptr(): p for p in parameters}.values()
 	return sum(p.numel() for p in unique)
+
+
+OptimizerFactoryFunction = Callable[[Iterable[torch.nn.parameter.Parameter], ...], torch.optim.Optimizer]
+LRschedulerFactoryFunction = Callable[[torch.optim.Optimizer, ...], torch.optim.lr_scheduler._LRScheduler]
+LossFactoryFunction = Callable[[...], torch.nn.modules.loss._Loss]
+
+TrainingTuple = typing.NamedTuple(
+	"TrainingTuple",
+	(
+		("optimizer", torch.optim.Optimizer),
+		("lr_scheduler", torch.optim.lr_scheduler._LRScheduler),
+		("loss", torch.nn.modules.loss._Loss),
+	),
+)
+
+@dataclass(kw_only=True)
+class TrainingConfig:
+	"""training configuration for a pytorch model (specifically LLMs)"""
+	batch_size: int
+	epochs: int = 1
+	optimizer_factory: OptimizerFactoryFunction
+	optimizer_kwargs: dict[str, Any] = field(default_factory=dict)
+	lr_scheduler_factory: LRschedulerFactoryFunction|None
+	lr_scheduler_kwargs: dict[str, Any] = field(default_factory=dict)
+	loss_factory: LossFactoryFunction
+	loss_kwargs: dict[str, Any] = field(default_factory=dict)
+
+	def get_all(
+			self, 
+			model: torch.nn.Module,
+		) -> TrainingTuple:
+		"""get the optimizer, learning rate scheduler, and loss for the model from the config"""
+
+		# optimizer from model
+		optimizer: torch.optim.Optimizer = self.optimizer_factory(model.parameters(), **self.optimizer_kwargs)
+
+		# lr scheduler from optimizer
+		lr_scheduler: torch.optim.lr_scheduler._LRScheduler
+		if self.lr_scheduler_factory is None:
+			# if its none, use constant LR
+			lr_scheduler = torch.optim.lr_scheduler.ConstantLR(optimizer, factor = 1.0, total_iters = 0)
+		else:
+			lr_scheduler = self.lr_scheduler_factory(optimizer, **self.lr_scheduler_kwargs)
+
+		# loss
+		loss: torch.nn.modules.loss._Loss = self.loss_factory(**self.loss_kwargs)
+		
+		return TrainingTuple(optimizer = optimizer, lr_scheduler = lr_scheduler, loss = loss)
+
+	def serialize(self, jser: JsonSerializer|None = None) -> JSONitem:
+		"""serialize this object to JSON"""
+		if jser is None:
+			jser = JsonSerializer(handlers_default=BASE_HANDLERS)
+
+		# handle `None` scheduler
+		_SER_lr_scheduler_factory: dict[str, Any]|None
+		if self.lr_scheduler_factory is not None:
+			_SER_lr_scheduler_factory = {
+				"__name__": self.lr_scheduler_factory.__name__,
+				"__module__": self.lr_scheduler_factory.__module__,
+			}
+		else:
+			_SER_lr_scheduler_factory = None
+
+		return {
+			"batch_size": self.batch_size,
+			"epochs": self.epochs,
+			"optimizer_factory": {
+				"__name__": self.optimizer_factory.__name__,
+				"__module__": self.optimizer_factory.__module__,
+			},
+			"optimizer_kwargs" : jser.json_serialize(self.optimizer_kwargs),
+			"lr_scheduler_factory": _SER_lr_scheduler_factory,
+			"lr_scheduler_kwargs" : jser.json_serialize(self.lr_scheduler_kwargs),
+			"loss_factory": {
+				"__name__": self.loss_factory.__name__,
+				"__module__": self.loss_factory.__module__,
+			},
+			"loss_kwargs" : jser.json_serialize(self.loss_kwargs),
+		}
+		
+
+	@classmethod
+	def load(cls, data: JSONitem) -> "TrainingConfig":
+		"""load a TrainingConfig from a serialized object"""
+
+		# optimizer
+		assert (
+			"optimizer_factory" in data
+			and "__name__" in data["optimizer_factory"]
+			and "__module__" in data["optimizer_factory"]
+			and data["optimizer_factory"]["__module__"].startswith("torch.optim")
+		), "optimizer_factory must be a dict with __name__ and __module__ keys, and be a member of torch.optim"
+
+		optimizer_factory: OptimizerFactoryFunction = getattr(torch.optim, data["optimizer_factory"]["__name__"])
+
+		# lr scheduler
+		if data["lr_scheduler_factory"] is None:
+			lr_scheduler_factory: LRschedulerFactoryFunction|None = None
+		else:
+			assert (
+				"lr_scheduler_factory" in data
+				and "__name__" in data["lr_scheduler_factory"]
+				and "__module__" in data["lr_scheduler_factory"]
+				and data["lr_scheduler_factory"]["__module__"].startswith("torch.optim.lr_scheduler")
+			), "lr_scheduler_factory must be a dict with __name__ and __module__ keys, and be a member of torch.optim.lr_scheduler"
+
+			lr_scheduler_factory: LRschedulerFactoryFunction = getattr(torch.optim.lr_scheduler, data["lr_scheduler_factory"]["__name__"])
+
+		# loss
+		assert (
+			"loss_factory" in data
+			and "__name__" in data["loss_factory"]
+			and "__module__" in data["loss_factory"]
+			and data["loss_factory"]["__module__"].startswith("torch.nn.modules.loss")
+		), "loss_factory must be a dict with __name__ and __module__ keys, and be a member of torch.nn.modules.loss"
+
+		loss_factory: LossFactoryFunction = getattr(torch.nn.modules.loss, data["loss_factory"]["__name__"])
+
+		return cls(
+			batch_size = data["batch_size"],
+			epochs = data["epochs"],
+			optimizer_factory = optimizer_factory,
+			optimizer_kwargs = data["optimizer_kwargs"],
+			lr_scheduler_factory = lr_scheduler_factory,
+			lr_scheduler_kwargs = data["lr_scheduler_kwargs"],
+			loss_factory = loss_factory,
+			loss_kwargs = data["loss_kwargs"],
+		)
 
 
 @dataclass

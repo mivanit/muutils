@@ -57,15 +57,7 @@ class SerializerHandler:
     # optional description of how this serializer works
     desc: str = "(no description)"
 
-
-
-DEFAULT_HANDLERS: MonoTuple[SerializerHandler] = (
-    SerializerHandler(
-        # TODO: allow for custom serialization handler name
-        check = lambda self, obj, path: hasattr(obj, "serialize") and callable(obj.serialize),
-        serialize = lambda self, obj, path: obj.serialize(),
-        desc = ".serialize override",
-    ),
+BASE_HANDLERS: MonoTuple[SerializerHandler] = (
     SerializerHandler(
         check = lambda self, obj, path: isinstance(obj, (bool, int, float, str)),
         serialize = lambda self, obj, path: obj,
@@ -78,6 +70,21 @@ DEFAULT_HANDLERS: MonoTuple[SerializerHandler] = (
             for k, v in obj.items()
         },
         desc = "dictionaries",
+    ),
+        SerializerHandler(
+        check = lambda self, obj, path: isinstance(obj, (list, tuple)),
+        serialize = lambda self, obj, path: [self.json_serialize(x, path + (i,)) for i, x in enumerate(obj)],
+        desc = "(list, tuple) -> list",
+    ),
+)
+
+
+DEFAULT_HANDLERS: MonoTuple[SerializerHandler] = BASE_HANDLERS + (
+    SerializerHandler(
+        # TODO: allow for custom serialization handler name
+        check = lambda self, obj, path: hasattr(obj, "serialize") and callable(obj.serialize),
+        serialize = lambda self, obj, path: obj.serialize(),
+        desc = ".serialize override",
     ),
     SerializerHandler(
         check = lambda self, obj, path: isinstance_namedtuple(obj),

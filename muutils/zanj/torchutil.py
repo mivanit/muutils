@@ -1,7 +1,7 @@
 import abc
 import typing
 from typing import Callable, Iterable, Any
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 import torch
 
@@ -41,6 +41,8 @@ TrainingTuple = typing.NamedTuple(
 @dataclass(kw_only=True)
 class TrainingConfig:
 	"""training configuration for a pytorch model (specifically LLMs)"""
+	__format__: str = field(default="zanj.torchutil.TrainingConfig", init=False)
+
 	batch_size: int
 	epochs: int = 1
 	optimizer_factory: OptimizerFactoryFunction
@@ -75,7 +77,7 @@ class TrainingConfig:
 	def serialize(self, jser: JsonSerializer|None = None) -> JSONitem:
 		"""serialize this object to JSON"""
 		if jser is None:
-			jser = JsonSerializer(handlers_default=BASE_HANDLERS)
+			jser = JsonSerializer(handlers_default=BASE_HANDLERS) # only allow base handlers, for reproducibility
 
 		# handle `None` scheduler
 		_SER_lr_scheduler_factory: dict[str, Any]|None
@@ -88,6 +90,7 @@ class TrainingConfig:
 			_SER_lr_scheduler_factory = None
 
 		return {
+			"__format__": self.__format__,
 			"batch_size": self.batch_size,
 			"epochs": self.epochs,
 			"optimizer_factory": {
@@ -107,7 +110,10 @@ class TrainingConfig:
 
 	@classmethod
 	def load(cls, data: JSONitem) -> "TrainingConfig":
-		"""load a TrainingConfig from a serialized object"""
+		"""load a TrainingConfig from a serialized object
+		
+		TODO: support loading custom optimizers, lr schedulers, and losses
+		"""
 
 		# optimizer
 		assert (
@@ -123,23 +129,9 @@ class TrainingConfig:
 		if data["lr_scheduler_factory"] is None:
 			lr_scheduler_factory: LRschedulerFactoryFunction|None = None
 		else:
-			assert (
-				"lr_scheduler_factory" in data
-				and "__name__" in data["lr_scheduler_factory"]
-				and "__module__" in data["lr_scheduler_factory"]
-				and data["lr_scheduler_factory"]["__module__"].startswith("torch.optim.lr_scheduler")
-			), "lr_scheduler_factory must be a dict with __name__ and __module__ keys, and be a member of torch.optim.lr_scheduler"
-
 			lr_scheduler_factory: LRschedulerFactoryFunction = getattr(torch.optim.lr_scheduler, data["lr_scheduler_factory"]["__name__"])
 
 		# loss
-		assert (
-			"loss_factory" in data
-			and "__name__" in data["loss_factory"]
-			and "__module__" in data["loss_factory"]
-			and data["loss_factory"]["__module__"].startswith("torch.nn.modules.loss")
-		), "loss_factory must be a dict with __name__ and __module__ keys, and be a member of torch.nn.modules.loss"
-
 		loss_factory: LossFactoryFunction = getattr(torch.nn.modules.loss, data["loss_factory"]["__name__"])
 
 		return cls(
@@ -152,6 +144,8 @@ class TrainingConfig:
 			loss_factory = loss_factory,
 			loss_kwargs = data["loss_kwargs"],
 		)
+
+
 
 
 @dataclass
@@ -200,7 +194,7 @@ class ConfiguredModel(
 		print(f"{self.config_class = } {type(self.config_class) = }")
 		if self.config_class is None:
 			raise NotImplementedError("you need to set `config_class` for your model")
-		if not isinstance(config, self.config_class):
+		if not isinstance(config, self.config_class): # type: ignore
 			raise TypeError(f"config must be an instance of {self.config_class = }, got {type(config) = }")
 
 		self.config: T_config = config

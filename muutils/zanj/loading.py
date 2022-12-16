@@ -29,6 +29,7 @@ def load_jsonl(zanj: "LoadedZANJ", fp: IO[bytes]) -> list[JSONitem]:
 		for line in fp
 	]
 
+# TODO: move these to zanj loaders
 EXTERNAL_LOAD_FUNCS: dict[ExternalItemType, Callable[["ZANJ", IO[bytes]], Any]] = {
 	"ndarray": load_ndarray,
 	"jsonl": load_jsonl,
@@ -44,6 +45,22 @@ class LoaderHandler:
 	load: Callable[[JSONitem, ObjectPath], Any]
 	# description of the handler
 	desc: str = "(no description)"
+
+	@classmethod
+	def from_formattedclass(cls, fc: type):
+		"""create a loader from a class with `serialize`, `load` methods and `__format__` attribute"""
+		assert hasattr(fc, "serialize")
+		assert callable(fc.serialize)
+		assert hasattr(fc, "load")
+		assert callable(fc.load)
+		assert hasattr(fc, "__format__")
+		assert isinstance(fc.__format__, str)
+
+		return cls(
+			check = lambda json_item, path: json_item["__format__"] == fc.__format__,
+			load = lambda json_item, path: fc.load(json_item),
+			desc = f"formatted class loader for {fc.__name__}",
+		)
 
 @dataclass
 class ZANJLoaderHandler:
@@ -64,6 +81,10 @@ class ZANJLoaderHandler:
 			load = lambda zanj, json_item, path: lh.load(json_item, path),
 			desc = lh.desc,
 		)
+
+	@classmethod
+	def from_formattedclass(cls, fc: type):
+		return cls.from_LoaderHandler(LoaderHandler.from_formattedclass(fc))
 
 DEFAULT_LOADER_HANDLERS: tuple[LoaderHandler] = (
 	LoaderHandler(
@@ -107,7 +128,19 @@ DEFAULT_LOADER_HANDLERS_ZANJ: tuple[ZANJLoaderHandler] = (
 	for lh in DEFAULT_LOADER_HANDLERS
 )
 
+CUSTOM_LOADER_HANDLERS: list[ZANJLoaderHandler] = list()
+CUSTOM_LOADER_HANDLERS_ZANJ: list[ZANJLoaderHandler] = list()
 
+# TODO: priority system for loaders
+
+def register_loader_handler(handler: LoaderHandler):
+	"""register a custom loader handler (adds to zanj as well)"""
+	CUSTOM_LOADER_HANDLERS.append(handler)
+	CUSTOM_LOADER_HANDLERS_ZANJ.append(ZANJLoaderHandler.from_LoaderHandler(handler))
+
+def register_loader_handler_zanj(handler: ZANJLoaderHandler):
+	"""register a custom loader handler for ZANJ"""
+	CUSTOM_LOADER_HANDLERS_ZANJ.append(handler)
 
 
 @dataclass
@@ -190,9 +223,14 @@ class LoadedZANJ(typing.Mapping):
 		# config
 		path: str|Path,
 		zanj: "ZANJ",
-		loader_handlers: MonoTuple[ZANJLoaderHandler],
+		loader_handlers: MonoTuple[ZANJLoaderHandler]|None = None,
 		externals_mode: ExternalsLoadingMode = "lazy",
 	) -> None:
+
+		if loader_handlers is None:
+			loader_handlers = tuple(DEFAULT_LOADER_HANDLERS_ZANJ) + tuple(CUSTOM_LOADER_HANDLERS_ZANJ)
+
+		self._loader_handlers: MonoTuple[ZANJLoaderHandler] = loader_handlers
 
 		self._path: str = str(path)
 		self._zanj: "ZANJ" = zanj
@@ -203,7 +241,7 @@ class LoadedZANJ(typing.Mapping):
 		self._meta: JSONitem = json.load(self._zipf.open(ZANJ_META, "r"))
 		self._json_data: ZANJLoaderTreeNode = ZANJLoaderTreeNode(
 			_parent = self,
-			_data = json.load(self._zipf.open(ZANJ_MAIN, "r"))
+			_data = json.load(self._zipf.open(ZANJ_MAIN, "r")),
 		)
 
 		self._externals: LazyExternalLoader|dict
@@ -230,3 +268,12 @@ class LoadedZANJ(typing.Mapping):
 	
 	def __len__(self):
 		return len(self._json_data)
+
+
+
+__doc__ = """Documentation for this module:
+
+
+
+
+"""

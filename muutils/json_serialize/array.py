@@ -122,16 +122,20 @@ def infer_array_mode(arr: JSONitem) -> ArrayMode:
     elif isinstance(arr, list):
         return "list"
     else:
-        raise ValueError(f"cannot infer array_mode from {fmt = }\t{type(arr) = }\n{arr = }")
+        raise ValueError(f"cannot infer array_mode from\t{type(arr) = }\n{arr = }")
 
 def load_array(arr: JSONitem, array_mode: Optional[ArrayMode] = None) -> Any:
     """load a json-serialized array, infer the mode if not specified"""
+    # return arr if its already a numpy array
+    if isinstance(arr, np.ndarray) and array_mode is None:
+        return arr
+
     # try to infer the array_mode
     array_mode_inferred: ArrayMode = infer_array_mode(arr)
     if array_mode is None:
         array_mode = array_mode_inferred
     elif array_mode != array_mode_inferred:
-        warnings.warn(f"array_mode {array_mode} does not match inferred array_mode {array_mode_inferred}")        
+        warnings.warn(f"array_mode {array_mode} does not match inferred array_mode {array_mode_inferred}")
 
     # actually load the array
     if array_mode == "array_list_meta":

@@ -35,5 +35,21 @@ EXTERNAL_ITEMS_EXTENSIONS_INV: dict[str, ExternalItemType] = {
 }
 
 
+def load_ndarray(zanj: "LoadedZANJ", fp: IO[bytes]) -> NDArray:
+	return np.load(fp)
+
+def load_jsonl(zanj: "LoadedZANJ", fp: IO[bytes]) -> list[JSONitem]:
+	return [
+		json.loads(line) 
+		for line in fp
+	]
+
+EXTERNAL_LOAD_FUNCS: dict[ExternalItemType, Callable[["ZANJ", IO[bytes]], Any]] = {
+	"ndarray": load_ndarray,
+	"jsonl": load_jsonl,
+}
+
+
+
 
 

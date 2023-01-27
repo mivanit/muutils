@@ -15,26 +15,9 @@ from muutils.json_serialize.array import serialize_array, ArrayMode, arr_metadat
 from muutils.json_serialize.json_serialize import JsonSerializer, json_serialize, SerializerHandler, DEFAULT_HANDLERS, ObjectPath
 from muutils.tensor_utils import NDArray
 from muutils.sysinfo import SysInfo
-from muutils.zanj.externals import ExternalItemType, ExternalItem, EXTERNAL_ITEMS_EXTENSIONS, ZANJ_MAIN, ZANJ_META, EXTERNAL_ITEMS_EXTENSIONS_INV
+from muutils.zanj.externals import ExternalItemType, ExternalItem, EXTERNAL_ITEMS_EXTENSIONS, ZANJ_MAIN, ZANJ_META, EXTERNAL_ITEMS_EXTENSIONS_INV, EXTERNAL_LOAD_FUNCS
 
 ExternalsLoadingMode = Literal["lazy", "full"]
-
-
-def load_ndarray(zanj: "LoadedZANJ", fp: IO[bytes]) -> NDArray:
-	return np.load(fp)
-
-def load_jsonl(zanj: "LoadedZANJ", fp: IO[bytes]) -> list[JSONitem]:
-	return [
-		json.loads(line) 
-		for line in fp
-	]
-
-# TODO: move these to zanj loaders
-EXTERNAL_LOAD_FUNCS: dict[ExternalItemType, Callable[["ZANJ", IO[bytes]], Any]] = {
-	"ndarray": load_ndarray,
-	"jsonl": load_jsonl,
-}
-
 
 @dataclass
 class LoaderHandler:
@@ -120,7 +103,7 @@ DEFAULT_LOADER_HANDLERS_ZANJ: tuple[ZANJLoaderHandler] = (
 			and json_item["__format__"].startswith("external:")
 		),
 		load = lambda zanj, json_item, path: (
-			zanj._externals[json_item["key"]]
+			zanj._externals[json_item["$ref"]]
 		)
 	),
 ) + tuple(
@@ -169,6 +152,12 @@ class ZANJLoaderTreeNode(typing.Mapping):
 		else:
 			val = self._data[key]
 
+		# apply loaders
+		# TODO: does it make sense to pass `self` instead of `self._parent`? this would require refactoring
+		for lh in self._parent._loader_handlers:
+			if lh.check(self._parent, val, self._parent._path):
+				return lh.load(self._parent, val, self._parent._path)
+
 		if isinstance(val, (dict,list)):
 			return ZANJLoaderTreeNode(_parent=self._parent, _data=val)
 		else:
@@ -201,6 +190,8 @@ class LazyExternalLoader:
 			for key, val in zanj_meta["externals_info"].items()
 		}
 
+		self._loaded_zanj: LoadedZANJ = loaded_zanj
+
 		# validate by checking each external file exists
 		for key, item_type in self._externals_types.items():
 			fname: str = f"{key}.{EXTERNAL_ITEMS_EXTENSIONS[item_type]}"
@@ -212,7 +203,7 @@ class LazyExternalLoader:
 		if key in self._externals_types:
 			path, item_type = key
 			with self._zipf.open(path, "r") as fp:
-				return EXTERNAL_LOAD_FUNCS[item_type](self.loaded_zanj, fp)
+				return EXTERNAL_LOAD_FUNCS[item_type](self._loaded_zanj, fp)
 
 
 
@@ -268,12 +259,3 @@ class LoadedZANJ(typing.Mapping):
 	
 	def __len__(self):
 		return len(self._json_data)
-
-
-
-__doc__ = """Documentation for this module:
-
-
-
-
-"""

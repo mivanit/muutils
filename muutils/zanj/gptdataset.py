@@ -25,7 +25,7 @@ class GPTDatasetConfig(metaclass=abc.ABCMeta):
 		raise NotImplementedError()
 
 	@abc.abstractmethod
-	def padding_token_idx(self) -> str:
+	def padding_token_idx(self) -> int:
 		raise NotImplementedError()
 
 	def tokenizer_map(self) -> dict[str, int]:
@@ -45,9 +45,9 @@ class GPTDatasetConfig(metaclass=abc.ABCMeta):
 		return dict(
 			vocab_size = len(self.token_arr),
 			n_positions = self.seq_len_max,
-			pad_token_id = self.padding_token_idx, # The id of the _padding_ token.
-			bos_token_id = self.padding_token_idx, # The id of the _beginning-of-stream_ token.
-			eos_token_id = self.padding_token_idx, # The id of the _end-of-stream_ token.
+			pad_token_id = self.padding_token_idx(), # The id of the _padding_ token.
+			bos_token_id = self.padding_token_idx(), # The id of the _beginning-of-stream_ token.
+			eos_token_id = self.padding_token_idx(), # The id of the _end-of-stream_ token.
 		)
 
 	def tokenize_seq(self, seq: list[str]) -> ATensor:
@@ -88,12 +88,13 @@ class GPTDatasetConfig(metaclass=abc.ABCMeta):
 
 	def pad_sequence(self, seq: ATensor):
 		"""process TOKENIZED sequence into tensor, padding or truncating as needed"""
-		return lpad_array(
-			seq,
-			self.seq_len_max,
-			self.padding_token_idx,
-		)
-
+		if seq.shape[0] > self.seq_len_max:
+			return seq[:self.seq_len_max]
+		else:
+			return np.concatenate([
+				np.full((self.seq_len_max - seq.shape[0],), self.padding_token_idx(), dtype=seq.dtype),
+				seq,
+			])
 
 
 @dataclass(kw_only=True)

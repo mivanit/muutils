@@ -10,6 +10,8 @@ from muutils.zanj import ZANJ
 
 # pylint: disable=protected-access
 
+KWArgs = Any
+
 def num_params(m: torch.nn.Module, only_trainable: bool = True):
 	"""return total number of parameters in a model
 	
@@ -25,9 +27,40 @@ def num_params(m: torch.nn.Module, only_trainable: bool = True):
 	return sum(p.numel() for p in unique)
 
 
-OptimizerFactoryFunction = Callable[[Iterable[torch.nn.parameter.Parameter], ...], torch.optim.Optimizer]
-LRschedulerFactoryFunction = Callable[[torch.optim.Optimizer, ...], torch.optim.lr_scheduler._LRScheduler]
-LossFactoryFunction = Callable[[...], torch.nn.modules.loss._Loss]
+def get_device(m: torch.nn.Module) -> tuple[
+		bool,
+		torch.device|dict[str, torch.device],
+	]:
+	"""get the current devices"""
+	
+	devs: dict[str, torch.device] = {
+		name: p.device
+		for name, p in m.named_parameters()
+	}
+
+	# check if all devices are the same
+	dev_uni: torch.device = list(devs.values())[0]
+
+	if all(dev == dev_uni for dev in devs.values()):
+		return True, dev_uni
+	else:
+		return False, devs
+
+
+
+
+OptimizerFactoryFunction = Callable[
+	[Iterable[torch.nn.parameter.Parameter], KWArgs], 
+	torch.optim.Optimizer
+]
+LRschedulerFactoryFunction = Callable[
+	[torch.optim.Optimizer, KWArgs], 
+	torch.optim.lr_scheduler._LRScheduler
+]
+LossFactoryFunction = Callable[
+	[KWArgs], 
+	torch.nn.modules.loss._Loss
+]
 
 TrainingTuple = typing.NamedTuple(
 	"TrainingTuple",
@@ -39,9 +72,9 @@ TrainingTuple = typing.NamedTuple(
 )
 
 @dataclass(kw_only=True)
-class TrainingConfig:
+class TrainConfig:
 	"""training configuration for a pytorch model (specifically LLMs)"""
-	__format__: str = field(default="zanj.torchutil.TrainingConfig", init=False)
+	__format__: str = field(default="zanj.torchutil.TrainConfig", init=False)
 
 	batch_size: int
 	epochs: int = 1
@@ -49,8 +82,8 @@ class TrainingConfig:
 	optimizer_kwargs: dict[str, Any] = field(default_factory=dict)
 	lr_scheduler_factory: LRschedulerFactoryFunction|None
 	lr_scheduler_kwargs: dict[str, Any] = field(default_factory=dict)
-	loss_factory: LossFactoryFunction
-	loss_kwargs: dict[str, Any] = field(default_factory=dict)
+	# loss_factory: LossFactoryFunction
+	# loss_kwargs: dict[str, Any] = field(default_factory=dict)
 
 	def get_all(
 			self, 
@@ -70,7 +103,8 @@ class TrainingConfig:
 			lr_scheduler = self.lr_scheduler_factory(optimizer, **self.lr_scheduler_kwargs)
 
 		# loss
-		loss: torch.nn.modules.loss._Loss = self.loss_factory(**self.loss_kwargs)
+		# loss: torch.nn.modules.loss._Loss = self.loss_factory(**self.loss_kwargs)
+		loss = None
 		
 		return TrainingTuple(optimizer = optimizer, lr_scheduler = lr_scheduler, loss = loss)
 
@@ -109,8 +143,8 @@ class TrainingConfig:
 		
 
 	@classmethod
-	def load(cls, data: JSONitem) -> "TrainingConfig":
-		"""load a TrainingConfig from a serialized object
+	def load(cls, data: JSONitem) -> "TrainConfig":
+		"""load a TrainConfig from a serialized object
 		
 		TODO: support loading custom optimizers, lr schedulers, and losses
 		"""
@@ -153,7 +187,6 @@ class ModelConfig(metaclass=abc.ABCMeta):
 	"""configuration for a pytorch model
 	
 	- needs to implement: 
-	  - `get_init_kwargs()`, which will return a dict of the arguments used to initialize the model
 	  - `load()`, a class method which will load a model from a serialized object (JSONitem)
 	- allows better loading and saving to ZANJ
 	- more consistent reproducibility of models
@@ -167,12 +200,12 @@ class ModelConfig(metaclass=abc.ABCMeta):
 	@abc.abstractclassmethod
 	def load(cls, obj: JSONitem) -> "ModelConfig":
 		"""load a model config from a serialized object"""
-		raise NotImplementedError
+		raise NotImplementedError()
 
 	@abc.abstractmethod
-	def get_init_kwargs(self) -> dict:
-		"""get the kwargs used to initialize the model"""
-		raise NotImplementedError
+	def serialize(self, jser: JsonSerializer|None = None) -> JSONitem:
+		"""serialize this object to JSON"""
+		raise NotImplementedError()
 
 T_config = typing.TypeVar("T_config", bound=ModelConfig)
 class ConfiguredModel(

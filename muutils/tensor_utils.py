@@ -76,13 +76,13 @@ DTYPE_LIST: list = [
         # numpy
         # ----------
         # floats
-        np.float_, np.float16, np.float32, np.float64, np.half, np.float, np.double,
+        np.float_, np.float16, np.float32, np.float64, np.half, np.single, np.double,
         # complex
         np.complex64, np.complex128,
         # ints
-        np.int8, np.int16, np.int32, np.int64, np.int, np.long, np.short,
+        np.int8, np.int16, np.int32, np.int64, np.int_, np.longlong, np.short,
         # simplest
-        np.uint8, np.bool,
+        np.uint8, np.bool_,
     ]
 ]
 

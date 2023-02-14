@@ -174,34 +174,75 @@ TORCH_OPTIMIZERS_MAP: dict[str, torch.optim.Optimizer] = {
     
 
 
-def lpad_tensor(tensor: torch.Tensor, padded_length: int, pad_value: float = 0.0) -> torch.Tensor:
-    """pad a 1-d tensor on the left with pad_value to length `padded_length`"""
-    return torch.cat([
-        torch.full((padded_length - tensor.shape[0],), pad_value, dtype=tensor.dtype, device=tensor.device),
+
+def pad_tensor(
+        tensor: ATensor["token"],
+        padded_length: int,
+        pad_value: float = 0.0,
+        rpad: bool = False,
+    ) -> ATensor["padded_length"]:
+    """pad a 1-d tensor on the left with pad_value to length `padded_length`
+    
+    set `rpad = True` to pad on the right instead"""
+
+    temp: list[ATensor] = [
+        torch.full(
+            (padded_length - tensor.shape[0],), 
+            pad_value, 
+            dtype=tensor.dtype, 
+            device=tensor.device,
+        ),
         tensor,
-    ])
+    ]
+
+    if rpad:
+        temp.reverse()
+
+    return torch.cat(temp)
+
+
+def lpad_tensor(tensor: torch.Tensor, padded_length: int, pad_value: float = 0.0) -> torch.Tensor:
+    return pad_tensor(tensor, padded_length, pad_value, rpad=False)
 
 def rpad_tensor(tensor: torch.Tensor, pad_length: int, pad_value: float = 0.0) -> torch.Tensor:
     """pad a 1-d tensor on the right with pad_value to length `pad_length`"""
-    return torch.cat([
-        tensor,
-        torch.full((pad_length - tensor.shape[0],), pad_value, dtype=tensor.dtype, device=tensor.device),
-    ])
+    return pad_tensor(tensor, pad_length, pad_value, rpad=True)
+
+
+
+
+def pad_array(
+        array: NDArray["token"],
+        padded_length: int,
+        pad_value: float = 0.0,
+        rpad: bool = False,
+    ) -> NDArray["padded_length"]:
+    """pad a 1-d array on the left with pad_value to length `padded_length`
+
+    set `rpad = True` to pad on the right instead"""
+
+    temp: list[NDArray] = [
+        np.full(
+            (padded_length - array.shape[0],), 
+            pad_value, 
+            dtype=array.dtype,
+        ),
+        array,
+    ]
+
+    if rpad:
+        temp.reverse()
+
+    return np.concatenate(temp)
+
 
 def lpad_array(array: ATensor["token"], padded_length: int, pad_value: float = 0.0) -> NDArray:
     """pad a 1-d array on the left with pad_value to length `padded_length`"""
-    return np.concatenate([
-        np.full((padded_length - array.shape[0],), pad_value, dtype=array.dtype),
-        array,
-    ])
+    return pad_array(array, padded_length, pad_value, rpad=False)
 
 def rpad_array(array: ATensor["token"], pad_length: int, pad_value: float = 0.0) -> NDArray:
     """pad a 1-d array on the right with pad_value to length `pad_length`"""
-    return np.concatenate([
-        array,
-        np.full((pad_length - array.shape[0],), pad_value, dtype=array.dtype),
-    ])
-
+    return pad_array(array, pad_length, pad_value, rpad=True)
 
 
 

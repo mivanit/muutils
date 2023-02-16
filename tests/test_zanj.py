@@ -4,7 +4,7 @@ from dataclasses import asdict, dataclass
 import numpy as np
 import pandas as pd
 
-from muutils._wip.json_serialize.zanj import ZANJ
+from muutils.zanj import ZANJ
 
 np.random.seed(0)
 
@@ -55,7 +55,7 @@ def test_torch_simple():
 def test_torch_configmodel():
 	import torch
 
-	from muutils._wip.json_serialize.torchutil import ModelConfig, ConfiguredModel
+	from muutils.zanj.torchutil import ModelConfig, ConfiguredModel, set_config_class
 
 	@dataclass
 	class MyGPTConfig(ModelConfig):
@@ -73,8 +73,9 @@ def test_torch_configmodel():
 		@classmethod
 		def load(cls, obj: dict) -> "MyGPTConfig":
 			"""load the model from a path"""
-			return cls(**data)
+			return cls(**obj)
 
+	@set_config_class(MyGPTConfig)
 	class MyGPT(ConfiguredModel[MyGPTConfig]):
 		"""basic GPT model"""
 		def __init__(self, config: MyGPTConfig):
@@ -111,7 +112,7 @@ def test_torch_configmodel():
 	print(f"{model.config = }")
 
 	# try to load the model
-	model2: MyGPT = ZANJ().read(fname)
+	model2: MyGPT = MyGPT.load_file(fname)
 	print(f"loaded model from {fname}")
 	print(f"{model2.config = }")
 

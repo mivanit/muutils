@@ -1,6 +1,6 @@
 import abc
 import typing
-from typing import Callable, Iterable, Any
+from typing import Callable, Iterable, Any, Type
 from dataclasses import dataclass, field
 
 import torch
@@ -49,25 +49,12 @@ def get_device(m: torch.nn.Module) -> tuple[
 
 
 
-OptimizerFactoryFunction = Callable[
-	[Iterable[torch.nn.parameter.Parameter], KWArgs], 
-	torch.optim.Optimizer
-]
-LRschedulerFactoryFunction = Callable[
-	[torch.optim.Optimizer, KWArgs], 
-	torch.optim.lr_scheduler._LRScheduler
-]
-LossFactoryFunction = Callable[
-	[KWArgs], 
-	torch.nn.modules.loss._Loss
-]
-
 TrainingTuple = typing.NamedTuple(
 	"TrainingTuple",
 	(
-		("optimizer", torch.optim.Optimizer),
+		("optim", torch.optim.Optimizer),
 		("lr_scheduler", torch.optim.lr_scheduler._LRScheduler),
-		("loss", torch.nn.modules.loss._Loss),
+		("loss_fn", torch.nn.modules.loss._Loss),
 	),
 )
 
@@ -78,12 +65,14 @@ class TrainConfig:
 
 	batch_size: int
 	epochs: int = 1
-	optimizer_factory: OptimizerFactoryFunction
+
+	optimizer: Type[torch.optim.Optimizer]
 	optimizer_kwargs: dict[str, Any] = field(default_factory=dict)
-	lr_scheduler_factory: LRschedulerFactoryFunction|None
+
+	lr_scheduler: Type[torch.optim.lr_scheduler._LRScheduler]|None
 	lr_scheduler_kwargs: dict[str, Any] = field(default_factory=dict)
-	# loss_factory: LossFactoryFunction
-	# loss_kwargs: dict[str, Any] = field(default_factory=dict)
+
+	loss: Type[torch.nn.modules.loss._Loss]
 
 	def get_all(
 			self, 
@@ -92,15 +81,15 @@ class TrainConfig:
 		"""get the optimizer, learning rate scheduler, and loss for the model from the config"""
 
 		# optimizer from model
-		optimizer: torch.optim.Optimizer = self.optimizer_factory(model.parameters(), **self.optimizer_kwargs)
+		optimizer: torch.optim.Optimizer = self.optimizer(model.parameters(), **self.optimizer_kwargs)
 
 		# lr scheduler from optimizer
 		lr_scheduler: torch.optim.lr_scheduler._LRScheduler
-		if self.lr_scheduler_factory is None:
+		if self.lr_scheduler is None:
 			# if its none, use constant LR
 			lr_scheduler = torch.optim.lr_scheduler.ConstantLR(optimizer, factor = 1.0, total_iters = 0)
 		else:
-			lr_scheduler = self.lr_scheduler_factory(optimizer, **self.lr_scheduler_kwargs)
+			lr_scheduler = self.lr_scheduler(optimizer, **self.lr_scheduler_kwargs)
 
 		# loss
 		# loss: torch.nn.modules.loss._Loss = self.loss_factory(**self.loss_kwargs)
@@ -114,25 +103,25 @@ class TrainConfig:
 			jser = JsonSerializer(handlers_default=BASE_HANDLERS) # only allow base handlers, for reproducibility
 
 		# handle `None` scheduler
-		_SER_lr_scheduler_factory: dict[str, Any]|None
-		if self.lr_scheduler_factory is not None:
-			_SER_lr_scheduler_factory = {
-				"__name__": self.lr_scheduler_factory.__name__,
-				"__module__": self.lr_scheduler_factory.__module__,
+		_SER_lr_scheduler: dict[str, Any]|None
+		if self.lr_scheduler is not None:
+			_SER_lr_scheduler = {
+				"__name__": self.lr_scheduler.__name__,
+				"__module__": self.lr_scheduler.__module__,
 			}
 		else:
-			_SER_lr_scheduler_factory = None
+			_SER_lr_scheduler = None
 
 		return {
 			"__format__": self.__format__,
 			"batch_size": self.batch_size,
 			"epochs": self.epochs,
-			"optimizer_factory": {
-				"__name__": self.optimizer_factory.__name__,
-				"__module__": self.optimizer_factory.__module__,
+			"optimizer": {
+				"__name__": self.optimizer.__name__,
+				"__module__": self.optimizer.__module__,
 			},
 			"optimizer_kwargs" : jser.json_serialize(self.optimizer_kwargs),
-			"lr_scheduler_factory": _SER_lr_scheduler_factory,
+			"lr_scheduler": _SER_lr_scheduler,
 			"lr_scheduler_kwargs" : jser.json_serialize(self.lr_scheduler_kwargs),
 			"loss_factory": {
 				"__name__": self.loss_factory.__name__,
@@ -151,19 +140,19 @@ class TrainConfig:
 
 		# optimizer
 		assert (
-			"optimizer_factory" in data
-			and "__name__" in data["optimizer_factory"]
-			and "__module__" in data["optimizer_factory"]
-			and data["optimizer_factory"]["__module__"].startswith("torch.optim")
-		), "optimizer_factory must be a dict with __name__ and __module__ keys, and be a member of torch.optim"
+			"optimizer" in data
+			and "__name__" in data["optimizer"]
+			and "__module__" in data["optimizer"]
+			and data["optimizer"]["__module__"].startswith("torch.optim")
+		), "optimizer must be a dict with __name__ and __module__ keys, and be a member of torch.optim"
 
-		optimizer_factory: OptimizerFactoryFunction = getattr(torch.optim, data["optimizer_factory"]["__name__"])
+		optimizer: OptimizerFactoryFunction = getattr(torch.optim, data["optimizer"]["__name__"])
 
 		# lr scheduler
-		if data["lr_scheduler_factory"] is None:
-			lr_scheduler_factory: LRschedulerFactoryFunction|None = None
+		if data["lr_scheduler"] is None:
+			lr_scheduler: LRschedulerFactoryFunction|None = None
 		else:
-			lr_scheduler_factory: LRschedulerFactoryFunction = getattr(torch.optim.lr_scheduler, data["lr_scheduler_factory"]["__name__"])
+			lr_scheduler: LRschedulerFactoryFunction = getattr(torch.optim.lr_scheduler, data["lr_scheduler"]["__name__"])
 
 		# loss
 		loss_factory: LossFactoryFunction = getattr(torch.nn.modules.loss, data["loss_factory"]["__name__"])
@@ -171,9 +160,9 @@ class TrainConfig:
 		return cls(
 			batch_size = data["batch_size"],
 			epochs = data["epochs"],
-			optimizer_factory = optimizer_factory,
+			optimizer = optimizer,
 			optimizer_kwargs = data["optimizer_kwargs"],
-			lr_scheduler_factory = lr_scheduler_factory,
+			lr_scheduler = lr_scheduler,
 			lr_scheduler_kwargs = data["lr_scheduler_kwargs"],
 			loss_factory = loss_factory,
 			loss_kwargs = data["loss_kwargs"],

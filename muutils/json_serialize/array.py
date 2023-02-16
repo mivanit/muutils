@@ -11,7 +11,7 @@ import warnings
 
 import numpy as np
 
-from muutils._wip.json_serialize.util import JSONitem, Hashableitem, MonoTuple, UniversalContainer, isinstance_namedtuple, try_catch
+from muutils.json_serialize.util import JSONitem, Hashableitem, MonoTuple, UniversalContainer, isinstance_namedtuple, try_catch
 from muutils.tensor_utils import NDArray
 
 
@@ -103,36 +103,39 @@ def infer_array_mode(arr: JSONitem) -> ArrayMode:
     
     assumes the array was serialized via `serialize_array()`
     """
-    if isinstance(arr, dict):
+    if isinstance(arr, typing.Mapping):
         fmt: Optional[str] = arr.get("__format__", None)
         if fmt == "array_list_meta":
-            if type(arr["data"]) != list:
-                raise ValueError(f"invalid list format: {arr}")
+            if not isinstance(arr["data"], Iterable):
+                raise ValueError(f"invalid list format: {type(arr['data']) = }\t{arr}")
             return fmt
         elif fmt == "array_hex_meta":
-            if type(arr["data"]) != str:
-                raise ValueError(f"invalid hex format: {arr}")
+            if not isinstance(arr["data"], str):
+                raise ValueError(f"invalid hex format: {type(arr['data']) = }\t{arr}")
             return fmt
-        elif fmt == "external":
-            if ("$ref" not in arr) or (type(arr["$ref"]) != str):
-                raise ValueError(f"invalid external format: {arr}")
+        elif fmt == "external:npy":
+            if ("$ref" not in arr) or (not isinstance(arr["$ref"], (str, np.ndarray))):
+                raise ValueError(f"invalid external format: {type(arr['$ref']) = }\t{arr}")
             return fmt
         else:
             raise ValueError(f"invalid format: {arr}")
-
     elif isinstance(arr, list):
         return "list"
     else:
-        raise ValueError(f"cannot infer array_mode from {arr}")
+        raise ValueError(f"cannot infer array_mode from\t{type(arr) = }\n{arr = }")
 
 def load_array(arr: JSONitem, array_mode: Optional[ArrayMode] = None) -> Any:
     """load a json-serialized array, infer the mode if not specified"""
+    # return arr if its already a numpy array
+    if isinstance(arr, np.ndarray) and array_mode is None:
+        return arr
+
     # try to infer the array_mode
     array_mode_inferred: ArrayMode = infer_array_mode(arr)
     if array_mode is None:
         array_mode = array_mode_inferred
     elif array_mode != array_mode_inferred:
-        warnings.warn(f"array_mode {array_mode} does not match inferred array_mode {array_mode_inferred}")        
+        warnings.warn(f"array_mode {array_mode} does not match inferred array_mode {array_mode_inferred}")
 
     # actually load the array
     if array_mode == "array_list_meta":
@@ -145,5 +148,10 @@ def load_array(arr: JSONitem, array_mode: Optional[ArrayMode] = None) -> Any:
         return data.reshape(arr["shape"])
     elif array_mode == "list":
         return np.array(arr)
+    elif array_mode == "external:npy":
+        data = np.array(arr["$ref"], dtype=arr["dtype"])
+        if tuple(arr["shape"]) != tuple(data.shape):
+            raise ValueError(f"invalid shape: {arr}")
+        return data
     else:
         raise ValueError(f"invalid array_mode: {array_mode}")

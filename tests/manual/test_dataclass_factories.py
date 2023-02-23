@@ -1,3 +1,5 @@
+# NOTE: This is a manual test. the tests in this file are not run by pytest.
+
 from typing import Any
 
 from muutils.json_serialize import dataclass_serializer_factory, dataclass_loader_factory, JSONitem

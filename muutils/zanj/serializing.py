@@ -161,7 +161,7 @@ DEFAULT_SERIALIZER_HANDLERS_ZANJ: MonoTuple[SerializerHandler] = (
 				isinstance(obj, np.ndarray) 
 				and obj.size >= self.external_array_threshold
 			),
-			serialize = lambda self, obj, path: zanj_external_serialize(self, obj, path, item_type="ndarray"),
+			serialize_func = lambda self, obj, path: zanj_external_serialize(self, obj, path, item_type="ndarray"),
 			desc = "external:ndarray",
 		),
 		SerializerHandler(
@@ -169,17 +169,17 @@ DEFAULT_SERIALIZER_HANDLERS_ZANJ: MonoTuple[SerializerHandler] = (
 				str(type(obj)) == "<class 'torch.Tensor'>" 
 				and int(obj.nelement()) >= self.external_array_threshold
 			),
-			serialize = lambda self, obj, path: zanj_external_serialize(self, obj, path, item_type="ndarray"),
+			serialize_func = lambda self, obj, path: zanj_external_serialize(self, obj, path, item_type="ndarray"),
 			desc = "external:ndarray:torchtensor",
 		),
 		SerializerHandler(
 			check = lambda self, obj, path: isinstance(obj, (list, tuple, pd.DataFrame)) and len(obj) >= self.external_table_threshold,
-			serialize = lambda self, obj, path: zanj_external_serialize(self, obj, path, item_type="jsonl"),
+			serialize_func = lambda self, obj, path: zanj_external_serialize(self, obj, path, item_type="jsonl"),
 			desc = "external:jsonl",
 		),
 		SerializerHandler(
 			check = lambda self, obj, path: "<class 'torch.nn.modules.module.Module'>" in [str(t) for t in obj.__class__.__mro__],
-			serialize = lambda self, obj, path: zanj_serialize_torchmodule(self, obj, path),
+			serialize_func = lambda self, obj, path: zanj_serialize_torchmodule(self, obj, path),
 			desc = "torch.nn.Module",
 		),
 	)

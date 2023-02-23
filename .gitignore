@@ -1,4 +1,4 @@
-tests/junk_data/**
+junk_data
 .pypi-token
 __pycache__/
 **/__pycache__/
@@ -9,3 +9,4 @@ dist/
 muutils.egg-info/
 
 setup_build.sh
+

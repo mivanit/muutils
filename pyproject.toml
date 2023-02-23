@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "muutils"
+version = "0.2.0"
+description = "a collection of miscellaneous python utilities"
+license = "GPL-3.0-only"
+authors = ["mivanit <mivanits@umich.edu>"]
+readme = "README.md"
+classifiers=[
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
+    "Operating System :: OS Independent",
+]
+repository = "https://github.com/mivanit/muutils"
+[tool.poetry.dependencies]
+python = "^3.8"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

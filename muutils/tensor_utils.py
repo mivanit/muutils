@@ -14,8 +14,10 @@ import torch
 TYPE_TO_JAX_DTYPE: dict[type, type] = {
     float : jaxtyping.Float,
     int : jaxtyping.Int,
+    bool : jaxtyping.Bool,
     np.float32: jaxtyping.Float,
     np.float64: jaxtyping.Float,
+    np.int8: jaxtyping.Int,
     np.int32: jaxtyping.Int,
     np.int64: jaxtyping.Int,
     torch.float32: jaxtyping.Float,

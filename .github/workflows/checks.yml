@@ -16,18 +16,17 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
+      - name: Install linters
+        run: pip install pycln isort black
+
       - name: pycln
-        run: |
-          pip install pycln
-          pycln --check --config pyproject.toml .
+        run: pycln --check --config pyproject.toml .
+
       - name: isort
-        run: |
-          pip install isort
-          isort --check-only .
+        run: isort --check-only .
+
       - name: black
-        run: |
-          pip install black
-          python -m black --check .
+        run: python -m black --check .
   test:
     name: Test
     runs-on: ubuntu-latest

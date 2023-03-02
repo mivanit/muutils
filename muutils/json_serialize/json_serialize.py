@@ -1,4 +1,5 @@
 from __future__ import annotations
+from typing import Union
 
 import inspect
 import types
@@ -42,7 +43,7 @@ SERIALIZE_DIRECT_AS_STR: set[str] = {
     "<class 'torch.dtype'>",
 }
 
-ObjectPath = MonoTuple[str | int]
+ObjectPath = MonoTuple[Union[str, int]]
 
 
 @dataclass

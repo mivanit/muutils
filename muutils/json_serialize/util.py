@@ -4,7 +4,7 @@ import functools
 import types
 import typing
 import warnings
-from typing import Any, Callable, Iterable, Literal, Union
+from typing import Any, Callable, Iterable, Literal, Tuple, Union, get_origin
 
 _NUMPY_WORKING: bool
 try:
@@ -34,14 +34,14 @@ class MonoTuple:
 
     @typing._tp_cache
     def __class_getitem__(cls, params):
-        if isinstance(params, (type, types.UnionType)):
-            return types.GenericAlias(tuple, (params, Ellipsis))
+        if get_origin(params) is Union:
+            return Tuple[params, ...]
         # test if has len and is iterable
         elif isinstance(params, Iterable):
             if len(params) == 0:
-                return tuple
+                return Tuple
             elif len(params) == 1:
-                return types.GenericAlias(tuple, (params[0], Ellipsis))
+                return Tuple[params[0], ...]
         else:
             raise TypeError(
                 f"MonoTuple expects 1 type argument, got {len(params) = } \n\t{params = }"

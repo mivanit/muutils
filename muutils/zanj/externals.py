@@ -1,5 +1,7 @@
 """for storing/retrieving an item externally in a ZANJ archive"""
 
+from __future__ import annotations
+
 import json
 from typing import IO, Any, Callable, Literal, NamedTuple
 

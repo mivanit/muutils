@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from muutils.json_serialize import JSONitem
 from muutils.jsonlines import jsonl_load
 

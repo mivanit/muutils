@@ -1,7 +1,11 @@
+from __future__ import annotations
+
 from typing import Callable, Generic, TypeVar
 
 _KT = TypeVar("_KT")
 _VT = TypeVar("_VT")
+
+from typing import Callable, Generic, TypeVar
 
 
 class DefaulterDict(dict[_KT, _VT], Generic[_KT, _VT]):

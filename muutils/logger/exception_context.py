@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import json
 
 from muutils.json_serialize import json_serialize

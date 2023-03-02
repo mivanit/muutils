@@ -11,6 +11,8 @@ for large arrays, the output is a .tar.gz file with most data in a json file, bu
 
 """
 
+from __future__ import annotations
+
 import json
 import os
 import zipfile

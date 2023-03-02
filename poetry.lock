@@ -60,14 +60,14 @@ files = [
 
 [[package]]
 name = "jaxtyping"
-version = "0.2.12"
+version = "0.2.13"
 description = "Type annotations and runtime checking for shape and dtype of JAX arrays, and PyTrees."
 category = "main"
 optional = false
-python-versions = "~=3.7"
+python-versions = "~=3.8"
 files = [
-    {file = "jaxtyping-0.2.12-py3-none-any.whl", hash = "sha256:ae17bb386d3f0b7af8306d910bec85be793bdad427e28b4ea7a23d409488fb70"},
-    {file = "jaxtyping-0.2.12.tar.gz", hash = "sha256:7d3bca2bdbcb2f74d2f54d18d1957a2836a11dff09e44c2c023da254ddaf20e8"},
+    {file = "jaxtyping-0.2.13-py3-none-any.whl", hash = "sha256:4d7ee005eebd366e6e3ea5133d4b10fd6f9ee779bc2312c1eff84cca59061570"},
+    {file = "jaxtyping-0.2.13.tar.gz", hash = "sha256:1e8a9ae5bd29c0e796a0f856362c81acadca0df863b471306b282b6403d09896"},
 ]
 
 [package.dependencies]
@@ -229,7 +229,6 @@ files = [
 
 [package.dependencies]
 numpy = [
-    {version = ">=1.20.3", markers = "python_version < \"3.10\""},
     {version = ">=1.21.0", markers = "python_version >= \"3.10\""},
     {version = ">=1.23.2", markers = "python_version >= \"3.11\""},
 ]
@@ -433,5 +432,5 @@ test = ["pytest (>=3.0.0)"]
 
 [metadata]
 lock-version = "2.0"
-python-versions = "^3.8"
-content-hash = "bebd55bd315fece9e99d7065bb97c14fe391cd41ab844633c69f72cc17bd51ff"
+python-versions = "^3.10"
+content-hash = "cae93fd5a40c56d1cb4f020d4aefbffaeefbb78d5b511116abf7cadbf10f5129"

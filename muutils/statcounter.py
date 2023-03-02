@@ -1,19 +1,21 @@
-from types import NoneType
-from typing import Any, Callable, Generic, Iterable, List, Optional, Sequence, Tuple, TypeVar, Dict, Union
-from collections import Counter
-from functools import cache, cached_property
-from itertools import chain
-import math
 import json
-# import pdb
-
+import math
+from collections import Counter
+from functools import cached_property
+from itertools import chain
+from types import NoneType
+from typing import Callable, Iterable, Optional, Sequence, Union
 
 import numpy as np
+
+# import pdb
+
 
 # pylint: disable=abstract-method
 
 # misc
 # ==================================================
+
 
 def universal_flatten(arr: Sequence, require_rectangular: bool = True) -> Sequence:
     """flattens any iterable"""
@@ -26,10 +28,7 @@ def universal_flatten(arr: Sequence, require_rectangular: bool = True) -> Sequen
         if require_rectangular and (all(elements_iterable) != any(elements_iterable)):
             raise ValueError("arr contains mixed iterable and non-iterable elements")
         if any(elements_iterable):
-            return chain.from_iterable(
-                universal_flatten(x)
-                for x in arr
-            )
+            return chain.from_iterable(universal_flatten(x) for x in arr)
         else:
             return arr
 
@@ -42,10 +41,12 @@ def compute_rsquared(actual: np.ndarray, predicted: np.ndarray) -> float:
     ss_res: float = np.sum((actual - predicted) ** 2.0)
     ss_tot: float = np.sum((actual - actual_mean) ** 2.0)
 
-    return (1 - ss_res / ss_tot)
+    return 1 - ss_res / ss_tot
+
 
 # StatCounter
 # ==================================================
+
 
 class StatCounter(Counter):
     """counter, but with some stat calculation methods which assume the keys are numbers
@@ -55,24 +56,13 @@ class StatCounter(Counter):
 
     def validate(self) -> bool:
         """validate the counter as being all floats or ints"""
-        return all(
-            isinstance(k, (bool, int, float, NoneType)) 
-            for k in self.keys()
-        )
+        return all(isinstance(k, (bool, int, float, NoneType)) for k in self.keys())
 
     def min(self):
-        return min(
-            x
-            for x, v in self.items()
-            if v > 0      
-        )
+        return min(x for x, v in self.items() if v > 0)
 
     def max(self):
-        return max(
-            x
-            for x, v in self.items()
-            if v > 0    
-        )
+        return max(x for x, v in self.items() if v > 0)
 
     @cached_property
     def keys_sorted(self) -> list:
@@ -120,7 +110,9 @@ class StatCounter(Counter):
                     #     sorted_keys[i], (n_sofar + 1 - real_target),
                     #     sorted_keys[i + 1], (real_target - n_sofar),
                     # )
-                    return sorted_keys[i] * (n_sofar + 1 - real_target) + sorted_keys[i + 1] * (real_target - n_sofar)
+                    return sorted_keys[i] * (n_sofar + 1 - real_target) + sorted_keys[
+                        i + 1
+                    ] * (real_target - n_sofar)
             else:
                 continue
 
@@ -144,12 +136,11 @@ class StatCounter(Counter):
         return (deviations / self.total()) ** 0.5
 
     def summary(
-            self, 
-            typecast: Callable = lambda x: x,
-            *,
-            extra_percentiles: Optional[list[float]] = None,
-        ) -> dict[str, Union[float, int]]:
-
+        self,
+        typecast: Callable = lambda x: x,
+        *,
+        extra_percentiles: Optional[list[float]] = None,
+    ) -> dict[str, Union[float, int]]:
         # common stats that always work
         output: dict = dict(
             total_items=self.total(),
@@ -184,18 +175,17 @@ class StatCounter(Counter):
         return output
 
     def serialize(
-            self, 
-            typecast: Callable = lambda x: x,
-            *,
-            extra_percentiles: Optional[list[float]] = None,
-        ) -> dict:
+        self,
+        typecast: Callable = lambda x: x,
+        *,
+        extra_percentiles: Optional[list[float]] = None,
+    ) -> dict:
         return {
             "StatCounter": {
-                typecast(k): v 
-                for k, v in 
-                sorted(dict(self).items(), key=lambda x: x[0])
+                typecast(k): v
+                for k, v in sorted(dict(self).items(), key=lambda x: x[0])
             },
-            "summary": self.summary(typecast, extra_percentiles = extra_percentiles),
+            "summary": self.summary(typecast, extra_percentiles=extra_percentiles),
         }
 
     def __str__(self) -> str:
@@ -220,16 +210,12 @@ class StatCounter(Counter):
         map_func: Callable = float,
     ) -> "StatCounter":
         """calls `map_func` on each element of `universal_flatten(arr)`"""
-        return cls([
-            map_func(x) 
-            for x in universal_flatten(arr)
-        ])
-
-
+        return cls([map_func(x) for x in universal_flatten(arr)])
 
 
 # testing
 # ==================================================
+
 
 def _compute_err(a: float, b: float, /) -> tuple[dict]:
     return dict(
@@ -254,7 +240,6 @@ def _compare_np_custom(arr: np.ndarray) -> dict[str, dict]:
 
 
 def _test_statscounter():
-
     arrs: list[np.ndarray] = [
         np.array([0, 1]),
         np.array([1, 2]),

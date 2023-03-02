@@ -19,7 +19,7 @@ jobs:
       - name: pycln
         run: |
           pip install pycln
-          pycln --check --all .
+          pycln --check --config pyproject.toml .
       - name: isort
         run: |
           pip install isort

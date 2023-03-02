@@ -26,3 +26,14 @@ pytest = "^7.2.1"
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.pycln]
+all = true
+exclude = "_wip"
+
+[tool.isort]
+profile = "black"
+extend_skip = ["_wip"]
+
+[tool.black]
+extend-exclude = "_wip"

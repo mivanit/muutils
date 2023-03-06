@@ -1,12 +1,22 @@
-test:
-	poetry run python -m pytest tests
+# python -m pylint muutils/
+# python -m pylint tests/
+lint:
+	python -m mypy --config-file pyproject.toml muutils/
+	python -m pylint --config-file pyproject.toml tests/
+
+lint-poetry:
+	poetry run python --version
+	poetry run python -m mypy --config-file pyproject.toml muutils/
+	poetry run python -m pylint --config-file pyproject.toml tests/
+
+lint-wip:
+	python -m mypy muutils/
+	python -m pylint tests/
 
 format:
-	poetry run python -m pycln --config pyproject.toml .
-	poetry run python -m isort format .
-	poetry run python -m black .
+	python -m black .
 
 check-format:
-	poetry run python -m pycln --check --config pyproject.toml .
-	poetry run python -m isort --check-only .
-	poetry run python -m black --check .
+	python -m black --check .
+
+test:

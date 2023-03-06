@@ -9,6 +9,8 @@ import inspect
 import typing
 import warnings
 
+from muutils.json_serialize.util import JSONdict
+
 
 _NUMPY_WORKING: bool
 try:
@@ -245,7 +247,7 @@ def json_serialize(
         if isinstance(obj, dict):
             # print(f'\n### reading obj as dict: {str(obj)}')
             # if dict, recurse
-            out_dict: dict[str, JSONitem] = dict()
+            out_dict: JSONdict = dict()
             for k, v in obj.items():
                 out_dict[str(k)] = json_serialize(v, newdepth)
             return out_dict
@@ -415,7 +417,7 @@ def dataclass_serializer_factory(
 
     def serialize(self):
         # get the base outputs for all keys in the dataclass but which dont have a special serializer
-        base_output: dict[str, JSONitem] = {
+        base_output: JSONdict = {
             k: (
                 json_serialize(getattr(self, k))
             )

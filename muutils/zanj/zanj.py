@@ -28,7 +28,7 @@ from muutils.json_serialize.json_serialize import (
 from muutils.json_serialize.util import ErrorMode, JSONitem, MonoTuple
 from muutils.sysinfo import SysInfo
 from muutils.tensor_utils import NDArray
-from muutils.zanj.externals import ZANJ_MAIN, ZANJ_META, ExternalItem
+from muutils.zanj.externals import ZANJ_MAIN, ZANJ_META, ExternalItem, _ZANJ_pre
 from muutils.zanj.loading import (
     DEFAULT_LOADER_HANDLERS_ZANJ,
     ExternalsLoadingMode,
@@ -193,3 +193,6 @@ class ZANJ(JsonSerializer):
             externals_mode=externals_mode,
             loader_handlers=loader_handlers,
         )
+
+
+_ZANJ_pre = ZANJ # type: ignore

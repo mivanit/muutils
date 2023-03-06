@@ -18,11 +18,8 @@ from muutils.zanj.externals import (
     EXTERNAL_ITEMS_EXTENSIONS,
     ExternalItem,
     ExternalItemType,
+    _ZANJ_pre,
 )
-
-
-# this is to make type checking work -- it will later be overridden
-_ZANJ_pre = JsonSerializer
 
 
 def jsonl_metadata(data: list[JSONitem]) -> dict:

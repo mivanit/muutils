@@ -6,7 +6,7 @@ from typing import Any, Callable, Iterable, Optional, Union
 
 from muutils.json_serialize.array import ArrayMode
 from muutils.json_serialize.json_serialize import JsonSerializer
-from muutils.json_serialize.util import JSONitem, TypeErrorMode
+from muutils.json_serialize.util import JSONdict, JSONitem, MonoTuple, TypeErrorMode
 
 # pylint: disable=pointless-string-statement, unreachable, import-outside-toplevel
 
@@ -96,6 +96,8 @@ def dataclass_serializer_factory(
 
     if fields_exclude is None:
         fields_exclude = list()
+    
+    assert isinstance(fields_exclude, Iterable)
 
     sfuncs_simple: dict[
         str, Callable
@@ -118,15 +120,15 @@ def dataclass_serializer_factory(
             )
 
     def serialize(
-        self, jser: JsonSerializer | None = None, path: tuple[str | int] = tuple()
+        self, jser: JsonSerializer | None = None, path: MonoTuple[str | int] = tuple()
     ) -> JSONitem:
         # get the base outputs for all keys in the dataclass but which dont have a special serializer
 
         if jser is None:
             jser = JsonSerializer()
 
-        base_output: dict[str, JSONitem] = {
-            k: (jser.json_serialize(getattr(self, k), path=path + (k,)))
+        base_output: JSONdict = {
+            k: (jser.json_serialize(getattr(self, k), path=tuple(path) + (k,)))
             for k in self.__dataclass_fields__
             if (
                 (k not in sfuncs_simple)
@@ -152,7 +154,7 @@ def loader_typecheck_factory(
     key: str,
     expected_type: type,
     error_mode: TypeErrorMode = "except",
-) -> Callable[[JSONitem], Any]:
+) -> Callable[[JSONdict], Any]:
     """outputs a loader function, which checks the type of the argument
 
     if the argument `data` to the loader is not of the expected type:
@@ -164,7 +166,8 @@ def loader_typecheck_factory(
     TODO: perhaps an option to warn, but try to convert?
     """
 
-    origin_type: type = typing.get_origin(expected_type)
+    # get_origin() returns `Any` but we know its going to be a type
+    origin_type: type = typing.get_origin(expected_type) # type: ignore
     if origin_type is None:
         # set it back if `get_origin()` returns `None`
         origin_type = expected_type
@@ -184,7 +187,7 @@ def loader_typecheck_factory(
         )
         return_raw = True
 
-    def loader(data: dict[str, JSONitem]) -> Any:
+    def loader(data: JSONdict) -> Any:
         if key not in data:
             raise KeyError(
                 f"while executing `.load(data)`, key {key} not found in data: {data = }"
@@ -224,7 +227,7 @@ def dataclass_loader_factory(
     loader_types_override: Optional[dict[str, type]] = None,
     # key_error_mode: ErrorMode = "except",
     type_error_mode: TypeErrorMode = "except",
-) -> Callable[[JSONitem], Any]:
+) -> Callable[[JSONdict], Any]:
     """returns a `.load()` method for a dataclass, recursively calling loader functions if found
 
     where arguments present in `special_loaders` are loaded using the corresponding function
@@ -243,9 +246,11 @@ def dataclass_loader_factory(
     # make it an empty dict if not provided
     if special_loaders is None:
         special_loaders = dict()
+    assert isinstance(special_loaders, dict)
 
     if loader_types_override is None:
         loader_types_override = dict()
+    assert isinstance(loader_types_override, dict)
 
     # check all loaders make sense
     for key in special_loaders:
@@ -255,7 +260,7 @@ def dataclass_loader_factory(
     # assemble actual loaders
     type_hints: dict[str, Any] = typing.get_type_hints(cls)
 
-    loader_funcs: dict[str, Callable[[JSONitem], Any]] = dict()
+    loader_funcs: dict[str, Callable[[JSONdict], Any]] = dict()
 
     for k in cls.__dataclass_fields__:
         # first, use the special loader
@@ -299,9 +304,14 @@ def dataclass_loader_factory(
         # otherwise, use the identity function
         else:
             # note here that we cant just use k because it's defined in the loop
-            loader_funcs[k] = lambda data, _k=k: data[_k]
 
-    def load(data: JSONitem):
+            # TODO: do some runtime type checking here?
+            # mypy gives `error: Cannot infer type of lambda`
+            loader_funcs[k] = lambda data, _k=k: data[_k] # type: ignore
+
+    # note that we assume dataclasses are always stored as dicts
+    def load(data: JSONdict):
+        
         # get the base outputs for all keys in the dataclass but which dont have a special loader
         output: dict[str, Any] = dict()
 

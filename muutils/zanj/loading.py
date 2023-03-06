@@ -8,13 +8,19 @@ from typing import Any, Callable, Literal
 import numpy as np
 
 from muutils.json_serialize.json_serialize import ObjectPath
-from muutils.json_serialize.util import JSONitem, MonoTuple
+from muutils.json_serialize.util import JSONdict, JSONitem, MonoTuple
 from muutils.zanj.externals import (
     EXTERNAL_ITEMS_EXTENSIONS,
     EXTERNAL_LOAD_FUNCS,
+    GET_EXTERNAL_LOAD_FUNC,
     ZANJ_MAIN,
     ZANJ_META,
+    _ZANJ_pre,
+    ExternalItemType,
+    ExternalItemType_vals,
 )
+
+# pylint: disable=protected-access
 
 ExternalsLoadingMode = Literal["lazy", "full"]
 
@@ -34,11 +40,11 @@ class LoaderHandler:
     def from_formattedclass(cls, fc: type):
         """create a loader from a class with `serialize`, `load` methods and `__format__` attribute"""
         assert hasattr(fc, "serialize")
-        assert callable(fc.serialize)
+        assert callable(fc.serialize) # type: ignore
         assert hasattr(fc, "load")
-        assert callable(fc.load)
+        assert callable(fc.load) # type: ignore
         assert hasattr(fc, "__format__")
-        assert isinstance(fc.__format__, str)
+        assert isinstance(fc.__format__, str) # type: ignore
 
         return cls(
             check=lambda json_item, path: json_item["__format__"] == fc.__format__,
@@ -52,9 +58,9 @@ class ZANJLoaderHandler:
     """handler for loading an object from a ZANJ archive (takes ZANJ object as first arg)"""
 
     # (zanj_obi, json_data, path) -> whether to use this handler
-    check: Callable[["ZANJ", JSONitem, ObjectPath], bool]
+    check: Callable[[_ZANJ_pre, JSONitem, ObjectPath], bool]
     # function to load the object (zanj_obj, json_data, path) -> loaded_obj
-    load: Callable[["ZANJ", JSONitem, ObjectPath], Any]
+    load: Callable[[_ZANJ_pre, JSONitem, ObjectPath], Any]
     # TODO: add name/unique identifier, `desc` should be human-readable and more detailed
     # description of the handler
     desc: str = "(no description)"
@@ -73,6 +79,8 @@ class ZANJLoaderHandler:
         return cls.from_LoaderHandler(LoaderHandler.from_formattedclass(fc))
 
 
+# NOTE: there are type ignores on the loaders, since the type checking should be the responsibility of the check function
+
 DEFAULT_LOADER_HANDLERS: MonoTuple[LoaderHandler] = (
     LoaderHandler(
         check=lambda json_item, path: (
@@ -81,8 +89,8 @@ DEFAULT_LOADER_HANDLERS: MonoTuple[LoaderHandler] = (
             and json_item["__format__"] == "array_list_meta"
         ),
         load=lambda json_item, path: (
-            np.array(json_item["data"], dtype=json_item["dtype"]).reshape(
-                json_item["shape"]
+            np.array(json_item["data"], dtype=json_item["dtype"]).reshape( # type: ignore
+                json_item["shape"] # type: ignore
             )
         ),
         desc="array_list_meta loader",
@@ -95,8 +103,8 @@ DEFAULT_LOADER_HANDLERS: MonoTuple[LoaderHandler] = (
         ),
         load=lambda json_item, path: (
             np.frombuffer(
-                bytes.fromhex(json_item["data"]), dtype=json_item["dtype"]
-            ).reshape(json_item["shape"])
+                bytes.fromhex(json_item["data"]), dtype=json_item["dtype"] # type: ignore
+            ).reshape(json_item["shape"]) # type: ignore
         ),
         desc="array_hex_meta loader",
     ),
@@ -110,7 +118,7 @@ DEFAULT_LOADER_HANDLERS_ZANJ: tuple[ZANJLoaderHandler] = (
             and "__format__" in json_item
             and json_item["__format__"].startswith("external:")
         ),
-        load=lambda zanj, json_item, path: (zanj._externals[json_item["$ref"]]),
+        load=lambda zanj, json_item, path: (zanj._externals[json_item["$ref"]]), # type: ignore
     ),
 ) + tuple(ZANJLoaderHandler.from_LoaderHandler(lh) for lh in DEFAULT_LOADER_HANDLERS)
 
@@ -139,7 +147,7 @@ class ZANJLoaderTreeNode(typing.Mapping):
     """
 
     _parent: "LoadedZANJ"
-    _data: dict[str, JSONitem] | list[JSONitem]
+    _data: JSONdict | list[JSONitem]
 
     def __getitem__(self, key: str | int) -> Any:
         # get value, check key types
@@ -206,9 +214,9 @@ class LazyExternalLoader:
 
     def __getitem__(self, key: str) -> Any:
         if key in self._externals_types:
-            path, item_type = key
-            with self._zipf.open(path, "r") as fp:
-                return EXTERNAL_LOAD_FUNCS[item_type](self._loaded_zanj, fp)
+            item_type: str = self._externals_types[key]
+            with self._zipf.open(key, "r") as fp:
+                return GET_EXTERNAL_LOAD_FUNC(item_type)(self._loaded_zanj, fp)
 
 
 class LoadedZANJ(typing.Mapping):
@@ -218,7 +226,7 @@ class LoadedZANJ(typing.Mapping):
         self,
         # config
         path: str | Path,
-        zanj: "ZANJ",
+        zanj: _ZANJ_pre,
         loader_handlers: MonoTuple[ZANJLoaderHandler] | None = None,
         externals_mode: ExternalsLoadingMode = "lazy",
     ) -> None:
@@ -230,12 +238,12 @@ class LoadedZANJ(typing.Mapping):
         self._loader_handlers: MonoTuple[ZANJLoaderHandler] = loader_handlers
 
         self._path: str = str(path)
-        self._zanj: "ZANJ" = zanj
+        self._zanj: _ZANJ_pre = zanj
         self._externals_mode: ExternalsLoadingMode = externals_mode
 
         self._zipf: zipfile.ZipFile = zipfile.ZipFile(file=self._path, mode="r")
 
-        self._meta: JSONitem = json.load(self._zipf.open(ZANJ_META, "r"))
+        self._meta: dict = json.load(self._zipf.open(ZANJ_META, "r"))
         self._json_data: ZANJLoaderTreeNode = ZANJLoaderTreeNode(
             _parent=self,
             _data=json.load(self._zipf.open(ZANJ_MAIN, "r")),
@@ -254,7 +262,7 @@ class LoadedZANJ(typing.Mapping):
             for fname, val in self._meta["externals_info"].items():
                 item_type: str = val["item_type"]
                 with self._zipf.open(fname, "r") as fp:
-                    self._externals[fname] = EXTERNAL_LOAD_FUNCS[item_type](self, fp)
+                    self._externals[fname] = GET_EXTERNAL_LOAD_FUNC(item_type)(self, fp)
 
     def __getitem__(self, key: str) -> Any:
         """get the value of the given key"""

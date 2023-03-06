@@ -30,7 +30,9 @@ class MonoTuple:
     def __init_subclass__(cls, *args, **kwargs):
         raise TypeError(f"Cannot subclass {cls.__module__}")
 
-    @typing._tp_cache
+
+    # idk why mypy thinks there is no such function in typing
+    @typing._tp_cache # type: ignore
     def __class_getitem__(cls, params):
         if isinstance(params, (type, types.UnionType)):
             return types.GenericAlias(tuple, (params, Ellipsis))

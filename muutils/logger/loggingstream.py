@@ -26,7 +26,7 @@ class LoggingStream:
     """
 
     name: str
-    aliases: set[str] = field(default_factory=tuple)
+    aliases: set[str] = field(default_factory=set)
     file: str | bool | AnyIO | None = None
     default_level: int | None = None
     default_contents: dict[str, Callable[[], Any]] = field(default_factory=dict)
@@ -35,7 +35,7 @@ class LoggingStream:
     # TODO: implement last-message caching
     # last_msg: tuple[float, Any]|None = None
 
-    def make_handler(self) -> AnyIO:
+    def make_handler(self) -> AnyIO|None:
         if self.file is None:
             return None
         elif isinstance(self.file, str):

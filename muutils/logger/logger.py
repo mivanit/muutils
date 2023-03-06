@@ -72,7 +72,7 @@ class Logger(SimpleLogger):
         default_level: int = 0,
         console_print_threshold: int = 50,
         level_header: HeaderFunction = HEADER_FUNCTIONS["md"],
-        streams: dict[str, LoggingStream] | Sequence[LoggingStream] = (),
+        streams: dict[str|None, LoggingStream] | Sequence[LoggingStream] = (),
         keep_last_msg_time: bool = True,
         # junk args
         timestamp: bool = True,
@@ -105,7 +105,7 @@ class Logger(SimpleLogger):
         self._default_level: int = default_level
 
         # set up streams
-        self._streams: dict[str, LoggingStream] = (
+        self._streams: dict[str|None, LoggingStream] = (
             streams if isinstance(streams, dict) else {s.name: s for s in streams}
         )
         # default error stream
@@ -153,12 +153,11 @@ class Logger(SimpleLogger):
     def _exception_context(
         self,
         stream: str = "error",
-        level: int = -256,
-        **kwargs,
+        # level: int = -256,
+        # **kwargs,
     ) -> ExceptionContext:
-        return ExceptionContext(
-            stream=self._stream[stream],
-        )
+        s: LoggingStream = self._streams[stream]
+        return ExceptionContext(stream=s)
 
     def log(  # type: ignore # yes, the signatures are different here.
         self,
@@ -187,6 +186,8 @@ class Logger(SimpleLogger):
 
         # add to known stream names if not present
         if stream not in self._streams:
+            if stream is None:
+                raise ValueError(f"None stream should always be in self._streams:\n{self._streams = }")
             self._streams[stream] = LoggingStream(stream)
 
         # set default level to either global or stream-specific default level
@@ -200,10 +201,12 @@ class Logger(SimpleLogger):
                 else:
                     lvl = self._default_level
 
+        assert not lvl is None, "lvl should not be None at this point"
+
         # print to console with formatting
         # ========================================
         _printed: bool = False
-        if console_print or (lvl is None) or (lvl <= self._console_print_threshold):
+        if console_print or (lvl <= self._console_print_threshold):
             # add some formatting
             print(
                 self._level_header(
@@ -257,7 +260,11 @@ class Logger(SimpleLogger):
             self._log_file_handle.write(logfile_msg)
         else:
             # otherwise, write to the stream-specific file
-            self._streams[stream].handler.write(logfile_msg)
+            s_handler: AnyIO|None = self._streams[stream].handler
+            if s_handler is not None:
+                s_handler.write(logfile_msg)
+            else:
+                raise ValueError(f"stream handler is None! something in the logging stream setup is wrong:\n{self}")
 
         # if it was important enough to print, flush all streams
         if _printed:

@@ -35,6 +35,19 @@ def jsonl_load(
 
     return data
 
+def jsonl_load_log(
+    path: str,
+    /,
+    *,
+    use_gzip: bool | None = None,
+) -> list[dict]:
+    
+    data: list[JSONitem] = jsonl_load(path, use_gzip=use_gzip)
+    for idx, item in enumerate(data):
+        assert isinstance(item, dict), f"item {idx = } from file {path} is not a dict: {type(item) = }\t{item = }"
+
+    return data
+
 
 def jsonl_write(
     path: str,

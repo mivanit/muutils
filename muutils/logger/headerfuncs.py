@@ -1,6 +1,8 @@
+import json
 from typing import Any, Callable, Protocol
 
 from muutils.json_serialize import json_serialize
+from muutils.json_serialize.util import JSONitem
 
 # takes message, level, other data, and outputs message with appropriate header
 # HeaderFunction = Callable[[str, int, Any], str]
@@ -49,7 +51,7 @@ def md_header_function(
     if isinstance(msg, dict):
         msg_processed = ", ".join([f"{k}: {json_serialize(v)}" for k, v in msg.items()])
     else:
-        msg_processed = json_serialize(msg)
+        msg_processed = json.dumps(json_serialize(msg))
 
     if lvl >= 0:
         return f"{extra_indent}{indent_lvl * (lvl_div_10 - 1)}{stream_prefix}#{'#' * lvl_div_10 if lvl else ''} {msg_processed}"

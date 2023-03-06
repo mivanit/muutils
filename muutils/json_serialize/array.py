@@ -138,14 +138,22 @@ def load_array(arr: JSONitem, array_mode: Optional[ArrayMode] = None) -> Any:
 
     # actually load the array
     if array_mode == "array_list_meta":
+        assert isinstance(arr, dict), f"invalid list format: {type(arr) = }\n{arr = }"
+
         data = np.array(arr["data"], dtype=arr["dtype"])
         if tuple(arr["shape"]) != tuple(data.shape):
             raise ValueError(f"invalid shape: {arr}")
         return data
+
     elif array_mode == "array_hex_meta":
+        assert isinstance(arr, dict), f"invalid list format: {type(arr) = }\n{arr = }"
+
         data = np.frombuffer(bytes.fromhex(arr["data"]), dtype=arr["dtype"])
         return data.reshape(arr["shape"])
+
     elif array_mode == "list":
+        assert isinstance(arr, list), f"invalid list format: {type(arr) = }\n{arr = }"
+
         return np.array(arr)
     elif array_mode == "external:npy":
         data = np.array(arr["$ref"], dtype=arr["dtype"])

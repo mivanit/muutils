@@ -184,7 +184,7 @@ def loader_typecheck_factory(
         )
         return_raw = True
 
-    def loader(data: JSONitem) -> Any:
+    def loader(data: dict[str, JSONitem]) -> Any:
         if key not in data:
             raise KeyError(
                 f"while executing `.load(data)`, key {key} not found in data: {data = }"

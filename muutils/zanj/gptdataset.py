@@ -73,7 +73,7 @@ class GPTDatasetConfig(metaclass=abc.ABCMeta):
 
     @classmethod
     @abc.abstractclassmethod
-    def load(cls, data: dict) -> "DatasetConfig":
+    def load(cls, data: dict) -> "GPTDatasetConfig":
         # TODO: how to handle inheritance for loaders?
         raise NotImplementedError()
 

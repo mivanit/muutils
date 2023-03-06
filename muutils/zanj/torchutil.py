@@ -1,12 +1,13 @@
 import abc
 import typing
 from dataclasses import dataclass, field
-from typing import Any, Callable, Iterable
+from typing import Type, Any, Callable, Iterable, TypeVar
 
 import torch
 
 from muutils.json_serialize import BASE_HANDLERS, JSONitem, JsonSerializer
 from muutils.zanj import ZANJ
+from muutils.zanj.loading import LoadedZANJ
 
 # pylint: disable=protected-access
 
@@ -24,7 +25,11 @@ def num_params(m: torch.nn.Module, only_trainable: bool = True):
     parameters: list[torch.nn.Parameter] = list(m.parameters())
     if only_trainable:
         parameters = [p for p in parameters if p.requires_grad]
-    unique: list[torch.nn.Parameter] = {p.data_ptr(): p for p in parameters}.values()
+    
+    unique: list[torch.nn.Parameter] = list({
+        p.data_ptr(): p for p in parameters
+    }.values())
+
     return sum(p.numel() for p in unique)
 
 
@@ -62,11 +67,15 @@ TrainingTuple = typing.NamedTuple(
 )
 
 
+# TODO: this is very broken, and not really using it anywhere. deprecate?
+
 @dataclass(kw_only=True)
 class TrainConfig:
     """training configuration for a pytorch model (specifically LLMs)"""
 
-    __format__: str = field(default="zanj.torchutil.TrainConfig", init=False)
+    # not sure what was happening here:
+    # error: Incompatible types in assignment (expression has type "str", base class "object" defined the type as "Callable[[object, str], str]")
+    __format__: str = field(default="zanj.torchutil.TrainConfig", init=False) # type: ignore
 
     batch_size: int
     epochs: int = 1
@@ -82,6 +91,8 @@ class TrainConfig:
         model: torch.nn.Module,
     ) -> TrainingTuple:
         """get the optimizer, learning rate scheduler, and loss for the model from the config"""
+
+        raise NotImplementedError("TODO: implement this")
 
         # optimizer from model
         optimizer: torch.optim.Optimizer = self.optimizer_factory(
@@ -108,6 +119,9 @@ class TrainConfig:
 
     def serialize(self, jser: JsonSerializer | None = None) -> JSONitem:
         """serialize this object to JSON"""
+
+        raise NotImplementedError("TODO: implement this")
+
         if jser is None:
             jser = JsonSerializer(
                 handlers_default=BASE_HANDLERS
@@ -142,11 +156,12 @@ class TrainConfig:
         }
 
     @classmethod
-    def load(cls, data: JSONitem) -> "TrainConfig":
+    def load(cls, data: dict[str, Any]) -> "TrainConfig":
         """load a TrainConfig from a serialized object
 
         TODO: support loading custom optimizers, lr schedulers, and losses
         """
+        raise NotImplementedError("TODO: implement this")
 
         # optimizer
         assert (
@@ -161,10 +176,11 @@ class TrainConfig:
         )
 
         # lr scheduler
+        lr_scheduler_factory: LRschedulerFactoryFunction|None
         if data["lr_scheduler_factory"] is None:
-            lr_scheduler_factory: LRschedulerFactoryFunction | None = None
+            lr_scheduler_factory = None
         else:
-            lr_scheduler_factory: LRschedulerFactoryFunction = getattr(
+            lr_scheduler_factory = getattr(
                 torch.optim.lr_scheduler, data["lr_scheduler_factory"]["__name__"]
             )
 
@@ -185,7 +201,11 @@ class TrainConfig:
         )
 
 
-@dataclass
+
+# this is a mypy issue, see
+# https://github.com/python/mypy/issues/5374
+# https://github.com/python/mypy/issues/4717
+@dataclass # type: ignore
 class ModelConfig(metaclass=abc.ABCMeta):
     """configuration for a pytorch model
 
@@ -211,7 +231,7 @@ class ModelConfig(metaclass=abc.ABCMeta):
         raise NotImplementedError()
 
 
-T_config = typing.TypeVar("T_config", bound=ModelConfig)
+T_config = TypeVar("T_config", bound=ModelConfig)
 
 
 class ConfiguredModel(
@@ -259,7 +279,7 @@ class ConfiguredModel(
         )
 
     @classmethod
-    def load(cls, obj: JSONitem) -> "ConfiguredModel":
+    def load(cls, obj: dict[str, Any]|LoadedZANJ) -> "ConfiguredModel":
         """load a model from a serialized object"""
 
         # get the config
@@ -271,6 +291,8 @@ class ConfiguredModel(
         # load the state dict
         model.load_state_dict(obj["model"]["state_dict"])
 
+        return model
+    
     @classmethod
     def load_file(cls, file_path: str, zanj: ZANJ | None = None) -> "ConfiguredModel":
         """load a model from a file"""
@@ -281,12 +303,13 @@ class ConfiguredModel(
 
 
 def set_config_class(
-    config_class: type,
-) -> typing.Callable[[type], type]:
+    config_class: Type[ModelConfig],
+) -> typing.Callable[[Type[ConfiguredModel]], Type[ConfiguredModel]]:
+
     if not issubclass(config_class, ModelConfig):
         raise TypeError(f"{config_class} must be a subclass of ModelConfig")
 
-    def wrapper(cls: type) -> type:
+    def wrapper(cls: Type[ConfiguredModel]) -> Type[ConfiguredModel]:
         cls._config_class = config_class
         return cls
 

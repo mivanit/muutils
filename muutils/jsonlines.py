@@ -17,7 +17,10 @@ def _get_opener(
 ) -> Callable:
     if use_gzip is None:
         use_gzip = _file_is_gzip(path)
-    return open if not use_gzip else gzip.open
+    
+    # appears to be another mypy bug
+    # https://github.com/python/mypy/issues/10740
+    return open if not use_gzip else gzip.open # type: ignore
 
 
 def jsonl_load(
@@ -46,7 +49,9 @@ def jsonl_load_log(
     for idx, item in enumerate(data):
         assert isinstance(item, dict), f"item {idx = } from file {path} is not a dict: {type(item) = }\t{item = }"
 
-    return data
+    # mypy complains that we are returning a list[JSONitem] but the function signature says list[dict]
+    # it can't figure out that we are asserting that all items are dicts
+    return data # type: ignore
 
 
 def jsonl_write(

@@ -1,2 +1,14 @@
+# python -m pylint muutils/
+# python -m pylint tests/
+lint:
+	python -m mypy muutils/
+	python -m pylint tests/
+
+format:
+	python -m black .
+
+check-format:
+	python -m black --check .
+
 test:
-	poetry run python -m pytest tests
+	python -m pytest tests

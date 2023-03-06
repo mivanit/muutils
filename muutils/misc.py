@@ -26,7 +26,7 @@ def freeze(obj: typing.Any) -> typing.Any:
 
 
 
-_SHORTEN_MAP: dict[int, str] = {
+_SHORTEN_MAP: dict[int|float, str] = {
 	1e3: "K",
 	1e6: "M",
 	1e9: "B",
@@ -35,7 +35,7 @@ _SHORTEN_MAP: dict[int, str] = {
 	1e18: "Q",
 }
 
-_SHORTEN_TUPLES: tuple[tuple[int, str]] = sorted(
+_SHORTEN_TUPLES: list[tuple[int|float, str]] = sorted(
 	((val, suffix) for val, suffix in _SHORTEN_MAP.items()),
 	key = lambda x: x[0],
 )

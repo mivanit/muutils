@@ -99,9 +99,9 @@ class ZANJ(JsonSerializer):
         # create the externals, leave it empty
         self._externals: dict[str, ExternalItem] = dict()
 
-    def externals_info(self) -> dict[dict]:
+    def externals_info(self) -> dict[str, dict]:
         """return information about the current externals"""
-        output: dict[dict] = dict()
+        output: dict[str, dict] = dict()
 
         key: str
         item: ExternalItem
@@ -176,7 +176,7 @@ class ZANJ(JsonSerializer):
         zipf.close()
 
         # clear the externals, again
-        self._externals: dict[str, Any] = dict()
+        self._externals = dict()
 
         return file_path
 

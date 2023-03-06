@@ -8,6 +8,7 @@ import pandas as pd
 from muutils.json_serialize.array import arr_metadata
 from muutils.json_serialize.json_serialize import (
     DEFAULT_HANDLERS,
+    JsonSerializer,
     ObjectPath,
     SerializerHandler,
 )
@@ -20,6 +21,10 @@ from muutils.zanj.externals import (
 )
 
 
+# this is to make type checking work -- it will later be overridden
+_ZANJ_pre = JsonSerializer
+
+
 def jsonl_metadata(data: list[JSONitem]) -> dict:
     """metadata about a jsonl object"""
     return {
@@ -28,7 +33,7 @@ def jsonl_metadata(data: list[JSONitem]) -> dict:
     }
 
 
-def store_ndarray(self, fp: IO[bytes], data: NDArray) -> None:
+def store_ndarray(self: _ZANJ_pre, fp: IO[bytes], data: NDArray) -> None:
     """store numpy array to given file as .npy"""
     np.lib.format.write_array(
         fp=fp,
@@ -37,7 +42,7 @@ def store_ndarray(self, fp: IO[bytes], data: NDArray) -> None:
     )
 
 
-def store_jsonl(self, fp: IO[bytes], data: Sequence[JSONitem]) -> None:
+def store_jsonl(self: _ZANJ_pre, fp: IO[bytes], data: Sequence[JSONitem]) -> None:
     """store sequence to given file as .jsonl"""
 
     for item in data:
@@ -45,14 +50,17 @@ def store_jsonl(self, fp: IO[bytes], data: Sequence[JSONitem]) -> None:
         fp.write("\n".encode("utf-8"))
 
 
-EXTERNAL_STORE_FUNCS: dict[ExternalItemType, Callable[[IO[bytes], Any], None]] = {
+EXTERNAL_STORE_FUNCS: dict[
+    ExternalItemType, 
+    Callable[[_ZANJ_pre, IO[bytes], Any], None]
+] = {
     "ndarray": store_ndarray,
     "jsonl": store_jsonl,
 }
 
 
 def zanj_external_serialize(
-    jser: "ZANJ",
+    jser: _ZANJ_pre,
     data: Any,
     path: ObjectPath,
     item_type: ExternalItemType,
@@ -122,7 +130,7 @@ def zanj_external_serialize(
 
 
 def zanj_serialize_torchmodule(
-    jser: "ZANJ",
+    jser: _ZANJ_pre,
     data: "torch.nn.Module",
     path: ObjectPath,
 ) -> JSONitem:

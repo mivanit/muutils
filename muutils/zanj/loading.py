@@ -73,7 +73,7 @@ class ZANJLoaderHandler:
         return cls.from_LoaderHandler(LoaderHandler.from_formattedclass(fc))
 
 
-DEFAULT_LOADER_HANDLERS: tuple[LoaderHandler] = (
+DEFAULT_LOADER_HANDLERS: MonoTuple[LoaderHandler] = (
     LoaderHandler(
         check=lambda json_item, path: (
             isinstance(json_item, dict)
@@ -186,7 +186,7 @@ class LazyExternalLoader:
     def __init__(
         self,
         zipf: zipfile.ZipFile,
-        zanj_meta: JSONitem,
+        zanj_meta: dict,
         loaded_zanj: "LoadedZANJ",
     ):
         self._zipf: zipfile.ZipFile = zipf

@@ -202,6 +202,7 @@ class TrainConfig:
 
 
 
+# "error: Only concrete class can be given where Type[Abstract] is expected"
 # this is a mypy issue, see
 # https://github.com/python/mypy/issues/5374
 # https://github.com/python/mypy/issues/4717

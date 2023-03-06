@@ -9,7 +9,11 @@ from torch.utils.data import Dataset
 from muutils.tensor_utils import ATensor
 
 
-@dataclass(kw_only=True)
+# "error: Only concrete class can be given where Type[Abstract] is expected"
+# this is a mypy issue, see
+# https://github.com/python/mypy/issues/5374
+# https://github.com/python/mypy/issues/4717
+@dataclass(kw_only=True) # type: ignore
 class GPTDatasetConfig(metaclass=abc.ABCMeta):
     """base config class"""
 

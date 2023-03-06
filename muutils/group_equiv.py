@@ -1,8 +1,9 @@
-from typing import Optional, Tuple, List, Sequence, Dict, Callable, Union, Literal, TypeVar
 from itertools import chain
+from typing import Callable, Sequence, TypeVar
+
+T = TypeVar("T")
 
 
-T = TypeVar('T')
 def group_by_equivalence(
     items_in: Sequence[T],
     eq_func: Callable[[T, T], bool],

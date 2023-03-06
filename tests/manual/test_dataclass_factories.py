@@ -2,10 +2,14 @@
 
 from typing import Any
 
-from muutils.json_serialize import dataclass_serializer_factory, dataclass_loader_factory, JSONitem
+from muutils.json_serialize import (
+    JSONitem,
+    dataclass_loader_factory,
+    dataclass_serializer_factory,
+)
+
 
 def _test():
-
     # @augement_dataclass_serializer_loader(
     #     special_serializers=dict(rand_data=lambda self: str(self.rand_data)),
     # )
@@ -15,13 +19,13 @@ def _test():
         b: str
         c: float
         rand_data: Any = None
-    
+
     TestClass.serialize = dataclass_serializer_factory(
         TestClass,
         special_serializers=dict(rand_data=lambda self: str(self.rand_data)),
     )
     TestClass.load = dataclass_loader_factory(TestClass)
-    
+
     # @augement_dataclass_serializer_loader
     @dataclass
     class OuterTestClass:
@@ -40,7 +44,7 @@ def _test():
     print(f"{item_a.serialize() = }")
     print(f"{item_b = }")
     print(f"{item_b.serialize() = }")
-    
+
     item_b_ser: JSONitem = item_b.serialize()
 
     item_b_loaded: OuterTestClass = OuterTestClass.load(item_b_ser)

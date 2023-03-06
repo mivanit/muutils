@@ -20,4 +20,3 @@ check-format:
 	python -m black --check .
 
 test:
-	python -m pytest tests

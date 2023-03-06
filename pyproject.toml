@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "muutils"
-version = "0.2.1"
+version = "0.2.2"
 description = "A collection of miscellaneous python utilities"
 license = "GPL-3.0-only"
 authors = ["mivanit <mivanits@umich.edu>"]
@@ -13,9 +13,9 @@ classifiers=[
 repository = "https://github.com/mivanit/muutils"
 
 [tool.poetry.dependencies]
-python = "^3.8"
+python = "^3.10"
 torch = "^1.13.1"
-numpy = "^1.24.2"
+numpy = "^1.22.4"
 jaxtyping = "^0.2.12"
 pandas = "^1.5.3"
 
@@ -29,6 +29,17 @@ mypy = "^1.0.1"
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.pycln]
+all = true
+exclude = "_wip"
+
+[tool.isort]
+profile = "black"
+extend_skip = ["_wip"]
+
+[tool.black]
+extend-exclude = "_wip"
 
 [tool.mypy]
 exclude = ['_wip']

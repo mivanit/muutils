@@ -1,18 +1,11 @@
 import functools
-import json
-from pathlib import Path
 import types
-from typing import Any, Dict, List, NamedTuple, Optional, Tuple, Type, Union, Callable, Literal, Iterable
-from dataclasses import dataclass, is_dataclass, asdict
-from collections import namedtuple
-import inspect
 import typing
 import warnings
-
+from typing import Any, Callable, Iterable, Literal, Union
 
 _NUMPY_WORKING: bool
 try:
-    import numpy as np
     _NUMPY_WORKING = True
 except ImportError:
     warnings.warn("numpy not found, cannot serialize numpy arrays!")
@@ -25,8 +18,10 @@ TypeErrorMode = Union[ErrorMode, Literal["try_convert"]]
 JSONitem = Union[bool, int, float, str, list, dict, None]
 Hashableitem = Union[bool, int, float, str, tuple]
 
+
 class MonoTuple:
     """tuple type hint, but for a tuple of any length with all the same type"""
+
     __slots__ = ()
 
     def __new__(cls, *args, **kwargs):
@@ -46,11 +41,14 @@ class MonoTuple:
             elif len(params) == 1:
                 return types.GenericAlias(tuple, (params[0], Ellipsis))
         else:
-            raise TypeError(f"MonoTuple expects 1 type argument, got {len(params) = } \n\t{params = }")
+            raise TypeError(
+                f"MonoTuple expects 1 type argument, got {len(params) = } \n\t{params = }"
+            )
 
 
 class UniversalContainer:
     """contains everything -- `x in UniversalContainer()` is always True"""
+
     def __contains__(self, x: Any) -> bool:
         return True
 
@@ -72,9 +70,10 @@ def isinstance_namedtuple(x):
 
 def try_catch(func: Callable):
     """wraps the function to catch exceptions, returns serialized error message on exception
-    
+
     returned func will return normal result on success, or error message on exception
     """
+
     @functools.wraps(func)
     def newfunc(*args, **kwargs):
         try:
@@ -85,18 +84,11 @@ def try_catch(func: Callable):
     return newfunc
 
 
-
 def _recursive_hashify(obj: Any, force: bool = True) -> Hashableitem:
     if isinstance(obj, dict):
-        return tuple(
-            (k, _recursive_hashify(v)) 
-            for k, v in obj.items()
-        )
+        return tuple((k, _recursive_hashify(v)) for k, v in obj.items())
     elif isinstance(obj, (tuple, list, Iterable)):
-        return tuple(
-            _recursive_hashify(v)
-            for v in obj
-        )
+        return tuple(_recursive_hashify(v) for v in obj)
     elif isinstance(obj, (bool, int, float, str)):
         return obj
     else:
@@ -106,14 +98,13 @@ def _recursive_hashify(obj: Any, force: bool = True) -> Hashableitem:
             raise ValueError(f"cannot hashify:\n{obj}")
 
 
-
 class SerializationException(Exception):
     pass
 
 
 def string_as_lines(s: str) -> list[str]:
     """for easier reading of long strings in json, split up by newlines
-    
+
     sort of like how jupyter notebooks do it
     """
 

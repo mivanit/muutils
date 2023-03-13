@@ -145,7 +145,7 @@ def infer_array_mode(arr: JSONitem) -> ArrayMode:
     
     assumes the array was serialized via `serialize_array()`
     """
-    if isinstance(arr, dict):
+    if isinstance(arr, typing.Mapping):
         fmt: Optional[str] = arr.get("__format__", None)
         if fmt == "array_list_meta":
             if type(arr["data"]) != list:
@@ -244,7 +244,7 @@ def json_serialize(
         if depth == 0:
             return str(obj)
 
-        if isinstance(obj, dict):
+        if isinstance(obj, typing.Mapping):
             # print(f'\n### reading obj as dict: {str(obj)}')
             # if dict, recurse
             out_dict: JSONdict = dict()
@@ -299,7 +299,7 @@ def json_serialize(
 
 
 def _recursive_hashify(obj: Any, force: bool = True) -> Hashableitem:
-    if isinstance(obj, dict):
+    if isinstance(obj, typing.Mapping):
         return tuple(
             (k, _recursive_hashify(v)) 
             for k, v in obj.items()

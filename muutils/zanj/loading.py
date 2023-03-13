@@ -132,7 +132,7 @@ class ZANJLoaderHandler(LoaderHandler):
 LOADER_HANDLERS: list[LoaderHandler] = [
     LoaderHandler(
         check=lambda json_item, path: (
-            isinstance(json_item, dict)
+            isinstance(json_item, typing.Mapping)
             and "__format__" in json_item
             and json_item["__format__"] == "array_list_meta"
         ),
@@ -147,7 +147,7 @@ LOADER_HANDLERS: list[LoaderHandler] = [
     ),
     LoaderHandler(
         check=lambda json_item, path: (
-            isinstance(json_item, dict)
+            isinstance(json_item, typing.Mapping)
             and "__format__" in json_item
             and json_item["__format__"] == "array_hex_meta"
         ),
@@ -168,7 +168,7 @@ LOADER_HANDLERS: list[LoaderHandler] = [
 LOADER_HANDLERS_ZANJ: list[ZANJLoaderHandler] = [
     ZANJLoaderHandler(
         check=lambda zanj, json_item, path: (
-            isinstance(json_item, dict)
+            isinstance(json_item, typing.Mapping)
             and "__format__" in json_item
             and json_item["__format__"].startswith("external:")
         ),
@@ -219,13 +219,13 @@ def register_loader_handler_zanj(handler: ZANJLoaderHandler):
 
 
 
-def GET_LOADER(
+def get_item_loader(
         json_item: JSONitem, 
         path: ObjectPath, 
         zanj: _ZANJ_pre|None = None,
         error_mode: ErrorMode = "warn",
         lh_map: dict[str, LoaderHandler] = LOADER_MAP_JOINED,
-    ) -> LoaderHandler:
+    ) -> LoaderHandler|None:
     # check loaders map is correct
     if zanj is None:
         assert not any(isinstance(lh, ZANJLoaderHandler) for lh in lh_map.values()), "invalid lh_map"
@@ -233,7 +233,7 @@ def GET_LOADER(
         assert all(isinstance(lh, ZANJLoaderHandler) for lh in lh_map.values()), "invalid lh_map"
     
     # check if we recognize the format
-    if isinstance(json_item, dict) and "__format__" in json_item:
+    if isinstance(json_item, typing.Mapping) and "__format__" in json_item:
         if json_item["__format__"] in lh_map:
             return lh_map[json_item["__format__"]]
         else:
@@ -255,9 +255,8 @@ def GET_LOADER(
             if lh.check(zanj, json_item, path):
                 return lh
     
-    # if we still dont have a loader, something is wrong
-    # this state should be inaccesible!
-    raise ValueError(f"no loader found for {json_item} at {path}")
+    # if we still dont have a loader, return None
+    return None
 
 
 
@@ -275,8 +274,8 @@ class ZANJLoaderTreeNode(typing.Mapping):
         # make sure we have a string key for dict, int key for list
         # --------------------------------------------------
         val: JSONitem
-        if (isinstance(self._data, list) and isinstance(key, int)) or (
-            isinstance(self._data, dict) and isinstance(key, str)
+        if (isinstance(self._data, typing.Sequence) and isinstance(key, int)) or (
+            isinstance(self._data, typing.Mapping) and isinstance(key, str)
         ):
             # not sure why mypy is complaining, we are performing all checks
             val = self._data[key]  # type: ignore
@@ -296,20 +295,29 @@ class ZANJLoaderTreeNode(typing.Mapping):
         else:
             # get value
             val = self._data[key]  # type: ignore
-
-        # apply loaders
-        # --------------------------------------------------
-        # TODO: does it make sense to pass `self` instead of `self._parent`? this would require refactoring
-        for lh in self._parent._loader_handlers:
-            if lh.check(self._parent, val, self._parent._path):
-                return lh.load(self._parent, val, self._parent._path)
-
+            
         # nest tree node if necessary
         # --------------------------------------------------
+        tree_val: ZANJLoaderTreeNode | JSONitem
         if isinstance(val, (dict, list)):
-            return ZANJLoaderTreeNode(_parent=self._parent, _data=val)
+            tree_val = ZANJLoaderTreeNode(_parent=self._parent, _data=val)
         else:
-            return val
+            tree_val = val
+
+        # apply loaders, if one exists
+        # --------------------------------------------------
+        item_path: ObjectPath = tuple(self._parent._path) + (key,)
+        lh: ZANJLoaderHandler|None = get_item_loader(
+            zanj = self._parent.zanj,
+            json_item = tree_val,
+            path = item_path, 
+            lh_map = self._parent._loader_handlers,
+            error_mode = self._parent._format_error_mode,
+        )
+        if lh is not None:
+            return lh.load(self._parent, tree_val, self._parent._path)
+
+        return tree_val
 
     def __iter__(self):
         yield from self._data
@@ -359,28 +367,37 @@ class LoadedZANJ(typing.Mapping):
         # config
         path: str | Path,
         zanj: _ZANJ_pre,
-        loader_handlers: MonoTuple[ZANJLoaderHandler] | None = None,
+        loader_handlers: dict[str, ZANJLoaderHandler] | None = None,
         externals_mode: ExternalsLoadingMode = "lazy",
+        format_error_mode: ErrorMode = "warn",
     ) -> None:
-        if loader_handlers is None:
-            loader_handlers = tuple(DEFAULT_LOADER_HANDLERS_ZANJ) + tuple(
-                CUSTOM_LOADER_HANDLERS_ZANJ
-            )
 
-        self._loader_handlers: MonoTuple[ZANJLoaderHandler] = loader_handlers
+        # copy handlers
+        self._loader_handlers: dict[str, ZANJLoaderHandler]
+        if loader_handlers is not None:
+            self._loader_handlers = loader_handlers
+        else:
+            loader_handlers = LOADER_MAP_JOINED
 
+        # path and zanj object 
         self._path: str = str(path)
         self._zanj: _ZANJ_pre = zanj
+
+        # config
         self._externals_mode: ExternalsLoadingMode = externals_mode
+        self._format_error_mode: ErrorMode = format_error_mode
 
+        # load zip file
         self._zipf: zipfile.ZipFile = zipfile.ZipFile(file=self._path, mode="r")
-
+        
+        # load data
         self._meta: dict = json.load(self._zipf.open(ZANJ_META, "r"))
         self._json_data: ZANJLoaderTreeNode = ZANJLoaderTreeNode(
             _parent=self,
             _data=json.load(self._zipf.open(ZANJ_MAIN, "r")),
         )
 
+        # externals
         self._externals: LazyExternalLoader | dict
         if externals_mode == "lazy":
             self._externals = LazyExternalLoader(

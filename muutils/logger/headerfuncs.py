@@ -1,5 +1,5 @@
 import json
-from typing import Any, Callable, Protocol
+from typing import Any, Callable, Protocol, Mapping
 
 from muutils.json_serialize import json_serialize
 from muutils.json_serialize.util import JSONitem
@@ -51,7 +51,7 @@ def md_header_function(
     lvl_div_10: int = lvl // 10
 
     msg_processed: str
-    if isinstance(msg, dict):
+    if isinstance(msg, Mapping):
         msg_processed = ", ".join([f"{k}: {json_serialize(v)}" for k, v in msg.items()])
     else:
         msg_processed = json.dumps(json_serialize(msg))

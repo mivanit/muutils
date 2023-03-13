@@ -3,7 +3,7 @@ import types
 import warnings
 from dataclasses import dataclass, is_dataclass
 from pathlib import Path
-from typing import Any, Callable, Iterable
+from typing import Any, Callable, Iterable, Mapping
 
 from muutils.json_serialize.array import ArrayMode, serialize_array
 from muutils.json_serialize.util import (
@@ -70,7 +70,7 @@ BASE_HANDLERS: MonoTuple[SerializerHandler] = (
         desc="base types",
     ),
     SerializerHandler(
-        check=lambda self, obj, path: isinstance(obj, dict),
+        check=lambda self, obj, path: isinstance(obj, Mapping),
         serialize_func=lambda self, obj, path: {
             str(k): self.json_serialize(v, tuple(path) + (k,)) for k, v in obj.items()
         },

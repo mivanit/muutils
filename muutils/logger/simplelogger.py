@@ -1,6 +1,7 @@
 import json
 import sys
 import time
+import typing
 from typing import TextIO
 
 from muutils.json_serialize import JSONitem, json_serialize
@@ -66,7 +67,7 @@ class SimpleLogger:
         if console_print:
             print(msg)
 
-        if not isinstance(msg, dict):
+        if not isinstance(msg, typing.Mapping):
             msg = {"_msg": msg}
 
         if self._timestamp:

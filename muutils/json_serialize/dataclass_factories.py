@@ -96,7 +96,7 @@ def dataclass_serializer_factory(
     if special_serializers is not None:
         _special_serializers = special_serializers
 
-    assert isinstance(_special_serializers, dict)
+    assert isinstance(_special_serializers, typing.Mapping)
 
     _fields_exclude: MonoTuple[str] = tuple()
     if fields_exclude is not None:
@@ -251,11 +251,11 @@ def dataclass_loader_factory(
     # make it an empty dict if not provided
     if special_loaders is None:
         special_loaders = dict()
-    assert isinstance(special_loaders, dict)
+    assert isinstance(special_loaders, typing.Mapping)
 
     if loader_types_override is None:
         loader_types_override = dict()
-    assert isinstance(loader_types_override, dict)
+    assert isinstance(loader_types_override, typing.Mapping)
 
     # check all loaders make sense
     for key in special_loaders:

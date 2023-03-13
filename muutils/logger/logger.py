@@ -10,6 +10,7 @@
 import json
 import time
 from functools import partial
+import typing
 from typing import Callable, Sequence
 
 from muutils.json_serialize import JSONitem, json_serialize
@@ -106,7 +107,7 @@ class Logger(SimpleLogger):
 
         # set up streams
         self._streams: dict[str | None, LoggingStream] = (
-            streams if isinstance(streams, dict) else {s.name: s for s in streams}
+            streams if isinstance(streams, typing.Mapping) else {s.name: s for s in streams}
         )
         # default error stream
         if "error" not in self._streams:
@@ -215,8 +216,8 @@ class Logger(SimpleLogger):
         # convert and add data
         # ========================================
         # converting to dict
-        msg_dict: dict
-        if not isinstance(msg, dict):
+        msg_dict: typing.Mapping
+        if not isinstance(msg, typing.Mapping):
             msg_dict = {"_msg": msg}
         else:
             msg_dict = msg

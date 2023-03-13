@@ -90,7 +90,7 @@ def try_catch(func: Callable):
 
 
 def _recursive_hashify(obj: Any, force: bool = True) -> Hashableitem:
-    if isinstance(obj, dict):
+    if isinstance(obj, typing.Mapping):
         return tuple((k, _recursive_hashify(v)) for k, v in obj.items())
     elif isinstance(obj, (tuple, list, Iterable)):
         return tuple(_recursive_hashify(v) for v in obj)

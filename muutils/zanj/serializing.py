@@ -48,8 +48,7 @@ def store_jsonl(self: _ZANJ_pre, fp: IO[bytes], data: Sequence[JSONitem]) -> Non
 
 
 EXTERNAL_STORE_FUNCS: dict[
-    ExternalItemType, 
-    Callable[[_ZANJ_pre, IO[bytes], Any], None]
+    ExternalItemType, Callable[[_ZANJ_pre, IO[bytes], Any], None]
 ] = {
     "ndarray": store_ndarray,
     "jsonl": store_jsonl,

@@ -35,7 +35,7 @@ class LoggingStream:
     # TODO: implement last-message caching
     # last_msg: tuple[float, Any]|None = None
 
-    def make_handler(self) -> AnyIO|None:
+    def make_handler(self) -> AnyIO | None:
         if self.file is None:
             return None
         elif isinstance(self.file, str):

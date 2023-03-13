@@ -1,8 +1,10 @@
 import abc
 import os
 from dataclasses import dataclass, field
+from typing import Sequence
 
 import numpy as np
+import jaxtyping
 import torch
 from torch.utils.data import Dataset
 
@@ -23,7 +25,7 @@ class GPTDatasetConfig(metaclass=abc.ABCMeta):
             "cuda" if torch.cuda.is_available() else "cpu"
         )
     )
-    dtype: torch.dtype | np.dtype = field(default_factory=lambda: torch.int16)
+    dtype: torch.dtype = field(default_factory=lambda: torch.int16)
     seq_len_min: int | None
     seq_len_max: int | None
 
@@ -37,7 +39,7 @@ class GPTDatasetConfig(metaclass=abc.ABCMeta):
 
     def tokenizer_map(self) -> dict[str, int]:
         """map from token to index"""
-        return {t: i for i, t in enumerate(self.token_arr)}
+        return {t: i for i, t in enumerate(self.token_arr())}
 
     @classmethod
     @abc.abstractmethod
@@ -47,17 +49,17 @@ class GPTDatasetConfig(metaclass=abc.ABCMeta):
     def gpt_config_kwargs(self) -> dict:
         """gpt model config with vocab size, context size, and padding token"""
         return dict(
-            vocab_size=len(self.token_arr),
+            vocab_size=len(self.token_arr()),
             n_positions=self.seq_len_max,
             pad_token_id=self.padding_token_idx(),  # The id of the _padding_ token.
             bos_token_id=self.padding_token_idx(),  # The id of the _beginning-of-stream_ token.
             eos_token_id=self.padding_token_idx(),  # The id of the _end-of-stream_ token.
         )
 
-    def tokenize_seq(self, seq: list[str]) -> ATensor:
+    def tokenize_seq(self, seq: list[str]) -> jaxtyping.Int[torch.Tensor, "n_tokens"]:
         """tokenize sequence"""
         return torch.tensor(
-            [self.tokenizer_map[t] for t in seq],
+            [self.tokenizer_map()[t] for t in seq],
             dtype=self.dtype,
             device="cpu",
         )
@@ -88,15 +90,21 @@ class GPTDatasetConfig(metaclass=abc.ABCMeta):
         elif slm < self.seq_len_max:
             self.seq_len_max = slm
 
-    def pad_sequence(self, seq: ATensor):
+    def pad_sequence(self, seq: jaxtyping.Int[torch.Tensor, "n_tokens"]):
         """process TOKENIZED sequence into tensor, padding or truncating as needed"""
-        if seq.shape[0] > self.seq_len_max:
+        assert (
+            len(seq.shape) == 1
+        ), f"sequence to be padded should be 1d, got {seq.shape = }"
+        # even with this assert, mypy still complains about the shape of seq
+
+        if seq.shape[0] > self.seq_len_max:  # type: ignore[operator]
             return seq[: self.seq_len_max]
         else:
+            # no idea why mypy complains about the signature of np.full here
             return np.concatenate(
                 [
-                    np.full(
-                        (self.seq_len_max - seq.shape[0],),
+                    np.full(  # type: ignore[call-overload]
+                        (self.seq_len_max - seq.shape[0],),  # type: ignore[operator]
                         self.padding_token_idx(),
                         dtype=seq.dtype,
                     ),
@@ -111,13 +119,13 @@ class IndexedArray(metaclass=abc.ABCMeta):
 
     mainly for allowing __getitem__ to work nice for datasets"""
 
-    arr: ATensor
-    idxs: ATensor
+    arr: torch.Tensor
+    idxs: jaxtyping.Int[torch.Tensor, "n_seqs"]
 
     def get_len(self, idx: int) -> int:
-        return self.idxs[idx + 1] - self.idxs[idx]
+        return (self.idxs[idx + 1] - self.idxs[idx]).item()  # type: ignore[return-value]
 
-    def get_all_lengths(self) -> ATensor:
+    def get_all_lengths(self) -> torch.Tensor:
         return torch.cat(
             [
                 self.idxs[1:] - self.idxs[:-1],
@@ -131,7 +139,7 @@ class IndexedArray(metaclass=abc.ABCMeta):
 
     @classmethod
     @abc.abstractclassmethod
-    def from_sequences(cls, data: list[ATensor[("tokens")]]) -> "IndexedArray":
+    def from_sequences(cls, data: Sequence[torch.Tensor]) -> "IndexedArray":
         """process many sequences into a single array, keeping track of sequence start indices
 
         example:
@@ -140,8 +148,10 @@ class IndexedArray(metaclass=abc.ABCMeta):
                 idxs = [0,3],
         )
         """
-        arr: ATensor = torch.cat(data)
-        idxs: ATensor = torch.cumsum(torch.tensor([0, *map(len, data)]), dim=0)[:-1]
+        arr: torch.Tensor = torch.cat(tuple(data))
+        idxs: torch.Tensor = torch.cumsum(torch.tensor([0, *map(len, data)]), dim=0)[
+            :-1
+        ]
         return cls(arr=arr, idxs=idxs)
 
 

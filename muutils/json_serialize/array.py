@@ -1,16 +1,19 @@
 import typing
 import warnings
-from typing import Any, Dict, Iterable, Literal, Optional
+from typing import Any, Dict, Iterable, Literal, Optional, Sequence
 
 import numpy as np
+import jaxtyping
 
 from muutils.json_serialize.util import JSONitem
 from muutils.tensor_utils import NDArray
 
+# pylint: disable=unused-argument
+
 ArrayMode = Literal["list", "array_list_meta", "array_hex_meta", "external"]
 
 
-def array_n_elements(arr: typing.Union["torch.Tensor", "np.ndarray"]) -> int:
+def array_n_elements(arr: jaxtyping.Shaped[jaxtyping.Array, "..."]) -> int:  # type: ignore[name-defined]
     """get the number of elements in an array"""
     if isinstance(arr, np.ndarray):
         return arr.size
@@ -20,7 +23,7 @@ def array_n_elements(arr: typing.Union["torch.Tensor", "np.ndarray"]) -> int:
         raise TypeError(f"invalid type: {type(arr)}")
 
 
-def arr_metadata(arr: NDArray) -> Dict[str, Any]:
+def arr_metadata(arr: jaxtyping.Shaped[jaxtyping.Array, "..."]) -> Dict[str, Any]:
     """get metadata for a numpy array"""
     return {
         "shape": arr.shape,
@@ -30,9 +33,9 @@ def arr_metadata(arr: NDArray) -> Dict[str, Any]:
 
 
 def serialize_array(
-    jser: "JsonSerializer",
-    arr: NDArray,
-    path: str,
+    jser: "JsonSerializer",  # type: ignore[name-defined]
+    arr: np.ndarray,
+    path: str | Sequence[str | int],
     array_mode: ArrayMode | None = None,
 ) -> JSONitem:
     """serialize a numpy or pytorch array in one of several modes
@@ -102,21 +105,21 @@ def infer_array_mode(arr: JSONitem) -> ArrayMode:
         if fmt == "array_list_meta":
             if not isinstance(arr["data"], Iterable):
                 raise ValueError(f"invalid list format: {type(arr['data']) = }\t{arr}")
-            return fmt
+            return fmt  # type: ignore[return-value]
         elif fmt == "array_hex_meta":
             if not isinstance(arr["data"], str):
                 raise ValueError(f"invalid hex format: {type(arr['data']) = }\t{arr}")
-            return fmt
+            return fmt  # type: ignore[return-value]
         elif fmt == "external:npy":
             if ("$ref" not in arr) or (not isinstance(arr["$ref"], (str, np.ndarray))):
                 raise ValueError(
                     f"invalid external format: {type(arr['$ref']) = }\t{arr}"
                 )
-            return fmt
+            return fmt  # type: ignore[return-value]
         else:
             raise ValueError(f"invalid format: {arr}")
     elif isinstance(arr, list):
-        return "list"
+        return "list"  # type: ignore[return-value]
     else:
         raise ValueError(f"cannot infer array_mode from\t{type(arr) = }\n{arr = }")
 

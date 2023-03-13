@@ -107,10 +107,12 @@ class SerializationException(Exception):
     pass
 
 
-def string_as_lines(s: str) -> list[str]:
+def string_as_lines(s: str | None) -> list[str]:
     """for easier reading of long strings in json, split up by newlines
 
     sort of like how jupyter notebooks do it
     """
-
-    return s.splitlines(keepends=False)
+    if s is None:
+        return list()
+    else:
+        return s.splitlines(keepends=False)

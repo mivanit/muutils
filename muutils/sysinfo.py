@@ -15,13 +15,14 @@ def _popen(cmd: list[str], split_out: bool = False) -> dict[str, typing.Any]:
     if p.stdout is not None:
         p_out = p.stdout.read().decode("utf-8")
         if split_out:
+            assert isinstance(p_out, str)
             p_out = p_out.strip().split("\n")
     else:
         p_out = None
 
     return {
         "stdout": p_out,
-        "stderr": p.stderr.read().decode("utf-8"),
+        "stderr": (None if p.stderr is None else p.stderr.read().decode("utf-8")),
         "returncode": p.returncode if p.returncode is None else int(p.returncode),
     }
 

@@ -11,6 +11,7 @@ from muutils.json_serialize.json_serialize import ObjectPath
 from muutils.json_serialize.util import JSONdict, JSONitem, MonoTuple
 from muutils.zanj.externals import (
     EXTERNAL_ITEMS_EXTENSIONS,
+    GET_EXTERNAL_ITEM_EXTENSION,
     EXTERNAL_LOAD_FUNCS,
     GET_EXTERNAL_LOAD_FUNC,
     ZANJ_MAIN,
@@ -54,13 +55,13 @@ class LoaderHandler:
 
 
 @dataclass
-class ZANJLoaderHandler:
+class ZANJLoaderHandler(LoaderHandler):
     """handler for loading an object from a ZANJ archive (takes ZANJ object as first arg)"""
 
     # (zanj_obi, json_data, path) -> whether to use this handler
-    check: Callable[[_ZANJ_pre, JSONitem, ObjectPath], bool]
+    check: Callable[[_ZANJ_pre, JSONitem, ObjectPath], bool]  # type: ignore[assignment]
     # function to load the object (zanj_obj, json_data, path) -> loaded_obj
-    load: Callable[[_ZANJ_pre, JSONitem, ObjectPath], Any]
+    load: Callable[[_ZANJ_pre, JSONitem, ObjectPath], Any]  # type: ignore[assignment]
     # TODO: add name/unique identifier, `desc` should be human-readable and more detailed
     # description of the handler
     desc: str = "(no description)"
@@ -105,8 +106,8 @@ DEFAULT_LOADER_HANDLERS: MonoTuple[LoaderHandler] = (
             np.frombuffer(
                 bytes.fromhex(json_item["data"]), dtype=json_item["dtype"]  # type: ignore
             ).reshape(
-                json_item["shape"]
-            )  # type: ignore
+                json_item["shape"]  # type: ignore
+            )
         ),
         desc="array_hex_meta loader",
     ),
@@ -124,7 +125,7 @@ DEFAULT_LOADER_HANDLERS_ZANJ: tuple[ZANJLoaderHandler] = (
     ),
 ) + tuple(ZANJLoaderHandler.from_LoaderHandler(lh) for lh in DEFAULT_LOADER_HANDLERS)
 
-CUSTOM_LOADER_HANDLERS: list[ZANJLoaderHandler] = list()
+CUSTOM_LOADER_HANDLERS: list[LoaderHandler] = list()
 CUSTOM_LOADER_HANDLERS_ZANJ: list[ZANJLoaderHandler] = list()
 
 # TODO: priority system for loaders
@@ -157,17 +158,24 @@ class ZANJLoaderTreeNode(typing.Mapping):
         if (isinstance(self._data, list) and isinstance(key, int)) or (
             isinstance(self._data, dict) and isinstance(key, str)
         ):
-            val = self._data[key]
+            # not sure why mypy is complaining, we are performing all checks
+            val = self._data[key]  # type: ignore
         else:
             raise KeyError(
                 f"invalid key type {type(key) = }, {key = } for {self._data = } with {type(self._data) = }"
             )
 
         # get value or dereference
-        if key == "$ref":
+        if isinstance(key, str) and (key == "$ref"):
+            assert isinstance(
+                val, str
+            ), f"invalid $ref type: {type(val) = } for {val = }"
             val = self._parent._externals[val]
         else:
-            val = self._data[key]
+            assert isinstance(
+                val, (dict, list)
+            ), f"invalid value type: {type(val) = } for {val = }"
+            val = self._data[key]  # type: ignore
 
         # apply loaders
         # TODO: does it make sense to pass `self` instead of `self._parent`? this would require refactoring
@@ -210,7 +218,7 @@ class LazyExternalLoader:
 
         # validate by checking each external file exists
         for key, item_type in self._externals_types.items():
-            fname: str = f"{key}.{EXTERNAL_ITEMS_EXTENSIONS[item_type]}"
+            fname: str = f"{key}.{GET_EXTERNAL_ITEM_EXTENSION(item_type)}"
             if fname not in zipf.namelist():
                 raise ValueError(f"external file {fname} not found in archive")
 

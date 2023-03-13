@@ -1,6 +1,7 @@
 import inspect
 import json
 from typing import IO, Any, Callable, Iterable, Sequence
+from dataclasses import dataclass
 
 import numpy as np
 import pandas as pd
@@ -20,6 +21,8 @@ from muutils.zanj.externals import (
     ExternalItemType,
     _ZANJ_pre,
 )
+
+# pylint: disable=unused-argument
 
 
 def jsonl_metadata(data: list[JSONitem]) -> dict:
@@ -108,7 +111,8 @@ def zanj_external_serialize(
             data_new = data.to_dict(orient="records")
         elif isinstance(data, (list, tuple, Iterable)):
             data_new = [
-                jser.json_serialize(item, path + (i,)) for i, item in enumerate(data)
+                jser.json_serialize(item, tuple(path) + (i,))
+                for i, item in enumerate(data)
             ]
         else:
             raise TypeError(f"expected list or pd.DataFrame, got {type(data)}")
@@ -127,7 +131,7 @@ def zanj_external_serialize(
 
 def zanj_serialize_torchmodule(
     jser: _ZANJ_pre,
-    data: "torch.nn.Module",
+    data: "torch.nn.Module",  # type: ignore
     path: ObjectPath,
 ) -> JSONitem:
     """serialize a torch module to zanj
@@ -141,14 +145,29 @@ def zanj_serialize_torchmodule(
     - __dict__ with values printed (not fully serialized)
     """
 
+    # check torch is installed
+    try:
+        import torch
+    except ImportError:
+        raise ImportError(
+            "torch is not installed! how do you expect to serialize torch modules?"
+        )
+
+    # check type
+    if not isinstance(data, torch.nn.Module):
+        raise TypeError(f"expected torch.nn.Module, got {type(data)}")
+
+    # serialize the output
     output: dict = {
         "__format__": "torchmodule",
         "__class__": str(data.__class__.__name__),
         "__doc__": string_as_lines(data.__doc__),
         "__mro__": [str(c.__name__) for c in data.__class__.__mro__],
-        "__init__": string_as_lines(inspect.getsource(data.__init__)),
+        "__init__": string_as_lines(inspect.getsource(data.__init__)),  # type: ignore[misc]
         "forward": string_as_lines(inspect.getsource(data.forward)),
-        "state_dict": jser.json_serialize(data.state_dict(), path + ("state_dict",)),
+        "state_dict": jser.json_serialize(
+            data.state_dict(), tuple(path) + ("state_dict",)
+        ),
         "_modules": {k: str(v) for k, v in data._modules.items()},
         "__dict__": {k: str(v) for k, v in data.__dict__.items()},
     }
@@ -156,40 +175,58 @@ def zanj_serialize_torchmodule(
     return jser.json_serialize(output)
 
 
-DEFAULT_SERIALIZER_HANDLERS_ZANJ: MonoTuple[SerializerHandler] = (
-    SerializerHandler(
-        check=lambda self, obj, path: (
-            isinstance(obj, np.ndarray) and obj.size >= self.external_array_threshold
+@dataclass
+class ZANJSerializerHandler(SerializerHandler):
+    # (self_config, object) -> whether to use this handler
+    check: Callable[[_ZANJ_pre, Any, ObjectPath], bool]
+    # (self_config, object, path) -> serialized object
+    serialize_func: Callable[[_ZANJ_pre, Any, ObjectPath], JSONitem]
+    # optional description of how this serializer works
+    desc: str = "(no description)"
+
+
+DEFAULT_SERIALIZER_HANDLERS_ZANJ: MonoTuple[ZANJSerializerHandler] = tuple(
+    [
+        ZANJSerializerHandler(
+            check=lambda self, obj, path: (
+                isinstance(obj, np.ndarray)
+                and obj.size >= self.external_array_threshold
+            ),
+            serialize_func=lambda self, obj, path: zanj_external_serialize(
+                self, obj, path, item_type="ndarray"
+            ),
+            desc="external:ndarray",
         ),
-        serialize_func=lambda self, obj, path: zanj_external_serialize(
-            self, obj, path, item_type="ndarray"
+        ZANJSerializerHandler(
+            check=lambda self, obj, path: (
+                str(type(obj)) == "<class 'torch.Tensor'>"
+                and int(obj.nelement()) >= self.external_array_threshold
+            ),
+            serialize_func=lambda self, obj, path: zanj_external_serialize(
+                self, obj, path, item_type="ndarray"
+            ),
+            desc="external:ndarray:torchtensor",
         ),
-        desc="external:ndarray",
-    ),
-    SerializerHandler(
-        check=lambda self, obj, path: (
-            str(type(obj)) == "<class 'torch.Tensor'>"
-            and int(obj.nelement()) >= self.external_array_threshold
+        ZANJSerializerHandler(
+            check=lambda self, obj, path: isinstance(obj, (list, tuple, pd.DataFrame))
+            and len(obj) >= self.external_table_threshold,
+            serialize_func=lambda self, obj, path: zanj_external_serialize(
+                self, obj, path, item_type="jsonl"
+            ),
+            desc="external:jsonl",
         ),
-        serialize_func=lambda self, obj, path: zanj_external_serialize(
-            self, obj, path, item_type="ndarray"
+        ZANJSerializerHandler(
+            check=lambda self, obj, path: "<class 'torch.nn.modules.module.Module'>"
+            in [str(t) for t in obj.__class__.__mro__],
+            serialize_func=lambda self, obj, path: zanj_serialize_torchmodule(
+                self, obj, path
+            ),
+            desc="torch.nn.Module",
         ),
-        desc="external:ndarray:torchtensor",
-    ),
-    SerializerHandler(
-        check=lambda self, obj, path: isinstance(obj, (list, tuple, pd.DataFrame))
-        and len(obj) >= self.external_table_threshold,
-        serialize_func=lambda self, obj, path: zanj_external_serialize(
-            self, obj, path, item_type="jsonl"
-        ),
-        desc="external:jsonl",
-    ),
-    SerializerHandler(
-        check=lambda self, obj, path: "<class 'torch.nn.modules.module.Module'>"
-        in [str(t) for t in obj.__class__.__mro__],
-        serialize_func=lambda self, obj, path: zanj_serialize_torchmodule(
-            self, obj, path
-        ),
-        desc="torch.nn.Module",
-    ),
-) + DEFAULT_HANDLERS
+    ]
+) + tuple(
+    DEFAULT_HANDLERS # type: ignore[arg-type]
+)
+
+# the complaint above is:
+# error: Argument 1 to "tuple" has incompatible type "Sequence[SerializerHandler]"; expected "Iterable[ZANJSerializerHandler]"  [arg-type]

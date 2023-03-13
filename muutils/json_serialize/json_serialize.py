@@ -17,7 +17,7 @@ from muutils.json_serialize.util import (
     try_catch,
 )
 
-SERIALIZER_SPECIAL_KEYS: tuple[str] = (
+SERIALIZER_SPECIAL_KEYS: MonoTuple[str] = (
     "__name__",
     "__doc__",
     "__module__",
@@ -72,21 +72,21 @@ BASE_HANDLERS: MonoTuple[SerializerHandler] = (
     SerializerHandler(
         check=lambda self, obj, path: isinstance(obj, dict),
         serialize_func=lambda self, obj, path: {
-            str(k): self.json_serialize(v, path + (k,)) for k, v in obj.items()
+            str(k): self.json_serialize(v, tuple(path) + (k,)) for k, v in obj.items()
         },
         desc="dictionaries",
     ),
     SerializerHandler(
         check=lambda self, obj, path: isinstance(obj, (list, tuple)),
         serialize_func=lambda self, obj, path: [
-            self.json_serialize(x, path + (i,)) for i, x in enumerate(obj)
+            self.json_serialize(x, tuple(path) + (i,)) for i, x in enumerate(obj)
         ],
         desc="(list, tuple) -> list",
     ),
 )
 
 
-DEFAULT_HANDLERS: MonoTuple[SerializerHandler] = BASE_HANDLERS + (
+DEFAULT_HANDLERS: MonoTuple[SerializerHandler] = tuple(BASE_HANDLERS) + (
     SerializerHandler(
         # TODO: allow for custom serialization handler name
         check=lambda self, obj, path: hasattr(obj, "serialize")
@@ -102,7 +102,7 @@ DEFAULT_HANDLERS: MonoTuple[SerializerHandler] = BASE_HANDLERS + (
     SerializerHandler(
         check=lambda self, obj, path: is_dataclass(obj),
         serialize_func=lambda self, obj, path: {
-            k: self.json_serialize(getattr(obj, k), path + (k,))
+            k: self.json_serialize(getattr(obj, k), tuple(path) + (k,))
             for k in obj.__dataclass_fields__
         },
         desc="dataclass -> dict",
@@ -139,7 +139,7 @@ DEFAULT_HANDLERS: MonoTuple[SerializerHandler] = BASE_HANDLERS + (
         check=lambda self, obj, path: isinstance(obj, (set, list, tuple))
         or isinstance(obj, Iterable),
         serialize_func=lambda self, obj, path: [
-            self.json_serialize(x, path + (i,)) for i, x in enumerate(obj)
+            self.json_serialize(x, tuple(path) + (i,)) for i, x in enumerate(obj)
         ],
         desc="(set, list, tuple, Iterable) -> list",
     ),
@@ -173,7 +173,9 @@ class JsonSerializer:
         self.array_mode: ArrayMode = array_mode
         self.error_mode: ErrorMode = error_mode
         # join up the handlers
-        self.handlers: MonoTuple[SerializerHandler] = handlers_pre + handlers_default
+        self.handlers: MonoTuple[SerializerHandler] = tuple(handlers_pre) + tuple(
+            handlers_default
+        )
 
     def json_serialize(
         self,

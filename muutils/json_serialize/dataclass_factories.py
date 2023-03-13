@@ -2,88 +2,89 @@ import inspect
 import types
 import typing
 import warnings
-from typing import Any, Callable, Iterable, Optional, Union
+from typing import Any, Callable, Iterable, Optional, Union, Sequence
 
 from muutils.json_serialize.array import ArrayMode
 from muutils.json_serialize.json_serialize import JsonSerializer
 from muutils.json_serialize.util import JSONdict, JSONitem, MonoTuple, TypeErrorMode
 
-# pylint: disable=pointless-string-statement, unreachable, import-outside-toplevel
+# pylint: disable=pointless-string-statement, unreachable, import-outside-toplevel, consider-using-dict-items
 
 
-def serialize_torch_module(
-    obj: "torch.nn.Module",
-    *,
-    member_typecasts: dict[str, Callable],
-    array_mode: ArrayMode = "array_list_meta",
-) -> JSONitem:
-    """serialize an instance of `torch.nn.Module`
+# TODO: this is implemented in ZANJ now, I think -- remove this?
+# def serialize_torch_module(
+#     obj: "torch.nn.Module", # type: ignore[name-defined]
+#     *,
+#     member_typecasts: dict[str, Callable],
+#     array_mode: ArrayMode = "array_list_meta",
+# ) -> JSONitem:
+#     """serialize an instance of `torch.nn.Module`
 
-    you'll need to specify `member_typecasts`, which is a dict mapping
-    member names to functions to call on the member value before serializing it
+#     you'll need to specify `member_typecasts`, which is a dict mapping
+#     member names to functions to call on the member value before serializing it
 
-    the state dict will be saved separately under `state_dict`
-    """
-    # TODO: add paths to serializer
-    raise NotImplementedError()
-    return {
-        "__format__": "torch_module",
-        "name": obj.__class__.__name__,
-        "state_dict": {
-            k: serialize_array(v.cpu().numpy(), array_mode=array_mode)
-            for k, v in obj.state_dict().items()
-        },
-        "members_dict": {
-            k: (
-                json_serialize(v)
-                if k not in member_typecasts
-                else json_serialize(member_typecasts[k](v))
-            )
-            for k, v in obj.__dict__.items()
-            if not k.startswith("_")
-        },
-    }
+#     the state dict will be saved separately under `state_dict`
+#     """
+#     # TODO: add paths to serializer
+#     raise NotImplementedError()
+#     return {
+#         "__format__": "torch_module",
+#         "name": obj.__class__.__name__,
+#         "state_dict": {
+#             k: serialize_array(v.cpu().numpy(), array_mode=array_mode)
+#             for k, v in obj.state_dict().items()
+#         },
+#         "members_dict": {
+#             k: (
+#                 json_serialize(v)
+#                 if k not in member_typecasts
+#                 else json_serialize(member_typecasts[k](v))
+#             )
+#             for k, v in obj.__dict__.items()
+#             if not k.startswith("_")
+#         },
+#     }
 
 
-def load_torch_module_factory(
-    cls,
-    *,
-    members_exclude: list[str],
-    typecasts: dict[str, Callable],
-) -> Callable[[Any, JSONitem], "torch.nn.Module"]:
-    """create a function which allows for loading a torch module from `JSONitem`
+# def load_torch_module_factory(
+#     cls,
+#     *,
+#     members_exclude: list[str],
+#     typecasts: dict[str, Callable],
+# ) -> Callable[[Any, JSONitem], "torch.nn.Module"]: # type: ignore[name-defined]
+#     """create a function which allows for loading a torch module from `JSONitem`
 
-    - everything from the `members_dict` not in `members_exclude` will be passed to the `__init__` method of the module
-    - everything from the `state_dict` will be passed to the `load_state_dict` method of the module
-    """
-    raise NotImplementedError()
+#     - everything from the `members_dict` not in `members_exclude` will be passed to the `__init__` method of the module
+#     - everything from the `state_dict` will be passed to the `load_state_dict` method of the module
+#     """
+#     raise NotImplementedError()
 
-    import torch
+#     import torch
 
-    @classmethod
-    def load(cls, item: JSONitem) -> "torch.nn.Module":
-        assert item["__format__"] == "torch_module"
-        assert item["name"] == cls.__name__
+#     @classmethod
+#     def load(cls, item: JSONitem) -> "torch.nn.Module":
+#         assert item["__format__"] == "torch_module"
+#         assert item["name"] == cls.__name__
 
-        module_obj = cls(
-            **{
-                k: (v if k not in typecasts else typecasts[k](v))
-                for k, v in item["members_dict"].items()
-                if k not in members_exclude
-            }
-        )
-        module_obj.load_state_dict(
-            {k: torch.from_numpy(load_array(v)) for k, v in item["state_dict"].items()},
-        )
-        return module_obj
+#         module_obj = cls(
+#             **{
+#                 k: (v if k not in typecasts else typecasts[k](v))
+#                 for k, v in item["members_dict"].items()
+#                 if k not in members_exclude
+#             }
+#         )
+#         module_obj.load_state_dict(
+#             {k: torch.from_numpy(load_array(v)) for k, v in item["state_dict"].items()},
+#         )
+#         return module_obj
 
-    return load
+#     return load
 
 
 def dataclass_serializer_factory(
     cls,
     special_serializers: Optional[dict[str, Callable]] = None,
-    fields_exclude: Optional[Iterable[str]] = None,
+    fields_exclude: Optional[Sequence[str]] = None,
 ) -> Callable[[Any], JSONitem]:
     """outputs a `.serialize` method for a dataclass,
     where fields present in `special_serializers` are serialized using the corresponding function.
@@ -91,13 +92,17 @@ def dataclass_serializer_factory(
     each function in `special_serializers` should take the class itself as an argument, and return a JSONitem.
     """
     # make it an empty dict if not provided
-    if special_serializers is None:
-        special_serializers = dict()
+    _special_serializers: dict[str, Callable] = dict()
+    if special_serializers is not None:
+        _special_serializers = special_serializers
 
-    if fields_exclude is None:
-        fields_exclude = list()
+    assert isinstance(_special_serializers, dict)
 
-    assert isinstance(fields_exclude, Iterable)
+    _fields_exclude: MonoTuple[str] = tuple()
+    if fields_exclude is not None:
+        _fields_exclude = tuple(fields_exclude)
+
+    assert isinstance(_fields_exclude, Sequence)
 
     sfuncs_simple: dict[
         str, Callable
@@ -108,7 +113,7 @@ def dataclass_serializer_factory(
 
     # augment special serializers if they are missing `jser` and `path` arguments
     spec_ser: Callable
-    for key, spec_ser in special_serializers.items():
+    for key, spec_ser in _special_serializers.items():
         args: list[str] = inspect.getfullargspec(spec_ser).args
         if len(args) == 1:
             sfuncs_simple[key] = spec_ser
@@ -133,16 +138,16 @@ def dataclass_serializer_factory(
             if (
                 (k not in sfuncs_simple)
                 and (k not in sfuncs_full)
-                and (k not in fields_exclude)
+                and (k not in _fields_exclude)
             )
         }
 
         # update with the special serializers
         for k in sfuncs_simple:
-            if k not in fields_exclude:
+            if k not in _fields_exclude:
                 base_output[k] = sfuncs_simple[k](self)
         for k in sfuncs_full:
-            if k not in fields_exclude:
+            if k not in _fields_exclude:
                 base_output[k] = sfuncs_full[k](self, jser=jser, path=path)
 
         return base_output

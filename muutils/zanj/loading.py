@@ -3,7 +3,7 @@ import typing
 import zipfile
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, Callable, Literal
+from typing import Any, Callable, Literal, Iterable
 
 import numpy as np
 
@@ -24,6 +24,41 @@ from muutils.zanj.externals import (
 # pylint: disable=protected-access
 
 ExternalsLoadingMode = Literal["lazy", "full"]
+
+
+def _assert_mappings_equal(m1, m2) -> bool:
+    shared_keys = set(m1.keys()) & set(m2.keys())
+
+    for k in shared_keys:
+        assert k in m1
+        assert k in m2
+
+        v1 = m1[k]
+        v2 = m2[k]
+
+        if isinstance(v1, typing.Mapping):
+            assert isinstance(v2, typing.Mapping)
+            assert_mappings_equal(v1, v2)
+        else:
+            if isinstance(v1, Iterable):
+                assert isinstance(v2, Iterable)
+                assert len(v1) == len(v2), f"{len(v1)} != {len(v2)}"
+
+                tval = v1 == v2
+
+                if hasattr(tval, "all") and callable(tval.all):
+                    assert v1.shape == v2.shape, f"{v1.shape} != {v2.shape}"
+                    assert tval.all()
+                else:
+                    if isinstance(tval, Iterable):
+                        assert all(tval)
+                    else:
+                        assert isinstance(tval, bool)
+                        assert tval
+            else:
+                assert tval
+
+    return True
 
 
 @dataclass
@@ -153,7 +188,8 @@ class ZANJLoaderTreeNode(typing.Mapping):
     _data: JSONdict | list[JSONitem]
 
     def __getitem__(self, key: str | int) -> Any:
-        # get value, check key types
+        # make sure we have a string key for dict, int key for list
+        # --------------------------------------------------
         val: JSONitem
         if (isinstance(self._data, list) and isinstance(key, int)) or (
             isinstance(self._data, dict) and isinstance(key, str)
@@ -166,23 +202,26 @@ class ZANJLoaderTreeNode(typing.Mapping):
             )
 
         # get value or dereference
+        # --------------------------------------------------
         if isinstance(key, str) and (key == "$ref"):
+            # dereference
             assert isinstance(
                 val, str
             ), f"invalid $ref type: {type(val) = } for {val = }"
             val = self._parent._externals[val]
         else:
-            assert isinstance(
-                val, (dict, list)
-            ), f"invalid value type: {type(val) = } for {val = }"
+            # get value
             val = self._data[key]  # type: ignore
 
         # apply loaders
+        # --------------------------------------------------
         # TODO: does it make sense to pass `self` instead of `self._parent`? this would require refactoring
         for lh in self._parent._loader_handlers:
             if lh.check(self._parent, val, self._parent._path):
                 return lh.load(self._parent, val, self._parent._path)
 
+        # nest tree node if necessary
+        # --------------------------------------------------
         if isinstance(val, (dict, list)):
             return ZANJLoaderTreeNode(_parent=self._parent, _data=val)
         else:
@@ -211,16 +250,15 @@ class LazyExternalLoader:
         self._zanj_meta: JSONitem = zanj_meta
         # (path, item_type) pairs
         self._externals_types: dict[str, str] = {
-            key: val.item_type for key, val in zanj_meta["externals_info"].items()
+            key: val["item_type"] for key, val in zanj_meta["externals_info"].items()
         }
 
         self._loaded_zanj: LoadedZANJ = loaded_zanj
 
         # validate by checking each external file exists
         for key, item_type in self._externals_types.items():
-            fname: str = f"{key}.{GET_EXTERNAL_ITEM_EXTENSION(item_type)}"
-            if fname not in zipf.namelist():
-                raise ValueError(f"external file {fname} not found in archive")
+            if key not in zipf.namelist():
+                raise ValueError(f"external file {key} not found in archive")
 
     def __getitem__(self, key: str) -> Any:
         if key in self._externals_types:

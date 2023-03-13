@@ -13,7 +13,7 @@ from muutils.tensor_utils import NDArray
 ArrayMode = Literal["list", "array_list_meta", "array_hex_meta", "external"]
 
 
-def array_n_elements(arr: jaxtyping.Shaped[jaxtyping.Array, "..."]) -> int:  # type: ignore[name-defined]
+def array_n_elements(arr) -> int:  # type: ignore[name-defined]
     """get the number of elements in an array"""
     if isinstance(arr, np.ndarray):
         return arr.size
@@ -23,7 +23,7 @@ def array_n_elements(arr: jaxtyping.Shaped[jaxtyping.Array, "..."]) -> int:  # t
         raise TypeError(f"invalid type: {type(arr)}")
 
 
-def arr_metadata(arr: jaxtyping.Shaped[jaxtyping.Array, "..."]) -> Dict[str, Any]:
+def arr_metadata(arr) -> Dict[str, Any]:
     """get metadata for a numpy array"""
     return {
         "shape": arr.shape,

@@ -177,10 +177,6 @@ class Logger(SimpleLogger):
 
         # add to known stream names if not present
         if stream not in self._streams:
-            if stream is None:
-                raise ValueError(
-                    f"None stream should always be in self._streams:\n{self._streams = }"
-                )
             self._streams[stream] = LoggingStream(stream)
 
         # set default level to either global or stream-specific default level

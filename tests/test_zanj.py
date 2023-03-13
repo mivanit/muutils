@@ -1,15 +1,19 @@
 from dataclasses import asdict, dataclass
+from pathlib import Path
 
 import numpy as np
 import pandas as pd
 import pytest
+
 from muutils.json_serialize.json_serialize import JsonSerializer
 from muutils.json_serialize.util import JSONdict
-
 from muutils.zanj import ZANJ
 from muutils.json_serialize import JSONitem
 
 np.random.seed(0)
+
+
+TEST_DATA_PATH: Path = Path("tests/junk_data")
 
 
 def test_numpy():
@@ -19,8 +23,25 @@ def test_numpy():
         some_other_array=np.random.rand(16, 64),
         small_array=np.random.rand(4, 4),
     )
+    fname: Path = TEST_DATA_PATH / "test_numpy.zanj"
+    z: ZANJ = ZANJ()
+    z.save(data, fname)
+    recovered_data = z.read(fname)
 
-    ZANJ().save(data, "junk_data/test_numpy.zanj")
+    print(f"{list(data.keys()) = }")
+    print(f"{list(recovered_data.keys()) = }")
+
+    assert sorted(list(data.keys())) == sorted(list(recovered_data.keys()))
+    assert all([type(data[k]) == type(recovered_data[k]) for k in data.keys()])
+
+    assert all(
+        [
+            data["name"] == recovered_data["name"],
+            np.allclose(data["some_array"], recovered_data["some_array"]),
+            np.allclose(data["some_other_array"], recovered_data["some_other_array"]),
+            np.allclose(data["small_array"], recovered_data["small_array"]),
+        ]
+    )
 
 
 def test_jsonl():
@@ -34,8 +55,22 @@ def test_jsonl():
         ),
         some_array=np.random.rand(128, 128),
     )
+    fname: Path = TEST_DATA_PATH / "test_jsonl.zanj"
+    z: ZANJ = ZANJ()
+    z.save(data, fname)
+    recovered_data = z.read(fname)
 
-    ZANJ().save(data, "junk_data/test_jsonl.zanj")
+    assert sorted(list(data.keys())) == sorted(list(recovered_data.keys()))
+    assert all([type(data[k]) == type(recovered_data[k]) for k in data.keys()])
+
+    assert all(
+        [
+            data["name"] == recovered_data["name"],
+            np.allclose(data["some_array"], recovered_data["some_array"]),
+            data["iris_data"].equals(recovered_data["iris_data"]),
+            data["brain_data"].equals(recovered_data["brain_data"]),
+        ]
+    )
 
 
 def test_torch_simple():
@@ -47,15 +82,12 @@ def test_torch_simple():
         torch.nn.Linear(32, 2),
         torch.nn.Softmax(dim=1),
     )
+    fname: Path = TEST_DATA_PATH / "test_torch.zanj"
+    z: ZANJ = ZANJ()
+    z.save(SimpleNetwork, fname)
+    recovered_data = z.read(fname)
 
-    # print(SimpleNetwork)
-
-    # print(f"{dir(SimpleNetwork) = }")
-
-    # print(f"{SimpleNetwork.__class__ = }")
-    # print(f"{[str(x) for x in SimpleNetwork.__class__.__bases__] = }")
-
-    ZANJ().save(SimpleNetwork, "junk_data/test_torch.zanj")
+    assert SimpleNetwork == recovered_data
 
 
 @pytest.mark.skip(reason="TODO")
@@ -113,7 +145,7 @@ def test_torch_configmodel():
 
     model: MyGPT = MyGPT(config)
 
-    fname: str = "junk_data/test_torch_configmodel.zanj"
+    fname: Path = TEST_DATA_PATH / "test_torch_configmodel.zanj"
     ZANJ().save(model, fname)
 
     print(f"saved model to {fname}")

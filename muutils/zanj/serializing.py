@@ -17,6 +17,7 @@ from muutils.json_serialize.util import JSONitem, MonoTuple, string_as_lines
 from muutils.tensor_utils import NDArray
 from muutils.zanj.externals import (
     EXTERNAL_ITEMS_EXTENSIONS,
+    GET_EXTERNAL_ITEM_EXTENSION,
     ExternalItem,
     ExternalItemType,
     _ZANJ_pre,
@@ -79,7 +80,7 @@ def zanj_external_serialize(
     """
     # get the path, make sure its unique
     joined_path: str = "/".join([str(p) for p in path])
-    archive_path: str = f"{joined_path}.{EXTERNAL_ITEMS_EXTENSIONS[item_type]}"
+    archive_path: str = f"{joined_path}.{GET_EXTERNAL_ITEM_EXTENSION(item_type)}"
 
     if archive_path in jser._externals:
         raise ValueError(f"external path {archive_path} already exists!")
@@ -89,7 +90,7 @@ def zanj_external_serialize(
     # process the data if needed, assemble metadata
     data_new: Any = data
     output: dict = {
-        "__format__": f"external:{EXTERNAL_ITEMS_EXTENSIONS[item_type]}",
+        "__format__": f"external:{GET_EXTERNAL_ITEM_EXTENSION(item_type)}",
         "$ref": archive_path,
     }
     if item_type == "ndarray":

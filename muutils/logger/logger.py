@@ -107,7 +107,9 @@ class Logger(SimpleLogger):
 
         # set up streams
         self._streams: dict[str | None, LoggingStream] = (
-            streams if isinstance(streams, typing.Mapping) else {s.name: s for s in streams}
+            streams
+            if isinstance(streams, typing.Mapping)
+            else {s.name: s for s in streams}
         )
         # default error stream
         if "error" not in self._streams:

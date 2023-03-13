@@ -185,6 +185,7 @@ LOADER_MAP: dict[str, LoaderHandler] = dict()
 LOADER_MAP_ZANJ: dict[str, ZANJLoaderHandler] = dict()
 LOADER_MAP_JOINED: dict[str, ZANJLoaderHandler] = dict()
 
+
 def _update_loaders():
     """update the loader maps"""
     global LOADER_HANDLERS, LOADER_HANDLERS_ZANJ, LOADER_HANDLERS_JOINED, LOADER_MAP, LOADER_MAP_ZANJ, LOADER_MAP_JOINED
@@ -207,7 +208,9 @@ def _update_loaders():
 
 def register_loader_handler(handler: LoaderHandler):
     """register a custom loader handler"""
-    assert not isinstance(handler, ZANJLoaderHandler), "use register_loader_handler_zanj for ZANJLoaderHandlers"
+    assert not isinstance(
+        handler, ZANJLoaderHandler
+    ), "use register_loader_handler_zanj for ZANJLoaderHandlers"
     LOADER_HANDLERS.append(handler)
     _update_loaders()
 
@@ -218,20 +221,23 @@ def register_loader_handler_zanj(handler: ZANJLoaderHandler):
     _update_loaders()
 
 
-
 def get_item_loader(
-        json_item: JSONitem, 
-        path: ObjectPath, 
-        zanj: _ZANJ_pre|None = None,
-        error_mode: ErrorMode = "warn",
-        lh_map: dict[str, LoaderHandler] = LOADER_MAP_JOINED,
-    ) -> LoaderHandler|None:
+    json_item: JSONitem,
+    path: ObjectPath,
+    zanj: _ZANJ_pre | None = None,
+    error_mode: ErrorMode = "warn",
+    lh_map: dict[str, LoaderHandler] = LOADER_MAP_JOINED,
+) -> LoaderHandler | None:
     # check loaders map is correct
     if zanj is None:
-        assert not any(isinstance(lh, ZANJLoaderHandler) for lh in lh_map.values()), "invalid lh_map"
+        assert not any(
+            isinstance(lh, ZANJLoaderHandler) for lh in lh_map.values()
+        ), "invalid lh_map"
     else:
-        assert all(isinstance(lh, ZANJLoaderHandler) for lh in lh_map.values()), "invalid lh_map"
-    
+        assert all(
+            isinstance(lh, ZANJLoaderHandler) for lh in lh_map.values()
+        ), "invalid lh_map"
+
     # check if we recognize the format
     if isinstance(json_item, typing.Mapping) and "__format__" in json_item:
         if json_item["__format__"] in lh_map:
@@ -254,10 +260,9 @@ def get_item_loader(
         else:
             if lh.check(zanj, json_item, path):
                 return lh
-    
+
     # if we still dont have a loader, return None
     return None
-
 
 
 @dataclass
@@ -295,7 +300,7 @@ class ZANJLoaderTreeNode(typing.Mapping):
         else:
             # get value
             val = self._data[key]  # type: ignore
-            
+
         # nest tree node if necessary
         # --------------------------------------------------
         tree_val: ZANJLoaderTreeNode | JSONitem
@@ -307,12 +312,12 @@ class ZANJLoaderTreeNode(typing.Mapping):
         # apply loaders, if one exists
         # --------------------------------------------------
         item_path: ObjectPath = tuple(self._parent._path) + (key,)
-        lh: ZANJLoaderHandler|None = get_item_loader(
-            zanj = self._parent.zanj,
-            json_item = tree_val,
-            path = item_path, 
-            lh_map = self._parent._loader_handlers,
-            error_mode = self._parent._format_error_mode,
+        lh: ZANJLoaderHandler | None = get_item_loader(
+            zanj=self._parent.zanj,
+            json_item=tree_val,
+            path=item_path,
+            lh_map=self._parent._loader_handlers,
+            error_mode=self._parent._format_error_mode,
         )
         if lh is not None:
             return lh.load(self._parent, tree_val, self._parent._path)
@@ -379,7 +384,7 @@ class LoadedZANJ(typing.Mapping):
         else:
             loader_handlers = LOADER_MAP_JOINED
 
-        # path and zanj object 
+        # path and zanj object
         self._path: str = str(path)
         self._zanj: _ZANJ_pre = zanj
 
@@ -389,7 +394,7 @@ class LoadedZANJ(typing.Mapping):
 
         # load zip file
         self._zipf: zipfile.ZipFile = zipfile.ZipFile(file=self._path, mode="r")
-        
+
         # load data
         self._meta: dict = json.load(self._zipf.open(ZANJ_META, "r"))
         self._json_data: ZANJLoaderTreeNode = ZANJLoaderTreeNode(

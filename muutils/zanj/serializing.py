@@ -225,7 +225,7 @@ DEFAULT_SERIALIZER_HANDLERS_ZANJ: MonoTuple[ZANJSerializerHandler] = tuple(
         ),
     ]
 ) + tuple(
-    DEFAULT_HANDLERS # type: ignore[arg-type]
+    DEFAULT_HANDLERS  # type: ignore[arg-type]
 )
 
 # the complaint above is:

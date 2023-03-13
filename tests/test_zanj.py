@@ -3,8 +3,11 @@ from dataclasses import asdict, dataclass
 import numpy as np
 import pandas as pd
 import pytest
+from muutils.json_serialize.json_serialize import JsonSerializer
+from muutils.json_serialize.util import JSONdict
 
 from muutils.zanj import ZANJ
+from muutils.json_serialize import JSONitem
 
 np.random.seed(0)
 
@@ -71,14 +74,15 @@ def test_torch_configmodel():
         n_positions: int
         n_vocab: int
 
-        def get_init_kwargs(self) -> dict:
-            """just return all the attributes of the dataclass"""
-            return asdict(self)
-
+        # override here is returning `MyGPTConfig` instead of `ModelConfig`
         @classmethod
-        def load(cls, obj: dict) -> "MyGPTConfig":
+        def load(cls, obj: JSONdict) -> "MyGPTConfig":  # type: ignore[override]
             """load the model from a path"""
-            return cls(**obj)
+            return cls(**obj)  # type: ignore[arg-type]
+
+        def serialize(self, jser: JsonSerializer | None = None) -> JSONitem:
+            """serialize the model to a path"""
+            return asdict(self)
 
     @set_config_class(MyGPTConfig)
     class MyGPT(ConfiguredModel[MyGPTConfig]):
@@ -122,7 +126,7 @@ def test_torch_configmodel():
 
 
 if __name__ == "__main__":
-    import fire
+    import fire  # type: ignore[import]
 
     fire.Fire(
         dict(

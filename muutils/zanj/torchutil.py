@@ -6,6 +6,7 @@ from typing import Type, Any, Callable, Iterable, TypeVar
 import torch
 
 from muutils.json_serialize import BASE_HANDLERS, JSONitem, JsonSerializer
+from muutils.json_serialize.util import JSONdict
 from muutils.zanj import ZANJ
 from muutils.zanj.loading import LoadedZANJ
 
@@ -222,7 +223,7 @@ class ModelConfig(metaclass=abc.ABCMeta):
 
     @classmethod
     @abc.abstractclassmethod
-    def load(cls, obj: JSONitem) -> "ModelConfig":
+    def load(cls, obj: JSONdict) -> "ModelConfig":
         """load a model config from a serialized object"""
         raise NotImplementedError()
 

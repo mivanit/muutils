@@ -141,15 +141,6 @@ class Logger(SimpleLogger):
 
         print({k: str(v) for k, v in self._streams.items()})
 
-    def __del__(self):
-        self._log_file_handle.flush()
-        self._log_file_handle.close()
-
-        for stream in self._streams.values():
-            if stream.handler is not None:
-                stream.handler.flush()
-                stream.handler.close()
-
     def _exception_context(
         self,
         stream: str = "error",

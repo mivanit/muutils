@@ -61,18 +61,6 @@ class SimpleLogger:
                 assert log_path is not None
                 self._log_file_handle = open(log_path, "w", encoding="utf-8")
 
-    def __del__(self):
-        self._log_file_handle.flush()
-        self._log_file_handle.close()
-        # try:
-        # 	self._log_file_handle.flush()
-        # except Exception as e:
-        # 	print(f"[logger_internal] # failed to flush log file: {e}", sys.stderr)
-        # try:
-        # 	self._log_file_handle.close()
-        # except Exception as e:
-        # 	print(f"[logger_internal] # failed to close log file: {e}", sys.stderr)
-
     def log(self, msg: JSONitem, console_print: bool = False, **kwargs):
         """log a message to the log file, and optionally to the console"""
         if console_print:

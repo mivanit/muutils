@@ -145,18 +145,8 @@ def jaxtype_factory(
     return _BaseArray
 
 
-
-CHECKING_MYPY: bool = False
 if typing.TYPE_CHECKING:
-    import sys
-
-    with open("__TEMP__.txt", "w") as f:
-        f.write(str(sys.argv))
-    if any(x.lower().strip() == "mypy" for x in sys.argv):
-        CHECKING_MYPY = True
-
-if not CHECKING_MYPY:
-    # these class definitions are only used here to make pylint happy, 
+    # these class definitions are only used here to make pylint happy,
     # but they make mypy unhappy and there is no way to only run if not mypy
     # so, later on we have more ignores
     class ATensor(torch.Tensor):

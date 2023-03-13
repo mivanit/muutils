@@ -72,7 +72,7 @@ class Logger(SimpleLogger):
         default_level: int = 0,
         console_print_threshold: int = 50,
         level_header: HeaderFunction = HEADER_FUNCTIONS["md"],
-        streams: dict[str|None, LoggingStream] | Sequence[LoggingStream] = (),
+        streams: dict[str | None, LoggingStream] | Sequence[LoggingStream] = (),
         keep_last_msg_time: bool = True,
         # junk args
         timestamp: bool = True,
@@ -105,7 +105,7 @@ class Logger(SimpleLogger):
         self._default_level: int = default_level
 
         # set up streams
-        self._streams: dict[str|None, LoggingStream] = (
+        self._streams: dict[str | None, LoggingStream] = (
             streams if isinstance(streams, dict) else {s.name: s for s in streams}
         )
         # default error stream
@@ -187,7 +187,9 @@ class Logger(SimpleLogger):
         # add to known stream names if not present
         if stream not in self._streams:
             if stream is None:
-                raise ValueError(f"None stream should always be in self._streams:\n{self._streams = }")
+                raise ValueError(
+                    f"None stream should always be in self._streams:\n{self._streams = }"
+                )
             self._streams[stream] = LoggingStream(stream)
 
         # set default level to either global or stream-specific default level
@@ -260,11 +262,13 @@ class Logger(SimpleLogger):
             self._log_file_handle.write(logfile_msg)
         else:
             # otherwise, write to the stream-specific file
-            s_handler: AnyIO|None = self._streams[stream].handler
+            s_handler: AnyIO | None = self._streams[stream].handler
             if s_handler is not None:
                 s_handler.write(logfile_msg)
             else:
-                raise ValueError(f"stream handler is None! something in the logging stream setup is wrong:\n{self}")
+                raise ValueError(
+                    f"stream handler is None! something in the logging stream setup is wrong:\n{self}"
+                )
 
         # if it was important enough to print, flush all streams
         if _printed:

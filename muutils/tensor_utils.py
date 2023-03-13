@@ -58,7 +58,7 @@ TYPE_TO_JAX_DTYPE: dict = {
 def jaxtype_factory(
     name: str,
     array_type: type,
-    default_jax_dtype = jaxtyping.Float,
+    default_jax_dtype=jaxtyping.Float,
     legacy_mode: typing.Literal["error", "warn", "ignore"] = "warn",
 ) -> type:
     class _BaseArray:
@@ -87,7 +87,7 @@ def jaxtype_factory(
                 }
             )
 
-        @typing._tp_cache # type: ignore
+        @typing._tp_cache  # type: ignore
         def __class_getitem__(cls, params):
             # MyTensor["dim1 dim2"]
             if isinstance(params, str):
@@ -133,10 +133,10 @@ def jaxtype_factory(
                 )
 
     _BaseArray.__name__ = name
-    
+
     if _BaseArray.__doc__ is None:
         _BaseArray.__doc__ = "{default_jax_dtype = }\n{array_type = }"
-    
+
     _BaseArray.__doc__ = _BaseArray.__doc__.format(
         default_jax_dtype=repr(default_jax_dtype),
         array_type=repr(array_type),
@@ -145,24 +145,34 @@ def jaxtype_factory(
     return _BaseArray
 
 
-# this makes linters happy
 
-class ATensor(torch.Tensor):
-    @typing._tp_cache # type: ignore
-    def __class_getitem__(cls, params):
-        raise NotImplementedError()
+CHECKING_MYPY: bool = False
+if typing.TYPE_CHECKING:
+    import sys
+
+    with open("__TEMP__.txt", "w") as f:
+        f.write(str(sys.argv))
+    if any(x.lower().strip() == "mypy" for x in sys.argv):
+        CHECKING_MYPY = True
+
+if not CHECKING_MYPY:
+    # these class definitions are only used here to make pylint happy, 
+    # but they make mypy unhappy and there is no way to only run if not mypy
+    # so, later on we have more ignores
+    class ATensor(torch.Tensor):
+        @typing._tp_cache  # type: ignore
+        def __class_getitem__(cls, params):
+            raise NotImplementedError()
+
+    class NDArray(torch.Tensor):
+        @typing._tp_cache  # type: ignore
+        def __class_getitem__(cls, params):
+            raise NotImplementedError()
 
 
-ATensor = jaxtype_factory("ATensor", torch.Tensor, jaxtyping.Float)
+ATensor = jaxtype_factory("ATensor", torch.Tensor, jaxtyping.Float)  # type: ignore[misc, assignment]
 
-
-class NDArray(torch.Tensor):
-    @typing._tp_cache # type: ignore
-    def __class_getitem__(cls, params):
-        raise NotImplementedError()
-
-
-NDArray = jaxtype_factory("NDArray", np.ndarray, jaxtyping.Float)
+NDArray = jaxtype_factory("NDArray", np.ndarray, jaxtyping.Float)  # type: ignore[misc, assignment]
 
 
 DTYPE_LIST: list = [

@@ -40,11 +40,11 @@ class LoaderHandler:
     def from_formattedclass(cls, fc: type):
         """create a loader from a class with `serialize`, `load` methods and `__format__` attribute"""
         assert hasattr(fc, "serialize")
-        assert callable(fc.serialize) # type: ignore
+        assert callable(fc.serialize)  # type: ignore
         assert hasattr(fc, "load")
-        assert callable(fc.load) # type: ignore
+        assert callable(fc.load)  # type: ignore
         assert hasattr(fc, "__format__")
-        assert isinstance(fc.__format__, str) # type: ignore
+        assert isinstance(fc.__format__, str)  # type: ignore
 
         return cls(
             check=lambda json_item, path: json_item["__format__"] == fc.__format__,
@@ -89,8 +89,8 @@ DEFAULT_LOADER_HANDLERS: MonoTuple[LoaderHandler] = (
             and json_item["__format__"] == "array_list_meta"
         ),
         load=lambda json_item, path: (
-            np.array(json_item["data"], dtype=json_item["dtype"]).reshape( # type: ignore
-                json_item["shape"] # type: ignore
+            np.array(json_item["data"], dtype=json_item["dtype"]).reshape(  # type: ignore
+                json_item["shape"]  # type: ignore
             )
         ),
         desc="array_list_meta loader",
@@ -103,8 +103,10 @@ DEFAULT_LOADER_HANDLERS: MonoTuple[LoaderHandler] = (
         ),
         load=lambda json_item, path: (
             np.frombuffer(
-                bytes.fromhex(json_item["data"]), dtype=json_item["dtype"] # type: ignore
-            ).reshape(json_item["shape"]) # type: ignore
+                bytes.fromhex(json_item["data"]), dtype=json_item["dtype"]  # type: ignore
+            ).reshape(
+                json_item["shape"]
+            )  # type: ignore
         ),
         desc="array_hex_meta loader",
     ),
@@ -118,7 +120,7 @@ DEFAULT_LOADER_HANDLERS_ZANJ: tuple[ZANJLoaderHandler] = (
             and "__format__" in json_item
             and json_item["__format__"].startswith("external:")
         ),
-        load=lambda zanj, json_item, path: (zanj._externals[json_item["$ref"]]), # type: ignore
+        load=lambda zanj, json_item, path: (zanj._externals[json_item["$ref"]]),  # type: ignore
     ),
 ) + tuple(ZANJLoaderHandler.from_LoaderHandler(lh) for lh in DEFAULT_LOADER_HANDLERS)
 

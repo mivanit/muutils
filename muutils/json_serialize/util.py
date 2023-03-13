@@ -22,6 +22,7 @@ Hashableitem = Union[bool, int, float, str, tuple]
 if typing.TYPE_CHECKING:
     MonoTuple = typing.Sequence
 else:
+
     class MonoTuple:
         """tuple type hint, but for a tuple of any length with all the same type"""
 
@@ -33,9 +34,8 @@ else:
         def __init_subclass__(cls, *args, **kwargs):
             raise TypeError(f"Cannot subclass {cls.__module__}")
 
-
         # idk why mypy thinks there is no such function in typing
-        @typing._tp_cache # type: ignore
+        @typing._tp_cache  # type: ignore
         def __class_getitem__(cls, params):
             if isinstance(params, (type, types.UnionType)):
                 return types.GenericAlias(tuple, (params, Ellipsis))

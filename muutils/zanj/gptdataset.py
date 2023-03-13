@@ -13,7 +13,7 @@ from muutils.tensor_utils import ATensor
 # this is a mypy issue, see
 # https://github.com/python/mypy/issues/5374
 # https://github.com/python/mypy/issues/4717
-@dataclass(kw_only=True) # type: ignore
+@dataclass(kw_only=True)  # type: ignore
 class GPTDatasetConfig(metaclass=abc.ABCMeta):
     """base config class"""
 

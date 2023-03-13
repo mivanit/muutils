@@ -43,3 +43,4 @@ extend-exclude = "_wip"
 
 [tool.mypy]
 exclude = ['_wip']
+show_error_codes = true

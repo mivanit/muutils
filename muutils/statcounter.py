@@ -23,12 +23,14 @@ GeneralSequence = Union[Sequence, _GeneralArray]
 # ==================================================
 
 
-def universal_flatten(arr: GeneralSequence, require_rectangular: bool = True) -> GeneralSequence:
+def universal_flatten(
+    arr: GeneralSequence, require_rectangular: bool = True
+) -> GeneralSequence:
     """flattens any iterable"""
 
     # mypy complains that the sequence has no attribute "flatten"
-    if hasattr(arr, "flatten") and callable(arr.flatten): # type: ignore
-        return arr.flatten() # type: ignore
+    if hasattr(arr, "flatten") and callable(arr.flatten):  # type: ignore
+        return arr.flatten()  # type: ignore
     elif not isinstance(arr, Iterable):
         return arr
     else:
@@ -218,10 +220,7 @@ class StatCounter(Counter):
         map_func: Callable = float,
     ) -> "StatCounter":
         """calls `map_func` on each element of `universal_flatten(arr)`"""
-        return cls([
-            map_func(x) 
-            for x in universal_flatten(arr)
-        ])
+        return cls([map_func(x) for x in universal_flatten(arr)])
 
 
 # testing

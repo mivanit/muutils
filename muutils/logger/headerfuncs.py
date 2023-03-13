@@ -7,8 +7,11 @@ from muutils.json_serialize.util import JSONitem
 # takes message, level, other data, and outputs message with appropriate header
 # HeaderFunction = Callable[[str, int, Any], str]
 
+
 class HeaderFunction(Protocol):
-    def __call__(self, msg: Any, lvl: int, **kwargs) -> str: ...
+    def __call__(self, msg: Any, lvl: int, **kwargs) -> str:
+        ...
+
 
 def md_header_function(
     msg: Any,

@@ -18,7 +18,7 @@ def _popen(cmd: list[str], split_out: bool = False) -> dict[str, typing.Any]:
             p_out = p_out.strip().split("\n")
     else:
         p_out = None
-    
+
     return {
         "stdout": p_out,
         "stderr": p.stderr.read().decode("utf-8"),

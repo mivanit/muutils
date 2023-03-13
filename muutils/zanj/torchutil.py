@@ -25,10 +25,10 @@ def num_params(m: torch.nn.Module, only_trainable: bool = True):
     parameters: list[torch.nn.Parameter] = list(m.parameters())
     if only_trainable:
         parameters = [p for p in parameters if p.requires_grad]
-    
-    unique: list[torch.nn.Parameter] = list({
-        p.data_ptr(): p for p in parameters
-    }.values())
+
+    unique: list[torch.nn.Parameter] = list(
+        {p.data_ptr(): p for p in parameters}.values()
+    )
 
     return sum(p.numel() for p in unique)
 
@@ -69,13 +69,14 @@ TrainingTuple = typing.NamedTuple(
 
 # TODO: this is very broken, and not really using it anywhere. deprecate?
 
+
 @dataclass(kw_only=True)
 class TrainConfig:
     """training configuration for a pytorch model (specifically LLMs)"""
 
     # not sure what was happening here:
     # error: Incompatible types in assignment (expression has type "str", base class "object" defined the type as "Callable[[object, str], str]")
-    __format__: str = field(default="zanj.torchutil.TrainConfig", init=False) # type: ignore
+    __format__: str = field(default="zanj.torchutil.TrainConfig", init=False)  # type: ignore
 
     batch_size: int
     epochs: int = 1
@@ -176,7 +177,7 @@ class TrainConfig:
         )
 
         # lr scheduler
-        lr_scheduler_factory: LRschedulerFactoryFunction|None
+        lr_scheduler_factory: LRschedulerFactoryFunction | None
         if data["lr_scheduler_factory"] is None:
             lr_scheduler_factory = None
         else:
@@ -201,12 +202,11 @@ class TrainConfig:
         )
 
 
-
 # "error: Only concrete class can be given where Type[Abstract] is expected"
 # this is a mypy issue, see
 # https://github.com/python/mypy/issues/5374
 # https://github.com/python/mypy/issues/4717
-@dataclass # type: ignore
+@dataclass  # type: ignore
 class ModelConfig(metaclass=abc.ABCMeta):
     """configuration for a pytorch model
 
@@ -280,7 +280,7 @@ class ConfiguredModel(
         )
 
     @classmethod
-    def load(cls, obj: dict[str, Any]|LoadedZANJ) -> "ConfiguredModel":
+    def load(cls, obj: dict[str, Any] | LoadedZANJ) -> "ConfiguredModel":
         """load a model from a serialized object"""
 
         # get the config
@@ -293,7 +293,7 @@ class ConfiguredModel(
         model.load_state_dict(obj["model"]["state_dict"])
 
         return model
-    
+
     @classmethod
     def load_file(cls, file_path: str, zanj: ZANJ | None = None) -> "ConfiguredModel":
         """load a model from a file"""

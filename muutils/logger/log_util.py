@@ -48,7 +48,7 @@ def gather_val(
     allow_skip: bool = True,
 ) -> list[list]:
     """gather specific keys from a specific stream in a log file
-    
+
     example:
     if "log.jsonl" has contents:
     ```jsonl
@@ -59,11 +59,11 @@ def gather_val(
     then `gather_val("log.jsonl", "s1", ("a", "b"))` will return
     ```python
     [
-        [1, 2], 
+        [1, 2],
         [4, 5]
     ]
     ```
-    
+
     """
     data: list[dict] = jsonl_load_log(file)
 

@@ -195,4 +195,4 @@ class ZANJ(JsonSerializer):
         )
 
 
-_ZANJ_pre = ZANJ # type: ignore
+_ZANJ_pre = ZANJ  # type: ignore

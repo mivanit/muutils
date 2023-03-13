@@ -96,7 +96,7 @@ def dataclass_serializer_factory(
 
     if fields_exclude is None:
         fields_exclude = list()
-    
+
     assert isinstance(fields_exclude, Iterable)
 
     sfuncs_simple: dict[
@@ -167,7 +167,7 @@ def loader_typecheck_factory(
     """
 
     # get_origin() returns `Any` but we know its going to be a type
-    origin_type: type = typing.get_origin(expected_type) # type: ignore
+    origin_type: type = typing.get_origin(expected_type)  # type: ignore
     if origin_type is None:
         # set it back if `get_origin()` returns `None`
         origin_type = expected_type
@@ -307,11 +307,11 @@ def dataclass_loader_factory(
 
             # TODO: do some runtime type checking here?
             # mypy gives `error: Cannot infer type of lambda`
-            loader_funcs[k] = lambda data, _k=k: data[_k] # type: ignore
+            loader_funcs[k] = lambda data, _k=k: data[_k]  # type: ignore
 
     # note that we assume dataclasses are always stored as dicts
     def load(data: JSONdict):
-        
+
         # get the base outputs for all keys in the dataclass but which dont have a special loader
         output: dict[str, Any] = dict()
 

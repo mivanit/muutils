@@ -1,14 +1,15 @@
 import json
 import typing
+import warnings
 import zipfile
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Callable, Literal, Iterable
 
 import numpy as np
 
 from muutils.json_serialize.json_serialize import ObjectPath
-from muutils.json_serialize.util import JSONdict, JSONitem, MonoTuple
+from muutils.json_serialize.util import JSONdict, JSONitem, MonoTuple, ErrorMode
 from muutils.zanj.externals import (
     EXTERNAL_ITEMS_EXTENSIONS,
     GET_EXTERNAL_ITEM_EXTENSION,
@@ -21,7 +22,7 @@ from muutils.zanj.externals import (
     ExternalItemType_vals,
 )
 
-# pylint: disable=protected-access
+# pylint: disable=protected-access, dangerous-default-value
 
 ExternalsLoadingMode = Literal["lazy", "full"]
 
@@ -38,7 +39,7 @@ def _assert_mappings_equal(m1, m2) -> bool:
 
         if isinstance(v1, typing.Mapping):
             assert isinstance(v2, typing.Mapping)
-            assert_mappings_equal(v1, v2)
+            _assert_mappings_equal(v1, v2)
         else:
             if isinstance(v1, Iterable):
                 assert isinstance(v2, Iterable)
@@ -61,7 +62,7 @@ def _assert_mappings_equal(m1, m2) -> bool:
     return True
 
 
-@dataclass
+@dataclass(kw_only=True)
 class LoaderHandler:
     """handler for loading an object from a json file"""
 
@@ -69,11 +70,17 @@ class LoaderHandler:
     check: Callable[[JSONitem, ObjectPath], bool]
     # function to load the object
     load: Callable[[JSONitem, ObjectPath], Any]
+    # unique identifier for the handler
+    uid: str
+    # source package of the handler -- note that this might be overridden by ZANJ
+    source_pckg: str
+    # priority of the handler, defaults are all 0
+    priority: int = 0
     # description of the handler
     desc: str = "(no description)"
 
     @classmethod
-    def from_formattedclass(cls, fc: type):
+    def from_formattedclass(cls, fc: type, priority: int = 0):
         """create a loader from a class with `serialize`, `load` methods and `__format__` attribute"""
         assert hasattr(fc, "serialize")
         assert callable(fc.serialize)  # type: ignore
@@ -85,6 +92,9 @@ class LoaderHandler:
         return cls(
             check=lambda json_item, path: json_item["__format__"] == fc.__format__,
             load=lambda json_item, path: fc.load(json_item),
+            uid=fc.__format__,
+            source_pckg=str(fc.__module__),
+            priority=priority,
             desc=f"formatted class loader for {fc.__name__}",
         )
 
@@ -97,9 +107,8 @@ class ZANJLoaderHandler(LoaderHandler):
     check: Callable[[_ZANJ_pre, JSONitem, ObjectPath], bool]  # type: ignore[assignment]
     # function to load the object (zanj_obj, json_data, path) -> loaded_obj
     load: Callable[[_ZANJ_pre, JSONitem, ObjectPath], Any]  # type: ignore[assignment]
-    # TODO: add name/unique identifier, `desc` should be human-readable and more detailed
-    # description of the handler
-    desc: str = "(no description)"
+    # priority is higher for ZANJ loaders
+    priority: int = 100
 
     @classmethod
     def from_LoaderHandler(cls, lh: LoaderHandler):
@@ -107,6 +116,9 @@ class ZANJLoaderHandler(LoaderHandler):
         return cls(
             check=lambda zanj, json_item, path: lh.check(json_item, path),
             load=lambda zanj, json_item, path: lh.load(json_item, path),
+            uid=lh.uid,
+            source_pckg=lh.source_pckg,
+            priority=lh.priority,
             desc=lh.desc,
         )
 
@@ -117,7 +129,7 @@ class ZANJLoaderHandler(LoaderHandler):
 
 # NOTE: there are type ignores on the loaders, since the type checking should be the responsibility of the check function
 
-DEFAULT_LOADER_HANDLERS: MonoTuple[LoaderHandler] = (
+LOADER_HANDLERS: list[LoaderHandler] = [
     LoaderHandler(
         check=lambda json_item, path: (
             isinstance(json_item, dict)
@@ -129,6 +141,8 @@ DEFAULT_LOADER_HANDLERS: MonoTuple[LoaderHandler] = (
                 json_item["shape"]  # type: ignore
             )
         ),
+        uid="array_list_meta",
+        source_pckg="muutils.zanj",
         desc="array_list_meta loader",
     ),
     LoaderHandler(
@@ -144,12 +158,14 @@ DEFAULT_LOADER_HANDLERS: MonoTuple[LoaderHandler] = (
                 json_item["shape"]  # type: ignore
             )
         ),
+        uid="array_hex_meta",
+        source_pckg="muutils.zanj",
         desc="array_hex_meta loader",
     ),
-)
+]
 
 
-DEFAULT_LOADER_HANDLERS_ZANJ: tuple[ZANJLoaderHandler] = (
+LOADER_HANDLERS_ZANJ: list[ZANJLoaderHandler] = [
     ZANJLoaderHandler(
         check=lambda zanj, json_item, path: (
             isinstance(json_item, dict)
@@ -157,24 +173,92 @@ DEFAULT_LOADER_HANDLERS_ZANJ: tuple[ZANJLoaderHandler] = (
             and json_item["__format__"].startswith("external:")
         ),
         load=lambda zanj, json_item, path: (zanj._externals[json_item["$ref"]]),  # type: ignore
+        uid="external",
+        source_pckg="muutils.zanj",
+        desc="external object loader",
     ),
-) + tuple(ZANJLoaderHandler.from_LoaderHandler(lh) for lh in DEFAULT_LOADER_HANDLERS)
+]
 
-CUSTOM_LOADER_HANDLERS: list[LoaderHandler] = list()
-CUSTOM_LOADER_HANDLERS_ZANJ: list[ZANJLoaderHandler] = list()
+# these are populated in _update_loaders to avoid code duplication
+LOADER_HANDLERS_JOINED: list[ZANJLoaderHandler] = list()
+LOADER_MAP: dict[str, LoaderHandler] = dict()
+LOADER_MAP_ZANJ: dict[str, ZANJLoaderHandler] = dict()
+LOADER_MAP_JOINED: dict[str, ZANJLoaderHandler] = dict()
 
-# TODO: priority system for loaders
+def _update_loaders():
+    """update the loader maps"""
+    global LOADER_HANDLERS, LOADER_HANDLERS_ZANJ, LOADER_HANDLERS_JOINED, LOADER_MAP, LOADER_MAP_ZANJ, LOADER_MAP_JOINED
+
+    # join zanj and non-zanj loaders
+    LOADER_HANDLERS_JOINED = LOADER_HANDLERS_ZANJ + [
+        ZANJLoaderHandler.from_LoaderHandler(lh) for lh in LOADER_HANDLERS
+    ]
+
+    # sort by priority
+    LOADER_HANDLERS.sort(key=lambda lh: lh.priority, reverse=True)
+    LOADER_HANDLERS_ZANJ.sort(key=lambda lh: lh.priority, reverse=True)
+    LOADER_HANDLERS_JOINED.sort(key=lambda lh: lh.priority, reverse=True)
+
+    # create maps, order should be ensured by the sorting
+    LOADER_MAP = {lh.uid: lh for lh in LOADER_HANDLERS}
+    LOADER_MAP_ZANJ = {lh.uid: lh for lh in LOADER_HANDLERS_ZANJ}
+    LOADER_MAP_JOINED = {lh.uid: lh for lh in LOADER_HANDLERS_JOINED}
 
 
 def register_loader_handler(handler: LoaderHandler):
-    """register a custom loader handler (adds to zanj as well)"""
-    CUSTOM_LOADER_HANDLERS.append(handler)
-    CUSTOM_LOADER_HANDLERS_ZANJ.append(ZANJLoaderHandler.from_LoaderHandler(handler))
+    """register a custom loader handler"""
+    assert not isinstance(handler, ZANJLoaderHandler), "use register_loader_handler_zanj for ZANJLoaderHandlers"
+    LOADER_HANDLERS.append(handler)
+    _update_loaders()
 
 
 def register_loader_handler_zanj(handler: ZANJLoaderHandler):
     """register a custom loader handler for ZANJ"""
-    CUSTOM_LOADER_HANDLERS_ZANJ.append(handler)
+    LOADER_HANDLERS_ZANJ.append(handler)
+    _update_loaders()
+
+
+
+def GET_LOADER(
+        json_item: JSONitem, 
+        path: ObjectPath, 
+        zanj: _ZANJ_pre|None = None,
+        error_mode: ErrorMode = "warn",
+        lh_map: dict[str, LoaderHandler] = LOADER_MAP_JOINED,
+    ) -> LoaderHandler:
+    # check loaders map is correct
+    if zanj is None:
+        assert not any(isinstance(lh, ZANJLoaderHandler) for lh in lh_map.values()), "invalid lh_map"
+    else:
+        assert all(isinstance(lh, ZANJLoaderHandler) for lh in lh_map.values()), "invalid lh_map"
+    
+    # check if we recognize the format
+    if isinstance(json_item, dict) and "__format__" in json_item:
+        if json_item["__format__"] in lh_map:
+            return lh_map[json_item["__format__"]]
+        else:
+            if error_mode == "warn":
+                warnings.warn(f"unknown format {json_item['__format__']} at {path}")
+            elif error_mode == "except":
+                raise ValueError(f"unknown format {json_item['__format__']} at {path}")
+            elif error_mode == "ignore":
+                pass
+            else:
+                raise ValueError(f"invalid error mode {error_mode}")
+
+    # if we dont recognize the format, try to find a loader that can handle it
+    for key, lh in lh_map.items():
+        if zanj is None:
+            if lh.check(json_item, path):
+                return lh
+        else:
+            if lh.check(zanj, json_item, path):
+                return lh
+    
+    # if we still dont have a loader, something is wrong
+    # this state should be inaccesible!
+    raise ValueError(f"no loader found for {json_item} at {path}")
+
 
 
 @dataclass

@@ -17,6 +17,7 @@ import zipfile
 from pathlib import Path
 from typing import Any, Union
 
+import numpy as np
 import pandas as pd
 
 from muutils.json_serialize.array import ArrayMode, arr_metadata
@@ -27,10 +28,9 @@ from muutils.json_serialize.json_serialize import (
 )
 from muutils.json_serialize.util import ErrorMode, JSONitem, MonoTuple
 from muutils.sysinfo import SysInfo
-from muutils.tensor_utils import NDArray
 from muutils.zanj.externals import ZANJ_MAIN, ZANJ_META, ExternalItem, _ZANJ_pre
 from muutils.zanj.loading import (
-    DEFAULT_LOADER_HANDLERS_ZANJ,
+    LOADER_HANDLERS_JOINED,
     ExternalsLoadingMode,
     LoadedZANJ,
     ZANJLoaderHandler,
@@ -40,11 +40,11 @@ from muutils.zanj.serializing import (
     EXTERNAL_STORE_FUNCS,
 )
 
-# pylint: disable=protected-access
+# pylint: disable=protected-access, unused-import, dangerous-default-value, line-too-long
 
 ZANJitem = Union[
     JSONitem,
-    NDArray,
+    np.ndarray,
     pd.DataFrame,
 ]
 
@@ -54,7 +54,7 @@ class ZANJ(JsonSerializer):
 
     given an arbitrary object, throw into a zip file, with arrays stored in .npy files, and everything else stored in a json file
 
-    (basically npz file with augemented json)
+    (basically npz file with json)
 
     # TODO: large tables in JSONL format
 
@@ -184,7 +184,7 @@ class ZANJ(JsonSerializer):
         self,
         path: Union[str, Path],
         externals_mode: ExternalsLoadingMode = "lazy",
-        loader_handlers: MonoTuple[ZANJLoaderHandler] = DEFAULT_LOADER_HANDLERS_ZANJ,
+        loader_handlers: dict[str, ZANJLoaderHandler] = LOADER_HANDLERS_JOINED,
     ) -> LoadedZANJ:
         """load the object from a ZANJ archive"""
         return LoadedZANJ(

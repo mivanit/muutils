@@ -70,7 +70,7 @@ class LoaderHandler:
     check: Callable[[JSONitem, ObjectPath], bool]
     # function to load the object
     load: Callable[[JSONitem, ObjectPath], Any]
-    # unique identifier for the handler
+    # unique identifier for the handler, saved in __format__ field
     uid: str
     # source package of the handler -- note that this might be overridden by ZANJ
     source_pckg: str
@@ -170,8 +170,9 @@ LOADER_HANDLERS_ZANJ: list[ZANJLoaderHandler] = [
         check=lambda zanj, json_item, path: (
             isinstance(json_item, typing.Mapping)
             and "__format__" in json_item
-            and json_item["__format__"].startswith("external:")
+            and json_item["__format__"].endswith(":external")
         ),
+        # TODO: load function should strip the "external" and load again
         load=lambda zanj, json_item, path: (zanj._externals[json_item["$ref"]]),  # type: ignore
         uid="external",
         source_pckg="muutils.zanj",

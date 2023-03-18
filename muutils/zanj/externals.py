@@ -15,7 +15,7 @@ _ZANJ_pre = Any
 ZANJ_MAIN: str = "__zanj__.json"
 ZANJ_META: str = "__zanj_meta__.json"
 
-ExternalItemType = Literal["ndarray", "jsonl"]
+ExternalItemType = Literal["npy", "jsonl"]
 
 ExternalItemType_vals = get_args(ExternalItemType)
 
@@ -28,27 +28,8 @@ ExternalItem = NamedTuple(
     ],
 )
 
-EXTERNAL_ITEMS_EXTENSIONS: dict[ExternalItemType, str] = {
-    "ndarray": "npy",
-    "jsonl": "jsonl",
-}
 
-
-def GET_EXTERNAL_ITEM_EXTENSION(item_type: str) -> str:
-    if item_type not in EXTERNAL_ITEMS_EXTENSIONS:
-        raise ValueError(
-            f"unknown external item type: {item_type}, needs to be one of {EXTERNAL_ITEMS_EXTENSIONS.keys()}"
-        )
-    # safe to ignore since we just checked
-    return EXTERNAL_ITEMS_EXTENSIONS[item_type]  # type: ignore[index]
-
-
-# EXTERNAL_ITEMS_EXTENSIONS_INV: dict[str, ExternalItemType] = {
-#     ext: item_type for item_type, ext in EXTERNAL_ITEMS_EXTENSIONS.items()
-# }
-
-
-def load_ndarray(zanj: "LoadedZANJ", fp: IO[bytes]) -> NDArray:  # type: ignore[name-defined]
+def load_npy(zanj: "LoadedZANJ", fp: IO[bytes]) -> NDArray:  # type: ignore[name-defined]
     return np.load(fp)
 
 
@@ -57,7 +38,7 @@ def load_jsonl(zanj: "LoadedZANJ", fp: IO[bytes]) -> list[JSONitem]:  # type: ig
 
 
 EXTERNAL_LOAD_FUNCS: dict[ExternalItemType, Callable[[_ZANJ_pre, IO[bytes]], Any]] = {
-    "ndarray": load_ndarray,
+    "npy": load_npy,
     "jsonl": load_jsonl,
 }
 

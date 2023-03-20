@@ -24,31 +24,22 @@ from muutils.zanj.externals import (
 # pylint: disable=unused-argument, protected-access, unexpected-keyword-arg
 # for some reason pylint complains about kwargs to ZANJSerializerHandler
 
+
 def jsonl_metadata(data: list[JSONdict]) -> dict:
     """metadata about a jsonl object"""
-    all_cols: set[str] = set([
-        col
-        for item in data
-        for col in item.keys()
-    ])
+    all_cols: set[str] = set([col for item in data for col in item.keys()])
     return {
         "data[0]": data[0],
         "len(data)": len(data),
         "columns": {
             col: {
-                "types": list(set([
-                    type(item[col]).__name__ 
-                    for item in data
-                    if col in item
-                ])),
-                "len": len([
-                    item[col] 
-                    for item in data 
-                    if col in item
-                ]),
+                "types": list(
+                    set([type(item[col]).__name__ for item in data if col in item])
+                ),
+                "len": len([item[col] for item in data if col in item]),
             }
             for col in all_cols
-        }
+        },
     }
 
 
@@ -75,8 +66,6 @@ EXTERNAL_STORE_FUNCS: dict[
     "npy": store_npy,
     "jsonl": store_jsonl,
 }
-
-
 
 
 def zanj_serialize_torchmodule(
@@ -128,6 +117,7 @@ def zanj_serialize_torchmodule(
 @dataclass(kw_only=True)
 class ZANJSerializerHandler(SerializerHandler):
     """a handler for ZANJ serialization"""
+
     # (self_config, object) -> whether to use this handler
     check: Callable[[_ZANJ_pre, Any, ObjectPath], bool]
     # (self_config, object, path) -> serialized object
@@ -138,6 +128,7 @@ class ZANJSerializerHandler(SerializerHandler):
     source_pckg: str
     # optional description of how this serializer works
     desc: str = "(no description)"
+
 
 def zanj_external_serialize(
     jser: _ZANJ_pre,
@@ -210,7 +201,6 @@ def zanj_external_serialize(
     )
 
     return output
-
 
 
 DEFAULT_SERIALIZER_HANDLERS_ZANJ: MonoTuple[ZANJSerializerHandler] = tuple(

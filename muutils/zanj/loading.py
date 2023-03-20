@@ -380,7 +380,7 @@ class LoadedZANJ(typing.Mapping):
         if loader_handlers is not None:
             self._loader_handlers = loader_handlers
         else:
-            loader_handlers = LOADER_MAP_JOINED
+            self._loader_handlers = LOADER_MAP_JOINED
 
         # path and zanj object
         self._path: str = str(path)

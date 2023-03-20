@@ -1,5 +1,7 @@
 from dataclasses import asdict, dataclass
 from pathlib import Path
+import typing
+import json
 
 import numpy as np
 import pandas as pd
@@ -14,6 +16,19 @@ np.random.seed(0)
 
 
 TEST_DATA_PATH: Path = Path("tests/junk_data")
+
+def array_meta(x: typing.Any) -> dict:
+    if isinstance(x, np.ndarray):
+        return dict(
+            shape=list(x.shape),
+            dtype=str(x.dtype),
+            contents=str(x),
+        )
+    else:
+        return dict(
+            type=type(x).__name__,
+            contents=str(x),
+        )
 
 
 def test_numpy():
@@ -30,6 +45,11 @@ def test_numpy():
 
     print(f"{list(data.keys()) = }")
     print(f"{list(recovered_data.keys()) = }")
+    original_vals: dict = {k: array_meta(v) for k,v in data.items()}
+    print(json.dumps(original_vals, indent=2))
+    recovered_vals: dict = {k: array_meta(v) for k,v in recovered_data.items()}
+    print(json.dumps(recovered_vals, indent=2))
+
 
     assert sorted(list(data.keys())) == sorted(list(recovered_data.keys()))
     # assert all([type(data[k]) == type(recovered_data[k]) for k in data.keys()])
@@ -41,7 +61,7 @@ def test_numpy():
             np.allclose(data["some_other_array"], recovered_data["some_other_array"]),
             np.allclose(data["small_array"], recovered_data["small_array"]),
         ]
-    )
+    ), f"assert failed:\n{data = }\n{recovered_data = }"
 
 
 def test_jsonl():

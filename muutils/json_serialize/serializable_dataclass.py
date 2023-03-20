@@ -188,6 +188,7 @@ def serializable_dataclass(
 
             return result
 
+        @classmethod
         def load(cls, data: dict[str, Any]) -> Type[T]:
             ctor_kwargs: dict[str, Any] = dict()
             for field in dataclasses.fields(cls):

@@ -52,6 +52,7 @@ class SerializableField(dataclasses.Field):
         # need to assemble kwargs in this hacky way so as not to upset type checking
         super_kwargs: dict[str, Any] = dict(
             default=default,
+            default_factory=default_factory,
             init=init,
             repr=repr,
             hash=hash,
@@ -59,14 +60,13 @@ class SerializableField(dataclasses.Field):
             kw_only=kw_only,
         )
 
-        if default_factory is not dataclasses.MISSING:
-            super_kwargs["default_factory"] = default_factory
-
         if metadata is not None:
             super_kwargs["metadata"] = metadata
+        else:
+            super_kwargs["metadata"] = types.MappingProxyType({})
         
         # actually init the super class
-        super().__init__(super_kwargs) # type: ignore[call-arg]
+        super().__init__(**super_kwargs) # type: ignore[call-arg]
 
         # now init the new fields
         self.serialize: bool = serialize

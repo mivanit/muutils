@@ -11,9 +11,6 @@ import numpy as np
 from muutils.json_serialize.json_serialize import ObjectPath
 from muutils.json_serialize.util import JSONdict, JSONitem, MonoTuple, ErrorMode
 from muutils.zanj.externals import (
-    EXTERNAL_ITEMS_EXTENSIONS,
-    GET_EXTERNAL_ITEM_EXTENSION,
-    EXTERNAL_LOAD_FUNCS,
     GET_EXTERNAL_LOAD_FUNC,
     ZANJ_MAIN,
     ZANJ_META,
@@ -314,7 +311,7 @@ class ZANJLoaderTreeNode(typing.Mapping):
         # --------------------------------------------------
         item_path: ObjectPath = tuple(self._parent._path) + (key,)
         lh: ZANJLoaderHandler | None = get_item_loader(
-            zanj=self._parent.zanj,
+            zanj=self._parent._zanj,
             json_item=tree_val,
             path=item_path,
             lh_map=self._parent._loader_handlers,

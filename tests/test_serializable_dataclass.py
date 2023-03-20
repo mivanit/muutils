@@ -1,7 +1,7 @@
 import pytest
 from typing import Any
 
-from muutils.json_serialize.serializable_dataclass import (
+from muutils.json_serialize import (
     serializable_dataclass,
     serializable_field,
     SerializableDataclass,

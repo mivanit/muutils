@@ -11,6 +11,11 @@ from muutils.json_serialize.json_serialize import (
     json_serialize,
 )
 from muutils.json_serialize.util import try_catch
+from muutils.json_serialize.serializable_dataclass import (
+    serializable_dataclass,
+    serializable_field,
+    SerializableDataclass,
+)
 
 __all__ = [
     "arr_metadata",
@@ -23,4 +28,7 @@ __all__ = [
     "JsonSerializer",
     "json_serialize",
     "try_catch",
+    "serializable_dataclass",
+    "serializable_field",
+    "SerializableDataclass",
 ]

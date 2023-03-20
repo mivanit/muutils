@@ -1,5 +1,6 @@
 import abc
 import dataclasses
+import types
 import typing
 from typing import Any, Callable, Optional, Type, TypeVar, Union
 
@@ -9,7 +10,20 @@ from typing import Any, Callable, Optional, Type, TypeVar, Union
 class SerializableField(dataclasses.Field):
     """extension of `dataclasses.Field` with additional serialization properties"""
 
-    __slots__ = dataclasses.Field.__slots__ + (
+    __slots__ = (
+        # from dataclasses.Field.__slots__
+        'name',
+        'type',
+        'default',
+        'default_factory',
+        'repr',
+        'hash',
+        'init',
+        'compare',
+        'metadata',
+        'kw_only',
+        '_field_type',  # Private: not to be used by user code.
+        # new ones
         "serialize",
         "serialization_fn",
         "loading_fn",
@@ -18,31 +32,43 @@ class SerializableField(dataclasses.Field):
 
     def __init__(
         self,
-        default: Any = dataclasses.MISSING,
-        default_factory: Optional[Callable[[], Any]] = dataclasses.MISSING,
+        default: Any|dataclasses._MISSING_TYPE = dataclasses.MISSING,
+        default_factory: Callable[[], Any]|dataclasses._MISSING_TYPE = dataclasses.MISSING,
         init: bool = True,
         repr: bool = True,
-        hash: Optional[int] = None,
+        hash: Optional[bool] = None,
         compare: bool = True,
-        metadata: Optional[dict] = None,
-        kw_only: bool = dataclasses.MISSING,
+        metadata: types.MappingProxyType|None = None,
+        kw_only: bool|dataclasses._MISSING_TYPE = dataclasses.MISSING,
         serialize: bool = True,
         serialization_fn: Optional[Callable[[Any], Any]] = None,
         loading_fn: Optional[Callable[[Any], Any]] = None,
         assert_type: bool = True,
     ):
+        # TODO: should we do this check, or assume the user knows what they are doing?
         if init and not serialize:
             raise ValueError("Cannot have init=True and serialize=False")
-        super().__init__(
+
+        # need to assemble kwargs in this hacky way so as not to upset type checking
+        super_kwargs: dict[str, Any] = dict(
             default=default,
-            default_factory=default_factory,
             init=init,
             repr=repr,
             hash=hash,
             compare=compare,
-            metadata=metadata,
             kw_only=kw_only,
         )
+
+        if default_factory is not dataclasses.MISSING:
+            super_kwargs["default_factory"] = default_factory
+
+        if metadata is not None:
+            super_kwargs["metadata"] = metadata
+        
+        # actually init the super class
+        super().__init__(super_kwargs) # type: ignore[call-arg]
+
+        # now init the new fields
         self.serialize: bool = serialize
         self.serialization_fn: Optional[Callable[[Any], Any]] = serialization_fn
         self.loading_fn: Optional[Callable[[Any], Any]] = loading_fn
@@ -103,7 +129,9 @@ def serializable_dataclass(
 ) -> Union[Callable[[Type[T]], Type[T]], Type[T]]:
 
     if properties_to_serialize is None:
-        properties_to_serialize = list()
+        _properties_to_serialize: list = list()
+    else:
+        _properties_to_serialize = properties_to_serialize
 
     def wrap(cls: Type[T]) -> Type[T]:
 
@@ -119,7 +147,7 @@ def serializable_dataclass(
                     field_value = serializable_field()
                 setattr(cls, field_name, field_value)
 
-        cls = dataclasses.dataclass(
+        cls = dataclasses.dataclass( # type: ignore[call-overload]
             cls,
             init=init,
             repr=repr,
@@ -130,7 +158,7 @@ def serializable_dataclass(
             **kwargs,
         )
 
-        cls._properties_to_serialize = properties_to_serialize.copy()
+        cls._properties_to_serialize = _properties_to_serialize.copy() # type: ignore[attr-defined]
 
         def serialize(self) -> dict[str, Any]:
             result: dict[str, Any] = dict()
@@ -159,7 +187,6 @@ def serializable_dataclass(
 
             return result
 
-        @classmethod
         def load(cls, data: dict[str, Any]) -> Type[T]:
             ctor_kwargs: dict[str, Any] = dict()
             for field in dataclasses.fields(cls):
@@ -171,7 +198,11 @@ def serializable_dataclass(
                     value = data[field.name]
 
                     print(f"{field.type = } {type(field.type) = }")
-                    if not isinstance(field.type, (typing.GenericAlias, typing._SpecialForm)) and issubclass(field.type, SerializableDataclass):
+                    if (
+                        # mypy thinks typing has no attribute `GenericAlias``
+                        not isinstance(field.type, (typing.GenericAlias, typing._SpecialForm)) # type: ignore[attr-defined]
+                        and issubclass(field.type, SerializableDataclass)
+                    ): 
                         if isinstance(value, dict):
                             value = field.type.load(value)
                         else:
@@ -189,8 +220,12 @@ def serializable_dataclass(
                     ctor_kwargs[field.name] = value
             return cls(**ctor_kwargs)
 
-        cls.serialize = serialize
-        cls.load = load
+
+        # mypy says "Type cannot be declared in assignment to non-self attribute" so thats why I've left the hints in the comments
+        # type is `Callable[[T], dict]`
+        cls.serialize = serialize # type: ignore[attr-defined]
+        # type is `Callable[[dict], T]`
+        cls.load = load # type: ignore[attr-defined]
 
         return cls
 

@@ -1,7 +1,7 @@
 
 # Overview
 
-The format is meant to be a way of saving arbitrary objects to disk, in a way that is flexible, allows to keep configuration and data together, and is human readable. To this end, the on-disk format is as follows:
+The `ZANJ` format is meant to be a way of saving arbitrary objects to disk, in a way that is flexible, allows to keep configuration and data together, and is human readable. It is loosely inspired by HDF5 and the derived `exdir` format, and the implementation is similar to `npz` files. The on-disk format is as follows:
 
 a file `<filename>.zanj` is a zip file containing:
 

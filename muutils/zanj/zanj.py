@@ -56,8 +56,6 @@ class ZANJ(JsonSerializer):
 
     (basically npz file with json)
 
-    # TODO: large tables in JSONL format
-
     - numpy (or pytorch) arrays are stored in paths according to their name and structure in the object
     - everything else about the object is stored in a json file `zanj.json` in the root of the archive, via `muutils.json_serialize.JsonSerializer`
     - metadata about ZANJ configuration, and optionally packages and versions, is stored in a `__zanj_meta__.json` file in the root of the archive

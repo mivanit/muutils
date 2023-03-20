@@ -14,6 +14,39 @@ from muutils.json_serialize import JSONitem
 
 np.random.seed(0)
 
+def _assert_mappings_equal(m1, m2) -> bool:
+    shared_keys = set(m1.keys()) & set(m2.keys())
+
+    for k in shared_keys:
+        assert k in m1
+        assert k in m2
+
+        v1 = m1[k]
+        v2 = m2[k]
+
+        if isinstance(v1, typing.Mapping):
+            assert isinstance(v2, typing.Mapping)
+            _assert_mappings_equal(v1, v2)
+        else:
+            if isinstance(v1, Iterable):
+                assert isinstance(v2, Iterable)
+                assert len(v1) == len(v2), f"{len(v1)} != {len(v2)}"
+
+                tval = v1 == v2
+
+                if hasattr(tval, "all") and callable(tval.all):
+                    assert v1.shape == v2.shape, f"{v1.shape} != {v2.shape}"
+                    assert tval.all()
+                else:
+                    if isinstance(tval, Iterable):
+                        assert all(tval)
+                    else:
+                        assert isinstance(tval, bool)
+                        assert tval
+            else:
+                assert tval
+
+    return True
 
 TEST_DATA_PATH: Path = Path("tests/junk_data")
 

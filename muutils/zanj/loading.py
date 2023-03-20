@@ -21,42 +21,9 @@ from muutils.zanj.externals import (
 
 # pylint: disable=protected-access, dangerous-default-value
 
+
+# TODO: only do full loading for now. lazy loading is not worth the effort
 ExternalsLoadingMode = Literal["lazy", "full"]
-
-
-def _assert_mappings_equal(m1, m2) -> bool:
-    shared_keys = set(m1.keys()) & set(m2.keys())
-
-    for k in shared_keys:
-        assert k in m1
-        assert k in m2
-
-        v1 = m1[k]
-        v2 = m2[k]
-
-        if isinstance(v1, typing.Mapping):
-            assert isinstance(v2, typing.Mapping)
-            _assert_mappings_equal(v1, v2)
-        else:
-            if isinstance(v1, Iterable):
-                assert isinstance(v2, Iterable)
-                assert len(v1) == len(v2), f"{len(v1)} != {len(v2)}"
-
-                tval = v1 == v2
-
-                if hasattr(tval, "all") and callable(tval.all):
-                    assert v1.shape == v2.shape, f"{v1.shape} != {v2.shape}"
-                    assert tval.all()
-                else:
-                    if isinstance(tval, Iterable):
-                        assert all(tval)
-                    else:
-                        assert isinstance(tval, bool)
-                        assert tval
-            else:
-                assert tval
-
-    return True
 
 
 @dataclass(kw_only=True)
@@ -122,6 +89,8 @@ class ZANJLoaderHandler(LoaderHandler):
     @classmethod
     def from_formattedclass(cls, fc: type):
         return cls.from_LoaderHandler(LoaderHandler.from_formattedclass(fc))
+
+# TODO: unify LoaderHandler and ZANJLoaderHandler, since they are basically the same. split it up later if we need to
 
 
 # NOTE: there are type ignores on the loaders, since the type checking should be the responsibility of the check function
@@ -263,9 +232,15 @@ def get_item_loader(
     return None
 
 
+
+
+
+
 @dataclass
 class ZANJLoaderTreeNode(typing.Mapping):
     """acts like a regular dictionary or list, but applies loaders to items
+    
+    # TODO: this whole class is buggy. Is there a better way to do this?
 
     does this by passing `_parent` down the stack, whenever you get an item from the container.
     """
@@ -329,6 +304,8 @@ class ZANJLoaderTreeNode(typing.Mapping):
         return len(self._data)
 
 
+
+# TODO: we are removing lazy loading, so this class is no longer needed
 class LazyExternalLoader:
     """lazy load np arrays or jsonl files, similar tp NpzFile from np.lib
 
@@ -362,6 +339,8 @@ class LazyExternalLoader:
                 return GET_EXTERNAL_LOAD_FUNC(item_type)(self._loaded_zanj, fp)
 
 
+
+# TODO: this needs to be refactored 
 class LoadedZANJ(typing.Mapping):
     """object loaded from ZANJ archive. acts like a dict."""
 

@@ -68,51 +68,6 @@ EXTERNAL_STORE_FUNCS: dict[
 }
 
 
-def zanj_serialize_torchmodule(
-    jser: _ZANJ_pre,
-    data: "torch.nn.Module",  # type: ignore
-    path: ObjectPath,
-) -> JSONitem:
-    """serialize a torch module to zanj
-
-    we want to save:
-    - class name, docstring, __mro__
-    - code of `.forward()` method
-    - code of `.__init__()` method
-    - state dict, in accordance with zanj parameters for storing arrays
-    - `_modules` with modules as strings
-    - __dict__ with values printed (not fully serialized)
-    """
-
-    # check torch is installed
-    try:
-        import torch
-    except ImportError:
-        raise ImportError(
-            "torch is not installed! how do you expect to serialize torch modules?"
-        )
-
-    # check type
-    if not isinstance(data, torch.nn.Module):
-        raise TypeError(f"expected torch.nn.Module, got {type(data)}")
-
-    # serialize the output
-    output: dict = {
-        "__format__": "torchmodule",
-        "__class__": str(data.__class__.__name__),
-        "__doc__": string_as_lines(data.__doc__),
-        "__mro__": [str(c.__name__) for c in data.__class__.__mro__],
-        "__init__": string_as_lines(inspect.getsource(data.__init__)),  # type: ignore[misc]
-        "forward": string_as_lines(inspect.getsource(data.forward)),
-        "state_dict": jser.json_serialize(
-            data.state_dict(), tuple(path) + ("state_dict",)
-        ),
-        "_modules": {k: str(v) for k, v in data._modules.items()},
-        "__dict__": {k: str(v) for k, v in data.__dict__.items()},
-    }
-
-    return jser.json_serialize(output)
-
 
 @dataclass(kw_only=True)
 class ZANJSerializerHandler(SerializerHandler):

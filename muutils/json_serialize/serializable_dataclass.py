@@ -1,5 +1,6 @@
 import abc
 import dataclasses
+import typing
 from typing import Any, Callable, Optional, Type, TypeVar, Union
 
 # pylint: disable=bad-mcs-classmethod-argument, too-many-arguments, protected-access
@@ -169,10 +170,14 @@ def serializable_dataclass(
                 if (field.name in data) and field.init:
                     value = data[field.name]
 
-                    if issubclass(
-                        field.type.__class__, SerializableDataclass
-                    ) and isinstance(value, dict):
-                        value = field.type.load(value)
+                    print(f"{field.type = } {type(field.type) = }")
+                    if not isinstance(field.type, (typing.GenericAlias, typing._SpecialForm)) and issubclass(field.type, SerializableDataclass):
+                        if isinstance(value, dict):
+                            value = field.type.load(value)
+                        else:
+                            raise ValueError(
+                                f"Cannot load value into {field.type}, espected {type(value) = } to be a dict\n{value = }"
+                            )
                     elif field.loading_fn:
                         value = field.loading_fn(data)
 

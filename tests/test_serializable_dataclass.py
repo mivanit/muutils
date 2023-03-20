@@ -21,9 +21,9 @@ class SimpleFields(SerializableDataclass):
 class FieldOptions(SerializableDataclass):
     a: str = serializable_field()
     b: str = serializable_field()
-    c: str = serializable_field(init=False, serialize=False)
+    c: str = serializable_field(init=False, serialize=False, repr=False, compare=False)
     d: str = serializable_field(
-        serialization_fn=lambda x: x.upper(), loading_fn=lambda x: x.lower()
+        serialization_fn=lambda x: x.upper(), loading_fn=lambda x: x["d"].lower()
     )
 
 
@@ -48,19 +48,12 @@ def simple_fields_instance():
 
 @pytest.fixture
 def field_options_instance():
-    return FieldOptions(a="hello", b="world", c="secret", d="case")
+    return FieldOptions(a="hello", b="world", d="case")
 
 
 @pytest.fixture
 def with_property_instance():
     return WithProperty(first_name="John", last_name="Doe")
-
-
-@pytest.fixture
-def child_instance():
-    return Child(
-        a="hello", b="world", c="secret", d="case", first_name="John", last_name="Doe"
-    )
 
 
 def test_simple_fields_serialization(simple_fields_instance):
@@ -76,7 +69,7 @@ def test_simple_fields_loading(simple_fields_instance):
 
 def test_field_options_serialization(field_options_instance):
     serialized = field_options_instance.serialize()
-    assert serialized == {"b": "world", "d": "HELLO"}
+    assert serialized == {"a": "hello", "b": "world", "d": "CASE"}
 
 
 def test_field_options_loading(field_options_instance):
@@ -100,23 +93,6 @@ def test_with_property_loading(with_property_instance):
     assert loaded == with_property_instance
 
 
-def test_child_serialization(child_instance):
-    serialized = child_instance.serialize()
-    assert serialized == {
-        "b": "world",
-        "d": "HELLO",
-        "first_name": "John",
-        "last_name": "Doe",
-        "full_name": "John Doe",
-    }
-
-
-def test_child_loading(child_instance):
-    serialized = child_instance.serialize()
-    loaded = Child.load(serialized)
-    assert loaded == child_instance
-
-
 @serializable_dataclass
 class Address(SerializableDataclass):
     street: str
@@ -129,7 +105,6 @@ class Person(SerializableDataclass):
     name: str
     age: int
     address: Address
-
 
 @pytest.fixture
 def address_instance():

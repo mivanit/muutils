@@ -106,6 +106,7 @@ class Person(SerializableDataclass):
     age: int
     address: Address
 
+
 @pytest.fixture
 def address_instance():
     return Address(street="123 Main St", city="New York", zip_code="10001")

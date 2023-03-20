@@ -12,17 +12,17 @@ class SerializableField(dataclasses.Field):
 
     __slots__ = (
         # from dataclasses.Field.__slots__
-        'name',
-        'type',
-        'default',
-        'default_factory',
-        'repr',
-        'hash',
-        'init',
-        'compare',
-        'metadata',
-        'kw_only',
-        '_field_type',  # Private: not to be used by user code.
+        "name",
+        "type",
+        "default",
+        "default_factory",
+        "repr",
+        "hash",
+        "init",
+        "compare",
+        "metadata",
+        "kw_only",
+        "_field_type",  # Private: not to be used by user code.
         # new ones
         "serialize",
         "serialization_fn",
@@ -32,14 +32,15 @@ class SerializableField(dataclasses.Field):
 
     def __init__(
         self,
-        default: Any|dataclasses._MISSING_TYPE = dataclasses.MISSING,
-        default_factory: Callable[[], Any]|dataclasses._MISSING_TYPE = dataclasses.MISSING,
+        default: Any | dataclasses._MISSING_TYPE = dataclasses.MISSING,
+        default_factory: Callable[[], Any]
+        | dataclasses._MISSING_TYPE = dataclasses.MISSING,
         init: bool = True,
         repr: bool = True,
         hash: Optional[bool] = None,
         compare: bool = True,
-        metadata: types.MappingProxyType|None = None,
-        kw_only: bool|dataclasses._MISSING_TYPE = dataclasses.MISSING,
+        metadata: types.MappingProxyType | None = None,
+        kw_only: bool | dataclasses._MISSING_TYPE = dataclasses.MISSING,
         serialize: bool = True,
         serialization_fn: Optional[Callable[[Any], Any]] = None,
         loading_fn: Optional[Callable[[Any], Any]] = None,
@@ -64,9 +65,9 @@ class SerializableField(dataclasses.Field):
             super_kwargs["metadata"] = metadata
         else:
             super_kwargs["metadata"] = types.MappingProxyType({})
-        
+
         # actually init the super class
-        super().__init__(**super_kwargs) # type: ignore[call-arg]
+        super().__init__(**super_kwargs)  # type: ignore[call-arg]
 
         # now init the new fields
         self.serialize: bool = serialize
@@ -147,7 +148,7 @@ def serializable_dataclass(
                     field_value = serializable_field()
                 setattr(cls, field_name, field_value)
 
-        cls = dataclasses.dataclass( # type: ignore[call-overload]
+        cls = dataclasses.dataclass(  # type: ignore[call-overload]
             cls,
             init=init,
             repr=repr,
@@ -158,7 +159,7 @@ def serializable_dataclass(
             **kwargs,
         )
 
-        cls._properties_to_serialize = _properties_to_serialize.copy() # type: ignore[attr-defined]
+        cls._properties_to_serialize = _properties_to_serialize.copy()  # type: ignore[attr-defined]
 
         def serialize(self) -> dict[str, Any]:
             result: dict[str, Any] = dict()
@@ -200,9 +201,9 @@ def serializable_dataclass(
                     print(f"{field.type = } {type(field.type) = }")
                     if (
                         # mypy thinks typing has no attribute `GenericAlias``
-                        not isinstance(field.type, (typing.GenericAlias, typing._SpecialForm)) # type: ignore[attr-defined]
+                        not isinstance(field.type, (typing.GenericAlias, typing._SpecialForm))  # type: ignore[attr-defined]
                         and issubclass(field.type, SerializableDataclass)
-                    ): 
+                    ):
                         if isinstance(value, dict):
                             value = field.type.load(value)
                         else:
@@ -220,12 +221,11 @@ def serializable_dataclass(
                     ctor_kwargs[field.name] = value
             return cls(**ctor_kwargs)
 
-
         # mypy says "Type cannot be declared in assignment to non-self attribute" so thats why I've left the hints in the comments
         # type is `Callable[[T], dict]`
-        cls.serialize = serialize # type: ignore[attr-defined]
+        cls.serialize = serialize  # type: ignore[attr-defined]
         # type is `Callable[[dict], T]`
-        cls.load = load # type: ignore[attr-defined]
+        cls.load = load  # type: ignore[attr-defined]
 
         return cls
 

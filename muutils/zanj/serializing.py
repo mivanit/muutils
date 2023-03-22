@@ -118,7 +118,7 @@ def zanj_external_serialize(
     # process the data if needed, assemble metadata
     data_new: Any = data
     output: dict = {
-        "__format__": f"external:{item_type}",
+        "__format__": f"{item_type}:external",
         "$ref": archive_path,
     }
     if item_type == "npy":

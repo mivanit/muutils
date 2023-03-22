@@ -21,19 +21,14 @@ from muutils.zanj.externals import (
 
 # pylint: disable=protected-access, dangerous-default-value
 
-
-# TODO: only do full loading for now. lazy loading is not worth the effort
-ExternalsLoadingMode = Literal["lazy", "full"]
-
-
-@dataclass(kw_only=True)
+@dataclass
 class LoaderHandler:
-    """handler for loading an object from a json file"""
+    """handler for loading an object from a json file or a ZANJ archive"""
 
-    # (json_data, path) -> whether to use this handler
-    check: Callable[[JSONitem, ObjectPath], bool]
-    # function to load the object
-    load: Callable[[JSONitem, ObjectPath], Any]
+    # (zanj_obj, json_data, path) -> whether to use this handler
+    check: Callable[[JSONitem, ObjectPath, _ZANJ_pre], bool]
+    # function to load the object (zanj_obj, json_data, path) -> loaded_obj
+    load: Callable[[JSONitem, ObjectPath, _ZANJ_pre], Any]
     # unique identifier for the handler, saved in __format__ field
     uid: str
     # source package of the handler -- note that this might be overridden by ZANJ
@@ -54,8 +49,8 @@ class LoaderHandler:
         assert isinstance(fc.__format__, str)  # type: ignore
 
         return cls(
-            check=lambda json_item, path: json_item["__format__"] == fc.__format__,
-            load=lambda json_item, path: fc.load(json_item),
+            check=lambda json_item, path, zanj_obj: json_item["__format__"] == fc.__format__,
+            load=lambda json_item, path, zanj_obj: fc.load(json_item),
             uid=fc.__format__,
             source_pckg=str(fc.__module__),
             priority=priority,
@@ -63,46 +58,16 @@ class LoaderHandler:
         )
 
 
-@dataclass
-class ZANJLoaderHandler(LoaderHandler):
-    """handler for loading an object from a ZANJ archive (takes ZANJ object as first arg)"""
-
-    # (zanj_obi, json_data, path) -> whether to use this handler
-    check: Callable[[_ZANJ_pre, JSONitem, ObjectPath], bool]  # type: ignore[assignment]
-    # function to load the object (zanj_obj, json_data, path) -> loaded_obj
-    load: Callable[[_ZANJ_pre, JSONitem, ObjectPath], Any]  # type: ignore[assignment]
-    # priority is higher for ZANJ loaders
-    priority: int = 100
-
-    @classmethod
-    def from_LoaderHandler(cls, lh: LoaderHandler):
-        """wrap a standard LoaderHandler to make it compatible with ZANJ"""
-        return cls(
-            check=lambda zanj, json_item, path: lh.check(json_item, path),
-            load=lambda zanj, json_item, path: lh.load(json_item, path),
-            uid=lh.uid,
-            source_pckg=lh.source_pckg,
-            priority=lh.priority,
-            desc=lh.desc,
-        )
-
-    @classmethod
-    def from_formattedclass(cls, fc: type):
-        return cls.from_LoaderHandler(LoaderHandler.from_formattedclass(fc))
-
-# TODO: unify LoaderHandler and ZANJLoaderHandler, since they are basically the same. split it up later if we need to
-
-
 # NOTE: there are type ignores on the loaders, since the type checking should be the responsibility of the check function
 
 LOADER_HANDLERS: list[LoaderHandler] = [
     LoaderHandler(
-        check=lambda json_item, path: (
+        check=lambda json_item, path, _=None: (
             isinstance(json_item, typing.Mapping)
             and "__format__" in json_item
             and json_item["__format__"] == "array_list_meta"
         ),
-        load=lambda json_item, path: (
+        load=lambda json_item, path, _=None: (
             np.array(json_item["data"], dtype=json_item["dtype"]).reshape(  # type: ignore
                 json_item["shape"]  # type: ignore
             )
@@ -112,12 +77,12 @@ LOADER_HANDLERS: list[LoaderHandler] = [
         desc="array_list_meta loader",
     ),
     LoaderHandler(
-        check=lambda json_item, path: (
+        check=lambda json_item, path, _=None: (
             isinstance(json_item, typing.Mapping)
             and "__format__" in json_item
             and json_item["__format__"] == "array_hex_meta"
         ),
-        load=lambda json_item, path: (
+        load=lambda json_item, path, _: (
             np.frombuffer(
                 bytes.fromhex(json_item["data"]), dtype=json_item["dtype"]  # type: ignore
             ).reshape(
@@ -131,60 +96,25 @@ LOADER_HANDLERS: list[LoaderHandler] = [
 ]
 
 
-LOADER_HANDLERS_ZANJ: list[ZANJLoaderHandler] = [
-    ZANJLoaderHandler(
-        check=lambda zanj, json_item, path: (
-            isinstance(json_item, typing.Mapping)
-            and "__format__" in json_item
-            and json_item["__format__"].endswith(":external")
-        ),
-        # TODO: load function should strip the "external" and load again
-        load=lambda zanj, json_item, path: (zanj._externals[json_item["$ref"]]),  # type: ignore
-        uid="external",
-        source_pckg="muutils.zanj",
-        desc="external object loader",
-    ),
-]
-
-# these are populated in _update_loaders to avoid code duplication
-LOADER_HANDLERS_JOINED: list[ZANJLoaderHandler] = list()
 LOADER_MAP: dict[str, LoaderHandler] = dict()
-LOADER_MAP_ZANJ: dict[str, ZANJLoaderHandler] = dict()
-LOADER_MAP_JOINED: dict[str, ZANJLoaderHandler] = dict()
 
 
 def _update_loaders():
     """update the loader maps"""
-    global LOADER_HANDLERS, LOADER_HANDLERS_ZANJ, LOADER_HANDLERS_JOINED, LOADER_MAP, LOADER_MAP_ZANJ, LOADER_MAP_JOINED
-
-    # join zanj and non-zanj loaders
-    LOADER_HANDLERS_JOINED = LOADER_HANDLERS_ZANJ + [
-        ZANJLoaderHandler.from_LoaderHandler(lh) for lh in LOADER_HANDLERS
-    ]
+    global LOADER_HANDLERS, LOADER_MAP
 
     # sort by priority
     LOADER_HANDLERS.sort(key=lambda lh: lh.priority, reverse=True)
-    LOADER_HANDLERS_ZANJ.sort(key=lambda lh: lh.priority, reverse=True)
-    LOADER_HANDLERS_JOINED.sort(key=lambda lh: lh.priority, reverse=True)
 
-    # create maps, order should be ensured by the sorting
+    # create map, order should be ensured by the sorting
     LOADER_MAP = {lh.uid: lh for lh in LOADER_HANDLERS}
-    LOADER_MAP_ZANJ = {lh.uid: lh for lh in LOADER_HANDLERS_ZANJ}
-    LOADER_MAP_JOINED = {lh.uid: lh for lh in LOADER_HANDLERS_JOINED}
-
 
 def register_loader_handler(handler: LoaderHandler):
     """register a custom loader handler"""
     assert not isinstance(
-        handler, ZANJLoaderHandler
-    ), "use register_loader_handler_zanj for ZANJLoaderHandlers"
+        handler, LoaderHandler
+    ), "use register_loader_handler_zanj for LoaderHandlers"
     LOADER_HANDLERS.append(handler)
-    _update_loaders()
-
-
-def register_loader_handler_zanj(handler: ZANJLoaderHandler):
-    """register a custom loader handler for ZANJ"""
-    LOADER_HANDLERS_ZANJ.append(handler)
     _update_loaders()
 
 
@@ -193,17 +123,9 @@ def get_item_loader(
     path: ObjectPath,
     zanj: _ZANJ_pre | None = None,
     error_mode: ErrorMode = "warn",
-    lh_map: dict[str, LoaderHandler] = LOADER_MAP_JOINED,
+    lh_map: dict[str, LoaderHandler] = LOADER_MAP,
 ) -> LoaderHandler | None:
-    # check loaders map is correct
-    if zanj is None:
-        assert not any(
-            isinstance(lh, ZANJLoaderHandler) for lh in lh_map.values()
-        ), "invalid lh_map"
-    else:
-        assert all(
-            isinstance(lh, ZANJLoaderHandler) for lh in lh_map.values()
-        ), "invalid lh_map"
+    """get the loader for a json item"""
 
     # check if we recognize the format
     if isinstance(json_item, typing.Mapping) and "__format__" in json_item:
@@ -232,6 +154,41 @@ def get_item_loader(
     return None
 
 
+
+
+def _external_load(json_item: JSONitem, path: ObjectPath, zanj: _ZANJ_pre) -> Any:
+    """load an external object"""
+    assert isinstance(json_item, typing.Mapping)
+    assert "$ref" in json_item
+    assert isinstance(json_item["$ref"], str)
+    assert "__format__" in json_item
+    assert json_item["__format__"].endswith(":external")
+    assert json_item["$ref"] in zanj._externals
+
+    externally_loaded = zanj._externals[json_item["$ref"]]
+    
+    new_loader: LoaderHandler | None = get_item_loader(externally_loaded, path, zanj)
+
+    if new_loader is None:
+        return externally_loaded
+    else:
+        return new_loader.load(externally_loaded, path, zanj)
+
+# add the special externals loader
+
+LoaderHandler(
+    check=lambda json_item, path, zanj: (
+        isinstance(json_item, typing.Mapping)
+        and "__format__" in json_item
+        and json_item["__format__"].endswith(":external")
+    ),
+    # load function should strip the "external" and load again
+    load=_external_load,  # type: ignore
+    uid="external",
+    source_pckg="muutils.zanj",
+    priority=999,
+    desc="external object loader",
+)
 
 
 
@@ -285,7 +242,7 @@ class ZANJLoaderTreeNode(typing.Mapping):
         # apply loaders, if one exists
         # --------------------------------------------------
         item_path: ObjectPath = tuple(self._parent._path) + (key,)
-        lh: ZANJLoaderHandler | None = get_item_loader(
+        lh: LoaderHandler | None = get_item_loader(
             zanj=self._parent._zanj,
             json_item=tree_val,
             path=item_path,
@@ -305,40 +262,6 @@ class ZANJLoaderTreeNode(typing.Mapping):
 
 
 
-# TODO: we are removing lazy loading, so this class is no longer needed
-class LazyExternalLoader:
-    """lazy load np arrays or jsonl files, similar tp NpzFile from np.lib
-
-    initialize with zipfile object and zanj metadata (for list of externals)
-    """
-
-    def __init__(
-        self,
-        zipf: zipfile.ZipFile,
-        zanj_meta: dict,
-        loaded_zanj: "LoadedZANJ",
-    ):
-        self._zipf: zipfile.ZipFile = zipf
-        self._zanj_meta: JSONitem = zanj_meta
-        # (path, item_type) pairs
-        self._externals_types: dict[str, str] = {
-            key: val["item_type"] for key, val in zanj_meta["externals_info"].items()
-        }
-
-        self._loaded_zanj: LoadedZANJ = loaded_zanj
-
-        # validate by checking each external file exists
-        for key, item_type in self._externals_types.items():
-            if key not in zipf.namelist():
-                raise ValueError(f"external file {key} not found in archive")
-
-    def __getitem__(self, key: str) -> Any:
-        if key in self._externals_types:
-            item_type: str = self._externals_types[key]
-            with self._zipf.open(key, "r") as fp:
-                return GET_EXTERNAL_LOAD_FUNC(item_type)(self._loaded_zanj, fp)
-
-
 
 # TODO: this needs to be refactored 
 class LoadedZANJ(typing.Mapping):
@@ -349,25 +272,19 @@ class LoadedZANJ(typing.Mapping):
         # config
         path: str | Path,
         zanj: _ZANJ_pre,
-        loader_handlers: dict[str, ZANJLoaderHandler] | None = None,
-        externals_mode: ExternalsLoadingMode = "lazy",
-        format_error_mode: ErrorMode = "warn",
+        loader_handlers: dict[str, LoaderHandler] | None = None,
     ) -> None:
 
         # copy handlers
-        self._loader_handlers: dict[str, ZANJLoaderHandler]
+        self._loader_handlers: dict[str, LoaderHandler]
         if loader_handlers is not None:
             self._loader_handlers = loader_handlers
         else:
-            self._loader_handlers = LOADER_MAP_JOINED
+            self._loader_handlers = LOADER_MAP
 
         # path and zanj object
         self._path: str = str(path)
         self._zanj: _ZANJ_pre = zanj
-
-        # config
-        self._externals_mode: ExternalsLoadingMode = externals_mode
-        self._format_error_mode: ErrorMode = format_error_mode
 
         # load zip file
         self._zipf: zipfile.ZipFile = zipfile.ZipFile(file=self._path, mode="r")
@@ -380,20 +297,12 @@ class LoadedZANJ(typing.Mapping):
         )
 
         # externals
-        self._externals: LazyExternalLoader | dict
-        if externals_mode == "lazy":
-            self._externals = LazyExternalLoader(
-                zipf=self._zipf,
-                zanj_meta=self._meta,
-                loaded_zanj=self,
-            )
-        elif externals_mode == "full":
-            self._externals = dict()
+        self._externals: dict[str, Any] = dict()
 
-            for fname, val in self._meta["externals_info"].items():
-                item_type: str = val["item_type"]
-                with self._zipf.open(fname, "r") as fp:
-                    self._externals[fname] = GET_EXTERNAL_LOAD_FUNC(item_type)(self, fp)
+        for fname, val in self._meta["externals_info"].items():
+            item_type: str = val["item_type"]
+            with self._zipf.open(fname, "r") as fp:
+                self._externals[fname] = GET_EXTERNAL_LOAD_FUNC(item_type)(self, fp)
 
     def __getitem__(self, key: str) -> Any:
         """get the value of the given key"""

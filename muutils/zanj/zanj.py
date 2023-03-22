@@ -30,10 +30,9 @@ from muutils.json_serialize.util import ErrorMode, JSONitem, MonoTuple
 from muutils.sysinfo import SysInfo
 from muutils.zanj.externals import ZANJ_MAIN, ZANJ_META, ExternalItem, _ZANJ_pre
 from muutils.zanj.loading import (
-    LOADER_MAP_JOINED,
-    ExternalsLoadingMode,
+    LOADER_MAP,
     LoadedZANJ,
-    ZANJLoaderHandler,
+    LoaderHandler,
 )
 from muutils.zanj.serializing import (
     DEFAULT_SERIALIZER_HANDLERS_ZANJ,
@@ -181,14 +180,12 @@ class ZANJ(JsonSerializer):
     def read(
         self,
         path: Union[str, Path],
-        externals_mode: ExternalsLoadingMode = "lazy",
-        loader_handlers: dict[str, ZANJLoaderHandler] = LOADER_MAP_JOINED,
-    ) -> LoadedZANJ:
+        loader_handlers: dict[str, LoaderHandler] = LOADER_MAP,
+    ) -> Any:
         """load the object from a ZANJ archive"""
         return LoadedZANJ(
             path=path,
             zanj=self,
-            externals_mode=externals_mode,
             loader_handlers=loader_handlers,
         )
 

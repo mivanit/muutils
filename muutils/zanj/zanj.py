@@ -33,7 +33,7 @@ from muutils.zanj.loading import (
     LOADER_MAP,
     LoadedZANJ,
     LoaderHandler,
-    load_item,
+    load_item_recursive,
 )
 from muutils.zanj.serializing import (
     DEFAULT_SERIALIZER_HANDLERS_ZANJ,
@@ -191,6 +191,12 @@ class ZANJ(JsonSerializer):
 
         loaded_zanj.populate_externals()
 
-        return load_item(loaded_zanj._json_data, path=tuple())
+        return load_item_recursive(
+            loaded_zanj._json_data,
+            path=tuple(),
+            zanj=loaded_zanj,
+            error_mode=self.error_mode,
+            lh_map=loader_handlers,
+        )
 
 _ZANJ_pre = ZANJ  # type: ignore

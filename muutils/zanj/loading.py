@@ -8,6 +8,7 @@ from typing import Any, Callable, Literal, Iterable
 
 import numpy as np
 import torch
+import pandas as pd
 
 from muutils.json_serialize.json_serialize import ObjectPath
 from muutils.json_serialize.util import JSONdict, JSONitem, MonoTuple, ErrorMode
@@ -102,31 +103,44 @@ LOADER_HANDLERS: list[LoaderHandler] = [
         check=lambda json_item, path: (
             isinstance(json_item, dict)
             and "__format__" in json_item
-            and json_item["__format__"] == "npy:external"
+            and json_item["__format__"].startswith("numpy.ndarray")
             and "$ref" in json_item
             and isinstance(json_item["data"], np.ndarray)
             and json_item["data"].dtype.name == json_item["dtype"]
             and tuple(json_item["data"].shape) == tuple(json_item["shape"])
         ),
         load=lambda json_item, path: json_item["data"],
-        uid="npy:external",
+        uid="numpy.ndarray:external",
         source_pckg="muutils.zanj",
-        desc="npy:external loader",
+        desc="numpy.ndarray:external loader",
     ),
     LoaderHandler(
         check=lambda json_item, path: (
             isinstance(json_item, dict)
             and "__format__" in json_item
-            and json_item["__format__"] == "tensor:external"
+            and json_item["__format__"].startswith("torch.Tensor")
             and "$ref" in json_item
-            and isinstance(json_item["data"], torch.Tensor)
+            and isinstance(json_item["data"], np.ndarray)
             and json_item["data"].dtype.name == json_item["dtype"]
             and tuple(json_item["data"].shape) == tuple(json_item["shape"])
         ),
-        load=lambda json_item, path: json_item["data"],
-        uid="tensor:external",
+        load=lambda json_item, path: torch.tensor(json_item["data"]),
+        uid="torch.Tensor:external",
         source_pckg="muutils.zanj",
-        desc="tensor:external loader",
+        desc="torch.Tensor:external loader",
+    ),
+    # pandas external
+    LoaderHandler(
+        check=lambda json_item, path: (
+            isinstance(json_item, dict)
+            and "__format__" in json_item
+            and json_item["__format__"].startswith("pandas.DataFrame")
+            and "$ref" in json_item
+        ),
+        load=lambda json_item, path: pd.DataFrame(json_item["data"]),
+        uid="pandas.DataFrame:external",
+        source_pckg="muutils.zanj",
+        desc="pandas.DataFrame:external loader",
     ),
 ]
 
@@ -175,17 +189,13 @@ def get_item_loader(
 
     # if we dont recognize the format, try to find a loader that can handle it
     for key, lh in lh_map.items():
-        if zanj is None:
-            if lh.check(json_item, path):
-                return lh
-        else:
-            if lh.check(zanj, json_item, path):
-                return lh
+        if lh.check(json_item, path):
+            return lh
 
     # if we still dont have a loader, return None
     return None
 
-def load_item(
+def load_item_recursive(
     json_item: JSONitem,
     path: ObjectPath,
     zanj: _ZANJ_pre | None = None,
@@ -201,38 +211,34 @@ def load_item(
     )
 
     if lh is None:
-        return json_item
+        if isinstance(json_item, dict):
+            return {
+                key: load_item_recursive(
+                    json_item = json_item[key],
+                    path = tuple(path) + (key,),
+                    zanj = zanj,
+                    error_mode = error_mode,
+                    lh_map = lh_map,
+                )
+                for key in json_item
+            }
+        elif isinstance(json_item, list):
+            return [
+                load_item_recursive(
+                    json_item = json_item[i],
+                    path = tuple(path) + (i,),
+                    zanj = zanj,
+                    error_mode = error_mode,
+                    lh_map = lh_map,
+                )
+                for i in range(len(json_item))
+            ]
+        elif isinstance(json_item, (str, int, float, bool, type(None))):
+            return json_item
+        else:
+            raise ValueError(f"unknown type {type(json_item)} at {path}\n{json_item}")
     else:
-        return lh.load(zanj, json_item, path)
-
-
-# add recursive loaders of base list and dict
-register_loader_handler(
-    LoaderHandler(
-        check=lambda json_item, path=None: isinstance(json_item, list),
-        load=lambda json_item, path=None: [
-            load_item(item, tuple(path) + (i,)) for i, item in enumerate(json_item)
-        ],
-        uid="list_recursive",
-        source_pckg="muutils.zanj",
-        priority=-9999,
-        desc="recursive list loader",
-    )       
-)
-
-register_loader_handler(
-    LoaderHandler(
-        check=lambda json_item, path=None: isinstance(json_item, dict),
-        load=lambda json_item, path=None: {
-            key: load_item(item, tuple(path) + (key,)) for key, item in json_item.items()
-        },
-        uid="dict_recursive",
-        source_pckg="muutils.zanj",
-        priority=-9999,
-        desc="recursive dict loader",
-    )
-)
-
+        return lh.load(json_item, path)
 
 class LoadedZANJ:
     """for loading a zanj file"""
@@ -283,3 +289,10 @@ class LoadedZANJ:
 
 
 
+    def load_recursive(self) -> Any:
+        """load the main json data recursively"""
+
+        return 
+
+
+_update_loaders()

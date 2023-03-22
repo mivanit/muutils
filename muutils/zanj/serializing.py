@@ -90,6 +90,7 @@ def zanj_external_serialize(
     data: Any,
     path: ObjectPath,
     item_type: ExternalItemType,
+    _format: str,
 ) -> JSONitem:
     """stores a numpy array or jsonl externally in a ZANJ object
 
@@ -118,7 +119,7 @@ def zanj_external_serialize(
     # process the data if needed, assemble metadata
     data_new: Any = data
     output: dict = {
-        "__format__": f"{item_type}:external",
+        "__format__": _format,
         "$ref": archive_path,
     }
     if item_type == "npy":
@@ -166,7 +167,7 @@ DEFAULT_SERIALIZER_HANDLERS_ZANJ: MonoTuple[ZANJSerializerHandler] = tuple(
                 and obj.size >= self.external_array_threshold
             ),
             serialize_func=lambda self, obj, path: zanj_external_serialize(
-                self, obj, path, item_type="npy"
+                self, obj, path, item_type="npy", _format="numpy.ndarray:external"
             ),
             uid="numpy.ndarray:external",
             source_pckg="muutils.zanj",
@@ -178,7 +179,7 @@ DEFAULT_SERIALIZER_HANDLERS_ZANJ: MonoTuple[ZANJSerializerHandler] = tuple(
                 and int(obj.nelement()) >= self.external_array_threshold
             ),
             serialize_func=lambda self, obj, path: zanj_external_serialize(
-                self, obj, path, item_type="npy"
+                self, obj, path, item_type="npy", _format="torch.Tensor:external"
             ),
             uid="torch.Tensor:external",
             source_pckg="muutils.zanj",
@@ -188,7 +189,7 @@ DEFAULT_SERIALIZER_HANDLERS_ZANJ: MonoTuple[ZANJSerializerHandler] = tuple(
             check=lambda self, obj, path: isinstance(obj, list)
             and len(obj) >= self.external_table_threshold,
             serialize_func=lambda self, obj, path: zanj_external_serialize(
-                self, obj, path, item_type="jsonl"
+                self, obj, path, item_type="jsonl", _format="list:external"
             ),
             uid="list:external",
             source_pckg="muutils.zanj",
@@ -198,7 +199,7 @@ DEFAULT_SERIALIZER_HANDLERS_ZANJ: MonoTuple[ZANJSerializerHandler] = tuple(
             check=lambda self, obj, path: isinstance(obj, tuple)
             and len(obj) >= self.external_table_threshold,
             serialize_func=lambda self, obj, path: zanj_external_serialize(
-                self, obj, path, item_type="jsonl"
+                self, obj, path, item_type="jsonl", _format="tuple:external"
             ),
             uid="tuple:external",
             source_pckg="muutils.zanj",
@@ -208,22 +209,22 @@ DEFAULT_SERIALIZER_HANDLERS_ZANJ: MonoTuple[ZANJSerializerHandler] = tuple(
             check=lambda self, obj, path: isinstance(obj, pd.DataFrame)
             and len(obj) >= self.external_table_threshold,
             serialize_func=lambda self, obj, path: zanj_external_serialize(
-                self, obj, path, item_type="jsonl"
+                self, obj, path, item_type="jsonl", _format="pandas.DataFrame:external"
             ),
             uid="pandas.DataFrame:external",
             source_pckg="muutils.zanj",
             desc="external pandas DataFrame",
         ),
-        ZANJSerializerHandler(
-            check=lambda self, obj, path: "<class 'torch.nn.modules.module.Module'>"
-            in [str(t) for t in obj.__class__.__mro__],
-            serialize_func=lambda self, obj, path: zanj_serialize_torchmodule(
-                self, obj, path
-            ),
-            uid="torch.nn.Module",
-            source_pckg="muutils.zanj",
-            desc="fallback torch serialization",
-        ),
+        # ZANJSerializerHandler(
+        #     check=lambda self, obj, path: "<class 'torch.nn.modules.module.Module'>"
+        #     in [str(t) for t in obj.__class__.__mro__],
+        #     serialize_func=lambda self, obj, path: zanj_serialize_torchmodule(
+        #         self, obj, path, 
+        #     ),
+        #     uid="torch.nn.Module",
+        #     source_pckg="muutils.zanj",
+        #     desc="fallback torch serialization",
+        # ),
     ]
 ) + tuple(
     DEFAULT_HANDLERS  # type: ignore[arg-type]

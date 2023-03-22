@@ -7,6 +7,7 @@ from pathlib import Path
 from typing import Any, Callable, Literal, Iterable
 
 import numpy as np
+import torch
 
 from muutils.json_serialize.json_serialize import ObjectPath
 from muutils.json_serialize.util import JSONdict, JSONitem, MonoTuple, ErrorMode
@@ -15,6 +16,7 @@ from muutils.zanj.externals import (
     ZANJ_MAIN,
     ZANJ_META,
     _ZANJ_pre,
+    ExternalItem,
     ExternalItemType,
     ExternalItemType_vals,
 )
@@ -25,10 +27,10 @@ from muutils.zanj.externals import (
 class LoaderHandler:
     """handler for loading an object from a json file or a ZANJ archive"""
 
-    # (zanj_obj, json_data, path) -> whether to use this handler
-    check: Callable[[JSONitem, ObjectPath, _ZANJ_pre], bool]
-    # function to load the object (zanj_obj, json_data, path) -> loaded_obj
-    load: Callable[[JSONitem, ObjectPath, _ZANJ_pre], Any]
+    # (json_data, path) -> whether to use this handler
+    check: Callable[[JSONitem, ObjectPath], bool]
+    # function to load the object (json_data, path) -> loaded_obj
+    load: Callable[[JSONitem, ObjectPath], Any]
     # unique identifier for the handler, saved in __format__ field
     uid: str
     # source package of the handler -- note that this might be overridden by ZANJ
@@ -49,8 +51,8 @@ class LoaderHandler:
         assert isinstance(fc.__format__, str)  # type: ignore
 
         return cls(
-            check=lambda json_item, path, zanj_obj: json_item["__format__"] == fc.__format__,
-            load=lambda json_item, path, zanj_obj: fc.load(json_item),
+            check=lambda json_item, path: json_item["__format__"] == fc.__format__,
+            load=lambda json_item, path: fc.load(json_item),
             uid=fc.__format__,
             source_pckg=str(fc.__module__),
             priority=priority,
@@ -61,13 +63,15 @@ class LoaderHandler:
 # NOTE: there are type ignores on the loaders, since the type checking should be the responsibility of the check function
 
 LOADER_HANDLERS: list[LoaderHandler] = [
+
+    # array inline
     LoaderHandler(
-        check=lambda json_item, path, _=None: (
+        check=lambda json_item, path=None: (
             isinstance(json_item, typing.Mapping)
             and "__format__" in json_item
             and json_item["__format__"] == "array_list_meta"
         ),
-        load=lambda json_item, path, _=None: (
+        load=lambda json_item, path=None: (
             np.array(json_item["data"], dtype=json_item["dtype"]).reshape(  # type: ignore
                 json_item["shape"]  # type: ignore
             )
@@ -77,12 +81,12 @@ LOADER_HANDLERS: list[LoaderHandler] = [
         desc="array_list_meta loader",
     ),
     LoaderHandler(
-        check=lambda json_item, path, _=None: (
+        check=lambda json_item, path=None: (
             isinstance(json_item, typing.Mapping)
             and "__format__" in json_item
             and json_item["__format__"] == "array_hex_meta"
         ),
-        load=lambda json_item, path, _: (
+        load=lambda json_item, path: (
             np.frombuffer(
                 bytes.fromhex(json_item["data"]), dtype=json_item["dtype"]  # type: ignore
             ).reshape(
@@ -92,6 +96,37 @@ LOADER_HANDLERS: list[LoaderHandler] = [
         uid="array_hex_meta",
         source_pckg="muutils.zanj",
         desc="array_hex_meta loader",
+    ),
+    # array external
+    LoaderHandler(
+        check=lambda json_item, path: (
+            isinstance(json_item, dict)
+            and "__format__" in json_item
+            and json_item["__format__"] == "npy:external"
+            and "$ref" in json_item
+            and isinstance(json_item["data"], np.ndarray)
+            and json_item["data"].dtype.name == json_item["dtype"]
+            and tuple(json_item["data"].shape) == tuple(json_item["shape"])
+        ),
+        load=lambda json_item, path: json_item["data"],
+        uid="npy:external",
+        source_pckg="muutils.zanj",
+        desc="npy:external loader",
+    ),
+    LoaderHandler(
+        check=lambda json_item, path: (
+            isinstance(json_item, dict)
+            and "__format__" in json_item
+            and json_item["__format__"] == "tensor:external"
+            and "$ref" in json_item
+            and isinstance(json_item["data"], torch.Tensor)
+            and json_item["data"].dtype.name == json_item["dtype"]
+            and tuple(json_item["data"].shape) == tuple(json_item["shape"])
+        ),
+        load=lambda json_item, path: json_item["data"],
+        uid="tensor:external",
+        source_pckg="muutils.zanj",
+        desc="tensor:external loader",
     ),
 ]
 
@@ -111,9 +146,6 @@ def _update_loaders():
 
 def register_loader_handler(handler: LoaderHandler):
     """register a custom loader handler"""
-    assert not isinstance(
-        handler, LoaderHandler
-    ), "use register_loader_handler_zanj for LoaderHandlers"
     LOADER_HANDLERS.append(handler)
     _update_loaders()
 
@@ -153,134 +185,62 @@ def get_item_loader(
     # if we still dont have a loader, return None
     return None
 
+def load_item(
+    json_item: JSONitem,
+    path: ObjectPath,
+    zanj: _ZANJ_pre | None = None,
+    error_mode: ErrorMode = "warn",
+    lh_map: dict[str, LoaderHandler] = LOADER_MAP,
+) -> Any:
+    lh = get_item_loader(
+        json_item = json_item,
+        path = path,
+        zanj = zanj,
+        error_mode = error_mode,
+        lh_map = lh_map,
+    )
 
-
-
-def _external_load(json_item: JSONitem, path: ObjectPath, zanj: _ZANJ_pre) -> Any:
-    """load an external object"""
-    assert isinstance(json_item, typing.Mapping)
-    assert "$ref" in json_item
-    assert isinstance(json_item["$ref"], str)
-    assert "__format__" in json_item
-    assert json_item["__format__"].endswith(":external")
-    assert json_item["$ref"] in zanj._externals
-
-    externally_loaded = zanj._externals[json_item["$ref"]]
-    
-    new_loader: LoaderHandler | None = get_item_loader(externally_loaded, path, zanj)
-
-    if new_loader is None:
-        return externally_loaded
+    if lh is None:
+        return json_item
     else:
-        return new_loader.load(externally_loaded, path, zanj)
+        return lh.load(zanj, json_item, path)
 
-# add the special externals loader
 
-LoaderHandler(
-    check=lambda json_item, path, zanj: (
-        isinstance(json_item, typing.Mapping)
-        and "__format__" in json_item
-        and json_item["__format__"].endswith(":external")
-    ),
-    # load function should strip the "external" and load again
-    load=_external_load,  # type: ignore
-    uid="external",
-    source_pckg="muutils.zanj",
-    priority=999,
-    desc="external object loader",
+# add recursive loaders of base list and dict
+register_loader_handler(
+    LoaderHandler(
+        check=lambda json_item, path=None: isinstance(json_item, list),
+        load=lambda json_item, path=None: [
+            load_item(item, tuple(path) + (i,)) for i, item in enumerate(json_item)
+        ],
+        uid="list_recursive",
+        source_pckg="muutils.zanj",
+        priority=-9999,
+        desc="recursive list loader",
+    )       
+)
+
+register_loader_handler(
+    LoaderHandler(
+        check=lambda json_item, path=None: isinstance(json_item, dict),
+        load=lambda json_item, path=None: {
+            key: load_item(item, tuple(path) + (key,)) for key, item in json_item.items()
+        },
+        uid="dict_recursive",
+        source_pckg="muutils.zanj",
+        priority=-9999,
+        desc="recursive dict loader",
+    )
 )
 
 
-
-
-@dataclass
-class ZANJLoaderTreeNode(typing.Mapping):
-    """acts like a regular dictionary or list, but applies loaders to items
-    
-    # TODO: this whole class is buggy. Is there a better way to do this?
-
-    does this by passing `_parent` down the stack, whenever you get an item from the container.
-    """
-
-    _parent: "LoadedZANJ"
-    _data: JSONdict | list[JSONitem]
-
-    def __getitem__(self, key: str | int) -> Any:
-        # make sure we have a string key for dict, int key for list
-        # --------------------------------------------------
-        val: JSONitem
-        if (isinstance(self._data, typing.Sequence) and isinstance(key, int)) or (
-            isinstance(self._data, typing.Mapping) and isinstance(key, str)
-        ):
-            # not sure why mypy is complaining, we are performing all checks
-            val = self._data[key]  # type: ignore
-        else:
-            raise KeyError(
-                f"invalid key type {type(key) = }, {key = } for {self._data = } with {type(self._data) = }"
-            )
-
-        # get value or dereference
-        # --------------------------------------------------
-        if isinstance(key, str) and (key == "$ref"):
-            # dereference
-            assert isinstance(
-                val, str
-            ), f"invalid $ref type: {type(val) = } for {val = }"
-            val = self._parent._externals[val]
-        else:
-            # get value
-            val = self._data[key]  # type: ignore
-
-        # nest tree node if necessary
-        # --------------------------------------------------
-        tree_val: ZANJLoaderTreeNode | JSONitem
-        if isinstance(val, (dict, list)):
-            tree_val = ZANJLoaderTreeNode(_parent=self._parent, _data=val)
-        else:
-            tree_val = val
-
-        # apply loaders, if one exists
-        # --------------------------------------------------
-        item_path: ObjectPath = tuple(self._parent._path) + (key,)
-        lh: LoaderHandler | None = get_item_loader(
-            zanj=self._parent._zanj,
-            json_item=tree_val,
-            path=item_path,
-            lh_map=self._parent._loader_handlers,
-            error_mode=self._parent._format_error_mode,
-        )
-        if lh is not None:
-            return lh.load(self._parent, tree_val, self._parent._path)
-
-        return tree_val
-
-    def __iter__(self):
-        yield from self._data
-
-    def __len__(self):
-        return len(self._data)
-
-
-
-
-# TODO: this needs to be refactored 
-class LoadedZANJ(typing.Mapping):
-    """object loaded from ZANJ archive. acts like a dict."""
-
+class LoadedZANJ:
+    """for loading a zanj file"""
     def __init__(
         self,
-        # config
         path: str | Path,
         zanj: _ZANJ_pre,
-        loader_handlers: dict[str, LoaderHandler] | None = None,
     ) -> None:
-
-        # copy handlers
-        self._loader_handlers: dict[str, LoaderHandler]
-        if loader_handlers is not None:
-            self._loader_handlers = loader_handlers
-        else:
-            self._loader_handlers = LOADER_MAP
 
         # path and zanj object
         self._path: str = str(path)
@@ -290,26 +250,36 @@ class LoadedZANJ(typing.Mapping):
         self._zipf: zipfile.ZipFile = zipfile.ZipFile(file=self._path, mode="r")
 
         # load data
-        self._meta: dict = json.load(self._zipf.open(ZANJ_META, "r"))
-        self._json_data: ZANJLoaderTreeNode = ZANJLoaderTreeNode(
-            _parent=self,
-            _data=json.load(self._zipf.open(ZANJ_MAIN, "r")),
-        )
+        self._meta: JSONdict = json.load(self._zipf.open(ZANJ_META, "r"))
+        self._json_data: JSONitem = json.load(self._zipf.open(ZANJ_MAIN, "r"))
 
-        # externals
-        self._externals: dict[str, Any] = dict()
-
-        for fname, val in self._meta["externals_info"].items():
-            item_type: str = val["item_type"]
+        # read externals
+        self._externals: dict[str, ExternalItem] = dict()
+        for fname, ext_item in self._meta["externals_info"].items():
+            item_type: str = ext_item["item_type"]
             with self._zipf.open(fname, "r") as fp:
-                self._externals[fname] = GET_EXTERNAL_LOAD_FUNC(item_type)(self, fp)
+                self._externals[fname] = ExternalItem(
+                    item_type=item_type,
+                    data=GET_EXTERNAL_LOAD_FUNC(item_type)(self, fp),
+                    path=ext_item["path"],
+                )
 
-    def __getitem__(self, key: str) -> Any:
-        """get the value of the given key"""
-        return self._json_data[key]
+    def populate_externals(self) -> None:
+        """put all external items into the main json data"""
 
-    def __iter__(self):
-        return iter(self._json_data)
+        for ext_path, ext_item in self._externals.items():
+            # get the path to the item
+            path: ObjectPath = tuple(ext_item.path)
+            assert len(path) > 0
+            assert all(isinstance(key, (str, int)) for key in path)
+            # get the item
+            item: JSONitem = self._json_data
+            for key in path:
+                item = item[key]
+            # replace the item with the external item
+            assert "$ref" in item
+            assert item["$ref"] == ext_path
+            item["data"] = ext_item.data
 
-    def __len__(self):
-        return len(self._json_data)
+
+

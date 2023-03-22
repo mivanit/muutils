@@ -4,6 +4,7 @@ import json
 from typing import IO, Any, Callable, Literal, NamedTuple, get_args, Sequence
 
 import numpy as np
+import torch
 
 from muutils.json_serialize.util import JSONitem
 from muutils.json_serialize.json_serialize import JsonSerializer, ObjectPath
@@ -15,7 +16,7 @@ _ZANJ_pre = Any
 ZANJ_MAIN: str = "__zanj__.json"
 ZANJ_META: str = "__zanj_meta__.json"
 
-ExternalItemType = Literal["npy", "jsonl"]
+ExternalItemType = Literal["jsonl", "npy", "tensor"]
 
 ExternalItemType_vals = get_args(ExternalItemType)
 
@@ -28,18 +29,20 @@ ExternalItem = NamedTuple(
     ],
 )
 
+def load_jsonl(zanj: "LoadedZANJ", fp: IO[bytes]) -> list[JSONitem]:  # type: ignore[name-defined]
+    return [json.loads(line) for line in fp]
 
 def load_npy(zanj: "LoadedZANJ", fp: IO[bytes]) -> NDArray:  # type: ignore[name-defined]
     return np.load(fp)
 
-
-def load_jsonl(zanj: "LoadedZANJ", fp: IO[bytes]) -> list[JSONitem]:  # type: ignore[name-defined]
-    return [json.loads(line) for line in fp]
+def load_tensor(zanj: "LoadedZANJ", fp: IO[bytes]) -> torch.Tensor:  # type: ignore[name-defined]
+    return torch.tensor(np.load(fp))
 
 
 EXTERNAL_LOAD_FUNCS: dict[ExternalItemType, Callable[[_ZANJ_pre, IO[bytes]], Any]] = {
-    "npy": load_npy,
     "jsonl": load_jsonl,
+    "npy": load_npy,
+    "tensor": load_tensor,
 }
 
 

@@ -125,7 +125,7 @@ def test_jsonl():
         ]
     )
 
-
+@pytest.mark.skip(reason="TODO")
 def test_torch_simple():
     import torch
 

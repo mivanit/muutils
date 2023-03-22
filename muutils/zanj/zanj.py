@@ -33,6 +33,7 @@ from muutils.zanj.loading import (
     LOADER_MAP,
     LoadedZANJ,
     LoaderHandler,
+    load_item,
 )
 from muutils.zanj.serializing import (
     DEFAULT_SERIALIZER_HANDLERS_ZANJ,
@@ -181,13 +182,15 @@ class ZANJ(JsonSerializer):
         self,
         path: Union[str, Path],
         loader_handlers: dict[str, LoaderHandler] = LOADER_MAP,
-    ) -> Any:
+    ) -> JSONitem:
         """load the object from a ZANJ archive"""
-        return LoadedZANJ(
+        loaded_zanj: LoadedZANJ = LoadedZANJ(
             path=path,
             zanj=self,
-            loader_handlers=loader_handlers,
         )
 
+        loaded_zanj.populate_externals()
+
+        return load_item(loaded_zanj._json_data, path=tuple())
 
 _ZANJ_pre = ZANJ  # type: ignore

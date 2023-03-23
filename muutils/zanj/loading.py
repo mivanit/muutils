@@ -129,7 +129,7 @@ LOADER_HANDLERS: list[LoaderHandler] = [
         source_pckg="muutils.zanj",
         desc="torch.Tensor:external loader",
     ),
-    # pandas external
+    # pandas
     LoaderHandler(
         check=lambda json_item, path: (
             isinstance(json_item, dict)
@@ -178,15 +178,6 @@ def get_item_loader(
     if isinstance(json_item, typing.Mapping) and "__format__" in json_item:
         if json_item["__format__"] in lh_map:
             return lh_map[json_item["__format__"]]
-        else:
-            if error_mode == "warn":
-                warnings.warn(f"unknown format {json_item['__format__']} at {path}")
-            elif error_mode == "except":
-                raise ValueError(f"unknown format {json_item['__format__']} at {path}")
-            elif error_mode == "ignore":
-                pass
-            else:
-                raise ValueError(f"invalid error mode {error_mode}")
 
     # if we dont recognize the format, try to find a loader that can handle it
     for key, lh in lh_map.items():
@@ -203,6 +194,7 @@ def load_item_recursive(
     zanj: _ZANJ_pre | None = None,
     error_mode: ErrorMode = "warn",
     lh_map: dict[str, LoaderHandler] = LOADER_MAP,
+    allow_not_loading: bool = True,
 ) -> Any:
     lh = get_item_loader(
         json_item=json_item,
@@ -238,7 +230,10 @@ def load_item_recursive(
         elif isinstance(json_item, (str, int, float, bool, type(None))):
             return json_item
         else:
-            raise ValueError(f"unknown type {type(json_item)} at {path}\n{json_item}")
+            if allow_not_loading:
+                return json_item
+            else:
+                raise ValueError(f"unknown type {type(json_item)} at {path}\n{json_item}")
     else:
         return lh.load(json_item, path)
 
@@ -291,10 +286,12 @@ class LoadedZANJ:
             assert item["$ref"] == ext_path
             item["data"] = ext_item.data
 
-    def load_recursive(self) -> Any:
-        """load the main json data recursively"""
+            item = load_item_recursive(
+                json_item=item,
+                path=path,
+                zanj=self._zanj,
+            )
 
-        return
 
 
 _update_loaders()

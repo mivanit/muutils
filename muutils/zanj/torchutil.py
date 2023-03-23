@@ -5,15 +5,13 @@ from typing import Type, Any, Callable, Iterable, TypeVar
 
 import torch
 
-from muutils.json_serialize import BASE_HANDLERS, JSONitem, JsonSerializer
-from muutils.json_serialize.util import JSONdict
-from muutils.zanj import ZANJ
-from muutils.zanj.loading import LoadedZANJ
+from muutils.json_serialize import JSONitem, serializable_dataclass, serializable_field, SerializableDataclass
+from muutils.zanj import ZANJ, register_loader_handler
+from muutils.zanj.loading import LoaderHandler
 
 # pylint: disable=protected-access
 
 KWArgs = Any
-
 
 def num_params(m: torch.nn.Module, only_trainable: bool = True):
     """return total number of parameters in a model
@@ -50,37 +48,8 @@ def get_device(
         return False, devs
 
 
-# "error: Only concrete class can be given where Type[Abstract] is expected"
-# this is a mypy issue, see
-# https://github.com/python/mypy/issues/5374
-# https://github.com/python/mypy/issues/4717
-@dataclass  # type: ignore
-class ModelConfig(metaclass=abc.ABCMeta):
-    """configuration for a pytorch model
 
-    - needs to implement:
-      - `load()`, a class method which will load a model from a serialized object (JSONitem)
-    - allows better loading and saving to ZANJ
-    - more consistent reproducibility of models
-
-    used in `ConfiguredModel` class
-
-    TODO: automatic mapping of loss functions and optimizers (string to class)
-    """
-
-    @classmethod
-    @abc.abstractclassmethod
-    def load(cls, obj: JSONdict) -> "ModelConfig":
-        """load a model config from a serialized object"""
-        raise NotImplementedError()
-
-    @abc.abstractmethod
-    def serialize(self, jser: JsonSerializer | None = None) -> JSONitem:
-        """serialize this object to JSON"""
-        raise NotImplementedError()
-
-
-T_config = TypeVar("T_config", bound=ModelConfig)
+T_config = TypeVar("T_config", bound=SerializableDataclass)
 
 
 class ConfiguredModel(
@@ -109,26 +78,21 @@ class ConfiguredModel(
 
         self.config: T_config = config
 
-    def save(self, file_path: str, zanj: ZANJ | None) -> None:
-        """save the model to a file"""
-        if zanj is None:
-            zanj = ZANJ()
-
-        zanj.save(
-            obj=dict(
-                model=self,
-                config=self.config,
-                meta=dict(
-                    class_name=self.__class__.__name__,
-                    module_name=self.__class__.__module__,
-                    num_params=num_params(self),
-                ),
+    def serialize(self) -> dict[str, Any]:
+        obj=dict(
+            config=self.config.serialize(),
+            meta=dict(
+                class_name=self.__class__.__name__,
+                class_doc=self.__class__.__doc__,
+                module_name=self.__class__.__module__,
+                num_params=num_params(self),
             ),
-            file_path=file_path,
+            state_dict=self.state_dict(),
         )
+        return obj
 
     @classmethod
-    def load(cls, obj: dict[str, Any] | LoadedZANJ) -> "ConfiguredModel":
+    def load(cls, obj: dict[str, Any]) -> "ConfiguredModel":
         """load a model from a serialized object"""
 
         # get the config
@@ -148,18 +112,29 @@ class ConfiguredModel(
         if zanj is None:
             zanj = ZANJ()
 
-        return cls.load(zanj.read(file_path, externals_mode="full"))
+        mdl = zanj.read(file_path)
+        assert isinstance(mdl, cls)
+        return mdl
+
+
+    def register_handlers
 
 
 def set_config_class(
-    config_class: Type[ModelConfig],
+    config_class: Type[SerializableDataclass],
 ) -> typing.Callable[[Type[ConfiguredModel]], Type[ConfiguredModel]]:
 
-    if not issubclass(config_class, ModelConfig):
-        raise TypeError(f"{config_class} must be a subclass of ModelConfig")
+    if not issubclass(config_class, SerializableDataclass):
+        raise TypeError(f"{config_class} must be a subclass of SerializableDataclass")
 
     def wrapper(cls: Type[ConfiguredModel]) -> Type[ConfiguredModel]:
+        # set the config class
         cls._config_class = config_class
+
+        cls_name: str = cls.__name__
+
+        # return the new class
         return cls
+
 
     return wrapper

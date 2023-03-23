@@ -10,44 +10,9 @@ import pytest
 from muutils.json_serialize.json_serialize import JsonSerializer
 from muutils.json_serialize.util import JSONdict
 from muutils.zanj import ZANJ
-from muutils.json_serialize import JSONitem
+from muutils.json_serialize import JSONitem, serializable_dataclass, SerializableDataclass, serializable_field
 
 np.random.seed(0)
-
-
-def _assert_mappings_equal(m1, m2) -> bool:
-    shared_keys = set(m1.keys()) & set(m2.keys())
-
-    for k in shared_keys:
-        assert k in m1
-        assert k in m2
-
-        v1 = m1[k]
-        v2 = m2[k]
-
-        if isinstance(v1, typing.Mapping):
-            assert isinstance(v2, typing.Mapping)
-            _assert_mappings_equal(v1, v2)
-        else:
-            if isinstance(v1, Iterable):
-                assert isinstance(v2, Iterable)
-                assert len(v1) == len(v2), f"{len(v1)} != {len(v2)}"
-
-                tval = v1 == v2
-
-                if hasattr(tval, "all") and callable(tval.all):
-                    assert v1.shape == v2.shape, f"{v1.shape} != {v2.shape}"
-                    assert tval.all()
-                else:
-                    if isinstance(tval, Iterable):
-                        assert all(tval)
-                    else:
-                        assert isinstance(tval, bool)
-                        assert tval
-            else:
-                assert tval
-
-    return True
 
 
 TEST_DATA_PATH: Path = Path("tests/junk_data")
@@ -127,33 +92,13 @@ def test_jsonl():
         ]
     )
 
-
-@pytest.mark.skip(reason="TODO")
-def test_torch_simple():
-    import torch
-
-    SimpleNetwork = torch.nn.Sequential(
-        torch.nn.Linear(128, 32),
-        torch.nn.ReLU(),
-        torch.nn.Linear(32, 2),
-        torch.nn.Softmax(dim=1),
-    )
-    fname: Path = TEST_DATA_PATH / "test_torch.zanj"
-    z: ZANJ = ZANJ()
-    z.save(SimpleNetwork, fname)
-    recovered_data = z.read(fname)
-
-    assert SimpleNetwork == recovered_data
-
-
-@pytest.mark.skip(reason="TODO")
 def test_torch_configmodel():
     import torch
 
-    from muutils.zanj.torchutil import ConfiguredModel, ModelConfig, set_config_class
+    from muutils.zanj.torchutil import ConfiguredModel, set_config_class
 
-    @dataclass
-    class MyGPTConfig(ModelConfig):
+    @serializable_dataclass
+    class MyGPTConfig(SerializableDataclass):
         """basic test GPT config"""
 
         n_layers: int
@@ -162,15 +107,30 @@ def test_torch_configmodel():
         n_positions: int
         n_vocab: int
 
-        # override here is returning `MyGPTConfig` instead of `ModelConfig`
-        @classmethod
-        def load(cls, obj: JSONdict) -> "MyGPTConfig":  # type: ignore[override]
-            """load the model from a path"""
-            return cls(**obj)  # type: ignore[arg-type]
+        loss_factory: torch.nn.modules.loss._Loss = serializable_field(
+            default_factory=lambda: torch.nn.CrossEntropyLoss,
+            serialization_fn=lambda x: x.__name__,
+            loading_fn=lambda x: getattr(torch.nn, x["loss_factory"]),
+        )
 
-        def serialize(self, jser: JsonSerializer | None = None) -> JSONitem:
-            """serialize the model to a path"""
-            return asdict(self)
+        loss_kwargs: dict = serializable_field(default_factory=dict)
+
+        @property
+        def loss(self):
+            return self.loss_factory(**self.loss_kwargs)
+
+        optim_factory: torch.optim.Optimizer = serializable_field(
+            default_factory=lambda: torch.optim.Adam,
+            serialization_fn=lambda x: x.__name__,
+            loading_fn=lambda x: getattr(torch.optim, x),
+        )
+
+        optim_kwargs: dict = serializable_field(default_factory=dict)
+
+        @property
+        def optim(self, model):
+            return self.optim_factory(model.parameters(), **self.optim_kwargs)
+
 
     @set_config_class(MyGPTConfig)
     class MyGPT(ConfiguredModel[MyGPTConfig]):
@@ -197,6 +157,7 @@ def test_torch_configmodel():
         embedding_size=16,
         n_positions=16,
         n_vocab=128,
+        loss_factory=torch.nn.CrossEntropyLoss,
     )
 
     model: MyGPT = MyGPT(config)
@@ -211,6 +172,11 @@ def test_torch_configmodel():
     model2: MyGPT = MyGPT.load_file(fname)
     print(f"loaded model from {fname}")
     print(f"{model2.config = }")
+
+    assert model.config == model2.config
+    
+    for k, v in model.state_dict().items():
+        assert torch.allclose(model.state_dict()[k], model2.state_dict()[k])
 
 
 if __name__ == "__main__":

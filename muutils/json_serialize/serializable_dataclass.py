@@ -95,8 +95,26 @@ class SerializableField(dataclasses.Field):
 
 # Step 2: Create a serializable_field function
 def serializable_field(*args, **kwargs) -> SerializableField:
+    """Create a new SerializableField
+    ```
+    default: Any | dataclasses._MISSING_TYPE = dataclasses.MISSING,
+    default_factory: Callable[[], Any]
+    | dataclasses._MISSING_TYPE = dataclasses.MISSING,
+    init: bool = True,
+    repr: bool = True,
+    hash: Optional[bool] = None,
+    compare: bool = True,
+    metadata: types.MappingProxyType | None = None,
+    kw_only: bool | dataclasses._MISSING_TYPE = dataclasses.MISSING,
+    serialize: bool = True,
+    serialization_fn: Optional[Callable[[Any], Any]] = None,
+    loading_fn: Optional[Callable[[Any], Any]] = None,
+    assert_type: bool = True,
+    ```
+    """
     return SerializableField(*args, **kwargs)
 
+serializable_field.__doc__ = SerializableField.__doc__
 
 T = TypeVar("T")
 

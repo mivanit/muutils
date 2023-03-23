@@ -42,6 +42,27 @@ class LoaderHandler:
     # description of the handler
     desc: str = "(no description)"
 
+    def serialize(self) -> JSONdict:
+        """serialize the handler info"""
+        return {
+            # get the code and doc of the check function
+            "check" : {
+                "code" : self.check.__code__,
+                "doc" : self.check.__doc__,
+            },
+            # get the code and doc of the load function
+            "load" : {
+                "code" : self.load.__code__,
+                "doc" : self.load.__doc__,
+            },
+            # get the uid, source_pckg, priority, and desc
+            "uid" : str(self.uid),
+            "source_pckg" : str(self.source_pckg),
+            "priority" : int(self.priority),
+            "desc" : str(self.desc),
+        }
+    
+
     @classmethod
     def from_formattedclass(cls, fc: type, priority: int = 0):
         """create a loader from a class with `serialize`, `load` methods and `__format__` attribute"""

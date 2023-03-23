@@ -131,7 +131,8 @@ class ZANJ(JsonSerializer):
                     external_array_threshold=self.external_array_threshold,
                     external_table_threshold=self.external_table_threshold,
                     compress=self.compress,
-                    handlers_desc=[str(h.desc) for h in self.handlers],
+                    serialization_handlers={h.uid : h.serialize() for h in self.handlers},
+                    load_handlers={h.uid : h.serialize() for h in LOADER_MAP.values()},
                 ),
                 # system info (python, pip packages, torch & cuda, platform info, git info)
                 sysinfo=SysInfo.get_all(include=("python", "pytorch")),
@@ -162,8 +163,8 @@ class ZANJ(JsonSerializer):
         )
 
         # store base json data and metadata
-        zipf.writestr(ZANJ_MAIN, json.dumps(json_data, indent="\t"))
         zipf.writestr(ZANJ_META, json.dumps(self.meta(), indent="\t"))
+        zipf.writestr(ZANJ_MAIN, json.dumps(json_data, indent="\t"))
 
         # store externals
         for key, (ext_type, ext_data, ext_path) in self._externals.items():

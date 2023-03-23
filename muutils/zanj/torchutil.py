@@ -6,6 +6,7 @@ from typing import Type, Any, Callable, Iterable, TypeVar
 import torch
 
 from muutils.json_serialize import JSONitem, serializable_dataclass, serializable_field, SerializableDataclass
+from muutils.json_serialize.json_serialize import ObjectPath
 from muutils.zanj import ZANJ, register_loader_handler
 from muutils.zanj.loading import LoaderHandler
 
@@ -78,16 +79,19 @@ class ConfiguredModel(
 
         self.config: T_config = config
 
-    def serialize(self) -> dict[str, Any]:
+    def serialize(self, path: ObjectPath = tuple(), zanj: ZANJ|None = None) -> dict[str, Any]:
+        if zanj is None:
+            zanj = ZANJ()
         obj=dict(
             config=self.config.serialize(),
             meta=dict(
                 class_name=self.__class__.__name__,
                 class_doc=self.__class__.__doc__,
                 module_name=self.__class__.__module__,
+                module_mro=[str(x) for x in self.__class__.__mro__],
                 num_params=num_params(self),
             ),
-            state_dict=self.state_dict(),
+            state_dict=zanj.json_serialize(self.state_dict(), path="state_dict"),
         )
         return obj
 
@@ -102,7 +106,7 @@ class ConfiguredModel(
         model: "ConfiguredModel" = cls(config)
 
         # load the state dict
-        model.load_state_dict(obj["model"]["state_dict"])
+        model.load_state_dict(obj["state_dict"])
 
         return model
 
@@ -116,9 +120,22 @@ class ConfiguredModel(
         assert isinstance(mdl, cls)
         return mdl
 
-
-    def register_handlers
-
+    @classmethod
+    def register_handlers(cls):
+        """register handlers for this model"""
+        cls_name: str = cls.__name__
+        register_loader_handler(LoaderHandler(
+            check=lambda json_item, path: (
+                isinstance(json_item, dict)
+                and "__format__" in json_item
+                and json_item["__format__"].startswith(cls_name)
+            ),
+            load=lambda json_item, path: cls.load(json_item),
+            uid=cls_name,
+            source_pckg=cls.__module__,
+            desc=f"{cls.__module__} {cls_name} loader via muutils.zanj.torchutil.ConfiguredModel",
+            )
+        )
 
 def set_config_class(
     config_class: Type[SerializableDataclass],
@@ -131,7 +148,8 @@ def set_config_class(
         # set the config class
         cls._config_class = config_class
 
-        cls_name: str = cls.__name__
+        # register the handlers
+        cls.register_handlers()
 
         # return the new class
         return cls

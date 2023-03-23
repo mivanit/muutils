@@ -178,21 +178,3 @@ def test_torch_configmodel():
     for k, v in model.state_dict().items():
         assert torch.allclose(model.state_dict()[k], model2.state_dict()[k])
 
-
-if __name__ == "__main__":
-    import fire  # type: ignore[import]
-
-    fire.Fire(
-        dict(
-            numpy=test_numpy,
-            jsonl=test_jsonl,
-            torch_simple=test_torch_simple,
-            torch=test_torch_configmodel,
-            all=lambda: [
-                test_numpy(),
-                test_jsonl(),
-                test_torch_simple(),
-                test_torch_configmodel(),
-            ],
-        )
-    )

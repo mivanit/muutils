@@ -9,6 +9,18 @@ from muutils.json_serialize import (
 
 # pylint: disable=missing-class-docstring, unused-variable
 
+@serializable_dataclass
+class Basic_autofields(SerializableDataclass):
+    a: str
+    b: int
+    c: list[int]
+
+
+def test_basic_auto_fields():
+    data = dict(a="hello", b=42, c=[1, 2, 3])
+    instance = Basic_autofields(**data)
+    assert instance.serialize() == data
+
 
 @serializable_dataclass
 class SimpleFields(SerializableDataclass):

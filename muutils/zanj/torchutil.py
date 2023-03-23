@@ -50,7 +50,6 @@ def get_device(
         return False, devs
 
 
-
 # "error: Only concrete class can be given where Type[Abstract] is expected"
 # this is a mypy issue, see
 # https://github.com/python/mypy/issues/5374

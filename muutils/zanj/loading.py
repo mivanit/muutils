@@ -24,6 +24,7 @@ from muutils.zanj.externals import (
 
 # pylint: disable=protected-access, dangerous-default-value
 
+
 @dataclass
 class LoaderHandler:
     """handler for loading an object from a json file or a ZANJ archive"""
@@ -64,7 +65,6 @@ class LoaderHandler:
 # NOTE: there are type ignores on the loaders, since the type checking should be the responsibility of the check function
 
 LOADER_HANDLERS: list[LoaderHandler] = [
-
     # array inline
     LoaderHandler(
         check=lambda json_item, path=None: (
@@ -158,6 +158,7 @@ def _update_loaders():
     # create map, order should be ensured by the sorting
     LOADER_MAP = {lh.uid: lh for lh in LOADER_HANDLERS}
 
+
 def register_loader_handler(handler: LoaderHandler):
     """register a custom loader handler"""
     LOADER_HANDLERS.append(handler)
@@ -195,6 +196,7 @@ def get_item_loader(
     # if we still dont have a loader, return None
     return None
 
+
 def load_item_recursive(
     json_item: JSONitem,
     path: ObjectPath,
@@ -203,33 +205,33 @@ def load_item_recursive(
     lh_map: dict[str, LoaderHandler] = LOADER_MAP,
 ) -> Any:
     lh = get_item_loader(
-        json_item = json_item,
-        path = path,
-        zanj = zanj,
-        error_mode = error_mode,
-        lh_map = lh_map,
+        json_item=json_item,
+        path=path,
+        zanj=zanj,
+        error_mode=error_mode,
+        lh_map=lh_map,
     )
 
     if lh is None:
         if isinstance(json_item, dict):
             return {
                 key: load_item_recursive(
-                    json_item = json_item[key],
-                    path = tuple(path) + (key,),
-                    zanj = zanj,
-                    error_mode = error_mode,
-                    lh_map = lh_map,
+                    json_item=json_item[key],
+                    path=tuple(path) + (key,),
+                    zanj=zanj,
+                    error_mode=error_mode,
+                    lh_map=lh_map,
                 )
                 for key in json_item
             }
         elif isinstance(json_item, list):
             return [
                 load_item_recursive(
-                    json_item = json_item[i],
-                    path = tuple(path) + (i,),
-                    zanj = zanj,
-                    error_mode = error_mode,
-                    lh_map = lh_map,
+                    json_item=json_item[i],
+                    path=tuple(path) + (i,),
+                    zanj=zanj,
+                    error_mode=error_mode,
+                    lh_map=lh_map,
                 )
                 for i in range(len(json_item))
             ]
@@ -240,8 +242,10 @@ def load_item_recursive(
     else:
         return lh.load(json_item, path)
 
+
 class LoadedZANJ:
     """for loading a zanj file"""
+
     def __init__(
         self,
         path: str | Path,
@@ -287,12 +291,10 @@ class LoadedZANJ:
             assert item["$ref"] == ext_path
             item["data"] = ext_item.data
 
-
-
     def load_recursive(self) -> Any:
         """load the main json data recursively"""
 
-        return 
+        return
 
 
 _update_loaders()

@@ -68,7 +68,6 @@ EXTERNAL_STORE_FUNCS: dict[
 }
 
 
-
 @dataclass(kw_only=True)
 class ZANJSerializerHandler(SerializerHandler):
     """a handler for ZANJ serialization"""
@@ -219,7 +218,7 @@ DEFAULT_SERIALIZER_HANDLERS_ZANJ: MonoTuple[ZANJSerializerHandler] = tuple(
         #     check=lambda self, obj, path: "<class 'torch.nn.modules.module.Module'>"
         #     in [str(t) for t in obj.__class__.__mro__],
         #     serialize_func=lambda self, obj, path: zanj_serialize_torchmodule(
-        #         self, obj, path, 
+        #         self, obj, path,
         #     ),
         #     uid="torch.nn.Module",
         #     source_pckg="muutils.zanj",

@@ -199,4 +199,5 @@ class ZANJ(JsonSerializer):
             lh_map=loader_handlers,
         )
 
+
 _ZANJ_pre = ZANJ  # type: ignore

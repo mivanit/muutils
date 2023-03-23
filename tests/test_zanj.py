@@ -14,6 +14,7 @@ from muutils.json_serialize import JSONitem
 
 np.random.seed(0)
 
+
 def _assert_mappings_equal(m1, m2) -> bool:
     shared_keys = set(m1.keys()) & set(m2.keys())
 
@@ -48,7 +49,9 @@ def _assert_mappings_equal(m1, m2) -> bool:
 
     return True
 
+
 TEST_DATA_PATH: Path = Path("tests/junk_data")
+
 
 def array_meta(x: typing.Any) -> dict:
     if isinstance(x, np.ndarray):
@@ -78,11 +81,10 @@ def test_numpy():
 
     print(f"{list(data.keys()) = }")
     print(f"{list(recovered_data.keys()) = }")
-    original_vals: dict = {k: array_meta(v) for k,v in data.items()}
+    original_vals: dict = {k: array_meta(v) for k, v in data.items()}
     print(json.dumps(original_vals, indent=2))
-    recovered_vals: dict = {k: array_meta(v) for k,v in recovered_data.items()}
+    recovered_vals: dict = {k: array_meta(v) for k, v in recovered_data.items()}
     print(json.dumps(recovered_vals, indent=2))
-
 
     assert sorted(list(data.keys())) == sorted(list(recovered_data.keys()))
     # assert all([type(data[k]) == type(recovered_data[k]) for k in data.keys()])
@@ -124,6 +126,7 @@ def test_jsonl():
             data["brain_data"].equals(recovered_data["brain_data"]),
         ]
     )
+
 
 @pytest.mark.skip(reason="TODO")
 def test_torch_simple():

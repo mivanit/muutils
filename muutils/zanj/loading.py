@@ -182,6 +182,7 @@ def _update_loaders():
 
 def register_loader_handler(handler: LoaderHandler):
     """register a custom loader handler"""
+    global LOADER_HANDLERS
     LOADER_HANDLERS.append(handler)
     _update_loaders()
 

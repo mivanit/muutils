@@ -155,7 +155,8 @@ class ZANJ(JsonSerializer):
         self._externals = dict()
 
         # serialize the object -- this will populate self._externals
-        json_data: JSONitem = self.json_serialize(obj)
+        # TODO: calling self.json_serialize again here might be slow
+        json_data: JSONitem = self.json_serialize(self.json_serialize(obj))
 
         # open the zip file
         zipf: zipfile.ZipFile = zipfile.ZipFile(
@@ -163,13 +164,12 @@ class ZANJ(JsonSerializer):
         )
 
         # store base json data and metadata
-        # TODO: calling self.json_serialize again here might be slow
         zipf.writestr(ZANJ_META, json.dumps(
             self.json_serialize(self.meta()), 
             indent="\t",
         ))
         zipf.writestr(ZANJ_MAIN, json.dumps(
-            self.json_serialize(json_data), 
+            json_data, 
             indent="\t",
         ))
 

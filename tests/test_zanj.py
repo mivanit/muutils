@@ -11,6 +11,7 @@ from muutils.json_serialize.json_serialize import JsonSerializer
 from muutils.json_serialize.util import JSONdict
 from muutils.zanj import ZANJ
 from muutils.json_serialize import JSONitem, serializable_dataclass, SerializableDataclass, serializable_field
+from muutils.zanj.loading import register_loader_handler
 
 np.random.seed(0)
 
@@ -122,7 +123,7 @@ def test_torch_configmodel():
         optim_factory: torch.optim.Optimizer = serializable_field(
             default_factory=lambda: torch.optim.Adam,
             serialization_fn=lambda x: x.__name__,
-            loading_fn=lambda x: getattr(torch.optim, x),
+            loading_fn=lambda x: getattr(torch.optim, x["optim_factory"]),
         )
 
         optim_kwargs: dict = serializable_field(default_factory=dict)
@@ -151,6 +152,9 @@ def test_torch_configmodel():
         def forward(self, x):
             return self.transformer(x)
 
+    # TODO: this is horrible, why isnt handler registered in the wrapper?
+    register_loader_handler(MyGPT.get_handler())
+
     config: MyGPTConfig = MyGPTConfig(
         n_layers=2,
         n_heads=2,
@@ -177,4 +181,14 @@ def test_torch_configmodel():
     
     for k, v in model.state_dict().items():
         assert torch.allclose(model.state_dict()[k], model2.state_dict()[k])
+
+
+    model3: MyGPT = ZANJ().read(fname)
+    print(f"loaded model from {fname}")
+    print(f"{model3.config = }")
+
+    assert model.config == model3.config
+
+    for k, v in model.state_dict().items():
+        assert torch.allclose(model.state_dict()[k], model3.state_dict()[k])
 

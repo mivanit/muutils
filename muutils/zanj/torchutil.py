@@ -92,6 +92,7 @@ class ConfiguredModel(
                 num_params=num_params(self),
             ),
             state_dict=self.state_dict(),
+            __format__=self.__class__.__name__,
         )
         return obj
 
@@ -117,14 +118,13 @@ class ConfiguredModel(
             zanj = ZANJ()
 
         mdl = zanj.read(file_path)
-        assert isinstance(mdl, cls)
+        assert isinstance(mdl, cls), f"loaded object must be a {cls}, got {type(mdl)}"
         return mdl
 
     @classmethod
-    def register_handlers(cls):
-        """register handlers for this model"""
-        cls_name: str = cls.__name__
-        register_loader_handler(LoaderHandler(
+    def get_handler(cls) -> LoaderHandler:
+        cls_name: str = str(cls.__name__)
+        return LoaderHandler(
             check=lambda json_item, path: (
                 isinstance(json_item, dict)
                 and "__format__" in json_item
@@ -134,8 +134,8 @@ class ConfiguredModel(
             uid=cls_name,
             source_pckg=cls.__module__,
             desc=f"{cls.__module__} {cls_name} loader via muutils.zanj.torchutil.ConfiguredModel",
-            )
         )
+
 
 def set_config_class(
     config_class: Type[SerializableDataclass],
@@ -149,7 +149,7 @@ def set_config_class(
         cls._config_class = config_class
 
         # register the handlers
-        cls.register_handlers()
+        register_loader_handler(cls.get_handler())
 
         # return the new class
         return cls

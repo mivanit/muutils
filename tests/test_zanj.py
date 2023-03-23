@@ -11,7 +11,7 @@ from muutils.json_serialize.json_serialize import JsonSerializer
 from muutils.json_serialize.util import JSONdict
 from muutils.zanj import ZANJ
 from muutils.json_serialize import JSONitem, serializable_dataclass, SerializableDataclass, serializable_field
-from muutils.zanj.loading import register_loader_handler
+from muutils.zanj.loading import LOADER_HANDLERS, LOADER_MAP, register_loader_handler
 
 np.random.seed(0)
 
@@ -151,9 +151,6 @@ def test_torch_configmodel():
 
         def forward(self, x):
             return self.transformer(x)
-
-    # TODO: this is horrible, why isnt handler registered in the wrapper?
-    register_loader_handler(MyGPT.get_handler())
 
     config: MyGPTConfig = MyGPTConfig(
         n_layers=2,

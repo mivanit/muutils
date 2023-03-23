@@ -101,7 +101,7 @@ class ConfiguredModel(
         """load a model from a serialized object"""
 
         # get the config
-        config: T_config = cls.config_class.load(obj["config"])
+        config: T_config = cls._config_class.load(obj["config"])
 
         # initialize the model
         model: "ConfiguredModel" = cls(config)

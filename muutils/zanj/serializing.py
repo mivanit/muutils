@@ -126,6 +126,7 @@ def zanj_external_serialize(
      - modifies `jser._externals`
     """
     # get the path, make sure its unique
+    assert isinstance(path, tuple), f"path must be a tuple, got {type(path) = } {path = }"
     joined_path: str = "/".join([str(p) for p in path])
     archive_path: str = f"{joined_path}.{item_type}"
 

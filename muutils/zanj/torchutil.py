@@ -91,7 +91,7 @@ class ConfiguredModel(
                 module_mro=[str(x) for x in self.__class__.__mro__],
                 num_params=num_params(self),
             ),
-            state_dict=zanj.json_serialize(self.state_dict(), path="state_dict"),
+            state_dict=self.state_dict(),
         )
         return obj
 

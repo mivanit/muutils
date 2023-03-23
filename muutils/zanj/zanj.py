@@ -163,8 +163,15 @@ class ZANJ(JsonSerializer):
         )
 
         # store base json data and metadata
-        zipf.writestr(ZANJ_META, json.dumps(self.meta(), indent="\t"))
-        zipf.writestr(ZANJ_MAIN, json.dumps(json_data, indent="\t"))
+        # TODO: calling self.json_serialize again here might be slow
+        zipf.writestr(ZANJ_META, json.dumps(
+            self.json_serialize(self.meta()), 
+            indent="\t",
+        ))
+        zipf.writestr(ZANJ_MAIN, json.dumps(
+            self.json_serialize(json_data), 
+            indent="\t",
+        ))
 
         # store externals
         for key, (ext_type, ext_data, ext_path) in self._externals.items():

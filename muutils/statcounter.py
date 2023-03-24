@@ -11,16 +11,26 @@ import numpy as np
 # import pdb
 
 
+# TODO: mypy complains that "torch" is not defined
+# _GeneralArray = Union[np.ndarray, "torch.Tensor"]
+_GeneralArray = np.ndarray
+
+GeneralSequence = Union[Sequence, _GeneralArray]
+
 # pylint: disable=abstract-method
 
 # misc
 # ==================================================
 
 
-def universal_flatten(arr: Sequence, require_rectangular: bool = True) -> Sequence:
+def universal_flatten(
+    arr: GeneralSequence, require_rectangular: bool = True
+) -> GeneralSequence:
     """flattens any iterable"""
-    if hasattr(arr, "flatten"):
-        return arr.flatten()
+
+    # mypy complains that the sequence has no attribute "flatten"
+    if hasattr(arr, "flatten") and callable(arr.flatten):  # type: ignore
+        return arr.flatten()  # type: ignore
     elif not isinstance(arr, Iterable):
         return arr
     else:
@@ -28,7 +38,7 @@ def universal_flatten(arr: Sequence, require_rectangular: bool = True) -> Sequen
         if require_rectangular and (all(elements_iterable) != any(elements_iterable)):
             raise ValueError("arr contains mixed iterable and non-iterable elements")
         if any(elements_iterable):
-            return chain.from_iterable(universal_flatten(x) for x in arr)
+            return list(chain.from_iterable(universal_flatten(x) for x in arr))
         else:
             return arr
 
@@ -206,7 +216,7 @@ class StatCounter(Counter):
     @classmethod
     def from_list_arrays(
         cls,
-        arr: Union[np.ndarray, "torch.Tensor"],
+        arr: _GeneralArray,
         map_func: Callable = float,
     ) -> "StatCounter":
         """calls `map_func` on each element of `universal_flatten(arr)`"""
@@ -217,7 +227,7 @@ class StatCounter(Counter):
 # ==================================================
 
 
-def _compute_err(a: float, b: float, /) -> tuple[dict]:
+def _compute_err(a: float, b: float, /) -> dict[str, float]:
     return dict(
         num_a=float(a),
         num_b=float(b),

@@ -20,10 +20,11 @@ class TimerContext:
 
 
 def filter_time_str(time: str) -> str:
-    """assuming format `hh:mm:ss`, clips off the hours if its 0
-    01234567"""
+    """assuming format `h:mm:ss`, clips off the hours if its 0"""
     if (len(time) == 7) and (time[0] == "0"):
         return time[3:]
+    else:
+        return time
 
 
 class ProgressEstimator:

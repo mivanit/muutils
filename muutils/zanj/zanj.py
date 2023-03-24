@@ -17,6 +17,7 @@ import zipfile
 from pathlib import Path
 from typing import Any, Union
 
+import numpy as np
 import pandas as pd
 
 from muutils.json_serialize.array import ArrayMode, arr_metadata
@@ -27,24 +28,23 @@ from muutils.json_serialize.json_serialize import (
 )
 from muutils.json_serialize.util import ErrorMode, JSONitem, MonoTuple
 from muutils.sysinfo import SysInfo
-from muutils.tensor_utils import NDArray
-from muutils.zanj.externals import ZANJ_MAIN, ZANJ_META, ExternalItem
+from muutils.zanj.externals import ZANJ_MAIN, ZANJ_META, ExternalItem, _ZANJ_pre
 from muutils.zanj.loading import (
-    DEFAULT_LOADER_HANDLERS_ZANJ,
-    ExternalsLoadingMode,
+    LOADER_MAP,
     LoadedZANJ,
-    ZANJLoaderHandler,
+    LoaderHandler,
+    load_item_recursive,
 )
 from muutils.zanj.serializing import (
     DEFAULT_SERIALIZER_HANDLERS_ZANJ,
     EXTERNAL_STORE_FUNCS,
 )
 
-# pylint: disable=protected-access
+# pylint: disable=protected-access, unused-import, dangerous-default-value, line-too-long
 
 ZANJitem = Union[
     JSONitem,
-    NDArray,
+    np.ndarray,
     pd.DataFrame,
 ]
 
@@ -54,9 +54,7 @@ class ZANJ(JsonSerializer):
 
     given an arbitrary object, throw into a zip file, with arrays stored in .npy files, and everything else stored in a json file
 
-    (basically npz file with augemented json)
-
-    # TODO: large tables in JSONL format
+    (basically npz file with json)
 
     - numpy (or pytorch) arrays are stored in paths according to their name and structure in the object
     - everything else about the object is stored in a json file `zanj.json` in the root of the archive, via `muutils.json_serialize.JsonSerializer`
@@ -99,9 +97,9 @@ class ZANJ(JsonSerializer):
         # create the externals, leave it empty
         self._externals: dict[str, ExternalItem] = dict()
 
-    def externals_info(self) -> dict[dict]:
+    def externals_info(self) -> dict[str, dict]:
         """return information about the current externals"""
-        output: dict[dict] = dict()
+        output: dict[str, dict] = dict()
 
         key: str
         item: ExternalItem
@@ -133,7 +131,11 @@ class ZANJ(JsonSerializer):
                     external_array_threshold=self.external_array_threshold,
                     external_table_threshold=self.external_table_threshold,
                     compress=self.compress,
-                    handlers_desc=[str(h.desc) for h in self.handlers],
+                    serialization_handlers={
+                        h.uid: h.serialize() for h in self.handlers
+                    },
+                    # TODO: the load_handlers here don't appear to always be saving the latest values
+                    load_handlers={h.uid: h.serialize() for h in LOADER_MAP.values()},
                 ),
                 # system info (python, pip packages, torch & cuda, platform info, git info)
                 sysinfo=SysInfo.get_all(include=("python", "pytorch")),
@@ -156,7 +158,8 @@ class ZANJ(JsonSerializer):
         self._externals = dict()
 
         # serialize the object -- this will populate self._externals
-        json_data: JSONitem = self.json_serialize(obj)
+        # TODO: calling self.json_serialize again here might be slow
+        json_data: JSONitem = self.json_serialize(self.json_serialize(obj))
 
         # open the zip file
         zipf: zipfile.ZipFile = zipfile.ZipFile(
@@ -164,8 +167,20 @@ class ZANJ(JsonSerializer):
         )
 
         # store base json data and metadata
-        zipf.writestr(ZANJ_MAIN, json.dumps(json_data, indent="\t"))
-        zipf.writestr(ZANJ_META, json.dumps(self.meta(), indent="\t"))
+        zipf.writestr(
+            ZANJ_META,
+            json.dumps(
+                self.json_serialize(self.meta()),
+                indent="\t",
+            ),
+        )
+        zipf.writestr(
+            ZANJ_MAIN,
+            json.dumps(
+                json_data,
+                indent="\t",
+            ),
+        )
 
         # store externals
         for key, (ext_type, ext_data, ext_path) in self._externals.items():
@@ -176,20 +191,30 @@ class ZANJ(JsonSerializer):
         zipf.close()
 
         # clear the externals, again
-        self._externals: dict[str, Any] = dict()
+        self._externals = dict()
 
         return file_path
 
     def read(
         self,
         path: Union[str, Path],
-        externals_mode: ExternalsLoadingMode = "lazy",
-        loader_handlers: MonoTuple[ZANJLoaderHandler] = DEFAULT_LOADER_HANDLERS_ZANJ,
-    ) -> LoadedZANJ:
+        loader_handlers: dict[str, LoaderHandler] = LOADER_MAP,
+    ) -> JSONitem:
         """load the object from a ZANJ archive"""
-        return LoadedZANJ(
+        loaded_zanj: LoadedZANJ = LoadedZANJ(
             path=path,
             zanj=self,
-            externals_mode=externals_mode,
-            loader_handlers=loader_handlers,
         )
+
+        loaded_zanj.populate_externals()
+
+        return load_item_recursive(
+            loaded_zanj._json_data,
+            path=tuple(),
+            zanj=loaded_zanj,
+            error_mode=self.error_mode,
+            # lh_map=loader_handlers,
+        )
+
+
+_ZANJ_pre = ZANJ  # type: ignore

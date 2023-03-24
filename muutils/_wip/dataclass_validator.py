@@ -1,4 +1,4 @@
-from typing import Optional, Tuple, List, Dict, Callable, Union, Literal
+from typing import Optional, Callable, Union, Literal
 
 def dataclass_validator_factory(
         cls,

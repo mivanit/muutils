@@ -15,35 +15,40 @@ ErrorMode = Literal["ignore", "warn", "except"]
 TypeErrorMode = Union[ErrorMode, Literal["try_convert"]]
 
 
-JSONitem = Union[bool, int, float, str, list, dict, None]
+JSONitem = Union[bool, int, float, str, list, dict[str, Any], None]
+JSONdict = dict[str, JSONitem]
 Hashableitem = Union[bool, int, float, str, tuple]
 
+if typing.TYPE_CHECKING:
+    MonoTuple = typing.Sequence
+else:
 
-class MonoTuple:
-    """tuple type hint, but for a tuple of any length with all the same type"""
+    class MonoTuple:
+        """tuple type hint, but for a tuple of any length with all the same type"""
 
-    __slots__ = ()
+        __slots__ = ()
 
-    def __new__(cls, *args, **kwargs):
-        raise TypeError("Type MonoTuple cannot be instantiated.")
+        def __new__(cls, *args, **kwargs):
+            raise TypeError("Type MonoTuple cannot be instantiated.")
 
-    def __init_subclass__(cls, *args, **kwargs):
-        raise TypeError(f"Cannot subclass {cls.__module__}")
+        def __init_subclass__(cls, *args, **kwargs):
+            raise TypeError(f"Cannot subclass {cls.__module__}")
 
-    @typing._tp_cache
-    def __class_getitem__(cls, params):
-        if isinstance(params, (type, types.UnionType)):
-            return types.GenericAlias(tuple, (params, Ellipsis))
-        # test if has len and is iterable
-        elif isinstance(params, Iterable):
-            if len(params) == 0:
-                return tuple
-            elif len(params) == 1:
-                return types.GenericAlias(tuple, (params[0], Ellipsis))
-        else:
-            raise TypeError(
-                f"MonoTuple expects 1 type argument, got {len(params) = } \n\t{params = }"
-            )
+        # idk why mypy thinks there is no such function in typing
+        @typing._tp_cache  # type: ignore
+        def __class_getitem__(cls, params):
+            if isinstance(params, (type, types.UnionType)):
+                return types.GenericAlias(tuple, (params, Ellipsis))
+            # test if has len and is iterable
+            elif isinstance(params, Iterable):
+                if len(params) == 0:
+                    return tuple
+                elif len(params) == 1:
+                    return types.GenericAlias(tuple, (params[0], Ellipsis))
+            else:
+                raise TypeError(
+                    f"MonoTuple expects 1 type argument, got {len(params) = } \n\t{params = }"
+                )
 
 
 class UniversalContainer:
@@ -85,7 +90,7 @@ def try_catch(func: Callable):
 
 
 def _recursive_hashify(obj: Any, force: bool = True) -> Hashableitem:
-    if isinstance(obj, dict):
+    if isinstance(obj, typing.Mapping):
         return tuple((k, _recursive_hashify(v)) for k, v in obj.items())
     elif isinstance(obj, (tuple, list, Iterable)):
         return tuple(_recursive_hashify(v) for v in obj)
@@ -102,10 +107,12 @@ class SerializationException(Exception):
     pass
 
 
-def string_as_lines(s: str) -> list[str]:
+def string_as_lines(s: str | None) -> list[str]:
     """for easier reading of long strings in json, split up by newlines
 
     sort of like how jupyter notebooks do it
     """
-
-    return s.splitlines(keepends=False)
+    if s is None:
+        return list()
+    else:
+        return s.splitlines(keepends=False)

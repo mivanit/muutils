@@ -180,7 +180,7 @@ class sdc_complicated(SerializableDataclass):
     arr2: np.ndarray
     iris_data: pd.DataFrame
     brain_data: pd.DataFrame
-    container: list[Nested] = serializable_field(default_factory=list)
+    container: list[Nested]
 
     tensor: torch.Tensor
 
@@ -213,3 +213,34 @@ def test_sdc_complicated():
     assert instance == recovered
 
 
+@serializable_dataclass
+class sdc_container_explicit(SerializableDataclass):
+    name: str
+    container: list[Nested] = serializable_field(
+        default_factory=list,
+        serialization_fn=lambda c: [n.serialize() for n in c],
+        loading_fn=lambda data: [Nested.load(n) for n in data["container"]],
+    )
+
+
+def test_sdc_container_explicit():
+
+    instance = sdc_container_explicit(
+        "container explicit",
+        container=[
+            Nested(
+                f"n-{n}", 
+                Basic(f"n-{n}_b",
+                n * 10 + 1, 
+                [n + 1, n + 2, n + 10]), 
+                n * np.pi,
+            )
+            for n in range(10)
+        ],
+    )
+    
+    z = ZANJ()
+    path = TEST_DATA_PATH / "test_sdc_container_explicit.zanj"
+    z.save(instance, path)
+    recovered = z.read(path)
+    assert instance == recovered

@@ -233,3 +233,43 @@ def test_custom_serialization():
 
     loaded = CustomSerialization.load(serialized)
     assert loaded == custom
+
+
+
+@serializable_dataclass
+class Nested_with_Container(SerializableDataclass):
+    val_int: int
+    val_str: str
+    val_list: list[Basic_autofields] = serializable_field(
+        default_factory=list,
+        serialization_fn=lambda x: [y.serialize() for y in x],
+        loading_fn=lambda x: [Basic_autofields.load(y) for y in x["val_list"]],
+    )
+ 
+
+def test_nested_with_container():
+
+    instance = Nested_with_Container(
+        val_int=42, 
+        val_str="hello", 
+        val_list=[
+            Basic_autofields(a="a", b=1, c=[1, 2, 3]),
+            Basic_autofields(a="b", b=2, c=[4, 5, 6]),
+        ],
+    )
+
+    serialized = instance.serialize()
+    expected_ser = {
+        "val_int": 42,
+        "val_str": "hello",
+        "val_list": [
+            {"a": "a", "b": 1, "c": [1, 2, 3], "__format__": "Basic_autofields(SerializableDataclass)"},
+            {"a": "b", "b": 2, "c": [4, 5, 6], "__format__": "Basic_autofields(SerializableDataclass)"},
+        ],
+        "__format__": "Nested_with_Container(SerializableDataclass)",
+    }
+
+    assert serialized == expected_ser
+    loaded = Nested_with_Container.load(serialized)
+    assert loaded == instance
+

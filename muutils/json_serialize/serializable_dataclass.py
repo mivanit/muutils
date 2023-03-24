@@ -96,6 +96,11 @@ class SerializableField(dataclasses.Field):
 # Step 2: Create a serializable_field function
 def serializable_field(*args, **kwargs) -> SerializableField:
     """Create a new SerializableField
+
+    note that if not using ZANJ, and you have a class inside a container, you MUST provide
+    `serialization_fn` and `loading_fn` to serialize and load the container.  
+    ZANJ will automatically do this for you.
+
     ```
     default: Any | dataclasses._MISSING_TYPE = dataclasses.MISSING,
     default_factory: Callable[[], Any]

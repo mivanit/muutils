@@ -207,33 +207,33 @@ def load_item_recursive(
     # lh_map: dict[str, LoaderHandler] = LOADER_MAP,
     allow_not_loading: bool = True,
 ) -> Any:
-    lh = get_item_loader(
+    lh: LoaderHandler|None = get_item_loader(
         json_item=json_item,
         path=path,
         zanj=zanj,
         error_mode=error_mode,
         # lh_map=lh_map,
     )
+
     if lh is not None:
         # special case for serializable dataclasses
         if (
                 isinstance(json_item, typing.Mapping) 
                 and ("__format__" in json_item) 
-                and (json_item["__format__"].endswith("(SerializableDataclass"))
+                and ("SerializableDataclass" in json_item["__format__"])
             ):
-            lh.load(
-                {
-                    key: load_item_recursive(
-                        json_item=json_item[key],
-                        path=tuple(path) + (key,),
-                        zanj=zanj,
-                        error_mode=error_mode,
-                    )
-                    for key in json_item
-                },
-                path, 
-                zanj,
-            )
+
+            processed_json_item: dict = {
+                key: load_item_recursive(
+                    json_item=val,
+                    path=tuple(path) + (key,),
+                    zanj=zanj,
+                    error_mode=error_mode,
+                )
+                for key, val in json_item.items()
+            }
+
+            return lh.load(processed_json_item, path, zanj)
             
         else:
             return lh.load(json_item, path, zanj)
@@ -252,13 +252,13 @@ def load_item_recursive(
         elif isinstance(json_item, list):
             return [
                 load_item_recursive(
-                    json_item=json_item[i],
+                    json_item=x,
                     path=tuple(path) + (i,),
                     zanj=zanj,
                     error_mode=error_mode,
                     # lh_map=lh_map,
                 )
-                for i in range(len(json_item))
+                for i, x in enumerate(json_item)
             ]
         elif isinstance(json_item, (str, int, float, bool, type(None))):
             return json_item

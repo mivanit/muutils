@@ -133,6 +133,26 @@ class SerializableDataclass(abc.ABC):
         raise NotImplementedError
 
 
+# NOTE: this will fail silently if ZANJ is not imported
+_ZANJ_backport_create_and_register_loader_handler = lambda *args, **kwargs: None
+
+def register_loader_serializable_dataclass(cls: Type[T]) -> Type[T]:
+    """Register a serializable dataclass with the ZANJ backport"""
+    cls_name: str = cls.__name__
+    _ZANJ_backport_create_and_register_loader_handler(
+        check=lambda json_item, path: (
+            isinstance(json_item, dict)
+            and "__format__" in json_item
+            and json_item["__format__"].startswith(cls_name)
+        ),
+        load=lambda json_item, path: cls.load(json_item),
+        uid=cls_name,
+        source_pckg=cls.__module__,
+        desc=f"{cls.__module__} {cls_name} loader via muutils.json_serialize.serializable_dataclass",
+    )
+    return cls
+
+
 # Step 3: Create a custom serializable_dataclass decorator
 def serializable_dataclass(
     _cls: Optional[Type[T]] = None,
@@ -245,6 +265,9 @@ def serializable_dataclass(
         cls.serialize = serialize  # type: ignore[attr-defined]
         # type is `Callable[[dict], T]`
         cls.load = load  # type: ignore[attr-defined]
+
+        # Register the class with the ZANJ backport
+        register_loader_serializable_dataclass(cls)
 
         return cls
 

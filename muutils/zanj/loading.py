@@ -10,6 +10,7 @@ import numpy as np
 import torch
 import pandas as pd
 
+from muutils.json_serialize import _ZANJ_backport_create_and_register_loader_handler
 from muutils.json_serialize.json_serialize import ObjectPath
 from muutils.json_serialize.util import JSONdict, JSONitem, MonoTuple, ErrorMode
 from muutils.zanj.externals import (
@@ -187,6 +188,28 @@ def register_loader_handler(handler: LoaderHandler):
     LOADER_MAP[handler.uid] = handler
     _update_loaders()
 
+
+def create_and_register_loader_handler(
+    check: Callable[[JSONitem, ObjectPath], bool],
+    load: Callable[[JSONitem, ObjectPath], Any],
+    uid: str,
+    source_pckg: str,
+    priority: int = 0,
+    desc: str = "",
+):
+    """create and register a custom loader handler"""
+    lh = LoaderHandler(
+        check=check,
+        load=load,
+        uid=uid,
+        source_pckg=source_pckg,
+        priority=priority,
+        desc=desc,
+    )
+
+    register_loader_handler(lh)
+
+_ZANJ_backport_create_and_register_loader_handler = create_and_register_loader_handler
 
 def get_item_loader(
     json_item: JSONitem,

@@ -13,6 +13,7 @@ import pandas as pd
 from muutils.json_serialize.serializable_dataclass import _ZANJ_backport_create_and_register_loader_handler
 from muutils.json_serialize.json_serialize import ObjectPath
 from muutils.json_serialize.util import JSONdict, JSONitem, MonoTuple, ErrorMode
+from muutils.json_serialize.array import load_array, load_array_into_item
 from muutils.zanj.externals import (
     GET_EXTERNAL_LOAD_FUNC,
     ZANJ_MAIN,
@@ -90,80 +91,79 @@ class LoaderHandler:
 # NOTE: there are type ignores on the loaders, since the type checking should be the responsibility of the check function
 
 LOADER_HANDLERS: list[LoaderHandler] = [
-    # array inline
-    LoaderHandler(
-        check=lambda json_item, path=None, z=None: (
-            isinstance(json_item, typing.Mapping)
-            and "__format__" in json_item
-            and json_item["__format__"] == "array_list_meta"
-        ),
-        load=lambda json_item, path=None, z=None: (
-            np.array(json_item["data"], dtype=json_item["dtype"]).reshape(  # type: ignore
-                json_item["shape"]  # type: ignore
-            )
-        ),
-        uid="array_list_meta",
-        source_pckg="muutils.zanj",
-        desc="array_list_meta loader",
-    ),
-    LoaderHandler(
-        check=lambda json_item, path=None, z=None: (
-            isinstance(json_item, typing.Mapping)
-            and "__format__" in json_item
-            and json_item["__format__"] == "array_hex_meta"
-        ),
-        load=lambda json_item, path=None, z=None: (
-            np.frombuffer(
-                bytes.fromhex(json_item["data"]), dtype=json_item["dtype"]  # type: ignore
-            ).reshape(
-                json_item["shape"]  # type: ignore
-            )
-        ),
-        uid="array_hex_meta",
-        source_pckg="muutils.zanj",
-        desc="array_hex_meta loader",
-    ),
+    # # array inline
+    # LoaderHandler(
+    #     check=lambda json_item, path=None, z=None: (
+    #         isinstance(json_item, typing.Mapping)
+    #         and "__format__" in json_item
+    #         and json_item["__format__"].endswith(":array_list_meta")
+    #     ),
+    #     load=lambda json_item, path=None, z=None: (
+    #         np.array(json_item["data"], dtype=json_item["dtype"]).reshape(  # type: ignore
+    #             json_item["shape"]  # type: ignore
+    #         )
+    #     ),
+    #     uid="array_list_meta",
+    #     source_pckg="muutils.zanj",
+    #     desc="array_list_meta loader",
+    # ),
+    # LoaderHandler(
+    #     check=lambda json_item, path=None, z=None: (
+    #         isinstance(json_item, typing.Mapping)
+    #         and "__format__" in json_item
+    #         and json_item["__format__"].endswith(":array_hex_meta")
+    #     ),
+    #     load=lambda json_item, path=None, z=None: (
+    #         np.frombuffer(
+    #             bytes.fromhex(json_item["data"]), dtype=json_item["dtype"]  # type: ignore
+    #         ).reshape(
+    #             json_item["shape"]  # type: ignore
+    #         )
+    #     ),
+    #     uid="array_hex_meta",
+    #     source_pckg="muutils.zanj",
+    #     desc="array_hex_meta loader",
+    # ),
     # array external
     LoaderHandler(
         check=lambda json_item, path=None, z=None: (
-            isinstance(json_item, dict)
+            isinstance(json_item, typing.Mapping)
             and "__format__" in json_item
             and json_item["__format__"].startswith("numpy.ndarray")
-            and isinstance(json_item["data"], np.ndarray)
-            and json_item["data"].dtype.name == json_item["dtype"]
-            and tuple(json_item["data"].shape) == tuple(json_item["shape"])
+            # and json_item["data"].dtype.name == json_item["dtype"]
+            # and tuple(json_item["data"].shape) == tuple(json_item["shape"])
         ),
-        load=lambda json_item, path=None, z=None: np.array(json_item["data"]),
-        uid="numpy.ndarray:external",
+        load=lambda json_item, path=None, z=None: np.array(load_array(json_item)),
+        uid="numpy.ndarray",
         source_pckg="muutils.zanj",
-        desc="numpy.ndarray:external loader",
+        desc="numpy.ndarray loader",
     ),
     LoaderHandler(
         check=lambda json_item, path=None, z=None: (
-            isinstance(json_item, dict)
+            isinstance(json_item, typing.Mapping)
             and "__format__" in json_item
             and json_item["__format__"].startswith("torch.Tensor")
-            and isinstance(json_item["data"], np.ndarray)
-            and json_item["data"].dtype.name == json_item["dtype"]
-            and tuple(json_item["data"].shape) == tuple(json_item["shape"])
+            # and json_item["data"].dtype.name == json_item["dtype"]
+            # and tuple(json_item["data"].shape) == tuple(json_item["shape"])
         ),
-        load=lambda json_item, path=None, z=None: torch.tensor(json_item["data"]),
-        uid="torch.Tensor:external",
+        load=lambda json_item, path=None, z=None: torch.tensor(load_array(json_item)),
+        uid="torch.Tensor",
         source_pckg="muutils.zanj",
-        desc="torch.Tensor:external loader",
+        desc="torch.Tensor loader",
     ),
     # pandas
     LoaderHandler(
         check=lambda json_item, path=None, z=None: (
-            isinstance(json_item, dict)
+            isinstance(json_item, typing.Mapping)
             and "__format__" in json_item
             and json_item["__format__"].startswith("pandas.DataFrame")
-            and "$ref" in json_item
+            and "data" in json_item
+            and isinstance(json_item["data"], typing.Sequence)
         ),
         load=lambda json_item, path=None, z=None: pd.DataFrame(json_item["data"]),
-        uid="pandas.DataFrame:external",
+        uid="pandas.DataFrame",
         source_pckg="muutils.zanj",
-        desc="pandas.DataFrame:external loader",
+        desc="pandas.DataFrame loader",
     ),
 ]
 
@@ -228,7 +228,7 @@ def get_item_loader(
 
     # if we dont recognize the format, try to find a loader that can handle it
     for key, lh in lh_map.items():
-        if lh.check(json_item, path):
+        if lh.check(json_item, path, zanj):
             return lh
 
     # if we still dont have a loader, return None
@@ -250,8 +250,9 @@ def load_item_recursive(
         error_mode=error_mode,
         lh_map=lh_map,
     )
-
-    if lh is None:
+    if lh is not None:
+        return lh.load(json_item, path, zanj)
+    else:
         if isinstance(json_item, dict):
             return {
                 key: load_item_recursive(
@@ -281,8 +282,6 @@ def load_item_recursive(
                 return json_item
             else:
                 raise ValueError(f"unknown type {type(json_item)} at {path}\n{json_item}")
-    else:
-        return lh.load(json_item, path, zanj)
 
 
 class LoadedZANJ:

@@ -132,6 +132,7 @@ class ZANJ(JsonSerializer):
                     external_table_threshold=self.external_table_threshold,
                     compress=self.compress,
                     serialization_handlers={h.uid : h.serialize() for h in self.handlers},
+                    # TODO: the load_handlers here don't appear to always be saving the latest values
                     load_handlers={h.uid : h.serialize() for h in LOADER_MAP.values()},
                 ),
                 # system info (python, pip packages, torch & cuda, platform info, git info)

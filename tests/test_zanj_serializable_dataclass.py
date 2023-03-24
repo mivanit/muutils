@@ -96,14 +96,56 @@ class sdc_with_np_array(SerializableDataclass):
     arr2: np.ndarray
 
 
-def test_sdc_with_np_array():
+def test_sdc_with_np_array_small():
 
     instance = sdc_with_np_array(
-        "hello", np.random.rand(128, 128), np.random.rand(256, 256)
+        "small arrays", np.random.rand(10), np.random.rand(20)
     )
 
     z = ZANJ()
     path = TEST_DATA_PATH / "test_sdc_with_np_array.zanj"
+    z.save(instance, path)
+    recovered = z.read(path)
+    assert instance == recovered
+
+
+def test_sdc_with_np_array():
+
+    instance = sdc_with_np_array(
+        "bigger arrays", np.random.rand(128, 128), np.random.rand(256, 256)
+    )
+
+    z = ZANJ()
+    path = TEST_DATA_PATH / "test_sdc_with_np_array.zanj"
+    z.save(instance, path)
+    recovered = z.read(path)
+    assert instance == recovered
+
+@serializable_dataclass
+class sdc_with_torch_tensor(SerializableDataclass):
+    name: str
+    tensor1: torch.Tensor
+    tensor2: torch.Tensor
+
+def test_sdc_tensor_small():
+    instance = sdc_with_torch_tensor(
+        "small tensors", torch.rand(8), torch.rand(16)
+    )
+
+    z = ZANJ()
+    path = TEST_DATA_PATH / "test_sdc_tensor_small.zanj"
+    z.save(instance, path)
+    recovered = z.read(path)
+    assert instance == recovered
+
+
+def test_sdc_tensor():
+    instance = sdc_with_torch_tensor(
+        "bigger tensors", torch.rand(128, 128), torch.rand(256, 256)
+    )
+
+    z = ZANJ()
+    path = TEST_DATA_PATH / "test_sdc_tensor.zanj"
     z.save(instance, path)
     recovered = z.read(path)
     assert instance == recovered

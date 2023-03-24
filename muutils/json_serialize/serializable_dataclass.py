@@ -94,7 +94,8 @@ class SerializableField(dataclasses.Field):
 
 
 # Step 2: Create a serializable_field function
-def serializable_field(*args, **kwargs) -> SerializableField:
+# no type hint to avoid confusing mypy
+def serializable_field(*args, **kwargs): # -> SerializableField:
     """Create a new SerializableField
 
     note that if not using ZANJ, and you have a class inside a container, you MUST provide
@@ -214,7 +215,8 @@ def zanj_register_loader_serializable_dataclass(cls: Type[T]) -> Type[T]:
 
 # Step 3: Create a custom serializable_dataclass decorator
 def serializable_dataclass(
-    _cls: Optional[Type[T]] = None,
+    # this should be `_cls: Type[T] | None = None,` but mypy doesn't like it
+    _cls = None, # type: ignore
     *,
     init: bool = True,
     repr: bool = True,
@@ -224,7 +226,8 @@ def serializable_dataclass(
     frozen: bool = False,
     properties_to_serialize: Optional[list[str]] = None,
     **kwargs,
-) -> Union[Callable[[Type[T]], Type[T]], Type[T]]:
+):
+# -> Union[Callable[[Type[T]], Type[T]], Type[T]]:
 
     if properties_to_serialize is None:
         _properties_to_serialize: list = list()

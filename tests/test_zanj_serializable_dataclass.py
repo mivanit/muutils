@@ -162,12 +162,8 @@ def test_sdc_with_df():
 
     instance = sdc_with_df(
         "downloaded_data",
-        iris_data=pd.read_csv(
-            "https://raw.githubusercontent.com/mwaskom/seaborn-data/master/iris.csv"
-        ),
-        brain_data=pd.read_csv(
-            "https://raw.githubusercontent.com/mwaskom/seaborn-data/master/brain_networks.csv"
-        ),
+        iris_data=pd.read_csv("tests/input_data/iris.csv"),
+        brain_data=pd.read_csv("tests/input_data/brain_networks.csv"),
     )
 
     z = ZANJ()
@@ -195,12 +191,8 @@ def test_sdc_complicated():
         name="complicated data",
         arr1=np.random.rand(128, 128),
         arr2=np.random.rand(256, 256),
-        iris_data=pd.read_csv(
-            "https://raw.githubusercontent.com/mwaskom/seaborn-data/master/iris.csv"
-        ),
-        brain_data=pd.read_csv(
-            "https://raw.githubusercontent.com/mwaskom/seaborn-data/master/brain_networks.csv"
-        ),
+        iris_data=pd.read_csv("tests/input_data/iris.csv"),
+        brain_data=pd.read_csv("tests/input_data/brain_networks.csv"),
         container=[
             Nested(
                 f"n-{n}", 

@@ -223,12 +223,23 @@ def load_item_recursive(
                 and ("SerializableDataclass" in json_item["__format__"])
             ):
 
+            # why this horribleness?
+            # SerializableDataclass, if it has a field `x` which is also a SerializableDataclass, will automatically call `x.__class__.load()`
+            # However, we need to load things in containers, as well as arrays
             processed_json_item: dict = {
-                key: load_item_recursive(
-                    json_item=val,
-                    path=tuple(path) + (key,),
-                    zanj=zanj,
-                    error_mode=error_mode,
+                key: (
+                    val
+                    if (
+                        isinstance(val, typing.Mapping) 
+                        and ("__format__" in val) 
+                        and ("SerializableDataclass" in val["__format__"])
+                    )
+                    else load_item_recursive(
+                        json_item=val,
+                        path=tuple(path) + (key,),
+                        zanj=zanj,
+                        error_mode=error_mode,
+                    )
                 )
                 for key, val in json_item.items()
             }

@@ -66,12 +66,8 @@ def test_numpy():
 def test_jsonl():
     data = dict(
         name="testing zanj jsonl",
-        iris_data=pd.read_csv(
-            "https://raw.githubusercontent.com/mwaskom/seaborn-data/master/iris.csv"
-        ),
-        brain_data=pd.read_csv(
-            "https://raw.githubusercontent.com/mwaskom/seaborn-data/master/brain_networks.csv"
-        ),
+        iris_data=pd.read_csv("tests/input_data/iris.csv"),
+        brain_data=pd.read_csv("tests/input_data/brain_networks.csv"),
         some_array=np.random.rand(128, 128),
     )
     fname: Path = TEST_DATA_PATH / "test_jsonl.zanj"

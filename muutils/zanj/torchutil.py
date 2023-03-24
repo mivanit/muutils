@@ -115,17 +115,18 @@ class ConfiguredModel(
             path + ("state_dict",),
             zanj,
         )
-        from muutils.json_serialize.array import load_array
-        from muutils.zanj.loading import LOADER_MAP
-        from pydbg import dbg
-        for k, v in tensored_state_dict.items():
-            dbg('-----------------')
-            dbg(v["__format__"])
-            dbg({kk: type(vv) for kk, vv in v.items()})
-            dbg(type(load_array(v)))
-            dbg(type(load_item_recursive(v, path + ("state_dict", k), zanj)))
-            dbg(type(LOADER_MAP["torch.Tensor"].load(v, path + ("state_dict", k), zanj)))
-            dbg(type(LOADER_MAP["torch.Tensor"].check(v, path + ("state_dict", k), zanj)))
+        # from muutils.json_serialize.array import load_array
+        # from muutils.zanj.loading import LOADER_MAP, get_item_loader
+        # from pydbg import dbg
+        # for k, v in tensored_state_dict.items():
+        #     dbg('-----------------')
+        #     dbg(v["__format__"])
+        #     dbg({kk: type(vv) for kk, vv in v.items()})
+        #     dbg(get_item_loader(v, path + ("state_dict", k), zanj))
+        #     dbg(type(load_array(v)))
+        #     dbg(type(load_item_recursive(v, path + ("state_dict", k), zanj)))
+        #     dbg(type(LOADER_MAP["torch.Tensor"].load(v, path + ("state_dict", k), zanj)))
+        #     dbg(LOADER_MAP["torch.Tensor"].check(v, path + ("state_dict", k), zanj))
         model.load_state_dict(tensored_state_dict)
 
         return model

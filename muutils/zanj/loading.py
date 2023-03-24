@@ -217,17 +217,17 @@ def get_item_loader(
     path: ObjectPath,
     zanj: _ZANJ_pre | None = None,
     error_mode: ErrorMode = "warn",
-    lh_map: dict[str, LoaderHandler] = LOADER_MAP,
+    # lh_map: dict[str, LoaderHandler] = LOADER_MAP,
 ) -> LoaderHandler | None:
     """get the loader for a json item"""
 
     # check if we recognize the format
     if isinstance(json_item, typing.Mapping) and "__format__" in json_item:
-        if json_item["__format__"] in lh_map:
-            return lh_map[json_item["__format__"]]
+        if json_item["__format__"] in LOADER_MAP:
+            return LOADER_MAP[json_item["__format__"]]
 
     # if we dont recognize the format, try to find a loader that can handle it
-    for key, lh in lh_map.items():
+    for key, lh in LOADER_MAP.items():
         if lh.check(json_item, path, zanj):
             return lh
 
@@ -240,7 +240,7 @@ def load_item_recursive(
     path: ObjectPath,
     zanj: _ZANJ_pre | None = None,
     error_mode: ErrorMode = "warn",
-    lh_map: dict[str, LoaderHandler] = LOADER_MAP,
+    # lh_map: dict[str, LoaderHandler] = LOADER_MAP,
     allow_not_loading: bool = True,
 ) -> Any:
     lh = get_item_loader(
@@ -248,7 +248,7 @@ def load_item_recursive(
         path=path,
         zanj=zanj,
         error_mode=error_mode,
-        lh_map=lh_map,
+        # lh_map=lh_map,
     )
     if lh is not None:
         return lh.load(json_item, path, zanj)
@@ -260,7 +260,7 @@ def load_item_recursive(
                     path=tuple(path) + (key,),
                     zanj=zanj,
                     error_mode=error_mode,
-                    lh_map=lh_map,
+                    # lh_map=lh_map,
                 )
                 for key in json_item
             }
@@ -271,7 +271,7 @@ def load_item_recursive(
                     path=tuple(path) + (i,),
                     zanj=zanj,
                     error_mode=error_mode,
-                    lh_map=lh_map,
+                    # lh_map=lh_map,
                 )
                 for i in range(len(json_item))
             ]

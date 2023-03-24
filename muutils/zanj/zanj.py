@@ -204,7 +204,7 @@ class ZANJ(JsonSerializer):
             path=tuple(),
             zanj=loaded_zanj,
             error_mode=self.error_mode,
-            lh_map=loader_handlers,
+            # lh_map=loader_handlers,
         )
 
 

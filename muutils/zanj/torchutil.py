@@ -5,7 +5,12 @@ from typing import Type, Any, Callable, Iterable, TypeVar
 
 import torch
 
-from muutils.json_serialize import JSONitem, serializable_dataclass, serializable_field, SerializableDataclass
+from muutils.json_serialize import (
+    JSONitem,
+    serializable_dataclass,
+    serializable_field,
+    SerializableDataclass,
+)
 from muutils.json_serialize.json_serialize import ObjectPath
 from muutils.zanj import ZANJ, register_loader_handler
 from muutils.zanj.loading import LoaderHandler, load_item_recursive
@@ -13,6 +18,7 @@ from muutils.zanj.loading import LoaderHandler, load_item_recursive
 # pylint: disable=protected-access
 
 KWArgs = Any
+
 
 def num_params(m: torch.nn.Module, only_trainable: bool = True):
     """return total number of parameters in a model
@@ -49,7 +55,6 @@ def get_device(
         return False, devs
 
 
-
 T_config = TypeVar("T_config", bound=SerializableDataclass)
 
 
@@ -78,10 +83,12 @@ class ConfiguredModel(
 
         self.config: T_config = config
 
-    def serialize(self, path: ObjectPath = tuple(), zanj: ZANJ|None = None) -> dict[str, Any]:
+    def serialize(
+        self, path: ObjectPath = tuple(), zanj: ZANJ | None = None
+    ) -> dict[str, Any]:
         if zanj is None:
             zanj = ZANJ()
-        obj=dict(
+        obj = dict(
             config=self.config.serialize(),
             meta=dict(
                 class_name=self.__class__.__name__,
@@ -96,7 +103,9 @@ class ConfiguredModel(
         return obj
 
     @classmethod
-    def load(cls, obj: dict[str, Any], path: ObjectPath, zanj: ZANJ|None = None) -> "ConfiguredModel":
+    def load(
+        cls, obj: dict[str, Any], path: ObjectPath, zanj: ZANJ | None = None
+    ) -> "ConfiguredModel":
         """load a model from a serialized object"""
 
         if zanj is None:
@@ -161,6 +170,5 @@ def set_config_class(
 
         # return the new class
         return cls
-
 
     return wrapper

@@ -98,7 +98,7 @@ def serializable_field(*args, **kwargs) -> SerializableField:
     """Create a new SerializableField
 
     note that if not using ZANJ, and you have a class inside a container, you MUST provide
-    `serialization_fn` and `loading_fn` to serialize and load the container.  
+    `serialization_fn` and `loading_fn` to serialize and load the container.
     ZANJ will automatically do this for you.
 
     ```
@@ -127,24 +127,27 @@ def array_safe_eq(a: Any, b: Any) -> bool:
         return True
 
     if (
-        (str(type(a)) == "<class 'numpy.ndarray'>" and str(type(b)) == "<class 'numpy.ndarray'>")
-        or (str(type(a)) == "<class 'torch.Tensor'>" and str(type(b)) == "<class 'torch.Tensor'>")
+        str(type(a)) == "<class 'numpy.ndarray'>"
+        and str(type(b)) == "<class 'numpy.ndarray'>"
+    ) or (
+        str(type(a)) == "<class 'torch.Tensor'>"
+        and str(type(b)) == "<class 'torch.Tensor'>"
     ):
         return (a == b).all()
 
-    if (str(type(a)) == "<class 'pandas.core.frame.DataFrame'>" and str(type(b)) == "<class 'pandas.core.frame.DataFrame'>"):
+    if (
+        str(type(a)) == "<class 'pandas.core.frame.DataFrame'>"
+        and str(type(b)) == "<class 'pandas.core.frame.DataFrame'>"
+    ):
         return a.equals(b)
 
     if isinstance(a, typing.Sequence) and isinstance(b, typing.Sequence):
-        return (
-            len(a) == len(b)
-            and all(array_safe_eq(a1, b1) for a1, b1 in zip(a, b))
-        )
+        return len(a) == len(b) and all(array_safe_eq(a1, b1) for a1, b1 in zip(a, b))
 
     if isinstance(a, (dict, typing.Mapping)) and isinstance(b, (dict, typing.Mapping)):
         return (
             len(a) == len(b)
-            and all(k1 == k2 for k1,k2 in zip(a.keys(), b.keys()))
+            and all(k1 == k2 for k1, k2 in zip(a.keys(), b.keys()))
             and all(array_safe_eq(a[k], b[k]) for k in a.keys())
         )
 
@@ -153,20 +156,20 @@ def array_safe_eq(a: Any, b: Any) -> bool:
     except TypeError:
         return NotImplementedError()
 
+
 def dc_eq(dc1, dc2) -> bool:
     """checks if two dataclasses which hold numpy arrays are equal"""
     if dc1 is dc2:
         return True
-    
+
     if dc1.__class__ is not dc2.__class__:
         return NotImplementedError
-    
+
     return all(
-        array_safe_eq(getattr(dc1, fld.name), getattr(dc2, fld.name)) 
+        array_safe_eq(getattr(dc1, fld.name), getattr(dc2, fld.name))
         for fld in dataclasses.fields(dc1)
         if fld.compare
     )
-
 
 
 T = TypeVar("T")
@@ -182,11 +185,12 @@ class SerializableDataclass(abc.ABC):
         raise NotImplementedError
 
     @classmethod
-    def load(cls: Type[T], data: dict[str, Any]|T) -> T:
+    def load(cls: Type[T], data: dict[str, Any] | T) -> T:
         raise NotImplementedError
 
     def __eq__(self, other: Any) -> bool:
         return dc_eq(self, other)
+
 
 def zanj_register_loader_serializable_dataclass(cls: Type[T]) -> Type[T]:
     """Register a serializable dataclass with the ZANJ backport"""
@@ -255,7 +259,9 @@ def serializable_dataclass(
         cls._properties_to_serialize = _properties_to_serialize.copy()  # type: ignore[attr-defined]
 
         def serialize(self) -> dict[str, Any]:
-            result: dict[str, Any] = {"__format__": f"{self.__class__.__name__}(SerializableDataclass)"}
+            result: dict[str, Any] = {
+                "__format__": f"{self.__class__.__name__}(SerializableDataclass)"
+            }
 
             for field in dataclasses.fields(self):
 
@@ -282,7 +288,7 @@ def serializable_dataclass(
             return result
 
         @classmethod
-        def load(cls, data: dict[str, Any]|T) -> Type[T]:
+        def load(cls, data: dict[str, Any] | T) -> Type[T]:
             # TODO: this is kind of ugly, but it fixes a lot of issues for when we do recursive loading with ZANJ
             if isinstance(data, cls):
                 return data

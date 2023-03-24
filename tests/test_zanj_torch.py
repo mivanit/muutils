@@ -5,7 +5,12 @@ import numpy as np
 import pytest
 
 from muutils.zanj import ZANJ
-from muutils.json_serialize import JSONitem, serializable_dataclass, SerializableDataclass, serializable_field
+from muutils.json_serialize import (
+    JSONitem,
+    serializable_dataclass,
+    SerializableDataclass,
+    serializable_field,
+)
 from muutils.zanj.loading import LOADER_HANDLERS, LOADER_MAP, register_loader_handler
 
 np.random.seed(0)
@@ -52,7 +57,6 @@ def test_torch_configmodel():
         def optim(self, model):
             return self.optim_factory(model.parameters(), **self.optim_kwargs)
 
-
     @set_config_class(MyGPTConfig)
     class MyGPT(ConfiguredModel[MyGPTConfig]):
         """basic GPT model"""
@@ -95,10 +99,9 @@ def test_torch_configmodel():
     print(f"{model2.config = }")
 
     assert model.config == model2.config
-    
+
     for k, v in model.state_dict().items():
         assert torch.allclose(model.state_dict()[k], model2.state_dict()[k])
-
 
     model3: MyGPT = ZANJ().read(fname)
     print(f"loaded model from {fname}")
@@ -108,4 +111,3 @@ def test_torch_configmodel():
 
     for k, v in model.state_dict().items():
         assert torch.allclose(model.state_dict()[k], model3.state_dict()[k])
-

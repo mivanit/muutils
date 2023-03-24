@@ -30,7 +30,7 @@ from muutils.zanj.externals import (
 class LoaderHandler:
     """handler for loading an object from a json file or a ZANJ archive"""
 
-    # TODO: add a separate "asserts" function? 
+    # TODO: add a separate "asserts" function?
     # right now, any asserts must happen in `check` or `load` which is annoying with lambdas
 
     # (json_data, path) -> whether to use this handler
@@ -50,22 +50,21 @@ class LoaderHandler:
         """serialize the handler info"""
         return {
             # get the code and doc of the check function
-            "check" : {
-                "code" : self.check.__code__,
-                "doc" : self.check.__doc__,
+            "check": {
+                "code": self.check.__code__,
+                "doc": self.check.__doc__,
             },
             # get the code and doc of the load function
-            "load" : {
-                "code" : self.load.__code__,
-                "doc" : self.load.__doc__,
+            "load": {
+                "code": self.load.__code__,
+                "doc": self.load.__doc__,
             },
             # get the uid, source_pckg, priority, and desc
-            "uid" : str(self.uid),
-            "source_pckg" : str(self.source_pckg),
-            "priority" : int(self.priority),
-            "desc" : str(self.desc),
+            "uid": str(self.uid),
+            "source_pckg": str(self.source_pckg),
+            "priority": int(self.priority),
+            "desc": str(self.desc),
         }
-    
 
     @classmethod
     def from_formattedclass(cls, fc: type, priority: int = 0):
@@ -78,7 +77,8 @@ class LoaderHandler:
         assert isinstance(fc.__format__, str)  # type: ignore
 
         return cls(
-            check=lambda json_item, path=None, z=None: json_item["__format__"] == fc.__format__,
+            check=lambda json_item, path=None, z=None: json_item["__format__"]
+            == fc.__format__,
             load=lambda json_item, path=None, z=None: fc.load(json_item, path, z),
             uid=fc.__format__,
             source_pckg=str(fc.__module__),
@@ -176,6 +176,7 @@ def create_and_register_loader_handler(
 
     register_loader_handler(lh)
 
+
 def get_item_loader(
     json_item: JSONitem,
     path: ObjectPath,
@@ -207,7 +208,7 @@ def load_item_recursive(
     # lh_map: dict[str, LoaderHandler] = LOADER_MAP,
     allow_not_loading: bool = True,
 ) -> Any:
-    lh: LoaderHandler|None = get_item_loader(
+    lh: LoaderHandler | None = get_item_loader(
         json_item=json_item,
         path=path,
         zanj=zanj,
@@ -218,10 +219,10 @@ def load_item_recursive(
     if lh is not None:
         # special case for serializable dataclasses
         if (
-                isinstance(json_item, typing.Mapping) 
-                and ("__format__" in json_item) 
-                and ("SerializableDataclass" in json_item["__format__"])
-            ):
+            isinstance(json_item, typing.Mapping)
+            and ("__format__" in json_item)
+            and ("SerializableDataclass" in json_item["__format__"])
+        ):
 
             # why this horribleness?
             # SerializableDataclass, if it has a field `x` which is also a SerializableDataclass, will automatically call `x.__class__.load()`
@@ -230,8 +231,8 @@ def load_item_recursive(
                 key: (
                     val
                     if (
-                        isinstance(val, typing.Mapping) 
-                        and ("__format__" in val) 
+                        isinstance(val, typing.Mapping)
+                        and ("__format__" in val)
                         and ("SerializableDataclass" in val["__format__"])
                     )
                     else load_item_recursive(
@@ -245,7 +246,7 @@ def load_item_recursive(
             }
 
             return lh.load(processed_json_item, path, zanj)
-            
+
         else:
             return lh.load(json_item, path, zanj)
     else:
@@ -277,7 +278,9 @@ def load_item_recursive(
             if allow_not_loading:
                 return json_item
             else:
-                raise ValueError(f"unknown type {type(json_item)} at {path}\n{json_item}")
+                raise ValueError(
+                    f"unknown type {type(json_item)} at {path}\n{json_item}"
+                )
 
 
 class LoadedZANJ:
@@ -333,7 +336,6 @@ class LoadedZANJ:
                 path=path,
                 zanj=self._zanj,
             )
-
 
 
 _update_loaders()

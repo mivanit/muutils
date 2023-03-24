@@ -8,7 +8,12 @@ import pandas as pd
 import pytest
 
 from muutils.zanj import ZANJ
-from muutils.json_serialize import JSONitem, serializable_dataclass, SerializableDataclass, serializable_field
+from muutils.json_serialize import (
+    JSONitem,
+    serializable_dataclass,
+    SerializableDataclass,
+    serializable_field,
+)
 from muutils.zanj.loading import LOADER_HANDLERS, LOADER_MAP, register_loader_handler
 
 np.random.seed(0)
@@ -86,4 +91,3 @@ def test_jsonl():
             data["brain_data"].equals(recovered_data["brain_data"]),
         ]
     )
-

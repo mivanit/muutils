@@ -87,19 +87,19 @@ class ZANJSerializerHandler(SerializerHandler):
         """serialize the handler info"""
         return {
             # get the code and doc of the check function
-            "check" : {
-                "code" : self.check.__code__,
-                "doc" : self.check.__doc__,
+            "check": {
+                "code": self.check.__code__,
+                "doc": self.check.__doc__,
             },
             # get the code and doc of the load function
-            "serialize_func" : {
-                "code" : self.serialize_func.__code__,
-                "doc" : self.serialize_func.__doc__,
+            "serialize_func": {
+                "code": self.serialize_func.__code__,
+                "doc": self.serialize_func.__doc__,
             },
             # get the uid, source_pckg, priority, and desc
-            "uid" : str(self.uid),
-            "source_pckg" : str(self.source_pckg),
-            "desc" : str(self.desc),
+            "uid": str(self.uid),
+            "source_pckg": str(self.source_pckg),
+            "desc": str(self.desc),
         }
 
 
@@ -126,7 +126,9 @@ def zanj_external_serialize(
      - modifies `jser._externals`
     """
     # get the path, make sure its unique
-    assert isinstance(path, tuple), f"path must be a tuple, got {type(path) = } {path = }"
+    assert isinstance(
+        path, tuple
+    ), f"path must be a tuple, got {type(path) = } {path = }"
     joined_path: str = "/".join([str(p) for p in path])
     archive_path: str = f"{joined_path}.{item_type}"
 

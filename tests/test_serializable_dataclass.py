@@ -9,6 +9,7 @@ from muutils.json_serialize import (
 
 # pylint: disable=missing-class-docstring, unused-variable
 
+
 @serializable_dataclass
 class Basic_autofields(SerializableDataclass):
     a: str
@@ -72,7 +73,12 @@ def with_property_instance():
 
 def test_simple_fields_serialization(simple_fields_instance):
     serialized = simple_fields_instance.serialize()
-    assert serialized == {"d": "hello", "e": 42, "f": [1, 2, 3], "__format__": "SimpleFields(SerializableDataclass)"}
+    assert serialized == {
+        "d": "hello",
+        "e": 42,
+        "f": [1, 2, 3],
+        "__format__": "SimpleFields(SerializableDataclass)",
+    }
 
 
 def test_simple_fields_loading(simple_fields_instance):
@@ -83,7 +89,12 @@ def test_simple_fields_loading(simple_fields_instance):
 
 def test_field_options_serialization(field_options_instance):
     serialized = field_options_instance.serialize()
-    assert serialized == {"a": "hello", "b": "world", "d": "CASE", "__format__": "FieldOptions(SerializableDataclass)"}
+    assert serialized == {
+        "a": "hello",
+        "b": "world",
+        "d": "CASE",
+        "__format__": "FieldOptions(SerializableDataclass)",
+    }
 
 
 def test_field_options_loading(field_options_instance):
@@ -137,7 +148,12 @@ def test_nested_serialization(person_instance):
     expected_ser = {
         "name": "John Doe",
         "age": 30,
-        "address": {"street": "123 Main St", "city": "New York", "zip_code": "10001", "__format__": "Address(SerializableDataclass)"},
+        "address": {
+            "street": "123 Main St",
+            "city": "New York",
+            "zip_code": "10001",
+            "__format__": "Address(SerializableDataclass)",
+        },
         "__format__": "Person(SerializableDataclass)",
     }
     assert serialized == expected_ser
@@ -180,7 +196,11 @@ def test_simple_class_serialization():
 
     simple = SimpleClass(a=42, b="hello")
     serialized = simple.serialize()
-    assert serialized == {"a": 42, "b": "hello", "__format__": "SimpleClass(SerializableDataclass)"}
+    assert serialized == {
+        "a": 42,
+        "b": "hello",
+        "__format__": "SimpleClass(SerializableDataclass)",
+    }
 
     loaded = SimpleClass.load(serialized)
     assert loaded == simple
@@ -229,11 +249,13 @@ def test_custom_serialization():
 
     custom = CustomSerialization(data=5)
     serialized = custom.serialize()
-    assert serialized == {"data": 10, "__format__": "CustomSerialization(SerializableDataclass)"}
+    assert serialized == {
+        "data": 10,
+        "__format__": "CustomSerialization(SerializableDataclass)",
+    }
 
     loaded = CustomSerialization.load(serialized)
     assert loaded == custom
-
 
 
 @serializable_dataclass
@@ -245,13 +267,13 @@ class Nested_with_Container(SerializableDataclass):
         serialization_fn=lambda x: [y.serialize() for y in x],
         loading_fn=lambda x: [Basic_autofields.load(y) for y in x["val_list"]],
     )
- 
+
 
 def test_nested_with_container():
 
     instance = Nested_with_Container(
-        val_int=42, 
-        val_str="hello", 
+        val_int=42,
+        val_str="hello",
         val_list=[
             Basic_autofields(a="a", b=1, c=[1, 2, 3]),
             Basic_autofields(a="b", b=2, c=[4, 5, 6]),
@@ -263,8 +285,18 @@ def test_nested_with_container():
         "val_int": 42,
         "val_str": "hello",
         "val_list": [
-            {"a": "a", "b": 1, "c": [1, 2, 3], "__format__": "Basic_autofields(SerializableDataclass)"},
-            {"a": "b", "b": 2, "c": [4, 5, 6], "__format__": "Basic_autofields(SerializableDataclass)"},
+            {
+                "a": "a",
+                "b": 1,
+                "c": [1, 2, 3],
+                "__format__": "Basic_autofields(SerializableDataclass)",
+            },
+            {
+                "a": "b",
+                "b": 2,
+                "c": [4, 5, 6],
+                "__format__": "Basic_autofields(SerializableDataclass)",
+            },
         ],
         "__format__": "Nested_with_Container(SerializableDataclass)",
     }
@@ -272,4 +304,3 @@ def test_nested_with_container():
     assert serialized == expected_ser
     loaded = Nested_with_Container.load(serialized)
     assert loaded == instance
-

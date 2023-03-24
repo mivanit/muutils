@@ -66,19 +66,19 @@ class SerializerHandler:
         """serialize the handler info"""
         return {
             # get the code and doc of the check function
-            "check" : {
-                "code" : self.check.__code__,
-                "doc" : self.check.__doc__,
+            "check": {
+                "code": self.check.__code__,
+                "doc": self.check.__doc__,
             },
             # get the code and doc of the load function
-            "serialize_func" : {
-                "code" : self.serialize_func.__code__,
-                "doc" : self.serialize_func.__doc__,
+            "serialize_func": {
+                "code": self.serialize_func.__code__,
+                "doc": self.serialize_func.__doc__,
             },
             # get the uid, source_pckg, priority, and desc
-            "uid" : str(self.uid),
+            "uid": str(self.uid),
             # "source_pckg" : str(self.source_pckg),
-            "desc" : str(self.desc),
+            "desc": str(self.desc),
         }
 
 
@@ -140,9 +140,7 @@ DEFAULT_HANDLERS: MonoTuple[SerializerHandler] = tuple(BASE_HANDLERS) + (
     ),
     SerializerHandler(
         check=lambda self, obj, path: str(type(obj)) == "<class 'numpy.ndarray'>",
-        serialize_func=lambda self, obj, path: serialize_array(
-            self, obj, path=path
-        ),
+        serialize_func=lambda self, obj, path: serialize_array(self, obj, path=path),
         uid="numpy.ndarray",
     ),
     SerializerHandler(

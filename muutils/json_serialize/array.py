@@ -169,7 +169,6 @@ def load_array(arr: JSONitem, array_mode: Optional[ArrayMode] = None) -> Any:
         raise ValueError(f"invalid array_mode: {array_mode}")
 
 
-
 def load_array_into_item(arr: JSONitem, array_mode: Optional[ArrayMode] = None) -> dict:
     """loads the json-serialized array, but leaves it in-place, replacing the "data" key or list"""
     arr_loaded = load_array(arr)

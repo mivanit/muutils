@@ -98,9 +98,7 @@ class sdc_with_np_array(SerializableDataclass):
 
 def test_sdc_with_np_array_small():
 
-    instance = sdc_with_np_array(
-        "small arrays", np.random.rand(10), np.random.rand(20)
-    )
+    instance = sdc_with_np_array("small arrays", np.random.rand(10), np.random.rand(20))
 
     z = ZANJ()
     path = TEST_DATA_PATH / "test_sdc_with_np_array.zanj"
@@ -121,16 +119,16 @@ def test_sdc_with_np_array():
     recovered = z.read(path)
     assert instance == recovered
 
+
 @serializable_dataclass
 class sdc_with_torch_tensor(SerializableDataclass):
     name: str
     tensor1: torch.Tensor
     tensor2: torch.Tensor
 
+
 def test_sdc_tensor_small():
-    instance = sdc_with_torch_tensor(
-        "small tensors", torch.rand(8), torch.rand(16)
-    )
+    instance = sdc_with_torch_tensor("small tensors", torch.rand(8), torch.rand(16))
 
     z = ZANJ()
     path = TEST_DATA_PATH / "test_sdc_tensor_small.zanj"
@@ -195,17 +193,15 @@ def test_sdc_complicated():
         brain_data=pd.read_csv("tests/input_data/brain_networks.csv"),
         container=[
             Nested(
-                f"n-{n}", 
-                Basic(f"n-{n}_b",
-                n * 10 + 1, 
-                [n + 1, n + 2, n + 10]), 
+                f"n-{n}",
+                Basic(f"n-{n}_b", n * 10 + 1, [n + 1, n + 2, n + 10]),
                 n * np.pi,
             )
             for n in range(10)
         ],
         tensor=torch.rand(512, 512),
     )
-    
+
     z = ZANJ()
     path = TEST_DATA_PATH / "test_sdc_complicated.zanj"
     z.save(instance, path)
@@ -229,16 +225,14 @@ def test_sdc_container_explicit():
         "container explicit",
         container=[
             Nested(
-                f"n-{n}", 
-                Basic(f"n-{n}_b",
-                n * 10 + 1, 
-                [n + 1, n + 2, n + 10]), 
+                f"n-{n}",
+                Basic(f"n-{n}_b", n * 10 + 1, [n + 1, n + 2, n + 10]),
                 n * np.pi,
             )
             for n in range(10)
         ],
     )
-    
+
     z = ZANJ()
     path = TEST_DATA_PATH / "test_sdc_container_explicit.zanj"
     z.save(instance, path)

@@ -27,7 +27,7 @@ TEST_DATA_PATH: Path = Path("tests/junk_data")
 @serializable_dataclass
 class Basic(SerializableDataclass):
     a: str
-    b: int = 42
+    q: int = 42
     c: list[int] = serializable_field(default_factory=list)
 
 

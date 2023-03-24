@@ -26,9 +26,9 @@ def test_basic_auto_fields():
 
 @serializable_dataclass
 class SimpleFields(SerializableDataclass):
-    f: str
-    b: int = 42
-    c: list[int] = serializable_field(default_factory=list)
+    d: str
+    e: int = 42
+    f: list[int] = serializable_field(default_factory=list)
 
 
 @serializable_dataclass
@@ -57,7 +57,7 @@ class Child(FieldOptions, WithProperty):
 
 @pytest.fixture
 def simple_fields_instance():
-    return SimpleFields(a="hello", b=42, c=[1, 2, 3])
+    return SimpleFields(d="hello", e=42, f=[1, 2, 3])
 
 
 @pytest.fixture
@@ -72,7 +72,7 @@ def with_property_instance():
 
 def test_simple_fields_serialization(simple_fields_instance):
     serialized = simple_fields_instance.serialize()
-    assert serialized == {"a": "hello", "b": 42, "c": [1, 2, 3], "__format__": "SimpleFields"}
+    assert serialized == {"d": "hello", "e": 42, "f": [1, 2, 3], "__format__": "SimpleFields"}
 
 
 def test_simple_fields_loading(simple_fields_instance):

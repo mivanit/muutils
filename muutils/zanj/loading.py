@@ -10,7 +10,7 @@ import numpy as np
 import torch
 import pandas as pd
 
-from muutils.json_serialize import _ZANJ_backport_create_and_register_loader_handler
+from muutils.json_serialize.serializable_dataclass import _ZANJ_backport_create_and_register_loader_handler
 from muutils.json_serialize.json_serialize import ObjectPath
 from muutils.json_serialize.util import JSONdict, JSONitem, MonoTuple, ErrorMode
 from muutils.zanj.externals import (
@@ -30,10 +30,13 @@ from muutils.zanj.externals import (
 class LoaderHandler:
     """handler for loading an object from a json file or a ZANJ archive"""
 
+    # TODO: add a separate "asserts" function? 
+    # right now, any asserts must happen in `check` or `load` which is annoying with lambdas
+
     # (json_data, path) -> whether to use this handler
-    check: Callable[[JSONitem, ObjectPath], bool]
+    check: Callable[[JSONitem, ObjectPath, _ZANJ_pre], bool]
     # function to load the object (json_data, path) -> loaded_obj
-    load: Callable[[JSONitem, ObjectPath], Any]
+    load: Callable[[JSONitem, ObjectPath, _ZANJ_pre], Any]
     # unique identifier for the handler, saved in __format__ field
     uid: str
     # source package of the handler -- note that this might be overridden by ZANJ
@@ -75,8 +78,8 @@ class LoaderHandler:
         assert isinstance(fc.__format__, str)  # type: ignore
 
         return cls(
-            check=lambda json_item, path: json_item["__format__"] == fc.__format__,
-            load=lambda json_item, path: fc.load(json_item),
+            check=lambda json_item, path=None, z=None: json_item["__format__"] == fc.__format__,
+            load=lambda json_item, path=None, z=None: fc.load(json_item, path, z),
             uid=fc.__format__,
             source_pckg=str(fc.__module__),
             priority=priority,
@@ -89,12 +92,12 @@ class LoaderHandler:
 LOADER_HANDLERS: list[LoaderHandler] = [
     # array inline
     LoaderHandler(
-        check=lambda json_item, path=None: (
+        check=lambda json_item, path=None, z=None: (
             isinstance(json_item, typing.Mapping)
             and "__format__" in json_item
             and json_item["__format__"] == "array_list_meta"
         ),
-        load=lambda json_item, path=None: (
+        load=lambda json_item, path=None, z=None: (
             np.array(json_item["data"], dtype=json_item["dtype"]).reshape(  # type: ignore
                 json_item["shape"]  # type: ignore
             )
@@ -104,12 +107,12 @@ LOADER_HANDLERS: list[LoaderHandler] = [
         desc="array_list_meta loader",
     ),
     LoaderHandler(
-        check=lambda json_item, path=None: (
+        check=lambda json_item, path=None, z=None: (
             isinstance(json_item, typing.Mapping)
             and "__format__" in json_item
             and json_item["__format__"] == "array_hex_meta"
         ),
-        load=lambda json_item, path: (
+        load=lambda json_item, path=None, z=None: (
             np.frombuffer(
                 bytes.fromhex(json_item["data"]), dtype=json_item["dtype"]  # type: ignore
             ).reshape(
@@ -122,44 +125,42 @@ LOADER_HANDLERS: list[LoaderHandler] = [
     ),
     # array external
     LoaderHandler(
-        check=lambda json_item, path: (
+        check=lambda json_item, path=None, z=None: (
             isinstance(json_item, dict)
             and "__format__" in json_item
             and json_item["__format__"].startswith("numpy.ndarray")
-            and "$ref" in json_item
             and isinstance(json_item["data"], np.ndarray)
             and json_item["data"].dtype.name == json_item["dtype"]
             and tuple(json_item["data"].shape) == tuple(json_item["shape"])
         ),
-        load=lambda json_item, path: json_item["data"],
+        load=lambda json_item, path=None, z=None: np.array(json_item["data"]),
         uid="numpy.ndarray:external",
         source_pckg="muutils.zanj",
         desc="numpy.ndarray:external loader",
     ),
     LoaderHandler(
-        check=lambda json_item, path: (
+        check=lambda json_item, path=None, z=None: (
             isinstance(json_item, dict)
             and "__format__" in json_item
             and json_item["__format__"].startswith("torch.Tensor")
-            and "$ref" in json_item
             and isinstance(json_item["data"], np.ndarray)
             and json_item["data"].dtype.name == json_item["dtype"]
             and tuple(json_item["data"].shape) == tuple(json_item["shape"])
         ),
-        load=lambda json_item, path: torch.tensor(json_item["data"]),
+        load=lambda json_item, path=None, z=None: torch.tensor(json_item["data"]),
         uid="torch.Tensor:external",
         source_pckg="muutils.zanj",
         desc="torch.Tensor:external loader",
     ),
     # pandas
     LoaderHandler(
-        check=lambda json_item, path: (
+        check=lambda json_item, path=None, z=None: (
             isinstance(json_item, dict)
             and "__format__" in json_item
             and json_item["__format__"].startswith("pandas.DataFrame")
             and "$ref" in json_item
         ),
-        load=lambda json_item, path: pd.DataFrame(json_item["data"]),
+        load=lambda json_item, path=None, z=None: pd.DataFrame(json_item["data"]),
         uid="pandas.DataFrame:external",
         source_pckg="muutils.zanj",
         desc="pandas.DataFrame:external loader",
@@ -281,7 +282,7 @@ def load_item_recursive(
             else:
                 raise ValueError(f"unknown type {type(json_item)} at {path}\n{json_item}")
     else:
-        return lh.load(json_item, path)
+        return lh.load(json_item, path, zanj)
 
 
 class LoadedZANJ:

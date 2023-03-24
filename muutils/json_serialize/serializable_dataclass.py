@@ -140,7 +140,7 @@ def register_loader_serializable_dataclass(cls: Type[T]) -> Type[T]:
     """Register a serializable dataclass with the ZANJ backport"""
     cls_name: str = cls.__name__
     _ZANJ_backport_create_and_register_loader_handler(
-        check=lambda json_item, path: (
+        check=lambda json_item, path=None, z=None: (
             isinstance(json_item, dict)
             and "__format__" in json_item
             and json_item["__format__"].startswith(cls_name)

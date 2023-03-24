@@ -8,7 +8,7 @@ import torch
 from muutils.json_serialize import JSONitem, serializable_dataclass, serializable_field, SerializableDataclass
 from muutils.json_serialize.json_serialize import ObjectPath
 from muutils.zanj import ZANJ, register_loader_handler
-from muutils.zanj.loading import LoaderHandler
+from muutils.zanj.loading import LoaderHandler, load_item_recursive
 
 # pylint: disable=protected-access
 
@@ -97,8 +97,11 @@ class ConfiguredModel(
         return obj
 
     @classmethod
-    def load(cls, obj: dict[str, Any]) -> "ConfiguredModel":
+    def load(cls, obj: dict[str, Any], path: ObjectPath, zanj: ZANJ|None = None) -> "ConfiguredModel":
         """load a model from a serialized object"""
+
+        if zanj is None:
+            zanj = ZANJ()
 
         # get the config
         config: T_config = cls._config_class.load(obj["config"])
@@ -107,7 +110,15 @@ class ConfiguredModel(
         model: "ConfiguredModel" = cls(config)
 
         # load the state dict
-        model.load_state_dict(obj["state_dict"])
+        tensored_state_dict: dict[str, torch.Tensor] = load_item_recursive(
+            obj["state_dict"],
+            path + ("state_dict",),
+            zanj,
+        )
+        for k, v in tensored_state_dict.items():
+            print(v["__format__"])
+            print({kk: type(vv) for kk, vv in v.items()})
+        model.load_state_dict(tensored_state_dict)
 
         return model
 
@@ -125,12 +136,12 @@ class ConfiguredModel(
     def get_handler(cls) -> LoaderHandler:
         cls_name: str = str(cls.__name__)
         return LoaderHandler(
-            check=lambda json_item, path: (
+            check=lambda json_item, path=None, z=None: (
                 isinstance(json_item, dict)
                 and "__format__" in json_item
                 and json_item["__format__"].startswith(cls_name)
             ),
-            load=lambda json_item, path: cls.load(json_item),
+            load=lambda json_item, path=None, z=None: cls.load(json_item, path, z),
             uid=cls_name,
             source_pckg=cls.__module__,
             desc=f"{cls.__module__} {cls_name} loader via muutils.zanj.torchutil.ConfiguredModel",

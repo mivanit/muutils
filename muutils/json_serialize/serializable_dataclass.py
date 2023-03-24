@@ -99,8 +99,7 @@ def serializable_field(*args, **kwargs) -> SerializableField:
 
     note that if not using ZANJ, and you have a class inside a container, you MUST provide
     `serialization_fn` and `loading_fn` to serialize and load the container.  
-    # TODO: fix this horrible footgun
-    ZANJ will automatically do this for you, and might actually break if you try to do this manually. This is a seriously bad situation
+    ZANJ will automatically do this for you.
 
     ```
     default: Any | dataclasses._MISSING_TYPE = dataclasses.MISSING,

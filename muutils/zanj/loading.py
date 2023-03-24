@@ -215,7 +215,28 @@ def load_item_recursive(
         # lh_map=lh_map,
     )
     if lh is not None:
-        return lh.load(json_item, path, zanj)
+        # special case for serializable dataclasses
+        if (
+                isinstance(json_item, typing.Mapping) 
+                and ("__format__" in json_item) 
+                and (json_item["__format__"].endswith("(SerializableDataclass"))
+            ):
+            lh.load(
+                {
+                    key: load_item_recursive(
+                        json_item=json_item[key],
+                        path=tuple(path) + (key,),
+                        zanj=zanj,
+                        error_mode=error_mode,
+                    )
+                    for key in json_item
+                },
+                path, 
+                zanj,
+            )
+            
+        else:
+            return lh.load(json_item, path, zanj)
     else:
         if isinstance(json_item, dict):
             return {

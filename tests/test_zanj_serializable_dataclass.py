@@ -184,11 +184,7 @@ class sdc_complicated(SerializableDataclass):
     arr2: np.ndarray
     iris_data: pd.DataFrame
     brain_data: pd.DataFrame
-    container: list[Nested] = serializable_field(
-        default_factory=list,
-        serialization_fn=lambda c: [n.serialize() for n in c],
-        loading_fn=lambda data: [Nested.load(n) for n in data["container"]],
-    )
+    container: list[Nested] = serializable_field(default_factory=list)
 
     tensor: torch.Tensor
 

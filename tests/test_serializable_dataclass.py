@@ -20,7 +20,7 @@ def test_basic_auto_fields():
     data = dict(a="hello", b=42, c=[1, 2, 3])
     instance = Basic_autofields(**data)
     data_with_format = data.copy()
-    data_with_format["__format__"] = "Basic_autofields"
+    data_with_format["__format__"] = "Basic_autofields(SerializableDataclass)"
     assert instance.serialize() == data_with_format
 
 
@@ -72,7 +72,7 @@ def with_property_instance():
 
 def test_simple_fields_serialization(simple_fields_instance):
     serialized = simple_fields_instance.serialize()
-    assert serialized == {"d": "hello", "e": 42, "f": [1, 2, 3], "__format__": "SimpleFields"}
+    assert serialized == {"d": "hello", "e": 42, "f": [1, 2, 3], "__format__": "SimpleFields(SerializableDataclass)"}
 
 
 def test_simple_fields_loading(simple_fields_instance):
@@ -83,7 +83,7 @@ def test_simple_fields_loading(simple_fields_instance):
 
 def test_field_options_serialization(field_options_instance):
     serialized = field_options_instance.serialize()
-    assert serialized == {"a": "hello", "b": "world", "d": "CASE", "__format__": "FieldOptions"}
+    assert serialized == {"a": "hello", "b": "world", "d": "CASE", "__format__": "FieldOptions(SerializableDataclass)"}
 
 
 def test_field_options_loading(field_options_instance):
@@ -98,7 +98,7 @@ def test_with_property_serialization(with_property_instance):
         "first_name": "John",
         "last_name": "Doe",
         "full_name": "John Doe",
-        "__format__": "WithProperty",
+        "__format__": "WithProperty(SerializableDataclass)",
     }
 
 
@@ -137,8 +137,8 @@ def test_nested_serialization(person_instance):
     expected_ser = {
         "name": "John Doe",
         "age": 30,
-        "address": {"street": "123 Main St", "city": "New York", "zip_code": "10001", "__format__": "Address"},
-        "__format__": "Person",
+        "address": {"street": "123 Main St", "city": "New York", "zip_code": "10001", "__format__": "Address(SerializableDataclass)"},
+        "__format__": "Person(SerializableDataclass)",
     }
     assert serialized == expected_ser
 
@@ -180,7 +180,7 @@ def test_simple_class_serialization():
 
     simple = SimpleClass(a=42, b="hello")
     serialized = simple.serialize()
-    assert serialized == {"a": 42, "b": "hello", "__format__": "SimpleClass"}
+    assert serialized == {"a": 42, "b": "hello", "__format__": "SimpleClass(SerializableDataclass)"}
 
     loaded = SimpleClass.load(serialized)
     assert loaded == simple
@@ -212,7 +212,7 @@ def test_person_serialization():
         "age": -1,
         "items": ["apple", "banana"],
         "full_name": "John Doe",
-        "__format__": "FullPerson",
+        "__format__": "FullPerson(SerializableDataclass)",
     }
     assert serialized == expected_ser, f"Expected {expected_ser}, got {serialized}"
 
@@ -229,7 +229,7 @@ def test_custom_serialization():
 
     custom = CustomSerialization(data=5)
     serialized = custom.serialize()
-    assert serialized == {"data": 10, "__format__": "CustomSerialization"}
+    assert serialized == {"data": 10, "__format__": "CustomSerialization(SerializableDataclass)"}
 
     loaded = CustomSerialization.load(serialized)
     assert loaded == custom

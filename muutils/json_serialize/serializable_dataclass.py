@@ -138,17 +138,17 @@ def zanj_register_loader_serializable_dataclass(cls: Type[T]) -> Type[T]:
 
     from muutils.zanj.loading import create_and_register_loader_handler
 
-    cls_name: str = cls.__name__
+    _format: str = f"{cls.__name__}(SerializableDataclass)"
     create_and_register_loader_handler(
         check=lambda json_item, path=None, z=None: (
             isinstance(json_item, dict)
             and "__format__" in json_item
-            and json_item["__format__"].startswith(cls_name)
+            and json_item["__format__"].startswith(_format)
         ),
         load=lambda json_item, path=None, z=None: cls.load(json_item),
-        uid=cls_name,
+        uid=_format,
         source_pckg=cls.__module__,
-        desc=f"{cls_name} loader via muutils.json_serialize.serializable_dataclass",
+        desc=f"{_format} loader via muutils.json_serialize.serializable_dataclass",
     )
     return cls
 
@@ -200,7 +200,7 @@ def serializable_dataclass(
         cls._properties_to_serialize = _properties_to_serialize.copy()  # type: ignore[attr-defined]
 
         def serialize(self) -> dict[str, Any]:
-            result: dict[str, Any] = {"__format__": self.__class__.__name__}
+            result: dict[str, Any] = {"__format__": f"{self.__class__.__name__}(SerializableDataclass)"}
 
             for field in dataclasses.fields(self):
 

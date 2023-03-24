@@ -235,7 +235,6 @@ def serializable_dataclass(
         _properties_to_serialize = properties_to_serialize
 
     def wrap(cls: Type[T]) -> Type[T]:
-
         # Modify the __annotations__ dictionary to replace regular fields with SerializableField
         for field_name, field_type in cls.__annotations__.items():
             field_value = getattr(cls, field_name, None)
@@ -267,7 +266,6 @@ def serializable_dataclass(
             }
 
             for field in dataclasses.fields(self):
-
                 if not isinstance(field, SerializableField):
                     raise ValueError(
                         f"Field '{field.name}' on class {self.__class__.__module__}.{self.__class__.__name__} is not a SerializableField, "

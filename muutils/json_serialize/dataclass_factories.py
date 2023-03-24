@@ -315,7 +315,6 @@ def dataclass_loader_factory(
 
     # note that we assume dataclasses are always stored as dicts
     def load(data: JSONdict):
-
         # get the base outputs for all keys in the dataclass but which dont have a special loader
         output: dict[str, Any] = dict()
 

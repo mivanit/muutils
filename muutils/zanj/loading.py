@@ -220,7 +220,6 @@ def load_item_recursive(
             and ("__format__" in json_item)
             and ("SerializableDataclass" in json_item["__format__"])
         ):
-
             # why this horribleness?
             # SerializableDataclass, if it has a field `x` which is also a SerializableDataclass, will automatically call `x.__class__.load()`
             # However, we need to load things in containers, as well as arrays
@@ -288,7 +287,6 @@ class LoadedZANJ:
         path: str | Path,
         zanj: _ZANJ_pre,
     ) -> None:
-
         # path and zanj object
         self._path: str = str(path)
         self._zanj: _ZANJ_pre = zanj

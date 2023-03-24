@@ -45,7 +45,6 @@ def jsonl_load_log(
     *,
     use_gzip: bool | None = None,
 ) -> list[dict]:
-
     data: list[JSONitem] = jsonl_load(path, use_gzip=use_gzip)
     for idx, item in enumerate(data):
         assert isinstance(

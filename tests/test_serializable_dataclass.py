@@ -271,7 +271,6 @@ class Nested_with_Container(SerializableDataclass):
 
 
 def test_nested_with_container():
-
     instance = Nested_with_Container(
         val_int=42,
         val_str="hello",

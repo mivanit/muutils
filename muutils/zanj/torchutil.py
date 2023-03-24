@@ -151,7 +151,6 @@ class ConfiguredModel(
 def set_config_class(
     config_class: Type[SerializableDataclass],
 ) -> typing.Callable[[Type[ConfiguredModel]], Type[ConfiguredModel]]:
-
     if not issubclass(config_class, SerializableDataclass):
         raise TypeError(f"{config_class} must be a subclass of SerializableDataclass")
 

@@ -64,7 +64,6 @@ class Nested_with_container(SerializableDataclass):
 
 
 def test_Nested_with_container():
-
     instance = Nested_with_container(
         "hello",
         basic=Basic("hello", 42, [1, 2, 3]),
@@ -90,7 +89,6 @@ class sdc_with_np_array(SerializableDataclass):
 
 
 def test_sdc_with_np_array_small():
-
     instance = sdc_with_np_array("small arrays", np.random.rand(10), np.random.rand(20))
 
     z = ZANJ()
@@ -101,7 +99,6 @@ def test_sdc_with_np_array_small():
 
 
 def test_sdc_with_np_array():
-
     instance = sdc_with_np_array(
         "bigger arrays", np.random.rand(128, 128), np.random.rand(256, 256)
     )
@@ -150,7 +147,6 @@ class sdc_with_df(SerializableDataclass):
 
 
 def test_sdc_with_df():
-
     instance = sdc_with_df(
         "downloaded_data",
         iris_data=pd.read_csv("tests/input_data/iris.csv"),
@@ -177,7 +173,6 @@ class sdc_complicated(SerializableDataclass):
 
 
 def test_sdc_complicated():
-
     instance = sdc_complicated(
         name="complicated data",
         arr1=np.random.rand(128, 128),
@@ -213,7 +208,6 @@ class sdc_container_explicit(SerializableDataclass):
 
 
 def test_sdc_container_explicit():
-
     instance = sdc_container_explicit(
         "container explicit",
         container=[

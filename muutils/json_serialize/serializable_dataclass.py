@@ -133,6 +133,9 @@ def array_safe_eq(a: Any, b: Any) -> bool:
     ):
         return (a == b).all()
 
+    if (str(type(a)) == "<class 'pandas.core.frame.DataFrame'>" and str(type(b)) == "<class 'pandas.core.frame.DataFrame'>"):
+        return a.equals(b)
+
     if isinstance(a, typing.Sequence) and isinstance(b, typing.Sequence):
         return (
             len(a) == len(b)
@@ -322,6 +325,8 @@ def serializable_dataclass(
         cls.serialize = serialize  # type: ignore[attr-defined]
         # type is `Callable[[dict], T]`
         cls.load = load  # type: ignore[attr-defined]
+
+        cls.__eq__ = lambda self, other: dc_eq(self, other)
 
         # Register the class with the ZANJ backport
         zanj_register_loader_serializable_dataclass(cls)

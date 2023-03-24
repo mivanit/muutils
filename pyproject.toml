@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "muutils"
-version = "0.3"
+version = "0.3.0"
 description = "A collection of miscellaneous python utilities"
 license = "GPL-3.0-only"
 authors = ["mivanit <mivanits@umich.edu>"]
@@ -43,3 +43,4 @@ extend-exclude = "_wip"
 
 [tool.mypy]
 exclude = ['_wip']
+show_error_codes = true

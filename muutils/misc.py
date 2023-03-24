@@ -1,8 +1,11 @@
 import typing
 
 
-def sanitize_fname(fname: str) -> str:
+def sanitize_fname(fname: str | None) -> str:
     """sanitize a filename for use in a path"""
+    if fname is None:
+        return "_None_"
+
     fname_sanitized: str = ""
     for char in fname:
         if char.isalnum():

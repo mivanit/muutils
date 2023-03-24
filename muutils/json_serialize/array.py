@@ -1,16 +1,17 @@
 import typing
 import warnings
-from typing import Any, Dict, Iterable, Literal, Optional
+from typing import Any, Dict, Iterable, Literal, Optional, Sequence
 
 import numpy as np
 
 from muutils.json_serialize.util import JSONitem
-from muutils.tensor_utils import NDArray
+
+# pylint: disable=unused-argument
 
 ArrayMode = Literal["list", "array_list_meta", "array_hex_meta", "external"]
 
 
-def array_n_elements(arr: typing.Union["torch.Tensor", "np.ndarray"]) -> int:
+def array_n_elements(arr) -> int:  # type: ignore[name-defined]
     """get the number of elements in an array"""
     if isinstance(arr, np.ndarray):
         return arr.size
@@ -20,7 +21,7 @@ def array_n_elements(arr: typing.Union["torch.Tensor", "np.ndarray"]) -> int:
         raise TypeError(f"invalid type: {type(arr)}")
 
 
-def arr_metadata(arr: NDArray) -> Dict[str, Any]:
+def arr_metadata(arr) -> Dict[str, Any]:
     """get metadata for a numpy array"""
     return {
         "shape": arr.shape,
@@ -30,9 +31,9 @@ def arr_metadata(arr: NDArray) -> Dict[str, Any]:
 
 
 def serialize_array(
-    jser: "JsonSerializer",
-    arr: NDArray,
-    path: str,
+    jser: "JsonSerializer",  # type: ignore[name-defined]
+    arr: np.ndarray,
+    path: str | Sequence[str | int],
     array_mode: ArrayMode | None = None,
 ) -> JSONitem:
     """serialize a numpy or pytorch array in one of several modes
@@ -43,7 +44,6 @@ def serialize_array(
     - `list`: serialize as a list of values, no metadata (equivalent to `arr.tolist()`)
     - `array_list_meta`: serialize dict with metadata, actual list under the key `data`
     - `array_hex_meta`: serialize dict with metadata, actual hex string under the key `data`
-        # - `external`: reference to external file
 
     for `array_list_meta` and `array_hex_meta`, the output will look like
     ```
@@ -74,19 +74,22 @@ def serialize_array(
     if array_mode is None:
         array_mode = jser.array_mode
 
+    arr_type: str = f"{type(arr).__module__}.{type(arr).__name__}"
+    arr_np: np.ndarray = arr if isinstance(arr, np.ndarray) else np.array(arr)
+
     if array_mode == "array_list_meta":
         return {
-            "__format__": "array_list_meta",
-            "data": arr.tolist(),
-            **arr_metadata(arr),
+            "__format__": f"{arr_type}:array_list_meta",
+            "data": arr_np.tolist(),
+            **arr_metadata(arr_np),
         }
     elif array_mode == "list":
-        return arr.tolist()
+        return arr_np.tolist()
     elif array_mode == "array_hex_meta":
         return {
-            "__format__": "array_hex_meta",
-            "data": arr.tobytes().hex(),
-            **arr_metadata(arr),
+            "__format__": f"{arr_type}:array_hex_meta",
+            "data": arr_np.tobytes().hex(),
+            **arr_metadata(arr_np),
         }
     else:
         raise KeyError(f"invalid array_mode: {array_mode}")
@@ -98,21 +101,17 @@ def infer_array_mode(arr: JSONitem) -> ArrayMode:
     assumes the array was serialized via `serialize_array()`
     """
     if isinstance(arr, typing.Mapping):
-        fmt: Optional[str] = arr.get("__format__", None)
-        if fmt == "array_list_meta":
+        fmt: str = arr.get("__format__", "")
+        if fmt.endswith(":array_list_meta"):
             if not isinstance(arr["data"], Iterable):
                 raise ValueError(f"invalid list format: {type(arr['data']) = }\t{arr}")
-            return fmt
-        elif fmt == "array_hex_meta":
+            return "array_list_meta"
+        elif fmt.endswith(":array_hex_meta"):
             if not isinstance(arr["data"], str):
                 raise ValueError(f"invalid hex format: {type(arr['data']) = }\t{arr}")
-            return fmt
-        elif fmt == "external:npy":
-            if ("$ref" not in arr) or (not isinstance(arr["$ref"], (str, np.ndarray))):
-                raise ValueError(
-                    f"invalid external format: {type(arr['$ref']) = }\t{arr}"
-                )
-            return fmt
+            return "array_hex_meta"
+        elif fmt.endswith(":external"):
+            return "external"
         else:
             raise ValueError(f"invalid format: {arr}")
     elif isinstance(arr, list):
@@ -138,19 +137,32 @@ def load_array(arr: JSONitem, array_mode: Optional[ArrayMode] = None) -> Any:
 
     # actually load the array
     if array_mode == "array_list_meta":
+        assert isinstance(
+            arr, typing.Mapping
+        ), f"invalid list format: {type(arr) = }\n{arr = }"
+
         data = np.array(arr["data"], dtype=arr["dtype"])
         if tuple(arr["shape"]) != tuple(data.shape):
             raise ValueError(f"invalid shape: {arr}")
         return data
+
     elif array_mode == "array_hex_meta":
+        assert isinstance(
+            arr, typing.Mapping
+        ), f"invalid list format: {type(arr) = }\n{arr = }"
+
         data = np.frombuffer(bytes.fromhex(arr["data"]), dtype=arr["dtype"])
         return data.reshape(arr["shape"])
+
     elif array_mode == "list":
+        assert isinstance(
+            arr, typing.Sequence
+        ), f"invalid list format: {type(arr) = }\n{arr = }"
+
         return np.array(arr)
-    elif array_mode == "external:npy":
-        data = np.array(arr["$ref"], dtype=arr["dtype"])
-        if tuple(arr["shape"]) != tuple(data.shape):
-            raise ValueError(f"invalid shape: {arr}")
-        return data
+    elif array_mode == "external":
+        # assume ZANJ has taken care of it
+        assert isinstance(arr, typing.Mapping)
+        return arr["data"]
     else:
         raise ValueError(f"invalid array_mode: {array_mode}")

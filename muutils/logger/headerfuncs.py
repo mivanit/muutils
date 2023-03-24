@@ -1,9 +1,15 @@
-from typing import Any, Callable
+import json
+from typing import Any, Mapping, Protocol
 
 from muutils.json_serialize import json_serialize
 
 # takes message, level, other data, and outputs message with appropriate header
-HeaderFunction = Callable[[str, int, Any], str]
+# HeaderFunction = Callable[[str, int, Any], str]
+
+
+class HeaderFunction(Protocol):
+    def __call__(self, msg: Any, lvl: int, **kwargs) -> str:
+        ...
 
 
 def md_header_function(
@@ -44,10 +50,10 @@ def md_header_function(
     lvl_div_10: int = lvl // 10
 
     msg_processed: str
-    if isinstance(msg, dict):
+    if isinstance(msg, Mapping):
         msg_processed = ", ".join([f"{k}: {json_serialize(v)}" for k, v in msg.items()])
     else:
-        msg_processed = json_serialize(msg)
+        msg_processed = json.dumps(json_serialize(msg))
 
     if lvl >= 0:
         return f"{extra_indent}{indent_lvl * (lvl_div_10 - 1)}{stream_prefix}#{'#' * lvl_div_10 if lvl else ''} {msg_processed}"

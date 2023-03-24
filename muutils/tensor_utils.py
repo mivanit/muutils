@@ -8,7 +8,7 @@ import torch
 # pylint: disable=missing-class-docstring
 
 
-TYPE_TO_JAX_DTYPE: dict[type, type] = {
+TYPE_TO_JAX_DTYPE: dict = {
     float: jaxtyping.Float,
     int: jaxtyping.Int,
     jaxtyping.Float: jaxtyping.Float,
@@ -54,10 +54,11 @@ TYPE_TO_JAX_DTYPE: dict[type, type] = {
 }
 
 
+# TODO: add proper type annotations to this signature
 def jaxtype_factory(
     name: str,
     array_type: type,
-    default_jax_dtype: type = jaxtyping.Float,
+    default_jax_dtype=jaxtyping.Float,
     legacy_mode: typing.Literal["error", "warn", "ignore"] = "warn",
 ) -> type:
     class _BaseArray:
@@ -86,7 +87,7 @@ def jaxtype_factory(
                 }
             )
 
-        @typing._tp_cache
+        @typing._tp_cache  # type: ignore
         def __class_getitem__(cls, params):
             # MyTensor["dim1 dim2"]
             if isinstance(params, str):
@@ -132,6 +133,10 @@ def jaxtype_factory(
                 )
 
     _BaseArray.__name__ = name
+
+    if _BaseArray.__doc__ is None:
+        _BaseArray.__doc__ = "{default_jax_dtype = }\n{array_type = }"
+
     _BaseArray.__doc__ = _BaseArray.__doc__.format(
         default_jax_dtype=repr(default_jax_dtype),
         array_type=repr(array_type),
@@ -140,25 +145,24 @@ def jaxtype_factory(
     return _BaseArray
 
 
-# this makes linters happy
+if typing.TYPE_CHECKING:
+    # these class definitions are only used here to make pylint happy,
+    # but they make mypy unhappy and there is no way to only run if not mypy
+    # so, later on we have more ignores
+    class ATensor(torch.Tensor):
+        @typing._tp_cache  # type: ignore
+        def __class_getitem__(cls, params):
+            raise NotImplementedError()
+
+    class NDArray(torch.Tensor):
+        @typing._tp_cache  # type: ignore
+        def __class_getitem__(cls, params):
+            raise NotImplementedError()
 
 
-class ATensor(torch.Tensor):
-    @typing._tp_cache
-    def __class_getitem__(cls, params):
-        raise NotImplementedError()
+ATensor = jaxtype_factory("ATensor", torch.Tensor, jaxtyping.Float)  # type: ignore[misc, assignment]
 
-
-ATensor = jaxtype_factory("ATensor", torch.Tensor, jaxtyping.Float)
-
-
-class NDArray(torch.Tensor):
-    @typing._tp_cache
-    def __class_getitem__(cls, params):
-        raise NotImplementedError()
-
-
-NDArray = jaxtype_factory("NDArray", np.ndarray, jaxtyping.Float)
+NDArray = jaxtype_factory("NDArray", np.ndarray, jaxtyping.Float)  # type: ignore[misc, assignment]
 
 
 DTYPE_LIST: list = [
@@ -225,7 +229,7 @@ DTYPE_LIST: list = [
 DTYPE_MAP: dict = {str(x): x for x in DTYPE_LIST}
 
 
-TORCH_OPTIMIZERS_MAP: dict[str, torch.optim.Optimizer] = {
+TORCH_OPTIMIZERS_MAP: dict[str, typing.Type[torch.optim.Optimizer]] = {
     "Adagrad": torch.optim.Adagrad,
     "Adam": torch.optim.Adam,
     "AdamW": torch.optim.AdamW,
@@ -242,16 +246,16 @@ TORCH_OPTIMIZERS_MAP: dict[str, torch.optim.Optimizer] = {
 
 
 def pad_tensor(
-    tensor: ATensor["token"],
+    tensor: jaxtyping.Shaped[torch.Tensor, "dim1"],
     padded_length: int,
     pad_value: float = 0.0,
     rpad: bool = False,
-) -> ATensor["padded_length"]:
+) -> jaxtyping.Shaped[torch.Tensor, "padded_length"]:
     """pad a 1-d tensor on the left with pad_value to length `padded_length`
 
     set `rpad = True` to pad on the right instead"""
 
-    temp: list[ATensor] = [
+    temp: list[torch.Tensor] = [
         torch.full(
             (padded_length - tensor.shape[0],),
             pad_value,
@@ -281,16 +285,16 @@ def rpad_tensor(
 
 
 def pad_array(
-    array: NDArray["token"],
+    array: jaxtyping.Shaped[np.ndarray, "dim1"],
     padded_length: int,
     pad_value: float = 0.0,
     rpad: bool = False,
-) -> NDArray["padded_length"]:
+) -> jaxtyping.Shaped[np.ndarray, "padded_length"]:
     """pad a 1-d array on the left with pad_value to length `padded_length`
 
     set `rpad = True` to pad on the right instead"""
 
-    temp: list[NDArray] = [
+    temp: list[np.ndarray] = [
         np.full(
             (padded_length - array.shape[0],),
             pad_value,
@@ -306,50 +310,14 @@ def pad_array(
 
 
 def lpad_array(
-    array: ATensor["token"], padded_length: int, pad_value: float = 0.0
-) -> NDArray:
+    array: np.ndarray, padded_length: int, pad_value: float = 0.0
+) -> np.ndarray:
     """pad a 1-d array on the left with pad_value to length `padded_length`"""
     return pad_array(array, padded_length, pad_value, rpad=False)
 
 
 def rpad_array(
-    array: ATensor["token"], pad_length: int, pad_value: float = 0.0
-) -> NDArray:
+    array: np.ndarray, pad_length: int, pad_value: float = 0.0
+) -> np.ndarray:
     """pad a 1-d array on the right with pad_value to length `pad_length`"""
     return pad_array(array, pad_length, pad_value, rpad=True)
-
-
-def split_sequences(
-    sequences: typing.Iterator[ATensor["token"]],
-    min_length: int = 1,
-    max_length: int | None = None,
-    lpad_to: int | None = None,
-) -> typing.Iterator[ATensor["token"]]:
-    """split a list of sequences into a list of sequences with length in [min_length, max_length]
-
-    mostly for feeding data into transformers"""
-
-    if max_length is None:
-        max_length = max(len(seq) for seq in sequences)
-
-    for seq in sequences:
-        for i in range(len(seq)):
-            if i < min_length:
-                continue
-
-            start_idx: int = max(0, i - max_length)
-
-            if lpad_to is None:
-                yield seq[start_idx : i + 1]
-            else:
-                yield torch.cat(
-                    [
-                        torch.full(
-                            (padded_length - tensor.shape[0],),
-                            pad_value,
-                            dtype=tensor.dtype,
-                            device=tensor.device,
-                        ),
-                        tensor,
-                    ]
-                )

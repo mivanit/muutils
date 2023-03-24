@@ -1,13 +1,13 @@
 import functools
-import json
 from pathlib import Path
 import types
-from typing import Any, Dict, List, NamedTuple, Optional, Tuple, Type, Union, Callable, Literal, Iterable
-from dataclasses import dataclass, is_dataclass, asdict
-from collections import namedtuple
+from typing import Any, Optional, Union, Callable, Literal, Iterable
+from dataclasses import dataclass, is_dataclass
 import inspect
 import typing
 import warnings
+
+from muutils.json_serialize.util import JSONdict
 
 
 _NUMPY_WORKING: bool
@@ -143,7 +143,7 @@ def infer_array_mode(arr: JSONitem) -> ArrayMode:
     
     assumes the array was serialized via `serialize_array()`
     """
-    if isinstance(arr, dict):
+    if isinstance(arr, typing.Mapping):
         fmt: Optional[str] = arr.get("__format__", None)
         if fmt == "array_list_meta":
             if type(arr["data"]) != list:
@@ -242,10 +242,10 @@ def json_serialize(
         if depth == 0:
             return str(obj)
 
-        if isinstance(obj, dict):
+        if isinstance(obj, typing.Mapping):
             # print(f'\n### reading obj as dict: {str(obj)}')
             # if dict, recurse
-            out_dict: dict[str, JSONitem] = dict()
+            out_dict: JSONdict = dict()
             for k, v in obj.items():
                 out_dict[str(k)] = json_serialize(v, newdepth)
             return out_dict
@@ -297,7 +297,7 @@ def json_serialize(
 
 
 def _recursive_hashify(obj: Any, force: bool = True) -> Hashableitem:
-    if isinstance(obj, dict):
+    if isinstance(obj, typing.Mapping):
         return tuple(
             (k, _recursive_hashify(v)) 
             for k, v in obj.items()
@@ -415,7 +415,7 @@ def dataclass_serializer_factory(
 
     def serialize(self):
         # get the base outputs for all keys in the dataclass but which dont have a special serializer
-        base_output: dict[str, JSONitem] = {
+        base_output: JSONdict = {
             k: (
                 json_serialize(getattr(self, k))
             )

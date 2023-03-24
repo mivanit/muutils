@@ -25,8 +25,8 @@ class LoggingStream:
     - `last_msg: tuple[float, Any]|None` last message written to this stream (timestamp, message)
     """
 
-    name: str
-    aliases: set[str] = field(default_factory=tuple)
+    name: str | None
+    aliases: set[str] = field(default_factory=set)
     file: str | bool | AnyIO | None = None
     default_level: int | None = None
     default_contents: dict[str, Callable[[], Any]] = field(default_factory=dict)
@@ -35,7 +35,7 @@ class LoggingStream:
     # TODO: implement last-message caching
     # last_msg: tuple[float, Any]|None = None
 
-    def make_handler(self) -> AnyIO:
+    def make_handler(self) -> AnyIO | None:
         if self.file is None:
             return None
         elif isinstance(self.file, str):
@@ -49,7 +49,7 @@ class LoggingStream:
             # if its a bool and true, open a file with the same name as the stream (in the current dir)
             # TODO: make this happen in the same dir as the main logfile?
             if self.file:
-                return open(
+                return open(  # type: ignore[return-value]
                     f"{sanitize_fname(self.name)}.log.jsonl",
                     "w",
                     encoding="utf-8",

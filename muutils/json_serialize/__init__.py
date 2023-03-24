@@ -10,6 +10,11 @@ from muutils.json_serialize.json_serialize import (
     JsonSerializer,
     json_serialize,
 )
+from muutils.json_serialize.serializable_dataclass import (
+    SerializableDataclass,
+    serializable_dataclass,
+    serializable_field,
+)
 from muutils.json_serialize.util import try_catch
 
 __all__ = [
@@ -23,4 +28,7 @@ __all__ = [
     "JsonSerializer",
     "json_serialize",
     "try_catch",
+    "serializable_dataclass",
+    "serializable_field",
+    "SerializableDataclass",
 ]

@@ -22,3 +22,7 @@ test:
 	rm -rf tests/junk_data
 	echo "running tests"
 	python -m pytest tests
+
+# workflow test -- no need to clear, runs using poetry
+wftest:
+	poetry run python -m pytest tests

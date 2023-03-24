@@ -50,6 +50,4 @@ jobs:
           poetry lock --check
           poetry install
       - name: tests
-        run: |
-          poetry shell
-          make test
+        run: make wftest

@@ -26,3 +26,8 @@ test:
 # workflow test -- no need to clear, runs using poetry
 wftest:
 	poetry run python -m pytest tests
+
+
+wflint:
+	poetry run python -m mypy --config-file pyproject.toml muutils/
+	poetry run python -m mypy --config-file pyproject.toml tests/

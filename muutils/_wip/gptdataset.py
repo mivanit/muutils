@@ -8,7 +8,6 @@ import jaxtyping
 import torch
 from torch.utils.data import Dataset
 
-from muutils.tensor_utils import ATensor
 
 
 # "error: Only concrete class can be given where Type[Abstract] is expected"

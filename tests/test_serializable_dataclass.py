@@ -1,10 +1,11 @@
-import pytest
 from typing import Any
 
+import pytest
+
 from muutils.json_serialize import (
+    SerializableDataclass,
     serializable_dataclass,
     serializable_field,
-    SerializableDataclass,
 )
 
 # pylint: disable=missing-class-docstring, unused-variable

@@ -10,12 +10,12 @@ from muutils.json_serialize.json_serialize import (
     JsonSerializer,
     json_serialize,
 )
-from muutils.json_serialize.util import try_catch
 from muutils.json_serialize.serializable_dataclass import (
+    SerializableDataclass,
     serializable_dataclass,
     serializable_field,
-    SerializableDataclass,
 )
+from muutils.json_serialize.util import try_catch
 
 __all__ = [
     "arr_metadata",

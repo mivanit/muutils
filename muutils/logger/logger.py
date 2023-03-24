@@ -9,8 +9,8 @@
 
 import json
 import time
-from functools import partial
 import typing
+from functools import partial
 from typing import Callable, Sequence
 
 from muutils.json_serialize import JSONitem, json_serialize

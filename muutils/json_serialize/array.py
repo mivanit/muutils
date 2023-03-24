@@ -3,10 +3,8 @@ import warnings
 from typing import Any, Dict, Iterable, Literal, Optional, Sequence
 
 import numpy as np
-import jaxtyping
 
 from muutils.json_serialize.util import JSONitem
-from muutils.tensor_utils import NDArray
 
 # pylint: disable=unused-argument
 

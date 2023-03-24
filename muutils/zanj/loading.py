@@ -1,26 +1,23 @@
 import json
 import typing
-import warnings
 import zipfile
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, Callable, Literal, Iterable
+from typing import Any, Callable
 
 import numpy as np
-import torch
 import pandas as pd
+import torch
 
-from muutils.json_serialize.json_serialize import ObjectPath
-from muutils.json_serialize.util import JSONdict, JSONitem, MonoTuple, ErrorMode
 from muutils.json_serialize.array import load_array
+from muutils.json_serialize.json_serialize import ObjectPath
+from muutils.json_serialize.util import ErrorMode, JSONdict, JSONitem
 from muutils.zanj.externals import (
     GET_EXTERNAL_LOAD_FUNC,
     ZANJ_MAIN,
     ZANJ_META,
-    _ZANJ_pre,
     ExternalItem,
-    ExternalItemType,
-    ExternalItemType_vals,
+    _ZANJ_pre,
 )
 
 # pylint: disable=protected-access, dangerous-default-value

@@ -1,12 +1,12 @@
 """for storing/retrieving an item externally in a ZANJ archive"""
 
 import json
-from typing import IO, Any, Callable, Literal, NamedTuple, get_args, Sequence
+from typing import IO, Any, Callable, Literal, NamedTuple, get_args
 
 import numpy as np
 
+from muutils.json_serialize.json_serialize import ObjectPath
 from muutils.json_serialize.util import JSONitem
-from muutils.json_serialize.json_serialize import JsonSerializer, ObjectPath
 from muutils.tensor_utils import NDArray
 
 # this is to make type checking work -- it will later be overridden

@@ -1,8 +1,7 @@
 import json
-from typing import Any, Callable, Protocol, Mapping
+from typing import Any, Mapping, Protocol
 
 from muutils.json_serialize import json_serialize
-from muutils.json_serialize.util import JSONitem
 
 # takes message, level, other data, and outputs message with appropriate header
 # HeaderFunction = Callable[[str, int, Any], str]

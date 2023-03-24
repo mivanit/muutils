@@ -1,5 +1,4 @@
-from muutils.json_serialize import JSONitem
-from muutils.jsonlines import jsonl_load, jsonl_load_log
+from muutils.jsonlines import jsonl_load_log
 
 
 def get_any_from_stream(stream: list[dict], key: str) -> None:

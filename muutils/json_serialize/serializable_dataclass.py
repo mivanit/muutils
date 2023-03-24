@@ -2,7 +2,7 @@ import abc
 import dataclasses
 import types
 import typing
-from typing import Any, Callable, Optional, Type, TypeVar, Union
+from typing import Any, Callable, Optional, Type, TypeVar
 
 # pylint: disable=bad-mcs-classmethod-argument, too-many-arguments, protected-access
 

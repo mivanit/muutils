@@ -2,9 +2,8 @@ import inspect
 import types
 import typing
 import warnings
-from typing import Any, Callable, Iterable, Optional, Union, Sequence
+from typing import Any, Callable, Optional, Sequence, Union
 
-from muutils.json_serialize.array import ArrayMode
 from muutils.json_serialize.json_serialize import JsonSerializer
 from muutils.json_serialize.util import JSONdict, JSONitem, MonoTuple, TypeErrorMode
 

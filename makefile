@@ -11,7 +11,7 @@ format:
 	python -m black .
 
 check-format:
-		python -m pycln --check --all .
+	python -m pycln --check --all .
 	python -m isort --check-only .
 	python -m black --check .
 

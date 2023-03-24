@@ -12,7 +12,7 @@ import pandas as pd
 
 from muutils.json_serialize.json_serialize import ObjectPath
 from muutils.json_serialize.util import JSONdict, JSONitem, MonoTuple, ErrorMode
-from muutils.json_serialize.array import load_array, load_array_into_item
+from muutils.json_serialize.array import load_array
 from muutils.zanj.externals import (
     GET_EXTERNAL_LOAD_FUNC,
     ZANJ_MAIN,
@@ -92,41 +92,41 @@ class LoaderHandler:
 LOADER_HANDLERS: list[LoaderHandler] = [
     # array external
     LoaderHandler(
-        check=lambda json_item, path=None, z=None: (
+        check=lambda json_item, path=None, z=None: ( # type: ignore[misc]
             isinstance(json_item, typing.Mapping)
             and "__format__" in json_item
             and json_item["__format__"].startswith("numpy.ndarray")
             # and json_item["data"].dtype.name == json_item["dtype"]
             # and tuple(json_item["data"].shape) == tuple(json_item["shape"])
         ),
-        load=lambda json_item, path=None, z=None: np.array(load_array(json_item)),
+        load=lambda json_item, path=None, z=None: np.array(load_array(json_item)),  # type: ignore[misc]
         uid="numpy.ndarray",
         source_pckg="muutils.zanj",
         desc="numpy.ndarray loader",
     ),
     LoaderHandler(
-        check=lambda json_item, path=None, z=None: (
+        check=lambda json_item, path=None, z=None: ( # type: ignore[misc]
             isinstance(json_item, typing.Mapping)
             and "__format__" in json_item
             and json_item["__format__"].startswith("torch.Tensor")
             # and json_item["data"].dtype.name == json_item["dtype"]
             # and tuple(json_item["data"].shape) == tuple(json_item["shape"])
         ),
-        load=lambda json_item, path=None, z=None: torch.tensor(load_array(json_item)),
+        load=lambda json_item, path=None, z=None: torch.tensor(load_array(json_item)),  # type: ignore[misc]
         uid="torch.Tensor",
         source_pckg="muutils.zanj",
         desc="torch.Tensor loader",
     ),
     # pandas
     LoaderHandler(
-        check=lambda json_item, path=None, z=None: (
+        check=lambda json_item, path=None, z=None: ( # type: ignore[misc]
             isinstance(json_item, typing.Mapping)
             and "__format__" in json_item
             and json_item["__format__"].startswith("pandas.DataFrame")
             and "data" in json_item
             and isinstance(json_item["data"], typing.Sequence)
         ),
-        load=lambda json_item, path=None, z=None: pd.DataFrame(json_item["data"]),
+        load=lambda json_item, path=None, z=None: pd.DataFrame(json_item["data"]),  # type: ignore[misc]
         uid="pandas.DataFrame",
         source_pckg="muutils.zanj",
         desc="pandas.DataFrame loader",
@@ -166,8 +166,8 @@ def create_and_register_loader_handler(
 ):
     """create and register a custom loader handler"""
     lh = LoaderHandler(
-        check=check,
-        load=load,
+        check=check,  # type: ignore
+        load=load,  # type: ignore
         uid=uid,
         source_pckg=source_pckg,
         priority=priority,
@@ -305,11 +305,11 @@ class LoadedZANJ:
 
         # read externals
         self._externals: dict[str, ExternalItem] = dict()
-        for fname, ext_item in self._meta["externals_info"].items():
+        for fname, ext_item in self._meta["externals_info"].items(): # type: ignore[union-attr]
             item_type: str = ext_item["item_type"]
             with self._zipf.open(fname, "r") as fp:
                 self._externals[fname] = ExternalItem(
-                    item_type=item_type,
+                    item_type=item_type, # type: ignore[arg-type]
                     data=GET_EXTERNAL_LOAD_FUNC(item_type)(self, fp),
                     path=ext_item["path"],
                 )
@@ -323,13 +323,13 @@ class LoadedZANJ:
             assert len(path) > 0
             assert all(isinstance(key, (str, int)) for key in path)
             # get the item
-            item: JSONitem = self._json_data
+            item = self._json_data
             for key in path:
-                item = item[key]
+                item = item[key] # type: ignore[index]
             # replace the item with the external item
-            assert "$ref" in item
-            assert item["$ref"] == ext_path
-            item["data"] = ext_item.data
+            assert "$ref" in item # type: ignore
+            assert item["$ref"] == ext_path # type: ignore
+            item["data"] = ext_item.data # type: ignore
 
             item = load_item_recursive(
                 json_item=item,

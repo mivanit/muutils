@@ -103,7 +103,7 @@ def infer_array_mode(arr: JSONitem) -> ArrayMode:
     assumes the array was serialized via `serialize_array()`
     """
     if isinstance(arr, typing.Mapping):
-        fmt: Optional[str] = arr.get("__format__", "")
+        fmt: str = arr.get("__format__", "")
         if fmt.endswith(":array_list_meta"):
             if not isinstance(arr["data"], Iterable):
                 raise ValueError(f"invalid list format: {type(arr['data']) = }\t{arr}")
@@ -164,16 +164,10 @@ def load_array(arr: JSONitem, array_mode: Optional[ArrayMode] = None) -> Any:
         return np.array(arr)
     elif array_mode == "external":
         # assume ZANJ has taken care of it
+        assert isinstance(
+            arr, typing.Mapping
+        )
         return arr["data"]
     else:
         raise ValueError(f"invalid array_mode: {array_mode}")
 
-
-def load_array_into_item(arr: JSONitem, array_mode: Optional[ArrayMode] = None) -> dict:
-    """loads the json-serialized array, but leaves it in-place, replacing the "data" key or list"""
-    arr_loaded = load_array(arr)
-
-    if isinstance(arr, dict):
-        return {**arr, "data": arr_loaded}
-    elif isinstance(arr, list):
-        return arr_loaded

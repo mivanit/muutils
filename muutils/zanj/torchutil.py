@@ -112,7 +112,7 @@ class ConfiguredModel(
             zanj = ZANJ()
 
         # get the config
-        config: T_config = cls._config_class.load(obj["config"])
+        config: T_config = cls._config_class.load(obj["config"]) # type: ignore
 
         # initialize the model
         model: "ConfiguredModel" = cls(config)
@@ -120,7 +120,7 @@ class ConfiguredModel(
         # load the state dict
         tensored_state_dict: dict[str, torch.Tensor] = load_item_recursive(
             obj["state_dict"],
-            path + ("state_dict",),
+            tuple(path) + ("state_dict",),
             zanj,
         )
 
@@ -142,12 +142,12 @@ class ConfiguredModel(
     def get_handler(cls) -> LoaderHandler:
         cls_name: str = str(cls.__name__)
         return LoaderHandler(
-            check=lambda json_item, path=None, z=None: (
+            check=lambda json_item, path=None, z=None: ( # type: ignore
                 isinstance(json_item, dict)
                 and "__format__" in json_item
                 and json_item["__format__"].startswith(cls_name)
             ),
-            load=lambda json_item, path=None, z=None: cls.load(json_item, path, z),
+            load=lambda json_item, path=None, z=None: cls.load(json_item, path, z), # type: ignore
             uid=cls_name,
             source_pckg=cls.__module__,
             desc=f"{cls.__module__} {cls_name} loader via muutils.zanj.torchutil.ConfiguredModel",

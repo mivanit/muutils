@@ -154,7 +154,7 @@ def array_safe_eq(a: Any, b: Any) -> bool:
     try:
         return a == b
     except TypeError:
-        return NotImplementedError()
+        return NotImplementedError # type: ignore[return-value]
 
 
 def dc_eq(dc1, dc2) -> bool:
@@ -163,7 +163,7 @@ def dc_eq(dc1, dc2) -> bool:
         return True
 
     if dc1.__class__ is not dc2.__class__:
-        return NotImplementedError
+        return NotImplementedError # type: ignore[return-value]
 
     return all(
         array_safe_eq(getattr(dc1, fld.name), getattr(dc2, fld.name))
@@ -199,12 +199,12 @@ def zanj_register_loader_serializable_dataclass(cls: Type[T]) -> Type[T]:
 
     _format: str = f"{cls.__name__}(SerializableDataclass)"
     create_and_register_loader_handler(
-        check=lambda json_item, path=None, z=None: (
+        check=lambda json_item, path=None, z=None: ( # type: ignore
             isinstance(json_item, dict)
             and "__format__" in json_item
             and json_item["__format__"].startswith(_format)
         ),
-        load=lambda json_item, path=None, z=None: cls.load(json_item),
+        load=lambda json_item, path=None, z=None: cls.load(json_item), # type: ignore
         uid=_format,
         source_pckg=cls.__module__,
         desc=f"{_format} loader via muutils.json_serialize.serializable_dataclass",
@@ -287,17 +287,21 @@ def serializable_dataclass(
 
             return result
 
-        @classmethod
+        # mypy thinks this isnt a classmethod
+        @classmethod # type: ignore[misc]
         def load(cls, data: dict[str, Any] | T) -> Type[T]:
             # TODO: this is kind of ugly, but it fixes a lot of issues for when we do recursive loading with ZANJ
             if isinstance(data, cls):
                 return data
+            
+            assert isinstance(data, typing.Mapping), f"Expected {data} to be a Mapping, but it is a {type(data)}"
 
             ctor_kwargs: dict[str, Any] = dict()
             for field in dataclasses.fields(cls):
                 assert isinstance(
                     field, SerializableField
                 ), f"Field '{field.name}' on class {cls.__name__} is not a SerializableField, but a {type(field)} this state should be inaccessible, please report this bug!"
+
 
                 if (field.name in data) and field.init:
                     value = data[field.name]
@@ -331,7 +335,7 @@ def serializable_dataclass(
         # type is `Callable[[dict], T]`
         cls.load = load  # type: ignore[attr-defined]
 
-        cls.__eq__ = lambda self, other: dc_eq(self, other)
+        cls.__eq__ = lambda self, other: dc_eq(self, other) # type: ignore[assignment]
 
         # Register the class with the ZANJ backport
         zanj_register_loader_serializable_dataclass(cls)

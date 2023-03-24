@@ -50,4 +50,6 @@ jobs:
           poetry lock --check
           poetry install
       - name: tests
-        run: make test
+        run: |
+          poetry shell
+          make test

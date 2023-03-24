@@ -10,7 +10,6 @@ import numpy as np
 import torch
 import pandas as pd
 
-from muutils.json_serialize.serializable_dataclass import _ZANJ_backport_create_and_register_loader_handler
 from muutils.json_serialize.json_serialize import ObjectPath
 from muutils.json_serialize.util import JSONdict, JSONitem, MonoTuple, ErrorMode
 from muutils.json_serialize.array import load_array, load_array_into_item
@@ -91,39 +90,6 @@ class LoaderHandler:
 # NOTE: there are type ignores on the loaders, since the type checking should be the responsibility of the check function
 
 LOADER_HANDLERS: list[LoaderHandler] = [
-    # # array inline
-    # LoaderHandler(
-    #     check=lambda json_item, path=None, z=None: (
-    #         isinstance(json_item, typing.Mapping)
-    #         and "__format__" in json_item
-    #         and json_item["__format__"].endswith(":array_list_meta")
-    #     ),
-    #     load=lambda json_item, path=None, z=None: (
-    #         np.array(json_item["data"], dtype=json_item["dtype"]).reshape(  # type: ignore
-    #             json_item["shape"]  # type: ignore
-    #         )
-    #     ),
-    #     uid="array_list_meta",
-    #     source_pckg="muutils.zanj",
-    #     desc="array_list_meta loader",
-    # ),
-    # LoaderHandler(
-    #     check=lambda json_item, path=None, z=None: (
-    #         isinstance(json_item, typing.Mapping)
-    #         and "__format__" in json_item
-    #         and json_item["__format__"].endswith(":array_hex_meta")
-    #     ),
-    #     load=lambda json_item, path=None, z=None: (
-    #         np.frombuffer(
-    #             bytes.fromhex(json_item["data"]), dtype=json_item["dtype"]  # type: ignore
-    #         ).reshape(
-    #             json_item["shape"]  # type: ignore
-    #         )
-    #     ),
-    #     uid="array_hex_meta",
-    #     source_pckg="muutils.zanj",
-    #     desc="array_hex_meta loader",
-    # ),
     # array external
     LoaderHandler(
         check=lambda json_item, path=None, z=None: (
@@ -209,8 +175,6 @@ def create_and_register_loader_handler(
     )
 
     register_loader_handler(lh)
-
-_ZANJ_backport_create_and_register_loader_handler = create_and_register_loader_handler
 
 def get_item_loader(
     json_item: JSONitem,

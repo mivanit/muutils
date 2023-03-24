@@ -12,7 +12,13 @@ LAST_VERSION=$(cat $LAST_VERSION_FILE)
 set -x
 set -e
 
-poetry build
+rm -rf build/
+rm -rf dist/
+rm -rf muutils.egg-info/
+
+py -m build --wheel
+
+twine check dist/*
 
 set +x
 

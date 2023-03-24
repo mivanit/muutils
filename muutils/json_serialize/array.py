@@ -164,10 +164,7 @@ def load_array(arr: JSONitem, array_mode: Optional[ArrayMode] = None) -> Any:
         return np.array(arr)
     elif array_mode == "external":
         # assume ZANJ has taken care of it
-        assert isinstance(
-            arr, typing.Mapping
-        )
+        assert isinstance(arr, typing.Mapping)
         return arr["data"]
     else:
         raise ValueError(f"invalid array_mode: {array_mode}")
-

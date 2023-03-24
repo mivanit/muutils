@@ -92,7 +92,7 @@ class LoaderHandler:
 LOADER_HANDLERS: list[LoaderHandler] = [
     # array external
     LoaderHandler(
-        check=lambda json_item, path=None, z=None: ( # type: ignore[misc]
+        check=lambda json_item, path=None, z=None: (  # type: ignore[misc]
             isinstance(json_item, typing.Mapping)
             and "__format__" in json_item
             and json_item["__format__"].startswith("numpy.ndarray")
@@ -105,7 +105,7 @@ LOADER_HANDLERS: list[LoaderHandler] = [
         desc="numpy.ndarray loader",
     ),
     LoaderHandler(
-        check=lambda json_item, path=None, z=None: ( # type: ignore[misc]
+        check=lambda json_item, path=None, z=None: (  # type: ignore[misc]
             isinstance(json_item, typing.Mapping)
             and "__format__" in json_item
             and json_item["__format__"].startswith("torch.Tensor")
@@ -119,7 +119,7 @@ LOADER_HANDLERS: list[LoaderHandler] = [
     ),
     # pandas
     LoaderHandler(
-        check=lambda json_item, path=None, z=None: ( # type: ignore[misc]
+        check=lambda json_item, path=None, z=None: (  # type: ignore[misc]
             isinstance(json_item, typing.Mapping)
             and "__format__" in json_item
             and json_item["__format__"].startswith("pandas.DataFrame")
@@ -305,11 +305,11 @@ class LoadedZANJ:
 
         # read externals
         self._externals: dict[str, ExternalItem] = dict()
-        for fname, ext_item in self._meta["externals_info"].items(): # type: ignore[union-attr]
+        for fname, ext_item in self._meta["externals_info"].items():  # type: ignore[union-attr]
             item_type: str = ext_item["item_type"]
             with self._zipf.open(fname, "r") as fp:
                 self._externals[fname] = ExternalItem(
-                    item_type=item_type, # type: ignore[arg-type]
+                    item_type=item_type,  # type: ignore[arg-type]
                     data=GET_EXTERNAL_LOAD_FUNC(item_type)(self, fp),
                     path=ext_item["path"],
                 )
@@ -325,11 +325,11 @@ class LoadedZANJ:
             # get the item
             item = self._json_data
             for key in path:
-                item = item[key] # type: ignore[index]
+                item = item[key]  # type: ignore[index]
             # replace the item with the external item
-            assert "$ref" in item # type: ignore
-            assert item["$ref"] == ext_path # type: ignore
-            item["data"] = ext_item.data # type: ignore
+            assert "$ref" in item  # type: ignore
+            assert item["$ref"] == ext_path  # type: ignore
+            item["data"] = ext_item.data  # type: ignore
 
             item = load_item_recursive(
                 json_item=item,

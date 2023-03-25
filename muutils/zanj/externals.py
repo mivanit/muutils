@@ -7,7 +7,6 @@ import numpy as np
 
 from muutils.json_serialize.json_serialize import ObjectPath
 from muutils.json_serialize.util import JSONitem
-from muutils.tensor_utils import NDArray
 
 # this is to make type checking work -- it will later be overridden
 _ZANJ_pre = Any
@@ -33,7 +32,7 @@ def load_jsonl(zanj: "LoadedZANJ", fp: IO[bytes]) -> list[JSONitem]:  # type: ig
     return [json.loads(line) for line in fp]
 
 
-def load_npy(zanj: "LoadedZANJ", fp: IO[bytes]) -> NDArray:  # type: ignore[name-defined]
+def load_npy(zanj: "LoadedZANJ", fp: IO[bytes]) -> np.ndarray:  # type: ignore[name-defined]
     return np.load(fp)
 
 

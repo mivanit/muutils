@@ -13,6 +13,7 @@ from muutils.zanj import ZANJ
 
 np.random.seed(0)
 
+# pylint: disable=missing-function-docstring,missing-class-docstring
 
 TEST_DATA_PATH: Path = Path("tests/junk_data")
 
@@ -222,6 +223,63 @@ def test_sdc_container_explicit():
 
     z = ZANJ()
     path = TEST_DATA_PATH / "test_sdc_container_explicit.zanj"
+    z.save(instance, path)
+    recovered = z.read(path)
+    assert instance == recovered
+
+
+@serializable_dataclass
+class ModelCfg(SerializableDataclass):
+    name: str
+    num_layers: int
+    hidden_size: int
+    dropout: float
+
+
+@serializable_dataclass
+class OptimizerCfg(SerializableDataclass):
+    name: str
+    lr: float
+    weight_decay: float
+
+
+class CustomCfg:
+    def __init__(self, x: int, y: str):
+        self.x = x
+        self.y = y
+
+    def __eq__(self, other):
+        return self.x == other.x and self.y == other.y
+
+    def serialize(self):
+        return {"x": self.x, "y": self.y}
+
+    @classmethod
+    def load(cls, data):
+        return cls(
+            **{
+                "x": data["x"],
+                "y": data["y"],
+            }
+        )
+
+
+@serializable_dataclass
+class MyCfgHolder(SerializableDataclass):
+    model: ModelCfg
+    optimizer: OptimizerCfg
+    custom: CustomCfg
+
+
+def test_config_holder():
+    instance = MyCfgHolder(
+        ModelCfg("lstm", 3, 128, 0.1),
+        OptimizerCfg("adam", 0.001, 0.0001),
+        CustomCfg(42, "forty-two"),
+    )
+
+    z = ZANJ()
+    path = TEST_DATA_PATH / "test_config_holder.zanj"
     z.save(instance, path)
     recovered = z.read(path)
     assert instance == recovered

@@ -175,6 +175,37 @@ def dc_eq(dc1, dc2) -> bool:
 
 T = TypeVar("T")
 
+_zanj_loading_needs_import: bool = True
+
+
+def zanj_register_loader_serializable_dataclass(cls: Type[T]):
+    """Register a serializable dataclass with the ZANJ backport
+
+
+    # TODO: there is some duplication here with register_loader_handler
+    """
+    global _zanj_loading_needs_import
+
+    if _zanj_loading_needs_import:
+        from muutils.zanj.loading import LoaderHandler, register_loader_handler
+
+    _format: str = f"{cls.__name__}(SerializableDataclass)"
+    lh: LoaderHandler = LoaderHandler(
+        check=lambda json_item, path=None, z=None: (  # type: ignore
+            isinstance(json_item, dict)
+            and "__format__" in json_item
+            and json_item["__format__"].startswith(_format)
+        ),
+        load=lambda json_item, path=None, z=None: cls.load(json_item),  # type: ignore
+        uid=_format,
+        source_pckg=cls.__module__,
+        desc=f"{_format} loader via muutils.json_serialize.serializable_dataclass",
+    )
+
+    register_loader_handler(lh)
+
+    return lh
+
 
 class SerializableDataclass(abc.ABC):
     """Base class for serializable dataclasses
@@ -191,26 +222,6 @@ class SerializableDataclass(abc.ABC):
 
     def __eq__(self, other: Any) -> bool:
         return dc_eq(self, other)
-
-
-def zanj_register_loader_serializable_dataclass(cls: Type[T]) -> Type[T]:
-    """Register a serializable dataclass with the ZANJ backport"""
-
-    from muutils.zanj.loading import create_and_register_loader_handler
-
-    _format: str = f"{cls.__name__}(SerializableDataclass)"
-    create_and_register_loader_handler(
-        check=lambda json_item, path=None, z=None: (  # type: ignore
-            isinstance(json_item, dict)
-            and "__format__" in json_item
-            and json_item["__format__"].startswith(_format)
-        ),
-        load=lambda json_item, path=None, z=None: cls.load(json_item),  # type: ignore
-        uid=_format,
-        source_pckg=cls.__module__,
-        desc=f"{_format} loader via muutils.json_serialize.serializable_dataclass",
-    )
-    return cls
 
 
 # Step 3: Create a custom serializable_dataclass decorator
@@ -277,6 +288,8 @@ def serializable_dataclass(
                     value = getattr(self, field.name)
                     if isinstance(value, SerializableDataclass):
                         value = value.serialize()
+                    if hasattr(value, "serialize") and callable(value.serialize):
+                        value = value.serialize()
                     elif field.serialization_fn:
                         value = field.serialization_fn(value)
                     result[field.name] = value
@@ -297,7 +310,7 @@ def serializable_dataclass(
 
             assert isinstance(
                 data, typing.Mapping
-            ), f"Expected {data} to be a Mapping, but it is a {type(data)}"
+            ), f"When loading {cls.__name__ = } expected a Mapping, but got {type(data) = }:\n{data = }"
 
             ctor_kwargs: dict[str, Any] = dict()
             for field in dataclasses.fields(cls):
@@ -308,12 +321,7 @@ def serializable_dataclass(
                 if (field.name in data) and field.init:
                     value = data[field.name]
 
-                    print(f"{field.type = } {type(field.type) = }")
-                    if (
-                        # mypy thinks typing has no attribute `GenericAlias``
-                        not isinstance(field.type, (typing.GenericAlias, typing._SpecialForm))  # type: ignore[attr-defined]
-                        and issubclass(field.type, SerializableDataclass)
-                    ):
+                    if hasattr(field.type, "load") and callable(field.type.load):
                         if isinstance(value, dict):
                             value = field.type.load(value)
                         else:
@@ -339,7 +347,7 @@ def serializable_dataclass(
 
         cls.__eq__ = lambda self, other: dc_eq(self, other)  # type: ignore[assignment]
 
-        # Register the class with the ZANJ backport
+        # Register the class with ZANJ
         zanj_register_loader_serializable_dataclass(cls)
 
         return cls

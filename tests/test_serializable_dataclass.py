@@ -304,3 +304,42 @@ def test_nested_with_container():
     assert serialized == expected_ser
     loaded = Nested_with_Container.load(serialized)
     assert loaded == instance
+
+
+class Custom_class_with_serialization:
+    """custom class which doesnt inherit but does serialize"""
+
+    def __init__(self, a: int, b: str):
+        self.a: int = a
+        self.b: str = b
+
+    def serialize(self):
+        return {"a": self.a, "b": self.b}
+
+    @classmethod
+    def load(cls, data):
+        return cls(data["a"], data["b"])
+
+    def __eq__(self, other):
+        return (self.a == other.a) and (self.b == other.b)
+
+
+@serializable_dataclass
+class nested_custom(SerializableDataclass):
+    value: float
+    data1: Custom_class_with_serialization
+
+
+def test_nested_custom():
+    instance = nested_custom(
+        value=42.0, data1=Custom_class_with_serialization(1, "hello")
+    )
+    serialized = instance.serialize()
+    expected_ser = {
+        "value": 42.0,
+        "data1": {"a": 1, "b": "hello"},
+        "__format__": "nested_custom(SerializableDataclass)",
+    }
+    assert serialized == expected_ser
+    loaded = nested_custom.load(serialized)
+    assert loaded == instance

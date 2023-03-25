@@ -32,7 +32,6 @@ from muutils.sysinfo import SysInfo
 from muutils.zanj.externals import ZANJ_MAIN, ZANJ_META, ExternalItem, _ZANJ_pre
 from muutils.zanj.loading import (
     LOADER_MAP,
-    LOADER_MAP_LOCK,
     LoadedZANJ,
     LoaderHandler,
     load_item_recursive,
@@ -125,15 +124,12 @@ class ZANJ(JsonSerializer):
         """return the metadata of the ZANJ archive"""
         global LOADER_MAP
 
-        print(f"zanj.meta(): {list(LOADER_MAP.keys())}")
-
-        with LOADER_MAP_LOCK:
-            serialization_handlers={
-                h.uid: h.serialize() for h in self.handlers
-            },
-            load_handlers={
-                h.uid: h.serialize() for h in LOADER_MAP.values()
-            },
+        serialization_handlers={
+            h.uid: h.serialize() for h in self.handlers
+        }
+        load_handlers={
+            h.uid: h.serialize() for h in LOADER_MAP.values()
+        }
 
         return json_serialize(
             dict(
@@ -209,7 +205,6 @@ class ZANJ(JsonSerializer):
     def read(
         self,
         path: Union[str, Path],
-        # loader_handlers: dict[str, LoaderHandler] = LOADER_MAP,
     ) -> JSONitem:
         """load the object from a ZANJ archive"""
         loaded_zanj: LoadedZANJ = LoadedZANJ(

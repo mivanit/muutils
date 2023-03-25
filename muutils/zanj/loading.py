@@ -87,84 +87,60 @@ class LoaderHandler:
 
 # NOTE: there are type ignores on the loaders, since the type checking should be the responsibility of the check function
 
-LOADER_HANDLERS: list[LoaderHandler] = [
-    # array external
-    LoaderHandler(
-        check=lambda json_item, path=None, z=None: (  # type: ignore[misc]
-            isinstance(json_item, typing.Mapping)
-            and "__format__" in json_item
-            and json_item["__format__"].startswith("numpy.ndarray")
-            # and json_item["data"].dtype.name == json_item["dtype"]
-            # and tuple(json_item["data"].shape) == tuple(json_item["shape"])
-        ),
-        load=lambda json_item, path=None, z=None: np.array(load_array(json_item)),  # type: ignore[misc]
-        uid="numpy.ndarray",
-        source_pckg="muutils.zanj",
-        desc="numpy.ndarray loader",
-    ),
-    LoaderHandler(
-        check=lambda json_item, path=None, z=None: (  # type: ignore[misc]
-            isinstance(json_item, typing.Mapping)
-            and "__format__" in json_item
-            and json_item["__format__"].startswith("torch.Tensor")
-            # and json_item["data"].dtype.name == json_item["dtype"]
-            # and tuple(json_item["data"].shape) == tuple(json_item["shape"])
-        ),
-        load=lambda json_item, path=None, z=None: torch.tensor(load_array(json_item)),  # type: ignore[misc]
-        uid="torch.Tensor",
-        source_pckg="muutils.zanj",
-        desc="torch.Tensor loader",
-    ),
-    # pandas
-    LoaderHandler(
-        check=lambda json_item, path=None, z=None: (  # type: ignore[misc]
-            isinstance(json_item, typing.Mapping)
-            and "__format__" in json_item
-            and json_item["__format__"].startswith("pandas.DataFrame")
-            and "data" in json_item
-            and isinstance(json_item["data"], typing.Sequence)
-        ),
-        load=lambda json_item, path=None, z=None: pd.DataFrame(json_item["data"]),  # type: ignore[misc]
-        uid="pandas.DataFrame",
-        source_pckg="muutils.zanj",
-        desc="pandas.DataFrame loader",
-    ),
-]
-
-
-LOADER_MAP: dict[str, LoaderHandler] = dict()
 LOADER_MAP_LOCK = threading.Lock()
+
+LOADER_MAP: dict[str, LoaderHandler] = {
+    lh.uid: lh 
+    for lh in [
+        # array external
+        LoaderHandler(
+            check=lambda json_item, path=None, z=None: (  # type: ignore[misc]
+                isinstance(json_item, typing.Mapping)
+                and "__format__" in json_item
+                and json_item["__format__"].startswith("numpy.ndarray")
+                # and json_item["data"].dtype.name == json_item["dtype"]
+                # and tuple(json_item["data"].shape) == tuple(json_item["shape"])
+            ),
+            load=lambda json_item, path=None, z=None: np.array(load_array(json_item)),  # type: ignore[misc]
+            uid="numpy.ndarray",
+            source_pckg="muutils.zanj",
+            desc="numpy.ndarray loader",
+        ),
+        LoaderHandler(
+            check=lambda json_item, path=None, z=None: (  # type: ignore[misc]
+                isinstance(json_item, typing.Mapping)
+                and "__format__" in json_item
+                and json_item["__format__"].startswith("torch.Tensor")
+                # and json_item["data"].dtype.name == json_item["dtype"]
+                # and tuple(json_item["data"].shape) == tuple(json_item["shape"])
+            ),
+            load=lambda json_item, path=None, z=None: torch.tensor(load_array(json_item)),  # type: ignore[misc]
+            uid="torch.Tensor",
+            source_pckg="muutils.zanj",
+            desc="torch.Tensor loader",
+        ),
+        # pandas
+        LoaderHandler(
+            check=lambda json_item, path=None, z=None: (  # type: ignore[misc]
+                isinstance(json_item, typing.Mapping)
+                and "__format__" in json_item
+                and json_item["__format__"].startswith("pandas.DataFrame")
+                and "data" in json_item
+                and isinstance(json_item["data"], typing.Sequence)
+            ),
+            load=lambda json_item, path=None, z=None: pd.DataFrame(json_item["data"]),  # type: ignore[misc]
+            uid="pandas.DataFrame",
+            source_pckg="muutils.zanj",
+            desc="pandas.DataFrame loader",
+        ),
+    ]
+}
 
 def register_loader_handler(handler: LoaderHandler):
     """register a custom loader handler"""
-    global LOADER_HANDLERS, LOADER_MAP, LOADER_MAP_LOCK
+    global LOADER_MAP, LOADER_MAP_LOCK
     with LOADER_MAP_LOCK:
-        LOADER_HANDLERS.append(handler)
-        LOADER_HANDLERS.sort(key=lambda lh: lh.priority, reverse=True)
         LOADER_MAP[handler.uid] = handler
-        print(f"register_loader_handler(): registered {handler.uid}")
-        print(f"\t{list(LOADER_MAP.keys()) = }")
-
-
-def create_and_register_loader_handler(
-    check: Callable[[JSONitem, ObjectPath], bool],
-    load: Callable[[JSONitem, ObjectPath], Any],
-    uid: str,
-    source_pckg: str,
-    priority: int = 0,
-    desc: str = "",
-):
-    """create and register a custom loader handler"""
-    lh = LoaderHandler(
-        check=check,  # type: ignore
-        load=load,  # type: ignore
-        uid=uid,
-        source_pckg=source_pckg,
-        priority=priority,
-        desc=desc,
-    )
-
-    register_loader_handler(lh)
 
 
 def get_item_loader(
@@ -196,7 +172,6 @@ def load_item_recursive(
     path: ObjectPath,
     zanj: _ZANJ_pre | None = None,
     error_mode: ErrorMode = "warn",
-    # lh_map: dict[str, LoaderHandler] = LOADER_MAP,
     allow_not_loading: bool = True,
 ) -> Any:
     lh: LoaderHandler | None = get_item_loader(

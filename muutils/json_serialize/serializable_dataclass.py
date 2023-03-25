@@ -185,10 +185,8 @@ def zanj_register_loader_serializable_dataclass(cls: Type[T]):
     """
     global _zanj_loading_needs_import
 
-    print(f"zanj_register_loader_serializable_dataclass(): Registering {cls.__name__} from module {cls.__module__}")
-
     if _zanj_loading_needs_import:
-        from muutils.zanj.loading import LoaderHandler, LOADER_HANDLERS, LOADER_MAP
+        from muutils.zanj.loading import LoaderHandler, register_loader_handler
 
     _format: str = f"{cls.__name__}(SerializableDataclass)"
     lh: LoaderHandler = LoaderHandler(
@@ -203,10 +201,7 @@ def zanj_register_loader_serializable_dataclass(cls: Type[T]):
         desc=f"{_format} loader via muutils.json_serialize.serializable_dataclass",
     )
 
-    LOADER_HANDLERS.append(lh)
-    LOADER_MAP[lh.uid] = lh
-    print(f"zanj_register_loader_serializable_dataclass(): registered {lh.uid}")
-    print(f"\t{list(LOADER_MAP.keys()) = }")
+    register_loader_handler(lh)
 
     return lh
 

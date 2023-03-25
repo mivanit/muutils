@@ -277,6 +277,8 @@ def serializable_dataclass(
                     value = getattr(self, field.name)
                     if isinstance(value, SerializableDataclass):
                         value = value.serialize()
+                    if hasattr(value, "serialize") and callable(value.serialize):
+                        value = value.serialize()
                     elif field.serialization_fn:
                         value = field.serialization_fn(value)
                     result[field.name] = value
@@ -308,12 +310,18 @@ def serializable_dataclass(
                 if (field.name in data) and field.init:
                     value = data[field.name]
 
-                    print(f"{field.type = } {type(field.type) = }")
                     if (
                         # mypy thinks typing has no attribute `GenericAlias``
                         not isinstance(field.type, (typing.GenericAlias, typing._SpecialForm))  # type: ignore[attr-defined]
                         and issubclass(field.type, SerializableDataclass)
                     ):
+                        if isinstance(value, dict):
+                            value = field.type.load(value)
+                        else:
+                            raise ValueError(
+                                f"Cannot load value into {field.type}, espected {type(value) = } to be a dict\n{value = }"
+                            )
+                    elif hasattr(field.type, "load") and callable(field.type.load):
                         if isinstance(value, dict):
                             value = field.type.load(value)
                         else:

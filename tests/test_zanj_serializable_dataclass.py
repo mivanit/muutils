@@ -235,11 +235,13 @@ class ModelCfg(SerializableDataclass):
     hidden_size: int
     dropout: float
 
+
 @serializable_dataclass
 class OptimizerCfg(SerializableDataclass):
     name: str
     lr: float
     weight_decay: float
+
 
 class CustomCfg:
     def __init__(self, x: int, y: str):
@@ -248,16 +250,19 @@ class CustomCfg:
 
     def __eq__(self, other):
         return self.x == other.x and self.y == other.y
-    
+
     def serialize(self):
         return {"x": self.x, "y": self.y}
 
     @classmethod
     def load(cls, data):
-        return cls(**{
-            "x": data["x"],
-            "y": data["y"],
-        })
+        return cls(
+            **{
+                "x": data["x"],
+                "y": data["y"],
+            }
+        )
+
 
 @serializable_dataclass
 class MyCfgHolder(SerializableDataclass):

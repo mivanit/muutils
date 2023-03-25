@@ -177,10 +177,11 @@ T = TypeVar("T")
 
 _zanj_loading_needs_import: bool = True
 
+
 def zanj_register_loader_serializable_dataclass(cls: Type[T]):
     """Register a serializable dataclass with the ZANJ backport
-    
-    
+
+
     # TODO: there is some duplication here with register_loader_handler
     """
     global _zanj_loading_needs_import
@@ -222,16 +223,13 @@ class SerializableDataclass(abc.ABC):
     def __eq__(self, other: Any) -> bool:
         return dc_eq(self, other)
 
-
     @classmethod
     def _register_self_loader(cls):
         """register this class with the ZANJ backport"""
         zanj_register_loader_serializable_dataclass(cls.__class__)
 
-
     def __post_init__(self):
         self.__class__._register_self_loader()
-
 
 
 # Step 3: Create a custom serializable_dataclass decorator
@@ -361,6 +359,7 @@ def serializable_dataclass(
         @classmethod
         def _register_self_loader(cls):
             zanj_register_loader_serializable_dataclass(cls)
+
         cls._register_self_loader = _register_self_loader
         cls._register_self_loader()
 

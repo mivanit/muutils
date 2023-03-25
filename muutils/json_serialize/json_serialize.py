@@ -14,8 +14,8 @@ from muutils.json_serialize.util import (
     SerializationException,
     _recursive_hashify,
     isinstance_namedtuple,
-    try_catch,
     safe_getsource,
+    try_catch,
 )
 
 # pylint: disable=protected-access
@@ -80,7 +80,7 @@ class SerializerHandler:
             },
             # get the uid, source_pckg, priority, and desc
             "uid": str(self.uid),
-            "source_pckg" : getattr(self.serialize_func, "source_pckg", None),
+            "source_pckg": getattr(self.serialize_func, "source_pckg", None),
             "__module__": getattr(self.serialize_func, "__module__", None),
             "desc": str(self.desc),
         }
@@ -110,7 +110,10 @@ BASE_HANDLERS: MonoTuple[SerializerHandler] = (
     ),
 )
 
-def _serialize_override_serialize_func(self: "JsonSerializer", obj: Any, path: ObjectPath) -> JSONitem:
+
+def _serialize_override_serialize_func(
+    self: "JsonSerializer", obj: Any, path: ObjectPath
+) -> JSONitem:
     obj_cls: type = type(obj)
     # if hasattr(obj_cls, "_register_self") and callable(obj_cls._register_self):
     #     obj_cls._register_self()

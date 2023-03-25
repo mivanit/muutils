@@ -1,10 +1,10 @@
 import json
+import threading
 import typing
 import zipfile
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Callable
-import threading
 
 import numpy as np
 import pandas as pd
@@ -90,7 +90,7 @@ class LoaderHandler:
 LOADER_MAP_LOCK = threading.Lock()
 
 LOADER_MAP: dict[str, LoaderHandler] = {
-    lh.uid: lh 
+    lh.uid: lh
     for lh in [
         # array external
         LoaderHandler(
@@ -135,6 +135,7 @@ LOADER_MAP: dict[str, LoaderHandler] = {
         ),
     ]
 }
+
 
 def register_loader_handler(handler: LoaderHandler):
     """register a custom loader handler"""
@@ -300,4 +301,3 @@ class LoadedZANJ:
                 path=path,
                 zanj=self._zanj,
             )
-

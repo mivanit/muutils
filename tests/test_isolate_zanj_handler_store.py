@@ -1,8 +1,6 @@
 from pathlib import Path
 
 import numpy as np
-import pandas as pd
-import torch
 
 from muutils.json_serialize import (
     SerializableDataclass,
@@ -60,9 +58,9 @@ def test_isolate_handlers():
     assert "Basic(SerializableDataclass)" in LOADER_MAP
     assert "ModelCfg(SerializableDataclass)" in LOADER_MAP
 
-	# check they are in the zanj file
-    import zipfile
+	heck they are in the zanj file
     import json
+    import zipfile
     with zipfile.ZipFile(path, "r") as zfile:
         zmeta = json.load(zfile.open("__zanj_meta__.json", "r"))
         assert "Basic(SerializableDataclass)" in zmeta["zanj_cfg"]["load_handlers"]

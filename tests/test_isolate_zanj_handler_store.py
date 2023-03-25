@@ -1,3 +1,5 @@
+import json
+import zipfile
 from pathlib import Path
 
 import numpy as np
@@ -33,7 +35,9 @@ def test_Basic():
     recovered = z.read(path)
     assert instance == recovered
 
+
 print(list(LOADER_MAP.keys()))
+
 
 @serializable_dataclass
 class ModelCfg(SerializableDataclass):
@@ -42,7 +46,9 @@ class ModelCfg(SerializableDataclass):
     hidden_size: int
     dropout: float
 
+
 print(list(LOADER_MAP.keys()))
+
 
 def test_isolate_handlers():
     instance = ModelCfg("lstm", 3, 128, 0.1)
@@ -58,15 +64,11 @@ def test_isolate_handlers():
     assert "Basic(SerializableDataclass)" in LOADER_MAP
     assert "ModelCfg(SerializableDataclass)" in LOADER_MAP
 
-	heck they are in the zanj file
-    import json
-    import zipfile
+    # check they are in the zanj file
     with zipfile.ZipFile(path, "r") as zfile:
         zmeta = json.load(zfile.open("__zanj_meta__.json", "r"))
         assert "Basic(SerializableDataclass)" in zmeta["zanj_cfg"]["load_handlers"]
         assert "ModelCfg(SerializableDataclass)" in zmeta["zanj_cfg"]["load_handlers"]
-
-
 
 
 if __name__ == "__main__":

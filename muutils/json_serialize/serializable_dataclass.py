@@ -223,14 +223,6 @@ class SerializableDataclass(abc.ABC):
     def __eq__(self, other: Any) -> bool:
         return dc_eq(self, other)
 
-    @classmethod
-    def _register_self_loader(cls):
-        """register this class with the ZANJ backport"""
-        zanj_register_loader_serializable_dataclass(cls.__class__)
-
-    def __post_init__(self):
-        self.__class__._register_self_loader()
-
 
 # Step 3: Create a custom serializable_dataclass decorator
 def serializable_dataclass(
@@ -356,12 +348,7 @@ def serializable_dataclass(
         cls.__eq__ = lambda self, other: dc_eq(self, other)  # type: ignore[assignment]
 
         # Register the class with ZANJ
-        @classmethod
-        def _register_self_loader(cls):
-            zanj_register_loader_serializable_dataclass(cls)
-
-        cls._register_self_loader = _register_self_loader
-        cls._register_self_loader()
+        zanj_register_loader_serializable_dataclass(cls)
 
         return cls
 

@@ -64,6 +64,8 @@ set -x
 echo "uploading!"
 
 echo $NEW_VERSION > .lastversion
+git add .lastversion
+git commit -m "auto update to $NEW_VERSION"
 git tag $NEW_VERSION
 git push origin $NEW_VERSION
 twine upload dist/*

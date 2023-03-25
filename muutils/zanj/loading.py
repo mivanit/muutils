@@ -4,6 +4,7 @@ import zipfile
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Callable
+import threading
 
 import numpy as np
 import pandas as pd
@@ -132,25 +133,17 @@ LOADER_HANDLERS: list[LoaderHandler] = [
 
 
 LOADER_MAP: dict[str, LoaderHandler] = dict()
-
-
-def _update_loaders():
-    """update the loader maps"""
-    global LOADER_HANDLERS, LOADER_MAP
-
-    # sort by priority
-    LOADER_HANDLERS.sort(key=lambda lh: lh.priority, reverse=True)
-
-    # create map, order should be ensured by the sorting
-    LOADER_MAP = {lh.uid: lh for lh in LOADER_HANDLERS}
-
+LOADER_MAP_LOCK = threading.Lock()
 
 def register_loader_handler(handler: LoaderHandler):
     """register a custom loader handler"""
-    global LOADER_HANDLERS, LOADER_MAP
-    LOADER_HANDLERS.append(handler)
-    LOADER_MAP[handler.uid] = handler
-    _update_loaders()
+    global LOADER_HANDLERS, LOADER_MAP, LOADER_MAP_LOCK
+    with LOADER_MAP_LOCK:
+        LOADER_HANDLERS.append(handler)
+        LOADER_HANDLERS.sort(key=lambda lh: lh.priority, reverse=True)
+        LOADER_MAP[handler.uid] = handler
+        print(f"register_loader_handler(): registered {handler.uid}")
+        print(f"\t{list(LOADER_MAP.keys()) = }")
 
 
 def create_and_register_loader_handler(
@@ -333,5 +326,3 @@ class LoadedZANJ:
                 zanj=self._zanj,
             )
 
-
-_update_loaders()

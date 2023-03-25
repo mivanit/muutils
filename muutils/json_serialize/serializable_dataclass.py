@@ -175,6 +175,41 @@ def dc_eq(dc1, dc2) -> bool:
 
 T = TypeVar("T")
 
+_zanj_loading_needs_import: bool = True
+
+def zanj_register_loader_serializable_dataclass(cls: Type[T]):
+    """Register a serializable dataclass with the ZANJ backport
+    
+    
+    # TODO: there is some duplication here with register_loader_handler
+    """
+    global _zanj_loading_needs_import
+
+    print(f"zanj_register_loader_serializable_dataclass(): Registering {cls.__name__} from module {cls.__module__}")
+
+    if _zanj_loading_needs_import:
+        from muutils.zanj.loading import LoaderHandler, LOADER_HANDLERS, LOADER_MAP
+
+    _format: str = f"{cls.__name__}(SerializableDataclass)"
+    lh: LoaderHandler = LoaderHandler(
+        check=lambda json_item, path=None, z=None: (  # type: ignore
+            isinstance(json_item, dict)
+            and "__format__" in json_item
+            and json_item["__format__"].startswith(_format)
+        ),
+        load=lambda json_item, path=None, z=None: cls.load(json_item),  # type: ignore
+        uid=_format,
+        source_pckg=cls.__module__,
+        desc=f"{_format} loader via muutils.json_serialize.serializable_dataclass",
+    )
+
+    LOADER_HANDLERS.append(lh)
+    LOADER_MAP[lh.uid] = lh
+    print(f"zanj_register_loader_serializable_dataclass(): registered {lh.uid}")
+    print(f"\t{list(LOADER_MAP.keys()) = }")
+
+    return lh
+
 
 class SerializableDataclass(abc.ABC):
     """Base class for serializable dataclasses
@@ -193,30 +228,15 @@ class SerializableDataclass(abc.ABC):
         return dc_eq(self, other)
 
 
+    @classmethod
+    def _register_self_loader(cls):
+        """register this class with the ZANJ backport"""
+        zanj_register_loader_serializable_dataclass(cls.__class__)
 
-_zanj_create_and_register_loader_handler: Optional[Callable] = None
 
-def zanj_register_loader_serializable_dataclass(cls: Type[T]) -> Type[T]:
-    """Register a serializable dataclass with the ZANJ backport"""
-    global _zanj_create_and_register_loader_handler
+    def __post_init__(self):
+        self.__class__._register_self_loader()
 
-    if _zanj_create_and_register_loader_handler is None:
-        from muutils.zanj.loading import create_and_register_loader_handler
-        _zanj_create_and_register_loader_handler = create_and_register_loader_handler
-
-    _format: str = f"{cls.__name__}(SerializableDataclass)"
-    _zanj_create_and_register_loader_handler(
-        check=lambda json_item, path=None, z=None: (  # type: ignore
-            isinstance(json_item, dict)
-            and "__format__" in json_item
-            and json_item["__format__"].startswith(_format)
-        ),
-        load=lambda json_item, path=None, z=None: cls.load(json_item),  # type: ignore
-        uid=_format,
-        source_pckg=cls.__module__,
-        desc=f"{_format} loader via muutils.json_serialize.serializable_dataclass",
-    )
-    return cls
 
 
 # Step 3: Create a custom serializable_dataclass decorator
@@ -344,10 +364,10 @@ def serializable_dataclass(
 
         # Register the class with ZANJ
         @classmethod
-        def _register_self(cls):
+        def _register_self_loader(cls):
             zanj_register_loader_serializable_dataclass(cls)
-        cls._register_self = _register_self
-        cls._register_self()
+        cls._register_self_loader = _register_self_loader
+        cls._register_self_loader()
 
         return cls
 

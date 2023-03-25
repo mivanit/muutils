@@ -32,6 +32,7 @@ from muutils.sysinfo import SysInfo
 from muutils.zanj.externals import ZANJ_MAIN, ZANJ_META, ExternalItem, _ZANJ_pre
 from muutils.zanj.loading import (
     LOADER_MAP,
+    LOADER_MAP_LOCK,
     LoadedZANJ,
     LoaderHandler,
     load_item_recursive,
@@ -124,6 +125,16 @@ class ZANJ(JsonSerializer):
         """return the metadata of the ZANJ archive"""
         global LOADER_MAP
 
+        print(f"zanj.meta(): {list(LOADER_MAP.keys())}")
+
+        with LOADER_MAP_LOCK:
+            serialization_handlers={
+                h.uid: h.serialize() for h in self.handlers
+            },
+            load_handlers={
+                h.uid: h.serialize() for h in LOADER_MAP.values()
+            },
+
         return json_serialize(
             dict(
                 # configuration of this ZANJ instance
@@ -133,13 +144,8 @@ class ZANJ(JsonSerializer):
                     external_array_threshold=self.external_array_threshold,
                     external_table_threshold=self.external_table_threshold,
                     compress=self.compress,
-                    serialization_handlers={
-                        h.uid: h.serialize() for h in self.handlers
-                    },
-                    # TODO: the load_handlers here don't appear to always be saving the latest values
-                    load_handlers={
-                        h.uid: h.serialize() for h in LOADER_MAP.values()
-                    },
+                    serialization_handlers=serialization_handlers,
+                    load_handlers=load_handlers,
                 ),
                 # system info (python, pip packages, torch & cuda, platform info, git info)
                 sysinfo=SysInfo.get_all(include=("python", "pytorch")),

@@ -112,8 +112,8 @@ BASE_HANDLERS: MonoTuple[SerializerHandler] = (
 
 def _serialize_override_serialize_func(self: "JsonSerializer", obj: Any, path: ObjectPath) -> JSONitem:
     obj_cls: type = type(obj)
-    if hasattr(obj_cls, "_register_self") and callable(obj_cls._register_self):
-        obj_cls._register_self()
+    # if hasattr(obj_cls, "_register_self") and callable(obj_cls._register_self):
+    #     obj_cls._register_self()
 
     # get the serialized object
     return obj.serialize()

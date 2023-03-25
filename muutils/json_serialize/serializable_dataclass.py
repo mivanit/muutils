@@ -299,7 +299,7 @@ def serializable_dataclass(
 
             assert isinstance(
                 data, typing.Mapping
-            ), f"Expected {data} to be a Mapping, but it is a {type(data)}"
+            ), f"When loading {cls.__name__ = } expected a Mapping, but got {type(data) = }:\n{data = }"
 
             ctor_kwargs: dict[str, Any] = dict()
             for field in dataclasses.fields(cls):

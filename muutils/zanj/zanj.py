@@ -13,6 +13,7 @@ for large arrays, the output is a .tar.gz file with most data in a json file, bu
 
 import json
 import os
+import time
 import zipfile
 from pathlib import Path
 from typing import Any, Union
@@ -121,6 +122,7 @@ class ZANJ(JsonSerializer):
 
     def meta(self) -> JSONitem:
         """return the metadata of the ZANJ archive"""
+        global LOADER_MAP
 
         return json_serialize(
             dict(
@@ -135,11 +137,14 @@ class ZANJ(JsonSerializer):
                         h.uid: h.serialize() for h in self.handlers
                     },
                     # TODO: the load_handlers here don't appear to always be saving the latest values
-                    load_handlers={h.uid: h.serialize() for h in LOADER_MAP.values()},
+                    load_handlers={
+                        h.uid: h.serialize() for h in LOADER_MAP.values()
+                    },
                 ),
                 # system info (python, pip packages, torch & cuda, platform info, git info)
                 sysinfo=SysInfo.get_all(include=("python", "pytorch")),
                 externals_info=self.externals_info(),
+                timestamp=time.time(),
             )
         )
 
@@ -198,7 +203,7 @@ class ZANJ(JsonSerializer):
     def read(
         self,
         path: Union[str, Path],
-        loader_handlers: dict[str, LoaderHandler] = LOADER_MAP,
+        # loader_handlers: dict[str, LoaderHandler] = LOADER_MAP,
     ) -> JSONitem:
         """load the object from a ZANJ archive"""
         loaded_zanj: LoadedZANJ = LoadedZANJ(

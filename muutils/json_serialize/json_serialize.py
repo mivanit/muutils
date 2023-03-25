@@ -15,7 +15,10 @@ from muutils.json_serialize.util import (
     _recursive_hashify,
     isinstance_namedtuple,
     try_catch,
+    safe_getsource,
 )
+
+# pylint: disable=protected-access
 
 SERIALIZER_SPECIAL_KEYS: MonoTuple[str] = (
     "__name__",
@@ -67,17 +70,18 @@ class SerializerHandler:
         return {
             # get the code and doc of the check function
             "check": {
-                "code": self.check.__code__,
+                "code": safe_getsource(self.check),
                 "doc": self.check.__doc__,
             },
             # get the code and doc of the load function
             "serialize_func": {
-                "code": self.serialize_func.__code__,
+                "code": safe_getsource(self.serialize_func),
                 "doc": self.serialize_func.__doc__,
             },
             # get the uid, source_pckg, priority, and desc
             "uid": str(self.uid),
-            # "source_pckg" : str(self.source_pckg),
+            "source_pckg" : getattr(self.serialize_func, "source_pckg", None),
+            "__module__": getattr(self.serialize_func, "__module__", None),
             "desc": str(self.desc),
         }
 
@@ -106,13 +110,21 @@ BASE_HANDLERS: MonoTuple[SerializerHandler] = (
     ),
 )
 
+def _serialize_override_serialize_func(self: "JsonSerializer", obj: Any, path: ObjectPath) -> JSONitem:
+    obj_cls: type = type(obj)
+    if hasattr(obj_cls, "_register_self") and callable(obj_cls._register_self):
+        obj_cls._register_self()
+
+    # get the serialized object
+    return obj.serialize()
+
 
 DEFAULT_HANDLERS: MonoTuple[SerializerHandler] = tuple(BASE_HANDLERS) + (
     SerializerHandler(
         # TODO: allow for custom serialization handler name
         check=lambda self, obj, path: hasattr(obj, "serialize")
         and callable(obj.serialize),
-        serialize_func=lambda self, obj, path: obj.serialize(),
+        serialize_func=_serialize_override_serialize_func,
         uid=".serialize override",
     ),
     SerializerHandler(

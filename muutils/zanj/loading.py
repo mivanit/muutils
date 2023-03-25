@@ -11,7 +11,7 @@ import torch
 
 from muutils.json_serialize.array import load_array
 from muutils.json_serialize.json_serialize import ObjectPath
-from muutils.json_serialize.util import ErrorMode, JSONdict, JSONitem
+from muutils.json_serialize.util import ErrorMode, JSONdict, JSONitem, safe_getsource
 from muutils.zanj.externals import (
     GET_EXTERNAL_LOAD_FUNC,
     ZANJ_MAIN,
@@ -48,12 +48,12 @@ class LoaderHandler:
         return {
             # get the code and doc of the check function
             "check": {
-                "code": self.check.__code__,
+                "code": safe_getsource(self.check),
                 "doc": self.check.__doc__,
             },
             # get the code and doc of the load function
             "load": {
-                "code": self.load.__code__,
+                "code": safe_getsource(self.load),
                 "doc": self.load.__doc__,
             },
             # get the uid, source_pckg, priority, and desc
@@ -182,6 +182,7 @@ def get_item_loader(
     # lh_map: dict[str, LoaderHandler] = LOADER_MAP,
 ) -> LoaderHandler | None:
     """get the loader for a json item"""
+    global LOADER_MAP
 
     # check if we recognize the format
     if isinstance(json_item, typing.Mapping) and "__format__" in json_item:

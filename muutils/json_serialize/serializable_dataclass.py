@@ -193,13 +193,19 @@ class SerializableDataclass(abc.ABC):
         return dc_eq(self, other)
 
 
+
+_zanj_create_and_register_loader_handler: Optional[Callable] = None
+
 def zanj_register_loader_serializable_dataclass(cls: Type[T]) -> Type[T]:
     """Register a serializable dataclass with the ZANJ backport"""
+    global _zanj_create_and_register_loader_handler
 
-    from muutils.zanj.loading import create_and_register_loader_handler
+    if _zanj_create_and_register_loader_handler is None:
+        from muutils.zanj.loading import create_and_register_loader_handler
+        _zanj_create_and_register_loader_handler = create_and_register_loader_handler
 
     _format: str = f"{cls.__name__}(SerializableDataclass)"
-    create_and_register_loader_handler(
+    _zanj_create_and_register_loader_handler(
         check=lambda json_item, path=None, z=None: (  # type: ignore
             isinstance(json_item, dict)
             and "__format__" in json_item
@@ -336,8 +342,12 @@ def serializable_dataclass(
 
         cls.__eq__ = lambda self, other: dc_eq(self, other)  # type: ignore[assignment]
 
-        # Register the class with the ZANJ backport
-        zanj_register_loader_serializable_dataclass(cls)
+        # Register the class with ZANJ
+        @classmethod
+        def _register_self(cls):
+            zanj_register_loader_serializable_dataclass(cls)
+        cls._register_self = _register_self
+        cls._register_self()
 
         return cls
 

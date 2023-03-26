@@ -1,4 +1,5 @@
 from pathlib import Path
+import typing
 
 import numpy as np
 import pandas as pd
@@ -239,8 +240,15 @@ class ModelCfg(SerializableDataclass):
 @serializable_dataclass
 class OptimizerCfg(SerializableDataclass):
     name: str
-    lr: float
     weight_decay: float
+    optimizer: typing.Type[torch.optim.Optimizer] = serializable_field(
+        default_factory=lambda: torch.optim.Adam,
+        serialization_fn=lambda x: x.__name__,
+        loading_fn=lambda data: getattr(torch.optim, data["optimizer"]),
+    ) 
+    optimizer_kwargs: dict[str, typing.Any] = serializable_field(  # type: ignore
+        default_factory=lambda: dict(lr=0.000001)
+    )
 
 
 class CustomCfg:
@@ -268,10 +276,26 @@ class CustomCfg:
 class MyCfgHolder(SerializableDataclass):
     model: ModelCfg
     optimizer: OptimizerCfg
-    custom: CustomCfg
+    custom: CustomCfg | None = serializable_field(
+        default=None,
+        serialization_fn=lambda x: x.serialize(),
+        loading_fn=lambda data: CustomCfg.load(data["custom"]),
+    )
 
 
 def test_config_holder():
+    instance = MyCfgHolder(
+        ModelCfg("lstm", 3, 128, 0.1),
+        OptimizerCfg("adam", 0.001, 0.0001),
+        CustomCfg(42, "forty-two"),
+    )
+
+    instance_stored = instance.serialize()
+    recovered = MyCfgHolder.load(instance_stored)
+    assert instance == recovered
+
+
+def test_config_holder_zanj():
     instance = MyCfgHolder(
         ModelCfg("lstm", 3, 128, 0.1),
         OptimizerCfg("adam", 0.001, 0.0001),

@@ -237,7 +237,7 @@ class ModelCfg(SerializableDataclass):
     dropout: float
 
 
-@serializable_dataclass
+@serializable_dataclass(kw_only=True)
 class OptimizerCfg(SerializableDataclass):
     name: str
     weight_decay: float
@@ -286,7 +286,12 @@ class MyCfgHolder(SerializableDataclass):
 def test_config_holder():
     instance = MyCfgHolder(
         ModelCfg("lstm", 3, 128, 0.1),
-        OptimizerCfg("adam", 0.001, 0.0001),
+        OptimizerCfg(
+            name="adamw",
+            weight_decay=0.2,
+            optimizer=torch.optim.AdamW,
+            optimizer_kwargs=dict(lr=0.0001),
+        ),
         CustomCfg(42, "forty-two"),
     )
 
@@ -298,7 +303,12 @@ def test_config_holder():
 def test_config_holder_zanj():
     instance = MyCfgHolder(
         ModelCfg("lstm", 3, 128, 0.1),
-        OptimizerCfg("adam", 0.001, 0.0001),
+        OptimizerCfg(
+            name="adamw",
+            weight_decay=0.2,
+            optimizer=torch.optim.AdamW,
+            optimizer_kwargs=dict(lr=0.0001),
+        ),
         CustomCfg(42, "forty-two"),
     )
 

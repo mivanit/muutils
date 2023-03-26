@@ -314,7 +314,6 @@ def serializable_dataclass(
 
             ctor_kwargs: dict[str, Any] = dict()
             for field in dataclasses.fields(cls):
-                print(f"{cls.__name__ = } {field.name = } {field.type = }")
                 assert isinstance(
                     field, SerializableField
                 ), f"Field '{field.name}' on class {cls.__name__} is not a SerializableField, but a {type(field)} this state should be inaccessible, please report this bug!"

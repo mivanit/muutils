@@ -295,7 +295,7 @@ def serializable_dataclass(
                     result[field.name] = value
 
             for prop in self._properties_to_serialize:
-                if hasattr(cls, prop) and isinstance(getattr(cls, prop), property):
+                if hasattr(cls, prop):
                     value = getattr(self, prop)
                     result[prop] = value
 

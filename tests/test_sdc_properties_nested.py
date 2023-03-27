@@ -18,7 +18,7 @@ class Person(SerializableDataclass):
         return f"{self.first_name} {self.last_name}"
 
 
-@serializable_dataclass(properties_to_serialize=["full_name", "full_title"])
+@serializable_dataclass(kw_only=True, properties_to_serialize=["full_name", "full_title"])
 class TitledPerson(Person):
     title: str
 
@@ -43,7 +43,7 @@ def test_serialize_person():
     assert recovered == instance
 
 def test_serialize_titled_person():
-    instance = TitledPerson("Jane", "Smith", title="Dr.")
+    instance = TitledPerson(first_name="Jane", last_name="Smith", title="Dr.")
     
     serialized = instance.serialize()
 

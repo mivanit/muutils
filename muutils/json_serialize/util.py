@@ -121,6 +121,6 @@ def string_as_lines(s: str | None) -> list[str]:
 
 def safe_getsource(func) -> str:
     try:
-        return inspect.getsource(func)
+        return string_as_lines(inspect.getsource(func))
     except Exception as e:
         return f"Error: Unable to retrieve source code: {e}"

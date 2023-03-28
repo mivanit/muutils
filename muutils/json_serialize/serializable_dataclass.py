@@ -2,8 +2,8 @@ import abc
 import dataclasses
 import types
 import typing
-from typing import Any, Callable, Optional, Type, TypeVar
 import warnings
+from typing import Any, Callable, Optional, Type, TypeVar
 
 # pylint: disable=bad-mcs-classmethod-argument, too-many-arguments, protected-access
 
@@ -147,12 +147,9 @@ def array_safe_eq(a: Any, b: Any) -> bool:
         return len(a) == len(b) and all(array_safe_eq(a1, b1) for a1, b1 in zip(a, b))
 
     if isinstance(a, (dict, typing.Mapping)) and isinstance(b, (dict, typing.Mapping)):
-        return (
-            len(a) == len(b)
-            and all(
-                array_safe_eq(k1, k2) and array_safe_eq(a[k1], b[k2]) 
-                for k1, k2 in zip(a.keys(), b.keys())
-            )
+        return len(a) == len(b) and all(
+            array_safe_eq(k1, k2) and array_safe_eq(a[k1], b[k2])
+            for k1, k2 in zip(a.keys(), b.keys())
         )
 
     try:
@@ -168,7 +165,9 @@ def dc_eq(dc1, dc2) -> bool:
         return True
 
     if dc1.__class__ is not dc2.__class__:
-        warnings.warn(f"Cannot compare {dc1} and {dc2} for equality due to classes not matching: {dc1.__class__} vs {dc2.__class__}")
+        warnings.warn(
+            f"Cannot compare {dc1} and {dc2} for equality due to classes not matching: {dc1.__class__} vs {dc2.__class__}"
+        )
         return NotImplemented  # type: ignore[return-value]
 
     return all(
@@ -330,13 +329,17 @@ def serializable_dataclass(
                     field_type_hint: Any = cls_type_hints.get(field.name, None)
                     if field.loading_fn:
                         value = field.loading_fn(data)
-                    elif field_type_hint is not None and hasattr(field_type_hint, "load") and callable(field_type_hint.load):
+                    elif (
+                        field_type_hint is not None
+                        and hasattr(field_type_hint, "load")
+                        and callable(field_type_hint.load)
+                    ):
                         if isinstance(value, dict):
                             value = field_type_hint.load(value)
                         else:
                             raise ValueError(
                                 f"Cannot load value into {field_type_hint}, espected {type(value) = } to be a dict\n{value = }"
-                            )                    
+                            )
 
                     if field.assert_type:
                         if field.name in ctor_kwargs:

@@ -1,5 +1,4 @@
 from pathlib import Path
-import typing
 
 import numpy as np
 import pandas as pd
@@ -227,4 +226,3 @@ def test_sdc_container_explicit():
     z.save(instance, path)
     recovered = z.read(path)
     assert instance == recovered
-

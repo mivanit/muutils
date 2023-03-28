@@ -1,12 +1,9 @@
 import json
-from pathlib import Path
 import typing
+from pathlib import Path
 
-import pytest
 import numpy as np
-import pandas as pd
 import torch
-from transformers import PreTrainedTokenizer
 
 from muutils.json_serialize import (
     SerializableDataclass,
@@ -20,6 +17,7 @@ np.random.seed(0)
 # pylint: disable=missing-function-docstring,missing-class-docstring
 
 TEST_DATA_PATH: Path = Path("tests/junk_data")
+
 
 @serializable_dataclass
 class MyModelCfg(SerializableDataclass):
@@ -37,7 +35,7 @@ class TrainCfg(SerializableDataclass):
         default_factory=lambda: torch.optim.Adam,
         serialization_fn=lambda x: x.__name__,
         loading_fn=lambda data: getattr(torch.optim, data["optimizer"]),
-    ) 
+    )
     optimizer_kwargs: dict[str, typing.Any] = serializable_field(  # type: ignore
         default_factory=lambda: dict(lr=0.000001)
     )
@@ -73,6 +71,7 @@ class BasicCfgHolder(SerializableDataclass):
         serialization_fn=lambda x: x.serialize(),
         loading_fn=lambda data: CustomCfg.load(data["custom"]),
     )
+
 
 instance_basic: BasicCfgHolder = BasicCfgHolder(
     MyModelCfg("lstm", 3, 128, 0.1),
@@ -124,6 +123,7 @@ class BaseGPTConfig(SerializableDataclass):
     d_head: int
     n_layers: int
 
+
 @serializable_dataclass(kw_only=True)
 class AdvCfgHolder(SerializableDataclass):
     """
@@ -135,8 +135,11 @@ class AdvCfgHolder(SerializableDataclass):
     tokenizer: CustomCfg | None = serializable_field(
         default=None,
         serialization_fn=lambda x: repr(x) if x is not None else None,
-        loading_fn=lambda data: None if data["tokenizer"] is None else NotImplementedError,
+        loading_fn=lambda data: None
+        if data["tokenizer"] is None
+        else NotImplementedError,
     )
+
 
 instance_adv: AdvCfgHolder = AdvCfgHolder(
     model_cfg=BaseGPTConfig(
@@ -157,6 +160,7 @@ def test_adv_config_holder():
     recovered = AdvCfgHolder.load(instance_stored)
     assert isinstance(recovered.model_cfg, BaseGPTConfig)
     assert instance_adv == recovered
+
 
 def test_adv_config_holder_zanj():
     z = ZANJ()

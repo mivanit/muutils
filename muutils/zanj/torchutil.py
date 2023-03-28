@@ -64,18 +64,18 @@ class ConfiguredModel(
     """
 
     _config_class: type | None = None
-    config_class = property(lambda self: type(self)._config_class)
+    zanj_config_class = property(lambda self: type(self)._config_class)
 
-    def __init__(self, config: T_config):
-        super().__init__()
-        if self.config_class is None:
+    def __init__(self, zanj_model_config: T_config, **kwargs):
+        super().__init__(**kwargs)
+        if self.zanj_config_class is None:
             raise NotImplementedError("you need to set `config_class` for your model")
-        if not isinstance(config, self.config_class):  # type: ignore
+        if not isinstance(zanj_model_config, self.zanj_config_class):  # type: ignore
             raise TypeError(
-                f"config must be an instance of {self.config_class = }, got {type(config) = }"
+                f"config must be an instance of {self.zanj_config_class = }, got {type(zanj_model_config) = }"
             )
 
-        self.config: T_config = config
+        self.config: T_config = zanj_model_config
 
     def serialize(
         self, path: ObjectPath = tuple(), zanj: ZANJ | None = None

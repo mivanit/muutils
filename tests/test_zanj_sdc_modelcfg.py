@@ -62,7 +62,7 @@ class CustomCfg:
         )
 
 
-@serializable_dataclass
+@serializable_dataclass(kw_only=True)
 class BasicCfgHolder(SerializableDataclass):
     model: MyModelCfg
     optimizer: TrainCfg
@@ -73,15 +73,15 @@ class BasicCfgHolder(SerializableDataclass):
     )
 
 
-instance_basic: BasicCfgHolder = BasicCfgHolder(
-    MyModelCfg("lstm", 3, 128, 0.1),
-    TrainCfg(
+instance_basic: BasicCfgHolder = BasicCfgHolder(  # type: ignore
+    model=MyModelCfg("lstm", 3, 128, 0.1),  # type: ignore
+    optimizer=TrainCfg(  # type: ignore
         name="adamw",
         weight_decay=0.2,
         optimizer=torch.optim.AdamW,
         optimizer_kwargs=dict(lr=0.0001),
     ),
-    CustomCfg(42, "forty-two"),
+    custom=CustomCfg(42, "forty-two"),
 )
 
 
@@ -113,10 +113,6 @@ def test_config_holder_zanj():
 
 @serializable_dataclass(kw_only=True)
 class BaseGPTConfig(SerializableDataclass):
-    """
-    Add a name property and serialization to HookedTransformerConfig
-    """
-
     name: str
     act_fn: str
     d_model: int
@@ -126,10 +122,6 @@ class BaseGPTConfig(SerializableDataclass):
 
 @serializable_dataclass(kw_only=True)
 class AdvCfgHolder(SerializableDataclass):
-    """
-    Handles any logic that moves data between the configs below it.
-    """
-
     name: str = serializable_field(default="default")
     model_cfg: BaseGPTConfig
     tokenizer: CustomCfg | None = serializable_field(
@@ -141,8 +133,8 @@ class AdvCfgHolder(SerializableDataclass):
     )
 
 
-instance_adv: AdvCfgHolder = AdvCfgHolder(
-    model_cfg=BaseGPTConfig(
+instance_adv: AdvCfgHolder = AdvCfgHolder(  # type: ignore
+    model_cfg=BaseGPTConfig(  # type: ignore
         name="gpt2",
         act_fn="gelu",
         d_model=128,

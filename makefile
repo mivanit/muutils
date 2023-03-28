@@ -55,7 +55,7 @@ check-git:
 	if [ -n "$(shell git status --porcelain)" ]; then \
 		echo "Git is not clean, exiting!"; \
 		exit 1; \
-	fi; \
+	fi; \g
 
 #check-format test
 .PHONY: build
@@ -79,11 +79,11 @@ publish: check-format test build check-git version
 	echo $$(cat $(PYPI_TOKEN_FILE))
 
 	echo "Uploading!"; \
-	echo $$NEW_VERSION > $(LAST_VERSION_FILE); \
+	echo $(VERSION) > $(LAST_VERSION_FILE); \
 	git add $(LAST_VERSION_FILE); \
-	git commit -m "Auto update to $$NEW_VERSION"; \
-	git tag $$NEW_VERSION; \
-	git push origin $$NEW_VERSION; \
+	git commit -m "Auto update to $(VERSION)"; \
+	git tag $(VERSION); \
+	git push origin $(VERSION); \
 	twine upload dist/*
 
 # workflow test -- no need to clear, runs using poetry

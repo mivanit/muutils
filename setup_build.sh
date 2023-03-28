@@ -12,13 +12,19 @@ LAST_VERSION=$(cat $LAST_VERSION_FILE)
 set -x
 set -e
 
+make check-format
+
+make test
+
 rm -rf build/
 rm -rf dist/
 rm -rf muutils.egg-info/
 
-py -m build --wheel
+poetry build
 
-twine check dist/*
+# py -m build --wheel
+
+# twine check dist/*
 
 set +x
 

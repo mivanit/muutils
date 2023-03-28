@@ -10,7 +10,7 @@ import numpy as np
 import pandas as pd
 import torch
 
-from muutils.tensor_utils import DTYPE_MAP
+from muutils.tensor_utils import DTYPE_MAP, TORCH_DTYPE_MAP
 from muutils.json_serialize.array import load_array
 from muutils.json_serialize.json_serialize import ObjectPath
 from muutils.json_serialize.util import ErrorMode, JSONdict, JSONitem, safe_getsource
@@ -115,7 +115,7 @@ LOADER_MAP: dict[str, LoaderHandler] = {
                 # and json_item["data"].dtype.name == json_item["dtype"]
                 # and tuple(json_item["data"].shape) == tuple(json_item["shape"])
             ),
-            load=lambda json_item, path=None, z=None: torch.tensor(load_array(json_item), dtype=DTYPE_MAP[json_item["dtype"]]),  # type: ignore[misc]
+            load=lambda json_item, path=None, z=None: torch.tensor(load_array(json_item), dtype=TORCH_DTYPE_MAP[json_item["dtype"]]),  # type: ignore[misc]
             uid="torch.Tensor",
             source_pckg="muutils.zanj",
             desc="torch.Tensor loader",

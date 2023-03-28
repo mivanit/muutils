@@ -6,15 +6,8 @@ LAST_VERSION_FILE := .lastversion
 VERSION := $(shell grep -oP '__version__ = "\K.*?(?=")' $(VERSION_INFO_LOCATION))
 LAST_VERSION := $(shell cat $(LAST_VERSION_FILE))
 
-POETRY := $(shell command -v poetry)
-
 .PHONY: default
 default: help
-
-.PHONY: check-poetry
-check-poetry:
-	@echo "Checking poetry in PATH:"
-	@which poetry || echo "Poetry not found in PATH"
 
 .PHONY: version
 version:
@@ -56,18 +49,21 @@ test:
 .PHONY: build
 build: 
 	@echo "run format check, test, and then build"
-	python -m build --wheel
-	twine check dist/*
+	poetry build
 
 .PHONY: publish
 publish: check-format test build version
 	@echo "run format check, test, build, and then publish"
+	
+
 	@echo "Enter the new version number if you want to upload to pypi and create a new tag"
 	@read -p "Confirm: " NEW_VERSION; \
 	if [ "$$NEW_VERSION" != "$(VERSION)" ]; then \
 		echo "Confirmation failed, exiting!"; \
 		exit 1; \
 	fi; \
+	
+	@echo "checking git status"
 	if [ "$(shell git branch --show-current)" != $(PUBLISH_BRANCH) ]; then \
 		echo "Git is not on the $(PUBLISH_BRANCH) branch, exiting!"; \
 		exit 1; \
@@ -76,6 +72,7 @@ publish: check-format test build version
 		echo "Git is not clean, exiting!"; \
 		exit 1; \
 	fi; \
+
 	echo "Uploading!"; \
 	echo $$NEW_VERSION > $(LAST_VERSION_FILE); \
 	git add $(LAST_VERSION_FILE); \

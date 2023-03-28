@@ -317,6 +317,7 @@ def serializable_dataclass(
                 data, typing.Mapping
             ), f"When loading {cls.__name__ = } expected a Mapping, but got {type(data) = }:\n{data = }"
 
+            cls_type_hints: dict[str, Any] = typing.get_type_hints(cls)
             ctor_kwargs: dict[str, Any] = dict()
             for field in dataclasses.fields(cls):
                 assert isinstance(
@@ -326,20 +327,20 @@ def serializable_dataclass(
                 if (field.name in data) and field.init:
                     value = data[field.name]
 
-                    if hasattr(field.type, "load") and callable(field.type.load):
+                    field_type_hint: Any = cls_type_hints.get(field.name, None)
+                    if field.loading_fn:
+                        value = field.loading_fn(data)
+                    elif field_type_hint is not None and hasattr(field_type_hint, "load") and callable(field_type_hint.load):
                         if isinstance(value, dict):
-                            value = field.type.load(value)
+                            value = field_type_hint.load(value)
                         else:
                             raise ValueError(
-                                f"Cannot load value into {field.type}, espected {type(value) = } to be a dict\n{value = }"
-                            )
-                    elif field.loading_fn:
-                        value = field.loading_fn(data)
+                                f"Cannot load value into {field_type_hint}, espected {type(value) = } to be a dict\n{value = }"
+                            )                    
 
                     if field.assert_type:
-                        # TODO: make this work
-                        # assert isinstance(ctor_kwargs[field.name], field.type)
-                        pass
+                        if field.name in ctor_kwargs:
+                            assert isinstance(ctor_kwargs[field.name], field_type_hint)
 
                     ctor_kwargs[field.name] = value
             return cls(**ctor_kwargs)

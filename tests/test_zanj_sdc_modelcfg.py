@@ -90,12 +90,14 @@ def test_config_holder():
     instance_stored = instance_basic.serialize()
     with open(TEST_DATA_PATH / "test_config_holder.json", "w") as f:
         json.dump(instance_stored, f, indent="\t")
-    recovered = BasicCfgHolder.load(instance_stored)
-    assert instance_basic == recovered
+    with open(TEST_DATA_PATH / "test_config_holder.json", "r") as f:
+        instance_stored_read = json.load(f)
+    recovered = BasicCfgHolder.load(instance_stored_read)
     assert isinstance(recovered.model, MyModelCfg)
     assert isinstance(recovered.optimizer, TrainCfg)
     assert isinstance(recovered.custom, CustomCfg)
     assert recovered.custom.x == 42
+    assert instance_basic == recovered
 
 
 def test_config_holder_zanj():
@@ -103,11 +105,11 @@ def test_config_holder_zanj():
     path = TEST_DATA_PATH / "test_config_holder.zanj"
     z.save(instance_basic, path)
     recovered = z.read(path)
-    assert instance_basic == recovered
     assert isinstance(recovered.model, MyModelCfg)
     assert isinstance(recovered.optimizer, TrainCfg)
     assert isinstance(recovered.custom, CustomCfg)
     assert recovered.custom.x == 42
+    assert instance_basic == recovered
 
 
 @serializable_dataclass(kw_only=True)
@@ -153,6 +155,7 @@ def test_adv_config_holder():
     with open(TEST_DATA_PATH / "test_adv_config_holder.json", "w") as f:
         json.dump(instance_stored, f, indent="\t")
     recovered = AdvCfgHolder.load(instance_stored)
+    assert isinstance(recovered.model_cfg, BaseGPTConfig)
     assert instance_adv == recovered
 
 def test_adv_config_holder_zanj():
@@ -160,4 +163,5 @@ def test_adv_config_holder_zanj():
     path = TEST_DATA_PATH / "test_adv_config_holder.zanj"
     z.save(instance_adv, path)
     recovered = z.read(path)
+    assert isinstance(recovered.model_cfg, BaseGPTConfig)
     assert instance_adv == recovered

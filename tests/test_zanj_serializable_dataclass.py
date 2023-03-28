@@ -20,17 +20,17 @@ TEST_DATA_PATH: Path = Path("tests/junk_data")
 
 
 @serializable_dataclass
-class Basic(SerializableDataclass):
+class BasicZanj(SerializableDataclass):
     a: str
     q: int = 42
     c: list[int] = serializable_field(default_factory=list)
 
 
 def test_Basic():
-    instance = Basic("hello", 42, [1, 2, 3])
+    instance = BasicZanj("hello", 42, [1, 2, 3])
 
     z = ZANJ()
-    path = TEST_DATA_PATH / "test_Basic.zanj"
+    path = TEST_DATA_PATH / "test_BasicZanj.zanj"
     z.save(instance, path)
     recovered = z.read(path)
     assert instance == recovered
@@ -39,12 +39,12 @@ def test_Basic():
 @serializable_dataclass
 class Nested(SerializableDataclass):
     name: str
-    basic: Basic
+    basic: BasicZanj
     val: float
 
 
 def test_Nested():
-    instance = Nested("hello", Basic("hello", 42, [1, 2, 3]), 3.14)
+    instance = Nested("hello", BasicZanj("hello", 42, [1, 2, 3]), 3.14)
 
     z = ZANJ()
     path = TEST_DATA_PATH / "test_Nested.zanj"
@@ -56,7 +56,7 @@ def test_Nested():
 @serializable_dataclass
 class Nested_with_container(SerializableDataclass):
     name: str
-    basic: Basic
+    basic: BasicZanj
     val: float
     container: list[Nested] = serializable_field(
         default_factory=list,
@@ -68,11 +68,11 @@ class Nested_with_container(SerializableDataclass):
 def test_Nested_with_container():
     instance = Nested_with_container(
         "hello",
-        basic=Basic("hello", 42, [1, 2, 3]),
+        basic=BasicZanj("hello", 42, [1, 2, 3]),
         val=3.14,
         container=[
-            Nested("n1", Basic("n1_b", 123, [4, 5, 7]), 2.71),
-            Nested("n2", Basic("n2_b", 456, [7, 8, 9]), 6.28),
+            Nested("n1", BasicZanj("n1_b", 123, [4, 5, 7]), 2.71),
+            Nested("n2", BasicZanj("n2_b", 456, [7, 8, 9]), 6.28),
         ],
     )
 
@@ -184,7 +184,7 @@ def test_sdc_complicated():
         container=[
             Nested(
                 f"n-{n}",
-                Basic(f"n-{n}_b", n * 10 + 1, [n + 1, n + 2, n + 10]),
+                BasicZanj(f"n-{n}_b", n * 10 + 1, [n + 1, n + 2, n + 10]),
                 n * np.pi,
             )
             for n in range(10)
@@ -215,7 +215,7 @@ def test_sdc_container_explicit():
         container=[
             Nested(
                 f"n-{n}",
-                Basic(f"n-{n}_b", n * 10 + 1, [n + 1, n + 2, n + 10]),
+                BasicZanj(f"n-{n}_b", n * 10 + 1, [n + 1, n + 2, n + 10]),
                 n * np.pi,
             )
             for n in range(10)

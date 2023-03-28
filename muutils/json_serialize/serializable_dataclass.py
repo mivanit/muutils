@@ -3,6 +3,7 @@ import dataclasses
 import types
 import typing
 from typing import Any, Callable, Optional, Type, TypeVar
+import warnings
 
 # pylint: disable=bad-mcs-classmethod-argument, too-many-arguments, protected-access
 
@@ -148,14 +149,17 @@ def array_safe_eq(a: Any, b: Any) -> bool:
     if isinstance(a, (dict, typing.Mapping)) and isinstance(b, (dict, typing.Mapping)):
         return (
             len(a) == len(b)
-            and all(k1 == k2 for k1, k2 in zip(a.keys(), b.keys()))
-            and all(array_safe_eq(a[k], b[k]) for k in a.keys())
+            and all(
+                array_safe_eq(k1, k2) and array_safe_eq(a[k1], b[k2]) 
+                for k1, k2 in zip(a.keys(), b.keys())
+            )
         )
 
     try:
         return a == b
     except TypeError:
-        return NotImplementedError  # type: ignore[return-value]
+        warnings.warn(f"Cannot compare {a} and {b} for equality")
+        return NotImplemented  # type: ignore[return-value]
 
 
 def dc_eq(dc1, dc2) -> bool:
@@ -164,7 +168,8 @@ def dc_eq(dc1, dc2) -> bool:
         return True
 
     if dc1.__class__ is not dc2.__class__:
-        return NotImplementedError  # type: ignore[return-value]
+        warnings.warn(f"Cannot compare {dc1} and {dc2} for equality due to classes not matching: {dc1.__class__} vs {dc2.__class__}")
+        return NotImplemented  # type: ignore[return-value]
 
     return all(
         array_safe_eq(getattr(dc1, fld.name), getattr(dc2, fld.name))

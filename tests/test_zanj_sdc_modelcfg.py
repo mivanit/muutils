@@ -22,7 +22,7 @@ np.random.seed(0)
 TEST_DATA_PATH: Path = Path("tests/junk_data")
 
 @serializable_dataclass
-class ModelCfg(SerializableDataclass):
+class MyModelCfg(SerializableDataclass):
     name: str
     num_layers: int
     hidden_size: int
@@ -66,7 +66,7 @@ class CustomCfg:
 
 @serializable_dataclass
 class BasicCfgHolder(SerializableDataclass):
-    model: ModelCfg
+    model: MyModelCfg
     optimizer: TrainCfg
     custom: CustomCfg | None = serializable_field(
         default=None,
@@ -75,7 +75,7 @@ class BasicCfgHolder(SerializableDataclass):
     )
 
 instance_basic: BasicCfgHolder = BasicCfgHolder(
-    ModelCfg("lstm", 3, 128, 0.1),
+    MyModelCfg("lstm", 3, 128, 0.1),
     TrainCfg(
         name="adamw",
         weight_decay=0.2,
@@ -92,6 +92,10 @@ def test_config_holder():
         json.dump(instance_stored, f, indent="\t")
     recovered = BasicCfgHolder.load(instance_stored)
     assert instance_basic == recovered
+    assert isinstance(recovered.model, MyModelCfg)
+    assert isinstance(recovered.optimizer, TrainCfg)
+    assert isinstance(recovered.custom, CustomCfg)
+    assert recovered.custom.x == 42
 
 
 def test_config_holder_zanj():
@@ -100,6 +104,10 @@ def test_config_holder_zanj():
     z.save(instance_basic, path)
     recovered = z.read(path)
     assert instance_basic == recovered
+    assert isinstance(recovered.model, MyModelCfg)
+    assert isinstance(recovered.optimizer, TrainCfg)
+    assert isinstance(recovered.custom, CustomCfg)
+    assert recovered.custom.x == 42
 
 
 @serializable_dataclass(kw_only=True)

@@ -12,7 +12,7 @@ from muutils.json_serialize import (
 
 
 @serializable_dataclass
-class Basic_autofields(SerializableDataclass):
+class BasicAutofields(SerializableDataclass):
     a: str
     b: int
     c: list[int]
@@ -20,9 +20,9 @@ class Basic_autofields(SerializableDataclass):
 
 def test_basic_auto_fields():
     data = dict(a="hello", b=42, c=[1, 2, 3])
-    instance = Basic_autofields(**data)
+    instance = BasicAutofields(**data)
     data_with_format = data.copy()
-    data_with_format["__format__"] = "Basic_autofields(SerializableDataclass)"
+    data_with_format["__format__"] = "BasicAutofields(SerializableDataclass)"
     assert instance.serialize() == data_with_format
 
 
@@ -263,10 +263,10 @@ def test_custom_serialization():
 class Nested_with_Container(SerializableDataclass):
     val_int: int
     val_str: str
-    val_list: list[Basic_autofields] = serializable_field(
+    val_list: list[BasicAutofields] = serializable_field(
         default_factory=list,
         serialization_fn=lambda x: [y.serialize() for y in x],
-        loading_fn=lambda x: [Basic_autofields.load(y) for y in x["val_list"]],
+        loading_fn=lambda x: [BasicAutofields.load(y) for y in x["val_list"]],
     )
 
 
@@ -275,8 +275,8 @@ def test_nested_with_container():
         val_int=42,
         val_str="hello",
         val_list=[
-            Basic_autofields(a="a", b=1, c=[1, 2, 3]),
-            Basic_autofields(a="b", b=2, c=[4, 5, 6]),
+            BasicAutofields(a="a", b=1, c=[1, 2, 3]),
+            BasicAutofields(a="b", b=2, c=[4, 5, 6]),
         ],
     )
 
@@ -289,13 +289,13 @@ def test_nested_with_container():
                 "a": "a",
                 "b": 1,
                 "c": [1, 2, 3],
-                "__format__": "Basic_autofields(SerializableDataclass)",
+                "__format__": "BasicAutofields(SerializableDataclass)",
             },
             {
                 "a": "b",
                 "b": 2,
                 "c": [4, 5, 6],
-                "__format__": "Basic_autofields(SerializableDataclass)",
+                "__format__": "BasicAutofields(SerializableDataclass)",
             },
         ],
         "__format__": "Nested_with_Container(SerializableDataclass)",

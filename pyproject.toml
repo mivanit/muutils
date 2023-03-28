@@ -11,6 +11,7 @@ classifiers=[
     "Operating System :: OS Independent",
 ]
 repository = "https://github.com/mivanit/muutils"
+build = { include = ["py.typed"] }
 
 [tool.poetry.dependencies]
 python = "^3.10"

@@ -64,7 +64,7 @@ class ConfiguredModel(
     """
 
     # dont set this directly, use `set_config_class()` decorator
-    _config_class: type | None = None 
+    _config_class: type | None = None
     zanj_config_class = property(lambda self: type(self)._config_class)
 
     def __init__(self, zanj_model_config: T_config, **kwargs):

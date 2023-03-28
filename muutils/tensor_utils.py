@@ -165,7 +165,7 @@ ATensor = jaxtype_factory("ATensor", torch.Tensor, jaxtyping.Float)  # type: ign
 NDArray = jaxtype_factory("NDArray", np.ndarray, jaxtyping.Float)  # type: ignore[misc, assignment]
 
 
-def numpy_to_torch_dtype(dtype: np.dtype|torch.dtype) -> torch.dtype:
+def numpy_to_torch_dtype(dtype: np.dtype | torch.dtype) -> torch.dtype:
     """convert numpy dtype to torch dtype"""
     if isinstance(dtype, torch.dtype):
         return dtype
@@ -236,16 +236,11 @@ DTYPE_LIST: list = [
 
 DTYPE_MAP: dict = {
     **{str(x): x for x in DTYPE_LIST},
-    **{
-        dtype.__name__: dtype
-        for dtype in DTYPE_LIST
-        if dtype.__module__ == "numpy"
-    },
+    **{dtype.__name__: dtype for dtype in DTYPE_LIST if dtype.__module__ == "numpy"},
 }
 
 TORCH_DTYPE_MAP: dict = {
-    key : numpy_to_torch_dtype(dtype)
-    for key, dtype in DTYPE_MAP.items()
+    key: numpy_to_torch_dtype(dtype) for key, dtype in DTYPE_MAP.items()
 }
 
 

@@ -98,6 +98,11 @@ class ConfiguredModel(
         )
         return obj
 
+    def save(self, file_path: str, zanj: ZANJ | None = None):
+        if zanj is None:
+            zanj = ZANJ()
+        zanj.save(self, file_path)
+
     @classmethod
     def load(
         cls, obj: dict[str, Any], path: ObjectPath, zanj: ZANJ | None = None

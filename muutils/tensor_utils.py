@@ -226,7 +226,14 @@ DTYPE_LIST: list = [
     ],
 ]
 
-DTYPE_MAP: dict = {str(x): x for x in DTYPE_LIST}
+DTYPE_MAP: dict = {
+    **{str(x): x for x in DTYPE_LIST},
+    **{
+        dtype.__name__: dtype
+        for dtype in DTYPE_LIST
+        if dtype.__module__ == "numpy"
+    },
+}
 
 
 TORCH_OPTIMIZERS_MAP: dict[str, typing.Type[torch.optim.Optimizer]] = {

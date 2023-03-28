@@ -8,7 +8,7 @@ from muutils.json_serialize.util import JSONitem
 
 # pylint: disable=unused-argument
 
-ArrayMode = Literal["list", "array_list_meta", "array_hex_meta", "external"]
+ArrayMode = Literal["list", "array_list_meta", "array_hex_meta", "external", "zero_dim"]
 
 
 def array_n_elements(arr) -> int:  # type: ignore[name-defined]
@@ -68,14 +68,19 @@ def serialize_array(
      - `KeyError` : if the array mode is not valid
     """
 
-    if len(arr.shape) == 0:
-        return arr.item()
-
     if array_mode is None:
         array_mode = jser.array_mode
 
     arr_type: str = f"{type(arr).__module__}.{type(arr).__name__}"
     arr_np: np.ndarray = arr if isinstance(arr, np.ndarray) else np.array(arr)
+
+    # handle zero-dimensional arrays
+    if len(arr.shape) == 0:
+        return {
+            "__format__": f"{arr_type}:zero_dim",
+            "data": arr.item(),
+            **arr_metadata(arr),
+        }
 
     if array_mode == "array_list_meta":
         return {
@@ -112,6 +117,8 @@ def infer_array_mode(arr: JSONitem) -> ArrayMode:
             return "array_hex_meta"
         elif fmt.endswith(":external"):
             return "external"
+        elif fmt.endswith(":zero_dim"):
+            return "zero_dim"
         else:
             raise ValueError(f"invalid format: {arr}")
     elif isinstance(arr, list):
@@ -164,5 +171,11 @@ def load_array(arr: JSONitem, array_mode: Optional[ArrayMode] = None) -> Any:
         # assume ZANJ has taken care of it
         assert isinstance(arr, typing.Mapping)
         return arr["data"]
+    elif array_mode == "zero_dim":
+        assert isinstance(arr, typing.Mapping)
+        data = np.array(arr["data"])
+        if tuple(arr["shape"]) != tuple(data.shape):
+            raise ValueError(f"invalid shape: {arr}")
+        return data
     else:
         raise ValueError(f"invalid array_mode: {array_mode}")

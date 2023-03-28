@@ -63,7 +63,8 @@ class ConfiguredModel(
     `super().__init__(config)`
     """
 
-    _config_class: type | None = None
+    # dont set this directly, use `set_config_class()` decorator
+    _config_class: type | None = None 
     zanj_config_class = property(lambda self: type(self)._config_class)
 
     def __init__(self, zanj_model_config: T_config, **kwargs):
@@ -90,6 +91,7 @@ class ConfiguredModel(
                 module_name=self.__class__.__module__,
                 module_mro=[str(x) for x in self.__class__.__mro__],
                 num_params=num_params(self),
+                as_str=str(self),
             ),
             state_dict=self.state_dict(),
             __format__=self.__class__.__name__,

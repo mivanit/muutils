@@ -84,7 +84,7 @@ publish: check-format test build check-git version
 	git commit -m "Auto update to $(VERSION)"; \
 	git tag $(VERSION); \
 	git push origin $(VERSION); \
-	twine upload dist/*
+	twine upload dist/* --verbose
 
 # workflow test -- no need to clear, runs using poetry
 .PHONY: wftest

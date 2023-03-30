@@ -55,7 +55,7 @@ check-git:
 	if [ -n "$(shell git status --porcelain)" ]; then \
 		echo "Git is not clean, exiting!"; \
 		exit 1; \
-	fi; \g
+	fi; \
 
 #check-format test
 .PHONY: build

@@ -6,6 +6,7 @@ import torch
 
 from muutils.json_serialize import SerializableDataclass
 from muutils.json_serialize.json_serialize import ObjectPath
+from muutils.json_serialize.util import string_as_lines
 from muutils.zanj import ZANJ, register_loader_handler
 from muutils.zanj.loading import LoaderHandler, load_item_recursive
 
@@ -91,7 +92,7 @@ class ConfiguredModel(
                 module_name=self.__class__.__module__,
                 module_mro=[str(x) for x in self.__class__.__mro__],
                 num_params=num_params(self),
-                as_str=str(self),
+                as_str=string_as_lines(str(self)),
             ),
             state_dict=self.state_dict(),
             __format__=self.__class__.__name__,
@@ -101,7 +102,15 @@ class ConfiguredModel(
     def save(self, file_path: str, zanj: ZANJ | None = None):
         if zanj is None:
             zanj = ZANJ()
-        zanj.save(self, file_path)
+        zanj.save(self.serialize(), file_path)
+
+    def _load_state_dict_wrapper(
+        self,
+        state_dict: dict[str, torch.Tensor],
+        **kwargs: KWArgs,
+    ):
+        """wrapper for `load_state_dict()` in case you need to override it"""
+        return self.load_state_dict(state_dict, **kwargs)
 
     @classmethod
     def load(
@@ -125,7 +134,7 @@ class ConfiguredModel(
             zanj,
         )
 
-        model.load_state_dict(tensored_state_dict)
+        model._load_state_dict_wrapper(tensored_state_dict)
 
         return model
 

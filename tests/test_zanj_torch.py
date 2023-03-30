@@ -23,7 +23,7 @@ def compare_state_dicts(d1: dict, d2: dict):
             keys_failed.append(k)
     assert (
         len(keys_failed) == 0
-    ), f"{len(keys_failed)} / {len(d1.state_dict)} state dict elements don't match: {keys_failed}"
+    ), f"{len(keys_failed)} / {len(d1)} state dict elements don't match: {keys_failed}"
 
 
 def test_torch_configmodel():

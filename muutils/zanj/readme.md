@@ -33,3 +33,33 @@ contains some configuration info about saving, such as:
 - error modes
 - handlers for serialization
 
+
+# Comparison to other formats
+
+
+
+| Format                  | Safe | Zero-copy | Lazy loading | No file size limit | Layout control | Flexibility | Bfloat16 |
+| ----------------------- | ---- | --------- | ------------ | ------------------ | -------------- | ----------- | -------- |
+| pickle (PyTorch)        | ❌   | ❌        | ❌           | ✅                 | ❌             | ✅          | ✅       |
+| H5 (Tensorflow)         | ✅   | ❌        | ✅           | ✅                 | ~              | ~           | ❌       |
+| HDF5                    | ✅   | ?         | ✅           | ✅                 | ~              | ✅          | ❌       |
+| SavedModel (Tensorflow) | ✅   | ❌        | ❌           | ✅                 | ✅             | ❌          | ✅       |
+| MsgPack (flax)          | ✅   | ✅        | ❌           | ✅                 | ❌             | ❌          | ✅       |
+| Protobuf (ONNX)         | ✅   | ❌        | ❌           | ❌                 | ❌             | ❌          | ✅       |
+| Cap'n'Proto             | ✅   | ✅        | ~            | ✅                 | ✅             | ~           | ❌       |
+| Numpy (npy,npz)         | ✅   | ?         | ?            | ❌                 | ✅             | ❌          | ❌       |
+| SafeTensors             | ✅   | ✅        | ✅           | ✅                 | ✅             | ❌          | ✅       |
+| exdir                   | ✅   | ?         | ?            | ?                  | ?              | ✅          | ❌       |
+| ZANJ                    | ✅   | ?         | ❌*          | ✅                 | ✅             | ✅          | ❌       |
+
+
+- Safe: Can I use a file randomly downloaded and expect not to run arbitrary code ?
+- Zero-copy: Does reading the file require more memory than the original file ?
+- Lazy loading: Can I inspect the file without loading everything ? And loading only some tensors in it without scanning the whole file (distributed setting) ?
+- Layout control: Lazy loading, is not necessarily enough since if the information about tensors is spread out in your file, then even if the information is lazily accessible you might have to access most of your file to read the available tensors (incurring many DISK -> RAM copies). Controlling the layout to keep fast access to single tensors is important.
+- No file size limit: Is there a limit to the file size ?
+- Flexibility: Can I save custom code in the format and be able to use it later with zero extra code ? (~ means we can store more than pure tensors, but no custom code)
+- Bfloat16: Does the format support native bfloat16 (meaning no weird workarounds are necessary)? This is becoming increasingly important in the ML world.
+
+
+(This table was Stolen from [safetensors](https://github.com/huggingface/safetensors/blob/main/README.md))

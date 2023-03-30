@@ -93,7 +93,7 @@ class ZANJ(JsonSerializer):
         # create the externals, leave it empty
         self._externals: dict[str, ExternalItem] = dict()
 
-    def externals_info(self) -> dict[str, dict[str, str|int|list[int]]]:
+    def externals_info(self) -> dict[str, dict[str, str | int | list[int]]]:
         """return information about the current externals"""
         output: dict[str, dict] = dict()
 

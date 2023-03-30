@@ -21,7 +21,7 @@ def array_n_elements(arr) -> int:  # type: ignore[name-defined]
         raise TypeError(f"invalid type: {type(arr)}")
 
 
-def arr_metadata(arr) -> dict[str, list[int]|str|int]:
+def arr_metadata(arr) -> dict[str, list[int] | str | int]:
     """get metadata for a numpy array"""
     return {
         "shape": list(arr.shape),

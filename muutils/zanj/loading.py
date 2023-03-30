@@ -12,7 +12,13 @@ import torch
 
 from muutils.json_serialize.array import load_array
 from muutils.json_serialize.json_serialize import ObjectPath
-from muutils.json_serialize.util import ErrorMode, JSONdict, JSONitem, safe_getsource, string_as_lines
+from muutils.json_serialize.util import (
+    ErrorMode,
+    JSONdict,
+    JSONitem,
+    safe_getsource,
+    string_as_lines,
+)
 from muutils.tensor_utils import DTYPE_MAP, TORCH_DTYPE_MAP
 from muutils.zanj.externals import (
     GET_EXTERNAL_LOAD_FUNC,

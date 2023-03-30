@@ -20,8 +20,7 @@ version:
 # python -m pylint muutils/
 # python -m pylint tests/
 .PHONY: lint
-lint:
-	rm -rf .mypy_cache
+lint: clean
 	python -m mypy --config-file pyproject.toml muutils/
 	python -m mypy --config-file pyproject.toml tests/
 
@@ -39,10 +38,8 @@ check-format:
 	python -m black --check .
 
 .PHONY: test
-test:
+test: clean
 	@echo "running tests"
-	rm -rf .pytest_cache
-	rm -rf tests/junk_data
 	python -m pytest tests
 
 .PHONY: check-git
@@ -64,7 +61,7 @@ build:
 	poetry build
 
 .PHONY: publish
-publish: check-format test build check-git version
+publish: clean check-format test build check-git version
 	@echo "run format check, test, build, and then publish"
 
 	@echo "Enter the new version number if you want to upload to pypi and create a new tag"
@@ -95,6 +92,18 @@ wftest:
 wflint:
 	poetry run python -m mypy --config-file pyproject.toml muutils/
 	poetry run python -m mypy --config-file pyproject.toml tests/
+
+.PHONY: clean
+clean:
+	@echo "cleaning up"
+	rm -rf .mypy_cache
+	rm -rf .pytest_cache
+	rm -rf dist
+	rm -rf build
+	rm -rf muutils.egg-info
+	rm -rf tests/junk_data
+	find . -type d -name __pycache__ -exec rm -fr {} \;
+
 
 # listing targets, from stackoverflow
 # https://stackoverflow.com/questions/4219255/how-do-you-get-the-list-of-targets-in-a-makefile

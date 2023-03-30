@@ -15,6 +15,7 @@ from muutils.json_serialize.util import (
     _recursive_hashify,
     isinstance_namedtuple,
     safe_getsource,
+    string_as_lines,
     try_catch,
 )
 
@@ -71,12 +72,12 @@ class SerializerHandler:
             # get the code and doc of the check function
             "check": {
                 "code": safe_getsource(self.check),
-                "doc": self.check.__doc__,
+                "doc": string_as_lines(self.check.__doc__),
             },
             # get the code and doc of the load function
             "serialize_func": {
                 "code": safe_getsource(self.serialize_func),
-                "doc": self.serialize_func.__doc__,
+                "doc": string_as_lines(self.serialize_func.__doc__),
             },
             # get the uid, source_pckg, priority, and desc
             "uid": str(self.uid),

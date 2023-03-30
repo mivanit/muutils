@@ -165,6 +165,14 @@ ATensor = jaxtype_factory("ATensor", torch.Tensor, jaxtyping.Float)  # type: ign
 NDArray = jaxtype_factory("NDArray", np.ndarray, jaxtyping.Float)  # type: ignore[misc, assignment]
 
 
+def numpy_to_torch_dtype(dtype: np.dtype | torch.dtype) -> torch.dtype:
+    """convert numpy dtype to torch dtype"""
+    if isinstance(dtype, torch.dtype):
+        return dtype
+    else:
+        return torch.from_numpy(np.array(0, dtype=dtype)).dtype
+
+
 DTYPE_LIST: list = [
     *[
         bool,
@@ -226,7 +234,14 @@ DTYPE_LIST: list = [
     ],
 ]
 
-DTYPE_MAP: dict = {str(x): x for x in DTYPE_LIST}
+DTYPE_MAP: dict = {
+    **{str(x): x for x in DTYPE_LIST},
+    **{dtype.__name__: dtype for dtype in DTYPE_LIST if dtype.__module__ == "numpy"},
+}
+
+TORCH_DTYPE_MAP: dict = {
+    key: numpy_to_torch_dtype(dtype) for key, dtype in DTYPE_MAP.items()
+}
 
 
 TORCH_OPTIMIZERS_MAP: dict[str, typing.Type[torch.optim.Optimizer]] = {
@@ -321,3 +336,15 @@ def rpad_array(
 ) -> np.ndarray:
     """pad a 1-d array on the right with pad_value to length `pad_length`"""
     return pad_array(array, pad_length, pad_value, rpad=True)
+
+
+def compare_state_dicts(d1: dict, d2: dict):
+    assert d1.keys() == d2.keys(), "state dict keys don't match!"
+    keys_failed: list[str] = list()
+    for k, v in d1.items():
+        v_load = d2[k]
+        if not (v == v_load).all():
+            keys_failed.append(k)
+    assert (
+        len(keys_failed) == 0
+    ), f"{len(keys_failed)} / {len(d1)} state dict elements don't match: {keys_failed}"

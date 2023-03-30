@@ -6,6 +6,7 @@ import torch
 
 from muutils.json_serialize import SerializableDataclass
 from muutils.json_serialize.json_serialize import ObjectPath
+from muutils.json_serialize.util import safe_getsource, string_as_lines
 from muutils.zanj import ZANJ, register_loader_handler
 from muutils.zanj.loading import LoaderHandler, load_item_recursive
 
@@ -63,19 +64,20 @@ class ConfiguredModel(
     `super().__init__(config)`
     """
 
+    # dont set this directly, use `set_config_class()` decorator
     _config_class: type | None = None
-    config_class = property(lambda self: type(self)._config_class)
+    zanj_config_class = property(lambda self: type(self)._config_class)
 
-    def __init__(self, config: T_config):
-        super().__init__()
-        if self.config_class is None:
+    def __init__(self, zanj_model_config: T_config, **kwargs):
+        super().__init__(**kwargs)
+        if self.zanj_config_class is None:
             raise NotImplementedError("you need to set `config_class` for your model")
-        if not isinstance(config, self.config_class):  # type: ignore
+        if not isinstance(zanj_model_config, self.zanj_config_class):  # type: ignore
             raise TypeError(
-                f"config must be an instance of {self.config_class = }, got {type(config) = }"
+                f"config must be an instance of {self.zanj_config_class = }, got {type(zanj_model_config) = }"
             )
 
-        self.config: T_config = config
+        self.config: T_config = zanj_model_config
 
     def serialize(
         self, path: ObjectPath = tuple(), zanj: ZANJ | None = None
@@ -86,15 +88,30 @@ class ConfiguredModel(
             config=self.config.serialize(),
             meta=dict(
                 class_name=self.__class__.__name__,
-                class_doc=self.__class__.__doc__,
+                class_doc=string_as_lines(self.__class__.__doc__),
+                class_source=safe_getsource(self.__class__),
                 module_name=self.__class__.__module__,
                 module_mro=[str(x) for x in self.__class__.__mro__],
                 num_params=num_params(self),
+                as_str=string_as_lines(str(self)),
             ),
             state_dict=self.state_dict(),
             __format__=self.__class__.__name__,
         )
         return obj
+
+    def save(self, file_path: str, zanj: ZANJ | None = None):
+        if zanj is None:
+            zanj = ZANJ()
+        zanj.save(self.serialize(), file_path)
+
+    def _load_state_dict_wrapper(
+        self,
+        state_dict: dict[str, torch.Tensor],
+        **kwargs: KWArgs,
+    ):
+        """wrapper for `load_state_dict()` in case you need to override it"""
+        return self.load_state_dict(state_dict, **kwargs)
 
     @classmethod
     def load(
@@ -118,7 +135,7 @@ class ConfiguredModel(
             zanj,
         )
 
-        model.load_state_dict(tensored_state_dict)
+        model._load_state_dict_wrapper(tensored_state_dict)
 
         return model
 

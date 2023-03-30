@@ -93,7 +93,7 @@ class ZANJ(JsonSerializer):
         # create the externals, leave it empty
         self._externals: dict[str, ExternalItem] = dict()
 
-    def externals_info(self) -> dict[str, dict]:
+    def externals_info(self) -> dict[str, dict[str, str | int | list[int]]]:
         """return information about the current externals"""
         output: dict[str, dict] = dict()
 
@@ -117,28 +117,25 @@ class ZANJ(JsonSerializer):
 
     def meta(self) -> JSONitem:
         """return the metadata of the ZANJ archive"""
-        global LOADER_MAP
 
         serialization_handlers = {h.uid: h.serialize() for h in self.handlers}
         load_handlers = {h.uid: h.serialize() for h in LOADER_MAP.values()}
 
-        return json_serialize(
-            dict(
-                # configuration of this ZANJ instance
-                zanj_cfg=dict(
-                    error_mode=str(self.error_mode),
-                    array_mode=str(self.array_mode),
-                    external_array_threshold=self.external_array_threshold,
-                    external_table_threshold=self.external_table_threshold,
-                    compress=self.compress,
-                    serialization_handlers=serialization_handlers,
-                    load_handlers=load_handlers,
-                ),
-                # system info (python, pip packages, torch & cuda, platform info, git info)
-                sysinfo=SysInfo.get_all(include=("python", "pytorch")),
-                externals_info=self.externals_info(),
-                timestamp=time.time(),
-            )
+        return dict(
+            # configuration of this ZANJ instance
+            zanj_cfg=dict(
+                error_mode=str(self.error_mode),
+                array_mode=str(self.array_mode),
+                external_array_threshold=self.external_array_threshold,
+                external_table_threshold=self.external_table_threshold,
+                compress=self.compress,
+                serialization_handlers=serialization_handlers,
+                load_handlers=load_handlers,
+            ),
+            # system info (python, pip packages, torch & cuda, platform info, git info)
+            sysinfo=json_serialize(SysInfo.get_all(include=("python", "pytorch"))),
+            externals_info=self.externals_info(),
+            timestamp=time.time(),
         )
 
     def save(self, obj: Any, file_path: str | Path) -> str:

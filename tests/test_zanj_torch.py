@@ -7,6 +7,7 @@ from muutils.json_serialize import (
     serializable_dataclass,
     serializable_field,
 )
+from muutils.tensor_utils import compare_state_dicts
 from muutils.zanj import ZANJ
 
 np.random.seed(0)
@@ -96,8 +97,7 @@ def test_torch_configmodel():
 
     assert model.config == model2.config
 
-    for k, v in model.state_dict().items():
-        assert torch.allclose(model.state_dict()[k], model2.state_dict()[k])
+    compare_state_dicts(model.state_dict(), model2.state_dict())
 
     model3: MyGPT = ZANJ().read(fname)
     print(f"loaded model from {fname}")
@@ -105,5 +105,4 @@ def test_torch_configmodel():
 
     assert model.config == model3.config
 
-    for k, v in model.state_dict().items():
-        assert torch.allclose(model.state_dict()[k], model3.state_dict()[k])
+    compare_state_dicts(model.state_dict(), model3.state_dict())

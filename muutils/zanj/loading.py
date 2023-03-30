@@ -12,7 +12,14 @@ import torch
 
 from muutils.json_serialize.array import load_array
 from muutils.json_serialize.json_serialize import ObjectPath
-from muutils.json_serialize.util import ErrorMode, JSONdict, JSONitem, safe_getsource
+from muutils.json_serialize.util import (
+    ErrorMode,
+    JSONdict,
+    JSONitem,
+    safe_getsource,
+    string_as_lines,
+)
+from muutils.tensor_utils import DTYPE_MAP, TORCH_DTYPE_MAP
 from muutils.zanj.externals import (
     GET_EXTERNAL_LOAD_FUNC,
     ZANJ_MAIN,
@@ -50,12 +57,12 @@ class LoaderHandler:
             # get the code and doc of the check function
             "check": {
                 "code": safe_getsource(self.check),
-                "doc": self.check.__doc__,
+                "doc": string_as_lines(self.check.__doc__),
             },
             # get the code and doc of the load function
             "load": {
                 "code": safe_getsource(self.load),
-                "doc": self.load.__doc__,
+                "doc": string_as_lines(self.load.__doc__),
             },
             # get the uid, source_pckg, priority, and desc
             "uid": str(self.uid),
@@ -101,7 +108,7 @@ LOADER_MAP: dict[str, LoaderHandler] = {
                 # and json_item["data"].dtype.name == json_item["dtype"]
                 # and tuple(json_item["data"].shape) == tuple(json_item["shape"])
             ),
-            load=lambda json_item, path=None, z=None: np.array(load_array(json_item)),  # type: ignore[misc]
+            load=lambda json_item, path=None, z=None: np.array(load_array(json_item), dtype=DTYPE_MAP[json_item["dtype"]]),  # type: ignore[misc]
             uid="numpy.ndarray",
             source_pckg="muutils.zanj",
             desc="numpy.ndarray loader",
@@ -114,7 +121,7 @@ LOADER_MAP: dict[str, LoaderHandler] = {
                 # and json_item["data"].dtype.name == json_item["dtype"]
                 # and tuple(json_item["data"].shape) == tuple(json_item["shape"])
             ),
-            load=lambda json_item, path=None, z=None: torch.tensor(load_array(json_item)),  # type: ignore[misc]
+            load=lambda json_item, path=None, z=None: torch.tensor(load_array(json_item), dtype=TORCH_DTYPE_MAP[json_item["dtype"]]),  # type: ignore[misc]
             uid="torch.Tensor",
             source_pckg="muutils.zanj",
             desc="torch.Tensor loader",

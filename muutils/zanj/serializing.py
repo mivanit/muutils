@@ -143,7 +143,8 @@ def zanj_external_serialize(
         else:
             raise TypeError(f"expected list or pd.DataFrame, got {type(data)}")
 
-        output.update(jsonl_metadata(data_new))
+        if all([isinstance(item, dict) for item in data_new]):
+            output.update(jsonl_metadata(data_new))
 
     # store the item for external serialization
     jser._externals[archive_path] = ExternalItem(

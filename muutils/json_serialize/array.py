@@ -1,6 +1,6 @@
 import typing
 import warnings
-from typing import Any, Dict, Iterable, Literal, Optional, Sequence
+from typing import Any, Iterable, Literal, Optional, Sequence
 
 import numpy as np
 
@@ -21,10 +21,10 @@ def array_n_elements(arr) -> int:  # type: ignore[name-defined]
         raise TypeError(f"invalid type: {type(arr)}")
 
 
-def arr_metadata(arr) -> Dict[str, Any]:
+def arr_metadata(arr) -> dict[str, list[int]|str|int]:
     """get metadata for a numpy array"""
     return {
-        "shape": arr.shape,
+        "shape": list(arr.shape),
         "dtype": str(arr.dtype),
         "n_elements": array_n_elements(arr),
     }

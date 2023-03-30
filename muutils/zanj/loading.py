@@ -12,7 +12,7 @@ import torch
 
 from muutils.json_serialize.array import load_array
 from muutils.json_serialize.json_serialize import ObjectPath
-from muutils.json_serialize.util import ErrorMode, JSONdict, JSONitem, safe_getsource
+from muutils.json_serialize.util import ErrorMode, JSONdict, JSONitem, safe_getsource, string_as_lines
 from muutils.tensor_utils import DTYPE_MAP, TORCH_DTYPE_MAP
 from muutils.zanj.externals import (
     GET_EXTERNAL_LOAD_FUNC,
@@ -51,12 +51,12 @@ class LoaderHandler:
             # get the code and doc of the check function
             "check": {
                 "code": safe_getsource(self.check),
-                "doc": self.check.__doc__,
+                "doc": string_as_lines(self.check.__doc__),
             },
             # get the code and doc of the load function
             "load": {
                 "code": safe_getsource(self.load),
-                "doc": self.load.__doc__,
+                "doc": string_as_lines(self.load.__doc__),
             },
             # get the uid, source_pckg, priority, and desc
             "uid": str(self.uid),

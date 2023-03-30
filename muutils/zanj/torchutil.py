@@ -6,7 +6,7 @@ import torch
 
 from muutils.json_serialize import SerializableDataclass
 from muutils.json_serialize.json_serialize import ObjectPath
-from muutils.json_serialize.util import string_as_lines
+from muutils.json_serialize.util import safe_getsource, string_as_lines
 from muutils.zanj import ZANJ, register_loader_handler
 from muutils.zanj.loading import LoaderHandler, load_item_recursive
 
@@ -88,7 +88,8 @@ class ConfiguredModel(
             config=self.config.serialize(),
             meta=dict(
                 class_name=self.__class__.__name__,
-                class_doc=self.__class__.__doc__,
+                class_doc=string_as_lines(self.__class__.__doc__),
+                class_source=safe_getsource(self.__class__),
                 module_name=self.__class__.__module__,
                 module_mro=[str(x) for x in self.__class__.__mro__],
                 num_params=num_params(self),

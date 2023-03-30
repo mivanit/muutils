@@ -7,23 +7,12 @@ from muutils.json_serialize import (
     serializable_dataclass,
     serializable_field,
 )
+from muutils.tensor_utils import compare_state_dicts
 from muutils.zanj import ZANJ
 
 np.random.seed(0)
 
 TEST_DATA_PATH: Path = Path("tests/junk_data")
-
-
-def compare_state_dicts(d1: dict, d2: dict):
-    assert d1.keys() == d2.keys(), "state dict keys don't match!"
-    keys_failed: list[str] = list()
-    for k, v in d1.items():
-        v_load = d2[k]
-        if not (v == v_load).all():
-            keys_failed.append(k)
-    assert (
-        len(keys_failed) == 0
-    ), f"{len(keys_failed)} / {len(d1)} state dict elements don't match: {keys_failed}"
 
 
 def test_torch_configmodel():

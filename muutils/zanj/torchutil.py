@@ -198,7 +198,9 @@ def assert_model_cfg_equality(model_a: ConfiguredModel, model_b: ConfiguredModel
     assert isinstance(model_b, ConfiguredModel)
     assert isinstance(model_b.zanj_model_config, SerializableDataclass)
 
-    assert model_a.zanj_model_config == model_b.zanj_model_config
+    cls_type: type = type(model_a.zanj_model_config)
+
+    assert model_a.zanj_model_config == model_b.zanj_model_config, f"configs don't match: {cls_type.diff(model_a.zanj_model_config, model_b.zanj_model_config)}"
 
 def assert_model_exact_equality(model_a: ConfiguredModel, model_b: ConfiguredModel):
     """check the models are exactly equal, including state dict contents"""

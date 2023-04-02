@@ -66,6 +66,7 @@ class ZANJ(JsonSerializer):
         internal_array_mode: ArrayMode = "array_list_meta",
         external_array_threshold: int = 64,
         external_table_threshold: int = 64,
+        custom_settings: dict[str, Any]|None = None,
         compress: bool | int = True,
         handlers_pre: MonoTuple[SerializerHandler] = tuple(),
         handlers_default: MonoTuple[
@@ -81,6 +82,7 @@ class ZANJ(JsonSerializer):
 
         self.external_array_threshold: int = external_array_threshold
         self.external_table_threshold: int = external_table_threshold
+        self.custom_settings: dict = custom_settings if custom_settings is not None else dict()
 
         # process compression to int if bool given
         self.compress = compress
@@ -192,11 +194,13 @@ class ZANJ(JsonSerializer):
 
     def read(
         self,
-        path: Union[str, Path],
+        file_path: Union[str, Path],
     ) -> JSONitem:
-        """load the object from a ZANJ archive"""
+        """load the object from a ZANJ archive
+        # TODO: load only some part of the zanj file by passing an ObjectPath
+        """
         loaded_zanj: LoadedZANJ = LoadedZANJ(
-            path=path,
+            path=file_path,
             zanj=self,
         )
 
@@ -205,7 +209,7 @@ class ZANJ(JsonSerializer):
         return load_item_recursive(
             loaded_zanj._json_data,
             path=tuple(),
-            zanj=loaded_zanj,
+            zanj=self,
             error_mode=self.error_mode,
             # lh_map=loader_handlers,
         )

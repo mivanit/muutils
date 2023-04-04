@@ -200,7 +200,10 @@ def assert_model_cfg_equality(model_a: ConfiguredModel, model_b: ConfiguredModel
 
     cls_type: type = type(model_a.zanj_model_config)
 
-    assert model_a.zanj_model_config == model_b.zanj_model_config, f"configs don't match: {cls_type.diff(model_a.zanj_model_config, model_b.zanj_model_config)}"
+    assert (
+        model_a.zanj_model_config == model_b.zanj_model_config
+    ), f"configs don't match: {cls_type.diff(model_a.zanj_model_config, model_b.zanj_model_config)}"
+
 
 def assert_model_exact_equality(model_a: ConfiguredModel, model_b: ConfiguredModel):
     """check the models are exactly equal, including state dict contents"""
@@ -208,14 +211,18 @@ def assert_model_exact_equality(model_a: ConfiguredModel, model_b: ConfiguredMod
 
     model_a_sd_keys: set[str] = set(model_a.state_dict().keys())
     model_b_sd_keys: set[str] = set(model_b.state_dict().keys())
-    assert model_a_sd_keys == model_b_sd_keys, f"state dict keys don't match: {model_a_sd_keys - model_b_sd_keys} / {model_b_sd_keys - model_a_sd_keys}"
+    assert (
+        model_a_sd_keys == model_b_sd_keys
+    ), f"state dict keys don't match: {model_a_sd_keys - model_b_sd_keys} / {model_b_sd_keys - model_a_sd_keys}"
     keys_failed: list[str] = list()
     for k, v_a in model_a.state_dict().items():
         v_b = model_b.state_dict()[k]
         if not (v_a == v_b).all():
-        # if not torch.allclose(v, v_load):
+            # if not torch.allclose(v, v_load):
             keys_failed.append(k)
             print(f"failed {k}")
         else:
             print(f"passed {k}")
-    assert len(keys_failed) == 0, f"{len(keys_failed)} / {len(model_a_sd_keys)} state dict elements don't match: {keys_failed}"
+    assert (
+        len(keys_failed) == 0
+    ), f"{len(keys_failed)} / {len(model_a_sd_keys)} state dict elements don't match: {keys_failed}"

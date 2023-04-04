@@ -102,8 +102,8 @@ clean:
 	rm -rf build
 	rm -rf muutils.egg-info
 	rm -rf tests/junk_data
-	find . -type d -name __pycache__ -exec rm -fr {} \;
-
+	python -Bc "import pathlib; [p.unlink() for p in pathlib.Path('.').rglob('*.py[co]')]"
+	python -Bc "import pathlib; [p.rmdir() for p in pathlib.Path('.').rglob('__pycache__')]"
 
 # listing targets, from stackoverflow
 # https://stackoverflow.com/questions/4219255/how-do-you-get-the-list-of-targets-in-a-makefile

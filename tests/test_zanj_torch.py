@@ -88,21 +88,21 @@ def test_torch_configmodel():
     ZANJ().save(model, fname)
 
     print(f"saved model to {fname}")
-    print(f"{model.config = }")
+    print(f"{model.zanj_model_config = }")
 
     # try to load the model
     model2: MyGPT = MyGPT.load_file(fname)
     print(f"loaded model from {fname}")
-    print(f"{model2.config = }")
+    print(f"{model2.zanj_model_config = }")
 
-    assert model.config == model2.config
+    assert model.zanj_model_config == model2.zanj_model_config
 
     compare_state_dicts(model.state_dict(), model2.state_dict())
 
     model3: MyGPT = ZANJ().read(fname)
     print(f"loaded model from {fname}")
-    print(f"{model3.config = }")
+    print(f"{model3.zanj_model_config = }")
 
-    assert model.config == model3.config
+    assert model.zanj_model_config == model3.zanj_model_config
 
     compare_state_dicts(model.state_dict(), model3.state_dict())

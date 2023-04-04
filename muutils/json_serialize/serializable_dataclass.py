@@ -227,6 +227,38 @@ class SerializableDataclass(abc.ABC):
     def __eq__(self, other: Any) -> bool:
         return dc_eq(self, other)
 
+    def diff(self, other: "SerializableDataclass") -> dict[str, Any]:
+        if type(self) != type(other):
+            raise ValueError(
+                f"Instances must be of the same type, but got {type(self)} and {type(other)}"
+            )
+
+        diff_result: dict = {}
+
+        for field in dataclasses.fields(self):
+            if not field.compare:
+                continue
+
+            field_name: str = field.name
+            self_value = getattr(self, field_name)
+            other_value = getattr(other, field_name)
+
+            if isinstance(self_value, SerializableDataclass) and isinstance(
+                other_value, SerializableDataclass
+            ):
+                nested_diff: dict = self_value.diff(other_value)
+                if nested_diff:
+                    diff_result[field_name] = nested_diff
+            elif dataclasses.is_dataclass(self_value) and dataclasses.is_dataclass(
+                other_value
+            ):
+                raise ValueError("Non-serializable dataclass is not supported")
+            else:
+                if self_value != other_value:
+                    diff_result[field_name] = {"self": self_value, "other": other_value}
+
+        return diff_result
+
 
 # Step 3: Create a custom serializable_dataclass decorator
 def serializable_dataclass(

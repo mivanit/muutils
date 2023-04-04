@@ -61,7 +61,10 @@ class ConfiguredModel(
     """a model that has a configuration
 
     `__init__()` must initialize the model from a config object only, and call
-    `super().__init__(config)`
+    `super().__init__(zanj_model_config)`
+
+    If you are inheriting from another class + ConfiguredModel,
+    ConfiguredModel must be the first class in the inheritance list
     """
 
     # dont set this directly, use `set_config_class()` decorator
@@ -77,7 +80,7 @@ class ConfiguredModel(
                 f"config must be an instance of {self.zanj_config_class = }, got {type(zanj_model_config) = }"
             )
 
-        self.config: T_config = zanj_model_config
+        self.zanj_model_config: T_config = zanj_model_config
 
     def serialize(
         self, path: ObjectPath = tuple(), zanj: ZANJ | None = None
@@ -85,7 +88,7 @@ class ConfiguredModel(
         if zanj is None:
             zanj = ZANJ()
         obj = dict(
-            config=self.config.serialize(),
+            zanj_model_config=self.zanj_model_config.serialize(),
             meta=dict(
                 class_name=self.__class__.__name__,
                 class_doc=string_as_lines(self.__class__.__doc__),
@@ -108,10 +111,11 @@ class ConfiguredModel(
     def _load_state_dict_wrapper(
         self,
         state_dict: dict[str, torch.Tensor],
-        **kwargs: KWArgs,
+        **kwargs,
     ):
         """wrapper for `load_state_dict()` in case you need to override it"""
-        return self.load_state_dict(state_dict, **kwargs)
+        assert len(kwargs) == 0, f"got unexpected kwargs: {kwargs}"
+        return self.load_state_dict(state_dict)
 
     @classmethod
     def load(
@@ -123,10 +127,10 @@ class ConfiguredModel(
             zanj = ZANJ()
 
         # get the config
-        config: T_config = cls._config_class.load(obj["config"])  # type: ignore
+        zanj_model_config: T_config = cls._config_class.load(obj["zanj_model_config"])  # type: ignore
 
         # initialize the model
-        model: "ConfiguredModel" = cls(config)
+        model: "ConfiguredModel" = cls(zanj_model_config)
 
         # load the state dict
         tensored_state_dict: dict[str, torch.Tensor] = load_item_recursive(
@@ -135,7 +139,10 @@ class ConfiguredModel(
             zanj,
         )
 
-        model._load_state_dict_wrapper(tensored_state_dict)
+        model._load_state_dict_wrapper(
+            tensored_state_dict,
+            **zanj.custom_settings.get("_load_state_dict_wrapper", dict()),
+        )
 
         return model
 
@@ -182,3 +189,40 @@ def set_config_class(
         return cls
 
     return wrapper
+
+
+def assert_model_cfg_equality(model_a: ConfiguredModel, model_b: ConfiguredModel):
+    """check both models are correct instances and have the same config"""
+    assert isinstance(model_a, ConfiguredModel)
+    assert isinstance(model_a.zanj_model_config, SerializableDataclass)
+    assert isinstance(model_b, ConfiguredModel)
+    assert isinstance(model_b.zanj_model_config, SerializableDataclass)
+
+    cls_type: type = type(model_a.zanj_model_config)
+
+    assert (
+        model_a.zanj_model_config == model_b.zanj_model_config
+    ), f"configs don't match: {cls_type.diff(model_a.zanj_model_config, model_b.zanj_model_config)}"
+
+
+def assert_model_exact_equality(model_a: ConfiguredModel, model_b: ConfiguredModel):
+    """check the models are exactly equal, including state dict contents"""
+    assert_model_cfg_equality(model_a, model_b)
+
+    model_a_sd_keys: set[str] = set(model_a.state_dict().keys())
+    model_b_sd_keys: set[str] = set(model_b.state_dict().keys())
+    assert (
+        model_a_sd_keys == model_b_sd_keys
+    ), f"state dict keys don't match: {model_a_sd_keys - model_b_sd_keys} / {model_b_sd_keys - model_a_sd_keys}"
+    keys_failed: list[str] = list()
+    for k, v_a in model_a.state_dict().items():
+        v_b = model_b.state_dict()[k]
+        if not (v_a == v_b).all():
+            # if not torch.allclose(v, v_load):
+            keys_failed.append(k)
+            print(f"failed {k}")
+        else:
+            print(f"passed {k}")
+    assert (
+        len(keys_failed) == 0
+    ), f"{len(keys_failed)} / {len(model_a_sd_keys)} state dict elements don't match: {keys_failed}"

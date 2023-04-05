@@ -1,7 +1,5 @@
 import abc
 import dataclasses
-from collections import defaultdict
-import copy
 import types
 import typing
 import warnings
@@ -263,16 +261,15 @@ class SerializableDataclass(abc.ABC):
 
     def update_from_nested_dict(self, nested_dict: dict[str, Any]):
         for field in dataclasses.fields(self):
-
             field_name: str = field.name
             self_value = getattr(self, field_name)
 
-            if field_name in nested_dict:    
-
+            if field_name in nested_dict:
                 if isinstance(self_value, SerializableDataclass):
                     self_value.update_from_nested_dict(nested_dict[field_name])
                 else:
                     setattr(self, field_name, nested_dict[field_name])
+
 
 # Step 3: Create a custom serializable_dataclass decorator
 def serializable_dataclass(
@@ -345,12 +342,16 @@ def serializable_dataclass(
                             value = field.serialization_fn(value)
                         result[field.name] = value
                     except Exception as e:
-                        raise ValueError('\n'.join([
-                            f"Error serializing field '{field.name}' on class {self.__class__.__module__}.{self.__class__.__name__}",
-                            f"{field = }",
-                            f"{value = }",
-                            f"{self = }",
-                        ])) from e
+                        raise ValueError(
+                            "\n".join(
+                                [
+                                    f"Error serializing field '{field.name}' on class {self.__class__.__module__}.{self.__class__.__name__}",
+                                    f"{field = }",
+                                    f"{value = }",
+                                    f"{self = }",
+                                ]
+                            )
+                        ) from e
 
             for prop in self._properties_to_serialize:
                 if hasattr(cls, prop):

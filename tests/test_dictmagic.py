@@ -1,19 +1,12 @@
-from typing import Any
-
-import pytest
-
-from muutils.json_serialize import (
-    SerializableDataclass,
-    serializable_dataclass,
-    serializable_field,
-)
-
 from muutils.dictmagic import dotlist_to_nested_dict
+from muutils.json_serialize import SerializableDataclass, serializable_dataclass
+
 
 @serializable_dataclass
 class ChildData(SerializableDataclass):
     x: int
     y: int
+
 
 @serializable_dataclass
 class ParentData(SerializableDataclass):

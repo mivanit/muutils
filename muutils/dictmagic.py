@@ -1,5 +1,5 @@
-from typing import Callable, Generic, TypeVar, Any
 from collections import defaultdict
+from typing import Any, Callable, Generic, TypeVar
 
 _KT = TypeVar("_KT")
 _VT = TypeVar("_VT")
@@ -26,15 +26,18 @@ class DefaulterDict(dict[_KT, _VT], Generic[_KT, _VT]):
 def _recursive_defaultdict_ctor() -> defaultdict:
     return defaultdict(_recursive_defaultdict_ctor)
 
-def defaultdict_to_dict_recursive(dd: defaultdict|DefaulterDict) -> dict:
+
+def defaultdict_to_dict_recursive(dd: defaultdict | DefaulterDict) -> dict:
     """Convert a defaultdict or DefaulterDict to a normal dict, recursively"""
     return {
         key: (
-            defaultdict_to_dict_recursive(value) 
-            if isinstance(value, (defaultdict, DefaulterDict)) else value
+            defaultdict_to_dict_recursive(value)
+            if isinstance(value, (defaultdict, DefaulterDict))
+            else value
         )
         for key, value in dd.items()
     }
+
 
 def dotlist_to_nested_dict(dot_dict: dict[str, Any]) -> dict[str, Any]:
     """Convert a dict with dot-separated keys to a nested dict"""
@@ -49,5 +52,3 @@ def dotlist_to_nested_dict(dot_dict: dict[str, Any]) -> dict[str, Any]:
             current = current[sub_key]
         current[keys[-1]] = value
     return defaultdict_to_dict_recursive(nested_dict)
-
-

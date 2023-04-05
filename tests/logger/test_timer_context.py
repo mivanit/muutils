@@ -1,7 +1,7 @@
 from muutils.logger.timing import TimerContext
 
-def test_timer_context():
 
+def test_timer_context():
     with TimerContext() as timer:
         x: float = 1.0
 
@@ -10,4 +10,3 @@ def test_timer_context():
     assert isinstance(timer.elapsed_time, float)
     assert timer.start_time <= timer.end_time
     assert timer.elapsed_time >= 0.0
-

@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "muutils"
-version = "0.3.5"
+version = "0.3.6"
 description = "A collection of miscellaneous python utilities"
 license = "GPL-3.0-only"
 authors = ["mivanit <mivanits@umich.edu>"]
@@ -14,7 +14,7 @@ repository = "https://github.com/mivanit/muutils"
 
 [tool.poetry.dependencies]
 python = "^3.10"
-torch = "^1.13.1"
+torch = ">=1.12.1"
 numpy = "^1.22.4"
 jaxtyping = "^0.2.12"
 pandas = "^1.5.3"

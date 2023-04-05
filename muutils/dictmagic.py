@@ -39,13 +39,13 @@ def defaultdict_to_dict_recursive(dd: defaultdict | DefaulterDict) -> dict:
     }
 
 
-def dotlist_to_nested_dict(dot_dict: dict[str, Any]) -> dict[str, Any]:
+def dotlist_to_nested_dict(dot_dict: dict[str, Any], sep: str = ".") -> dict[str, Any]:
     """Convert a dict with dot-separated keys to a nested dict"""
     nested_dict: defaultdict = _recursive_defaultdict_ctor()
     for key, value in dot_dict.items():
         if not isinstance(key, str):
             raise TypeError(f"key must be a string, got {type(key)}")
-        keys: list[str] = key.split(".")
+        keys: list[str] = key.split(sep)
         current: defaultdict = nested_dict
         # iterate over the keys except the last one
         for sub_key in keys[:-1]:

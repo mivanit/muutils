@@ -190,6 +190,7 @@ def set_config_class(
 
     return wrapper
 
+
 class ConfigMismatchException(ValueError):
     def __init__(self, msg: str, diff):
         super().__init__(msg)
@@ -198,23 +199,28 @@ class ConfigMismatchException(ValueError):
     def __str__(self):
         return f"{super().__str__()}: {self.diff}"
 
+
 def assert_model_cfg_equality(model_a: ConfiguredModel, model_b: ConfiguredModel):
     """check both models are correct instances and have the same config
-    
+
     Raises:
         ConfigMismatchException: if the configs don't match, e.diff will contain the diff
     """
     assert isinstance(model_a, ConfiguredModel), "model_a must be a ConfiguredModel"
-    assert isinstance(model_a.zanj_model_config, SerializableDataclass), "model_a must have a zanj_model_config"
+    assert isinstance(
+        model_a.zanj_model_config, SerializableDataclass
+    ), "model_a must have a zanj_model_config"
     assert isinstance(model_b, ConfiguredModel), "model_b must be a ConfiguredModel"
-    assert isinstance(model_b.zanj_model_config, SerializableDataclass), "model_b must have a zanj_model_config"
+    assert isinstance(
+        model_b.zanj_model_config, SerializableDataclass
+    ), "model_b must have a zanj_model_config"
 
     cls_type: type = type(model_a.zanj_model_config)
 
     if not (model_a.zanj_model_config == model_b.zanj_model_config):
         raise ConfigMismatchException(
             f"configs of type {type(model_a.zanj_model_config)}, {type(model_b.zanj_model_config)} don't match",
-            diff = cls_type.diff(model_a.zanj_model_config, model_b.zanj_model_config),
+            diff=cls_type.diff(model_a.zanj_model_config, model_b.zanj_model_config),
         )
 
 

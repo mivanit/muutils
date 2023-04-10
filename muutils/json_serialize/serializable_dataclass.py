@@ -235,6 +235,9 @@ class SerializableDataclass(abc.ABC):
 
         diff_result: dict = {}
 
+        if self == other:
+            return diff_result
+
         for field in dataclasses.fields(self):
             if not field.compare:
                 continue
@@ -254,7 +257,7 @@ class SerializableDataclass(abc.ABC):
             ):
                 raise ValueError("Non-serializable dataclass is not supported")
             else:
-                if self_value != other_value:
+                if not array_safe_eq(self_value, other_value):
                     diff_result[field_name] = {"self": self_value, "other": other_value}
 
         return diff_result

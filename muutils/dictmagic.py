@@ -1,3 +1,5 @@
+import typing
+import warnings
 from collections import defaultdict
 from typing import Any, Callable, Generic, TypeVar
 
@@ -57,3 +59,47 @@ def dotlist_to_nested_dict(dot_dict: dict[str, Any], sep: str = ".") -> dict[str
             current = current[sub_key]
         current[keys[-1]] = value
     return defaultdict_to_dict_recursive(nested_dict)
+
+
+def kwargs_to_nested_dict(
+    kwargs_dict: dict[str, Any],
+    sep: str = ".",
+    strip_prefix: str | None = None,
+    when_unknown_prefix: typing.Literal["raise", "warn", "ignore"] = "warn",
+) -> dict[str, Any]:
+    """given kwargs from fire, convert them to a nested dict
+
+    if strip_prefix is not None, then all keys must start with the prefix. by default,
+    will warn if an unknown prefix is found, but can be set to raise an error or ignore it:
+    `when_unknown_prefix: typing.Literal["raise", "warn", "ignore"]`
+
+    Example:
+    ```python
+    def main(**kwargs):
+        print(kwargs_to_nested_dict(kwargs))
+    fire.Fire(main)
+    ```
+    running the above script will give:
+    ```bash
+    $ python test.py --a.b.c=1 --a.b.d=2 --a.e=3
+    {'a': {'b': {'c': 1, 'd': 2}, 'e': 3}}
+    ```
+    """
+    filtered_kwargs: dict[str, Any] = dict()
+    for key, value in kwargs_dict.items():
+        if strip_prefix is not None:
+            if not key.startswith(strip_prefix):
+                if when_unknown_prefix == "raise":
+                    raise ValueError(f"key {key} does not start with {strip_prefix}")
+                elif when_unknown_prefix == "warn":
+                    warnings.warn(f"key {key} does not start with {strip_prefix}")
+                elif when_unknown_prefix == "ignore":
+                    pass
+                else:
+                    raise ValueError(
+                        f"when_unknown_prefix must be one of 'raise', 'warn', or 'ignore', got {when_unknown_prefix}"
+                    )
+            key = key.removeprefix(strip_prefix)
+        filtered_kwargs[key] = value
+
+    return dotlist_to_nested_dict(filtered_kwargs, sep=sep)

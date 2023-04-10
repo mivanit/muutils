@@ -1,7 +1,7 @@
-from collections import defaultdict
-from typing import Any, Callable, Generic, TypeVar
 import typing
 import warnings
+from collections import defaultdict
+from typing import Any, Callable, Generic, TypeVar
 
 _KT = TypeVar("_KT")
 _VT = TypeVar("_VT")
@@ -60,16 +60,17 @@ def dotlist_to_nested_dict(dot_dict: dict[str, Any], sep: str = ".") -> dict[str
         current[keys[-1]] = value
     return defaultdict_to_dict_recursive(nested_dict)
 
+
 def kwargs_to_nested_dict(
-        kwargs_dict: dict[str, Any], 
-        sep: str = ".", 
-        strip_prefix: str|None = None,
-        when_unknown_prefix: typing.Literal["raise", "warn", "ignore"] = "warn",
-    ) -> dict[str, Any]:
+    kwargs_dict: dict[str, Any],
+    sep: str = ".",
+    strip_prefix: str | None = None,
+    when_unknown_prefix: typing.Literal["raise", "warn", "ignore"] = "warn",
+) -> dict[str, Any]:
     """given kwargs from fire, convert them to a nested dict
 
-    if strip_prefix is not None, then all keys must start with the prefix. by default, 
-    will warn if an unknown prefix is found, but can be set to raise an error or ignore it:  
+    if strip_prefix is not None, then all keys must start with the prefix. by default,
+    will warn if an unknown prefix is found, but can be set to raise an error or ignore it:
     `when_unknown_prefix: typing.Literal["raise", "warn", "ignore"]`
 
     Example:
@@ -95,7 +96,9 @@ def kwargs_to_nested_dict(
                 elif when_unknown_prefix == "ignore":
                     pass
                 else:
-                    raise ValueError(f"when_unknown_prefix must be one of 'raise', 'warn', or 'ignore', got {when_unknown_prefix}")
+                    raise ValueError(
+                        f"when_unknown_prefix must be one of 'raise', 'warn', or 'ignore', got {when_unknown_prefix}"
+                    )
             key = key.removeprefix(strip_prefix)
         filtered_kwargs[key] = value
 

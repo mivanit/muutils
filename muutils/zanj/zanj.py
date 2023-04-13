@@ -201,6 +201,12 @@ class ZANJ(JsonSerializer):
         """load the object from a ZANJ archive
         # TODO: load only some part of the zanj file by passing an ObjectPath
         """
+        file_path = Path(file_path)
+        if not file_path.exists():
+            raise FileNotFoundError(f"file not found: {file_path}")
+        if not file_path.is_file():
+            raise FileNotFoundError(f"not a file: {file_path}")
+
         loaded_zanj: LoadedZANJ = LoadedZANJ(
             path=file_path,
             zanj=self,

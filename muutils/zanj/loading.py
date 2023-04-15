@@ -140,6 +140,33 @@ LOADER_MAP: dict[str, LoaderHandler] = {
             source_pckg="muutils.zanj",
             desc="pandas.DataFrame loader",
         ),
+        # list/tuple external
+        LoaderHandler(
+            check=lambda json_item, path=None, z=None: (  # type: ignore[misc]
+                isinstance(json_item, typing.Mapping)
+                and "__format__" in json_item
+                and json_item["__format__"].startswith("list")
+                and "data" in json_item
+                and isinstance(json_item["data"], typing.Sequence)
+            ),
+            load=lambda json_item, path=None, z=None: list(json_item["data"]),  # type: ignore[misc]
+            uid="list",
+            source_pckg="muutils.zanj",
+            desc="list loader, for externals",
+        ),
+        LoaderHandler(
+            check=lambda json_item, path=None, z=None: (  # type: ignore[misc]
+                isinstance(json_item, typing.Mapping)
+                and "__format__" in json_item
+                and json_item["__format__"].startswith("tuple")
+                and "data" in json_item
+                and isinstance(json_item["data"], typing.Sequence)
+            ),
+            load=lambda json_item, path=None, z=None: tuple(json_item["data"]),  # type: ignore[misc]
+            uid="tuple",
+            source_pckg="muutils.zanj",
+            desc="tuple loader, for externals",
+        ),
     ]
 }
 
@@ -163,6 +190,10 @@ def get_item_loader(
 
     # check if we recognize the format
     if isinstance(json_item, typing.Mapping) and "__format__" in json_item:
+        if not isinstance(json_item["__format__"], str):
+            raise TypeError(
+                f"invalid __format__ type '{type(json_item['__format__'])}' in '{path=}': '{json_item['__format__'] = }'"
+            )
         if json_item["__format__"] in LOADER_MAP:
             return LOADER_MAP[json_item["__format__"]]
 

@@ -1,5 +1,6 @@
 import abc
 import dataclasses
+import json
 import types
 import typing
 import warnings
@@ -226,6 +227,9 @@ class SerializableDataclass(abc.ABC):
 
     def __eq__(self, other: Any) -> bool:
         return dc_eq(self, other)
+
+    def __hash__(self) -> int:
+        return hash(json.dumps(self.serialize()))
 
     def diff(self, other: "SerializableDataclass") -> dict[str, Any]:
         if type(self) != type(other):

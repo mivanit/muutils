@@ -154,9 +154,9 @@ def array_safe_eq(a: Any, b: Any) -> bool:
         )
 
     try:
-        return a == b
-    except TypeError:
-        warnings.warn(f"Cannot compare {a} and {b} for equality")
+        return bool(a == b)
+    except (TypeError, ValueError) as e:
+        warnings.warn(f"Cannot compare {a} and {b} for equality\n{e}")
         return NotImplemented  # type: ignore[return-value]
 
 

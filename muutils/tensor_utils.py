@@ -243,6 +243,10 @@ TORCH_DTYPE_MAP: dict = {
     key: numpy_to_torch_dtype(dtype) for key, dtype in DTYPE_MAP.items()
 }
 
+# no idea why we have to do this, smh
+DTYPE_MAP["bool"] = np.bool_
+TORCH_DTYPE_MAP["bool"] = torch.bool
+
 
 TORCH_OPTIMIZERS_MAP: dict[str, typing.Type[torch.optim.Optimizer]] = {
     "Adagrad": torch.optim.Adagrad,

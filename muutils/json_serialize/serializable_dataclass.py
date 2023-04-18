@@ -1,5 +1,6 @@
 import abc
 import dataclasses
+import json
 import types
 import typing
 import warnings
@@ -153,9 +154,9 @@ def array_safe_eq(a: Any, b: Any) -> bool:
         )
 
     try:
-        return a == b
-    except TypeError:
-        warnings.warn(f"Cannot compare {a} and {b} for equality")
+        return bool(a == b)
+    except (TypeError, ValueError) as e:
+        warnings.warn(f"Cannot compare {a} and {b} for equality\n{e}")
         return NotImplemented  # type: ignore[return-value]
 
 
@@ -226,6 +227,9 @@ class SerializableDataclass(abc.ABC):
 
     def __eq__(self, other: Any) -> bool:
         return dc_eq(self, other)
+
+    def __hash__(self) -> int:
+        return hash(json.dumps(self.serialize()))
 
     def diff(self, other: "SerializableDataclass") -> dict[str, Any]:
         if type(self) != type(other):

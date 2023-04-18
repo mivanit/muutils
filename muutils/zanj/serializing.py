@@ -33,6 +33,7 @@ def jsonl_metadata(data: list[JSONdict]) -> dict:
                 "len": len([item[col] for item in data if col in item]),
             }
             for col in all_cols
+            if col != "__format__"
         },
     }
 
@@ -184,7 +185,7 @@ DEFAULT_SERIALIZER_HANDLERS_ZANJ: MonoTuple[ZANJSerializerHandler] = tuple(
         ),
         ZANJSerializerHandler(
             check=lambda self, obj, path: isinstance(obj, list)
-            and len(obj) >= self.external_table_threshold,
+            and len(obj) >= self.external_list_threshold,
             serialize_func=lambda self, obj, path: zanj_external_serialize(
                 self, obj, path, item_type="jsonl", _format="list:external"
             ),
@@ -194,7 +195,7 @@ DEFAULT_SERIALIZER_HANDLERS_ZANJ: MonoTuple[ZANJSerializerHandler] = tuple(
         ),
         ZANJSerializerHandler(
             check=lambda self, obj, path: isinstance(obj, tuple)
-            and len(obj) >= self.external_table_threshold,
+            and len(obj) >= self.external_list_threshold,
             serialize_func=lambda self, obj, path: zanj_external_serialize(
                 self, obj, path, item_type="jsonl", _format="tuple:external"
             ),
@@ -204,7 +205,7 @@ DEFAULT_SERIALIZER_HANDLERS_ZANJ: MonoTuple[ZANJSerializerHandler] = tuple(
         ),
         ZANJSerializerHandler(
             check=lambda self, obj, path: isinstance(obj, pd.DataFrame)
-            and len(obj) >= self.external_table_threshold,
+            and len(obj) >= self.external_list_threshold,
             serialize_func=lambda self, obj, path: zanj_external_serialize(
                 self, obj, path, item_type="jsonl", _format="pandas.DataFrame:external"
             ),

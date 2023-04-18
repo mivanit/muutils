@@ -65,7 +65,7 @@ class ZANJ(JsonSerializer):
         error_mode: ErrorMode = "except",
         internal_array_mode: ArrayMode = "array_list_meta",
         external_array_threshold: int = 64,
-        external_table_threshold: int = 64,
+        external_list_threshold: int = 64,
         custom_settings: dict[str, Any] | None = None,
         compress: bool | int = True,
         handlers_pre: MonoTuple[SerializerHandler] = tuple(),
@@ -81,7 +81,7 @@ class ZANJ(JsonSerializer):
         )
 
         self.external_array_threshold: int = external_array_threshold
-        self.external_table_threshold: int = external_table_threshold
+        self.external_list_threshold: int = external_list_threshold
         self.custom_settings: dict = (
             custom_settings if custom_settings is not None else dict()
         )
@@ -131,7 +131,7 @@ class ZANJ(JsonSerializer):
                 error_mode=str(self.error_mode),
                 array_mode=str(self.array_mode),
                 external_array_threshold=self.external_array_threshold,
-                external_table_threshold=self.external_table_threshold,
+                external_list_threshold=self.external_list_threshold,
                 compress=self.compress,
                 serialization_handlers=serialization_handlers,
                 load_handlers=load_handlers,
@@ -201,6 +201,12 @@ class ZANJ(JsonSerializer):
         """load the object from a ZANJ archive
         # TODO: load only some part of the zanj file by passing an ObjectPath
         """
+        file_path = Path(file_path)
+        if not file_path.exists():
+            raise FileNotFoundError(f"file not found: {file_path}")
+        if not file_path.is_file():
+            raise FileNotFoundError(f"not a file: {file_path}")
+
         loaded_zanj: LoadedZANJ = LoadedZANJ(
             path=file_path,
             zanj=self,

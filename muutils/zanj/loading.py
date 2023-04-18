@@ -150,8 +150,7 @@ LOADER_MAP: dict[str, LoaderHandler] = {
                 and isinstance(json_item["data"], typing.Sequence)
             ),
             load=lambda json_item, path=None, z=None: [
-                load_item_recursive(x, path, z)
-                for x in json_item["data"]
+                load_item_recursive(x, path, z) for x in json_item["data"]
             ],
             uid="list",
             source_pckg="muutils.zanj",
@@ -165,10 +164,9 @@ LOADER_MAP: dict[str, LoaderHandler] = {
                 and "data" in json_item
                 and isinstance(json_item["data"], typing.Sequence)
             ),
-            load=lambda json_item, path=None, z=None: tuple([
-                load_item_recursive(x, path, z)
-                for x in json_item["data"]
-            ]),
+            load=lambda json_item, path=None, z=None: tuple(
+                [load_item_recursive(x, path, z) for x in json_item["data"]]
+            ),
             uid="tuple",
             source_pckg="muutils.zanj",
             desc="tuple loader, for externals",

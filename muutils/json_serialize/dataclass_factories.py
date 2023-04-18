@@ -9,6 +9,7 @@ from muutils.json_serialize.util import JSONdict, JSONitem, MonoTuple, TypeError
 
 # pylint: disable=pointless-string-statement, unreachable, import-outside-toplevel, consider-using-dict-items
 
+
 def dataclass_serializer_factory(
     cls,
     special_serializers: Optional[dict[str, Callable]] = None,

@@ -58,7 +58,14 @@ class ConfiguredModel(
     typing.Generic[T_config],
     metaclass=abc.ABCMeta,
 ):
-    """a model that has a configuration
+    """a model that has a configuration, for saving with ZANJ
+
+    ```python
+    @set_config_class(YourConfig)
+    class YourModule(ConfiguredModel[YourConfig]):
+        def __init__(self, cfg: YourConfig):
+            super().__init__(cfg)
+    ```
 
     `__init__()` must initialize the model from a config object only, and call
     `super().__init__(zanj_model_config)`

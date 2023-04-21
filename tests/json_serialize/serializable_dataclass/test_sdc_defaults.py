@@ -39,7 +39,7 @@ class ComplicatedConfig(SerializableDataclass):
     batch_size: int = serializable_field(default=64)
 
     some_type: type = serializable_field(
-        default_factory=lambda self: float,
+        default=float,
         serialization_fn=lambda x: x.__name__,
         loading_fn=lambda data: TYPE_MAP[data["some_type"]],
     )

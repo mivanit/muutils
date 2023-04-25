@@ -1,11 +1,11 @@
-import typing
-
-import torch
-
-from muutils.json_serialize import SerializableDataclass, serializable_dataclass, serializable_field
-from muutils.json_serialize.util import JSONitem
+from muutils.json_serialize import (
+    SerializableDataclass,
+    serializable_dataclass,
+    serializable_field,
+)
 
 # pylint: disable=missing-class-docstring
+
 
 @serializable_dataclass
 class Config(SerializableDataclass):
@@ -27,10 +27,8 @@ def test_sdc_empty():
     assert recovered == instance
 
 
-TYPE_MAP: dict[str, type] = {
-    x.__name__: x
-    for x in [int, float, str, bool]
-}
+TYPE_MAP: dict[str, type] = {x.__name__: x for x in [int, float, str, bool]}
+
 
 @serializable_dataclass
 class ComplicatedConfig(SerializableDataclass):
@@ -43,6 +41,7 @@ class ComplicatedConfig(SerializableDataclass):
         serialization_fn=lambda x: x.__name__,
         loading_fn=lambda data: TYPE_MAP[data["some_type"]],
     )
+
 
 def test_sdc_empty_complicated():
     instance = ComplicatedConfig()

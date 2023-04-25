@@ -6,7 +6,7 @@ import torch
 
 from muutils.json_serialize import SerializableDataclass
 from muutils.json_serialize.json_serialize import ObjectPath
-from muutils.json_serialize.util import JSONitem, safe_getsource, string_as_lines
+from muutils.json_serialize.util import safe_getsource, string_as_lines
 from muutils.zanj import ZANJ, register_loader_handler
 from muutils.zanj.loading import LoaderHandler, load_item_recursive
 
@@ -88,7 +88,7 @@ class ConfiguredModel(
             )
 
         self.zanj_model_config: T_config = zanj_model_config
-        self.training_records: dict|None = None
+        self.training_records: dict | None = None
 
     def serialize(
         self, path: ObjectPath = tuple(), zanj: ZANJ | None = None

@@ -58,7 +58,14 @@ class ConfiguredModel(
     typing.Generic[T_config],
     metaclass=abc.ABCMeta,
 ):
-    """a model that has a configuration
+    """a model that has a configuration, for saving with ZANJ
+
+    ```python
+    @set_config_class(YourConfig)
+    class YourModule(ConfiguredModel[YourConfig]):
+        def __init__(self, cfg: YourConfig):
+            super().__init__(cfg)
+    ```
 
     `__init__()` must initialize the model from a config object only, and call
     `super().__init__(zanj_model_config)`
@@ -81,6 +88,7 @@ class ConfiguredModel(
             )
 
         self.zanj_model_config: T_config = zanj_model_config
+        self.training_records: dict | None = None
 
     def serialize(
         self, path: ObjectPath = tuple(), zanj: ZANJ | None = None
@@ -98,6 +106,7 @@ class ConfiguredModel(
                 num_params=num_params(self),
                 as_str=string_as_lines(str(self)),
             ),
+            training_records=self.training_records,
             state_dict=self.state_dict(),
             __format__=self.__class__.__name__,
         )
@@ -129,6 +138,13 @@ class ConfiguredModel(
         # get the config
         zanj_model_config: T_config = cls._config_class.load(obj["zanj_model_config"])  # type: ignore
 
+        # get the training records
+        training_records: typing.Any = load_item_recursive(
+            obj.get("training_records", None),
+            tuple(path) + ("training_records",),
+            zanj,
+        )
+
         # initialize the model
         model: "ConfiguredModel" = cls(zanj_model_config)
 
@@ -143,6 +159,9 @@ class ConfiguredModel(
             tensored_state_dict,
             **zanj.custom_settings.get("_load_state_dict_wrapper", dict()),
         )
+
+        # set the training records
+        model.training_records = training_records
 
         return model
 

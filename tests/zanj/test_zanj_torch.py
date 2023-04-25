@@ -83,6 +83,7 @@ def test_torch_configmodel():
     )
 
     model: MyGPT = MyGPT(config)
+    model.training_records = dict(loss=[3, 2, 1], accuracy=[0.1, 0.2, 0.3])
 
     fname: Path = TEST_DATA_PATH / "test_torch_configmodel.zanj"
     ZANJ().save(model, fname)
@@ -96,6 +97,7 @@ def test_torch_configmodel():
     print(f"{model2.zanj_model_config = }")
 
     assert model.zanj_model_config == model2.zanj_model_config
+    assert model.training_records == model2.training_records
 
     compare_state_dicts(model.state_dict(), model2.state_dict())
 
@@ -104,5 +106,6 @@ def test_torch_configmodel():
     print(f"{model3.zanj_model_config = }")
 
     assert model.zanj_model_config == model3.zanj_model_config
+    assert model.training_records == model3.training_records
 
     compare_state_dicts(model.state_dict(), model3.state_dict())

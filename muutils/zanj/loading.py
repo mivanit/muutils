@@ -328,10 +328,12 @@ class LoadedZANJ:
             # get the path to the item
             path: ObjectPath = tuple(ext_item.path)
             assert len(path) > 0
-            assert all(isinstance(key, (str, int)) for key in path)
+            assert all(isinstance(key, (str, int)) for key in path), f"improper types in path {path=}"
             # get the item
             item = self._json_data
             for key in path:
+                if not key in item:
+                    raise KeyError(f"could not find {key=} in {item=} for {ext_path=}, {ext_item=}")
                 item = item[key]  # type: ignore[index]
             # replace the item with the external item
             assert "$ref" in item  # type: ignore

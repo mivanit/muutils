@@ -290,6 +290,7 @@ def serializable_dataclass(
     unsafe_hash: bool = False,
     frozen: bool = False,
     properties_to_serialize: Optional[list[str]] = None,
+    register_handler: bool = True,
     **kwargs,
 ):
     # -> Union[Callable[[Type[T]], Type[T]], Type[T]]:
@@ -400,7 +401,7 @@ def serializable_dataclass(
                             value = field_type_hint.load(value)
                         else:
                             raise ValueError(
-                                f"Cannot load value into {field_type_hint}, espected {type(value) = } to be a dict\n{value = }"
+                                f"Cannot load value into {field_type_hint}, expected {type(value) = } to be a dict\n{value = }"
                             )
 
                     if field.assert_type:
@@ -419,7 +420,8 @@ def serializable_dataclass(
         cls.__eq__ = lambda self, other: dc_eq(self, other)  # type: ignore[assignment]
 
         # Register the class with ZANJ
-        zanj_register_loader_serializable_dataclass(cls)
+        if register_handler:
+            zanj_register_loader_serializable_dataclass(cls)
 
         return cls
 

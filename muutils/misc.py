@@ -1,5 +1,5 @@
-import typing
 import hashlib
+import typing
 
 
 def stable_hash(s: str) -> int:
@@ -9,7 +9,6 @@ def stable_hash(s: str) -> int:
     hash_obj.update(bytes(s, "UTF-8"))
     # get digest and convert to int
     return int.from_bytes(hash_obj.digest(), "big")
-
 
 
 def sanitize_fname(fname: str | None) -> str:

@@ -322,27 +322,35 @@ class LoadedZANJ:
         self._zanj: _ZANJ_pre = zanj
 
         # load zip file
-        self._zipf: zipfile.ZipFile = zipfile.ZipFile(file=self._path, mode="r")
+        _zipf: zipfile.ZipFile = zipfile.ZipFile(file=self._path, mode="r")
 
         # load data
-        self._meta: JSONdict = json.load(self._zipf.open(ZANJ_META, "r"))
-        self._json_data: JSONitem = json.load(self._zipf.open(ZANJ_MAIN, "r"))
+        self._meta: JSONdict = json.load(_zipf.open(ZANJ_META, "r"))
+        self._json_data: JSONitem = json.load(_zipf.open(ZANJ_MAIN, "r"))
 
         # read externals
         self._externals: dict[str, ExternalItem] = dict()
         for fname, ext_item in self._meta["externals_info"].items():  # type: ignore[union-attr]
             item_type: str = ext_item["item_type"]
-            with self._zipf.open(fname, "r") as fp:
+            with _zipf.open(fname, "r") as fp:
                 self._externals[fname] = ExternalItem(
                     item_type=item_type,  # type: ignore[arg-type]
                     data=GET_EXTERNAL_LOAD_FUNC(item_type)(self, fp),
                     path=ext_item["path"],
                 )
 
+        # close zip file
+        _zipf.close()
+        del _zipf
+
     def populate_externals(self) -> None:
         """put all external items into the main json data"""
 
-        for ext_path, ext_item in self._externals.items():
+        sorted_externals: list[tuple[str, ExternalItem]] = sorted(
+            self._externals.items(), key=lambda x: len(x[1].path)
+        )
+
+        for ext_path, ext_item in sorted_externals:
             # get the path to the item
             path: ObjectPath = tuple(ext_item.path)
             assert len(path) > 0

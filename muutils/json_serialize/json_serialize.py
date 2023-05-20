@@ -169,7 +169,12 @@ DEFAULT_HANDLERS: MonoTuple[SerializerHandler] = tuple(BASE_HANDLERS) + (
     SerializerHandler(
         check=lambda self, obj, path: str(type(obj))
         == "<class 'pandas.core.frame.DataFrame'>",
-        serialize_func=lambda self, obj, path: obj.to_dict(orient="records"),
+        serialize_func=lambda self, obj, path: dict(
+            __format__="pandas.DataFrame",
+            columns=obj.columns.tolist(),
+            data=obj.to_dict(orient="records"),
+            path=path,
+        ),
         uid="pandas.DataFrame",
     ),
     SerializerHandler(

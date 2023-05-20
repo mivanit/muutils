@@ -31,6 +31,41 @@ from muutils.zanj.externals import (
 # pylint: disable=protected-access, dangerous-default-value
 
 
+def _populate_externals_error_checking(key, item) -> bool:
+    """checks that the key is valid for the item. returns "True" we need to augment the path by accessing the "data" element"""
+
+    # special case for not fully loaded external item which we still need to populate
+    if isinstance(item, typing.Mapping):
+        if ("__format__" in item) and item["__format__"].endswith(":external"):
+            if "data" in item:
+                return True
+            else:
+                raise KeyError(
+                    f"expected an external item, but could not find data: {list(item.keys())}",
+                    f"{item['__format__']}, {len(item) = }, {item.get('data', '<EMPTY>') = }",
+                )
+
+    # if it's a list, make sure the key is an int and that it's in range
+    if isinstance(item, typing.Sequence):
+        if not isinstance(key, int):
+            raise TypeError(f"improper type: '{type(key) = }', expected int")
+        if key >= len(item):
+            raise IndexError(f"index out of range: '{key = }', expected < {len(item)}")
+
+    # if it's a dict, make sure that the key is a str and that it's in the dict
+    elif isinstance(item, typing.Mapping):
+        if not isinstance(key, str):
+            raise TypeError(f"improper type: '{type(key) = }', expected str")
+        if key not in item:
+            raise KeyError(f"key not in dict: '{key = }', expected in {item.keys()}")
+
+    # otherwise, raise an error
+    else:
+        raise TypeError(f"improper type: '{type(item) = }', expected dict or list")
+
+    return False
+
+
 @dataclass
 class LoaderHandler:
     """handler for loading an object from a json file or a ZANJ archive"""
@@ -291,6 +326,43 @@ def load_item_recursive(
                 )
 
 
+def _each_item_in_externals(
+    externals: list[tuple[str, ExternalItem]],
+    json_data: JSONitem,
+) -> typing.Iterable[tuple[str, ExternalItem, Any, ObjectPath]]:
+    """note that you MUST use the raw iterator, dont try to turn into a list or something"""
+
+    sorted_externals: list[tuple[str, ExternalItem]] = sorted(
+        externals.items(), key=lambda x: len(x[1].path)
+    )
+
+    for ext_path, ext_item in sorted_externals:
+        # get the path to the item
+        path: ObjectPath = tuple(ext_item.path)
+        assert len(path) > 0
+        assert all(
+            isinstance(key, (str, int)) for key in path
+        ), f"improper types in path {path=}"
+        # get the item
+        item = json_data
+        for i, key in enumerate(path):
+            try:
+                external_unloaded: bool = _populate_externals_error_checking(key, item)
+                if external_unloaded:
+                    item = item["data"]
+                item = item[key]  # type: ignore[index]
+
+            except (KeyError, IndexError, TypeError) as e:
+                raise KeyError(
+                    f"could not find '{key = }' at path '{ext_path = }', specifically at index '{i = }'",
+                    f"'{type(item) =}', '{len(item) = }', '{item.keys() if isinstance(item, dict) else None = }'",
+                    f"From error: {e = }",
+                    f"\n\n{item=}\n\n{ext_item=}",
+                ) from e
+
+        yield (ext_path, ext_item, item, path)
+
+
 class LoadedZANJ:
     """for loading a zanj file"""
 
@@ -304,48 +376,35 @@ class LoadedZANJ:
         self._zanj: _ZANJ_pre = zanj
 
         # load zip file
-        self._zipf: zipfile.ZipFile = zipfile.ZipFile(file=self._path, mode="r")
+        _zipf: zipfile.ZipFile = zipfile.ZipFile(file=self._path, mode="r")
 
         # load data
-        self._meta: JSONdict = json.load(self._zipf.open(ZANJ_META, "r"))
-        self._json_data: JSONitem = json.load(self._zipf.open(ZANJ_MAIN, "r"))
+        self._meta: JSONdict = json.load(_zipf.open(ZANJ_META, "r"))
+        self._json_data: JSONitem = json.load(_zipf.open(ZANJ_MAIN, "r"))
 
         # read externals
         self._externals: dict[str, ExternalItem] = dict()
         for fname, ext_item in self._meta["externals_info"].items():  # type: ignore[union-attr]
             item_type: str = ext_item["item_type"]
-            with self._zipf.open(fname, "r") as fp:
+            with _zipf.open(fname, "r") as fp:
                 self._externals[fname] = ExternalItem(
                     item_type=item_type,  # type: ignore[arg-type]
                     data=GET_EXTERNAL_LOAD_FUNC(item_type)(self, fp),
                     path=ext_item["path"],
                 )
 
+        # close zip file
+        _zipf.close()
+        del _zipf
+
     def populate_externals(self) -> None:
         """put all external items into the main json data"""
 
-        for ext_path, ext_item in self._externals.items():
-            # get the path to the item
-            path: ObjectPath = tuple(ext_item.path)
-            assert len(path) > 0
-            assert all(
-                isinstance(key, (str, int)) for key in path
-            ), f"improper types in path {path=}"
-            # get the item
-            item = self._json_data
-            for key in path:
-                if not key in item:
-                    raise KeyError(
-                        f"could not find {key=} in {item=} for {ext_path=}, {ext_item=}"
-                    )
-                item = item[key]  # type: ignore[index]
+        # loop over once, populating the externals only
+        for ext_path, ext_item, item, path in _each_item_in_externals(
+            self._externals, self._json_data
+        ):
             # replace the item with the external item
             assert "$ref" in item  # type: ignore
             assert item["$ref"] == ext_path  # type: ignore
             item["data"] = ext_item.data  # type: ignore
-
-            item = load_item_recursive(
-                json_item=item,
-                path=path,
-                zanj=self._zanj,
-            )

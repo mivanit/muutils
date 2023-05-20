@@ -11,6 +11,7 @@ for large arrays, the output is a .tar.gz file with most data in a json file, bu
 
 """
 
+from dataclasses import dataclass
 import json
 import os
 import time
@@ -44,6 +45,17 @@ ZANJitem = Union[
     pd.DataFrame,
 ]
 
+@dataclass(kw_only=True)
+class _ZANJ_GLOBAL_DEFAULTS_CLASS:
+    error_mode: ErrorMode = "except"
+    internal_array_mode: ArrayMode = "array_list_meta"
+    external_array_threshold: int = 64
+    external_list_threshold: int = 64
+    compress: bool | int = True
+    custom_settings: dict[str, Any] | None = None
+
+ZANJ_GLOBAL_DEFAULTS: _ZANJ_GLOBAL_DEFAULTS_CLASS = _ZANJ_GLOBAL_DEFAULTS_CLASS()
+
 
 class ZANJ(JsonSerializer):
     """Zip up: Arrays in Numpy, JSON for everything else
@@ -62,12 +74,12 @@ class ZANJ(JsonSerializer):
 
     def __init__(
         self,
-        error_mode: ErrorMode = "except",
-        internal_array_mode: ArrayMode = "array_list_meta",
-        external_array_threshold: int = 64,
-        external_list_threshold: int = 64,
-        custom_settings: dict[str, Any] | None = None,
-        compress: bool | int = True,
+        error_mode: ErrorMode = ZANJ_GLOBAL_DEFAULTS.error_mode,
+        internal_array_mode: ArrayMode = ZANJ_GLOBAL_DEFAULTS.internal_array_mode,
+        external_array_threshold: int = ZANJ_GLOBAL_DEFAULTS.external_array_threshold,
+        external_list_threshold: int = ZANJ_GLOBAL_DEFAULTS.external_list_threshold,
+        compress: bool | int = ZANJ_GLOBAL_DEFAULTS.compress,
+        custom_settings: dict[str, Any] | None = ZANJ_GLOBAL_DEFAULTS.custom_settings,
         handlers_pre: MonoTuple[SerializerHandler] = tuple(),
         handlers_default: MonoTuple[
             SerializerHandler

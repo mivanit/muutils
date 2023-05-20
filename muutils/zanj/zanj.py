@@ -11,11 +11,11 @@ for large arrays, the output is a .tar.gz file with most data in a json file, bu
 
 """
 
-from dataclasses import dataclass
 import json
 import os
 import time
 import zipfile
+from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Union
 
@@ -45,6 +45,7 @@ ZANJitem = Union[
     pd.DataFrame,
 ]
 
+
 @dataclass(kw_only=True)
 class _ZANJ_GLOBAL_DEFAULTS_CLASS:
     error_mode: ErrorMode = "except"
@@ -53,6 +54,7 @@ class _ZANJ_GLOBAL_DEFAULTS_CLASS:
     external_list_threshold: int = 256
     compress: bool | int = True
     custom_settings: dict[str, Any] | None = None
+
 
 ZANJ_GLOBAL_DEFAULTS: _ZANJ_GLOBAL_DEFAULTS_CLASS = _ZANJ_GLOBAL_DEFAULTS_CLASS()
 

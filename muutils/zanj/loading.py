@@ -30,6 +30,7 @@ from muutils.zanj.externals import (
 
 # pylint: disable=protected-access, dangerous-default-value
 
+
 def _populate_externals_error_checking(key, item) -> bool:
     """checks that the key is valid for the item. returns "True" we need to augment the path by accessing the "data" element"""
 
@@ -50,19 +51,20 @@ def _populate_externals_error_checking(key, item) -> bool:
             raise TypeError(f"improper type: '{type(key) = }', expected int")
         if key >= len(item):
             raise IndexError(f"index out of range: '{key = }', expected < {len(item)}")
-    
+
     # if it's a dict, make sure that the key is a str and that it's in the dict
     elif isinstance(item, typing.Mapping):
         if not isinstance(key, str):
             raise TypeError(f"improper type: '{type(key) = }', expected str")
         if key not in item:
             raise KeyError(f"key not in dict: '{key = }', expected in {item.keys()}")
-        
+
     # otherwise, raise an error
     else:
         raise TypeError(f"improper type: '{type(item) = }', expected dict or list")
-    
+
     return False
+
 
 @dataclass
 class LoaderHandler:
@@ -325,16 +327,15 @@ def load_item_recursive(
 
 
 def _each_item_in_externals(
-        externals: list[tuple[str, ExternalItem]], 
-        json_data: JSONitem,
-    ) -> typing.Iterable[tuple[str, ExternalItem, Any, ObjectPath]]:
+    externals: list[tuple[str, ExternalItem]],
+    json_data: JSONitem,
+) -> typing.Iterable[tuple[str, ExternalItem, Any, ObjectPath]]:
     """note that you MUST use the raw iterator, dont try to turn into a list or something"""
 
     sorted_externals: list[tuple[str, ExternalItem]] = sorted(
         externals.items(), key=lambda x: len(x[1].path)
     )
 
-    
     for ext_path, ext_item in sorted_externals:
         # get the path to the item
         path: ObjectPath = tuple(ext_item.path)
@@ -358,7 +359,7 @@ def _each_item_in_externals(
                     f"From error: {e = }",
                     f"\n\n{item=}\n\n{ext_item=}",
                 ) from e
-        
+
         yield (ext_path, ext_item, item, path)
 
 
@@ -400,7 +401,9 @@ class LoadedZANJ:
         """put all external items into the main json data"""
 
         # loop over once, populating the externals only
-        for ext_path, ext_item, item, path in _each_item_in_externals(self._externals, self._json_data):
+        for ext_path, ext_item, item, path in _each_item_in_externals(
+            self._externals, self._json_data
+        ):
             # replace the item with the external item
             assert "$ref" in item  # type: ignore
             assert item["$ref"] == ext_path  # type: ignore

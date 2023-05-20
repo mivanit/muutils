@@ -173,7 +173,9 @@ def load_array(arr: JSONitem, array_mode: Optional[ArrayMode] = None) -> Any:
         # assume ZANJ has taken care of it
         assert isinstance(arr, typing.Mapping)
         if "data" not in arr:
-            raise KeyError(f"invalid external array, expected key 'data', got keys: '{list(arr.keys())}' and arr: {arr}")
+            raise KeyError(
+                f"invalid external array, expected key 'data', got keys: '{list(arr.keys())}' and arr: {arr}"
+            )
         return arr["data"]
     elif array_mode == "zero_dim":
         assert isinstance(arr, typing.Mapping)

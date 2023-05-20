@@ -30,6 +30,24 @@ from muutils.zanj.externals import (
 
 # pylint: disable=protected-access, dangerous-default-value
 
+def _populate_externals_error_checking(key, item):
+    # if it's a list, make sure the key is an int and that it's in range
+    if isinstance(item, typing.Sequence):
+        if not isinstance(key, int):
+            raise TypeError(f"improper type: '{type(key) = }', expected int")
+        if key >= len(item):
+            raise IndexError(f"index out of range: '{key = }', expected < {len(item)}")
+    
+    # if it's a dict, make sure that the key is a str and that it's in the dict
+    elif isinstance(item, typing.Mapping):
+        if not isinstance(key, str):
+            raise TypeError(f"improper type: '{type(key) = }', expected str")
+        if key not in item:
+            raise KeyError(f"key not in dict: '{key = }', expected in {item.keys()}")
+        
+    # otherwise, raise an error
+    else:
+        raise TypeError(f"improper type: '{type(item) = }', expected dict or list")
 
 @dataclass
 class LoaderHandler:
@@ -334,13 +352,17 @@ class LoadedZANJ:
             # get the item
             item = self._json_data
             for i, key in enumerate(path):
-                if not key in item:
+                try:
+                    _populate_externals_error_checking(key, item)
+                    item = item[key]  # type: ignore[index]
+
+                except (KeyError, IndexError, TypeError) as e:
                     raise KeyError(
                         f"could not find '{key = }' at path '{ext_path = }', specifically at index '{i = }'",
                         f"'{type(item) =}' '{len(item) = }', and '{item.keys() if isinstance(item, dict) else None = }'",
                         f"\n\n{item=}\n\n{ext_item=}",
-                    )
-                item = item[key]  # type: ignore[index]
+                    ) from e
+                            
             # replace the item with the external item
             assert "$ref" in item  # type: ignore
             assert item["$ref"] == ext_path  # type: ignore

@@ -18,23 +18,23 @@ np.random.seed(0)
 TEST_DATA_PATH: Path = Path("tests/junk_data")
 
 @serializable_dataclass
-class BasicZanj(SerializableDataclass):
+class InnerClassWithArray(SerializableDataclass):
     some_string: str
     arr_numbers: np.ndarray
 
 @serializable_dataclass
-class Nested(SerializableDataclass):
+class OuterClassWithNestedList(SerializableDataclass):
     name: str
-    lst_basic: list[BasicZanj] = serializable_field(
+    lst_basic: list[InnerClassWithArray] = serializable_field(
         serialization_fn=lambda x: [b.serialize() for b in x],
-        loading_fn=lambda x: [BasicZanj.load(b) for b in x],
+        loading_fn=lambda x: [InnerClassWithArray.load(b) for b in x],
 	)
 
 def test_nested_populate():
-    instance = Nested(
+    instance = OuterClassWithNestedList(
         name="hello", 
         lst_basic=[
-            BasicZanj(
+            InnerClassWithArray(
 				some_string = f"hello_{i}",
 				arr_numbers = np.random.rand(20),
             )

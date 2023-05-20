@@ -129,7 +129,10 @@ class ZANJ(JsonSerializer):
             elif item.item_type.startswith("jsonl"):
                 output[key]["data[0]"] = data[0]
 
-        return output
+        return {
+            key: val
+            for key, val in sorted(output.items(), key=lambda x: len(x[1]["path"]))
+        }
 
     def meta(self) -> JSONitem:
         """return the metadata of the ZANJ archive"""

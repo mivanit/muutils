@@ -30,7 +30,20 @@ from muutils.zanj.externals import (
 
 # pylint: disable=protected-access, dangerous-default-value
 
-def _populate_externals_error_checking(key, item):
+def _populate_externals_error_checking(key, item) -> bool:
+    """checks that the key is valid for the item. returns "True" we need to augment the path by accessing the "data" element"""
+
+    # special case for not fully loaded external item which we still need to populate
+    if isinstance(item, typing.Mapping):
+        if ("__format__" in item) and item["__format__"].endswith(":external"):
+            if "data" in item:
+                return True
+            else:
+                raise KeyError(
+                    f"expected an external item, but could not find data: {list(item.keys())}",
+                    f"{item['__format__']}, {len(item) = }, {item.get('data', '<EMPTY>') = }",
+                )
+
     # if it's a list, make sure the key is an int and that it's in range
     if isinstance(item, typing.Sequence):
         if not isinstance(key, int):
@@ -48,6 +61,8 @@ def _populate_externals_error_checking(key, item):
     # otherwise, raise an error
     else:
         raise TypeError(f"improper type: '{type(item) = }', expected dict or list")
+    
+    return False
 
 @dataclass
 class LoaderHandler:
@@ -309,6 +324,35 @@ def load_item_recursive(
                 )
 
 
+def _each_item_in_externals(sorted_externals: list[tuple[str, ExternalItem]], json_data: JSONitem) -> typing.Iterable[tuple[str, ExternalItem, Any, ObjectPath]]:
+    for ext_path, ext_item in sorted_externals:
+        # get the path to the item
+        path: ObjectPath = tuple(ext_item.path)
+        assert len(path) > 0
+        assert all(
+            isinstance(key, (str, int)) for key in path
+        ), f"improper types in path {path=}"
+        # get the item
+        item = json_data
+        for i, key in enumerate(path):
+            try:
+                external_unloaded: bool = _populate_externals_error_checking(key, item)
+                if external_unloaded:
+                    item = item["data"]
+                item = item[key]  # type: ignore[index]
+
+            except (KeyError, IndexError, TypeError) as e:
+                raise KeyError(
+                    f"could not find '{key = }' at path '{ext_path = }', specifically at index '{i = }'",
+                    f"'{type(item) =}', '{len(item) = }', '{item.keys() if isinstance(item, dict) else None = }'",
+                    f"From error: {e = }",
+                    f"\n\n{item=}\n\n{ext_item=}",
+                ) from e
+        
+        yield ext_path, ext_item, item, path
+
+
+
 class LoadedZANJ:
     """for loading a zanj file"""
 
@@ -350,27 +394,7 @@ class LoadedZANJ:
             self._externals.items(), key=lambda x: len(x[1].path)
         )
 
-        for ext_path, ext_item in sorted_externals:
-            # get the path to the item
-            path: ObjectPath = tuple(ext_item.path)
-            assert len(path) > 0
-            assert all(
-                isinstance(key, (str, int)) for key in path
-            ), f"improper types in path {path=}"
-            # get the item
-            item = self._json_data
-            for i, key in enumerate(path):
-                try:
-                    _populate_externals_error_checking(key, item)
-                    item = item[key]  # type: ignore[index]
-
-                except (KeyError, IndexError, TypeError) as e:
-                    raise KeyError(
-                        f"could not find '{key = }' at path '{ext_path = }', specifically at index '{i = }'",
-                        f"'{type(item) =}' '{len(item) = }', and '{item.keys() if isinstance(item, dict) else None = }'",
-                        f"\n\n{item=}\n\n{ext_item=}",
-                    ) from e
-                            
+        for ext_path, ext_item, item, path in _each_item_in_externals(sorted_externals, self._json_data):
             # replace the item with the external item
             assert "$ref" in item  # type: ignore
             assert item["$ref"] == ext_path  # type: ignore

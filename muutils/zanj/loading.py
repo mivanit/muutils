@@ -324,8 +324,20 @@ def load_item_recursive(
                 )
 
 
-def _each_item_in_externals(sorted_externals: list[tuple[str, ExternalItem]], json_data: JSONitem) -> typing.Iterable[tuple[str, ExternalItem, Any, ObjectPath]]:
+def _each_item_in_externals(
+        externals: list[tuple[str, ExternalItem]], 
+        json_data: JSONitem,
+    ) -> typing.Iterable[tuple[str, ExternalItem, Any, ObjectPath]]:
+    """note that you MUST use the raw iterator, dont try to turn into a list or something"""
+
+    sorted_externals: list[tuple[str, ExternalItem]] = sorted(
+        externals.items(), key=lambda x: len(x[1].path)
+    )
+
+    print("\n".join(f"{x[0] = }, {x[1].path = }" for x in sorted_externals))
+    
     for ext_path, ext_item in sorted_externals:
+        print(f"loading {ext_path = }")
         # get the path to the item
         path: ObjectPath = tuple(ext_item.path)
         assert len(path) > 0
@@ -349,8 +361,7 @@ def _each_item_in_externals(sorted_externals: list[tuple[str, ExternalItem]], js
                     f"\n\n{item=}\n\n{ext_item=}",
                 ) from e
         
-        yield ext_path, ext_item, item, path
-
+        yield (ext_path, ext_item, item, path)
 
 
 class LoadedZANJ:
@@ -390,16 +401,15 @@ class LoadedZANJ:
     def populate_externals(self) -> None:
         """put all external items into the main json data"""
 
-        sorted_externals: list[tuple[str, ExternalItem]] = sorted(
-            self._externals.items(), key=lambda x: len(x[1].path)
-        )
-
-        for ext_path, ext_item, item, path in _each_item_in_externals(sorted_externals, self._json_data):
+        for ext_path, ext_item, item, path in _each_item_in_externals(self._externals, self._json_data):
+            print(f"replacing: {ext_path = }, {ext_item.path = }, {item = }, {path = }")
             # replace the item with the external item
             assert "$ref" in item  # type: ignore
             assert item["$ref"] == ext_path  # type: ignore
             item["data"] = ext_item.data  # type: ignore
 
+        for ext_path, ext_item, item, path in _each_item_in_externals(self._externals, self._json_data):
+            print(f"loading: {ext_path = }, {ext_item.path = }, {item = }, {path = }")
             item = load_item_recursive(
                 json_item=item,
                 path=path,

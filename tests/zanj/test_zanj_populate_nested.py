@@ -27,7 +27,7 @@ class OuterClassWithNestedList(SerializableDataclass):
     name: str
     lst_basic: list[InnerClassWithArray] = serializable_field(
         serialization_fn=lambda x: [b.serialize() for b in x],
-        loading_fn=lambda x: [InnerClassWithArray.load(b) for b in x],
+        loading_fn=lambda x: [InnerClassWithArray.load(b) for b in x["lst_basic"]],
 	)
 
 def test_nested_populate():
@@ -47,6 +47,7 @@ def test_nested_populate():
         external_list_threshold=10,
 	)
     path = TEST_DATA_PATH / "test_nested_populate.zanj"
+    path.unlink(missing_ok=True)
     z.save(instance, path)
     recovered = z.read(path)
     assert instance == recovered

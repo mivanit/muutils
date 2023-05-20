@@ -49,8 +49,8 @@ ZANJitem = Union[
 class _ZANJ_GLOBAL_DEFAULTS_CLASS:
     error_mode: ErrorMode = "except"
     internal_array_mode: ArrayMode = "array_list_meta"
-    external_array_threshold: int = 64
-    external_list_threshold: int = 64
+    external_array_threshold: int = 256
+    external_list_threshold: int = 256
     compress: bool | int = True
     custom_settings: dict[str, Any] | None = None
 

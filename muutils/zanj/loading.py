@@ -333,10 +333,12 @@ class LoadedZANJ:
             ), f"improper types in path {path=}"
             # get the item
             item = self._json_data
-            for key in path:
+            for i, key in enumerate(path):
                 if not key in item:
                     raise KeyError(
-                        f"could not find {key=} in {item=} for {ext_path=}, {ext_item=}"
+                        f"could not find '{key = }' at path '{ext_path = }', specifically at index '{i = }'",
+                        f"'{type(item) =}' '{len(item) = }', and '{item.keys() if isinstance(item, dict) else None = }'",
+                        f"\n\n{item=}\n\n{ext_item=}",
                     )
                 item = item[key]  # type: ignore[index]
             # replace the item with the external item

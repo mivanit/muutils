@@ -1,7 +1,7 @@
 import abc
 import typing
-from typing import Any, Type, TypeVar
 import warnings
+from typing import Any, Type, TypeVar
 
 import torch
 
@@ -175,11 +175,13 @@ class ConfiguredModel(
         mdl: ConfiguredModel = zanj.read(file_path)
         assert isinstance(mdl, cls), f"loaded object must be a {cls}, got {type(mdl)}"
         return mdl
-    
+
     @classmethod
     def load_file(cls, file_path: str, zanj: ZANJ | None = None) -> "ConfiguredModel":
         """read a model from a file"""
-        warnings.warn("load_file() is deprecated, use read() instead", DeprecationWarning)
+        warnings.warn(
+            "load_file() is deprecated, use read() instead", DeprecationWarning
+        )
         return cls.read(file_path, zanj)
 
     @classmethod
@@ -196,7 +198,7 @@ class ConfiguredModel(
             source_pckg=cls.__module__,
             desc=f"{cls.__module__} {cls_name} loader via muutils.zanj.torchutil.ConfiguredModel",
         )
-    
+
     def num_params(self) -> int:
         return num_params(self)
 

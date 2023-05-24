@@ -41,6 +41,7 @@ class SerializableField(dataclasses.Field):
         repr: bool = True,
         hash: Optional[bool] = None,
         compare: bool = True,
+        # TODO: add field for custom comparator (such as serializing)
         metadata: types.MappingProxyType | None = None,
         kw_only: bool | dataclasses._MISSING_TYPE = dataclasses.MISSING,
         serialize: bool = True,
@@ -231,7 +232,7 @@ class SerializableDataclass(abc.ABC):
     def __hash__(self) -> int:
         return hash(json.dumps(self.serialize()))
 
-    def diff(self, other: "SerializableDataclass") -> dict[str, Any]:
+    def diff(self, other: "SerializableDataclass", of_serialized: bool = False) -> dict[str, Any]:
         if type(self) != type(other):
             raise ValueError(
                 f"Instances must be of the same type, but got {type(self)} and {type(other)}"
@@ -242,6 +243,10 @@ class SerializableDataclass(abc.ABC):
         if self == other:
             return diff_result
 
+        if of_serialized:
+            ser_self: dict = self.serialize()
+            ser_other: dict = other.serialize()
+
         for field in dataclasses.fields(self):
             if not field.compare:
                 continue
@@ -250,10 +255,11 @@ class SerializableDataclass(abc.ABC):
             self_value = getattr(self, field_name)
             other_value = getattr(other, field_name)
 
-            if isinstance(self_value, SerializableDataclass) and isinstance(
-                other_value, SerializableDataclass
+            if (
+                isinstance(self_value, SerializableDataclass) 
+                and isinstance(other_value, SerializableDataclass)
             ):
-                nested_diff: dict = self_value.diff(other_value)
+                nested_diff: dict = self_value.diff(other_value, of_serialized=of_serialized)
                 if nested_diff:
                     diff_result[field_name] = nested_diff
             elif dataclasses.is_dataclass(self_value) and dataclasses.is_dataclass(
@@ -261,7 +267,9 @@ class SerializableDataclass(abc.ABC):
             ):
                 raise ValueError("Non-serializable dataclass is not supported")
             else:
-                if not array_safe_eq(self_value, other_value):
+                self_value_s = ser_self[field_name] if of_serialized else self_value
+                other_value_s = ser_other[field_name] if of_serialized else other_value
+                if not array_safe_eq(self_value_s, other_value_s):
                     diff_result[field_name] = {"self": self_value, "other": other_value}
 
         return diff_result
@@ -276,6 +284,12 @@ class SerializableDataclass(abc.ABC):
                     self_value.update_from_nested_dict(nested_dict[field_name])
                 else:
                     setattr(self, field_name, nested_dict[field_name])
+
+    def __copy__(self) -> "SerializableDataclass":
+        return self.__class__.load(self.serialize())
+
+    def __deepcopy__(self, memo: dict) -> "SerializableDataclass":
+        return self.__class__.load(self.serialize())
 
 
 # Step 3: Create a custom serializable_dataclass decorator

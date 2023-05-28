@@ -22,6 +22,8 @@ There are a couple work-in-progress utilities in [`_wip`](https://github.com/miv
 
 # installation
 
+PyPi: [muutils](https://pypi.org/project/muutils/)
+
 ```
 pip install muutils
 ```

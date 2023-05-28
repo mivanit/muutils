@@ -38,6 +38,7 @@ exclude = "_wip"
 
 [tool.isort]
 profile = "black"
+ignore_comments = false
 extend_skip = ["_wip"]
 
 [tool.black]

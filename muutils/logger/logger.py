@@ -126,7 +126,7 @@ class Logger(SimpleLogger):
             )
 
         # check alias duplicates
-        alias_set: set[str] = set()
+        alias_set: set[str | None] = set()
         for stream in self._streams.values():
             for alias in stream.aliases:
                 if alias in alias_set:

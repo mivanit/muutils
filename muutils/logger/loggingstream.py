@@ -26,7 +26,7 @@ class LoggingStream:
     """
 
     name: str | None
-    aliases: set[str] = field(default_factory=set)
+    aliases: set[str | None] = field(default_factory=set)
     file: str | bool | AnyIO | None = None
     default_level: int | None = None
     default_contents: dict[str, Callable[[], Any]] = field(default_factory=dict)
@@ -75,7 +75,7 @@ class LoggingStream:
 
     def __post_init__(self):
         self.aliases = set(self.aliases)
-        if any(x.startswith("_") for x in self.aliases):
+        if any(x.startswith("_") for x in self.aliases if x is not None):
             raise ValueError(
                 "stream names or aliases cannot start with an underscore, sorry"
             )

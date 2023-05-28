@@ -3,7 +3,7 @@ import typing
 from pathlib import Path
 
 import numpy as np
-import pandas as pd
+import pandas as pd  # type: ignore
 
 from muutils.zanj import ZANJ
 

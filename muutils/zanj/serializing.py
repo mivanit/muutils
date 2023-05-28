@@ -3,7 +3,7 @@ from dataclasses import dataclass
 from typing import IO, Any, Callable, Iterable, Sequence
 
 import numpy as np
-import pandas as pd
+import pandas as pd  # type: ignore[import]
 
 from muutils.json_serialize.array import arr_metadata
 from muutils.json_serialize.json_serialize import (  # JsonSerializer,

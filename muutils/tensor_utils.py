@@ -88,7 +88,7 @@ def jaxtype_factory(
             )
 
         @typing._tp_cache  # type: ignore
-        def __class_getitem__(cls, params):
+        def __class_getitem__(cls, params: str | tuple) -> type:
             # MyTensor["dim1 dim2"]
             if isinstance(params, str):
                 return default_jax_dtype[array_type, params]

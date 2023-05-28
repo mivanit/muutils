@@ -1,7 +1,7 @@
 from muutils.logger.timing import TimerContext
 
 
-def test_timer_context():
+def test_timer_context() -> None:
     with TimerContext() as timer:
         x: float = 1.0
 

@@ -154,6 +154,6 @@ def test_incorrect_instance():
     model_b = "Not a ConfiguredModel instance"
 
     try:
-        assert_model_cfg_equality(model_a, model_b)
+        assert_model_cfg_equality(model_a, model_b)  # type: ignore
     except AssertionError as exc:
         assert str(exc) == "model_b must be a ConfiguredModel"

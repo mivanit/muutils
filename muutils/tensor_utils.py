@@ -115,8 +115,10 @@ def jaxtype_factory(
                     # MyTensor[("dim1", "dim2"), int]
                     shape_anot: list[str] = list()
                     for x in params[0]:
-                        if isinstance(x, (str, int)):
+                        if isinstance(x, str):
                             shape_anot.append(x)
+                        elif isinstance(x, int):
+                            shape_anot.append(str(x))
                         elif isinstance(x, tuple):
                             shape_anot.append("".join(str(y) for y in x))
                         else:

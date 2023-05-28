@@ -247,39 +247,3 @@ def _compare_np_custom(arr: np.ndarray) -> dict[str, dict]:
         q3=_compute_err(counter.percentile(0.75), np.percentile(arr, 75)),
         max=_compute_err(counter.max(), np.max(arr)),
     )
-
-
-def _test_statscounter():
-    arrs: list[np.ndarray] = [
-        np.array([0, 1]),
-        np.array([1, 2]),
-        np.random.randint(0, 10, size=100),
-        np.random.randint(-5, 15, size=10),
-        np.array([-5, -4, -1, 1, 1, 3, 3, 5, 11, 12]),
-        np.random.randint(-5, 15, size=10000),
-        np.random.randint(0, 100, size=100),
-        np.random.randint(0, 1000, size=10000),
-    ]
-
-    for i, j in np.random.randint(1, 100, size=(50, 2)):
-        if i > j:
-            i, j = j, i
-
-        arrs.append(np.random.randint(i, j, size=1000))
-
-    import json
-
-    for a in arrs:
-        r = _compare_np_custom(a)
-
-        if any(x["diff"] > 0.00000000001 for x in r.values()):
-            print("!!!!!!!!!!!!!!!!!!!!")
-            print(f"errs for rantint array: {a.shape = } {np.min(a) =} {np.max(a) =}")
-            print(json.dumps(r, indent=2))
-        # s = StatCounter(a)
-        # print(s.total(), s)
-        # print(sorted(list(s.elements())))
-
-
-# if __name__ == '__main__':
-#     _test_statscounter()

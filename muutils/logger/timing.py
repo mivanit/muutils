@@ -1,19 +1,20 @@
 import time
+from typing import Literal
 
 
 class TimerContext:
     """context manager for timing code"""
 
-    def __init__(self):
-        self.start_time: float|None = None
-        self.end_time: float|None = None
-        self.elapsed_time: float|None = None
+    def __init__(self) -> None:
+        self.start_time: float
+        self.end_time: float
+        self.elapsed_time: float
 
-    def __enter__(self):
+    def __enter__(self) -> "TimerContext":
         self.start_time = time.time()
         return self
 
-    def __exit__(self, exc_type, exc_val, exc_tb):
+    def __exit__(self, exc_type, exc_val, exc_tb) -> Literal[False]:
         self.end_time = time.time()
         self.elapsed_time = self.end_time - self.start_time
         return False

@@ -51,7 +51,7 @@ def test_torch_configmodel():
         optim_kwargs: dict = serializable_field(default_factory=dict)
 
         def optim(self, model):
-            return self.optim_factory(model.parameters(), **self.optim_kwargs)
+            return self.optim_factory(model.parameters(), **self.optim_kwargs)  # type: ignore
 
     @set_config_class(MyGPTConfig)
     class MyGPT(ConfiguredModel[MyGPTConfig]):
@@ -91,7 +91,7 @@ def test_torch_configmodel():
     print(f"{model.zanj_model_config = }")
 
     # try to load the model
-    model2: MyGPT = MyGPT.load_file(fname)
+    model2: MyGPT = MyGPT.read(fname)
     print(f"loaded model from {fname}")
     print(f"{model2.zanj_model_config = }")
 

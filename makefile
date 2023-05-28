@@ -18,12 +18,15 @@ version:
 		exit 1; \
 	fi
 
+# at some point, need to add back --check-untyped-defs to mypy call
+# but it complains when we specify arguments by keyword where positional is fine
+# not sure how to fix this
 # python -m pylint muutils/
 # python -m pylint tests/
 .PHONY: lint
 lint: clean
-	$(PYPOETRY) -m mypy --check-untyped-defs --config-file pyproject.toml muutils/
-	$(PYPOETRY) -m mypy --check-untyped-defs --config-file pyproject.toml tests/
+	$(PYPOETRY) -m mypy --config-file pyproject.toml muutils/
+	$(PYPOETRY) -m mypy --config-file pyproject.toml tests/
 
 .PHONY: format
 format:

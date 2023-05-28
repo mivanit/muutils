@@ -251,7 +251,7 @@ def assert_model_cfg_equality(model_a: ConfiguredModel, model_b: ConfiguredModel
     if not (model_a.zanj_model_config == model_b.zanj_model_config):
         raise ConfigMismatchException(
             f"configs of type {type(model_a.zanj_model_config)}, {type(model_b.zanj_model_config)} don't match",
-            diff=cls_type.diff(model_a.zanj_model_config, model_b.zanj_model_config),
+            diff=cls_type.diff(model_a.zanj_model_config, model_b.zanj_model_config),  # type: ignore[attr-defined]
         )
 
 

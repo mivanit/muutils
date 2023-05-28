@@ -7,7 +7,7 @@ from pathlib import Path
 from typing import Any, Callable
 
 import numpy as np
-import pandas as pd
+import pandas as pd  # type: ignore[import]
 import torch
 
 from muutils.json_serialize.array import load_array
@@ -184,7 +184,7 @@ LOADER_MAP: dict[str, LoaderHandler] = {
                 and "data" in json_item
                 and isinstance(json_item["data"], typing.Sequence)
             ),
-            load=lambda json_item, path=None, z=None: [
+            load=lambda json_item, path=None, z=None: [  # type: ignore[misc]
                 load_item_recursive(x, path, z) for x in json_item["data"]
             ],
             uid="list",
@@ -199,7 +199,7 @@ LOADER_MAP: dict[str, LoaderHandler] = {
                 and "data" in json_item
                 and isinstance(json_item["data"], typing.Sequence)
             ),
-            load=lambda json_item, path=None, z=None: tuple(
+            load=lambda json_item, path=None, z=None: tuple(  # type: ignore[misc]
                 [load_item_recursive(x, path, z) for x in json_item["data"]]
             ),
             uid="tuple",
@@ -327,7 +327,7 @@ def load_item_recursive(
 
 
 def _each_item_in_externals(
-    externals: list[tuple[str, ExternalItem]],
+    externals: dict[str, ExternalItem],
     json_data: JSONitem,
 ) -> typing.Iterable[tuple[str, ExternalItem, Any, ObjectPath]]:
     """note that you MUST use the raw iterator, dont try to turn into a list or something"""
@@ -347,15 +347,17 @@ def _each_item_in_externals(
         item = json_data
         for i, key in enumerate(path):
             try:
+                # ignores in this block are because we cannot know the type is indexable in static analysis
+                # but, we check the types in the line below
                 external_unloaded: bool = _populate_externals_error_checking(key, item)
                 if external_unloaded:
-                    item = item["data"]
+                    item = item["data"]  # type: ignore
                 item = item[key]  # type: ignore[index]
 
             except (KeyError, IndexError, TypeError) as e:
                 raise KeyError(
                     f"could not find '{key = }' at path '{ext_path = }', specifically at index '{i = }'",
-                    f"'{type(item) =}', '{len(item) = }', '{item.keys() if isinstance(item, dict) else None = }'",
+                    f"'{type(item) =}', '{len(item) = }', '{item.keys() if isinstance(item, dict) else None = }'",  # type: ignore
                     f"From error: {e = }",
                     f"\n\n{item=}\n\n{ext_item=}",
                 ) from e

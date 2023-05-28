@@ -6,6 +6,6 @@ def func(*args, **kwargs):
 
 
 if __name__ == "__main__":
-    import fire
+    import fire  # type: ignore[import]
 
     fire.Fire(func)

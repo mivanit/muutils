@@ -249,7 +249,7 @@ class SerializableDataclass(abc.ABC):
             ser_self: dict = self.serialize()
             ser_other: dict = other.serialize()
 
-        for field in dataclasses.fields(self):
+        for field in dataclasses.fields(self):  # type: ignore[arg-type]
             if not field.compare:
                 continue
 
@@ -278,7 +278,7 @@ class SerializableDataclass(abc.ABC):
         return diff_result
 
     def update_from_nested_dict(self, nested_dict: dict[str, Any]):
-        for field in dataclasses.fields(self):
+        for field in dataclasses.fields(self):  # type: ignore[arg-type]
             field_name: str = field.name
             self_value = getattr(self, field_name)
 

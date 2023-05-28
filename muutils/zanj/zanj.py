@@ -20,7 +20,7 @@ from pathlib import Path
 from typing import Any, Union
 
 import numpy as np
-import pandas as pd
+import pandas as pd  # type: ignore[import]
 
 from muutils.json_serialize.array import ArrayMode, arr_metadata
 from muutils.json_serialize.json_serialize import (
@@ -214,7 +214,7 @@ class ZANJ(JsonSerializer):
     def read(
         self,
         file_path: Union[str, Path],
-    ) -> JSONitem:
+    ) -> Any:
         """load the object from a ZANJ archive
         # TODO: load only some part of the zanj file by passing an ObjectPath
         """

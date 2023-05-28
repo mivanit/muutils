@@ -50,7 +50,6 @@ def test_torch_configmodel():
 
         optim_kwargs: dict = serializable_field(default_factory=dict)
 
-        @property
         def optim(self, model):
             return self.optim_factory(model.parameters(), **self.optim_kwargs)
 

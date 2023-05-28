@@ -10,7 +10,7 @@ on:
 
 jobs:
   lint:
-    name: Lint
+    name: Formatting
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -19,16 +19,11 @@ jobs:
       - name: Install linters
         run: pip install pycln isort black
 
-      - name: pycln
-        run: pycln --check --config pyproject.toml .
+      - name: Run Format Checks
+        run: make check-format
 
-      - name: isort
-        run: isort --check-only .
-
-      - name: black
-        run: python -m black --check .
   test:
-    name: Test
+    name: Test and Lint
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -50,6 +45,6 @@ jobs:
           poetry lock --check
           poetry install
       - name: tests
-        run: make wftest      
-      # - name: linting
-      #   run: make wflint
+        run: make test
+      - name: lint
+        run: make lint

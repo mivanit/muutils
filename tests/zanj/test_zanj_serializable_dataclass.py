@@ -1,7 +1,7 @@
 from pathlib import Path
 
 import numpy as np
-import pandas as pd
+import pandas as pd # type: ignore[import]
 import torch
 
 from muutils.json_serialize import (

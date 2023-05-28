@@ -1,5 +1,5 @@
-import sympy as sp
-from IPython.display import Math, display
+import sympy as sp  # type: ignore
+from IPython.display import Math, display  # type: ignore
 
 
 def print_tex(

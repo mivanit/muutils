@@ -5,9 +5,9 @@ class TimerContext:
     """context manager for timing code"""
 
     def __init__(self):
-        self.start_time: float = None
-        self.end_time: float = None
-        self.elapsed_time: float = None
+        self.start_time: float|None = None
+        self.end_time: float|None = None
+        self.elapsed_time: float|None = None
 
     def __enter__(self):
         self.start_time = time.time()

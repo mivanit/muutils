@@ -5,6 +5,7 @@ LAST_VERSION_FILE := .lastversion
 
 VERSION := $(shell grep -oP '__version__ = "\K.*?(?=")' $(VERSION_INFO_LOCATION))
 LAST_VERSION := $(shell cat $(LAST_VERSION_FILE))
+PYPOETRY := poetry run python
 
 .PHONY: default
 default: help
@@ -21,26 +22,30 @@ version:
 # python -m pylint tests/
 .PHONY: lint
 lint: clean
-	python -m mypy --config-file pyproject.toml muutils/
-	python -m mypy --config-file pyproject.toml tests/
+	$(PYPOETRY) -m mypy --check-untyped-defs --config-file pyproject.toml muutils/
+	$(PYPOETRY) -m mypy --check-untyped-defs --config-file pyproject.toml tests/
 
 .PHONY: format
 format:
-	python -m pycln --all .
+	python -m pycln --config pyproject.toml --all .
 	python -m isort format .
 	python -m black .
 
 .PHONY: check-format
 check-format:
 	@echo "run format check"
-	python -m pycln --check --all .
+	python -m pycln --check --config pyproject.toml .
 	python -m isort --check-only .
 	python -m black --check .
 
 .PHONY: test
 test: clean
 	@echo "running tests"
-	python -m pytest tests
+	$(PYPOETRY) -m pytest tests
+
+.PHONY: check-all
+check-all: check-format clean test lint
+	@echo "run format check, test, and then lint"
 
 .PHONY: check-git
 check-git: 
@@ -54,15 +59,15 @@ check-git:
 		exit 1; \
 	fi; \
 
-#check-format test
+
 .PHONY: build
 build: 
-	@echo "run format check, test, and then build"
+	@echo "build via poetry, assumes checks have been run"
 	poetry build
 
 .PHONY: publish
-publish: clean check-format test build check-git version
-	@echo "run format check, test, build, and then publish"
+publish: check-all build check-git version
+	@echo "run all checks, build, and then publish"
 
 	@echo "Enter the new version number if you want to upload to pypi and create a new tag"
 	@read -p "Confirm: " NEW_VERSION; \
@@ -82,16 +87,6 @@ publish: clean check-format test build check-git version
 	git tag $(VERSION); \
 	git push origin $(VERSION); \
 	twine upload dist/* --verbose
-
-# workflow test -- no need to clear, runs using poetry
-.PHONY: wftest
-wftest:
-	poetry run python -m pytest tests
-
-.PHONY: wflint
-wflint:
-	poetry run python -m mypy --config-file pyproject.toml muutils/
-	poetry run python -m mypy --config-file pyproject.toml tests/
 
 .PHONY: clean
 clean:

@@ -193,7 +193,16 @@ def zanj_register_loader_serializable_dataclass(cls: Type[T]):
     global _zanj_loading_needs_import
 
     if _zanj_loading_needs_import:
-        from muutils.zanj.loading import LoaderHandler, register_loader_handler
+        try:
+            from zanj.loading import (  # type: ignore[import]
+                LoaderHandler,
+                register_loader_handler,
+            )
+        except ImportError:
+            warnings.warn(
+                "ZANJ not installed, cannot register serializable dataclass loader. ZANJ can be found at https://github.com/mivanit/ZANJ"
+            )
+            return
 
     _format: str = f"{cls.__name__}(SerializableDataclass)"
     lh: LoaderHandler = LoaderHandler(

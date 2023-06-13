@@ -1,11 +1,6 @@
 from pathlib import Path
 
-import numpy as np
-
-from muutils.mlutils import (
-    get_checkpoint_paths_for_run,
-    register_method,
-)
+from muutils.mlutils import get_checkpoint_paths_for_run, register_method
 
 
 def test_get_checkpoint_paths_for_run():
@@ -51,4 +46,3 @@ def test_register_method():
     evalsB = TestEvalsB.evals
     assert list(evalsA.keys()) == ["eval_function"]
     assert list(evalsB.keys()) == ["other_eval_function"]
-

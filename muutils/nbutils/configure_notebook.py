@@ -1,11 +1,11 @@
 import os
 import warnings
 
-import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt # type: ignore[import]
 
 PLOTLY_IMPORTED: bool
 try:
-    import plotly.io as pio
+    import plotly.io as pio # type: ignore[import]
 except ImportError:
     warnings.warn("Plotly not installed. Plotly plots will not be available.")
     PLOTLY_IMPORTED = False
@@ -16,7 +16,7 @@ else:
 IN_JUPYTER: bool = not "_" in os.environ
 
 if IN_JUPYTER:
-    from IPython import get_ipython
+    from IPython import get_ipython # type: ignore[import]
 
 from muutils.mlutils import get_device, set_reproducibility
 

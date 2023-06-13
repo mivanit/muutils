@@ -9,7 +9,6 @@ from typing import Any, Callable, TypeVar
 import numpy as np
 import torch
 
-
 DEFAULT_SEED: int = 42
 GLOBAL_SEED: int = DEFAULT_SEED
 

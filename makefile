@@ -49,7 +49,7 @@ check-format:
 .PHONY: cov-text
 cov-text:
 	@echo "generate text coverage report"
-	coverage report > coverage.txt
+	$(PYPOETRY) -m coverage report > coverage.txt
 	grep '^TOTAL' coverage.txt | awk '{print $$NF}' > coverage_percent.txt
 
 # tests

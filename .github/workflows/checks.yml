@@ -44,17 +44,18 @@ jobs:
           curl -sSL https://install.python-poetry.org | python3 -
           poetry lock --check
           poetry install
-      - name: Check pytorch version
-        run: |
-          poetry run python -Bc "import torch; print(torch.__version__)"
+
       - name: tests
         run: make test
+
       - name: generate coverage report
         run: make cov-text
+
       - name: upload coverage
         uses: actions/upload-artifact@v3
         with:
           name: coverage.txt
           path: coverage.txt
+
       - name: lint
         run: make lint

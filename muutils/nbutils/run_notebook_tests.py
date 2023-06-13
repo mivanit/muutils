@@ -53,7 +53,7 @@ def test_notebooks(
                 )
             converted_notebooks.append(converted_file)
 
-        converted_file = None
+        del converted_file
 
         # the location of this line is important
         os.chdir(notebooks_dir)
@@ -77,7 +77,7 @@ def test_notebooks(
                     file_output: str = f.read()
                 raise NotebookTestError(f"Error in {file}:\n\n{file_output}")
 
-            process = None
+            del process
 
     except NotebookTestError as e:
         print("!" * 50, file=sys.stderr)

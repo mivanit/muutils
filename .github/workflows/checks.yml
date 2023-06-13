@@ -49,6 +49,8 @@ jobs:
           poetry run python -Bc "import torch; print(torch.__version__)"
       - name: tests
         run: make test
+      - name: generate coverage report
+        run: make cov-text
       - name: upload coverage
         uses: actions/upload-artifact@v3
         with:

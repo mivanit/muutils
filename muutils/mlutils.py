@@ -2,6 +2,7 @@ import json
 import os
 import random
 import typing
+import warnings
 from itertools import islice
 from pathlib import Path
 from typing import Any, Callable, TypeVar
@@ -15,12 +16,18 @@ GLOBAL_SEED: int = DEFAULT_SEED
 
 def get_device() -> torch.device:
     """Get the torch.device instance on which torch.Tensors should be allocated."""
-
-    if torch.cuda.is_available():
-        return torch.device("cuda")
-    elif torch.backends.mps.is_available():
-        return torch.device("mps")
-    else:
+    try:
+        if torch.cuda.is_available():
+            return torch.device("cuda")
+        elif torch.backends.mps.is_available():
+            return torch.device("mps")
+        else:
+            return torch.device("cpu")
+    except Exception as e:
+        warnings.warn(
+            f"Error while getting device, falling back to CPU. Error: {e}",
+            RuntimeWarning,
+        )
         return torch.device("cpu")
 
 

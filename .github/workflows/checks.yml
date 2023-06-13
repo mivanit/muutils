@@ -49,5 +49,10 @@ jobs:
           poetry run python -Bc "import torch; print(torch.__version__)"
       - name: tests
         run: make test
+      - name: upload coverage
+        uses: actions/upload-artifact@v3
+        with:
+          name: coverage.txt
+          path: coverage.txt
       - name: lint
         run: make lint

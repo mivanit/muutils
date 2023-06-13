@@ -1,4 +1,5 @@
-VERSION_INFO_LOCATION := muutils/__init__.py
+PACKAGE_NAME := muutils
+VERSION_INFO_LOCATION := $(PACKAGE_NAME)/__init__.py
 PUBLISH_BRANCH := main
 PYPI_TOKEN_FILE := .pypi-token
 LAST_VERSION_FILE := .lastversion
@@ -21,13 +22,15 @@ version:
 # at some point, need to add back --check-untyped-defs to mypy call
 # but it complains when we specify arguments by keyword where positional is fine
 # not sure how to fix this
-# python -m pylint muutils/
+# python -m pylint $(PACKAGE_NAME)/
 # python -m pylint tests/
 .PHONY: lint
 lint: clean
-	$(PYPOETRY) -m mypy --config-file pyproject.toml muutils/
+	$(PYPOETRY) -m mypy --config-file pyproject.toml $(PACKAGE_NAME)/
 	$(PYPOETRY) -m mypy --config-file pyproject.toml tests/
 
+# formatting
+# --------------------------------------------------
 .PHONY: format
 format:
 	python -m pycln --config pyproject.toml --all .
@@ -41,14 +44,28 @@ check-format:
 	python -m isort --check-only .
 	python -m black --check .
 
+# coverage reports
+# --------------------------------------------------
+.PHONY: cov-text
+cov-text:
+	@echo "generate text coverage report"
+	coverage report > coverage.txt
+	grep '^TOTAL' coverage.txt | awk '{print $$NF}' > coverage_percent.txt
+
+# tests
+# --------------------------------------------------
+
 .PHONY: test
 test: clean
 	@echo "running tests"
-	$(PYPOETRY) -m pytest tests
+	$(PYPOETRY) -m pytest --cov=$(PACKAGE_NAME) tests
 
 .PHONY: check-all
 check-all: check-format clean test lint
 	@echo "run format check, test, and then lint"
+
+# build and publish
+# --------------------------------------------------
 
 .PHONY: check-git
 check-git: 
@@ -61,7 +78,6 @@ check-git:
 		echo "Git is not clean, exiting!"; \
 		exit 1; \
 	fi; \
-
 
 .PHONY: build
 build: 
@@ -91,14 +107,19 @@ publish: check-all build check-git version
 	git push origin $(VERSION); \
 	twine upload dist/* --verbose
 
+# cleanup
+# --------------------------------------------------
+
 .PHONY: clean
 clean:
 	@echo "cleaning up"
 	rm -rf .mypy_cache
 	rm -rf .pytest_cache
+	rm -rf .coverage
+	rm -rf htmlcov
 	rm -rf dist
 	rm -rf build
-	rm -rf muutils.egg-info
+	rm -rf $(PACKAGE_NAME).egg-info
 	rm -rf tests/junk_data
 	python -Bc "import pathlib; [p.unlink() for p in pathlib.Path('.').rglob('*.py[co]')]"
 	python -Bc "import pathlib; [p.rmdir() for p in pathlib.Path('.').rglob('__pycache__')]"

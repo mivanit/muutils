@@ -5,6 +5,11 @@ __pycache__/
 **/.mypy_cache/
 **/.pytest_cache/
 
+.coverage
+htmlcov/**
+coverage.txt
+coverage_percent.txt
+
 build/
 dist/
 muutils.egg-info/

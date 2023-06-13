@@ -46,7 +46,7 @@ jobs:
           poetry install
       - name: Check pytorch version
         run: |
-          python -Bc "import torch; print(torch.__version__)"
+          poetry run python -Bc "import torch; print(torch.__version__)"
       - name: tests
         run: make test
       - name: lint

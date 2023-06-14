@@ -1,4 +1,3 @@
-
 class LazyExternalLoader:
     """lazy load np arrays or jsonl files, similar tp NpzFile from np.lib
 
@@ -32,9 +31,7 @@ class LazyExternalLoader:
                 return GET_EXTERNAL_LOAD_FUNC(item_type)(self._loaded_zanj, fp)
 
 
-
-
-# TODO: this needs to be refactored 
+# TODO: this needs to be refactored
 class LoadedZANJ(typing.Mapping):
     """object loaded from ZANJ archive. acts like a dict."""
 
@@ -47,7 +44,6 @@ class LoadedZANJ(typing.Mapping):
         externals_mode: ExternalsLoadingMode = "lazy",
         format_error_mode: ErrorMode = "warn",
     ) -> None:
-
         # copy handlers
         self._loader_handlers: dict[str, LoaderHandler]
         if loader_handlers is not None:

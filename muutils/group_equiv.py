@@ -11,9 +11,16 @@ def group_by_equivalence(
     """group items by assuming that `eq_func` implies an equivalence relation but might not be transitive
 
     so, if f(a,b) and f(b,c) then f(a,c) might be false, but we still want to put [a,b,c] in the same class
+
+    note that lists are used to avoid the need for hashable items, and to allow for duplicates
+
+    # Arguments
+     - `items_in: Sequence[T]` the items to group
+     - `eq_func: Callable[[T, T], bool]` a function that returns true if two items are equivalent. need not be transitive
     """
 
     items: list[T] = list(items_in)
+    items.reverse()
     output: list[list[T]] = list()
 
     while items:
@@ -46,6 +53,7 @@ def group_by_equivalence(
             merged.append(x)
 
             output_new.append(merged)
+            output = output_new
 
         # if no class found, make a new one
         else:

@@ -74,7 +74,7 @@ test-nocov: clean
 	$(PYPOETRY) -m pytest tests
 
 .PHONY: check
-check: check-format clean test lint cov
+check: clean check-format clean test lint cov
 	@echo "run format check, test, lint, and coverage report"
 
 # build and publish

@@ -36,3 +36,7 @@ PyPi: [muutils](https://pypi.org/project/muutils/)
 ```
 pip install muutils
 ```
+
+# todos:
+
+- [ ] option to have notebook conversion create pytest-compatible tests

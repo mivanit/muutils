@@ -50,7 +50,7 @@ jobs:
           poetry install
 
       - name: tests
-        run: make test-nocov
+        run: make test
 
       - name: lint
         run: make lint

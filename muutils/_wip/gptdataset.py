@@ -3,11 +3,10 @@ import os
 from dataclasses import dataclass, field
 from typing import Sequence
 
-import numpy as np
 import jaxtyping
+import numpy as np
 import torch
 from torch.utils.data import Dataset
-
 
 
 # "error: Only concrete class can be given where Type[Abstract] is expected"

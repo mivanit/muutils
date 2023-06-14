@@ -1,4 +1,3 @@
-# NOTE: This is a manual test. The tests in this file are not run by pytest.
 from muutils.logger import Logger
 
 

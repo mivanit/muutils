@@ -5,6 +5,7 @@ PUBLISH_BRANCH := main
 PYPI_TOKEN_FILE := .pypi-token
 LAST_VERSION_FILE := .lastversion
 COVERAGE_REPORTS_DIR := docs/coverage
+TESTS_DIR := tests/unit
 
 VERSION := $(shell grep -oP '__version__ = "\K.*?(?=")' $(VERSION_INFO_LOCATION))
 LAST_VERSION := $(shell cat $(LAST_VERSION_FILE))
@@ -65,7 +66,7 @@ cov-html:
 .PHONY: test
 test: clean
 	@echo "running tests"
-	$(PYPOETRY) -m pytest --cov=. tests
+	$(PYPOETRY) -m pytest --cov=. $(TESTS_DIR)
 
 .PHONY: test-nocov
 test-nocov: clean
@@ -73,7 +74,7 @@ test-nocov: clean
 	$(PYPOETRY) -m pytest tests
 
 .PHONY: check
-check: check-format clean test lint cov
+check: clean check-format clean test lint cov
 	@echo "run format check, test, lint, and coverage report"
 
 # build and publish
@@ -128,7 +129,6 @@ clean:
 	rm -rf .mypy_cache
 	rm -rf .pytest_cache
 	rm -rf .coverage
-	rm -rf htmlcov
 	rm -rf dist
 	rm -rf build
 	rm -rf $(PACKAGE_NAME).egg-info

@@ -45,7 +45,7 @@ DISABLE_PLOTS_WARNING: list[str] = [
 # showing plots has been disabled, so this is presumably in a temp dict for CI or something
 # so don't modify this code, it will be overwritten!
 # ------------------------------------------------------------
-"""
+""".lstrip()
 ]
 
 

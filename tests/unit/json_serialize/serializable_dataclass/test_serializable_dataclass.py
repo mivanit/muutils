@@ -24,6 +24,27 @@ def test_basic_auto_fields():
     data_with_format = data.copy()
     data_with_format["__format__"] = "BasicAutofields(SerializableDataclass)"
     assert instance.serialize() == data_with_format
+    assert instance == instance
+    assert instance.diff(instance) == {}
+
+
+def test_basic_diff():
+    instance_1 = BasicAutofields(a="hello", b=42, c=[1, 2, 3])
+    instance_2 = BasicAutofields(a="goodbye", b=42, c=[1, 2, 3])
+    instance_3 = BasicAutofields(a="hello", b=-1, c=[1, 2, 3])
+    instance_4 = BasicAutofields(a="hello", b=-1, c=[42])
+
+    assert instance_1.diff(instance_2) == {"a": {"self": "hello", "other": "goodbye"}}
+    assert instance_1.diff(instance_3) == {"b": {"self": 42, "other": -1}}
+    assert instance_1.diff(instance_4) == {
+        "b": {"self": 42, "other": -1},
+        "c": {"self": [1, 2, 3], "other": [42]},
+    }
+    assert instance_1.diff(instance_1) == {}
+    assert instance_2.diff(instance_3) == {
+        "a": {"self": "goodbye", "other": "hello"},
+        "b": {"self": 42, "other": -1},
+    }
 
 
 @serializable_dataclass
@@ -86,6 +107,8 @@ def test_simple_fields_loading(simple_fields_instance):
     serialized = simple_fields_instance.serialize()
     loaded = SimpleFields.load(serialized)
     assert loaded == simple_fields_instance
+    assert loaded.diff(simple_fields_instance) == {}
+    assert simple_fields_instance.diff(loaded) == {}
 
 
 def test_field_options_serialization(field_options_instance):

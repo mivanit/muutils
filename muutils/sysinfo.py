@@ -148,6 +148,7 @@ class SysInfo:
             }
         else:
             return {
+                "git version": git_version["stdout"],
                 "git status": git_status,
                 "git branch": _popen(["git", "branch"], split_out=True),
                 "git remote -v": _popen(["git", "remote", "-v"], split_out=True),

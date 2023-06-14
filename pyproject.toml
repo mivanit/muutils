@@ -31,23 +31,27 @@ isort = "^5.12.0"
 mypy = "^1.0.1"
 pytest-cov = "^4.1.0"
 coverage-badge = "^1.1.0"
+matplotlib = "^3.0.0"
 
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
+# TODO: make all of the following ignored across all formatting/linting
+# tests/input_data, tests/junk_data, muutils/_wip 
+
 [tool.pycln]
 all = true
-exclude = "_wip"
+exclude = "tests/input_data"
 
 [tool.isort]
 profile = "black"
 ignore_comments = false
-extend_skip = ["_wip"]
+extend_skip = "tests/input_data"
 
 [tool.black]
-extend-exclude = "_wip"
+extend-exclude = "tests/input_data"
 
 [tool.mypy]
-exclude = ['_wip']
+exclude = ['_wip', "tests/input_data", "tests/junk_data"]
 show_error_codes = true

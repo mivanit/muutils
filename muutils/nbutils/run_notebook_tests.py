@@ -8,11 +8,13 @@ class NotebookTestError(Exception):
     pass
 
 
-def test_notebooks(
+def run_notebook_tests(
     notebooks_dir: Path,
     converted_notebooks_temp_dir: Path,
     CI_output_suffix: str = ".CI-output.txt",
+    run_python_cmd: str = "poetry run python",
 ):
+    original_cwd: Path = Path.cwd()
     # get paths
     notebooks_dir = Path(notebooks_dir)
     converted_notebooks_temp_dir = Path(converted_notebooks_temp_dir)
@@ -64,7 +66,7 @@ def test_notebooks(
             output_file: Path = file.with_suffix(CI_output_suffix)
             print(f"  Output in {output_file}")
 
-            command: str = f"poetry run python {root_relative_to_notebooks / file} > {root_relative_to_notebooks / output_file} 2>&1"
+            command: str = f"{run_python_cmd} {root_relative_to_notebooks / file} > {root_relative_to_notebooks / output_file} 2>&1"
             process: subprocess.CompletedProcess = subprocess.run(
                 command, shell=True, text=True
             )
@@ -84,6 +86,9 @@ def test_notebooks(
         print(e, file=sys.stderr)
         print("!" * 50, file=sys.stderr)
         raise e
+    finally:
+        # return to original cwd
+        os.chdir(original_cwd)
 
 
 if __name__ == "__main__":
@@ -104,7 +109,7 @@ if __name__ == "__main__":
 
     args: argparse.Namespace = parser.parse_args()
 
-    test_notebooks(
+    run_notebook_tests(
         Path(args.notebooks_dir),
         Path(args.converted_notebooks_temp_dir),
     )

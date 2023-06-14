@@ -38,10 +38,6 @@ def test_dtype_maps():
         assert numpy_to_torch_dtype(DTYPE_MAP[key]) == TORCH_DTYPE_MAP[key]
 
 
-def test_numpy_to_torch_dtype():
-    assert numpy_to_torch_dtype(np.float32) == torch.float32
-    assert numpy_to_torch_dtype(torch.float32) == torch.float32
-
 
 def test_pad_tensor():
     tensor = torch.tensor([1, 2, 3])

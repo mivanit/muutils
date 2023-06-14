@@ -15,6 +15,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+        with: 
+          fetch-depth: 0
 
       - name: Install linters
         run: pip install pycln isort black
@@ -33,6 +35,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+        with: 
+          fetch-depth: 0
 
       - name: Set up python
         uses: actions/setup-python@v4
@@ -44,10 +48,9 @@ jobs:
           curl -sSL https://install.python-poetry.org | python3 -
           poetry lock --check
           poetry install
-      - name: Check pytorch version
-        run: |
-          poetry run python -Bc "import torch; print(torch.__version__)"
+
       - name: tests
-        run: make test
+        run: make test-nocov
+
       - name: lint
         run: make lint

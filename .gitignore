@@ -5,6 +5,9 @@ __pycache__/
 **/.mypy_cache/
 **/.pytest_cache/
 
+.coverage
+htmlcov/
+
 build/
 dist/
 muutils.egg-info/

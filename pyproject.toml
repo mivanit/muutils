@@ -6,7 +6,9 @@ license = "GPL-3.0-only"
 authors = ["mivanit <mivanits@umich.edu>"]
 readme = "README.md"
 classifiers=[
-    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Development Status :: 4 - Beta",
     "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
     "Operating System :: OS Independent",
 ]
@@ -27,6 +29,8 @@ pylint = "^2.16.4"
 pycln = "^2.1.3"
 isort = "^5.12.0"
 mypy = "^1.0.1"
+pytest-cov = "^4.1.0"
+coverage-badge = "^1.1.0"
 
 [build-system]
 requires = ["poetry-core"]

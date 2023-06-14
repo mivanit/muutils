@@ -1,7 +1,10 @@
-VERSION_INFO_LOCATION := muutils/__init__.py
+PACKAGE_NAME := muutils
+
+VERSION_INFO_LOCATION := $(PACKAGE_NAME)/__init__.py
 PUBLISH_BRANCH := main
 PYPI_TOKEN_FILE := .pypi-token
 LAST_VERSION_FILE := .lastversion
+COVERAGE_REPORTS_DIR := docs/coverage
 
 VERSION := $(shell grep -oP '__version__ = "\K.*?(?=")' $(VERSION_INFO_LOCATION))
 LAST_VERSION := $(shell cat $(LAST_VERSION_FILE))
@@ -21,13 +24,15 @@ version:
 # at some point, need to add back --check-untyped-defs to mypy call
 # but it complains when we specify arguments by keyword where positional is fine
 # not sure how to fix this
-# python -m pylint muutils/
+# python -m pylint $(PACKAGE_NAME)/
 # python -m pylint tests/
 .PHONY: lint
 lint: clean
-	$(PYPOETRY) -m mypy --config-file pyproject.toml muutils/
+	$(PYPOETRY) -m mypy --config-file pyproject.toml $(PACKAGE_NAME)/
 	$(PYPOETRY) -m mypy --config-file pyproject.toml tests/
 
+# formatting
+# --------------------------------------------------
 .PHONY: format
 format:
 	python -m pycln --config pyproject.toml --all .
@@ -41,17 +46,41 @@ check-format:
 	python -m isort --check-only .
 	python -m black --check .
 
+# coverage reports
+# --------------------------------------------------
+.PHONY: cov
+cov:
+	@echo "generate text coverage report"
+	$(PYPOETRY) -m coverage report -m > $(COVERAGE_REPORTS_DIR)/coverage.txt
+	$(PYPOETRY) -m coverage_badge -f -o $(COVERAGE_REPORTS_DIR)/coverage.svg
+
+.PHONY: cov-html
+cov-html:
+	@echo "generate html coverage report"
+	$(PYPOETRY) -m coverage html	
+
+# tests
+# --------------------------------------------------
+
 .PHONY: test
 test: clean
 	@echo "running tests"
+	$(PYPOETRY) -m pytest --cov=. tests
+
+.PHONY: test-nocov
+test-nocov: clean
+	@echo "running tests, without code coverage"
 	$(PYPOETRY) -m pytest tests
 
-.PHONY: check-all
-check-all: check-format clean test lint
-	@echo "run format check, test, and then lint"
+.PHONY: check
+check: check-format clean test lint cov
+	@echo "run format check, test, lint, and coverage report"
 
-.PHONY: check-git
-check-git: 
+# build and publish
+# --------------------------------------------------
+
+.PHONY: verify-git
+verify-git: 
 	@echo "checking git status"
 	if [ "$(shell git branch --show-current)" != $(PUBLISH_BRANCH) ]; then \
 		echo "Git is not on the $(PUBLISH_BRANCH) branch, exiting!"; \
@@ -62,14 +91,13 @@ check-git:
 		exit 1; \
 	fi; \
 
-
 .PHONY: build
 build: 
 	@echo "build via poetry, assumes checks have been run"
 	poetry build
 
 .PHONY: publish
-publish: check-all build check-git version
+publish: check build verify-git version
 	@echo "run all checks, build, and then publish"
 
 	@echo "Enter the new version number if you want to upload to pypi and create a new tag"
@@ -91,14 +119,19 @@ publish: check-all build check-git version
 	git push origin $(VERSION); \
 	twine upload dist/* --verbose
 
+# cleanup
+# --------------------------------------------------
+
 .PHONY: clean
 clean:
 	@echo "cleaning up"
 	rm -rf .mypy_cache
 	rm -rf .pytest_cache
+	rm -rf .coverage
+	rm -rf htmlcov
 	rm -rf dist
 	rm -rf build
-	rm -rf muutils.egg-info
+	rm -rf $(PACKAGE_NAME).egg-info
 	rm -rf tests/junk_data
 	python -Bc "import pathlib; [p.unlink() for p in pathlib.Path('.').rglob('*.py[co]')]"
 	python -Bc "import pathlib; [p.rmdir() for p in pathlib.Path('.').rglob('__pycache__')]"

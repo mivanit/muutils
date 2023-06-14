@@ -51,12 +51,6 @@ jobs:
 
       - name: tests
         run: make test-nocov
-      
-      - name: push coverage changes
-        uses: ad-m/github-push-action@master
-        with:
-          github_token: ${{ secrets.github_token }}
-          branch: ${{ github.ref }}
 
       - name: lint
         run: make lint

@@ -7,6 +7,11 @@ from typing import Any, Callable, Optional, Sequence, Union
 from muutils.json_serialize.json_serialize import JsonSerializer
 from muutils.json_serialize.util import JSONdict, JSONitem, MonoTuple, TypeErrorMode
 
+warnings.warn(
+    "this module is deprecated, use `muutils.json_serialize.SerializableDataclass` instead",
+    DeprecationWarning,
+)
+
 # pylint: disable=pointless-string-statement, unreachable, import-outside-toplevel, consider-using-dict-items
 
 

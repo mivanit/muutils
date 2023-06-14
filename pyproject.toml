@@ -39,15 +39,15 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.pycln]
 all = true
-exclude = "_wip"
+exclude = ["_wip", "tests/input_data"]
 
 [tool.isort]
 profile = "black"
 ignore_comments = false
-extend_skip = ["_wip"]
+extend_skip = ["_wip", "tests/input_data"]
 
 [tool.black]
-extend-exclude = "_wip"
+extend-exclude = ["_wip", "tests/input_data"]
 
 [tool.mypy]
 exclude = ['_wip']

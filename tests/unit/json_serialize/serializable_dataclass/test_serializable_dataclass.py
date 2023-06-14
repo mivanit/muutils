@@ -27,6 +27,7 @@ def test_basic_auto_fields():
     assert instance == instance
     assert instance.diff(instance) == {}
 
+
 def test_basic_diff():
     instance_1 = BasicAutofields(a="hello", b=42, c=[1, 2, 3])
     instance_2 = BasicAutofields(a="goodbye", b=42, c=[1, 2, 3])
@@ -35,9 +36,15 @@ def test_basic_diff():
 
     assert instance_1.diff(instance_2) == {"a": {"self": "hello", "other": "goodbye"}}
     assert instance_1.diff(instance_3) == {"b": {"self": 42, "other": -1}}
-    assert instance_1.diff(instance_4) == {"b": {"self": 42, "other": -1}, "c": {"self": [1, 2, 3], "other": [42]}}
+    assert instance_1.diff(instance_4) == {
+        "b": {"self": 42, "other": -1},
+        "c": {"self": [1, 2, 3], "other": [42]},
+    }
     assert instance_1.diff(instance_1) == {}
-    assert instance_2.diff(instance_3) == {"a": {"self": "goodbye", "other": "hello"}, "b": {"self": 42, "other": -1}}
+    assert instance_2.diff(instance_3) == {
+        "a": {"self": "goodbye", "other": "hello"},
+        "b": {"self": 42, "other": -1},
+    }
 
 
 @serializable_dataclass

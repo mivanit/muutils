@@ -1,5 +1,6 @@
 from muutils.logger import Logger
 
+
 def test_logger():
     logger = Logger()
 

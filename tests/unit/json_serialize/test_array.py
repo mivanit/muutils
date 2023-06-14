@@ -1,13 +1,19 @@
-import pytest
 import numpy as np
-from muutils.json_serialize import JSONitem, JsonSerializer
+import pytest
 
-from muutils.json_serialize.array import serialize_array, load_array, array_n_elements, arr_metadata, ArrayMode
+from muutils.json_serialize import JsonSerializer
+from muutils.json_serialize.array import (
+    ArrayMode,
+    arr_metadata,
+    array_n_elements,
+    load_array,
+    serialize_array,
+)
 
 # pylint: disable=missing-class-docstring
 
-class TestYourModule:
 
+class TestYourModule:
     def setup_method(self):
         self.array_1d = np.array([1, 2, 3])
         self.array_2d = np.array([[1, 2], [3, 4]])
@@ -36,23 +42,31 @@ class TestYourModule:
         ],
     )
     def test_serialize_array(self, array_mode: ArrayMode, expected_type: type):
-        result = serialize_array(self.jser, self.array_2d, "test_path", array_mode=array_mode)
+        result = serialize_array(
+            self.jser, self.array_2d, "test_path", array_mode=array_mode
+        )
         assert isinstance(result, expected_type)
 
     def test_load_array(self):
-        serialized_array = serialize_array(self.jser, self.array_3d, "test_path", array_mode="array_list_meta")
+        serialized_array = serialize_array(
+            self.jser, self.array_3d, "test_path", array_mode="array_list_meta"
+        )
         loaded_array = load_array(serialized_array, array_mode="array_list_meta")
         assert np.array_equal(loaded_array, self.array_3d)
 
     def test_serialize_load_integration(self):
         for array_mode in ["list", "array_list_meta", "array_hex_meta"]:
             for array in [self.array_1d, self.array_2d, self.array_3d]:
-                serialized_array = serialize_array(self.jser, array, "test_path", array_mode=array_mode)
+                serialized_array = serialize_array(
+                    self.jser, array, "test_path", array_mode=array_mode
+                )
                 loaded_array = load_array(serialized_array, array_mode=array_mode)
                 assert np.array_equal(loaded_array, array)
 
     def test_serialize_load_zero_dim(self):
         for array_mode in ["list", "array_list_meta", "array_hex_meta"]:
-            serialized_array = serialize_array(self.jser, self.array_zero_dim, "test_path", array_mode=array_mode)
+            serialized_array = serialize_array(
+                self.jser, self.array_zero_dim, "test_path", array_mode=array_mode
+            )
             loaded_array = load_array(serialized_array)
             assert np.array_equal(loaded_array, self.array_zero_dim)

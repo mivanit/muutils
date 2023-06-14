@@ -15,6 +15,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+        with: 
+          fetch-depth: 0
 
       - name: Install linters
         run: pip install pycln isort black
@@ -33,6 +35,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+        with: 
+          fetch-depth: 0
 
       - name: Set up python
         uses: actions/setup-python@v4
@@ -48,14 +52,16 @@ jobs:
       - name: tests
         run: make test
 
-      - name: generate coverage report
-        run: make cov-text
-
-      - name: upload coverage
-        uses: actions/upload-artifact@v3
+      - name: generate & commit coverage report
+        run: |
+          make cov
+          make commit-cov
+      
+      - name: push coverage changes
+        uses: ad-m/github-push-action@master
         with:
-          name: coverage.txt
-          path: coverage.txt
+          github_token: ${{ secrets.github_token }}
+          branch: ${{ github.ref }}
 
       - name: lint
         run: make lint

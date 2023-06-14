@@ -173,6 +173,21 @@ tomli = {version = "*", optional = true, markers = "python_full_version <= \"3.1
 toml = ["tomli"]
 
 [[package]]
+name = "coverage-badge"
+version = "1.1.0"
+description = "Generate coverage badges for Coverage.py."
+category = "dev"
+optional = false
+python-versions = "*"
+files = [
+    {file = "coverage-badge-1.1.0.tar.gz", hash = "sha256:c824a106503e981c02821e7d32f008fb3984b2338aa8c3800ec9357e33345b78"},
+    {file = "coverage_badge-1.1.0-py2.py3-none-any.whl", hash = "sha256:e365d56e5202e923d1b237f82defd628a02d1d645a147f867ac85c58c81d7997"},
+]
+
+[package.dependencies]
+coverage = "*"
+
+[[package]]
 name = "dill"
 version = "0.3.6"
 description = "serialize all of python"
@@ -1053,4 +1068,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "826badfab762976eb81ef325ec9f764e062fe331236d45ecf3b7fb3002570bed"
+content-hash = "ed48ed289ad81f34f4bdf130ba7d409dab8ddf460d1d04069f574e99ca0a4de6"

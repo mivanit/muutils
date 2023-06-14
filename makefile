@@ -3,6 +3,7 @@ VERSION_INFO_LOCATION := $(PACKAGE_NAME)/__init__.py
 PUBLISH_BRANCH := main
 PYPI_TOKEN_FILE := .pypi-token
 LAST_VERSION_FILE := .lastversion
+COVERAGE_REPORTS_DIR := docs/coverage
 
 VERSION := $(shell grep -oP '__version__ = "\K.*?(?=")' $(VERSION_INFO_LOCATION))
 LAST_VERSION := $(shell cat $(LAST_VERSION_FILE))
@@ -46,11 +47,23 @@ check-format:
 
 # coverage reports
 # --------------------------------------------------
-.PHONY: cov-text
-cov-text:
+.PHONY: cov
+cov:
 	@echo "generate text coverage report"
-	$(PYPOETRY) -m coverage report > coverage.txt
-	grep '^TOTAL' coverage.txt | awk '{print $$NF}' > coverage_percent.txt
+	$(PYPOETRY) -m coverage report -m > $(COVERAGE_REPORTS_DIR)/coverage.txt
+	$(PYPOETRY) -m coverage_badge -f -o $(COVERAGE_REPORTS_DIR)/coverage.svg
+
+.PHONY: cov-html
+cov-html:
+	@echo "generate html coverage report"
+	$(PYPOETRY) -m coverage html
+
+.PHONY: commit-cov
+commit-cov:
+	@echo "commit coverage reports"
+	git add $(COVERAGE_REPORTS_DIR)
+	git commit -m "Auto update coverage reports"
+	
 
 # tests
 # --------------------------------------------------

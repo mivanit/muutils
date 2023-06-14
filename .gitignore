@@ -6,9 +6,7 @@ __pycache__/
 **/.pytest_cache/
 
 .coverage
-htmlcov/**
-coverage.txt
-coverage_percent.txt
+htmlcov/
 
 build/
 dist/

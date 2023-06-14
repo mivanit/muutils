@@ -1,4 +1,5 @@
 PACKAGE_NAME := muutils
+
 VERSION_INFO_LOCATION := $(PACKAGE_NAME)/__init__.py
 PUBLISH_BRANCH := main
 PYPI_TOKEN_FILE := .pypi-token
@@ -56,14 +57,7 @@ cov:
 .PHONY: cov-html
 cov-html:
 	@echo "generate html coverage report"
-	$(PYPOETRY) -m coverage html
-
-.PHONY: commit-cov
-commit-cov:
-	@echo "commit coverage reports"
-	git add $(COVERAGE_REPORTS_DIR)
-	git commit -m "Auto update coverage reports"
-	
+	$(PYPOETRY) -m coverage html	
 
 # tests
 # --------------------------------------------------
@@ -71,17 +65,22 @@ commit-cov:
 .PHONY: test
 test: clean
 	@echo "running tests"
-	$(PYPOETRY) -m pytest --cov=$(PACKAGE_NAME) tests
+	$(PYPOETRY) -m pytest --cov=. tests
 
-.PHONY: check-all
-check-all: check-format clean test lint
-	@echo "run format check, test, and then lint"
+.PHONY: test-nocov
+test-nocov: clean
+	@echo "running tests, without code coverage"
+	$(PYPOETRY) -m pytest tests
+
+.PHONY: check
+check: check-format clean test lint cov
+	@echo "run format check, test, lint, and coverage report"
 
 # build and publish
 # --------------------------------------------------
 
-.PHONY: check-git
-check-git: 
+.PHONY: verify-git
+verify-git: 
 	@echo "checking git status"
 	if [ "$(shell git branch --show-current)" != $(PUBLISH_BRANCH) ]; then \
 		echo "Git is not on the $(PUBLISH_BRANCH) branch, exiting!"; \
@@ -98,7 +97,7 @@ build:
 	poetry build
 
 .PHONY: publish
-publish: check-all build check-git version
+publish: check build verify-git version
 	@echo "run all checks, build, and then publish"
 
 	@echo "Enter the new version number if you want to upload to pypi and create a new tag"

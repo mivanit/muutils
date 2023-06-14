@@ -6,6 +6,8 @@
 
 ![GitHub commit activity](https://img.shields.io/github/commit-activity/t/mivanit/muutils)
 ![GitHub closed pull requests](https://img.shields.io/github/issues-pr-closed/mivanit/muutils)
+![code size, bytes](https://img.shields.io/github/languages/code-size/mivanit/muutils)
+<!-- ![Lines of code](https://img.shields.io/tokei/lines/github.com/mivanit/muutils) -->
 
 `muutils`, stylized as "$\mu$utils" or "μutils", is a collection of miscellaneous python utilities, meant to be small and with ~~no~~ minimal dependencies outside of standard python.
 

@@ -50,14 +50,7 @@ jobs:
           poetry install
 
       - name: tests
-        run: make test
-
-      - name: generate & commit coverage report and badge
-        run: |
-          make cov
-          git config --local user.email "github-actions[bot]@users.noreply.github.com"
-          git config --local user.name "github-actions[bot]"
-          make commit-cov
+        run: make test-nocov
       
       - name: push coverage changes
         uses: ad-m/github-push-action@master

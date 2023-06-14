@@ -53,5 +53,5 @@ extend_skip = "tests/input_data"
 extend-exclude = "tests/input_data"
 
 [tool.mypy]
-exclude = ['_wip', "tests/input_data"]
+exclude = ['_wip', "tests/input_data", "tests\junk_data"]
 show_error_codes = true

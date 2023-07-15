@@ -3,7 +3,7 @@
 util for constructing a class which has a getitem method which just calls a function
 
 a `lambda` is an anonymous function: kappa is the letter before lambda in the greek alphabet,
-hence the name of this function"""
+hence the name of this class"""
 
 from typing import Callable, Mapping, TypeVar
 

@@ -10,12 +10,15 @@ TESTS_DIR := tests/unit
 VERSION := $(shell grep -oP '__version__ = "\K.*?(?=")' $(VERSION_INFO_LOCATION))
 LAST_VERSION := $(shell cat $(LAST_VERSION_FILE))
 PYPOETRY := poetry run python
-# note that the tr commands at the end:
-# - replace backticks with single quotes, to avoid funny business
-# - replace newlines with tabs, to prevent the newlines from being lost
+# note that the commands at the end:
+# 1) format the git log
+# 2) replace backticks with single quotes, to avoid funny business
+# 3) add a final newline, to make tac happy
+# 4) reverse the order of the lines, so that the oldest commit is first
+# 5) replace newlines with tabs, to prevent the newlines from being lost
 COMMIT_LOG_FILE := .commit_log
-COMMIT_LOG_SINCE_LAST_VERSION := $(shell git log $(LAST_VERSION)..HEAD --pretty=format:"- %s (%h)" | tr '`' "'" | tr '\n' '\t')
-
+COMMIT_LOG_SINCE_LAST_VERSION := $(shell (git log $(LAST_VERSION)..HEAD --pretty=format:"- %s (%h)" | tr '`' "'" ; echo) | tac | tr '\n' '\t')
+#                                                                                    1                2            3       4     5
 
 .PHONY: default
 default: help
@@ -23,13 +26,13 @@ default: help
 .PHONY: version
 version:
 	@echo "Current version is $(VERSION), last auto-uploaded version is $(LAST_VERSION)"
+	@echo "Commit log since last version:"
+	@echo "$(COMMIT_LOG_SINCE_LAST_VERSION)" | tr '\t' '\n' > $(COMMIT_LOG_FILE)
+	@cat $(COMMIT_LOG_FILE)
 	@if [ "$(VERSION)" = "$(LAST_VERSION)" ]; then \
 		echo "Python package $(VERSION) is the same as last published version $(LAST_VERSION), exiting!"; \
 		exit 1; \
 	fi
-	@echo "Commit log since last version:"
-	@echo "$(COMMIT_LOG_SINCE_LAST_VERSION)" | tr '\t' '\n' > $(COMMIT_LOG_FILE)
-	@cat $(COMMIT_LOG_FILE)
 
 # at some point, need to add back --check-untyped-defs to mypy call
 # but it complains when we specify arguments by keyword where positional is fine

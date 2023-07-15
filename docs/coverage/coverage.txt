@@ -10,6 +10,7 @@ muutils\json_serialize\json_serialize.py                                        
 muutils\json_serialize\serializable_dataclass.py                                    178     35    80%   68, 84, 140, 146, 152, 159-161, 170-173, 207-222, 232, 236, 239, 242, 248, 258-259, 263, 272-276, 280, 301, 304, 336, 362, 378-379, 402, 429, 435
 muutils\json_serialize\util.py                                                       76     41    46%   11-13, 24, 33, 36, 44-50, 59, 67-74, 85-88, 94-104, 116-119, 123-126
 muutils\jsonlines.py                                                                 31     31     0%   1-73
+muutils\kappa.py                                                                     14      0   100%
 muutils\logger\__init__.py                                                            5      0   100%
 muutils\logger\exception_context.py                                                  12      6    50%   24, 27, 30-43
 muutils\logger\headerfuncs.py                                                        19      2    89%   12, 54
@@ -38,9 +39,10 @@ tests\unit\nbutils\test_conversion.py                                           
 tests\unit\test_dictmagic.py                                                         34      0   100%
 tests\unit\test_group_equiv.py                                                       12      0   100%
 tests\unit\test_import_torch.py                                                       4      0   100%
+tests\unit\test_kappa.py                                                             39      0   100%
 tests\unit\test_mlutils.py                                                           35      3    91%   31, 35, 43
 tests\unit\test_statcounter.py                                                        8      0   100%
 tests\unit\test_sysinfo.py                                                            4      0   100%
 tests\unit\test_tensor_utils.py                                                      36      0   100%
 ---------------------------------------------------------------------------------------------------------------
-TOTAL                                                                              1918    643    66%
+TOTAL                                                                              1971    643    67%

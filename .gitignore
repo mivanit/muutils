@@ -1,5 +1,6 @@
 junk_data
 .pypi-token
+.commit_log
 __pycache__/
 **/__pycache__/
 **/.mypy_cache/

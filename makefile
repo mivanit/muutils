@@ -13,6 +13,7 @@ PYPOETRY := poetry run python
 # note that the tr commands at the end:
 # - replace backticks with single quotes, to avoid funny business
 # - replace newlines with tabs, to prevent the newlines from being lost
+COMMIT_LOG_FILE := .commit_log
 COMMIT_LOG_SINCE_LAST_VERSION := $(shell git log $(LAST_VERSION)..HEAD --pretty=format:"- %s (%h)" | tr '`' "'" | tr '\n' '\t')
 
 
@@ -27,8 +28,8 @@ version:
 		exit 1; \
 	fi
 	@echo "Commit log since last version:"
-	@echo "$(COMMIT_LOG_SINCE_LAST_VERSION)" | tr '\t' '\n' > .commit_log
-	@cat .commit_log
+	@echo "$(COMMIT_LOG_SINCE_LAST_VERSION)" | tr '\t' '\n' > $(COMMIT_LOG_FILE)
+	@cat $(COMMIT_LOG_FILE)
 
 # at some point, need to add back --check-untyped-defs to mypy call
 # but it complains when we specify arguments by keyword where positional is fine
@@ -124,7 +125,7 @@ publish: check build verify-git version
 	echo $(VERSION) > $(LAST_VERSION_FILE); \
 	git add $(LAST_VERSION_FILE); \
 	git commit -m "Auto update to $(VERSION)"; \
-	git tag -a $(VERSION) -F .commit_log; \
+	git tag -a $(VERSION) -F $(COMMIT_LOG_FILE); \
 	git push origin $(VERSION); \
 	twine upload dist/* --verbose
 

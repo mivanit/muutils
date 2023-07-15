@@ -10,6 +10,11 @@ TESTS_DIR := tests/unit
 VERSION := $(shell grep -oP '__version__ = "\K.*?(?=")' $(VERSION_INFO_LOCATION))
 LAST_VERSION := $(shell cat $(LAST_VERSION_FILE))
 PYPOETRY := poetry run python
+# note that the tr commands at the end:
+# - replace backticks with single quotes, to avoid funny business
+# - replace newlines with tabs, to prevent the newlines from being lost
+COMMIT_LOG_SINCE_LAST_VERSION := $(shell git log $(LAST_VERSION)..HEAD --pretty=format:"- %s (%h)" | tr '`' "'" | tr '\n' '\t')
+
 
 .PHONY: default
 default: help
@@ -21,6 +26,9 @@ version:
 		echo "Python package $(VERSION) is the same as last published version $(LAST_VERSION), exiting!"; \
 		exit 1; \
 	fi
+	@echo "Commit log since last version:"
+	@echo "$(COMMIT_LOG_SINCE_LAST_VERSION)" | tr '\t' '\n' > .commit_log
+	@cat .commit_log
 
 # at some point, need to add back --check-untyped-defs to mypy call
 # but it complains when we specify arguments by keyword where positional is fine
@@ -116,7 +124,7 @@ publish: check build verify-git version
 	echo $(VERSION) > $(LAST_VERSION_FILE); \
 	git add $(LAST_VERSION_FILE); \
 	git commit -m "Auto update to $(VERSION)"; \
-	git tag $(VERSION); \
+	git tag -a $(VERSION) -F .commit_log; \
 	git push origin $(VERSION); \
 	twine upload dist/* --verbose
 

@@ -61,6 +61,28 @@ def dotlist_to_nested_dict(dot_dict: dict[str, Any], sep: str = ".") -> dict[str
     return defaultdict_to_dict_recursive(nested_dict)
 
 
+def update_with_nested_dict(
+    original: dict[str, Any], 
+    update: dict[str, Any],
+) -> dict[str, Any]:
+    """Update a dict with a nested dict
+
+    Example:
+    >>> update_with_nested_dict({'a': {'b': 1}, "c": -1}, {'a': {"b": 2}})
+    {'a': {'b': 2}, 'c': -1}
+    """
+    for key, value in update.items():
+        if key in original:
+            if isinstance(original[key], dict) and isinstance(value, dict):
+                update_with_nested_dict(original[key], value)
+            else:
+                original[key] = value
+        else:
+            original[key] = value
+
+    return original
+    
+
 def kwargs_to_nested_dict(
     kwargs_dict: dict[str, Any],
     sep: str = ".",

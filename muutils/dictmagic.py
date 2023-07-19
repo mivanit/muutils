@@ -62,7 +62,7 @@ def dotlist_to_nested_dict(dot_dict: dict[str, Any], sep: str = ".") -> dict[str
 
 
 def update_with_nested_dict(
-    original: dict[str, Any], 
+    original: dict[str, Any],
     update: dict[str, Any],
 ) -> dict[str, Any]:
     """Update a dict with a nested dict
@@ -91,7 +91,7 @@ def update_with_nested_dict(
             original[key] = value
 
     return original
-    
+
 
 def kwargs_to_nested_dict(
     kwargs_dict: dict[str, Any],

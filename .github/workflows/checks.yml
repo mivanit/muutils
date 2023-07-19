@@ -47,7 +47,7 @@ jobs:
         run: |
           curl -sSL https://install.python-poetry.org | python3 -
           poetry lock --check
-          poetry install
+          poetry install --all-extras
 
       - name: tests
         run: make test

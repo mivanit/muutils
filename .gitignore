@@ -1,6 +1,7 @@
 junk_data
 .pypi-token
 .commit_log
+.vscode/
 __pycache__/
 **/__pycache__/
 **/.mypy_cache/

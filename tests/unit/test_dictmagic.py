@@ -47,6 +47,40 @@ def test_kwargs_to_nested_dict():
         kwargs_to_nested_dict({'--a.b.c': 1, '-a.b.d': 2, 'a.e': 3}, strip_prefix='-', when_unknown_prefix='warn')
 
 
+def test_kwargs_to_nested_dict_transform_key():
+
+    # Case where transform_key is not None, changing dashes to underscores
+    assert kwargs_to_nested_dict(
+        {'a-b-c': 1, 'a-b-d': 2, 'a-e': 3}, 
+        transform_key=lambda x: x.replace('-', '_')
+    ) == {'a_b_c': 1, 'a_b_d': 2, 'a_e': 3}
+
+    # Case where strip_prefix and transform_key are both used
+    assert kwargs_to_nested_dict(
+        {'prefix.a-b-c': 1, 'prefix.a-b-d': 2, 'prefix.a-e': 3}, 
+        strip_prefix='prefix.', 
+        transform_key=lambda x: x.replace('-', '_')
+    ) == {'a_b_c': 1, 'a_b_d': 2, 'a_e': 3}
+
+    # Case where strip_prefix, transform_key and when_unknown_prefix='raise' are all used
+    with pytest.raises(ValueError):
+        kwargs_to_nested_dict(
+            {'a-b-c': 1, 'prefix.a-b-d': 2, 'prefix.a-e': 3}, 
+            strip_prefix='prefix.', 
+            transform_key=lambda x: x.replace('-', '_'), 
+            when_unknown_prefix='raise'
+        )
+    
+    # Case where strip_prefix, transform_key and when_unknown_prefix='warn' are all used
+    with pytest.warns(UserWarning):
+        assert kwargs_to_nested_dict(
+            {'a-b-c': 1, 'prefix.a-b-d': 2, 'prefix.a-e': 3}, 
+            strip_prefix='prefix.', 
+            transform_key=lambda x: x.replace('-', '_'), 
+            when_unknown_prefix='warn'
+        ) == {'a_b_c': 1, 'a_b_d': 2, 'a_e': 3}
+
+
 @serializable_dataclass
 class ChildData(SerializableDataclass):
     x: int

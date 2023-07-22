@@ -16,12 +16,12 @@ repository = "https://github.com/mivanit/muutils"
 
 [tool.poetry.dependencies]
 python = "^3.10"
-numpy = "^1.22.4"
-torch = { version = "^1.13.1", optional = true }
+numpy = { version = "^1.22.4", optional = true }
+torch = { version = ">=1.13.1", optional = true }
 jaxtyping = { version = "^0.2.12", optional = true }
 
 [tool.poetry.extras]
-torch = ["torch", "jaxtyping"]
+array = ["numpy", "torch", "jaxtyping"]
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^7.2.1"

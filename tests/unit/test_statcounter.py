@@ -1,6 +1,27 @@
 import numpy as np
 
-from muutils.statcounter import _compare_np_custom
+from muutils.statcounter import StatCounter
+
+def _compute_err(a: float, b: float, /) -> dict[str, float]:
+    return dict(
+        num_a=float(a),
+        num_b=float(b),
+        diff=float(b - a),
+        frac_err=float((b - a) / a),
+    )
+
+
+def _compare_np_custom(arr: np.ndarray) -> dict[str, dict]:
+    counter: StatCounter = StatCounter(arr)
+    return dict(
+        mean=_compute_err(counter.mean(), np.mean(arr)),
+        std=_compute_err(counter.std(), np.std(arr)),
+        min=_compute_err(counter.min(), np.min(arr)),
+        q1=_compute_err(counter.percentile(0.25), np.percentile(arr, 25)),
+        median=_compute_err(counter.median(), np.median(arr)),
+        q3=_compute_err(counter.percentile(0.75), np.percentile(arr, 75)),
+        max=_compute_err(counter.max(), np.max(arr)),
+    )
 
 EPSILON: float = 1e-8
 

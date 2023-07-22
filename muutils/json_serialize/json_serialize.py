@@ -5,7 +5,16 @@ from dataclasses import dataclass, is_dataclass
 from pathlib import Path
 from typing import Any, Callable, Iterable, Mapping
 
-from muutils.json_serialize.array import ArrayMode, serialize_array
+try:
+    from muutils.json_serialize.array import ArrayMode, serialize_array
+except ImportError as e:
+    ArrayMode = None
+    serialize_array = None
+    warnings.warn(
+        f"muutils.json_serialize.array could not be imported probably because missing numpy, array serialization will not work: \n{e}",
+        ImportWarning,
+    )
+
 from muutils.json_serialize.util import (
     ErrorMode,
     Hashableitem,

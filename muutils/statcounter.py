@@ -5,17 +5,10 @@ from functools import cached_property
 from itertools import chain
 from types import NoneType
 from typing import Callable, Iterable, Optional, Sequence, Union
+import statistics
 
-import numpy as np
-
-# import pdb
-
-
-# TODO: mypy complains that "torch" is not defined
 # _GeneralArray = Union[np.ndarray, "torch.Tensor"]
-_GeneralArray = np.ndarray
-
-GeneralSequence = Union[Sequence, _GeneralArray]
+NumericSequence = Sequence[Union[float, int]]
 
 # pylint: disable=abstract-method
 
@@ -24,8 +17,8 @@ GeneralSequence = Union[Sequence, _GeneralArray]
 
 
 def universal_flatten(
-    arr: GeneralSequence, require_rectangular: bool = True
-) -> GeneralSequence:
+    arr: NumericSequence, require_rectangular: bool = True
+) -> NumericSequence:
     """flattens any iterable"""
 
     # mypy complains that the sequence has no attribute "flatten"
@@ -41,18 +34,6 @@ def universal_flatten(
             return list(chain.from_iterable(universal_flatten(x) for x in arr))
         else:
             return arr
-
-
-def compute_rsquared(actual: np.ndarray, predicted: np.ndarray) -> float:
-    assert actual.shape == predicted.shape
-
-    actual_mean: float = np.mean(actual)
-
-    ss_res: float = np.sum((actual - predicted) ** 2.0)
-    ss_tot: float = np.sum((actual - actual_mean) ** 2.0)
-
-    return 1 - ss_res / ss_tot
-
 
 # StatCounter
 # ==================================================
@@ -216,34 +197,8 @@ class StatCounter(Counter):
     @classmethod
     def from_list_arrays(
         cls,
-        arr: _GeneralArray,
+        arr,
         map_func: Callable = float,
     ) -> "StatCounter":
         """calls `map_func` on each element of `universal_flatten(arr)`"""
         return cls([map_func(x) for x in universal_flatten(arr)])
-
-
-# testing
-# ==================================================
-
-
-def _compute_err(a: float, b: float, /) -> dict[str, float]:
-    return dict(
-        num_a=float(a),
-        num_b=float(b),
-        diff=float(b - a),
-        frac_err=float((b - a) / a),
-    )
-
-
-def _compare_np_custom(arr: np.ndarray) -> dict[str, dict]:
-    counter: StatCounter = StatCounter(arr)
-    return dict(
-        mean=_compute_err(counter.mean(), np.mean(arr)),
-        std=_compute_err(counter.std(), np.std(arr)),
-        min=_compute_err(counter.min(), np.min(arr)),
-        q1=_compute_err(counter.percentile(0.25), np.percentile(arr, 25)),
-        median=_compute_err(counter.median(), np.median(arr)),
-        q3=_compute_err(counter.percentile(0.75), np.percentile(arr, 75)),
-        max=_compute_err(counter.max(), np.max(arr)),
-    )

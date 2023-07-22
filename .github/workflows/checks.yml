@@ -32,6 +32,9 @@ jobs:
         python-version:
           - "3.10"
           - "3.11"
+        torch-version:
+          - "1.13.1"
+          - "2.0.1"
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -47,6 +50,7 @@ jobs:
         run: |
           curl -sSL https://install.python-poetry.org | python3 -
           poetry lock --check
+          poetry run python -m pip install torch==${{ matrix.torch-version }}+cpu
           poetry install --all-extras
 
       - name: tests

@@ -27,11 +27,6 @@
 
 There are a couple work-in-progress utilities in [`_wip`](https://github.com/mivanit/muutils/tree/main/muutils/_wip/) that aren't ready for anything, but nothing in this repo is suitable for production. Use at your own risk!
 
-Note that for using `mlutils`, `tensor_utils`, `nbutils.configure_notebook`, or the array serialization features of `json_serialize`, you will need to install with optional `array` dependencies:
-```
-pip install muutils[array]
-```
-
 # installation
 
 PyPi: [muutils](https://pypi.org/project/muutils/)
@@ -39,6 +34,12 @@ PyPi: [muutils](https://pypi.org/project/muutils/)
 ```
 pip install muutils
 ```
+
+Note that for using `mlutils`, `tensor_utils`, `nbutils.configure_notebook`, or the array serialization features of `json_serialize`, you will need to install with optional `array` dependencies:
+```
+pip install muutils[array]
+```
+
 
 # todos:
 

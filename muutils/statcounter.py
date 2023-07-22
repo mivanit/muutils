@@ -4,7 +4,7 @@ from collections import Counter
 from functools import cached_property
 from itertools import chain
 from types import NoneType
-from typing import Callable, Iterable, Optional, Sequence, Union
+from typing import Callable, Optional, Sequence, Union
 
 # _GeneralArray = Union[np.ndarray, "torch.Tensor"]
 NumericSequence = Sequence[Union[float, int]]
@@ -16,23 +16,23 @@ NumericSequence = Sequence[Union[float, int]]
 
 
 def universal_flatten(
-    arr: NumericSequence, require_rectangular: bool = True
+    arr: NumericSequence | float | int, require_rectangular: bool = True
 ) -> NumericSequence:
     """flattens any iterable"""
 
     # mypy complains that the sequence has no attribute "flatten"
     if hasattr(arr, "flatten") and callable(arr.flatten):  # type: ignore
         return arr.flatten()  # type: ignore
-    elif not isinstance(arr, Iterable):
-        return arr
-    else:
-        elements_iterable: list[bool] = [isinstance(x, Iterable) for x in arr]
+    elif isinstance(arr, Sequence):
+        elements_iterable: list[bool] = [isinstance(x, Sequence) for x in arr]
         if require_rectangular and (all(elements_iterable) != any(elements_iterable)):
             raise ValueError("arr contains mixed iterable and non-iterable elements")
         if any(elements_iterable):
-            return list(chain.from_iterable(universal_flatten(x) for x in arr))
+            return list(chain.from_iterable(universal_flatten(x) for x in arr))  # type: ignore[misc]
         else:
             return arr
+    else:
+        return [arr]
 
 
 # StatCounter

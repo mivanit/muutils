@@ -8,8 +8,8 @@ from typing import Any, Callable, Iterable, Mapping
 try:
     from muutils.json_serialize.array import ArrayMode, serialize_array
 except ImportError as e:
-    ArrayMode = None
-    serialize_array = None
+    ArrayMode = str  # type: ignore[misc]
+    serialize_array = lambda *args, **kwargs: None
     warnings.warn(
         f"muutils.json_serialize.array could not be imported probably because missing numpy, array serialization will not work: \n{e}",
         ImportWarning,

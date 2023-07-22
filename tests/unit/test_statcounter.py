@@ -2,6 +2,7 @@ import numpy as np
 
 from muutils.statcounter import StatCounter
 
+
 def _compute_err(a: float, b: float, /) -> dict[str, float]:
     return dict(
         num_a=float(a),
@@ -22,6 +23,7 @@ def _compare_np_custom(arr: np.ndarray) -> dict[str, dict]:
         q3=_compute_err(counter.percentile(0.75), np.percentile(arr, 75)),
         max=_compute_err(counter.max(), np.max(arr)),
     )
+
 
 EPSILON: float = 1e-8
 

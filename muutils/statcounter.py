@@ -5,7 +5,6 @@ from functools import cached_property
 from itertools import chain
 from types import NoneType
 from typing import Callable, Iterable, Optional, Sequence, Union
-import statistics
 
 # _GeneralArray = Union[np.ndarray, "torch.Tensor"]
 NumericSequence = Sequence[Union[float, int]]
@@ -34,6 +33,7 @@ def universal_flatten(
             return list(chain.from_iterable(universal_flatten(x) for x in arr))
         else:
             return arr
+
 
 # StatCounter
 # ==================================================

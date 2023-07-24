@@ -52,7 +52,7 @@ jobs:
           curl -sSL https://install.python-poetry.org | python3 -
           poetry lock --check
           export CUDA_VISIBLE_DEVICES=0
-          poetry add torch@${{ matrix.versions.torch }}+cpu --source https://download.pytorch.org/whl/cpu
+          poetry add torch@${{ matrix.versions.torch }}+cpu --source torch_cpu
           poetry install --all-extras
 
       - name: tests

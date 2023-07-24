@@ -1359,4 +1359,4 @@ array = ["jaxtyping", "numpy", "torch"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "285aaafa123a182a09a4b063df2f248a84aebb24d7196832f613aab55fbf60d6"
+content-hash = "c73a5aaf6235ca14d946fac9759220275e2351ae424df65628f1764a8829a001"

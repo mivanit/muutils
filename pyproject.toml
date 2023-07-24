@@ -38,6 +38,11 @@ matplotlib = "^3.0.0"
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
+[[tool.poetry.source]]
+name = "torch_cpu"
+url = "https://download.pytorch.org/whl/cpu"
+priority = "explicit"
+
 # TODO: make all of the following ignored across all formatting/linting
 # tests/input_data, tests/junk_data, muutils/_wip 
 

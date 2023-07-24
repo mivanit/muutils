@@ -279,7 +279,7 @@ test = ["pytest (>=6)"]
 name = "filelock"
 version = "3.12.2"
 description = "A platform independent file lock."
-optional = false
+optional = true
 python-versions = ">=3.7"
 files = [
     {file = "filelock-3.12.2-py3-none-any.whl", hash = "sha256:cbb791cdea2a72f23da6ac5b5269ab0a0d161e9ef0100e653b69049a7706d1ec"},
@@ -379,7 +379,7 @@ requirements-deprecated-finder = ["pip-api", "pipreqs"]
 name = "jaxtyping"
 version = "0.2.20"
 description = "Type annotations and runtime checking for shape and dtype of JAX arrays, and PyTrees."
-optional = false
+optional = true
 python-versions = "~=3.9"
 files = [
     {file = "jaxtyping-0.2.20-py3-none-any.whl", hash = "sha256:7038e71cc9352b67a8673d1fc39b6c7e95a326623a1fd43ee7c56faf20866ab9"},
@@ -395,7 +395,7 @@ typing-extensions = ">=3.7.4.1"
 name = "jinja2"
 version = "3.1.2"
 description = "A very fast and expressive template engine."
-optional = false
+optional = true
 python-versions = ">=3.7"
 files = [
     {file = "Jinja2-3.1.2-py3-none-any.whl", hash = "sha256:6088930bfe239f0e6710546ab9c19c9ef35e29792895fed6e6e31a023a182a61"},
@@ -581,7 +581,7 @@ dev = ["Sphinx (>=5.1.1)", "black (==23.1.0)", "build (>=0.10.0)", "coverage (>=
 name = "markupsafe"
 version = "2.1.3"
 description = "Safely add untrusted strings to HTML/XML markup."
-optional = false
+optional = true
 python-versions = ">=3.7"
 files = [
     {file = "MarkupSafe-2.1.3-cp310-cp310-macosx_10_9_universal2.whl", hash = "sha256:cd0f502fe016460680cd20aaa5a76d241d6f35a1c3350c474bac1273803893fa"},
@@ -712,7 +712,7 @@ files = [
 name = "mpmath"
 version = "1.3.0"
 description = "Python library for arbitrary-precision floating-point arithmetic"
-optional = false
+optional = true
 python-versions = "*"
 files = [
     {file = "mpmath-1.3.0-py3-none-any.whl", hash = "sha256:a0b2b9fe80bbcd81a6647ff13108738cfb482d481d826cc0e02f5b35e5c88d2c"},
@@ -786,7 +786,7 @@ files = [
 name = "networkx"
 version = "3.1"
 description = "Python package for creating and manipulating graphs and networks"
-optional = false
+optional = true
 python-versions = ">=3.8"
 files = [
     {file = "networkx-3.1-py3-none-any.whl", hash = "sha256:4f33f68cb2afcf86f28a45f43efc27a9386b535d567d2127f8f61d51dec58d36"},
@@ -1133,7 +1133,7 @@ files = [
 name = "sympy"
 version = "1.12"
 description = "Computer algebra system (CAS) in Python"
-optional = false
+optional = true
 python-versions = ">=3.8"
 files = [
     {file = "sympy-1.12-py3-none-any.whl", hash = "sha256:c3588cd4295d0c0f603d0f2ae780587e64e2efeedb3521e46b9bb1d08d184fa5"},
@@ -1169,7 +1169,7 @@ files = [
 name = "torch"
 version = "2.0.1"
 description = "Tensors and Dynamic neural networks in Python with strong GPU acceleration"
-optional = false
+optional = true
 python-versions = ">=3.8.0"
 files = [
     {file = "torch-2.0.1-cp310-cp310-manylinux1_x86_64.whl", hash = "sha256:8ced00b3ba471856b993822508f77c98f48a458623596a4c43136158781e306a"},
@@ -1208,7 +1208,7 @@ opt-einsum = ["opt-einsum (>=3.3)"]
 name = "typeguard"
 version = "4.0.0"
 description = "Run-time type checker for Python"
-optional = false
+optional = true
 python-versions = ">=3.7.4"
 files = [
     {file = "typeguard-4.0.0-py3-none-any.whl", hash = "sha256:c4a40af0ba8a41077221271b46d0a6d8d46045443e4d887887c69254ca861952"},
@@ -1359,4 +1359,4 @@ array = ["jaxtyping", "numpy", "torch"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "18eac64d0680a66c54e505013ae56bcba136ab07eceb16fc46f07198046c7a61"
+content-hash = "285aaafa123a182a09a4b063df2f248a84aebb24d7196832f613aab55fbf60d6"

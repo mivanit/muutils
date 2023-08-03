@@ -29,6 +29,7 @@ class SerializableField(dataclasses.Field):
         "serialize",
         "serialization_fn",
         "loading_fn",
+        "deserialization_fn",
         "assert_type",
     )
 
@@ -76,6 +77,7 @@ class SerializableField(dataclasses.Field):
         self.serialize: bool = serialize
         self.serialization_fn: Optional[Callable[[Any], Any]] = serialization_fn
         self.loading_fn: Optional[Callable[[Any], Any]] = loading_fn
+        self.deserialization_fn: Optional[Callable[[Any], Any]] = deserialization_fn
         self.assert_type: bool = assert_type
 
     @classmethod
@@ -98,7 +100,7 @@ class SerializableField(dataclasses.Field):
 
 # Step 2: Create a serializable_field function
 # no type hint to avoid confusing mypy
-def serializable_field(*args, **kwargs):  # -> SerializableField:
+def serializable_field(*args, deserialization_fn=None, **kwargs):  # -> SerializableField:
     """Create a new SerializableField
 
     note that if not using ZANJ, and you have a class inside a container, you MUST provide
@@ -326,7 +328,7 @@ def serializable_dataclass(
     else:
         _properties_to_serialize = properties_to_serialize
 
-    def wrap(cls: Type[T]) -> Type[T]:
+    def wrap(cls: Type[T], deserialization_fn=None) -> Type[T]:
         # Modify the __annotations__ dictionary to replace regular fields with SerializableField
         for field_name, field_type in cls.__annotations__.items():
             field_value = getattr(cls, field_name, None)

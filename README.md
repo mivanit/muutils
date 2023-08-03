@@ -40,7 +40,6 @@ Note that for using `mlutils`, `tensor_utils`, `nbutils.configure_notebook`, or 
 pip install muutils[array]
 ```
 
-
 # todos:
 
 - [ ] option to have notebook conversion create pytest-compatible tests

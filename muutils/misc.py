@@ -1,3 +1,4 @@
+import json
 import hashlib
 import typing
 
@@ -26,6 +27,30 @@ def sanitize_fname(fname: str | None) -> str:
             fname_sanitized += ""
 
     return fname_sanitized
+
+
+def dict_to_filename(
+        data: dict, 
+        format_str: str = "{key}_{val}", 
+        separator: str = ".", 
+        max_length: int = 255,
+    ):
+    # Convert the dictionary items to a list of strings using the format string
+    formatted_items: list[str] = [format_str.format(key=k, val=v) for k, v in data.items()]
+    
+    # Join the formatted items using the separator
+    joined_str: str = separator.join(formatted_items)
+    
+    # Remove special characters and spaces
+    sanitized_str: str = sanitize_fname(joined_str)
+    
+    # Check if the length is within limits
+    if len(sanitized_str) <= max_length:
+        return sanitized_str
+    
+    # If the string is too long, generate a hash
+    return f"h_{stable_hash(sanitized_str)}"
+
 
 
 def freeze(obj: typing.Any) -> typing.Any:

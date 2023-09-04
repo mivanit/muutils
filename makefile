@@ -34,15 +34,6 @@ version:
 		exit 1; \
 	fi
 
-# at some point, need to add back --check-untyped-defs to mypy call
-# but it complains when we specify arguments by keyword where positional is fine
-# not sure how to fix this
-# python -m pylint $(PACKAGE_NAME)/
-# python -m pylint tests/
-.PHONY: lint
-lint: clean
-	$(PYPOETRY) -m mypy --config-file pyproject.toml $(PACKAGE_NAME)/
-	$(PYPOETRY) -m mypy --config-file pyproject.toml tests/
 
 # formatting
 # --------------------------------------------------
@@ -61,29 +52,40 @@ check-format:
 
 # coverage reports
 # --------------------------------------------------
+# whether to run pytest with coverage report generation
+COV ?= 1
+
+ifeq ($(COV),1)
+    PYTEST_OPTIONS=--cov=.
+else
+    PYTEST_OPTIONS=
+endif
+
 .PHONY: cov
 cov:
-	@echo "generate text coverage report"
+	@echo "generate coverage reports"
 	$(PYPOETRY) -m coverage report -m > $(COVERAGE_REPORTS_DIR)/coverage.txt
 	$(PYPOETRY) -m coverage_badge -f -o $(COVERAGE_REPORTS_DIR)/coverage.svg
-
-.PHONY: cov-html
-cov-html:
-	@echo "generate html coverage report"
 	$(PYPOETRY) -m coverage html	
 
 # tests
 # --------------------------------------------------
 
+# at some point, need to add back --check-untyped-defs to mypy call
+# but it complains when we specify arguments by keyword where positional is fine
+# not sure how to fix this
+# python -m pylint $(PACKAGE_NAME)/
+# python -m pylint tests/
+.PHONY: lint
+lint: clean
+	$(PYPOETRY) -m mypy --config-file pyproject.toml $(PACKAGE_NAME)/
+	$(PYPOETRY) -m mypy --config-file pyproject.toml tests/
+
 .PHONY: test
 test: clean
 	@echo "running tests"
-	$(PYPOETRY) -m pytest --cov=. $(TESTS_DIR)
+	$(PYPOETRY) -m pytest $(PYTEST_OPTIONS) $(TESTS_DIR)
 
-.PHONY: test-nocov
-test-nocov: clean
-	@echo "running tests, without code coverage"
-	$(PYPOETRY) -m pytest tests
 
 .PHONY: check
 check: clean check-format clean test lint cov

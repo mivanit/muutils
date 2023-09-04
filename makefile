@@ -1,15 +1,15 @@
 PACKAGE_NAME := muutils
 
-VERSION_INFO_LOCATION := $(PACKAGE_NAME)/__init__.py
 PUBLISH_BRANCH := main
 PYPI_TOKEN_FILE := .pypi-token
 LAST_VERSION_FILE := .lastversion
 COVERAGE_REPORTS_DIR := docs/coverage
 TESTS_DIR := tests/unit
 
-VERSION := $(shell grep -oP '__version__ = "\K.*?(?=")' $(VERSION_INFO_LOCATION))
+VERSION := $(shell python -c "import tomllib; print(tomllib.load(open('pyproject.toml', 'rb'))['tool']['poetry']['version'])")
 LAST_VERSION := $(shell cat $(LAST_VERSION_FILE))
 PYPOETRY := poetry run python
+
 # note that the commands at the end:
 # 1) format the git log
 # 2) replace backticks with single quotes, to avoid funny business

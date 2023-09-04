@@ -5,8 +5,9 @@ PYPI_TOKEN_FILE := .pypi-token
 LAST_VERSION_FILE := .lastversion
 COVERAGE_REPORTS_DIR := docs/coverage
 TESTS_DIR := tests/unit
+PYPROJECT := pyproject.toml
 
-VERSION := $(shell python -c "import tomllib; print(tomllib.load(open('pyproject.toml', 'rb'))['tool']['poetry']['version'])")
+VERSION := $(shell python -c "import tomllib; print(tomllib.load(open('$(PYPROJECT)', 'rb'))['tool']['poetry']['version'])")
 LAST_VERSION := $(shell cat $(LAST_VERSION_FILE))
 PYPOETRY := poetry run python
 
@@ -39,14 +40,14 @@ version:
 # --------------------------------------------------
 .PHONY: format
 format:
-	python -m pycln --config pyproject.toml --all .
+	python -m pycln --config $(PYPROJECT) --all .
 	python -m isort format .
 	python -m black .
 
 .PHONY: check-format
 check-format:
 	@echo "run format check"
-	python -m pycln --check --config pyproject.toml .
+	python -m pycln --check --config $(PYPROJECT) .
 	python -m isort --check-only .
 	python -m black --check .
 
@@ -78,8 +79,8 @@ cov:
 # python -m pylint tests/
 .PHONY: lint
 lint: clean
-	$(PYPOETRY) -m mypy --config-file pyproject.toml $(PACKAGE_NAME)/
-	$(PYPOETRY) -m mypy --config-file pyproject.toml tests/
+	$(PYPOETRY) -m mypy --config-file $(PYPROJECT) $(PACKAGE_NAME)/
+	$(PYPOETRY) -m mypy --config-file $(PYPROJECT) tests/
 
 .PHONY: test
 test: clean

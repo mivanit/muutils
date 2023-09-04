@@ -14,15 +14,41 @@ DEFAULT_SEED: int = 42
 GLOBAL_SEED: int = DEFAULT_SEED
 
 
-def get_device() -> torch.device:
+def get_device(device: "str|torch.device|None" = None) -> torch.device:
     """Get the torch.device instance on which torch.Tensors should be allocated."""
     try:
-        if torch.cuda.is_available():
-            return torch.device("cuda")
-        elif torch.backends.mps.is_available():
-            return torch.device("mps")
+        # if device is given
+        if device is not None:
+            device = torch.device(device)
+            if any(
+                [
+                    torch.cuda.is_available() and device.type == "cuda",
+                    torch.backends.mps.is_available() and device.type == "mps",
+                    device.type == "cpu",
+                ]
+            ):
+                # if device is given and available
+                pass
+            else:
+                warnings.warn(
+                    f"Specified device {device} is not available, falling back to CPU"
+                )
+                return torch.device("cpu")
+
+        # no device given, infer from availability
         else:
-            return torch.device("cpu")
+            if torch.cuda.is_available():
+                device = torch.device("cuda")
+            elif torch.backends.mps.is_available():
+                device = torch.device("mps")
+            else:
+                device = torch.device("cpu")
+
+        # put a dummy tensor on the device to check if it is available
+        _dummy = torch.zeros(1, device=device)
+
+        return device
+
     except Exception as e:
         warnings.warn(
             f"Error while getting device, falling back to CPU. Error: {e}",

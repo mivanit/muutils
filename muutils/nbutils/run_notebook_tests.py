@@ -64,14 +64,14 @@ def run_notebook_tests(
             # run the file
             print(f"  Running {file}")
             output_file: Path = file.with_suffix(CI_output_suffix)
-            print(f"  Output in {output_file}")
+            print(f"    Output in {output_file}")
 
             command: str = f"{run_python_cmd} {root_relative_to_notebooks / file} > {root_relative_to_notebooks / output_file} 2>&1"
             process: subprocess.CompletedProcess = subprocess.run(
                 command, shell=True, text=True
             )
 
-            print(f"  Run completed with return code {process.returncode}")
+            print(f"    Run completed with return code {process.returncode}")
 
             # print the output of the file to the console if it failed
             if process.returncode != 0:

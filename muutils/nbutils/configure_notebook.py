@@ -1,6 +1,6 @@
 import os
-import warnings
 import typing
+import warnings
 
 import matplotlib.pyplot as plt  # type: ignore[import]
 
@@ -25,7 +25,7 @@ from muutils.mlutils import get_device, set_reproducibility
 def configure_notebook(
     *args,
     seed: int = 42,
-    device: typing.Any = None, # this can be a string, torch.device, or None
+    device: typing.Any = None,  # this can be a string, torch.device, or None
     dark_mode: bool = True,
 ):
     """Shared Jupyter notebook setup steps:

@@ -89,8 +89,8 @@ test: clean
 
 
 .PHONY: check
-check: clean check-format clean test lint cov
-	@echo "run format check, test, lint, and coverage report"
+check: clean check-format clean test lint
+	@echo "run format check, test, and lint"
 
 # build and publish
 # --------------------------------------------------

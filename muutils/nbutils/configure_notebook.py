@@ -1,4 +1,5 @@
 import os
+import typing
 import warnings
 
 import matplotlib.pyplot as plt  # type: ignore[import]
@@ -21,7 +22,12 @@ if IN_JUPYTER:
 from muutils.mlutils import get_device, set_reproducibility
 
 
-def configure_notebook(seed=42, dark_mode=True):
+def configure_notebook(
+    *args,
+    seed: int = 42,
+    device: typing.Any = None,  # this can be a string, torch.device, or None
+    dark_mode: bool = True,
+):
     """Shared Jupyter notebook setup steps:
     - Set random seeds and library reproducibility settings
     - Set device based on availability
@@ -47,4 +53,4 @@ def configure_notebook(seed=42, dark_mode=True):
                 pio.templates.default = "plotly_dark"
                 plt.style.use("dark_background")
 
-    return get_device()
+    return get_device(device)

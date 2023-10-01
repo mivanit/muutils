@@ -1,9 +1,12 @@
+import json
 import typing
 import warnings
 
 import jaxtyping
 import numpy as np
 import torch
+
+from muutils.dictmagic import dotlist_to_nested_dict
 
 # pylint: disable=missing-class-docstring
 
@@ -344,13 +347,76 @@ def rpad_array(
     return pad_array(array, pad_length, pad_value, rpad=True)
 
 
-def compare_state_dicts(d1: dict, d2: dict):
-    assert d1.keys() == d2.keys(), "state dict keys don't match!"
-    keys_failed: list[str] = list()
-    for k, v in d1.items():
-        v_load = d2[k]
-        if not (v == v_load).all():
-            keys_failed.append(k)
+def get_dict_shapes(d: dict[str, "torch.Tensor"]) -> dict[str, tuple[int, ...]]:
+    """given a state dict or cache dict, compute the shapes and put them in a nested dict"""
+    return dotlist_to_nested_dict({k: tuple(v.shape) for k, v in d.items()})
+
+
+def string_dict_shapes(d: dict[str, "torch.Tensor"]) -> str:
+    """printable version of get_dict_shapes"""
+    return json.dumps(
+        dotlist_to_nested_dict(
+            {
+                k: str(
+                    tuple(v.shape)
+                )  # to string, since indent wont play nice with tuples
+                for k, v in d.items()
+            }
+        ),
+        indent=2,
+    )
+
+
+def compare_state_dicts(
+    d1: dict, d2: dict, rtol: float = 1e-5, atol: float = 1e-8, verbose: bool = True
+) -> None:
+    # check keys match
+    d1_keys: set = set(d1.keys())
+    d2_keys: set = set(d2.keys())
+    symmetric_diff: set = set.symmetric_difference(d1_keys, d2_keys)
+    keys_diff_1: set = d1_keys - d2_keys
+    keys_diff_2: set = d2_keys - d1_keys
+    # sort sets for easier debugging
+    symmetric_diff = set(sorted(symmetric_diff))
+    keys_diff_1 = set(sorted(keys_diff_1))
+    keys_diff_2 = set(sorted(keys_diff_2))
+    diff_shapes_1: str = (
+        string_dict_shapes({k: d1[k] for k in keys_diff_1})
+        if verbose
+        else "(verbose = False)"
+    )
+    diff_shapes_2: str = (
+        string_dict_shapes({k: d2[k] for k in keys_diff_2})
+        if verbose
+        else "(verbose = False)"
+    )
     assert (
-        len(keys_failed) == 0
-    ), f"{len(keys_failed)} / {len(d1)} state dict elements don't match: {keys_failed}"
+        len(symmetric_diff) == 0
+    ), f"state dicts do not match:\n{symmetric_diff = }\n{keys_diff_1 = }\n{keys_diff_2 = }\nd1_shapes = {diff_shapes_1}\nd2_shapes = {diff_shapes_2}"
+
+    # check tensors match
+    shape_failed: list[str] = list()
+    vals_failed: list[str] = list()
+    for k, v1 in d1.items():
+        v2 = d2[k]
+        # check shapes first
+        if not v1.shape == v2.shape:
+            shape_failed.append(k)
+        else:
+            # if shapes match, check values
+            if not torch.allclose(v1, v2, rtol=rtol, atol=atol):
+                vals_failed.append(k)
+
+    str_shape_failed: str = (
+        string_dict_shapes({k: d1[k] for k in shape_failed}) if verbose else ""
+    )
+    str_vals_failed: str = (
+        string_dict_shapes({k: d1[k] for k in vals_failed}) if verbose else ""
+    )
+
+    assert (
+        len(shape_failed) == 0
+    ), f"{len(shape_failed)} / {len(d1)} state dict elements don't match in shape:\n{shape_failed = }\n{str_shape_failed}"
+    assert (
+        len(vals_failed) == 0
+    ), f"{len(vals_failed)} / {len(d1)} state dict elements don't match in values:\n{vals_failed = }\n{str_vals_failed}"

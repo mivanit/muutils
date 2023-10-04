@@ -28,7 +28,7 @@ muutils\nbutils\print_tex.py                                                    
 muutils\nbutils\run_notebook_tests.py                                                58     20    66%   29, 31, 35, 39, 45, 53, 78-80, 84-88, 95-112
 muutils\statcounter.py                                                               87     32    63%   24-35, 50, 70, 98, 110, 120, 136-166, 174, 183, 186, 190-195, 204
 muutils\sysinfo.py                                                                   71     18    75%   21, 60-61, 78-111, 145, 168
-muutils\tensor_utils.py                                                              92     35    62%   73, 76, 81, 93-133, 140, 154-162
+muutils\tensor_utils.py                                                             125     39    69%   76, 79, 84, 96-136, 143, 157-165, 352, 418, 429, 443
 tests\unit\json_serialize\serializable_dataclass\test_sdc_defaults.py                24      0   100%
 tests\unit\json_serialize\serializable_dataclass\test_sdc_properties_nested.py       26      0   100%
 tests\unit\json_serialize\serializable_dataclass\test_serializable_dataclass.py     190      0   100%
@@ -45,4 +45,4 @@ tests\unit\test_statcounter.py                                                  
 tests\unit\test_sysinfo.py                                                            4      0   100%
 tests\unit\test_tensor_utils.py                                                      36      0   100%
 ---------------------------------------------------------------------------------------------------------------
-TOTAL                                                                              2018    655    68%
+TOTAL                                                                              2051    659    68%

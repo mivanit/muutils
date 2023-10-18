@@ -7,15 +7,23 @@ from itertools import islice
 from pathlib import Path
 from typing import Any, Callable, TypeVar
 
-import numpy as np
-import torch
+ARRAY_IMPORTS: bool
+try:
+    import numpy as np
+    import torch
+    ARRAY_IMPORTS = True
+except ImportError as e:
+    warnings.warn(f"Numpy or torch not installed. Array operations will not be available.\n{e}")
+    ARRAY_IMPORTS = False
 
 DEFAULT_SEED: int = 42
 GLOBAL_SEED: int = DEFAULT_SEED
 
 
-def get_device(device: "str|torch.device|None" = None) -> torch.device:
-    """Get the torch.device instance on which torch.Tensors should be allocated."""
+def get_device(device: "str|torch.device|None" = None) -> "torch.device":
+    """Get the torch.device instance on which `torch.Tensor`s should be allocated."""
+    if not ARRAY_IMPORTS:
+        raise ImportError("Numpy or torch not installed. Array operations will not be available.")
     try:
         # if device is given
         if device is not None:
@@ -69,13 +77,15 @@ def set_reproducibility(seed: int = DEFAULT_SEED):
     GLOBAL_SEED = seed
 
     random.seed(seed)
-    np.random.seed(seed)
-    torch.manual_seed(seed)
 
-    torch.use_deterministic_algorithms(True)
-    # Ensure reproducibility for concurrent CUDA streams
-    # see https://docs.nvidia.com/cuda/cublas/index.html#cublasApi_reproducibility.
-    os.environ["CUBLAS_WORKSPACE_CONFIG"] = ":4096:8"
+    if ARRAY_IMPORTS:
+        np.random.seed(seed)
+        torch.manual_seed(seed)
+
+        torch.use_deterministic_algorithms(True)
+        # Ensure reproducibility for concurrent CUDA streams
+        # see https://docs.nvidia.com/cuda/cublas/index.html#cublasApi_reproducibility.
+        os.environ["CUBLAS_WORKSPACE_CONFIG"] = ":4096:8"
 
 
 def chunks(it, chunk_size):

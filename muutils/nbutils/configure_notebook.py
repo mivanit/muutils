@@ -25,7 +25,7 @@ from muutils.mlutils import get_device, set_reproducibility
 # handling figures
 PlottingMode = typing.Literal["ignore", "inline", "widget", "save"]
 PLOT_MODE: PlottingMode
-FIG_COUNTER: int = 0
+FIG_COUNTER: int
 FIG_OUTPUT_FMT: str|None
 FIG_NUMBERED_FNAME: str|None = "figure-{num}"
 FIG_CONFIG: dict|None = None
@@ -43,10 +43,11 @@ def setup_plots(
     close_after_plotshow: bool = False,
 ) -> None:
     """Set up plot saving/rendering options"""
-    global PLOT_MODE, FIG_OUTPUT_FMT, FIG_NUMBERED_FNAME, FIG_CONFIG, FIG_BASEPATH, CLOSE_AFTER_PLOTSHOW
-
+    global PLOT_MODE, FIG_COUNTER, FIG_OUTPUT_FMT, FIG_NUMBERED_FNAME, FIG_CONFIG, FIG_BASEPATH, CLOSE_AFTER_PLOTSHOW
+    
     # set plot mode
     PLOT_MODE = plot_mode
+    FIG_COUNTER = 0
     CLOSE_AFTER_PLOTSHOW = close_after_plotshow
 
     if PLOT_MODE == "inline":
@@ -120,7 +121,7 @@ def configure_notebook(
     fig_config: dict | None = None,
     fig_basepath: str | None = None,
     close_after_plotshow: bool = False,
-) -> "torch.device":
+) -> "torch.device|None":
     """Shared Jupyter notebook setup steps:
     - Set random seeds and library reproducibility settings
     - Set device based on availability
@@ -157,7 +158,13 @@ def configure_notebook(
                 pio.templates.default = "plotly_dark"
                 plt.style.use("dark_background")
 
-    return get_device(device)
+    try:
+        # Set device
+        device = get_device(device)
+        return device
+    except ImportError:
+        warnings.warn("Torch not installed. Cannot get/set device.")
+        return None
 
 
 

@@ -27,7 +27,7 @@ PlottingMode = typing.Literal["ignore", "inline", "widget", "save"]
 PLOT_MODE: PlottingMode
 FIG_COUNTER: int
 FIG_OUTPUT_FMT: str | None
-FIG_NUMBERED_FNAME: str | None = "figure-{num}"
+FIG_NUMBERED_FNAME: str = "figure-{num}"
 FIG_CONFIG: dict | None = None
 FIG_BASEPATH: str | None = None
 CLOSE_AFTER_PLOTSHOW: bool = False
@@ -128,7 +128,7 @@ def configure_notebook(
     fig_config: dict | None = None,
     fig_basepath: str | None = None,
     close_after_plotshow: bool = False,
-) -> "torch.device|None":
+) -> "torch.device|None":  # type: ignore[name-defined]
     """Shared Jupyter notebook setup steps:
     - Set random seeds and library reproducibility settings
     - Set device based on availability
@@ -187,6 +187,7 @@ def plotshow(
             fname = FIG_NUMBERED_FNAME.format(num=FIG_COUNTER)
 
         # save figure
+        assert FIG_BASEPATH is not None
         plt.savefig(os.path.join(FIG_BASEPATH, fname))
     elif PLOT_MODE == "ignore":
         # do nothing

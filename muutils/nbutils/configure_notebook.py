@@ -26,17 +26,18 @@ from muutils.mlutils import get_device, set_reproducibility
 PlottingMode = typing.Literal["ignore", "inline", "widget", "save"]
 PLOT_MODE: PlottingMode
 FIG_COUNTER: int
-FIG_OUTPUT_FMT: str|None
-FIG_NUMBERED_FNAME: str|None = "figure-{num}"
-FIG_CONFIG: dict|None = None
-FIG_BASEPATH: str|None = None
+FIG_OUTPUT_FMT: str | None
+FIG_NUMBERED_FNAME: str | None = "figure-{num}"
+FIG_CONFIG: dict | None = None
+FIG_BASEPATH: str | None = None
 CLOSE_AFTER_PLOTSHOW: bool = False
 
 KNOWN_FORMATS = ["pdf", "png", "jpg", "jpeg", "svg", "eps", "ps", "tif", "tiff"]
 
+
 def setup_plots(
     plot_mode: PlottingMode = "inline",
-    fig_output_fmt: str|None = "pdf",
+    fig_output_fmt: str | None = "pdf",
     fig_numbered_fname: str = "figure-{num}",
     fig_config: dict | None = None,
     fig_basepath: str | None = None,
@@ -44,7 +45,7 @@ def setup_plots(
 ) -> None:
     """Set up plot saving/rendering options"""
     global PLOT_MODE, FIG_COUNTER, FIG_OUTPUT_FMT, FIG_NUMBERED_FNAME, FIG_CONFIG, FIG_BASEPATH, CLOSE_AFTER_PLOTSHOW
-    
+
     # set plot mode
     PLOT_MODE = plot_mode
     FIG_COUNTER = 0
@@ -80,33 +81,39 @@ def setup_plots(
     # set default figure format in rcParams savefig.format
     plt.rcParams["savefig.format"] = FIG_OUTPUT_FMT
     if FIG_OUTPUT_FMT not in KNOWN_FORMATS:
-        warnings.warn(f'Unknown figure format, things might break: {plt.rcParams["savefig.format"] = }')
+        warnings.warn(
+            f'Unknown figure format, things might break: {plt.rcParams["savefig.format"] = }'
+        )
 
     # if base path not given, make one
     if fig_basepath is None:
         if fig_config is None:
             # if no config, use the current time
             from datetime import datetime
+
             fig_basepath = f"figures/{datetime.now().strftime('%Y-%m-%d-%H-%M-%S')}"
         else:
             # if config given, convert to string
             from muutils.misc import dict_to_filename
+
             fig_basepath = f"figures/{dict_to_filename(fig_config)}"
-    
+
     FIG_BASEPATH = fig_basepath
     os.makedirs(fig_basepath, exist_ok=True)
 
     # if config given, serialize and save that config
     if fig_config is not None:
         import json
+
         from muutils.json_serialize import json_serialize
+
         with open(f"{fig_basepath}/config.json", "w") as f:
             json.dump(
                 json_serialize(fig_config),
                 f,
                 indent="\t",
             )
-        
+
     print(f"Figures will be saved to: '{fig_basepath}'")
 
 
@@ -116,7 +123,7 @@ def configure_notebook(
     device: typing.Any = None,  # this can be a string, torch.device, or None
     dark_mode: bool = True,
     plot_mode: PlottingMode = "inline",
-    fig_output_fmt: str|None = "pdf",
+    fig_output_fmt: str | None = "pdf",
     fig_numbered_fname: str = "figure-{num}",
     fig_config: dict | None = None,
     fig_basepath: str | None = None,
@@ -167,10 +174,9 @@ def configure_notebook(
         return None
 
 
-
 def plotshow(
-        fname: str | None = None,
-    ):
+    fname: str | None = None,
+):
     """Show the active plot, depending on global configs"""
     global FIG_COUNTER, CLOSE_AFTER_PLOTSHOW
     FIG_COUNTER += 1
@@ -193,6 +199,6 @@ def plotshow(
         plt.show()
     else:
         warnings.warn(f"Invalid plot mode: {PLOT_MODE}")
-    
+
     if CLOSE_AFTER_PLOTSHOW:
         plt.close()

@@ -11,9 +11,12 @@ ARRAY_IMPORTS: bool
 try:
     import numpy as np
     import torch
+
     ARRAY_IMPORTS = True
 except ImportError as e:
-    warnings.warn(f"Numpy or torch not installed. Array operations will not be available.\n{e}")
+    warnings.warn(
+        f"Numpy or torch not installed. Array operations will not be available.\n{e}"
+    )
     ARRAY_IMPORTS = False
 
 DEFAULT_SEED: int = 42
@@ -23,7 +26,9 @@ GLOBAL_SEED: int = DEFAULT_SEED
 def get_device(device: "str|torch.device|None" = None) -> "torch.device":
     """Get the torch.device instance on which `torch.Tensor`s should be allocated."""
     if not ARRAY_IMPORTS:
-        raise ImportError("Numpy or torch not installed. Array operations will not be available.")
+        raise ImportError(
+            "Numpy or torch not installed. Array operations will not be available."
+        )
     try:
         # if device is given
         if device is not None:

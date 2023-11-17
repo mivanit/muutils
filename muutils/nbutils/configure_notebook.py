@@ -24,16 +24,41 @@ from muutils.mlutils import get_device, set_reproducibility
 
 # handling figures
 PlottingMode = typing.Literal["ignore", "inline", "widget", "save"]
-PLOT_MODE: PlottingMode
-FIG_COUNTER: int
-FIG_OUTPUT_FMT: str | None
+PLOT_MODE: PlottingMode = "inline"
+FIG_COUNTER: int = 0
+FIG_OUTPUT_FMT: str | None = None
 FIG_NUMBERED_FNAME: str = "figure-{num}"
 FIG_CONFIG: dict | None = None
 FIG_BASEPATH: str | None = None
 CLOSE_AFTER_PLOTSHOW: bool = False
 
-KNOWN_FORMATS = ["pdf", "png", "jpg", "jpeg", "svg", "eps", "ps", "tif", "tiff"]
+MATPLOTLIB_FORMATS = ["pdf", "png", "jpg", "jpeg", "svg", "eps", "ps", "tif", "tiff"]
+TIKZPLOTLIB_FORMATS = ["tex", "tikz"]
 
+
+def universal_savefig(fname: str, fmt: str|None = None) -> None:
+    # try to infer format from fname
+    if fmt is None:
+        fmt = fname.split(".")[-1]
+    
+    if not (
+        fmt in MATPLOTLIB_FORMATS
+        or fmt in TIKZPLOTLIB_FORMATS
+    ):
+        warnings.warn(f"Unknown format '{fmt}', defaulting to '{FIG_OUTPUT_FMT}'")
+        fmt = FIG_OUTPUT_FMT
+    
+    if not fname.endswith(fmt):
+        fname += f".{fmt}"
+
+    if fmt in MATPLOTLIB_FORMATS:
+        plt.savefig(fname, format=fmt, bbox_inches="tight")
+    elif fmt in TIKZPLOTLIB_FORMATS:
+        import tikzplotlib  # type: ignore[import]
+        tikzplotlib.save(fname)
+    else:
+        warnings.warn(f"Unknown format '{fmt}', going with matplotlib default")
+        plt.savefig(fname, bbox_inches="tight")
 
 def setup_plots(
     plot_mode: PlottingMode = "inline",
@@ -80,10 +105,19 @@ def setup_plots(
 
     # set default figure format in rcParams savefig.format
     plt.rcParams["savefig.format"] = FIG_OUTPUT_FMT
-    if FIG_OUTPUT_FMT not in KNOWN_FORMATS:
-        warnings.warn(
-            f'Unknown figure format, things might break: {plt.rcParams["savefig.format"] = }'
-        )
+    if FIG_OUTPUT_FMT in TIKZPLOTLIB_FORMATS:
+        try:
+            import tikzplotlib  # type: ignore[import]
+        except ImportError:
+            warnings.warn(
+                f"Tikzplotlib not installed. Cannot save figures in Tikz format '{FIG_OUTPUT_FMT}', things might break."
+            )
+    else:
+        if FIG_OUTPUT_FMT not in MATPLOTLIB_FORMATS:
+            warnings.warn(
+                f'Unknown figure format, things might break: {plt.rcParams["savefig.format"] = }'
+            )
+
 
     # if base path not given, make one
     if fig_basepath is None:
@@ -147,6 +181,10 @@ def configure_notebook(
         close_after_plotshow=close_after_plotshow,
     )
 
+    global PLOT_MODE, FIG_OUTPUT_FMT, FIG_BASEPATH
+
+    print(f"set up plots with {PLOT_MODE = }, {FIG_OUTPUT_FMT = }, {FIG_BASEPATH = }")
+
     # Set seeds and other reproducibility-related library options
     set_reproducibility(seed)
 
@@ -176,30 +214,35 @@ def configure_notebook(
 
 def plotshow(
     fname: str | None = None,
+    plot_mode: PlottingMode | None = None,
+    fmt: str | None = None,
 ):
     """Show the active plot, depending on global configs"""
-    global FIG_COUNTER, CLOSE_AFTER_PLOTSHOW
+    global FIG_COUNTER, CLOSE_AFTER_PLOTSHOW, PLOT_MODE
     FIG_COUNTER += 1
 
-    if PLOT_MODE == "save":
+    if plot_mode is None:
+        plot_mode = PLOT_MODE
+
+    if plot_mode == "save":
         # get numbered figure name if not given
         if fname is None:
             fname = FIG_NUMBERED_FNAME.format(num=FIG_COUNTER)
 
         # save figure
         assert FIG_BASEPATH is not None
-        plt.savefig(os.path.join(FIG_BASEPATH, fname))
-    elif PLOT_MODE == "ignore":
+        universal_savefig(os.path.join(FIG_BASEPATH, fname), fmt=fmt)
+    elif plot_mode == "ignore":
         # do nothing
         pass
-    elif PLOT_MODE == "inline":
+    elif plot_mode == "inline":
         # show figure
         plt.show()
-    elif PLOT_MODE == "widget":
+    elif plot_mode == "widget":
         # show figure
         plt.show()
     else:
-        warnings.warn(f"Invalid plot mode: {PLOT_MODE}")
+        warnings.warn(f"Invalid plot mode: {plot_mode}")
 
     if CLOSE_AFTER_PLOTSHOW:
         plt.close()

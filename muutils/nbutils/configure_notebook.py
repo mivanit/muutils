@@ -36,18 +36,15 @@ MATPLOTLIB_FORMATS = ["pdf", "png", "jpg", "jpeg", "svg", "eps", "ps", "tif", "t
 TIKZPLOTLIB_FORMATS = ["tex", "tikz"]
 
 
-def universal_savefig(fname: str, fmt: str|None = None) -> None:
+def universal_savefig(fname: str, fmt: str | None = None) -> None:
     # try to infer format from fname
     if fmt is None:
         fmt = fname.split(".")[-1]
-    
-    if not (
-        fmt in MATPLOTLIB_FORMATS
-        or fmt in TIKZPLOTLIB_FORMATS
-    ):
+
+    if not (fmt in MATPLOTLIB_FORMATS or fmt in TIKZPLOTLIB_FORMATS):
         warnings.warn(f"Unknown format '{fmt}', defaulting to '{FIG_OUTPUT_FMT}'")
         fmt = FIG_OUTPUT_FMT
-    
+
     if not fname.endswith(fmt):
         fname += f".{fmt}"
 
@@ -55,10 +52,12 @@ def universal_savefig(fname: str, fmt: str|None = None) -> None:
         plt.savefig(fname, format=fmt, bbox_inches="tight")
     elif fmt in TIKZPLOTLIB_FORMATS:
         import tikzplotlib  # type: ignore[import]
+
         tikzplotlib.save(fname)
     else:
         warnings.warn(f"Unknown format '{fmt}', going with matplotlib default")
         plt.savefig(fname, bbox_inches="tight")
+
 
 def setup_plots(
     plot_mode: PlottingMode = "inline",
@@ -117,7 +116,6 @@ def setup_plots(
             warnings.warn(
                 f'Unknown figure format, things might break: {plt.rcParams["savefig.format"] = }'
             )
-
 
     # if base path not given, make one
     if fig_basepath is None:

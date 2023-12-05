@@ -46,7 +46,7 @@ def universal_savefig(fname: str, fmt: str | None = None) -> None:
         fmt = FIG_OUTPUT_FMT
 
     # not sure why linting is throwing an error here
-    if not fname.endswith(fmt): # type: ignore[arg-type]
+    if not fname.endswith(fmt):  # type: ignore[arg-type]
         fname += f".{fmt}"
 
     if fmt in MATPLOTLIB_FORMATS:

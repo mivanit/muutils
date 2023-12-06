@@ -36,6 +36,11 @@ render = new_render
 # ------------------------------------------------------------
 """
     ],
+    "muutils": [
+        """import muutils.nbutils.configure_notebook as nb_conf
+nb_conf.CONVERSION_PLOTMODE_OVERRIDE = "ignore"
+"""
+    ],
 }
 
 DISABLE_PLOTS_WARNING: list[str] = [
@@ -53,6 +58,10 @@ def disable_plots_in_script(script_lines: list[str]) -> list[str]:
     """Disable plots in a script by adding cursed things after the import statements"""
     result_str_TEMP: str = "\n\n".join(script_lines)
     script_lines_new: list[str] = script_lines
+
+    if "muutils" in result_str_TEMP:
+        script_lines_new = DISABLE_PLOTS["muutils"] + script_lines_new
+
     if "matplotlib" in result_str_TEMP:
         assert (
             "import matplotlib.pyplot as plt" in result_str_TEMP

@@ -25,6 +25,7 @@ from muutils.mlutils import get_device, set_reproducibility
 # handling figures
 PlottingMode = typing.Literal["ignore", "inline", "widget", "save"]
 PLOT_MODE: PlottingMode = "inline"
+CONVERSION_PLOTMODE_OVERRIDE: PlottingMode | None = None
 FIG_COUNTER: int = 0
 FIG_OUTPUT_FMT: str | None = None
 FIG_NUMBERED_FNAME: str = "figure-{num}"
@@ -69,10 +70,16 @@ def setup_plots(
     close_after_plotshow: bool = False,
 ) -> None:
     """Set up plot saving/rendering options"""
-    global PLOT_MODE, FIG_COUNTER, FIG_OUTPUT_FMT, FIG_NUMBERED_FNAME, FIG_CONFIG, FIG_BASEPATH, CLOSE_AFTER_PLOTSHOW
+    global PLOT_MODE, CONVERSION_PLOTMODE_OVERRIDE, FIG_COUNTER, FIG_OUTPUT_FMT, FIG_NUMBERED_FNAME, FIG_CONFIG, FIG_BASEPATH, CLOSE_AFTER_PLOTSHOW
 
-    # set plot mode
-    PLOT_MODE = plot_mode
+    # set plot mode, handling override
+    if CONVERSION_PLOTMODE_OVERRIDE is not None:
+        # override if set
+        PLOT_MODE = CONVERSION_PLOTMODE_OVERRIDE
+    else:
+        # otherwise use the given plot mode
+        PLOT_MODE = plot_mode
+
     FIG_COUNTER = 0
     CLOSE_AFTER_PLOTSHOW = close_after_plotshow
 
@@ -81,7 +88,9 @@ def setup_plots(
             ipython = get_ipython()
             ipython.magic("matplotlib inline")
         else:
-            raise RuntimeError("Cannot use inline plotting outside of Jupyter")
+            raise RuntimeError(
+                f"Cannot use inline plotting outside of Jupyter\n{PLOT_MODE = }\t{CONVERSION_PLOTMODE_OVERRIDE = }"
+            )
         return
     elif PLOT_MODE == "widget":
         if IN_JUPYTER:

@@ -36,8 +36,9 @@ class SerializableField(dataclasses.Field):
     def __init__(
         self,
         default: Any | dataclasses._MISSING_TYPE = dataclasses.MISSING,
-        default_factory: Callable[[], Any]
-        | dataclasses._MISSING_TYPE = dataclasses.MISSING,
+        default_factory: (
+            Callable[[], Any] | dataclasses._MISSING_TYPE
+        ) = dataclasses.MISSING,
         init: bool = True,
         repr: bool = True,
         hash: Optional[bool] = None,

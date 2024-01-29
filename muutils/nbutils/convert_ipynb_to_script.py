@@ -146,8 +146,7 @@ def convert_ipynb(
     strip_md_cells: bool = False,
     header_comment: str = r"#%%",
     disable_plots: bool = False,
-    filter_out_lines: str
-    | typing.Sequence[str] = (
+    filter_out_lines: str | typing.Sequence[str] = (
         "%",
         "!",
     ),  # ignore notebook magic commands and shell commands
@@ -183,12 +182,14 @@ def convert_ipynb(
             source: list[str] = cell["source"]
             if filter_out_lines:
                 source = [
-                    f"#{line}"
-                    if any(
-                        line.startswith(filter_prefix)
-                        for filter_prefix in filter_out_lines_set
+                    (
+                        f"#{line}"
+                        if any(
+                            line.startswith(filter_prefix)
+                            for filter_prefix in filter_out_lines_set
+                        )
+                        else line
                     )
-                    else line
                     for line in source
                 ]
             result.append(f'{header_comment}\n{"".join(source)}')

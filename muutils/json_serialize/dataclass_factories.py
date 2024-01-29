@@ -38,9 +38,7 @@ def dataclass_serializer_factory(
 
     assert isinstance(_fields_exclude, Sequence)
 
-    sfuncs_simple: dict[
-        str, Callable
-    ] = (
+    sfuncs_simple: dict[str, Callable] = (
         dict()
     )  # TODO: deprecate simple serializers? check if they output a nested structure or simple type? idk
     sfuncs_full: dict[str, Callable] = dict()

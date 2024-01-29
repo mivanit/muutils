@@ -66,7 +66,9 @@ def run_notebook_tests(
             output_file: Path = file.with_suffix(CI_output_suffix)
             print(f"    Output in {output_file}")
 
-            command: str = f"{run_python_cmd} {root_relative_to_notebooks / file} > {root_relative_to_notebooks / output_file} 2>&1"
+            command: str = (
+                f"{run_python_cmd} {root_relative_to_notebooks / file} > {root_relative_to_notebooks / output_file} 2>&1"
+            )
             process: subprocess.CompletedProcess = subprocess.run(
                 command, shell=True, text=True
             )

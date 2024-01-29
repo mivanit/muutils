@@ -17,6 +17,7 @@ else:
 # figure out if we're in a jupyter notebook
 try:
     from IPython import get_ipython
+
     IN_JUPYTER = get_ipython() is not None
 except ImportError:
     IN_JUPYTER = False

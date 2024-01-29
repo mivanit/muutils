@@ -25,9 +25,9 @@ def arr_metadata(arr) -> dict[str, list[int] | str | int]:
     """get metadata for a numpy array"""
     return {
         "shape": list(arr.shape),
-        "dtype": arr.dtype.__name__
-        if hasattr(arr.dtype, "__name__")
-        else str(arr.dtype),
+        "dtype": (
+            arr.dtype.__name__ if hasattr(arr.dtype, "__name__") else str(arr.dtype)
+        ),
         "n_elements": array_n_elements(arr),
     }
 

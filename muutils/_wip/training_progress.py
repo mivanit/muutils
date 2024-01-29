@@ -97,9 +97,9 @@ class TrainingProgress:
             "batches",
             "samples",
         ), f"display_progress must be one of 'epochs', 'batches', or 'samples', got {display_progress}"
-        self.display_progress: Literal[
-            "epochs", "batches", "samples"
-        ] = display_progress
+        self.display_progress: Literal["epochs", "batches", "samples"] = (
+            display_progress
+        )
         self.pbar: tqdm
 
         # single progress bar if over epochs, multiple otherwise
@@ -107,9 +107,11 @@ class TrainingProgress:
         self.pbar_total: int = (
             self.batches_per_epoch
             if self.display_progress == "batches"
-            else self.samples_per_epoch
-            if self.display_progress == "samples"
-            else self.epochs_total
+            else (
+                self.samples_per_epoch
+                if self.display_progress == "samples"
+                else self.epochs_total
+            )
         )
 
     def _get_desc(self) -> str:

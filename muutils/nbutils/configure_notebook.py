@@ -15,9 +15,11 @@ else:
     PLOTLY_IMPORTED = True
 
 # figure out if we're in a jupyter notebook
-IN_JUPYTER: bool = not "_" in os.environ
-if IN_JUPYTER:
-    from IPython import get_ipython  # type: ignore[import]
+try:
+    from IPython import get_ipython
+    IN_JUPYTER = get_ipython() is not None
+except ImportError:
+    IN_JUPYTER = False
 
 # muutils imports
 from muutils.mlutils import get_device, set_reproducibility

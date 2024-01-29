@@ -7,7 +7,7 @@ COVERAGE_REPORTS_DIR := docs/coverage
 TESTS_DIR := tests/unit
 PYPROJECT := pyproject.toml
 
-VERSION := $(shell python -c "import tomllib; print(tomllib.load(open('$(PYPROJECT)', 'rb'))['tool']['poetry']['version'])")
+VERSION := $(shell python -c "import re; print(re.search(r'^version\s*=\s*\"(.+?)\"', open('$(PYPROJECT)').read(), re.MULTILINE).group(1))")
 LAST_VERSION := $(shell cat $(LAST_VERSION_FILE))
 PYPOETRY := poetry run python
 

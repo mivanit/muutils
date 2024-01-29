@@ -16,7 +16,7 @@ else:
 
 # figure out if we're in a jupyter notebook
 try:
-    from IPython import get_ipython
+    from IPython import get_ipython  # type: ignore[import-not-found]
 
     IN_JUPYTER = get_ipython() is not None
 except ImportError:
@@ -105,7 +105,7 @@ def setup_plots(
         return
     elif PLOT_MODE == "ignore":
         # disable plotting
-        plt.show = lambda: None
+        plt.show = lambda: None  # type: ignore[misc]
         return
 
     # everything except saving handled up to this point

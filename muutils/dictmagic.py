@@ -312,8 +312,8 @@ def tuple_dims_replace(
 
 
 def condense_tensor_dict(
-    data: dict[str, "torch.Tensor|np.ndarray"]
-    | Iterable[tuple[str, "torch.Tensor|np.ndarray"]],
+    data: dict[str, "torch.Tensor|np.ndarray"] # type: ignore[name-defined]
+    | Iterable[tuple[str, "torch.Tensor|np.ndarray"]], # type: ignore[name-defined]
     shapes_convert: Callable[[tuple], Any] = lambda x: str(x)
     .replace('"', "")
     .replace("'", ""),
@@ -396,8 +396,8 @@ def condense_tensor_dict(
     if shapes_convert is None:
         shapes_convert = lambda x: x
 
-    data_items: Iterable[tuple[str, "torch.Tensor|np.ndarray"]] = (
-        data.items() if hasattr(data, "items") and callable(data.items) else data
+    data_items: Iterable[tuple[str, "torch.Tensor|np.ndarray"]] = ( # type: ignore
+        data.items() if hasattr(data, "items") and callable(data.items) else data # type: ignore
     )
 
     data_shapes: dict[str, str | tuple[int, ...]] = {
@@ -428,7 +428,7 @@ def condense_tensor_dict(
             return json.dumps(data_condensed, indent=2)
         case "yaml":
             try:
-                import yaml
+                import yaml # type: ignore[import-untyped]
 
                 return yaml.dump(data_condensed, sort_keys=False)
             except ImportError as e:

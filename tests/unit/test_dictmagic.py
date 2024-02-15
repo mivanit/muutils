@@ -1,9 +1,14 @@
 import pytest
 
 from muutils.dictmagic import (
+    condense_nested_dicts_matching_values,
+    condense_tensor_dict,
     dotlist_to_nested_dict,
     kwargs_to_nested_dict,
+    tuple_dims_replace,
     update_with_nested_dict,
+    is_numeric_consecutive, 
+    condense_nested_dicts,
 )
 from muutils.json_serialize import SerializableDataclass, serializable_dataclass
 
@@ -158,3 +163,147 @@ def test_update_from_dotlists():
     assert parent.a == 5
     assert parent.b.x == 6
     assert parent.b.y == 7
+
+
+# Tests for is_numeric_consecutive
+@pytest.mark.parametrize("test_input,expected", [
+    (["1", "2", "3"], True),
+    (["1", "3", "2"], True),
+    (["1", "4", "2"], False),
+    ([], False),
+    (["a", "2", "3"], False)
+])
+def test_is_numeric_consecutive(test_input, expected):
+    assert is_numeric_consecutive(test_input) == expected
+
+# Tests for condense_nested_dicts
+def test_condense_nested_dicts_single_level():
+    data = {"1": "a", "2": "a", "3": "b"}
+    expected = {"[1-2]": "a", "3": "b"}
+    assert condense_nested_dicts(data) == expected
+
+def test_condense_nested_dicts_nested():
+    data = {"1": {"1": "a", "2": "a"}, "2": "b"}
+    expected = {"1": {"[1-2]": "a"}, "2": "b"}
+    assert condense_nested_dicts(data) == expected
+
+def test_condense_nested_dicts_non_numeric():
+    data = {"a": "a", "b": "a", "c": "b"}
+    assert condense_nested_dicts(data, condense_matching_values=False) == data
+    assert condense_nested_dicts(data, condense_matching_values=True) == {"[a, b]": "a", "c": "b"}
+
+def test_condense_nested_dicts_mixed_keys():
+    data = {"1": "a", "2": "a", "a": "b"}
+    assert condense_nested_dicts(data) == {'[1, 2]': 'a', 'a': 'b'}
+
+
+# Mocking a Tensor-like object for use in tests
+class MockTensor:
+    def __init__(self, shape):
+        self.shape = shape
+
+# Test cases for `tuple_dims_replace`
+@pytest.mark.parametrize("input_tuple,dims_names_map,expected", [
+    ((1, 2, 3), {1: 'A', 2: 'B'}, ('A', 'B', 3)),
+    ((4, 5, 6), {}, (4, 5, 6)),
+    ((7, 8), None, (7, 8)),
+    ((1, 2, 3), {3: 'C'}, (1, 2, 'C')),
+])
+def test_tuple_dims_replace(input_tuple, dims_names_map, expected):
+    assert tuple_dims_replace(input_tuple, dims_names_map) == expected
+
+@pytest.fixture
+def tensor_data():
+    # Mock tensor data simulating different shapes
+    return {
+        'tensor1': MockTensor((10, 256, 256)),
+        'tensor2': MockTensor((10, 256, 256)),
+        'tensor3': MockTensor((10, 512, 256)),
+    }
+
+def test_condense_tensor_dict_basic(tensor_data):
+    assert condense_tensor_dict(
+        tensor_data, 
+        drop_batch_dims=1,
+        condense_matching_values=False,
+    ) == {
+        'tensor1': '(256, 256)',
+        'tensor2': '(256, 256)',
+        'tensor3': '(512, 256)',
+    }
+
+    assert condense_tensor_dict(
+        tensor_data, 
+        drop_batch_dims=1,
+        condense_matching_values=True,
+    ) == {
+        '[tensor1, tensor2]': '(256, 256)',
+        'tensor3': '(512, 256)',
+    }
+
+def test_condense_tensor_dict_shapes_convert(tensor_data):
+    shapes_convert = lambda x: x  # Returning the actual shape tuple
+    assert condense_tensor_dict(
+        tensor_data, 
+        shapes_convert=shapes_convert, 
+        drop_batch_dims=1,
+        condense_matching_values=False,
+    ) == {
+        'tensor1': (256, 256),
+        'tensor2': (256, 256),
+        'tensor3': (512, 256),
+    }
+
+    assert condense_tensor_dict(
+        tensor_data, 
+        shapes_convert=shapes_convert, 
+        drop_batch_dims=1,
+        condense_matching_values=True,
+    ) == {
+        '[tensor1, tensor2]': (256, 256),
+        'tensor3': (512, 256),
+    }
+
+def test_condense_tensor_dict_named_dims(tensor_data):
+    assert condense_tensor_dict(
+        tensor_data,
+        dims_names_map={10: 'B', 256: 'A', 512: 'C'},
+        condense_matching_values=False,
+    ) == {
+        'tensor1': "(B, A, A)",
+        'tensor2': "(B, A, A)",
+        'tensor3': "(B, C, A)",
+    }
+
+    assert condense_tensor_dict(
+        tensor_data,
+        dims_names_map={10: 'B', 256: 'A', 512: 'C'},
+        condense_matching_values=True,
+    ) =={'[tensor1, tensor2]': '(B, A, A)', 'tensor3': "(B, C, A)"}
+
+
+@pytest.mark.parametrize("input_data,expected,fallback_mapping", [
+    # Test 1: Simple dictionary with no identical values
+    ({"a": 1, "b": 2}, {"a": 1, "b": 2}, None),
+    
+    # Test 2: Dictionary with identical values
+    ({"a": 1, "b": 1, "c": 2}, {"[a, b]": 1, "c": 2}, None),
+    
+    # Test 3: Nested dictionary with identical values
+    ({"a": {"x": 1, "y": 1}, "b": 2}, {"a": {"[x, y]": 1}, "b": 2}, None),
+    
+    # Test 4: Nested dictionaries with and without identical values
+    ({"a": {"x": 1, "y": 2}, "b": {"x": 1, "z": 3}, "c": 1}, {"a": {"x": 1, "y": 2}, "b": {"x": 1, "z": 3}, "c": 1}, None),
+    
+    # Test 5: Dictionary with unhashable values and no fallback mapping
+    # This case is expected to fail without a fallback mapping, hence not included when using str as fallback
+    
+    # Test 6: Dictionary with unhashable values and a fallback mapping as str
+    ({"a": [1, 2], "b": [1, 2], "c": "test"}, {"[a, b]": '[1, 2]', "c": "test"}, str),
+])
+def test_condense_nested_dicts_matching_values(input_data, expected, fallback_mapping):
+    if fallback_mapping is not None:
+        result = condense_nested_dicts_matching_values(input_data, fallback_mapping)
+    else:
+        result = condense_nested_dicts_matching_values(input_data)
+    assert result == expected, f"Expected {expected}, got {result}"

@@ -1,7 +1,7 @@
 import typing
 import warnings
 from collections import defaultdict
-from typing import Any, Callable, Generic, TypeVar
+from typing import Any, Literal, Iterable, Callable, Generic, TypeVar, Hashable
 
 _KT = TypeVar("_KT")
 _VT = TypeVar("_VT")
@@ -152,3 +152,273 @@ def kwargs_to_nested_dict(
         filtered_kwargs[key] = value
 
     return dotlist_to_nested_dict(filtered_kwargs, sep=sep)
+
+
+def is_numeric_consecutive(lst: list[str]) -> bool:
+    """Check if the list of keys is numeric and consecutive."""
+    try:
+        numbers: list[int] = [int(x) for x in lst]
+        return sorted(numbers) == list(range(min(numbers), max(numbers) + 1))
+    except ValueError:
+        return False
+
+def condense_nested_dicts_numeric_keys(
+        data: dict[str, Any],
+    ) -> dict[str, Any]:
+    """condense a nested dict, by condensing numeric keys with matching values to ranges
+
+    # Examples:
+    ```python
+    >>> condense_nested_dicts_numeric_keys({'1': 1, '2': 1, '3': 1, '4': 2, '5': 2, '6': 2})
+    {'[1-3]': 1, '[4-6]': 2}
+    >>> condense_nested_dicts_numeric_keys({'1': {'1': 'a', '2': 'a'}, '2': 'b'})
+    {"1": {"[1-2]": "a"}, "2": "b"}
+    ```    
+    """
+
+    if not isinstance(data, dict):
+        return data
+
+    # Process each sub-dictionary
+    for key, value in list(data.items()):
+        data[key] = condense_nested_dicts_numeric_keys(value)
+    
+    # Find all numeric, consecutive keys
+    if is_numeric_consecutive(list(data.keys())):
+        keys: list[str] = sorted(data.keys(), key=lambda x: int(x))
+    else:
+        return data
+
+    # output dict
+    condensed_data: dict[str, Any] = {}
+
+    # Identify ranges of identical values and condense
+    i: int = 0
+    while i < len(keys):
+        j: int = i
+        while j + 1 < len(keys) and data[keys[j]] == data[keys[j + 1]]:
+            j += 1
+        if j > i:  # Found consecutive keys with identical values
+            condensed_key: str = f'[{keys[i]}-{keys[j]}]'
+            condensed_data[condensed_key] = data[keys[i]]
+            i = j + 1
+        else:
+            condensed_data[keys[i]] = data[keys[i]]
+            i += 1
+
+    return condensed_data
+
+def condense_nested_dicts_matching_values(
+        data: dict[str, Any],
+        val_condense_fallback_mapping: Callable[[Any], Hashable] | None = None,
+    ) -> dict[str, Any]:
+    """condense a nested dict, by condensing keys with matching values
+    
+    # Examples:
+
+    # Parameters:
+     - `data : dict[str, Any]`   
+        data to process
+     - `val_condense_fallback_mapping : Callable[[Any], Hashable] | None`   
+        a function to apply to each value before adding it to the dict (if it's not hashable)
+        (defaults to `None`)
+    
+    """    
+
+    if isinstance(data, dict):
+        data = {
+            key: condense_nested_dicts_matching_values(value, val_condense_fallback_mapping)
+            for key, value in data.items()
+        }
+    else:
+        return data
+
+    # Find all identical values and condense by stitching together keys
+    values_grouped: defaultdict[Any, list[str]] = defaultdict(list)
+    data_persist: dict[str, Any] = dict()
+    for key, value in data.items():
+        if not isinstance(value, dict):
+            try:
+                values_grouped[value].append(key)
+            except TypeError:
+                # If the value is unhashable, use a fallback mapping to find a hashable representation
+                if val_condense_fallback_mapping is not None:
+                    values_grouped[val_condense_fallback_mapping(value)].append(key)
+                else:
+                    data_persist[key] = value
+        else:
+            data_persist[key] = value
+
+
+    condensed_data = data_persist
+    for value, keys in values_grouped.items():
+        if len(keys) > 1:
+            merged_key = f"[{', '.join(keys)}]"  # Choose an appropriate method to represent merged keys
+            condensed_data[merged_key] = value
+        else:
+            condensed_data[keys[0]] = value
+
+    return condensed_data
+
+def condense_nested_dicts(
+    data: dict[str, Any],
+    condense_numeric_keys: bool = True,
+    condense_matching_values: bool = True,
+    val_condense_fallback_mapping: Callable[[Any], Hashable] | None = None,
+) -> dict[str, Any]:
+    """condense a nested dict, by condensing numeric or matching keys with matching values to ranges
+    
+    combines the functionality of `condense_nested_dicts_numeric_keys()` and `condense_nested_dicts_matching_values()`
+
+    # NOTE: this process is not meant to be reversible, and is intended for pretty-printing and visualization purposes
+    it's not reversible because types are lost to make the printing pretty
+     
+    # Parameters:
+     - `data : dict[str, Any]`   
+        data to process
+     - `condense_numeric_keys : bool`   
+        whether to condense numeric keys (e.g. "1", "2", "3") to ranges (e.g. "[1-3]")
+       (defaults to `True`)
+     - `condense_matching_values : bool`   
+        whether to condense keys with matching values
+       (defaults to `True`)
+     - `val_condense_fallback_mapping : Callable[[Any], Hashable] | None`   
+        a function to apply to each value before adding it to the dict (if it's not hashable)
+       (defaults to `None`)
+
+    """    
+
+    condensed_data: dict = data
+    if condense_numeric_keys:
+        condensed_data = condense_nested_dicts_numeric_keys(condensed_data)
+    if condense_matching_values:
+        condensed_data = condense_nested_dicts_matching_values(condensed_data, val_condense_fallback_mapping)
+    return condensed_data
+
+def tuple_dims_replace(t: tuple[int, ...], dims_names_map: dict[int, str]|None = None) -> tuple[int|str, ...]:
+    if dims_names_map is None:
+        return t
+    else:
+        return tuple(dims_names_map.get(x, x) for x in t)
+
+def condense_tensor_dict(
+        data: dict[str, "torch.Tensor|np.ndarray"]|Iterable[tuple[str, "torch.Tensor|np.ndarray"]],
+        shapes_convert: Callable[[tuple], Any] = lambda x: str(x).replace('"', '').replace("'", ''),
+        drop_batch_dims: int = 0,
+        return_format: Literal['dict', 'json', 'yaml'] = 'dict',
+        sep: str = '.',
+        dims_names_map: dict[int, str]|None = None,
+        condense_numeric_keys: bool = True,
+        condense_matching_values: bool = True,
+        val_condense_fallback_mapping: Callable[[Any], Hashable] | None = None,
+    ) -> str|dict[str, str|tuple[int, ...]]:
+    """Convert a dictionary of tensors to a dictionary of shapes.
+    
+    by default, values are converted to strings of their shapes (for nice printing).
+    If you want the actual shapes, set `shapes_convert = lambda x: x` or `shapes_convert = None`.
+
+    # Parameters:
+     - `data : dict[str, "torch.Tensor|np.ndarray"] | Iterable[tuple[str, "torch.Tensor|np.ndarray"]]`   
+        a either a dict from strings to tensors, or an iterable of (key, tensor) pairs (like you might get from a `dict().items())` )
+     - `shapes_convert : Callable[[tuple], Any]`   
+        conversion of a shape tuple to a string or other format (defaults to turning it into a string and removing quotes)
+        (defaults to `lambdax:str(x).replace('"', '').replace("'", '')`)
+     - `drop_batch_dims : int`   
+        number of leading dimensions to drop from the shape       
+        (defaults to `0`)
+     - `return_format : Literal['dict', 'json', 'yaml']`   
+        format to return the result in -- either a dict, or dump to json/yaml directly for pretty printing. will crash if yaml is not installed.
+        (defaults to `'dict'`)
+     - `sep : str`   
+        separator to use for nested keys
+        (defaults to `'.'`)
+     - `dims_names_map : dict[int, str] | None`   
+        convert certain dimension values in shape. not perfect, can be buggy
+        (defaults to `None`)
+     - `condense_numeric_keys : bool`   
+        whether to condense numeric keys (e.g. "1", "2", "3") to ranges (e.g. "[1-3]"), passed on to `condense_nested_dicts`
+        (defaults to `True`)
+     - `condense_matching_values : bool`
+        whether to condense keys with matching values, passed on to `condense_nested_dicts`
+        (defaults to `True`)
+     - `val_condense_fallback_mapping : Callable[[Any], Hashable] | None`
+        a function to apply to each value before adding it to the dict (if it's not hashable), passed on to `condense_nested_dicts`
+        (defaults to `None`)
+    
+    # Returns:
+     - `str|dict[str, str|tuple[int, ...]]`
+        dict if `return_format='dict'`, a string for `json` or `yaml` output
+    
+    # Examples:
+    ```python
+    >>> model = transformer_lens.HookedTransformer.from_pretrained("gpt2")
+    >>> print(condense_tensor_dict(model.named_parameters(), return_format='yaml'))
+    ```
+    ```yaml
+    embed:
+      W_E: (50257, 768)
+    pos_embed:
+      W_pos: (1024, 768)
+    blocks:
+      '[0-11]':
+        attn:
+          '[W_Q, W_K, W_V]': (12, 768, 64)
+          W_O: (12, 64, 768)
+          '[b_Q, b_K, b_V]': (12, 64)
+          b_O: (768,)
+        mlp:
+          W_in: (768, 3072)
+          b_in: (3072,)
+          W_out: (3072, 768)
+          b_out: (768,)
+    unembed:
+      W_U: (768, 50257)
+      b_U: (50257,)
+    ```
+
+    # Raises:
+     - `ValueError` :  if `return_format` is not one of 'dict', 'json', or 'yaml', or if you try to use 'yaml' output without having PyYAML installed
+    """
+
+    if shapes_convert is None:
+        shapes_convert = lambda x: x
+
+    data_items: Iterable[tuple[str, "torch.Tensor|np.ndarray"]] = (
+        data.items()
+        if hasattr(data, "items") and callable(data.items)
+        else data
+    )
+
+    data_shapes: dict[str, str|tuple[int, ...]] = {
+        k: shapes_convert(
+            tuple_dims_replace(
+                tuple(v.shape)[drop_batch_dims:],
+                dims_names_map,
+            )
+        )
+        for k, v in data_items
+    }
+
+    data_nested: dict[str, Any] = dotlist_to_nested_dict(data_shapes, sep=sep)
+
+    data_condensed: dict[str, str|tuple[int, ...]] = condense_nested_dicts(
+        data=data_nested,
+        condense_numeric_keys=condense_numeric_keys,
+        condense_matching_values=condense_matching_values,
+        val_condense_fallback_mapping=val_condense_fallback_mapping,
+    )
+
+    match return_format:
+        case 'dict':
+            return data_condensed
+        case 'json':
+            import json
+            return json.dumps(data_condensed, indent=2)
+        case 'yaml':
+            try:
+                import yaml
+                return yaml.dump(data_condensed, sort_keys=False)
+            except ImportError as e:
+                raise ValueError("PyYAML is required for YAML output") from e
+        case _:
+            raise ValueError(f"Invalid return format: {return_format}")

@@ -312,8 +312,10 @@ def tuple_dims_replace(
 
 
 def condense_tensor_dict(
-    data: dict[str, "torch.Tensor|np.ndarray"]  # type: ignore[name-defined]
-    | Iterable[tuple[str, "torch.Tensor|np.ndarray"]],  # type: ignore[name-defined]
+    data: (
+        dict[str, "torch.Tensor|np.ndarray"]  # type: ignore[name-defined]
+        | Iterable[tuple[str, "torch.Tensor|np.ndarray"]]
+    ),  # type: ignore[name-defined]
     shapes_convert: Callable[[tuple], Any] = lambda x: str(x)
     .replace('"', "")
     .replace("'", ""),

@@ -146,8 +146,7 @@ def convert_ipynb(
     strip_md_cells: bool = False,
     header_comment: str = r"#%%",
     disable_plots: bool = False,
-    filter_out_lines: str
-    | typing.Sequence[str] = (
+    filter_out_lines: str | typing.Sequence[str] = (
         "%",
         "!",
     ),  # ignore notebook magic commands and shell commands

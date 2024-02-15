@@ -97,9 +97,9 @@ class TrainingProgress:
             "batches",
             "samples",
         ), f"display_progress must be one of 'epochs', 'batches', or 'samples', got {display_progress}"
-        self.display_progress: Literal["epochs", "batches", "samples"] = (
-            display_progress
-        )
+        self.display_progress: Literal[
+            "epochs", "batches", "samples"
+        ] = display_progress
         self.pbar: tqdm
 
         # single progress bar if over epochs, multiple otherwise

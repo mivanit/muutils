@@ -8,7 +8,8 @@ from muutils.json_serialize import json_serialize
 
 
 class HeaderFunction(Protocol):
-    def __call__(self, msg: Any, lvl: int, **kwargs) -> str: ...
+    def __call__(self, msg: Any, lvl: int, **kwargs) -> str:
+        ...
 
 
 def md_header_function(

@@ -1,5 +1,9 @@
 import base64
-from IPython.display import Image, display
+try:
+    from IPython.display import Image, display
+except ImportError:
+    import warnings
+    warnings.warn("IPython.display could not be imported, mermaid will not work", ImportWarning)
 
 def mm(graph):
     """for plotting mermaid.js diagrams"""

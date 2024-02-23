@@ -267,7 +267,9 @@ class JsonSerializer:
         # recursive hashify, turning dicts and lists into tuples
         return _recursive_hashify(data, force=force)
 
+
 GLOBAL_JSON_SERIALIZER: JsonSerializer = JsonSerializer()
+
 
 def json_serialize(obj: Any, path: ObjectPath = tuple()) -> JSONitem:
     """serialize object to json-serializable object with default config"""

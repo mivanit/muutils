@@ -6,7 +6,7 @@ muutils\group_equiv.py                                                          
 muutils\json_serialize\__init__.py                                                    5      0   100%
 muutils\json_serialize\array.py                                                      80     19    76%   18-21, 74, 102, 114, 118, 121, 125, 129, 136, 143, 155, 174-179, 184, 187
 muutils\json_serialize\dataclass_factories.py                                       115    115     0%   1-303
-muutils\json_serialize\json_serialize.py                                             57     20    65%   10-13, 80, 127-132, 220, 241-256, 265-268
+muutils\json_serialize\json_serialize.py                                             58     20    66%   10-13, 80, 127-132, 220, 241-256, 265-268
 muutils\json_serialize\serializable_dataclass.py                                    178     35    80%   69, 85, 141, 147, 153, 160-162, 171-174, 208-223, 233, 237, 240, 243, 249, 259-260, 264, 273-277, 281, 302, 305, 337, 363, 379-380, 403, 430, 436
 muutils\json_serialize\util.py                                                       76     41    46%   11-13, 24, 33, 36, 44-50, 59, 67-74, 85-88, 94-104, 116-119, 123-126
 muutils\jsonlines.py                                                                 31     31     0%   1-73
@@ -21,11 +21,12 @@ muutils\logger\simplelogger.py                                                  
 muutils\logger\timing.py                                                             39     19    51%   25-28, 41-46, 50-52, 65-68, 79-84
 muutils\misc.py                                                                      54     43    20%   8-11, 16-28, 38-53, 59-64, 87-97, 103-112, 126-134
 muutils\mlutils.py                                                                   66     17    74%   16-20, 29, 35-49, 54, 56, 65-70, 141-142, 153
-muutils\nbutils\__init__.py                                                           0      0   100%
-muutils\nbutils\configure_notebook.py                                               128     45    65%   15, 21, 58-64, 81, 91-92, 97, 100-101, 121-124, 129, 135-144, 151-156, 204-215, 221-223, 249-256, 259
+muutils\nbutils\__init__.py                                                           2      0   100%
+muutils\nbutils\configure_notebook.py                                               128     46    64%   15, 22-23, 58-64, 81, 91-92, 97, 100-101, 121-124, 129, 135-144, 151-156, 204-215, 221-223, 249-256, 259
 muutils\nbutils\convert_ipynb_to_script.py                                          118     53    55%   63, 78, 91, 105-139, 169, 212-236, 263, 287-289, 296-349
+muutils\nbutils\mermaid.py                                                           11      7    36%   5-8, 15-18
 muutils\nbutils\print_tex.py                                                         10     10     0%   1-19
-muutils\nbutils\run_notebook_tests.py                                                58     20    66%   29, 31, 35, 39, 45, 53, 80-82, 86-90, 97-114
+muutils\nbutils\run_notebook_tests.py                                                58     22    62%   29, 31, 35, 39, 45, 53, 76-84, 87-90, 97-114
 muutils\statcounter.py                                                               87     32    63%   24-35, 50, 70, 98, 110, 120, 136-166, 174, 183, 186, 190-195, 204
 muutils\sysinfo.py                                                                   71     18    75%   21, 60-61, 78-111, 145, 168
 muutils\tensor_utils.py                                                             125     39    69%   76, 79, 84, 96-136, 143, 157-165, 352, 418, 429, 443
@@ -36,7 +37,7 @@ tests\unit\json_serialize\test_array.py                                         
 tests\unit\logger\test_logger.py                                                     10      0   100%
 tests\unit\logger\test_timer_context.py                                               9      0   100%
 tests\unit\nbutils\test_configure_notebook.py                                        49      0   100%
-tests\unit\nbutils\test_conversion.py                                                20      0   100%
+tests\unit\nbutils\test_conversion.py                                                20      8    60%   31-39
 tests\unit\test_chunks.py                                                            31      0   100%
 tests\unit\test_dictmagic.py                                                        103      0   100%
 tests\unit\test_group_equiv.py                                                       12      0   100%
@@ -47,4 +48,4 @@ tests\unit\test_statcounter.py                                                  
 tests\unit\test_sysinfo.py                                                            4      0   100%
 tests\unit\test_tensor_utils.py                                                      36      0   100%
 ---------------------------------------------------------------------------------------------------------------
-TOTAL                                                                              2365    676    71%
+TOTAL                                                                              2379    694    71%

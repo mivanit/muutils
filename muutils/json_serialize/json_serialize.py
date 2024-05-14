@@ -206,7 +206,30 @@ DEFAULT_HANDLERS: MonoTuple[SerializerHandler] = tuple(BASE_HANDLERS) + (
 
 
 class JsonSerializer:
-    """Json serialization class (holds configs)"""
+    """Json serialization class (holds configs)
+
+    # Parameters:
+        - `array_mode : ArrayMode`
+        how to write arrays
+        (defaults to `"array_list_meta"`)
+        - `error_mode : ErrorMode`
+        what to do when we can't serialize an object (will use repr as fallback if "ignore" or "warn")
+        (defaults to `"except"`)
+        - `handlers_pre : MonoTuple[SerializerHandler]`
+        handlers to use before the default handlers
+        (defaults to `tuple()`)
+        - `handlers_default : MonoTuple[SerializerHandler]`
+        default handlers to use
+        (defaults to `DEFAULT_HANDLERS`)
+        - `write_only_format : bool`
+        changes "__format__" keys in output to "__write_format__" (when you want to serialize something in a way that zanj won't try to recover the object when loading)
+        (defaults to `False`)
+
+    # Raises:
+        - `ValueError`: on init, if `args` is not empty
+        - `SerializationException`: on `json_serialize()`, if any error occurs when trying to serialize an object and `error_mode` is set to `"except"`
+
+    """
 
     def __init__(
         self,
@@ -215,6 +238,7 @@ class JsonSerializer:
         error_mode: ErrorMode = "except",
         handlers_pre: MonoTuple[SerializerHandler] = tuple(),
         handlers_default: MonoTuple[SerializerHandler] = DEFAULT_HANDLERS,
+        write_only_format: bool = False,
     ):
         if len(args) > 0:
             raise ValueError(
@@ -223,6 +247,7 @@ class JsonSerializer:
 
         self.array_mode: ArrayMode = array_mode
         self.error_mode: ErrorMode = error_mode
+        self.write_only_format: bool = write_only_format
         # join up the handlers
         self.handlers: MonoTuple[SerializerHandler] = tuple(handlers_pre) + tuple(
             handlers_default
@@ -236,7 +261,12 @@ class JsonSerializer:
         try:
             for handler in self.handlers:
                 if handler.check(self, obj, path):
-                    return handler.serialize_func(self, obj, path)
+                    output: JSONitem = handler.serialize_func(self, obj, path)
+                    if self.write_only_format:
+                        if isinstance(output, dict) and "__format__" in output:
+                            new_fmt: JSONitem = output.pop("__format__")
+                            output["__write_format__"] = new_fmt
+                    return output
 
             raise ValueError(f"no handler found for object with {type(obj) = }")
 

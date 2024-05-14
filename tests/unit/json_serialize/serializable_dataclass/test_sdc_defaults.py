@@ -1,4 +1,5 @@
 from muutils.json_serialize import (
+    JsonSerializer,
     SerializableDataclass,
     serializable_dataclass,
     serializable_field,
@@ -22,6 +23,20 @@ def test_sdc_empty():
         "save_model": True,
         "batch_size": 64,
         "__format__": "Config(SerializableDataclass)",
+    }
+    recovered = Config.load(serialized)
+    assert recovered == instance
+
+
+def test_sdc_strip_format_jser():
+    instance = Config()
+    jser: JsonSerializer = JsonSerializer(write_only_format=True)
+    serialized = jser.json_serialize(instance)
+    assert serialized == {
+        "name": "default_name",
+        "save_model": True,
+        "batch_size": 64,
+        "__write_format__": "Config(SerializableDataclass)",
     }
     recovered = Config.load(serialized)
     assert recovered == instance

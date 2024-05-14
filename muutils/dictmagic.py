@@ -61,6 +61,38 @@ def dotlist_to_nested_dict(dot_dict: dict[str, Any], sep: str = ".") -> dict[str
     return defaultdict_to_dict_recursive(nested_dict)
 
 
+def nested_dict_to_dotlist(
+    nested_dict: dict[str, Any],
+    sep: str = ".",
+    allow_lists: bool = False,
+) -> dict[str, Any]:
+    def _recurse(current: Any, parent_key: str = "") -> dict[str, Any]:
+        items: dict = dict()
+
+        if isinstance(current, dict):
+            # dict case
+            if not current and parent_key:
+                items[parent_key] = current
+            else:
+                for k, v in current.items():
+                    new_key: str = f"{parent_key}{sep}{k}" if parent_key else k
+                    items.update(_recurse(v, new_key))
+
+        elif allow_lists and isinstance(current, list):
+            # list case
+            for i, item in enumerate(current):
+                new_key: str = f"{parent_key}{sep}{i}" if parent_key else str(i)
+                items.update(_recurse(item, new_key))
+
+        else:
+            # anything else (write value)
+            items[parent_key] = current
+
+        return items
+
+    return _recurse(nested_dict)
+
+
 def update_with_nested_dict(
     original: dict[str, Any],
     update: dict[str, Any],

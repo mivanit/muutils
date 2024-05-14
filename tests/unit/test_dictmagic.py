@@ -7,6 +7,7 @@ from muutils.dictmagic import (
     dotlist_to_nested_dict,
     is_numeric_consecutive,
     kwargs_to_nested_dict,
+    nested_dict_to_dotlist,
     tuple_dims_replace,
     update_with_nested_dict,
 )
@@ -331,3 +332,42 @@ def test_condense_nested_dicts_matching_values(input_data, expected, fallback_ma
     else:
         result = condense_nested_dicts_matching_values(input_data)
     assert result == expected, f"Expected {expected}, got {result}"
+
+
+# "ndtd" = `nested_dict_to_dotlist`
+def test_nested_dict_to_dotlist_basic():
+    nested_dict = {"a": {"b": {"c": 1, "d": 2}, "e": 3}}
+    expected_dotlist = {"a.b.c": 1, "a.b.d": 2, "a.e": 3}
+    assert nested_dict_to_dotlist(nested_dict) == expected_dotlist
+
+
+def test_nested_dict_to_dotlist_empty():
+    nested_dict = {}
+    expected_dotlist = {}
+    result = nested_dict_to_dotlist(nested_dict)
+    assert result == expected_dotlist
+
+
+def test_nested_dict_to_dotlist_single_level():
+    nested_dict = {"a": 1, "b": 2, "c": 3}
+    expected_dotlist = {"a": 1, "b": 2, "c": 3}
+    assert nested_dict_to_dotlist(nested_dict) == expected_dotlist
+
+
+def test_nested_dict_to_dotlist_with_list():
+    nested_dict = {"a": [1, 2, {"b": 3}], "c": 4}
+    expected_dotlist = {"a.0": 1, "a.1": 2, "a.2.b": 3, "c": 4}
+    assert nested_dict_to_dotlist(nested_dict, allow_lists=True) == expected_dotlist
+
+
+def test_nested_dict_to_dotlist_nested_empty():
+    nested_dict = {"a": {"b": {}}}
+    expected_dotlist = {"a.b": {}}
+    assert nested_dict_to_dotlist(nested_dict) == expected_dotlist
+
+
+def test_round_trip_conversion():
+    original = {"a": {"b": {"c": 1, "d": 2}, "e": 3}}
+    dotlist = nested_dict_to_dotlist(original)
+    result = dotlist_to_nested_dict(dotlist)
+    assert result == original

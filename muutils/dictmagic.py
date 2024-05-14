@@ -69,19 +69,20 @@ def nested_dict_to_dotlist(
     def _recurse(current: Any, parent_key: str = "") -> dict[str, Any]:
         items: dict = dict()
 
+        new_key: str
         if isinstance(current, dict):
             # dict case
             if not current and parent_key:
                 items[parent_key] = current
             else:
                 for k, v in current.items():
-                    new_key: str = f"{parent_key}{sep}{k}" if parent_key else k
+                    new_key = f"{parent_key}{sep}{k}" if parent_key else k
                     items.update(_recurse(v, new_key))
 
         elif allow_lists and isinstance(current, list):
             # list case
             for i, item in enumerate(current):
-                new_key: str = f"{parent_key}{sep}{i}" if parent_key else str(i)
+                new_key = f"{parent_key}{sep}{i}" if parent_key else str(i)
                 items.update(_recurse(item, new_key))
 
         else:

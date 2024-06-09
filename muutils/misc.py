@@ -2,6 +2,10 @@ import hashlib
 import typing
 
 
+
+# objects and hashes
+# ================================================================================
+
 def stable_hash(s: str) -> int:
     """Returns a stable hash of the given string. not cryptographically secure, but stable between runs"""
     # init hash object and update with string
@@ -10,6 +14,61 @@ def stable_hash(s: str) -> int:
     # get digest and convert to int
     return int.from_bytes(hash_obj.digest(), "big")
 
+
+def freeze(obj: typing.Any) -> typing.Any:
+    """decorator to prevent writing to an object's members"""
+
+    def new_setattr(self, name, value):
+        raise AttributeError(f"{self.__class__.__name__} is frozen")
+
+    obj.__setattr__ = new_setattr
+
+    return obj
+
+
+
+# string-like operations on lists
+# ================================================================================
+
+def list_split(lst: list, val) -> list[list]:
+    """split a list into n sublists. similar to "a_b_c".split("_")"""
+
+    output: list[list] = [
+        [],
+    ]
+
+    for x in lst:
+        if x == val:
+            output.append([])
+        else:
+            output[-1].append(x)
+    return output
+
+
+def list_join(lst: list, factory: typing.Callable) -> list:
+    """add a *new* instance of `val` between each element of `lst`
+
+    ```
+    >>> list_join([1,2,3], lambda : 0)
+    [1,0,2,0,3]
+    >>> list_join([1,2,3], lambda: [time.sleep(0.1), time.time()][1])
+    [1, 1600000000.0, 2, 1600000000.1, 3]
+    ```
+    """
+
+    output: list = [
+        lst[0],
+    ]
+
+    for x in lst[1:]:
+        output.append(factory())
+        output.append(x)
+
+    return output
+
+
+# filename stuff
+# ================================================================================
 
 def sanitize_fname(fname: str | None) -> str:
     """sanitize a filename for use in a path"""
@@ -53,16 +112,8 @@ def dict_to_filename(
     return f"h_{stable_hash(sanitized_str)}"
 
 
-def freeze(obj: typing.Any) -> typing.Any:
-    """decorator to prevent writing to an object's members"""
-
-    def new_setattr(self, name, value):
-        raise AttributeError(f"{self.__class__.__name__} is frozen")
-
-    obj.__setattr__ = new_setattr
-
-    return obj
-
+# numerical conversions
+# ================================================================================
 
 _SHORTEN_MAP: dict[int | float, str] = {
     1e3: "K",
@@ -208,40 +259,3 @@ def str_to_numeric(
                 raise ValueError(f"Invalid quantity {quantity_original} ({quantity})") from e
 
     return result * multiplier
-
-
-def list_split(lst: list, val) -> list[list]:
-    """split a list into n sublists. similar to "a_b_c".split("_")"""
-
-    output: list[list] = [
-        [],
-    ]
-
-    for x in lst:
-        if x == val:
-            output.append([])
-        else:
-            output[-1].append(x)
-    return output
-
-
-def list_join(lst: list, factory: typing.Callable) -> list:
-    """add a *new* instance of `val` between each element of `lst`
-
-    ```
-    >>> list_join([1,2,3], lambda : 0)
-    [1,0,2,0,3]
-    >>> list_join([1,2,3], lambda: [time.sleep(0.1), time.time()][1])
-    [1, 1600000000.0, 2, 1600000000.1, 3]
-    ```
-    """
-
-    output: list = [
-        lst[0],
-    ]
-
-    for x in lst[1:]:
-        output.append(factory())
-        output.append(x)
-
-    return output

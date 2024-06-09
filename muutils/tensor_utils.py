@@ -64,6 +64,12 @@ def jaxtype_factory(
     default_jax_dtype=jaxtyping.Float,
     legacy_mode: typing.Literal["error", "warn", "ignore"] = "warn",
 ) -> type:
+    """usage:
+    ```
+    ATensor = jaxtype_factory("ATensor", torch.Tensor, jaxtyping.Float)
+    x: ATensor["dim1 dim2", np.float32]
+    ```
+    """
     class _BaseArray:
         """jaxtyping shorthand
         (backwards compatible with older versions of muutils.tensor_utils)
@@ -81,13 +87,15 @@ def jaxtype_factory(
         @classmethod
         def param_info(cls, params) -> str:
             """useful for error printing"""
-            return str(
+            return "\n".join(
+                f"{k} = {v}"
+                for k, v in
                 {
                     "cls.__name__": cls.__name__,
                     "cls.__doc__": cls.__doc__,
                     "params": params,
                     "type(params)": type(params),
-                }
+                }.items()
             )
 
         @typing._tp_cache  # type: ignore
@@ -99,7 +107,7 @@ def jaxtype_factory(
             elif isinstance(params, tuple):
                 if len(params) != 2:
                     raise Exception(
-                        f"unexpected type for params:\n{cls.param_info(params)}"
+                        f"unexpected type for params, expected tuple of length 2 here:\n{cls.param_info(params)}"
                     )
 
                 if isinstance(params[0], str):
@@ -126,7 +134,7 @@ def jaxtype_factory(
                             shape_anot.append("".join(str(y) for y in x))
                         else:
                             raise Exception(
-                                f"unexpected type for params:\n{cls.param_info(params)}"
+                                f"unexpected type for params, expected first part to be str, int, or tuple:\n{cls.param_info(params)}"
                             )
 
                     return TYPE_TO_JAX_DTYPE[params[1]][

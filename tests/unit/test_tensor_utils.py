@@ -6,7 +6,10 @@ import torch
 from muutils.tensor_utils import (
     DTYPE_MAP,
     TORCH_DTYPE_MAP,
+    StateDictKeysError,
+    StateDictShapeError,
     compare_state_dicts,
+    get_dict_shapes,
     jaxtype_factory,
     lpad_array,
     lpad_tensor,
@@ -23,6 +26,9 @@ def test_jaxtype_factory():
     assert ATensor.__name__ == "ATensor"
     assert "default_jax_dtype = <class 'jaxtyping.Float'" in ATensor.__doc__
     assert "array_type = <class 'torch.Tensor'>" in ATensor.__doc__
+
+    x = ATensor[(1, 2, 3), np.float32]
+    x = ATensor["dim1 dim2", np.float32]
 
 
 def test_numpy_to_torch_dtype():
@@ -60,3 +66,18 @@ def test_compare_state_dicts():
     d2["a"] = torch.tensor([7, 8, 9])
     with pytest.raises(AssertionError):
         compare_state_dicts(d1, d2)  # This should raise an exception
+
+    d2["a"] = torch.tensor([7, 8, 9, 10])
+    with pytest.raises(StateDictShapeError):
+        compare_state_dicts(d1, d2)  # This should raise an exception
+
+    d2["c"] = torch.tensor([10, 11, 12])
+    with pytest.raises(StateDictKeysError):
+        compare_state_dicts(d1, d2)  # This should raise an exception
+
+
+def test_get_dict_shapes():
+    
+    x = {"a": torch.rand(2, 3), "b": torch.rand(1, 3, 5), "c": torch.rand(2)}
+    x_shapes = get_dict_shapes(x)
+    assert x_shapes == {"a": (2, 3), "b": (1, 3, 5), "c": (2,)}

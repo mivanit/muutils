@@ -1,6 +1,9 @@
 import os
+import itertools
 
-from muutils.nbutils.convert_ipynb_to_script import process_dir
+import pytest
+
+from muutils.nbutils.convert_ipynb_to_script import process_dir, process_file
 from muutils.nbutils.run_notebook_tests import run_notebook_tests
 
 notebooks_input_dir: str = "tests/input_data/notebooks"
@@ -37,3 +40,23 @@ def test_run_notebook_tests():
         with open(os.path.join(test_output_dir, fname), "r") as f:
             actual = f.read()
         assert expected == actual
+
+@pytest.mark.parametrize(
+    "idx, args",
+    enumerate(itertools.product(
+        [True, False],
+        [r"#%%", "#"+"="*50],
+        [True, False],
+        ["%", ("!", "#"), ("import", "return")],
+    )),
+)
+def test_file_conversion(idx, args):
+    os.makedirs(test_output_dir, exist_ok=True)
+    process_file(
+        in_file=os.path.join(notebooks_input_dir, "dummy_notebook.ipynb"),
+        out_file=os.path.join(test_output_dir, f"dn-test-{idx}.py"),
+        strip_md_cells=args[0],
+        header_comment=args[1],
+        disable_plots=args[2],
+        filter_out_lines=args[3],
+    )

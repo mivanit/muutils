@@ -184,12 +184,17 @@ def str_to_numeric(
             num, den = quantity.split("/")
             num = num.strip()
             den = den.strip()
+            num_sign: int = 1
+            # negative numbers
+            if num.startswith("-"):
+                num_sign = -1
+                num = num[1:]
             # assert that both are digits
             assert num.isdigit() and den.isdigit(), f"numerator and denominator must be digits"
             # return the fraction
-            result = (int(num) / int(den)) # this allows for fractions with suffixes, which is weird, but whatever
+            result = num_sign * (int(num) / int(den)) # this allows for fractions with suffixes, which is weird, but whatever
         except AssertionError as e:
-            raise ValueError(f"Invalid fraction {quantity_original}") from e
+            raise ValueError(f"Invalid fraction {quantity_original}: {e}") from e
     
     # decimals
     else:
@@ -199,8 +204,8 @@ def str_to_numeric(
         except ValueError:
             try:
                 result = float(quantity)
-            except ValueError:
-                raise ValueError(f"Invalid quantity {quantity_original}")
+            except ValueError as e:
+                raise ValueError(f"Invalid quantity {quantity_original} ({quantity})") from e
 
     return result * multiplier
 

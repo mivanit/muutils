@@ -27,9 +27,11 @@ def test_freeze():
             self.attr = "value"
 
     instance = TestClass()
-    frozen_instance = freeze(instance)
-    with pytest.raises(AttributeError):
-        frozen_instance.attr = "new_value"
+    freeze(instance)
+    instance.attr = "new_value"
+    print(instance.attr)
+
+    assert instance.attr == "value", "Frozen instance should not be able to change attributes"
 
 def test_list_split():
     # with integers

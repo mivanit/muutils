@@ -33,6 +33,9 @@ def freeze(obj: typing.Any) -> typing.Any:
 def list_split(lst: list, val) -> list[list]:
     """split a list into n sublists. similar to "a_b_c".split("_")"""
 
+    if len(lst) == 0:
+        return [[]]
+
     output: list[list] = [
         [],
     ]
@@ -55,6 +58,9 @@ def list_join(lst: list, factory: typing.Callable) -> list:
     [1, 1600000000.0, 2, 1600000000.1, 3]
     ```
     """
+
+    if len(lst) == 0:
+        return []
 
     output: list = [
         lst[0],

@@ -1,5 +1,5 @@
-import os
 import itertools
+import os
 
 import pytest
 
@@ -41,14 +41,17 @@ def test_run_notebook_tests():
             actual = f.read()
         assert expected == actual
 
+
 @pytest.mark.parametrize(
     "idx, args",
-    enumerate(itertools.product(
-        [True, False],
-        [r"#%%", "#"+"="*50],
-        [True, False],
-        ["%", ("!", "#"), ("import", "return")],
-    )),
+    enumerate(
+        itertools.product(
+            [True, False],
+            [r"#%%", "#" + "=" * 50],
+            [True, False],
+            ["%", ("!", "#"), ("import", "return")],
+        )
+    ),
 )
 def test_file_conversion(idx, args):
     os.makedirs(test_output_dir, exist_ok=True)

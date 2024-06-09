@@ -2,11 +2,11 @@
 
 from typing import Any
 
-from muutils.json_serialize import JSONitem
 from muutils._wip.dataclass_factories import (
     dataclass_loader_factory,
     dataclass_serializer_factory,
 )
+from muutils.json_serialize import JSONitem
 
 
 def _test():

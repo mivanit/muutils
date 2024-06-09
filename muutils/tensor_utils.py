@@ -70,6 +70,7 @@ def jaxtype_factory(
     x: ATensor["dim1 dim2", np.float32]
     ```
     """
+
     class _BaseArray:
         """jaxtyping shorthand
         (backwards compatible with older versions of muutils.tensor_utils)
@@ -89,8 +90,7 @@ def jaxtype_factory(
             """useful for error printing"""
             return "\n".join(
                 f"{k} = {v}"
-                for k, v in
-                {
+                for k, v in {
                     "cls.__name__": cls.__name__,
                     "cls.__doc__": cls.__doc__,
                     "params": params,

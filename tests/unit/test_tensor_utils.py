@@ -77,7 +77,7 @@ def test_compare_state_dicts():
 
 
 def test_get_dict_shapes():
-    
+
     x = {"a": torch.rand(2, 3), "b": torch.rand(1, 3, 5), "c": torch.rand(2)}
     x_shapes = get_dict_shapes(x)
     assert x_shapes == {"a": (2, 3), "b": (1, 3, 5), "c": (2,)}

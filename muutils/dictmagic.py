@@ -343,22 +343,25 @@ def tuple_dims_replace(
     else:
         return tuple(dims_names_map.get(x, x) for x in t)
 
+TensorDict = dict[str, "torch.Tensor|np.ndarray"] # type: ignore[name-defined]
+TensorIterable = Iterable[tuple[str, "torch.Tensor|np.ndarray"]] # type: ignore[name-defined]
+TensorDictFormats = Literal["dict", "json", "yaml", "yml"]
+
+def _default_shapes_convert(x: tuple) -> str:
+    return str(x).replace('"', "").replace("'", "")
 
 def condense_tensor_dict(
-    data: (  # type: ignore[name-defined]
-        dict[str, "torch.Tensor|np.ndarray"]  # type: ignore[name-defined]
-        | Iterable[tuple[str, "torch.Tensor|np.ndarray"]]  # type: ignore[name-defined]
-    ),  # type: ignore[name-defined]
-    shapes_convert: Callable[[tuple], Any] = lambda x: str(x)
-    .replace('"', "")
-    .replace("'", ""),
+    data: TensorDict | TensorIterable,
+    fmt: TensorDictFormats = "dict",
+    *args,
+    shapes_convert: Callable[[tuple], Any] = _default_shapes_convert,
     drop_batch_dims: int = 0,
-    return_format: Literal["dict", "json", "yaml"] = "dict",
     sep: str = ".",
     dims_names_map: dict[int, str] | None = None,
     condense_numeric_keys: bool = True,
     condense_matching_values: bool = True,
     val_condense_fallback_mapping: Callable[[Any], Hashable] | None = None,
+    return_format: TensorDictFormats|None = None,
 ) -> str | dict[str, str | tuple[int, ...]]:
     """Convert a dictionary of tensors to a dictionary of shapes.
 
@@ -367,16 +370,16 @@ def condense_tensor_dict(
 
     # Parameters:
      - `data : dict[str, "torch.Tensor|np.ndarray"] | Iterable[tuple[str, "torch.Tensor|np.ndarray"]]`
-        a either a dict from strings to tensors, or an iterable of (key, tensor) pairs (like you might get from a `dict().items())` )
+        a either a `TensorDict` dict from strings to tensors, or an `TensorIterable` iterable of (key, tensor) pairs (like you might get from a `dict().items())` )
+     - `fmt : TensorDictFormats`
+        format to return the result in -- either a dict, or dump to json/yaml directly for pretty printing. will crash if yaml is not installed.
+        (defaults to `'dict'`)
      - `shapes_convert : Callable[[tuple], Any]`
         conversion of a shape tuple to a string or other format (defaults to turning it into a string and removing quotes)
         (defaults to `lambdax:str(x).replace('"', '').replace("'", '')`)
      - `drop_batch_dims : int`
         number of leading dimensions to drop from the shape
         (defaults to `0`)
-     - `return_format : Literal['dict', 'json', 'yaml']`
-        format to return the result in -- either a dict, or dump to json/yaml directly for pretty printing. will crash if yaml is not installed.
-        (defaults to `'dict'`)
      - `sep : str`
         separator to use for nested keys
         (defaults to `'.'`)
@@ -392,6 +395,8 @@ def condense_tensor_dict(
      - `val_condense_fallback_mapping : Callable[[Any], Hashable] | None`
         a function to apply to each value before adding it to the dict (if it's not hashable), passed on to `condense_nested_dicts`
         (defaults to `None`)
+     - `return_format : TensorDictFormats | None`
+        legacy alias for `fmt` kwarg
 
     # Returns:
      - `str|dict[str, str|tuple[int, ...]]`
@@ -428,13 +433,28 @@ def condense_tensor_dict(
      - `ValueError` :  if `return_format` is not one of 'dict', 'json', or 'yaml', or if you try to use 'yaml' output without having PyYAML installed
     """
 
+    # handle arg processing:
+    # ----------------------------------------------------------------------
+    # make all args except data and format keyword-only
+    assert len(args) == 0, f"unexpected positional args: {args}"
+    # handle legacy return_format
+    if return_format is not None:
+        warnings.warn(
+            "return_format is deprecated, use fmt instead",
+            DeprecationWarning,
+        )
+        fmt = return_format
+
+    # identity function for shapes_convert if not provided
     if shapes_convert is None:
         shapes_convert = lambda x: x
 
+    # convert to iterable
     data_items: Iterable[tuple[str, "torch.Tensor|np.ndarray"]] = (  # type: ignore
         data.items() if hasattr(data, "items") and callable(data.items) else data  # type: ignore
     )
 
+    # get shapes
     data_shapes: dict[str, str | tuple[int, ...]] = {
         k: shapes_convert(
             tuple_dims_replace(
@@ -445,8 +465,10 @@ def condense_tensor_dict(
         for k, v in data_items
     }
 
+    # nest the dict
     data_nested: dict[str, Any] = dotlist_to_nested_dict(data_shapes, sep=sep)
 
+    # condense the nested dict
     data_condensed: dict[str, str | tuple[int, ...]] = condense_nested_dicts(
         data=data_nested,
         condense_numeric_keys=condense_numeric_keys,
@@ -454,14 +476,15 @@ def condense_tensor_dict(
         val_condense_fallback_mapping=val_condense_fallback_mapping,
     )
 
-    match return_format:
+    # return in the specified format
+    match fmt.lower():
         case "dict":
             return data_condensed
         case "json":
             import json
 
             return json.dumps(data_condensed, indent=2)
-        case "yaml":
+        case "yaml"| "yml":
             try:
                 import yaml  # type: ignore[import-untyped]
 
@@ -469,4 +492,4 @@ def condense_tensor_dict(
             except ImportError as e:
                 raise ValueError("PyYAML is required for YAML output") from e
         case _:
-            raise ValueError(f"Invalid return format: {return_format}")
+            raise ValueError(f"Invalid return format: {fmt}")

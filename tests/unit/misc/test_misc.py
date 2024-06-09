@@ -28,10 +28,8 @@ def test_freeze():
 
     instance = TestClass()
     freeze(instance)
-    instance.attr = "new_value"
-    print(instance.attr)
-
-    assert instance.attr == "value", "Frozen instance should not be able to change attributes"
+    with pytest.raises(AttributeError):
+        instance.attr = "new_value"
 
 def test_list_split():
     # with integers

@@ -343,12 +343,15 @@ def tuple_dims_replace(
     else:
         return tuple(dims_names_map.get(x, x) for x in t)
 
-TensorDict = dict[str, "torch.Tensor|np.ndarray"] # type: ignore[name-defined]
-TensorIterable = Iterable[tuple[str, "torch.Tensor|np.ndarray"]] # type: ignore[name-defined]
+
+TensorDict = dict[str, "torch.Tensor|np.ndarray"]  # type: ignore[name-defined]
+TensorIterable = Iterable[tuple[str, "torch.Tensor|np.ndarray"]]  # type: ignore[name-defined]
 TensorDictFormats = Literal["dict", "json", "yaml", "yml"]
+
 
 def _default_shapes_convert(x: tuple) -> str:
     return str(x).replace('"', "").replace("'", "")
+
 
 def condense_tensor_dict(
     data: TensorDict | TensorIterable,
@@ -361,7 +364,7 @@ def condense_tensor_dict(
     condense_numeric_keys: bool = True,
     condense_matching_values: bool = True,
     val_condense_fallback_mapping: Callable[[Any], Hashable] | None = None,
-    return_format: TensorDictFormats|None = None,
+    return_format: TensorDictFormats | None = None,
 ) -> str | dict[str, str | tuple[int, ...]]:
     """Convert a dictionary of tensors to a dictionary of shapes.
 
@@ -484,7 +487,7 @@ def condense_tensor_dict(
             import json
 
             return json.dumps(data_condensed, indent=2)
-        case "yaml"| "yml":
+        case "yaml" | "yml":
             try:
                 import yaml  # type: ignore[import-untyped]
 

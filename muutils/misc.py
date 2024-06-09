@@ -1,10 +1,9 @@
 import hashlib
 import typing
 
-
-
 # hashes
 # ================================================================================
+
 
 def stable_hash(s: str) -> int:
     """Returns a stable hash of the given string. not cryptographically secure, but stable between runs"""
@@ -15,9 +14,9 @@ def stable_hash(s: str) -> int:
     return int.from_bytes(hash_obj.digest(), "big")
 
 
-
 # string-like operations on lists
 # ================================================================================
+
 
 def list_split(lst: list, val) -> list[list]:
     """split a list into n sublists. similar to "a_b_c".split("_")"""
@@ -64,6 +63,7 @@ def list_join(lst: list, factory: typing.Callable) -> list:
 
 # filename stuff
 # ================================================================================
+
 
 def sanitize_fname(fname: str | None) -> str:
     """sanitize a filename for use in a path"""
@@ -125,13 +125,14 @@ _SHORTEN_TUPLES: list[tuple[int | float, str]] = sorted(
 )
 
 
-_REVERSE_SHORTEN_MAP: dict[str, int|float] = {v: k for k, v in _SHORTEN_MAP.items()}
+_REVERSE_SHORTEN_MAP: dict[str, int | float] = {v: k for k, v in _SHORTEN_MAP.items()}
+
 
 def shorten_numerical_to_str(
-        num: int | float,
-        small_as_decimal: bool = True,
-        precision: int = 1,
-    ) -> str:
+    num: int | float,
+    small_as_decimal: bool = True,
+    precision: int = 1,
+) -> str:
     """shorten a large numerical value to a string
     1234 -> 1K
 
@@ -155,9 +156,9 @@ def shorten_numerical_to_str(
 
 
 def str_to_numeric(
-        quantity: str,
-        mapping: None|bool|dict[str, int|float] = True,
-    ) -> int | float:
+    quantity: str,
+    mapping: None | bool | dict[str, int | float] = True,
+) -> int | float:
     """Convert a string representing a quantity to a numeric value.
 
     The string can represent an integer, python float, fraction, or shortened via `shorten_numerical_to_str`.
@@ -182,8 +183,10 @@ def str_to_numeric(
 
     # check is string
     if not isinstance(quantity, str):
-        raise TypeError(f"quantity must be a string, got '{type(quantity) = }' '{quantity = }'")
-    
+        raise TypeError(
+            f"quantity must be a string, got '{type(quantity) = }' '{quantity = }'"
+        )
+
     # basic float conversion
     try:
         quantity_float: float = float(quantity)
@@ -192,18 +195,18 @@ def str_to_numeric(
         pass
 
     # mapping
-    _mapping: dict[str, int|float]
+    _mapping: dict[str, int | float]
     if mapping is True or mapping is None:
         _mapping = _REVERSE_SHORTEN_MAP
     else:
-        _mapping = mapping # type: ignore[assignment]
+        _mapping = mapping  # type: ignore[assignment]
 
     quantity_original: str = quantity
 
     quantity = quantity.strip()
 
-    result: int|float
-    multiplier: int|float = 1
+    result: int | float
+    multiplier: int | float = 1
 
     # detect if it has a suffix
     suffixes_detected: list[bool] = [suffix in quantity for suffix in _mapping]
@@ -223,8 +226,8 @@ def str_to_numeric(
                 raise ValueError(f"Invalid suffix in {quantity_original}")
         case _:
             # multiple suffixes
-            raise ValueError(f"Multiple suffixes detected in {quantity_original}")        
-    
+            raise ValueError(f"Multiple suffixes detected in {quantity_original}")
+
     # fractions
     if "/" in quantity:
         try:
@@ -239,12 +242,16 @@ def str_to_numeric(
                 num_sign = -1
                 num = num[1:]
             # assert that both are digits
-            assert num.isdigit() and den.isdigit(), f"numerator and denominator must be digits"
+            assert (
+                num.isdigit() and den.isdigit()
+            ), f"numerator and denominator must be digits"
             # return the fraction
-            result = num_sign * (int(num) / int(den)) # this allows for fractions with suffixes, which is weird, but whatever
+            result = num_sign * (
+                int(num) / int(den)
+            )  # this allows for fractions with suffixes, which is weird, but whatever
         except AssertionError as e:
             raise ValueError(f"Invalid fraction {quantity_original}: {e}") from e
-    
+
     # decimals
     else:
 
@@ -254,7 +261,9 @@ def str_to_numeric(
             try:
                 result = float(quantity)
             except ValueError as e:
-                raise ValueError(f"Invalid quantity {quantity_original} ({quantity})") from e
+                raise ValueError(
+                    f"Invalid quantity {quantity_original} ({quantity})"
+                ) from e
 
     return result * multiplier
 
@@ -262,12 +271,14 @@ def str_to_numeric(
 # freeze
 # ================================================================================
 
+
 class FrozenDict(dict):
     def __setitem__(self, key, value):
         raise AttributeError("dict is frozen")
 
     def __delitem__(self, key):
         raise AttributeError("dict is frozen")
+
 
 class FrozenList(list):
     def __setitem__(self, index, value):
@@ -293,16 +304,15 @@ class FrozenList(list):
 
     def clear(self):
         raise AttributeError("list is frozen")
-    
 
 
 def freeze(instance: object) -> object:
     """recursively freeze an object in-place so that its attributes and elements cannot be changed
-    
+
     messy in the sense that sometimes the object is modified in place, but you can't rely on that. always use the return value.
 
     the [gelidum](https://github.com/diegojromerolopez/gelidum/) package is a more complete implementation of this idea
-    
+
     """
 
     # mark as frozen
@@ -312,10 +322,10 @@ def freeze(instance: object) -> object:
 
     # try to mark as frozen
     try:
-        instance._IS_FROZEN = True # type: ignore[attr-defined]
+        instance._IS_FROZEN = True  # type: ignore[attr-defined]
     except AttributeError:
         pass
-    
+
     # skip basic types, weird things, or already frozen things
     if isinstance(instance, (bool, int, float, str, bytes)):
         pass
@@ -337,19 +347,19 @@ def freeze(instance: object) -> object:
 
     elif isinstance(instance, set):
         instance = frozenset({freeze(item) for item in instance})
-    
+
     elif isinstance(instance, dict):
         for key, value in instance.items():
             instance[key] = freeze(value)
         instance = FrozenDict(instance)
-    
+
     # handle custom classes
     else:
         # set everything in the __dict__ to frozen
-        instance.__dict__ = freeze(instance.__dict__) # type: ignore[assignment]
+        instance.__dict__ = freeze(instance.__dict__)  # type: ignore[assignment]
 
         # create a new class which inherits from the original class
-        class FrozenClass(instance.__class__): # type: ignore[name-defined]
+        class FrozenClass(instance.__class__):  # type: ignore[name-defined]
             def __setattr__(self, name, value):
                 raise AttributeError("class is frozen")
 
@@ -361,7 +371,8 @@ def freeze(instance: object) -> object:
         try:
             instance.__class__ = FrozenClass
         except TypeError as e:
-            raise TypeError(f"Cannot freeze:\n{instance = }\n{instance.__class__ = }\n{FrozenClass = }") from e
+            raise TypeError(
+                f"Cannot freeze:\n{instance = }\n{instance.__class__ = }\n{FrozenClass = }"
+            ) from e
 
     return instance
-    

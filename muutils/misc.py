@@ -192,8 +192,11 @@ def str_to_numeric(
         pass
 
     # mapping
+    _mapping: dict[str, int|float]
     if mapping is True or mapping is None:
-        mapping = _REVERSE_SHORTEN_MAP
+        _mapping = _REVERSE_SHORTEN_MAP
+    else:
+        _mapping = mapping # type: ignore[assignment]
 
     quantity_original: str = quantity
 
@@ -203,14 +206,14 @@ def str_to_numeric(
     multiplier: int|float = 1
 
     # detect if it has a suffix
-    suffixes_detected: list[bool] = [suffix in quantity for suffix in mapping]
+    suffixes_detected: list[bool] = [suffix in quantity for suffix in _mapping]
     match sum(suffixes_detected):
         case 0:
             # no suffix
             pass
         case 1:
             # find multiplier
-            for suffix, mult in mapping.items():
+            for suffix, mult in _mapping.items():
                 if quantity.endswith(suffix):
                     # remove suffix, store multiplier, and break
                     quantity = quantity.removesuffix(suffix).strip()
@@ -290,12 +293,6 @@ class FrozenList(list):
 
     def clear(self):
         raise AttributeError("list is frozen")
-
-    def __iadd__(self, other):
-        raise AttributeError("list is frozen")
-
-    def __imul__(self, other):
-        raise AttributeError("list is frozen")
     
 
 
@@ -311,11 +308,11 @@ def freeze(instance: object) -> object:
     # mark as frozen
     if hasattr(instance, "_IS_FROZEN"):
         if instance._IS_FROZEN:
-            return
+            return instance
 
     # try to mark as frozen
     try:
-        instance._IS_FROZEN = True
+        instance._IS_FROZEN = True # type: ignore[attr-defined]
     except AttributeError:
         pass
     
@@ -349,10 +346,10 @@ def freeze(instance: object) -> object:
     # handle custom classes
     else:
         # set everything in the __dict__ to frozen
-        instance.__dict__ = freeze(instance.__dict__)
+        instance.__dict__ = freeze(instance.__dict__) # type: ignore[assignment]
 
         # create a new class which inherits from the original class
-        class FrozenClass(instance.__class__):
+        class FrozenClass(instance.__class__): # type: ignore[name-defined]
             def __setattr__(self, name, value):
                 raise AttributeError("class is frozen")
 

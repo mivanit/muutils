@@ -47,6 +47,13 @@ priority = "explicit"
 # TODO: make all of the following ignored across all formatting/linting
 # tests/input_data, tests/junk_data, muutils/_wip 
 
+[tool.pytest.ini_options]
+filterwarnings = [
+    "ignore::muutils.nbutils.configure_notebook.UnknownFigureFormatWarning", # don't show warning for unknown figure format
+    "ignore::muutils.nbutils.configure_notebook.PlotlyNotInstalledWarning", # don't show warning for missing plotly
+    "ignore::muutils.json_serialize.serializable_dataclass.ZanjMissingWarning", # don't show warning for missing zanj (can't have as a dep since zanj depends on muutils)
+]
+
 [tool.pycln]
 all = true
 exclude = "tests/input_data"

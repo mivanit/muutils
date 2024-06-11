@@ -162,16 +162,54 @@ def array_safe_eq(a: Any, b: Any) -> bool:
         return NotImplemented  # type: ignore[return-value]
 
 
-def dc_eq(dc1, dc2) -> bool:
-    """checks if two dataclasses which hold numpy arrays are equal"""
+def dc_eq(
+    dc1,
+    dc2,
+    except_when_class_mismatch: bool = False,
+    except_when_field_mismatch: bool = False,
+) -> bool:
+    """checks if two dataclasses which (might) hold numpy arrays are equal
+
+    # Parameters:
+    - `dc1`: the first dataclass
+    - `dc2`: the second dataclass
+    - `except_when_class_mismatch: bool`
+        if `True`, will throw `TypeError` if the classes are different. if not, will attempt to match the fields
+        (default: `False`)
+    - `except_when_field_mismatch: bool`
+        only relevant if `except_when_class_mismatch` is `False`. if `True`, will throw `TypeError` if the fields are different.
+        (default: `True`)
+
+    # Returns:
+    - `bool`: True if the dataclasses are equal, False otherwise
+
+    # Raises:
+    - `TypeError`: if the dataclasses are of different classes
+    - `AttributeError`: if the dataclasses have different fields
+
+    """
     if dc1 is dc2:
         return True
 
     if dc1.__class__ is not dc2.__class__:
-        warnings.warn(
-            f"Cannot compare {dc1} and {dc2} for equality due to classes not matching: {dc1.__class__} vs {dc2.__class__}"
-        )
-        return NotImplemented  # type: ignore[return-value]
+        if except_when_class_mismatch:
+            # if the classes don't match, raise an error
+            raise TypeError(
+                f"Cannot compare dataclasses of different classes: `{dc1.__class__}` and `{dc2.__class__}`"
+            )
+        else:
+            dc1_fields: set = set([fld.name for fld in dataclasses.fields(dc1)])
+            dc2_fields: set = set([fld.name for fld in dataclasses.fields(dc2)])
+            fields_match: bool = set(dc1_fields) == set(dc2_fields)
+
+            if not fields_match:
+                # if the fields match, keep going
+                if except_when_field_mismatch:
+                    raise AttributeError(
+                        f"dataclasses {dc1} and {dc2} have different fields: `{dc1_fields}` and `{dc2_fields}`"
+                    )
+                else:
+                    return False
 
     return all(
         array_safe_eq(getattr(dc1, fld.name), getattr(dc2, fld.name))

@@ -166,6 +166,7 @@ def dc_eq(
     dc1,
     dc2,
     except_when_class_mismatch: bool = False,
+    false_when_class_mismatch: bool = True,
     except_when_field_mismatch: bool = False,
 ) -> bool:
     """checks if two dataclasses which (might) hold numpy arrays are equal
@@ -174,10 +175,12 @@ def dc_eq(
     - `dc1`: the first dataclass
     - `dc2`: the second dataclass
     - `except_when_class_mismatch: bool`
-        if `True`, will throw `TypeError` if the classes are different. if not, will attempt to match the fields
+        if `True`, will throw `TypeError` if the classes are different. if not, will return false by default or attempt to compare the fields if `false_when_class_mismatch` is `False`
         (default: `False`)
+    - `false_when_class_mismatch: bool`
+        only relevant if `except_when_class_mismatch` is `False`. if `True`, will return `False` if the classes are different. if `False`, will attempt to compare the fields.
     - `except_when_field_mismatch: bool`
-        only relevant if `except_when_class_mismatch` is `False`. if `True`, will throw `TypeError` if the fields are different.
+        only relevant if `except_when_class_mismatch` is `False` and `false_when_class_mismatch` is `False`. if `True`, will throw `TypeError` if the fields are different.
         (default: `True`)
 
     # Returns:
@@ -186,6 +189,46 @@ def dc_eq(
     # Raises:
     - `TypeError`: if the dataclasses are of different classes
     - `AttributeError`: if the dataclasses have different fields
+
+    ```
+                                                    
+                                                  
+  +------------------+                            
+  |      Start       |                            
+  +--------+---------+                            
+           |                                      
+           v                                      
+                                                  
+                                                  
+                                                  
+                     |No                          
+                     v                            
+   ┌───────────┐      +---------+                 
+   │dc1 is dc2?│      | classes |                 
+   └───────────┘      | match?  |                 
+   |Yes               +---------+                 
+   v                  |No       |Yes              
+ ----                 V         V                 
+(True)┌────────────────┐ +------------+           
+ ---- │ except when    │ | fields keys|           
+      │ class mismatch?│ | match?     |           
+      └────────────────┘ +------------+           
+      |Yes        |No    |No     |Yes             
+      v           v      V       v                
+ -----------  +----------+  +--------+            
+{ raise     } | except   |  | field  |            
+{ TypeError } | when     |  | values |            
+ -----------  | field    |  | match? |            
+              | mismatch?|  +--------+            
+              +----------+  |    |Yes             
+              |Yes      |No |    V                
+              v         v   V    ----             
+ ----------------       -----   (True)            
+{ raise          }     (False)   ----             
+{ AttributeError }      -----                     
+ ----------------                                 
+                                                  
+    ```
 
     """
     if dc1 is dc2:

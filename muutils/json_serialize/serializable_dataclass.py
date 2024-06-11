@@ -256,6 +256,11 @@ def dc_eq(
 
 T = TypeVar("T")
 
+
+class ZanjMissingWarning(UserWarning):
+    pass
+
+
 _zanj_loading_needs_import: bool = True
 
 
@@ -275,7 +280,8 @@ def zanj_register_loader_serializable_dataclass(cls: Type[T]):
             )
         except ImportError:
             warnings.warn(
-                "ZANJ not installed, cannot register serializable dataclass loader. ZANJ can be found at https://github.com/mivanit/ZANJ"
+                "ZANJ not installed, cannot register serializable dataclass loader. ZANJ can be found at https://github.com/mivanit/ZANJ or installed via `pip install zanj`",
+                ZanjMissingWarning,
             )
             return
 

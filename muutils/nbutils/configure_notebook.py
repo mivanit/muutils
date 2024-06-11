@@ -4,12 +4,20 @@ import warnings
 
 import matplotlib.pyplot as plt  # type: ignore[import]
 
+
+class PlotlyNotInstalledWarning(UserWarning):
+    pass
+
+
 # handle plotly importing
 PLOTLY_IMPORTED: bool
 try:
     import plotly.io as pio  # type: ignore[import]
 except ImportError:
-    warnings.warn("Plotly not installed. Plotly plots will not be available.")
+    warnings.warn(
+        "Plotly not installed. Plotly plots will not be available.",
+        PlotlyNotInstalledWarning,
+    )
     PLOTLY_IMPORTED = False
 else:
     PLOTLY_IMPORTED = True
@@ -40,13 +48,20 @@ MATPLOTLIB_FORMATS = ["pdf", "png", "jpg", "jpeg", "svg", "eps", "ps", "tif", "t
 TIKZPLOTLIB_FORMATS = ["tex", "tikz"]
 
 
+class UnknownFigureFormatWarning(UserWarning):
+    pass
+
+
 def universal_savefig(fname: str, fmt: str | None = None) -> None:
     # try to infer format from fname
     if fmt is None:
         fmt = fname.split(".")[-1]
 
     if not (fmt in MATPLOTLIB_FORMATS or fmt in TIKZPLOTLIB_FORMATS):
-        warnings.warn(f"Unknown format '{fmt}', defaulting to '{FIG_OUTPUT_FMT}'")
+        warnings.warn(
+            f"Unknown format '{fmt}', defaulting to '{FIG_OUTPUT_FMT}'",
+            UnknownFigureFormatWarning,
+        )
         fmt = FIG_OUTPUT_FMT
 
     # not sure why linting is throwing an error here

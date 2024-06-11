@@ -1,10 +1,16 @@
 import os
+import warnings
 
 import matplotlib.pyplot as plt  # type: ignore[import]
 import pytest
 import torch
 
-from muutils.nbutils.configure_notebook import configure_notebook, plotshow, setup_plots
+from muutils.nbutils.configure_notebook import (
+    UnknownFigureFormatWarning,
+    configure_notebook,
+    plotshow,
+    setup_plots,
+)
 
 JUNK_DATA_PATH: str = "tests/junk_data/test_cfg_notebook"
 
@@ -71,6 +77,29 @@ def test_plotshow_save_mixed():
     plt.plot([1, 1, 1], [1, 9, 9])
     plotshow()
     assert os.path.exists(os.path.join(JUNK_DATA_PATH, "mixedfig-3.pdf"))
+
+
+def test_warn_unknown_format():
+    with pytest.warns(UnknownFigureFormatWarning):
+        setup_plots(
+            plot_mode="save",
+            fig_basepath=JUNK_DATA_PATH,
+            fig_numbered_fname="mixedfig-{num}",
+        )
+        plt.plot([1, 2, 3], [1, 2, 3])
+        plotshow()
+
+
+def test_no_warn_pdf_format():
+    with warnings.catch_warnings():
+        warnings.simplefilter("error")
+        setup_plots(
+            plot_mode="save",
+            fig_basepath="JUNK_DATA_PATH",
+            fig_numbered_fname="fig-{num}.pdf",
+        )
+        plt.plot([1, 2, 3], [1, 2, 3])
+        plotshow()
 
 
 def test_plotshow_ignore():

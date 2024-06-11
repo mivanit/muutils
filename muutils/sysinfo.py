@@ -3,7 +3,7 @@ import subprocess
 import sys
 import typing
 
-from pip._internal.operations.freeze import freeze
+from pip._internal.operations.freeze import freeze as pip_freeze
 
 
 def _popen(cmd: list[str], split_out: bool = False) -> dict[str, typing.Any]:
@@ -46,7 +46,7 @@ class SysInfo:
     @staticmethod
     def pip() -> dict:
         """installed packages info"""
-        pckgs: list[str] = [x for x in freeze(local_only=True)]
+        pckgs: list[str] = [x for x in pip_freeze(local_only=True)]
         return {
             "n_packages": len(pckgs),
             "packages": pckgs,

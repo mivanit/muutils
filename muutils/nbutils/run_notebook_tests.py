@@ -20,8 +20,8 @@ def run_notebook_tests(
     converted_notebooks_temp_dir = Path(converted_notebooks_temp_dir)
     root_relative_to_notebooks: Path = Path(os.path.relpath(".", notebooks_dir))
 
-    print(f"testing notebooks in '{notebooks_dir}'")
-    print(f"reading converted notebooks from '{converted_notebooks_temp_dir}'")
+    print(f"# testing notebooks in '{notebooks_dir}'")
+    print(f"# reading converted notebooks from '{converted_notebooks_temp_dir}'")
 
     try:
         # check things exist
@@ -60,9 +60,10 @@ def run_notebook_tests(
         # the location of this line is important
         os.chdir(notebooks_dir)
 
-        for file in converted_notebooks:
+        n_notebooks: int = len(converted_notebooks)
+        for idx, file in enumerate(converted_notebooks):
             # run the file
-            print(f"  Running {file}")
+            print(f"  Running {idx+1}/{n_notebooks}: {file}")
             output_file: Path = file.with_suffix(CI_output_suffix)
             print(f"    Output in {output_file}")
 

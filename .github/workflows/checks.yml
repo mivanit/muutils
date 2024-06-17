@@ -30,6 +30,10 @@ jobs:
     strategy:
       matrix:
         versions:
+          - python: "3.8"
+            torch: "1.13.1"
+          - python: "3.9"
+            torch: "1.13.1"
           - python: "3.10"
             torch: "1.13.1"
           - python: "3.10"

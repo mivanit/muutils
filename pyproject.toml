@@ -22,9 +22,11 @@ python = "^3.8"
 numpy = { version = "^1.22.4", optional = true }
 torch = { version = ">=1.13.1", optional = true }
 jaxtyping = { version = "^0.2.12", optional = true }
+ipython = { version = "^8.20.0", optional = true, python = "^3.10" }
 
 [tool.poetry.extras]
 array = ["numpy", "torch", "jaxtyping"]
+notebook = ["ipython"]
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^7.2.1"
@@ -36,7 +38,6 @@ mypy = "^1.0.1"
 pytest-cov = "^4.1.0"
 coverage-badge = "^1.1.0"
 matplotlib = "^3.0.0"
-ipython = "^8.20.0"
 
 [build-system]
 requires = ["poetry-core"]

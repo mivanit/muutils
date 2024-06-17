@@ -6,8 +6,11 @@ license = "GPL-3.0-only"
 authors = ["mivanit <mivanits@umich.edu>"]
 readme = "README.md"
 classifiers=[
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
     "Development Status :: 4 - Beta",
     "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
     "Operating System :: OS Independent",
@@ -15,7 +18,7 @@ classifiers=[
 repository = "https://github.com/mivanit/muutils"
 
 [tool.poetry.dependencies]
-python = "^3.10"
+python = "^3.8"
 numpy = { version = "^1.22.4", optional = true }
 torch = { version = ">=1.13.1", optional = true }
 jaxtyping = { version = "^0.2.12", optional = true }

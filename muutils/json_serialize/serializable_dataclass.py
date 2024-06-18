@@ -582,7 +582,7 @@ def serializable_dataclass(
                                     + "  - coming in a future release, specify custom type validation functions\n"
                                 )
                         else:
-                            # TODO: raise an exception here? Can't validate if no type hint given
+                            # TODO: raise an exception here? Can't validate if data given
                             warnings.warn(
                                 f"Field '{field.name}' on class {cls} has no type hint, but {field.assert_type = }\n{field = }\n{cls_type_hints = }\n{data = }"
                             )

@@ -22,7 +22,7 @@ def test_get_checkpoint_paths_for_run():
     assert checkpoint_paths == [(123, checkpoint1_path), (456, checkpoint2_path)]
 
 
-BELOW_PY_3_10: bool = sys.version_info < (3, 9)
+BELOW_PY_3_10: bool = sys.version_info < (3, 10)
 
 
 def test_register_method(recwarn):

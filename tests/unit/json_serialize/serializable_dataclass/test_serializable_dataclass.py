@@ -384,7 +384,7 @@ class nested_custom(SerializableDataclass):
     data1: Custom_class_with_serialization
 
 
-def test_nested_custom():
+def test_nested_custom(recwarn):  # this will send some warnings but whatever
     instance = nested_custom(
         value=42.0, data1=Custom_class_with_serialization(1, "hello")
     )

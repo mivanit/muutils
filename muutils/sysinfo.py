@@ -38,6 +38,7 @@ class SysInfo:
         ver_tup = sys.version_info
         return {
             "version": sys.version,
+            "version_info": ver_tup,
             "major": ver_tup[0],
             "minor": ver_tup[1],
             "micro": ver_tup[2],

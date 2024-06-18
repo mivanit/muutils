@@ -1,12 +1,13 @@
 from __future__ import annotations
 
 import sys
+from typing import Any
 
 import pytest
 
 from muutils.json_serialize import SerializableDataclass, serializable_dataclass
 
-SUPPORS_KW_ONLY: bool = sys.version_info[1] >= 9
+SUPPORS_KW_ONLY: bool = sys.version_info >= (3, 10)
 
 print(f"{SUPPORS_KW_ONLY = }")
 

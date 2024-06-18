@@ -24,7 +24,7 @@ from muutils.tensor_utils import (
 
 
 def test_jaxtype_factory():
-    ATensor = jaxtype_factory("ATensor", torch.Tensor, jaxtyping.Float)
+    ATensor = jaxtype_factory("ATensor", torch.Tensor, jaxtyping.Float, legacy_mode="ignore")
     assert ATensor.__name__ == "ATensor"
     assert "default_jax_dtype = <class 'jaxtyping.Float'" in ATensor.__doc__
     assert "array_type = <class 'torch.Tensor'>" in ATensor.__doc__

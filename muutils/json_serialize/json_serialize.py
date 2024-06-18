@@ -100,7 +100,7 @@ class SerializerHandler:
 BASE_HANDLERS: MonoTuple[SerializerHandler] = (
     SerializerHandler(
         check=lambda self, obj, path: isinstance(
-            obj, (bool, int, float, str, types.NoneType)
+            obj, (bool, int, float, str, type(None))
         ),
         serialize_func=lambda self, obj, path: obj,
         uid="base types",

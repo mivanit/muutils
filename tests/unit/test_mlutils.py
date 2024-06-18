@@ -1,4 +1,5 @@
 from pathlib import Path
+import sys
 
 from muutils.mlutils import get_checkpoint_paths_for_run, register_method
 
@@ -44,5 +45,9 @@ def test_register_method():
 
     evalsA = TestEvalsA.evals
     evalsB = TestEvalsB.evals
-    assert list(evalsA.keys()) == ["eval_function"]
-    assert list(evalsB.keys()) == ["other_eval_function"]
+    if sys.version_info >= (3, 9):
+        assert list(evalsA.keys()) == ["eval_function"]
+        assert list(evalsB.keys()) == ["other_eval_function"]
+    else:
+        assert len(evalsA) == 1
+        assert len(evalsB) == 1

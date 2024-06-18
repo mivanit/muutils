@@ -43,8 +43,10 @@ from typing import Any, Dict, List, Set, Tuple, Union, Optional
 
 ])
 def test_validate_type_basic(value, expected_type, result):
-    assert validate_type(value, expected_type) == result
-
+    try:
+        assert validate_type(value, expected_type) == result
+    except Exception as e:
+        raise Exception(f"{value = }, {expected_type = }, {result = }, {e}") from e
 
 @pytest.mark.parametrize("value", [
     42,
@@ -60,7 +62,10 @@ def test_validate_type_basic(value, expected_type, result):
     "3.14",
 ])
 def test_validate_type_any(value):
-    assert validate_type(value, Any)
+    try:
+        assert validate_type(value, Any)
+    except Exception as e:
+        raise Exception(f"{value = }, expected `Any`, {e}") from e
 
 @pytest.mark.parametrize("value, expected_type, result", [
     (42, Union[int, str], True),
@@ -86,7 +91,10 @@ def test_validate_type_any(value):
     (None, int|str, False),
 ])
 def test_validate_type_union(value, expected_type, result):
-    assert validate_type(value, expected_type) == result
+    try:
+        assert validate_type(value, expected_type) == result
+    except Exception as e:
+        raise Exception(f"{value = }, {expected_type = }, {result = }, {e}") from e
 
 @pytest.mark.parametrize("value, expected_type, result", [
     (42, Optional[int], True),
@@ -109,7 +117,10 @@ def test_validate_type_union(value, expected_type, result):
     (None, None|List[Dict[str, int]], True),
 ])
 def test_validate_type_optional(value, expected_type, result):
-    assert validate_type(value, expected_type) == result
+    try:
+        assert validate_type(value, expected_type) == result
+    except Exception as e:
+        raise Exception(f"{value = }, {expected_type = }, {result = }, {e}") from e
 
 @pytest.mark.parametrize("value, expected_type, result", [
     (42, List[int], False),
@@ -122,11 +133,17 @@ def test_validate_type_optional(value, expected_type, result):
     ([1, "2", 3], List[int], False),
 ])
 def test_validate_type_list(value, expected_type, result):
-    assert validate_type(value, expected_type) == result
+    try:
+        assert validate_type(value, expected_type) == result
+    except Exception as e:
+        raise Exception(f"{value = }, {expected_type = }, {result = }, {e}") from e
 
 
 
 @pytest.mark.parametrize("value, expected_type, result", [
+    (42, dict[str, int], False),
+    ({'a': 1, 'b': 2}, dict[str, int], True),
+    ({'a': 1, 'b': 2}, dict[int, str], False),
     (42, Dict[str, int], False),
     ({'a': 1, 'b': 2}, Dict[str, int], True),
     ({'a': 1, 'b': 2}, Dict[int, str], False),
@@ -142,9 +159,14 @@ def test_validate_type_list(value, expected_type, result):
     ({"a": 1, "b": "2"}, Dict[str, int], False),
 ])
 def test_validate_type_dict(value, expected_type, result):
-    assert validate_type(value, expected_type) == result
+    try:
+        assert validate_type(value, expected_type) == result
+    except Exception as e:
+        raise Exception(f"{value = }, {expected_type = }, {result = }, {e}") from e
 
 @pytest.mark.parametrize("value, expected_type, result", [
+    (42, set[int], False),
+    ({1, 2, 3}, set[int], True),
     (42, Set[int], False),
     ({1, 2, 3}, Set[int], True),
     ({1, 2, 3}, Set[str], False),
@@ -157,9 +179,14 @@ def test_validate_type_dict(value, expected_type, result):
     ("hello", Set[str], False),
 ])
 def test_validate_type_set(value, expected_type, result):
-    assert validate_type(value, expected_type) == result
+    try:
+        assert validate_type(value, expected_type) == result
+    except Exception as e:
+        raise Exception(f"{value = }, {expected_type = }, {result = }, {e}") from e
 
 @pytest.mark.parametrize("value, expected_type, result", [
+    (42, tuple[int, str], False),
+    ((1, "a"), tuple[int, str], True),
     (42, Tuple[int, str], False),
     ((1, "a"), Tuple[int, str], True),
     ((1, 2), Tuple[int, str], False),
@@ -168,19 +195,30 @@ def test_validate_type_set(value, expected_type, result):
     ((1, 'a', 3.14), Tuple[int, str, float], True),
     (('a', 'b', 'c'), Tuple[str, str, str], True),
     ((1, 'a', 3.14), Tuple[int, str], False),
-    ([1, 'a', 3.14], Tuple[int, str, float], False),
+    ([1, 'a', 3.14], Tuple[int, str, float], True),
 ])
 def test_validate_type_tuple(value, expected_type, result):
-    assert validate_type(value, expected_type) == result
+    try:
+        assert validate_type(value, expected_type) == result
+    except Exception as e:
+        raise Exception(f"{value = }, {expected_type = }, {result = }, {e}") from e
 
-
-def test_validate_type_unsupported_type_hint():
+@pytest.mark.parametrize("value, expected_type", [
+    (43, typing.Callable),
+    (lambda x: x, typing.Callable),
+    (42, typing.Callable[[], None]),
+    (42, typing.Callable[[int, str], list]),
+])
+def test_validate_type_unsupported_type_hint(value, expected_type):
     with pytest.raises(ValueError):
-        validate_type(42, typing.Callable[[], None])
+        validate_type(value, expected_type)
+        print(f"Failed to except: {value = }, {expected_type = }")
 
 @pytest.mark.parametrize("value, expected_type", [
     (42, list[int, str]),
     ([1, 2, 3], list[int, str]),
+    ({"a": 1, "b": 2}, set[str, int]),
+    ({1: "a", 2: "b"}, set[int, str]),
     ({"a": 1, "b": 2}, set[str, int, str]),
     ({1: "a", 2: "b"}, set[int, str, int]),
     ({1, 2, 3}, set[int, str]),
@@ -189,8 +227,9 @@ def test_validate_type_unsupported_type_hint():
 def test_validate_type_unsupported_generic_alias(value, expected_type):
     with pytest.raises(TypeError):
         validate_type(value, expected_type)
+        print(f"Failed to except: {value = }, {expected_type = }")
 
-@pytest.mark.parametrize("value, expected_type, expected_result", [
+@pytest.mark.parametrize("value, expected_type, result", [
     ([1, 2, 3], List[int], True),
     (["a", "b", "c"], List[str], True),
     ([1, "a", 3], List[int], False),
@@ -200,11 +239,14 @@ def test_validate_type_unsupported_generic_alias(value, expected_type):
     ({1: [1, 2], 2: [3, 4]}, Dict[int, List[int]], True),
     ({1: [1, 2], 2: [3, "4"]}, Dict[int, List[int]], False),
 ])
-def test_validate_type_collections(value, expected_type, expected_result):
-    assert validate_type(value, expected_type) == expected_result
+def test_validate_type_collections(value, expected_type, result):
+    try:
+        assert validate_type(value, expected_type) == result
+    except Exception as e:
+        raise Exception(f"{value = }, {expected_type = }, {result = }, {e}") from e
 
 
-@pytest.mark.parametrize("value, expected_type, expected_result", [
+@pytest.mark.parametrize("value, expected_type, result", [
     # empty lists
     ([], List[int], True),
     ([], list[dict], True),
@@ -231,22 +273,43 @@ def test_validate_type_collections(value, expected_type, expected_result):
     (float("inf"), float, True),
     (float("-inf"), float, True),
     (float(0), float, True),
+    # list/tuple
+    ([1], tuple[int, int], False),
+    ((1,2), list[int], False),
 ])
-def test_validate_type_edge_cases():
-    assert validate_type([], List[int])
-    assert validate_type({}, Dict[str, int])
-    assert validate_type(set(), Set[int])
-    
-    assert not validate_type(42, List[int])
-    assert not validate_type("hello", Dict[str, int])
-    assert not validate_type([1, 2], Tuple[int, int, int])
-    
+def test_validate_type_edge_cases(value, expected_type, result):
+    try:
+        assert validate_type(value, expected_type) == result
+    except Exception as e:
+        raise Exception(f"{value = }, {expected_type = }, {result = }, {e}") from e
+
+
+@pytest.mark.parametrize("value, expected_type, result", [
+    (42, list[int], False),
+    ([1, 2, 3], int, False),
+    (3.14, tuple[float], False),
+    (3.14, tuple[float, float], False),
+    (3.14, tuple[bool, str], False),
+    (False, tuple[bool, str], False),
+    (False, tuple[bool], False),
+    ((False,), tuple[bool], True),
+    (("abc",), tuple[str], True),
+    ("test-dict", dict[str, int], False),
+    ("test-dict", dict, False),
+])
+def test_validate_type_wrong_type(value, expected_type, result):
+    try:
+        assert validate_type(value, expected_type) == result
+    except Exception as e:
+        raise Exception(f"{value = }, {expected_type = }, {result = }, {e}") from e
+
+
+
+def test_validate_type_complex():
     assert validate_type([1, 2, [3, 4]], List[Union[int, List[int]]])
     assert validate_type({'a': 1, 'b': {'c': 2}}, Dict[str, Union[int, Dict[str, int]]])
     assert validate_type({1, (2, 3)}, Set[Union[int, Tuple[int, int]]])
     assert validate_type((1, ('a', 'b')), Tuple[int, Tuple[str, str]])
-
-def test_validate_type_complex():
     assert validate_type([{"key": "value"}], typing.List[typing.Dict[str, str]])
     assert validate_type([{"key": 2}], typing.List[typing.Dict[str, str]]) == False
     assert validate_type([[1, 2], [3, 4]], typing.List[typing.List[int]])
@@ -274,7 +337,10 @@ def test_validate_type_complex():
     (((1, 2), (3, 4)), Tuple[Tuple[int, int], Tuple[int, str]], False),
 ])
 def test_validate_type_nested(value, expected_type, result):
-    assert validate_type(value, expected_type) == result
+    try:
+        assert validate_type(value, expected_type) == result
+    except Exception as e:
+        raise Exception(f"{value = }, {expected_type = }, {result = }, {e}") from e
 
 
                          

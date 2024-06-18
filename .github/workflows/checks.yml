@@ -41,13 +41,20 @@ jobs:
       - name: Install Poetry
         run: |
           curl -sSL https://install.python-poetry.org | python3 -
+          $POETRY_HOME/bin/pip install --user poetry-plugin-export
 
       - name: Check poetry.lock and dev-requirements.txt
         run: make check-dep-dev
 
+      - name: Try installing all dependencies
+        run: |
+          pip install uv
+          uv pip install -r dev-requirements.txt --system
+
   test:
     name: Test and Lint
     runs-on: ubuntu-latest
+    needs: [lint, check-deps]
     strategy:
       matrix:
         versions:

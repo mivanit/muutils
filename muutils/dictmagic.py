@@ -19,7 +19,7 @@ _KT = TypeVar("_KT")
 _VT = TypeVar("_VT")
 
 
-class DefaulterDict(dict[_KT, _VT], Generic[_KT, _VT]):
+class DefaulterDict(typing.Dict[_KT, _VT], Generic[_KT, _VT]):
     """like a defaultdict, but default_factory is passed the key as an argument"""
 
     def __init__(self, default_factory: Callable[[_KT], _VT], *args, **kwargs):
@@ -53,7 +53,9 @@ def defaultdict_to_dict_recursive(dd: Union[defaultdict, DefaulterDict]) -> dict
     }
 
 
-def dotlist_to_nested_dict(dot_dict: dict[str, Any], sep: str = ".") -> dict[str, Any]:
+def dotlist_to_nested_dict(
+    dot_dict: typing.Dict[str, Any], sep: str = "."
+) -> typing.Dict[str, Any]:
     """Convert a dict with dot-separated keys to a nested dict
 
     Example:
@@ -74,11 +76,11 @@ def dotlist_to_nested_dict(dot_dict: dict[str, Any], sep: str = ".") -> dict[str
 
 
 def nested_dict_to_dotlist(
-    nested_dict: dict[str, Any],
+    nested_dict: typing.Dict[str, Any],
     sep: str = ".",
     allow_lists: bool = False,
 ) -> dict[str, Any]:
-    def _recurse(current: Any, parent_key: str = "") -> dict[str, Any]:
+    def _recurse(current: Any, parent_key: str = "") -> typing.Dict[str, Any]:
         items: dict = dict()
 
         new_key: str
@@ -357,8 +359,8 @@ def tuple_dims_replace(
         return tuple(dims_names_map.get(x, x) for x in t)
 
 
-TensorDict = dict[str, "torch.Tensor|np.ndarray"]  # type: ignore[name-defined]
-TensorIterable = Iterable[tuple[str, "torch.Tensor|np.ndarray"]]  # type: ignore[name-defined]
+TensorDict = typing.Dict[str, "torch.Tensor|np.ndarray"]  # type: ignore[name-defined]
+TensorIterable = Iterable[typing.Tuple[str, "torch.Tensor|np.ndarray"]]  # type: ignore[name-defined]
 TensorDictFormats = Literal["dict", "json", "yaml", "yml"]
 
 

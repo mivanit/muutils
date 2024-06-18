@@ -18,8 +18,8 @@ ErrorMode = Literal["ignore", "warn", "except"]
 TypeErrorMode = Union[ErrorMode, Literal["try_convert"]]
 
 
-JSONitem = Union[bool, int, float, str, list, dict[str, Any], None]
-JSONdict = dict[str, JSONitem]
+JSONitem = Union[bool, int, float, str, list, typing.Dict[str, Any], None]
+JSONdict = typing.Dict[str, JSONitem]
 Hashableitem = Union[bool, int, float, str, tuple]
 
 # or if python version <3.9

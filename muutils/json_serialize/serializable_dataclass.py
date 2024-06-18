@@ -9,6 +9,8 @@ import typing
 import warnings
 from typing import Any, Callable, Optional, Type, TypeVar, Union
 
+from muutils.validate_type import validate_type
+
 # pylint: disable=bad-mcs-classmethod-argument, too-many-arguments, protected-access
 
 
@@ -577,7 +579,7 @@ def serializable_dataclass(
                             if field_type_hint is not None:
                                 # TODO: recursive type hint checking like pydantic?
                                 try:
-                                    assert _validate_type(
+                                    assert validate_type(
                                         ctor_kwargs[field.name], field_type_hint
                                     )
                                 except Exception as e:

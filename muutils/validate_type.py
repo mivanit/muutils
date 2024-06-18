@@ -14,7 +14,7 @@ def validate_type(value: typing.Any, expected_type: typing.Any) -> bool:
     args: list = typing.get_args(expected_type)
 
     # useful for debugging
-    print(f"{value = },   {expected_type = },   {origin = },   {args = }")
+    # print(f"{value = },   {expected_type = },   {origin = },   {args = }")
 
     if origin is types.UnionType or origin is typing.Union:
         return any(validate_type(value, arg) for arg in args)

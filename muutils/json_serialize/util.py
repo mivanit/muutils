@@ -41,12 +41,12 @@ else:
         # idk why mypy thinks there is no such function in typing
         @typing._tp_cache  # type: ignore
         def __class_getitem__(cls, params):
-            if isinstance(params, type):
-                typing.GenericAlias(tuple, (params, Ellipsis))
-            elif any("typing.UnionType" in str(t) for t in params.__class__.__mro__):
+            if any("typing.UnionType" in str(t) for t in params.__class__.__mro__):
                 # TODO: unsure about this
                 # check via mro
                 return typing.GenericAlias(tuple, (params, Ellipsis))
+            elif isinstance(params, type):
+                typing.GenericAlias(tuple, (params, Ellipsis))
             # test if has len and is iterable
             elif isinstance(params, Iterable):
                 if len(params) == 0:

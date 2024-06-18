@@ -403,14 +403,16 @@ def serializable_dataclass(
     _cls=None,  # type: ignore
     *,
     init: bool = True,
-    repr: bool = True, # TODO: this overrides the actual `repr` method, can this be fixed?
+    repr: bool = True,  # TODO: this overrides the actual `repr` method, can this be fixed?
     eq: bool = True,
     order: bool = False,
     unsafe_hash: bool = False,
     frozen: bool = False,
     properties_to_serialize: Optional[list[str]] = None,
     register_handler: bool = True,
-    on_type_assert: typing.Literal["raise", "warn", "ignore"] = "warn", # TODO: change default to "raise" once more stable
+    on_type_assert: typing.Literal[
+        "raise", "warn", "ignore"
+    ] = "warn",  # TODO: change default to "raise" once more stable
     **kwargs,
 ):
     # -> Union[Callable[[Type[T]], Type[T]], Type[T]]:
@@ -566,7 +568,6 @@ def serializable_dataclass(
                         # assume no loading needs to happen, keep `value` as-is
                         pass
 
-
                     # store the value in the constructor kwargs
                     ctor_kwargs[field.name] = value
 
@@ -576,7 +577,9 @@ def serializable_dataclass(
                             if field_type_hint is not None:
                                 # TODO: recursive type hint checking like pydantic?
                                 try:
-                                    assert _validate_type(ctor_kwargs[field.name], field_type_hint)
+                                    assert _validate_type(
+                                        ctor_kwargs[field.name], field_type_hint
+                                    )
                                 except Exception as e:
                                     raise ValueError(
                                         f"{field.name = }, {field_type_hint = }, {type(field_type_hint) = }, {ctor_kwargs[field.name] = }"
@@ -594,7 +597,6 @@ def serializable_dataclass(
                             warnings.warn(
                                 f"Field '{field.name}' on class {cls} has no type hint, but {field.assert_type = }\n{field = }\n{cls_type_hints = }\n{data = }"
                             )
-
 
             return cls(**ctor_kwargs)
 

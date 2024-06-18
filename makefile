@@ -141,11 +141,13 @@ EXPORT_ARGS := -E zanj -E array -E notebook --with dev --without-hashes
 .PHONY: dep-dev
 dep-dev:
 	@echo "exporting dev and extras dependencies to dev-requirements.txt"
+	poetry update
 	poetry export $(EXPORT_ARGS) --output dev-requirements.txt
 
 .PHONY: check-dep-dev
 check-dep-dev:
 	@echo "checking requirements.txt matches poetry dependencies"
+	poetry lock --check
 	poetry export $(EXPORT_ARGS) | diff - dev-requirements.txt
 
 .PHONY: build

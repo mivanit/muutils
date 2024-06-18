@@ -1,9 +1,10 @@
+from __future__ import annotations
 import os
 import subprocess
 import sys
 import typing
 
-from pip._internal.operations.freeze import freeze as pip_freeze
+from importlib.metadata import distributions
 
 
 def _popen(
@@ -49,7 +50,10 @@ class SysInfo:
     @staticmethod
     def pip() -> dict:
         """installed packages info"""
-        pckgs: typing.List[str] = [x for x in pip_freeze(local_only=True)]
+        pckgs: list[tuple[str, str]] = [
+            (x.name, x.version)
+            for x in distributions()
+        ]
         return {
             "n_packages": len(pckgs),
             "packages": pckgs,
@@ -141,7 +145,7 @@ class SysInfo:
         return {x: getattr(platform, x)() for x in items}
 
     @staticmethod
-    def git_info() -> dict:
+    def git_info(with_log: bool = False) -> dict:
         git_version: dict = _popen(["git", "version"])
         git_status: dict = _popen(["git", "status"])
         if git_status["stderr"].startswith("fatal: not a git repository"):
@@ -150,13 +154,17 @@ class SysInfo:
                 "git status": git_status,
             }
         else:
-            return {
+
+            output: dict[str, str] = {
                 "git version": git_version["stdout"],
                 "git status": git_status,
                 "git branch": _popen(["git", "branch"], split_out=True),
                 "git remote -v": _popen(["git", "remote", "-v"], split_out=True),
-                "git log": _popen(["git", "log"]),
             }
+            if with_log:
+                output["git log"] = _popen(["git", "log"], split_out=False)
+
+            return output
 
     @classmethod
     def get_all(
@@ -183,3 +191,8 @@ class SysInfo:
                 ]
             )
         }
+
+
+if __name__ == "__main__":
+    import pprint
+    pprint.pprint(SysInfo.get_all())

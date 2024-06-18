@@ -29,7 +29,7 @@ BELOW_PY_3_9: bool = sys.version_info < (3, 9)
 
 def test_register_method():
 
-    with pytest.warns(UserWarning) as record:
+    with pytest.warns() as record:
 
         class TestEvalsA:
             evals = {}

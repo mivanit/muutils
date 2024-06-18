@@ -43,7 +43,7 @@ else:
         def __class_getitem__(cls, params):
             if isinstance(params, type):
                 typing.GenericAlias(tuple, (params, Ellipsis))
-            elif any("typing.UnionType" in str(t) for t in params.mro()):
+            elif any("typing.UnionType" in str(t) for t in params.__class__.__mro__):
                 # TODO: unsure about this
                 # check via mro
                 return typing.GenericAlias(tuple, (params, Ellipsis))

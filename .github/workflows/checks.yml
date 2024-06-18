@@ -64,6 +64,9 @@ jobs:
       - name: tests
         run: make test
 
+      - name: tests - strict mode
+        run: make test WARN_STRICT=1
+
       - name: check typing
         if: ${{ matrix.versions.python != '3.8' && matrix.versions.python != '3.9' }}
         run: make typing

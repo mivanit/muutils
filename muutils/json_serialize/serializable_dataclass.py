@@ -403,13 +403,14 @@ def serializable_dataclass(
     _cls=None,  # type: ignore
     *,
     init: bool = True,
-    repr: bool = True,
+    repr: bool = True, # TODO: this overrides the actual `repr` method, can this be fixed?
     eq: bool = True,
     order: bool = False,
     unsafe_hash: bool = False,
     frozen: bool = False,
     properties_to_serialize: Optional[list[str]] = None,
     register_handler: bool = True,
+    on_type_assert: typing.Literal["raise", "warn", "ignore"] = "warn", # TODO: change default to "raise" once more stable
     **kwargs,
 ):
     # -> Union[Callable[[Type[T]], Type[T]], Type[T]]:
@@ -565,14 +566,21 @@ def serializable_dataclass(
                         # assume no loading needs to happen, keep `value` as-is
                         pass
 
+
+                    # store the value in the constructor kwargs
+                    ctor_kwargs[field.name] = value
+
                     # validate the type
                     if field.assert_type:
                         if field.name in ctor_kwargs:
                             if field_type_hint is not None:
                                 # TODO: recursive type hint checking like pydantic?
-                                assert isinstance(
-                                    ctor_kwargs[field.name], field_type_hint
-                                )
+                                try:
+                                    assert _validate_type(ctor_kwargs[field.name], field_type_hint)
+                                except Exception as e:
+                                    raise ValueError(
+                                        f"{field.name = }, {field_type_hint = }, {type(field_type_hint) = }, {ctor_kwargs[field.name] = }"
+                                    ) from e
                             else:
                                 raise ValueError(
                                     f"Cannot get type hints for {cls.__name__}, and so cannot validate. Python version is {sys.version_info = }. You can:\n"
@@ -587,8 +595,6 @@ def serializable_dataclass(
                                 f"Field '{field.name}' on class {cls} has no type hint, but {field.assert_type = }\n{field = }\n{cls_type_hints = }\n{data = }"
                             )
 
-                    # store the value in the constructor kwargs
-                    ctor_kwargs[field.name] = value
 
             return cls(**ctor_kwargs)
 

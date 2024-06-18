@@ -12,9 +12,11 @@ def _popen(cmd: list[str], split_out: bool = False) -> dict[str, typing.Any]:
         cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE
     )
 
+    stdout, stderr = p.communicate()
+
     p_out: typing.Union[str, list[str], None]
-    if p.stdout is not None:
-        p_out = p.stdout.read().decode("utf-8")
+    if stdout:
+        p_out = stdout.decode("utf-8")
         if split_out:
             assert isinstance(p_out, str)
             p_out = p_out.strip().split("\n")
@@ -23,7 +25,7 @@ def _popen(cmd: list[str], split_out: bool = False) -> dict[str, typing.Any]:
 
     return {
         "stdout": p_out,
-        "stderr": (None if p.stderr is None else p.stderr.read().decode("utf-8")),
+        "stderr": stderr.decode("utf-8") if stderr else None,
         "returncode": p.returncode if p.returncode is None else int(p.returncode),
     }
 

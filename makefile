@@ -103,7 +103,6 @@ typing-compat: clean
 .PHONY: test
 test: clean
 	@echo "running tests"
-	@echo "pytest options: $(PYTEST_OPTIONS)"
 	$(PYPOETRY) -m pytest $(PYTEST_OPTIONS) $(TESTS_DIR)
 
 

@@ -11,7 +11,14 @@ from muutils.json_serialize.util import JSONitem
 
 # pylint: disable=unused-argument
 
-ArrayMode = Literal["list", "array_list_meta", "array_hex_meta", "array_b64_meta", "external", "zero_dim"]
+ArrayMode = Literal[
+    "list",
+    "array_list_meta",
+    "array_hex_meta",
+    "array_b64_meta",
+    "external",
+    "zero_dim",
+]
 
 
 def array_n_elements(arr) -> int:  # type: ignore[name-defined]
@@ -176,7 +183,7 @@ def load_array(arr: JSONitem, array_mode: Optional[ArrayMode] = None) -> Any:
 
         data = np.frombuffer(bytes.fromhex(arr["data"]), dtype=arr["dtype"])
         return data.reshape(arr["shape"])
-    
+
     elif array_mode == "array_b64_meta":
         assert isinstance(
             arr, typing.Mapping

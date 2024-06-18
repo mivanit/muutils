@@ -146,7 +146,9 @@ class SysInfo:
     def git_info(with_log: bool = False) -> dict:
         git_version: dict = _popen(["git", "version"])
         git_status: dict = _popen(["git", "status"])
-        if git_status["stderr"].startswith("fatal: not a git repository"):
+        if not git_status["stderr"] or git_status["stderr"].startswith(
+            "fatal: not a git repository"
+        ):
             return {
                 "git version": git_version["stdout"],
                 "git status": git_status,

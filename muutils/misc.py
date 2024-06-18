@@ -62,26 +62,74 @@ def list_join(lst: list, factory: typing.Callable) -> list:
     return output
 
 
-# filename stuff
+# name stuff
 # ================================================================================
 
+def sanitize_name(
+        name: str | None, 
+        additional_allowed_chars: str = "",
+        replace_invalid: str = "",
+        when_none: str | None = "_None_",
+        leading_digit_prefix: str = "",
+    ) -> str:
+    """sanitize a string, leaving only alphanumerics and `additional_allowed_chars`
+    
+    # Parameters:
+     - `name : str | None`   
+       input string
+     - `additional_allowed_chars : str`   
+       additional characters to allow, none by default
+       (defaults to `""`)
+     - `replace_invalid : str`   
+        character to replace invalid characters with
+       (defaults to `""`)
+     - `when_none : str | None`   
+        string to return if `name` is `None`. if `None`, raises an exception
+       (defaults to `"_None_"`)
+     - `leading_digit_prefix : str`   
+        character to prefix the string with if it starts with a digit
+       (defaults to `""`)
+    
+    # Returns:
+     - `str` 
+        sanitized string
+    """    
 
-def sanitize_fname(fname: str | None) -> str:
-    """sanitize a filename for use in a path"""
-    if fname is None:
-        return "_None_"
-
-    fname_sanitized: str = ""
-    for char in fname:
-        if char.isalnum():
-            fname_sanitized += char
-        elif char in ("-", "_", "."):
-            fname_sanitized += char
+    
+    if name is None:
+        if when_none is None:
+            raise ValueError("name is None")
         else:
-            fname_sanitized += ""
+            return when_none
 
-    return fname_sanitized
+    sanitized: str = ""
+    for char in name:
+        if char.isalnum():
+            sanitized += char
+        elif char in additional_allowed_chars:
+            sanitized += char
+        else:
+            sanitized += replace_invalid
+    
+    if sanitized[0].isdigit():
+        sanitized = leading_digit_prefix + sanitized
 
+    return sanitized
+
+def sanitize_fname(fname: str | None, **kwargs) -> str:
+    """sanitize a filename to posix standards
+    
+    - leave only alphanumerics, `_` (underscore), '-' (dash) and `.` (period)
+    """
+    return sanitize_name(fname, additional_allowed_chars="._-", **kwargs)
+
+def sanitize_identifier(fname: str | None, **kwargs) -> str:
+    """sanitize an identifier (variable or function name)
+    
+    - leave only alphanumerics and `_` (underscore)
+    - prefix with `_` if it starts with a digit
+    """
+    return sanitize_name(fname, additional_allowed_chars="_", leading_digit_prefix="_", **kwargs)
 
 def dict_to_filename(
     data: dict,
@@ -220,7 +268,7 @@ def str_to_numeric(
         for suffix, mult in _mapping.items():
             if quantity.endswith(suffix):
                 # remove suffix, store multiplier, and break
-                quantity = quantity.removesuffix(suffix).strip()
+                quantity = quantity[: -len(suffix)].strip()
                 multiplier = mult
                 break
         else:

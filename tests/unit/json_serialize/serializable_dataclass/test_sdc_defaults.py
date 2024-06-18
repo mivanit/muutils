@@ -1,6 +1,7 @@
 from __future__ import annotations
+
 import sys
-from typing import Dict, Any
+from typing import Any, Dict
 
 import pytest
 
@@ -16,7 +17,7 @@ from muutils.json_serialize import (
 BELOW_PY_3_9: bool = sys.version_info < (3, 9)
 
 
-def _loading_test_wrapper(cls, data, assert_record_len: int|None = None) -> Any:
+def _loading_test_wrapper(cls, data, assert_record_len: int | None = None) -> Any:
     """wrapper for testing the load function, which accounts for version differences"""
     if BELOW_PY_3_9:
         with pytest.warns(UserWarning) as record:
@@ -28,7 +29,6 @@ def _loading_test_wrapper(cls, data, assert_record_len: int|None = None) -> Any:
     else:
         loaded = cls.load(data)
         return loaded
-
 
 
 @serializable_dataclass

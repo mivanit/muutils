@@ -9,7 +9,6 @@ import typing
 import warnings
 from typing import Any, Callable, Optional, Type, TypeVar, Union
 
-
 # pylint: disable=bad-mcs-classmethod-argument, too-many-arguments, protected-access
 
 
@@ -571,7 +570,9 @@ def serializable_dataclass(
                         if field.name in ctor_kwargs:
                             if field_type_hint is not None:
                                 # TODO: recursive type hint checking like pydantic?
-                                assert isinstance(ctor_kwargs[field.name], field_type_hint)
+                                assert isinstance(
+                                    ctor_kwargs[field.name], field_type_hint
+                                )
                             else:
                                 raise ValueError(
                                     f"Cannot get type hints for {cls.__name__}, and so cannot validate. Python version is {sys.version_info = }. You can:\n"

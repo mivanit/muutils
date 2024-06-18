@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-from typing import Any
 import sys
+from typing import Any
 
 import pytest
 
@@ -17,8 +17,7 @@ from muutils.json_serialize import (
 BELOW_PY_3_9: bool = sys.version_info < (3, 9)
 
 
-
-def _loading_test_wrapper(cls, data, assert_record_len: int|None = None) -> Any:
+def _loading_test_wrapper(cls, data, assert_record_len: int | None = None) -> Any:
     """wrapper for testing the load function, which accounts for version differences"""
     if BELOW_PY_3_9:
         with pytest.warns(UserWarning) as record:
@@ -231,7 +230,9 @@ def test_with_printing():
     serialized_data = my_instance.serialize()
     print(serialized_data)
 
-    loaded_instance = _loading_test_wrapper(MyClass, serialized_data, assert_record_len=3)
+    loaded_instance = _loading_test_wrapper(
+        MyClass, serialized_data, assert_record_len=3
+    )
     print(loaded_instance)
 
 
@@ -284,7 +285,7 @@ def test_person_serialization():
     assert serialized == expected_ser, f"Expected {expected_ser}, got {serialized}"
 
     loaded = _loading_test_wrapper(FullPerson, serialized, assert_record_len=4)
-    
+
     assert loaded == person
 
 
@@ -350,8 +351,10 @@ def test_nested_with_container():
 
     assert serialized == expected_ser
 
-    loaded = _loading_test_wrapper(Nested_with_Container, serialized, assert_record_len=12)
-    
+    loaded = _loading_test_wrapper(
+        Nested_with_Container, serialized, assert_record_len=12
+    )
+
     assert loaded == instance
 
 

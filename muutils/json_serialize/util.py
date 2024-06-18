@@ -23,7 +23,7 @@ JSONdict = Dict[str, JSONitem]
 Hashableitem = Union[bool, int, float, str, tuple]
 
 # or if python version <3.9
-if typing.TYPE_CHECKING or sys.version_info[1] < 9:
+if typing.TYPE_CHECKING or sys.version_info < (3, 9):
     MonoTuple = typing.Sequence
 else:
 
@@ -41,9 +41,7 @@ else:
         # idk why mypy thinks there is no such function in typing
         @typing._tp_cache  # type: ignore
         def __class_getitem__(cls, params):
-            if any("typing.UnionType" in str(t) for t in params.__class__.__mro__):
-                # TODO: unsure about this
-                # check via mro
+            if getattr(params, "__origin__", None) == typing.Union:
                 return typing.GenericAlias(tuple, (params, Ellipsis))
             elif isinstance(params, type):
                 typing.GenericAlias(tuple, (params, Ellipsis))

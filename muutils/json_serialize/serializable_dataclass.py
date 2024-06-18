@@ -9,6 +9,7 @@ import typing
 import warnings
 from typing import Any, Callable, Optional, Type, TypeVar, Union
 
+
 # pylint: disable=bad-mcs-classmethod-argument, too-many-arguments, protected-access
 
 
@@ -52,6 +53,7 @@ class SerializableField(dataclasses.Field):
         serialization_fn: Optional[Callable[[Any], Any]] = None,
         loading_fn: Optional[Callable[[Any], Any]] = None,
         assert_type: bool = True,
+        # TODO: add field for custom type assertion
     ):
         # TODO: should we do this check, or assume the user knows what they are doing?
         if init and not serialize:
@@ -396,6 +398,7 @@ class SerializableDataclass(abc.ABC):
 
 
 # Step 3: Create a custom serializable_dataclass decorator
+# TODO: add a kwarg for always asserting type for all fields
 def serializable_dataclass(
     # this should be `_cls: Type[T] | None = None,` but mypy doesn't like it
     _cls=None,  # type: ignore
@@ -504,36 +507,88 @@ def serializable_dataclass(
                 data, typing.Mapping
             ), f"When loading {cls.__name__ = } expected a Mapping, but got {type(data) = }:\n{data = }"
 
-            cls_type_hints: dict[str, Any] = typing.get_type_hints(cls)
+            # get the type hints for the class
+            cls_type_hints: dict[str, Any]
+            try:
+                cls_type_hints = typing.get_type_hints(cls)
+            except TypeError as e:
+                if sys.version_info < (3, 9):
+                    warnings.warn(
+                        f"Cannot get type hints for {cls.__name__}. Python version is {sys.version_info = }. You can:\n"
+                        + "  - use hints like `typing.Dict` instead of `dict` in type hints (this is required on python 3.8.x)\n"
+                        + "  - use python 3.9.x or higher\n"
+                        + "  - add explicit loading functions to the fields\n"
+                        + f"  {dataclasses.fields(cls) = }"
+                    )
+                    cls_type_hints = dict()
+                else:
+                    raise TypeError(
+                        f"Cannot get type hints for {cls.__name__}. Python version is {sys.version_info = }\n"
+                        + f"  {dataclasses.fields(cls) = }\n"
+                        + f"   {e = }"
+                    ) from e
+
+            # initialize dict for keeping what we will pass to the constructor
             ctor_kwargs: dict[str, Any] = dict()
+
+            # iterate over the fields of the class
             for field in dataclasses.fields(cls):
+                # check if the field is a SerializableField
                 assert isinstance(
                     field, SerializableField
-                ), f"Field '{field.name}' on class {cls.__name__} is not a SerializableField, but a {type(field)} this state should be inaccessible, please report this bug!"
+                ), f"Field '{field.name}' on class {cls.__name__} is not a SerializableField, but a {type(field)}. this state should be inaccessible, please report this bug!\nhttps://github.com/mivanit/muutils/issues/new"
 
+                # check if the field is in the data and if it should be initialized
                 if (field.name in data) and field.init:
-                    value = data[field.name]
+                    # get the value, we will be processing it
+                    value: Any = data[field.name]
 
+                    # get the type hint for the field
                     field_type_hint: Any = cls_type_hints.get(field.name, None)
+
                     if field.loading_fn:
+                        # if it has a loading function, use that
                         value = field.loading_fn(data)
                     elif (
                         field_type_hint is not None
                         and hasattr(field_type_hint, "load")
                         and callable(field_type_hint.load)
                     ):
+                        # if no loading function but has a type hint with a load method, use that
                         if isinstance(value, dict):
+                            # TODO: should this be passing the whole data dict?
                             value = field_type_hint.load(value)
                         else:
                             raise ValueError(
                                 f"Cannot load value into {field_type_hint}, expected {type(value) = } to be a dict\n{value = }"
                             )
+                    else:
+                        # assume no loading needs to happen, keep `value` as-is
+                        pass
 
+                    # validate the type
                     if field.assert_type:
                         if field.name in ctor_kwargs:
-                            assert isinstance(ctor_kwargs[field.name], field_type_hint)
+                            if field_type_hint is not None:
+                                # TODO: recursive type hint checking like pydantic?
+                                assert isinstance(ctor_kwargs[field.name], field_type_hint)
+                            else:
+                                raise ValueError(
+                                    f"Cannot get type hints for {cls.__name__}, and so cannot validate. Python version is {sys.version_info = }. You can:\n"
+                                    + f"  - disable `assert_type`. Currently: {field.assert_type = }\n"
+                                    + f"  - use hints like `typing.Dict` instead of `dict` in type hints (this is required on python 3.8.x). You had {field.type = }\n"
+                                    + "  - use python 3.9.x or higher\n"
+                                    + "  - coming in a future release, specify custom type validation functions\n"
+                                )
+                        else:
+                            # TODO: raise an exception here? Can't validate if no type hint given
+                            warnings.warn(
+                                f"Field '{field.name}' on class {cls} has no type hint, but {field.assert_type = }\n{field = }\n{cls_type_hints = }\n{data = }"
+                            )
 
+                    # store the value in the constructor kwargs
                     ctor_kwargs[field.name] = value
+
             return cls(**ctor_kwargs)
 
         # mypy says "Type cannot be declared in assignment to non-self attribute" so thats why I've left the hints in the comments

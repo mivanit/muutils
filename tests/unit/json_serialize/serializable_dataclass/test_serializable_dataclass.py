@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from typing import Any
+import sys
 
 import pytest
 
@@ -12,6 +13,8 @@ from muutils.json_serialize import (
 
 # pylint: disable=missing-class-docstring, unused-variable
 
+
+BELOW_PY_3_9: bool = sys.version_info < (3, 9)
 
 @serializable_dataclass
 class BasicAutofields(SerializableDataclass):
@@ -107,6 +110,16 @@ def test_simple_fields_serialization(simple_fields_instance):
 
 def test_simple_fields_loading(simple_fields_instance):
     serialized = simple_fields_instance.serialize()
+
+    if BELOW_PY_3_9:
+        with pytest.warns(UserWarning) as record:
+            loaded = SimpleFields.load(serialized)
+        print([x.message for x in record])
+        assert len(record) == 4
+    else:
+        loaded = SimpleFields.load(serialized)
+    
+
     loaded = SimpleFields.load(serialized)
     assert loaded == simple_fields_instance
     assert loaded.diff(simple_fields_instance) == {}
@@ -262,7 +275,14 @@ def test_person_serialization():
     }
     assert serialized == expected_ser, f"Expected {expected_ser}, got {serialized}"
 
-    loaded = FullPerson.load(serialized)
+    if BELOW_PY_3_9:
+        with pytest.warns(UserWarning) as record:
+            loaded = FullPerson.load(serialized)
+        print([x.message for x in record])
+        assert len(record) == 4
+    else:
+        loaded = FullPerson.load(serialized)
+    
     assert loaded == person
 
 
@@ -327,7 +347,15 @@ def test_nested_with_container():
     }
 
     assert serialized == expected_ser
-    loaded = Nested_with_Container.load(serialized)
+
+    if BELOW_PY_3_9:
+        with pytest.warns(UserWarning) as record:
+            loaded = Nested_with_Container.load(serialized)
+        print([x.message for x in record])
+        assert len(record) == 12
+    else:
+        loaded = Nested_with_Container.load(serialized)
+    
     assert loaded == instance
 
 

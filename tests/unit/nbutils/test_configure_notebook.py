@@ -93,6 +93,7 @@ def test_warn_unknown_format():
         plt.plot([1, 2, 3], [1, 2, 3])
         plotshow()
 
+
 def test_no_warn_unknown_format_2():
     with pytest.warns(UnknownFigureFormatWarning):
         setup_plots(

@@ -30,18 +30,18 @@ jobs:
     strategy:
       matrix:
         versions:
-          - python: "3.8"
-            torch: "1.13.1"
-          - python: "3.9"
-            torch: "1.13.1"
-          - python: "3.10"
-            torch: "1.13.1"
-          - python: "3.10"
-            torch: "2.3.1"
-          - python: "3.11"
-            torch: "2.3.1"
-          # - python: "3.12"
-          #   torch: "2.3.1"
+          - python: '3.8'
+            torch: '1.13.1'
+          - python: '3.9'
+            torch: '1.13.1'
+          - python: '3.10'
+            torch: '1.13.1'
+          - python: '3.10'
+            torch: '2.3.1'
+          - python: '3.11'
+            torch: '2.3.1'
+          # - python: '3.12'
+          #   torch: '2.3.1'
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -65,5 +65,5 @@ jobs:
         run: make test
 
       - name: lint
-        if: matrix.versions.python == '3.8' || matrix.versions.python == '3.9'
+        if: ${{ matrix.versions.python != '3.8' && matrix.versions.python != '3.9' }}
         run: make lint

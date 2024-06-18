@@ -23,7 +23,6 @@ COMMIT_LOG_SINCE_LAST_VERSION := $(shell (git log $(LAST_VERSION)..HEAD --pretty
 
 TYPECHECK_COMPAT_ARGS := --disable-error-code misc --disable-error-code syntax --disable-error-code import-not-found
 
-
 .PHONY: default
 default: help
 
@@ -54,16 +53,25 @@ check-format:
 	python -m isort --check-only .
 	python -m black --check .
 
-# coverage reports
+# pytest options and coverage
 # --------------------------------------------------
+
+PYTEST_OPTIONS ?=
+
 # whether to run pytest with coverage report generation
 COV ?= 1
 
-ifeq ($(COV),1)
-    PYTEST_OPTIONS=--cov=.
-else
-    PYTEST_OPTIONS=
+ifneq ($(COV), 0)
+	PYTEST_OPTIONS += --cov=.
 endif
+
+# whether to run pytest with warnings as errors
+WARN_STRICT ?= 0
+
+ifneq ($(WARN_STRICT), 0)
+    PYTEST_OPTIONS += -W error
+endif
+
 
 .PHONY: cov
 cov:
@@ -95,6 +103,7 @@ typing-compat: clean
 .PHONY: test
 test: clean
 	@echo "running tests"
+	@echo "pytest options: $(PYTEST_OPTIONS)"
 	$(PYPOETRY) -m pytest $(PYTEST_OPTIONS) $(TESTS_DIR)
 
 

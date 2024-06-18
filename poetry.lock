@@ -2150,6 +2150,23 @@ files = [
 ]
 
 [[package]]
+name = "zanj"
+version = "0.2.2"
+description = "save and load complex objects to disk without pickling"
+optional = true
+python-versions = "<4.0,>=3.10"
+files = [
+    {file = "zanj-0.2.2-py3-none-any.whl", hash = "sha256:91cce89bf8e7041e8acca3071b935899edad0ff776bf4e7bf0d98cfa6cb28f1d"},
+    {file = "zanj-0.2.2.tar.gz", hash = "sha256:71c6110f9b9d1a0fe04c011156b8e2c96f6fac1a6f9dc690b6c380862fd5fb8d"},
+]
+
+[package.dependencies]
+muutils = {version = ">=0.5.1,<0.6.0", extras = ["array"]}
+
+[package.extras]
+pandas = ["pandas (>=1.5.3)"]
+
+[[package]]
 name = "zipp"
 version = "3.19.2"
 description = "Backport of pathlib-compatible object wrapper for zip files"
@@ -2167,8 +2184,9 @@ test = ["big-O", "importlib-resources", "jaraco.functools", "jaraco.itertools", 
 [extras]
 array = ["jaxtyping", "numpy", "torch"]
 notebook = ["ipython"]
+zanj = ["zanj"]
 
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.8"
-content-hash = "c2a126688ee5e43af857b80f2d7062ad7858ad4b95e114784e5ab595a780607b"
+content-hash = "2ce686a4013fe36f7ba4776adf40fe201c7c7855f92bb9ce1487b8372a3ae9df"

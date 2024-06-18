@@ -1,4 +1,5 @@
-# Assuming your functions are in a file named `group_by.py`
+from __future__ import annotations
+
 from muutils.group_equiv import group_by_equivalence
 
 

@@ -6,12 +6,12 @@ import typing
 from pip._internal.operations.freeze import freeze as pip_freeze
 
 
-def _popen(cmd: list[str], split_out: bool = False) -> dict[str, typing.Any]:
+def _popen(cmd: typing.List[str], split_out: bool = False) -> typing.Dict[str, typing.Any]:
     p: subprocess.Popen = subprocess.Popen(
         cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE
     )
 
-    p_out: str | list[str] | None
+    p_out: typing.Union[str, typing.List[str], None]
     if p.stdout is not None:
         p_out = p.stdout.read().decode("utf-8")
         if split_out:
@@ -46,7 +46,7 @@ class SysInfo:
     @staticmethod
     def pip() -> dict:
         """installed packages info"""
-        pckgs: list[str] = [x for x in pip_freeze(local_only=True)]
+        pckgs: typing.List[str] = [x for x in pip_freeze(local_only=True)]
         return {
             "n_packages": len(pckgs),
             "packages": pckgs,
@@ -158,10 +158,10 @@ class SysInfo:
     @classmethod
     def get_all(
         cls,
-        include: tuple[str, ...] | None = None,
-        exclude: tuple[str, ...] = tuple(),
+        include: typing.Optional[typing.Tuple[str, ...]] = None,
+        exclude: typing.Tuple[str, ...] = tuple(),
     ) -> dict:
-        include_meta: tuple[str, ...]
+        include_meta: typing.Tuple[str, ...]
         if include is None:
             include_meta = tuple(cls.__dict__.keys())
         else:

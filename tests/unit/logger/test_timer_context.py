@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from muutils.logger.timing import TimerContext
 
 

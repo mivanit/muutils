@@ -2,7 +2,7 @@ from __future__ import annotations
 import typing
 import warnings
 from collections import defaultdict
-from typing import Any, Callable, Generic, Hashable, Iterable, Literal, TypeVar, Dict
+from typing import Any, Callable, Generic, Hashable, Iterable, Literal, TypeVar, Dict, Union, Optional, Tuple
 
 _KT = TypeVar("_KT")
 _VT = TypeVar("_VT")
@@ -30,7 +30,7 @@ def _recursive_defaultdict_ctor() -> defaultdict:
     return defaultdict(_recursive_defaultdict_ctor)
 
 
-def defaultdict_to_dict_recursive(dd: defaultdict | DefaulterDict) -> dict:
+def defaultdict_to_dict_recursive(dd: Union[defaultdict, DefaulterDict]) -> dict:
     """Convert a defaultdict or DefaulterDict to a normal dict, recursively"""
     return {
         key: (
@@ -130,9 +130,9 @@ def update_with_nested_dict(
 def kwargs_to_nested_dict(
     kwargs_dict: Dict[str, Any],
     sep: str = ".",
-    strip_prefix: str | None = None,
+    strip_prefix: Optional[str] = None,
     when_unknown_prefix: typing.Literal["raise", "warn", "ignore"] = "warn",
-    transform_key: Callable[[str], str] | None = None,
+    transform_key: Optional[Callable[[str], str]] = None,
 ) -> Dict[str, Any]:
     """given kwargs from fire, convert them to a nested dict
 
@@ -157,7 +157,7 @@ def kwargs_to_nested_dict(
         the kwargs dict to convert
     - `sep: str = "."`
         the separator to use for nested keys
-    - `strip_prefix: str | None = None`
+    - `strip_prefix: Optional[str] = None`
         if not None, then all keys must start with this prefix
     - `when_unknown_prefix: typing.Literal["raise", "warn", "ignore"] = "warn"`
         what to do when an unknown prefix is found
@@ -246,7 +246,7 @@ def condense_nested_dicts_numeric_keys(
 
 def condense_nested_dicts_matching_values(
     data: Dict[str, Any],
-    val_condense_fallback_mapping: Callable[[Any], Hashable] | None = None,
+    val_condense_fallback_mapping: Optional[Callable[[Any], Hashable]] = None,
 ) -> Dict[str, Any]:
     """condense a nested dict, by condensing keys with matching values
 
@@ -302,7 +302,7 @@ def condense_nested_dicts(
     data: Dict[str, Any],
     condense_numeric_keys: bool = True,
     condense_matching_values: bool = True,
-    val_condense_fallback_mapping: Callable[[Any], Hashable] | None = None,
+    val_condense_fallback_mapping: Optional[Callable[[Any], Hashable]] = None,
 ) -> Dict[str, Any]:
     """condense a nested dict, by condensing numeric or matching keys with matching values to ranges
 
@@ -337,8 +337,8 @@ def condense_nested_dicts(
 
 
 def tuple_dims_replace(
-    t: tuple[int, ...], dims_names_map: Dict[int, str] | None = None
-) -> tuple[int | str, ...]:
+    t: Tuple[int, ...], dims_names_map: Optional[Dict[int, str]] = None
+) -> Tuple[Union[int, str], ...]:
     if dims_names_map is None:
         return t
     else:
@@ -346,7 +346,7 @@ def tuple_dims_replace(
 
 
 TensorDict = Dict[str, "torch.Tensor|np.ndarray"]  # type: ignore[name-defined]
-TensorIterable = Iterable[tuple[str, "torch.Tensor|np.ndarray"]]  # type: ignore[name-defined]
+TensorIterable = Iterable[Tuple[str, "torch.Tensor|np.ndarray"]]  # type: ignore[name-defined]
 TensorDictFormats = Literal["dict", "json", "yaml", "yml"]
 
 
@@ -361,19 +361,19 @@ def condense_tensor_dict(
     shapes_convert: Callable[[tuple], Any] = _default_shapes_convert,
     drop_batch_dims: int = 0,
     sep: str = ".",
-    dims_names_map: Dict[int, str] | None = None,
+    dims_names_map: Optional[Dict[int, str]] = None,
     condense_numeric_keys: bool = True,
     condense_matching_values: bool = True,
-    val_condense_fallback_mapping: Callable[[Any], Hashable] | None = None,
-    return_format: TensorDictFormats | None = None,
-) -> str | Dict[str, str | tuple[int, ...]]:
+    val_condense_fallback_mapping: Optional[Callable[[Any], Hashable]] = None,
+    return_format: Optional[TensorDictFormats] = None,
+) -> Union[str, Dict[str, str | Tuple[int, ...]]]:
     """Convert a dictionary of tensors to a dictionary of shapes.
 
     by default, values are converted to strings of their shapes (for nice printing).
     If you want the actual shapes, set `shapes_convert = lambda x: x` or `shapes_convert = None`.
 
     # Parameters:
-     - `data : Dict[str, "torch.Tensor|np.ndarray"] | Iterable[tuple[str, "torch.Tensor|np.ndarray"]]`
+     - `data : Dict[str, "torch.Tensor|np.ndarray"] | Iterable[Tuple[str, "torch.Tensor|np.ndarray"]]`
         a either a `TensorDict` dict from strings to tensors, or an `TensorIterable` iterable of (key, tensor) pairs (like you might get from a `dict().items())` )
      - `fmt : TensorDictFormats`
         format to return the result in -- either a dict, or dump to json/yaml directly for pretty printing. will crash if yaml is not installed.
@@ -403,7 +403,7 @@ def condense_tensor_dict(
         legacy alias for `fmt` kwarg
 
     # Returns:
-     - `str|Dict[str, str|tuple[int, ...]]`
+     - `str|Dict[str, str|Tuple[int, ...]]`
         dict if `return_format='dict'`, a string for `json` or `yaml` output
 
     # Examples:
@@ -454,12 +454,12 @@ def condense_tensor_dict(
         shapes_convert = lambda x: x
 
     # convert to iterable
-    data_items: Iterable[tuple[str, "torch.Tensor|np.ndarray"]] = (  # type: ignore
+    data_items: "Iterable[Tuple[str, Union[torch.Tensor,np.ndarray]]]" = (  # type: ignore
         data.items() if hasattr(data, "items") and callable(data.items) else data  # type: ignore
     )
 
     # get shapes
-    data_shapes: Dict[str, str | tuple[int, ...]] = {
+    data_shapes: Dict[str, Union[str, Tuple[int, ...]]] = {
         k: shapes_convert(
             tuple_dims_replace(
                 tuple(v.shape)[drop_batch_dims:],
@@ -473,7 +473,7 @@ def condense_tensor_dict(
     data_nested: Dict[str, Any] = dotlist_to_nested_dict(data_shapes, sep=sep)
 
     # condense the nested dict
-    data_condensed: Dict[str, str | tuple[int, ...]] = condense_nested_dicts(
+    data_condensed: Dict[str, Union[str, Tuple[int, ...]]] = condense_nested_dicts(
         data=data_nested,
         condense_numeric_keys=condense_numeric_keys,
         condense_matching_values=condense_matching_values,

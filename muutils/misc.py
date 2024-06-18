@@ -1,3 +1,4 @@
+from __future__ import annotations
 import hashlib
 import typing
 
@@ -210,23 +211,23 @@ def str_to_numeric(
 
     # detect if it has a suffix
     suffixes_detected: list[bool] = [suffix in quantity for suffix in _mapping]
-    match sum(suffixes_detected):
-        case 0:
-            # no suffix
-            pass
-        case 1:
-            # find multiplier
-            for suffix, mult in _mapping.items():
-                if quantity.endswith(suffix):
-                    # remove suffix, store multiplier, and break
-                    quantity = quantity.removesuffix(suffix).strip()
-                    multiplier = mult
-                    break
-            else:
-                raise ValueError(f"Invalid suffix in {quantity_original}")
-        case _:
-            # multiple suffixes
-            raise ValueError(f"Multiple suffixes detected in {quantity_original}")
+    n_suffixes_detected: int = sum(suffixes_detected)
+    if n_suffixes_detected == 0:
+        # no suffix
+        pass
+    elif n_suffixes_detected == 1:
+        # find multiplier
+        for suffix, mult in _mapping.items():
+            if quantity.endswith(suffix):
+                # remove suffix, store multiplier, and break
+                quantity = quantity.removesuffix(suffix).strip()
+                multiplier = mult
+                break
+        else:
+            raise ValueError(f"Invalid suffix in {quantity_original}")
+    else:
+        # multiple suffixes
+        raise ValueError(f"Multiple suffixes detected in {quantity_original}")
 
     # fractions
     if "/" in quantity:

@@ -1,5 +1,13 @@
+from __future__ import annotations
+import sys
+
+import pytest
+
 from muutils.json_serialize import SerializableDataclass, serializable_dataclass
 
+SUPPORS_KW_ONLY: bool = sys.version_info[1] >= 9
+
+print(f"{SUPPORS_KW_ONLY = }")
 
 @serializable_dataclass
 class Person(SerializableDataclass):
@@ -12,7 +20,7 @@ class Person(SerializableDataclass):
 
 
 @serializable_dataclass(
-    kw_only=True, properties_to_serialize=["full_name", "full_title"]
+    kw_only=SUPPORS_KW_ONLY, properties_to_serialize=["full_name", "full_title"]
 )
 class TitledPerson(Person):
     title: str
@@ -40,6 +48,10 @@ def test_serialize_person():
 
 def test_serialize_titled_person():
     instance = TitledPerson(first_name="Jane", last_name="Smith", title="Dr.")
+
+    if SUPPORS_KW_ONLY:
+        with pytest.raises(TypeError):
+            TitledPerson("Jane", "Smith", "Dr.")
 
     serialized = instance.serialize()
 

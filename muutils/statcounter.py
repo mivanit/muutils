@@ -1,9 +1,9 @@
+from __future__ import annotations
 import json
 import math
 from collections import Counter
 from functools import cached_property
 from itertools import chain
-from types import NoneType
 from typing import Callable, Optional, Sequence, Union
 
 # _GeneralArray = Union[np.ndarray, "torch.Tensor"]
@@ -16,7 +16,7 @@ NumericSequence = Sequence[Union[float, int]]
 
 
 def universal_flatten(
-    arr: NumericSequence | float | int, require_rectangular: bool = True
+    arr: Union[NumericSequence, float, int], require_rectangular: bool = True
 ) -> NumericSequence:
     """flattens any iterable"""
 
@@ -24,7 +24,7 @@ def universal_flatten(
     if hasattr(arr, "flatten") and callable(arr.flatten):  # type: ignore
         return arr.flatten()  # type: ignore
     elif isinstance(arr, Sequence):
-        elements_iterable: list[bool] = [isinstance(x, Sequence) for x in arr]
+        elements_iterable: List[bool] = [isinstance(x, Sequence) for x in arr]
         if require_rectangular and (all(elements_iterable) != any(elements_iterable)):
             raise ValueError("arr contains mixed iterable and non-iterable elements")
         if any(elements_iterable):
@@ -47,7 +47,7 @@ class StatCounter(Counter):
 
     def validate(self) -> bool:
         """validate the counter as being all floats or ints"""
-        return all(isinstance(k, (bool, int, float, NoneType)) for k in self.keys())
+        return all(isinstance(k, (bool, int, float, type(None))) for k in self.keys())
 
     def min(self):
         return min(x for x, v in self.items() if v > 0)

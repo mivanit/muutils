@@ -432,6 +432,16 @@ def serializable_dataclass(
                     field_value = serializable_field()
                 setattr(cls, field_name, field_value)
 
+        # special check, kw_only is not supported in python <3.9 and `dataclasses.MISSING` is truthy
+        if (sys.version_info[1] < 9):
+            if "kw_only" in kwargs:
+                if (kwargs["kw_only"] == True):  # noqa: E712
+                    raise ValueError(
+                        "kw_only is not supported in python >=3.9"
+                    )
+                else:
+                    del kwargs["kw_only"]
+
         cls = dataclasses.dataclass(  # type: ignore[call-overload]
             cls,
             init=init,

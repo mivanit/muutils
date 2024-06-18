@@ -24,7 +24,7 @@ def test_get_checkpoint_paths_for_run():
     assert checkpoint_paths == [(123, checkpoint1_path), (456, checkpoint2_path)]
 
 
-BELOW_PY_3_9: bool = sys.version_info < (3, 9)
+BELOW_PY_3_10: bool = sys.version_info < (3, 9)
 
 
 def test_register_method():
@@ -51,14 +51,14 @@ def test_register_method():
             def other_eval_function():
                 pass
 
-    if BELOW_PY_3_9:
+    if BELOW_PY_3_10:
         assert len(record) == 2
     else:
         assert len(record) == 0
 
     evalsA = TestEvalsA.evals
     evalsB = TestEvalsB.evals
-    if BELOW_PY_3_9:
+    if BELOW_PY_3_10:
         assert len(evalsA) == 1
         assert len(evalsB) == 1
     else:

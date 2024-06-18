@@ -14,12 +14,12 @@ from muutils.json_serialize import (
 # pylint: disable=missing-class-docstring, unused-variable
 
 
-BELOW_PY_3_9: bool = sys.version_info < (3, 9)
+BELOW_PY_3_10: bool = sys.version_info < (3, 10)
 
 
 def _loading_test_wrapper(cls, data, assert_record_len: int | None = None) -> Any:
     """wrapper for testing the load function, which accounts for version differences"""
-    if BELOW_PY_3_9:
+    if BELOW_PY_3_10:
         with pytest.warns(UserWarning) as record:
             loaded = cls.load(data)
         print([x.message for x in record])

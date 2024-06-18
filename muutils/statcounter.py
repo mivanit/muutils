@@ -25,7 +25,7 @@ def universal_flatten(
     if hasattr(arr, "flatten") and callable(arr.flatten):  # type: ignore
         return arr.flatten()  # type: ignore
     elif isinstance(arr, Sequence):
-        elements_iterable: List[bool] = [isinstance(x, Sequence) for x in arr]
+        elements_iterable: list[bool] = [isinstance(x, Sequence) for x in arr]
         if require_rectangular and (all(elements_iterable) != any(elements_iterable)):
             raise ValueError("arr contains mixed iterable and non-iterable elements")
         if any(elements_iterable):

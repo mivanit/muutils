@@ -164,10 +164,10 @@ class SysInfo:
     @classmethod
     def get_all(
         cls,
-        include: typing.Optional[typing.Tuple[str, ...]] = None,
-        exclude: typing.Tuple[str, ...] = tuple(),
+        include: typing.Optional[tuple[str, ...]] = None,
+        exclude: tuple[str, ...] = tuple(),
     ) -> dict:
-        include_meta: typing.Tuple[str, ...]
+        include_meta: tuple[str, ...]
         if include is None:
             include_meta = tuple(cls.__dict__.keys())
         else:

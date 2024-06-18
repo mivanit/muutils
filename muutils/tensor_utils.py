@@ -355,7 +355,7 @@ def rpad_array(
     return pad_array(array, pad_length, pad_value, rpad=True)
 
 
-def get_dict_shapes(d: dict[str, "torch.Tensor"]) -> dict[str, typing.Tuple[int, ...]]:
+def get_dict_shapes(d: dict[str, "torch.Tensor"]) -> dict[str, tuple[int, ...]]:
     """given a state dict or cache dict, compute the shapes and put them in a nested dict"""
     return dotlist_to_nested_dict({k: tuple(v.shape) for k, v in d.items()})
 

@@ -11,7 +11,6 @@ from typing import (
     Iterable,
     Literal,
     Optional,
-    Tuple,
     TypeVar,
     Union,
 )
@@ -350,8 +349,8 @@ def condense_nested_dicts(
 
 
 def tuple_dims_replace(
-    t: Tuple[int, ...], dims_names_map: Optional[dict[int, str]] = None
-) -> Tuple[Union[int, str], ...]:
+    t: tuple[int, ...], dims_names_map: Optional[dict[int, str]] = None
+) -> tuple[Union[int, str], ...]:
     if dims_names_map is None:
         return t
     else:
@@ -359,7 +358,7 @@ def tuple_dims_replace(
 
 
 TensorDict = dict[str, "torch.Tensor|np.ndarray"]  # type: ignore[name-defined]
-TensorIterable = Iterable[Tuple[str, "torch.Tensor|np.ndarray"]]  # type: ignore[name-defined]
+TensorIterable = Iterable[tuple[str, "torch.Tensor|np.ndarray"]]  # type: ignore[name-defined]
 TensorDictFormats = Literal["dict", "json", "yaml", "yml"]
 
 
@@ -379,14 +378,14 @@ def condense_tensor_dict(
     condense_matching_values: bool = True,
     val_condense_fallback_mapping: Optional[Callable[[Any], Hashable]] = None,
     return_format: Optional[TensorDictFormats] = None,
-) -> Union[str, dict[str, str | Tuple[int, ...]]]:
+) -> Union[str, dict[str, str | tuple[int, ...]]]:
     """Convert a dictionary of tensors to a dictionary of shapes.
 
     by default, values are converted to strings of their shapes (for nice printing).
     If you want the actual shapes, set `shapes_convert = lambda x: x` or `shapes_convert = None`.
 
     # Parameters:
-     - `data : dict[str, "torch.Tensor|np.ndarray"] | Iterable[Tuple[str, "torch.Tensor|np.ndarray"]]`
+     - `data : dict[str, "torch.Tensor|np.ndarray"] | Iterable[tuple[str, "torch.Tensor|np.ndarray"]]`
         a either a `TensorDict` dict from strings to tensors, or an `TensorIterable` iterable of (key, tensor) pairs (like you might get from a `dict().items())` )
      - `fmt : TensorDictFormats`
         format to return the result in -- either a dict, or dump to json/yaml directly for pretty printing. will crash if yaml is not installed.
@@ -416,7 +415,7 @@ def condense_tensor_dict(
         legacy alias for `fmt` kwarg
 
     # Returns:
-     - `str|dict[str, str|Tuple[int, ...]]`
+     - `str|dict[str, str|tuple[int, ...]]`
         dict if `return_format='dict'`, a string for `json` or `yaml` output
 
     # Examples:
@@ -467,12 +466,12 @@ def condense_tensor_dict(
         shapes_convert = lambda x: x
 
     # convert to iterable
-    data_items: "Iterable[Tuple[str, Union[torch.Tensor,np.ndarray]]]" = (  # type: ignore
+    data_items: "Iterable[tuple[str, Union[torch.Tensor,np.ndarray]]]" = (  # type: ignore
         data.items() if hasattr(data, "items") and callable(data.items) else data  # type: ignore
     )
 
     # get shapes
-    data_shapes: dict[str, Union[str, Tuple[int, ...]]] = {
+    data_shapes: dict[str, Union[str, tuple[int, ...]]] = {
         k: shapes_convert(
             tuple_dims_replace(
                 tuple(v.shape)[drop_batch_dims:],
@@ -486,7 +485,7 @@ def condense_tensor_dict(
     data_nested: dict[str, Any] = dotlist_to_nested_dict(data_shapes, sep=sep)
 
     # condense the nested dict
-    data_condensed: dict[str, Union[str, Tuple[int, ...]]] = condense_nested_dicts(
+    data_condensed: dict[str, Union[str, tuple[int, ...]]] = condense_nested_dicts(
         data=data_nested,
         condense_numeric_keys=condense_numeric_keys,
         condense_matching_values=condense_matching_values,

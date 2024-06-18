@@ -152,7 +152,7 @@ class SysInfo:
             }
         else:
 
-            output: dict[str, str] = {
+            output: dict = {
                 "git version": git_version["stdout"],
                 "git status": git_status,
                 "git branch": _popen(["git", "branch"], split_out=True),

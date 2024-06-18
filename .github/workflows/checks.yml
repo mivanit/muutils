@@ -65,4 +65,5 @@ jobs:
         run: make test
 
       - name: lint
+        if: "${{ matrix.versions.python >= '3.10' }}"
         run: make lint

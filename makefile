@@ -9,7 +9,7 @@ PYPROJECT := pyproject.toml
 
 VERSION := $(shell python -c "import re; print(re.search(r'^version\s*=\s*\"(.+?)\"', open('$(PYPROJECT)').read(), re.MULTILINE).group(1))")
 LAST_VERSION := $(shell cat $(LAST_VERSION_FILE))
-PYPOETRY := poetry run python
+PYTHON_BASE := python
 
 # note that the commands at the end:
 # 1) format the git log
@@ -37,21 +37,31 @@ version:
 		exit 1; \
 	fi
 
+# command line options
+# --------------------------------------------------
+# for formatting or CI, we might want to run python without setting up all of poetry
+RUN_GLOBAL ?= 0
+ifeq ($(RUN_GLOBAL),0)
+	PYTHON = poetry run $(PYTHON_BASE)
+else
+	PYTHON = $(PYTHON_BASE)
+endif
+
 
 # formatting
 # --------------------------------------------------
 .PHONY: format
 format:
-	python -m pycln --config $(PYPROJECT) --all .
-	python -m isort format .
-	python -m black .
+	$(PYTHON) -m pycln --config $(PYPROJECT) --all .
+	$(PYTHON) -m isort format .
+	$(PYTHON) -m black .
 
 .PHONY: check-format
 check-format:
 	@echo "run format check"
-	python -m pycln --check --config $(PYPROJECT) .
-	python -m isort --check-only .
-	python -m black --check .
+	$(PYTHON) -m pycln --check --config $(PYPROJECT) .
+	$(PYTHON) -m isort --check-only .
+	$(PYTHON) -m black --check .
 
 # pytest options and coverage
 # --------------------------------------------------
@@ -76,9 +86,9 @@ endif
 .PHONY: cov
 cov:
 	@echo "generate coverage reports"
-	$(PYPOETRY) -m coverage report -m > $(COVERAGE_REPORTS_DIR)/coverage.txt
-	$(PYPOETRY) -m coverage_badge -f -o $(COVERAGE_REPORTS_DIR)/coverage.svg
-	$(PYPOETRY) -m coverage html	
+	$(PYTHON) -m coverage report -m > $(COVERAGE_REPORTS_DIR)/coverage.txt
+	$(PYTHON) -m coverage_badge -f -o $(COVERAGE_REPORTS_DIR)/coverage.svg
+	$(PYTHON) -m coverage html	
 
 # tests
 # --------------------------------------------------
@@ -91,19 +101,19 @@ cov:
 .PHONY: typing
 typing: clean
 	@echo "running type checks"
-	$(PYPOETRY) -m mypy --config-file $(PYPROJECT) $(PACKAGE_NAME)/
-	$(PYPOETRY) -m mypy --config-file $(PYPROJECT) tests/
+	$(PYTHON) -m mypy --config-file $(PYPROJECT) $(PACKAGE_NAME)/
+	$(PYTHON) -m mypy --config-file $(PYPROJECT) tests/
 
 .PHONY: typing-compat
 typing-compat: clean
 	@echo "running type checks in compatibility mode for older python versions"
-	$(PYPOETRY) -m mypy --config-file $(PYPROJECT) $(TYPECHECK_COMPAT_ARGS) $(PACKAGE_NAME)/
-	$(PYPOETRY) -m mypy --config-file $(PYPROJECT) $(TYPECHECK_COMPAT_ARGS) tests/
+	$(PYTHON) -m mypy --config-file $(PYPROJECT) $(TYPECHECK_COMPAT_ARGS) $(PACKAGE_NAME)/
+	$(PYTHON) -m mypy --config-file $(PYPROJECT) $(TYPECHECK_COMPAT_ARGS) tests/
 
 .PHONY: test
 test: clean
 	@echo "running tests"
-	$(PYPOETRY) -m pytest $(PYTEST_OPTIONS) $(TESTS_DIR)
+	$(PYTHON) -m pytest $(PYTEST_OPTIONS) $(TESTS_DIR)
 
 
 .PHONY: check
@@ -189,3 +199,9 @@ help:
 	@echo -n "# list make targets"
 	@echo ":"
 	@cat Makefile | sed -n '/^\.PHONY: / h; /\(^\t@*echo\|^\t:\)/ {H; x; /PHONY/ s/.PHONY: \(.*\)\n.*"\(.*\)"/    make \1\t\2/p; d; x}'| sort -k2,2 |expand -t 25
+	@echo "# makefile variables:"
+	@echo "    PYTHON = $(PYTHON)"
+	@echo "    PACKAGE_NAME = $(PACKAGE_NAME)"
+	@echo "    VERSION = $(VERSION)"
+	@echo "    LAST_VERSION = $(LAST_VERSION)"
+	@echo "    PYTEST_OPTIONS = $(PYTEST_OPTIONS)"

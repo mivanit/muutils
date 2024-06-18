@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with: 
           fetch-depth: 0
 
@@ -22,7 +22,31 @@ jobs:
         run: pip install pycln isort black
 
       - name: Run Format Checks
-        run: make check-format
+        run: make check-format RUN_GLOBAL=1
+  
+  check-deps:
+    name: Check poetry.lock and dev dependencies
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Install Poetry
+        run: |
+          curl -sSL https://install.python-poetry.org | python3 -
+
+      - name: Check poetry.lock
+        run: poetry lock --check
+
+      - name: Check dev-requirements.txt
+        run: make check-dev-dep
 
   test:
     name: Test and Lint
@@ -44,7 +68,7 @@ jobs:
           #   torch: '2.3.1'
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with: 
           fetch-depth: 0
 
@@ -53,24 +77,22 @@ jobs:
         with:
           python-version: ${{ matrix.versions.python }}
 
+      - name: Install uv
+        run: pip install uv
+
       - name: Install dependencies
-        run: |
-          curl -sSL https://install.python-poetry.org | python3 -
-          poetry lock --check
-          export CUDA_VISIBLE_DEVICES=0
-          poetry add torch@${{ matrix.versions.torch }}+cpu --source torch_cpu
-          poetry install --all-extras
+        run: uv install -r dev-requirements.txt --system
 
       - name: tests
-        run: make test
+        run: make test RUN_GLOBAL=1
 
-      - name: tests - strict mode
-        run: make test WARN_STRICT=1
+      - name: tests in strict mode
+        run: make test WARN_STRICT=1 RUN_GLOBAL=1
 
       - name: check typing
         if: ${{ matrix.versions.python != '3.8' && matrix.versions.python != '3.9' }}
-        run: make typing
+        run: make typing RUN_GLOBAL=1
       
       - name: check typing in compatibility mode
         if: ${{ matrix.versions.python == '3.8' || matrix.versions.python == '3.9' }}
-        run: make typing-compat
+        run: make typing-compat RUN_GLOBAL=1

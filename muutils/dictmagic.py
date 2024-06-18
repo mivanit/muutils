@@ -178,7 +178,8 @@ def kwargs_to_nested_dict(
                     raise ValueError(
                         f"when_unknown_prefix must be one of 'raise', 'warn', or 'ignore', got {when_unknown_prefix}"
                     )
-            key = key.removeprefix(strip_prefix)
+            else:
+                key = key[len(strip_prefix) :]
 
         if transform_key is not None:
             key = transform_key(key)

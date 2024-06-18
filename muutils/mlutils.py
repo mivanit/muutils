@@ -136,8 +136,15 @@ def register_method(
     """Decorator to add a method to the method_dict"""
 
     def decorator(method: F) -> F:
+        method_name: str
         if custom_name is None:
-            method_name: str = method.__name__
+            method_name: str|None = getattr(method, "__name__", None)
+            if method_name is None:
+                warnings.warn(
+                    f"Method {method} does not have a name, using sanitized repr"
+                )
+                from muutils.misc import sanitize_identifier
+                method_name = sanitize_identifier(repr(method))
         else:
             method_name = custom_name
             method.__name__ = custom_name

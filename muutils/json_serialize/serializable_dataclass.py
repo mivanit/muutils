@@ -101,7 +101,7 @@ class SerializableField(dataclasses.Field):
             hash=field.hash,
             compare=field.compare,
             metadata=field.metadata,
-            kw_only=field.kw_only,
+            kw_only=getattr(field, "kw_only", dataclasses.MISSING),  # for python <3.9
             serialize=field.repr,
             serialization_fn=None,
             loading_fn=None,

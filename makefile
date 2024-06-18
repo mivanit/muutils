@@ -21,6 +21,9 @@ COMMIT_LOG_FILE := .commit_log
 COMMIT_LOG_SINCE_LAST_VERSION := $(shell (git log $(LAST_VERSION)..HEAD --pretty=format:"- %s (%h)" | tr '`' "'" ; echo) | tac | tr '\n' '\t')
 #                                                                                    1                2            3       4     5
 
+TYPECHECK_COMPAT_ARGS := --disable-error-code misc --disable-error-code syntax --disable-error-code import-not-found
+
+
 .PHONY: default
 default: help
 
@@ -77,10 +80,17 @@ cov:
 # not sure how to fix this
 # python -m pylint $(PACKAGE_NAME)/
 # python -m pylint tests/
-.PHONY: lint
-lint: clean
+.PHONY: typing
+typing: clean
+	@echo "running type checks"
 	$(PYPOETRY) -m mypy --config-file $(PYPROJECT) $(PACKAGE_NAME)/
 	$(PYPOETRY) -m mypy --config-file $(PYPROJECT) tests/
+
+.PHONY: typing-compat
+typing-compat: clean
+	@echo "running type checks in compatibility mode for older python versions"
+	$(PYPOETRY) -m mypy --config-file $(PYPROJECT) $(TYPECHECK_COMPAT_ARGS) $(PACKAGE_NAME)/
+	$(PYPOETRY) -m mypy --config-file $(PYPROJECT) $(TYPECHECK_COMPAT_ARGS) tests/
 
 .PHONY: test
 test: clean

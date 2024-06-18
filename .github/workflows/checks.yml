@@ -64,6 +64,10 @@ jobs:
       - name: tests
         run: make test
 
-      - name: lint
+      - name: check typing
         if: ${{ matrix.versions.python != '3.8' && matrix.versions.python != '3.9' }}
-        run: make lint
+        run: make typing
+      
+      - name: check typing in compatibility mode
+        if: ${{ matrix.versions.python == '3.8' || matrix.versions.python == '3.9' }}
+        run: make typing-compat

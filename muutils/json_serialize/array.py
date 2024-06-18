@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import base64
 import typing
 import warnings
 from typing import Any, Iterable, Literal, Optional, Sequence
@@ -10,7 +11,7 @@ from muutils.json_serialize.util import JSONitem
 
 # pylint: disable=unused-argument
 
-ArrayMode = Literal["list", "array_list_meta", "array_hex_meta", "external", "zero_dim"]
+ArrayMode = Literal["list", "array_list_meta", "array_hex_meta", "array_b64_meta", "external", "zero_dim"]
 
 
 def array_n_elements(arr) -> int:  # type: ignore[name-defined]
@@ -48,14 +49,15 @@ def serialize_array(
     - `list`: serialize as a list of values, no metadata (equivalent to `arr.tolist()`)
     - `array_list_meta`: serialize dict with metadata, actual list under the key `data`
     - `array_hex_meta`: serialize dict with metadata, actual hex string under the key `data`
+    - `array_b64_meta`: serialize dict with metadata, actual base64 string under the key `data`
 
-    for `array_list_meta` and `array_hex_meta`, the output will look like
+    for `array_list_meta`, `array_hex_meta`, and `array_b64_meta`, the serialized object is:
     ```
     {
         "__format__": <array_list_meta|array_hex_meta>,
         "shape": arr.shape,
         "dtype": str(arr.dtype),
-        "data": <arr.tolist()|arr.tobytes().hex()>,
+        "data": <arr.tolist()|arr.tobytes().hex()|base64.b64encode(arr.tobytes()).decode()>,
     }
     ```
 
@@ -100,6 +102,12 @@ def serialize_array(
             "data": arr_np.tobytes().hex(),
             **arr_metadata(arr_np),
         }
+    elif array_mode == "array_b64_meta":
+        return {
+            "__format__": f"{arr_type}:array_b64_meta",
+            "data": base64.b64encode(arr_np.tobytes()).decode(),
+            **arr_metadata(arr_np),
+        }
     else:
         raise KeyError(f"invalid array_mode: {array_mode}")
 
@@ -119,6 +127,10 @@ def infer_array_mode(arr: JSONitem) -> ArrayMode:
             if not isinstance(arr["data"], str):
                 raise ValueError(f"invalid hex format: {type(arr['data']) = }\t{arr}")
             return "array_hex_meta"
+        elif fmt.endswith(":array_b64_meta"):
+            if not isinstance(arr["data"], str):
+                raise ValueError(f"invalid b64 format: {type(arr['data']) = }\t{arr}")
+            return "array_b64_meta"
         elif fmt.endswith(":external"):
             return "external"
         elif fmt.endswith(":zero_dim"):
@@ -163,6 +175,14 @@ def load_array(arr: JSONitem, array_mode: Optional[ArrayMode] = None) -> Any:
         ), f"invalid list format: {type(arr) = }\n{arr = }"
 
         data = np.frombuffer(bytes.fromhex(arr["data"]), dtype=arr["dtype"])
+        return data.reshape(arr["shape"])
+    
+    elif array_mode == "array_b64_meta":
+        assert isinstance(
+            arr, typing.Mapping
+        ), f"invalid list format: {type(arr) = }\n{arr = }"
+
+        data = np.frombuffer(base64.b64decode(arr["data"]), dtype=arr["dtype"])
         return data.reshape(arr["shape"])
 
     elif array_mode == "list":

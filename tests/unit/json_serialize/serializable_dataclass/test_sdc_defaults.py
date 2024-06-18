@@ -1,3 +1,4 @@
+from typing import Dict
 from muutils.json_serialize import (
     JsonSerializer,
     SerializableDataclass,
@@ -42,7 +43,7 @@ def test_sdc_strip_format_jser():
     assert recovered == instance
 
 
-TYPE_MAP: dict[str, type] = {x.__name__: x for x in [int, float, str, bool]}
+TYPE_MAP: Dict[str, type] = {x.__name__: x for x in [int, float, str, bool]}
 
 
 @serializable_dataclass

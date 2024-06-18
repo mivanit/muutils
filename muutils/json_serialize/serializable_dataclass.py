@@ -2,6 +2,7 @@ from __future__ import annotations
 import abc
 import dataclasses
 import json
+import sys
 import types
 import typing
 import warnings
@@ -71,6 +72,15 @@ class SerializableField(dataclasses.Field):
             super_kwargs["metadata"] = metadata
         else:
             super_kwargs["metadata"] = types.MappingProxyType({})
+
+        # special check, kw_only is not supported in python <3.9 and `dataclasses.MISSING` is truthy
+        if (sys.version_info[1] < 9):
+            if (super_kwargs["kw_only"] == True):  # noqa: E712
+                raise ValueError(
+                    "kw_only is not supported in python >=3.9"
+                )
+            else:
+                del super_kwargs["kw_only"]
 
         # actually init the super class
         super().__init__(**super_kwargs)  # type: ignore[call-arg]

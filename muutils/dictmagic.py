@@ -1,13 +1,14 @@
+from __future__ import annotations
 import typing
 import warnings
 from collections import defaultdict
-from typing import Any, Callable, Generic, Hashable, Iterable, Literal, TypeVar
+from typing import Any, Callable, Generic, Hashable, Iterable, Literal, TypeVar, Dict
 
 _KT = TypeVar("_KT")
 _VT = TypeVar("_VT")
 
 
-class DefaulterDict(dict[_KT, _VT], Generic[_KT, _VT]):
+class DefaulterDict(Dict[_KT, _VT], Generic[_KT, _VT]):
     """like a defaultdict, but default_factory is passed the key as an argument"""
 
     def __init__(self, default_factory: Callable[[_KT], _VT], *args, **kwargs):
@@ -41,7 +42,7 @@ def defaultdict_to_dict_recursive(dd: defaultdict | DefaulterDict) -> dict:
     }
 
 
-def dotlist_to_nested_dict(dot_dict: dict[str, Any], sep: str = ".") -> dict[str, Any]:
+def dotlist_to_nested_dict(dot_dict: Dict[str, Any], sep: str = ".") -> Dict[str, Any]:
     """Convert a dict with dot-separated keys to a nested dict
 
     Example:
@@ -62,11 +63,11 @@ def dotlist_to_nested_dict(dot_dict: dict[str, Any], sep: str = ".") -> dict[str
 
 
 def nested_dict_to_dotlist(
-    nested_dict: dict[str, Any],
+    nested_dict: Dict[str, Any],
     sep: str = ".",
     allow_lists: bool = False,
-) -> dict[str, Any]:
-    def _recurse(current: Any, parent_key: str = "") -> dict[str, Any]:
+) -> Dict[str, Any]:
+    def _recurse(current: Any, parent_key: str = "") -> Dict[str, Any]:
         items: dict = dict()
 
         new_key: str
@@ -95,9 +96,9 @@ def nested_dict_to_dotlist(
 
 
 def update_with_nested_dict(
-    original: dict[str, Any],
-    update: dict[str, Any],
-) -> dict[str, Any]:
+    original: Dict[str, Any],
+    update: Dict[str, Any],
+) -> Dict[str, Any]:
     """Update a dict with a nested dict
 
     Example:
@@ -105,9 +106,9 @@ def update_with_nested_dict(
     {'a': {'b': 2}, 'c': -1}
 
     # Arguments
-    - `original: dict[str, Any]`
+    - `original: Dict[str, Any]`
         the dict to update (will be modified in-place)
-    - `update: dict[str, Any]`
+    - `update: Dict[str, Any]`
         the dict to update with
 
     # Returns
@@ -127,12 +128,12 @@ def update_with_nested_dict(
 
 
 def kwargs_to_nested_dict(
-    kwargs_dict: dict[str, Any],
+    kwargs_dict: Dict[str, Any],
     sep: str = ".",
     strip_prefix: str | None = None,
     when_unknown_prefix: typing.Literal["raise", "warn", "ignore"] = "warn",
     transform_key: Callable[[str], str] | None = None,
-) -> dict[str, Any]:
+) -> Dict[str, Any]:
     """given kwargs from fire, convert them to a nested dict
 
     if strip_prefix is not None, then all keys must start with the prefix. by default,
@@ -152,7 +153,7 @@ def kwargs_to_nested_dict(
     ```
 
     # Arguments
-    - `kwargs_dict: dict[str, Any]`
+    - `kwargs_dict: Dict[str, Any]`
         the kwargs dict to convert
     - `sep: str = "."`
         the separator to use for nested keys
@@ -163,7 +164,7 @@ def kwargs_to_nested_dict(
     - `transform_key: Callable[[str], str] | None = None`
         a function to apply to each key before adding it to the dict (applied after stripping the prefix)
     """
-    filtered_kwargs: dict[str, Any] = dict()
+    filtered_kwargs: Dict[str, Any] = dict()
     for key, value in kwargs_dict.items():
         if strip_prefix is not None:
             if not key.startswith(strip_prefix):
@@ -197,8 +198,8 @@ def is_numeric_consecutive(lst: list[str]) -> bool:
 
 
 def condense_nested_dicts_numeric_keys(
-    data: dict[str, Any],
-) -> dict[str, Any]:
+    data: Dict[str, Any],
+) -> Dict[str, Any]:
     """condense a nested dict, by condensing numeric keys with matching values to ranges
 
     # Examples:
@@ -224,7 +225,7 @@ def condense_nested_dicts_numeric_keys(
         return data
 
     # output dict
-    condensed_data: dict[str, Any] = {}
+    condensed_data: Dict[str, Any] = {}
 
     # Identify ranges of identical values and condense
     i: int = 0
@@ -244,15 +245,15 @@ def condense_nested_dicts_numeric_keys(
 
 
 def condense_nested_dicts_matching_values(
-    data: dict[str, Any],
+    data: Dict[str, Any],
     val_condense_fallback_mapping: Callable[[Any], Hashable] | None = None,
-) -> dict[str, Any]:
+) -> Dict[str, Any]:
     """condense a nested dict, by condensing keys with matching values
 
     # Examples:
 
     # Parameters:
-     - `data : dict[str, Any]`
+     - `data : Dict[str, Any]`
         data to process
      - `val_condense_fallback_mapping : Callable[[Any], Hashable] | None`
         a function to apply to each value before adding it to the dict (if it's not hashable)
@@ -272,7 +273,7 @@ def condense_nested_dicts_matching_values(
 
     # Find all identical values and condense by stitching together keys
     values_grouped: defaultdict[Any, list[str]] = defaultdict(list)
-    data_persist: dict[str, Any] = dict()
+    data_persist: Dict[str, Any] = dict()
     for key, value in data.items():
         if not isinstance(value, dict):
             try:
@@ -298,11 +299,11 @@ def condense_nested_dicts_matching_values(
 
 
 def condense_nested_dicts(
-    data: dict[str, Any],
+    data: Dict[str, Any],
     condense_numeric_keys: bool = True,
     condense_matching_values: bool = True,
     val_condense_fallback_mapping: Callable[[Any], Hashable] | None = None,
-) -> dict[str, Any]:
+) -> Dict[str, Any]:
     """condense a nested dict, by condensing numeric or matching keys with matching values to ranges
 
     combines the functionality of `condense_nested_dicts_numeric_keys()` and `condense_nested_dicts_matching_values()`
@@ -311,7 +312,7 @@ def condense_nested_dicts(
     it's not reversible because types are lost to make the printing pretty
 
     # Parameters:
-     - `data : dict[str, Any]`
+     - `data : Dict[str, Any]`
         data to process
      - `condense_numeric_keys : bool`
         whether to condense numeric keys (e.g. "1", "2", "3") to ranges (e.g. "[1-3]")
@@ -336,7 +337,7 @@ def condense_nested_dicts(
 
 
 def tuple_dims_replace(
-    t: tuple[int, ...], dims_names_map: dict[int, str] | None = None
+    t: tuple[int, ...], dims_names_map: Dict[int, str] | None = None
 ) -> tuple[int | str, ...]:
     if dims_names_map is None:
         return t
@@ -344,7 +345,7 @@ def tuple_dims_replace(
         return tuple(dims_names_map.get(x, x) for x in t)
 
 
-TensorDict = dict[str, "torch.Tensor|np.ndarray"]  # type: ignore[name-defined]
+TensorDict = Dict[str, "torch.Tensor|np.ndarray"]  # type: ignore[name-defined]
 TensorIterable = Iterable[tuple[str, "torch.Tensor|np.ndarray"]]  # type: ignore[name-defined]
 TensorDictFormats = Literal["dict", "json", "yaml", "yml"]
 
@@ -360,19 +361,19 @@ def condense_tensor_dict(
     shapes_convert: Callable[[tuple], Any] = _default_shapes_convert,
     drop_batch_dims: int = 0,
     sep: str = ".",
-    dims_names_map: dict[int, str] | None = None,
+    dims_names_map: Dict[int, str] | None = None,
     condense_numeric_keys: bool = True,
     condense_matching_values: bool = True,
     val_condense_fallback_mapping: Callable[[Any], Hashable] | None = None,
     return_format: TensorDictFormats | None = None,
-) -> str | dict[str, str | tuple[int, ...]]:
+) -> str | Dict[str, str | tuple[int, ...]]:
     """Convert a dictionary of tensors to a dictionary of shapes.
 
     by default, values are converted to strings of their shapes (for nice printing).
     If you want the actual shapes, set `shapes_convert = lambda x: x` or `shapes_convert = None`.
 
     # Parameters:
-     - `data : dict[str, "torch.Tensor|np.ndarray"] | Iterable[tuple[str, "torch.Tensor|np.ndarray"]]`
+     - `data : Dict[str, "torch.Tensor|np.ndarray"] | Iterable[tuple[str, "torch.Tensor|np.ndarray"]]`
         a either a `TensorDict` dict from strings to tensors, or an `TensorIterable` iterable of (key, tensor) pairs (like you might get from a `dict().items())` )
      - `fmt : TensorDictFormats`
         format to return the result in -- either a dict, or dump to json/yaml directly for pretty printing. will crash if yaml is not installed.
@@ -386,7 +387,7 @@ def condense_tensor_dict(
      - `sep : str`
         separator to use for nested keys
         (defaults to `'.'`)
-     - `dims_names_map : dict[int, str] | None`
+     - `dims_names_map : Dict[int, str] | None`
         convert certain dimension values in shape. not perfect, can be buggy
         (defaults to `None`)
      - `condense_numeric_keys : bool`
@@ -402,7 +403,7 @@ def condense_tensor_dict(
         legacy alias for `fmt` kwarg
 
     # Returns:
-     - `str|dict[str, str|tuple[int, ...]]`
+     - `str|Dict[str, str|tuple[int, ...]]`
         dict if `return_format='dict'`, a string for `json` or `yaml` output
 
     # Examples:
@@ -458,7 +459,7 @@ def condense_tensor_dict(
     )
 
     # get shapes
-    data_shapes: dict[str, str | tuple[int, ...]] = {
+    data_shapes: Dict[str, str | tuple[int, ...]] = {
         k: shapes_convert(
             tuple_dims_replace(
                 tuple(v.shape)[drop_batch_dims:],
@@ -469,10 +470,10 @@ def condense_tensor_dict(
     }
 
     # nest the dict
-    data_nested: dict[str, Any] = dotlist_to_nested_dict(data_shapes, sep=sep)
+    data_nested: Dict[str, Any] = dotlist_to_nested_dict(data_shapes, sep=sep)
 
     # condense the nested dict
-    data_condensed: dict[str, str | tuple[int, ...]] = condense_nested_dicts(
+    data_condensed: Dict[str, str | tuple[int, ...]] = condense_nested_dicts(
         data=data_nested,
         condense_numeric_keys=condense_numeric_keys,
         condense_matching_values=condense_matching_values,
@@ -480,19 +481,19 @@ def condense_tensor_dict(
     )
 
     # return in the specified format
-    match fmt.lower():
-        case "dict":
-            return data_condensed
-        case "json":
-            import json
+    fmt_lower: str = fmt.lower()
+    if fmt_lower == "dict":
+        return data_condensed
+    elif fmt_lower == "json":
+        import json
 
-            return json.dumps(data_condensed, indent=2)
-        case "yaml" | "yml":
-            try:
-                import yaml  # type: ignore[import-untyped]
+        return json.dumps(data_condensed, indent=2)
+    elif fmt_lower in ["yaml", "yml"]:
+        try:
+            import yaml  # type: ignore[import-untyped]
 
-                return yaml.dump(data_condensed, sort_keys=False)
-            except ImportError as e:
-                raise ValueError("PyYAML is required for YAML output") from e
-        case _:
-            raise ValueError(f"Invalid return format: {fmt}")
+            return yaml.dump(data_condensed, sort_keys=False)
+        except ImportError as e:
+            raise ValueError("PyYAML is required for YAML output") from e
+    else:
+        raise ValueError(f"Invalid return format: {fmt}")

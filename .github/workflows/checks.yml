@@ -78,7 +78,7 @@ jobs:
         run: pip install uv
 
       - name: Install dependencies
-        run: uv install -r dev-requirements.txt --system
+        run: uv pip install -r dev-requirements.txt --system
 
       - name: tests
         run: make test RUN_GLOBAL=1

@@ -1,8 +1,6 @@
 import sys
 from pathlib import Path
 
-import pytest
-
 from muutils.mlutils import get_checkpoint_paths_for_run, register_method
 
 

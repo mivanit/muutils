@@ -1,9 +1,9 @@
 from __future__ import annotations
+
 import os
 import subprocess
 import sys
 import typing
-
 from importlib.metadata import distributions
 
 
@@ -50,10 +50,7 @@ class SysInfo:
     @staticmethod
     def pip() -> dict:
         """installed packages info"""
-        pckgs: list[tuple[str, str]] = [
-            (x.name, x.version)
-            for x in distributions()
-        ]
+        pckgs: list[tuple[str, str]] = [(x.name, x.version) for x in distributions()]
         return {
             "n_packages": len(pckgs),
             "packages": pckgs,
@@ -195,4 +192,5 @@ class SysInfo:
 
 if __name__ == "__main__":
     import pprint
+
     pprint.pprint(SysInfo.get_all())

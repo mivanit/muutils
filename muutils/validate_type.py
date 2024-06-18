@@ -12,13 +12,15 @@ def validate_type(value: typing.Any, expected_type: typing.Any) -> bool:
     origin: type = typing.get_origin(expected_type)
     args: list = typing.get_args(expected_type)
     
+    # useful for debugging
+    print(f"{value = },   {expected_type = },   {origin = },   {args = }")
+
     if origin is types.UnionType or origin is typing.Union:
         return any(validate_type(value, arg) for arg in args)
 
     # generic alias, more complicated
     if isinstance(expected_type, (typing.GenericAlias, typing._GenericAlias, typing._UnionGenericAlias)):
 
-        print(f"{value = },   {expected_type = },   {origin = },   {args = }")
         
         if origin is list:
             if len(args) != 1:

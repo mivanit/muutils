@@ -27,34 +27,32 @@ def test_get_checkpoint_paths_for_run():
 BELOW_PY_3_10: bool = sys.version_info < (3, 9)
 
 
-def test_register_method():
+def test_register_method(recwarn):
 
-    with pytest.warns() as record:
+    class TestEvalsA:
+        evals = {}
 
-        class TestEvalsA:
-            evals = {}
+        @register_method(evals)
+        @staticmethod
+        def eval_function():
+            pass
 
-            @register_method(evals)
-            @staticmethod
-            def eval_function():
-                pass
+        @staticmethod
+        def other_function():
+            pass
 
-            @staticmethod
-            def other_function():
-                pass
+    class TestEvalsB:
+        evals = {}
 
-        class TestEvalsB:
-            evals = {}
-
-            @register_method(evals)
-            @staticmethod
-            def other_eval_function():
-                pass
+        @register_method(evals)
+        @staticmethod
+        def other_eval_function():
+            pass
 
     if BELOW_PY_3_10:
-        assert len(record) == 2
+        assert len(recwarn) == 2
     else:
-        assert len(record) == 0
+        assert len(recwarn) == 0
 
     evalsA = TestEvalsA.evals
     evalsB = TestEvalsB.evals

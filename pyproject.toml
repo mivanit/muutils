@@ -29,7 +29,7 @@ array = ["numpy", "torch", "jaxtyping"]
 notebook = ["ipython"]
 
 [tool.poetry.group.dev.dependencies]
-pytest = "^7.2.1"
+pytest = "^8.2.2"
 black = "^24.1.1"
 pylint = "^2.16.4"
 pycln = "^2.1.3"

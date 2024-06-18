@@ -137,10 +137,9 @@ def register_method(
     """Decorator to add a method to the method_dict"""
 
     def decorator(method: F) -> F:
-        method_name_orig: str | None
         method_name: str
         if custom_name is None:
-            method_name_orig: str = getattr(method, "__name__", None)
+            method_name_orig: str | None = getattr(method, "__name__", None)
             if method_name_orig is None:
                 warnings.warn(
                     f"Method {method} does not have a name, using sanitized repr"

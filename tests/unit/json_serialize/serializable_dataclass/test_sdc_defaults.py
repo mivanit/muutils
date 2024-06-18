@@ -23,7 +23,8 @@ def _loading_test_wrapper(cls, data, assert_record_len: int | None = None) -> An
         with pytest.warns(UserWarning) as record:
             loaded = cls.load(data)
         print([x.message for x in record])
-
+        if assert_record_len is not None:
+            assert len(record) == assert_record_len
         return loaded
     else:
         loaded = cls.load(data)

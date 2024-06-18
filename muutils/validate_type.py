@@ -1,8 +1,14 @@
+from __future__ import annotations
+
 import types
 import typing
 
 
 def validate_type(value: typing.Any, expected_type: typing.Any) -> bool:
+    """Validate that a value is of the expected type. use `typeguard` for a more robust solution.
+
+    https://github.com/agronholm/typeguard
+    """
     if expected_type is typing.Any:
         return True
 

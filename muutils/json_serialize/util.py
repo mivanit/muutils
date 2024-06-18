@@ -5,7 +5,7 @@ import inspect
 import sys
 import typing
 import warnings
-from typing import Any, Callable, Dict, Iterable, Literal, Union
+from typing import Any, Callable, Iterable, Literal, Union
 
 _NUMPY_WORKING: bool
 try:
@@ -18,8 +18,8 @@ ErrorMode = Literal["ignore", "warn", "except"]
 TypeErrorMode = Union[ErrorMode, Literal["try_convert"]]
 
 
-JSONitem = Union[bool, int, float, str, list, Dict[str, Any], None]
-JSONdict = Dict[str, JSONitem]
+JSONitem = Union[bool, int, float, str, list, dict[str, Any], None]
+JSONdict = dict[str, JSONitem]
 Hashableitem = Union[bool, int, float, str, tuple]
 
 # or if python version <3.9

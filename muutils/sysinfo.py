@@ -7,14 +7,12 @@ import typing
 from importlib.metadata import distributions
 
 
-def _popen(
-    cmd: typing.List[str], split_out: bool = False
-) -> typing.Dict[str, typing.Any]:
+def _popen(cmd: list[str], split_out: bool = False) -> dict[str, typing.Any]:
     p: subprocess.Popen = subprocess.Popen(
         cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE
     )
 
-    p_out: typing.Union[str, typing.List[str], None]
+    p_out: typing.Union[str, list[str], None]
     if p.stdout is not None:
         p_out = p.stdout.read().decode("utf-8")
         if split_out:

@@ -4,7 +4,7 @@ import inspect
 import warnings
 from dataclasses import dataclass, is_dataclass
 from pathlib import Path
-from typing import Any, Callable, Dict, Iterable, Mapping, Set, Union
+from typing import Any, Callable, Iterable, Mapping, Set, Union
 
 try:
     from muutils.json_serialize.array import ArrayMode, serialize_array
@@ -40,7 +40,7 @@ SERIALIZER_SPECIAL_KEYS: MonoTuple[str] = (
     "__annotations__",
 )
 
-SERIALIZER_SPECIAL_FUNCS: Dict[str, Callable] = {
+SERIALIZER_SPECIAL_FUNCS: dict[str, Callable] = {
     "str": str,
     "dir": dir,
     "type": try_catch(lambda x: str(type(x).__name__)),

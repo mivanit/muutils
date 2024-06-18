@@ -124,7 +124,7 @@ def jaxtype_factory(
                             f"legacy type annotation was used:\n{cls.param_info(params)}"
                         )
                     # MyTensor[("dim1", "dim2"), int]
-                    shape_anot: typing.List[str] = list()
+                    shape_anot: list[str] = list()
                     for x in params[0]:
                         if isinstance(x, str):
                             shape_anot.append(x)
@@ -261,7 +261,7 @@ DTYPE_MAP["bool"] = np.bool_
 TORCH_DTYPE_MAP["bool"] = torch.bool
 
 
-TORCH_OPTIMIZERS_MAP: typing.Dict[str, typing.Type[torch.optim.Optimizer]] = {
+TORCH_OPTIMIZERS_MAP: dict[str, typing.Type[torch.optim.Optimizer]] = {
     "Adagrad": torch.optim.Adagrad,
     "Adam": torch.optim.Adam,
     "AdamW": torch.optim.AdamW,
@@ -287,7 +287,7 @@ def pad_tensor(
 
     set `rpad = True` to pad on the right instead"""
 
-    temp: typing.List[torch.Tensor] = [
+    temp: list[torch.Tensor] = [
         torch.full(
             (padded_length - tensor.shape[0],),
             pad_value,
@@ -326,7 +326,7 @@ def pad_array(
 
     set `rpad = True` to pad on the right instead"""
 
-    temp: typing.List[np.ndarray] = [
+    temp: list[np.ndarray] = [
         np.full(
             (padded_length - array.shape[0],),
             pad_value,
@@ -355,14 +355,12 @@ def rpad_array(
     return pad_array(array, pad_length, pad_value, rpad=True)
 
 
-def get_dict_shapes(
-    d: typing.Dict[str, "torch.Tensor"]
-) -> typing.Dict[str, typing.Tuple[int, ...]]:
+def get_dict_shapes(d: dict[str, "torch.Tensor"]) -> dict[str, typing.Tuple[int, ...]]:
     """given a state dict or cache dict, compute the shapes and put them in a nested dict"""
     return dotlist_to_nested_dict({k: tuple(v.shape) for k, v in d.items()})
 
 
-def string_dict_shapes(d: typing.Dict[str, "torch.Tensor"]) -> str:
+def string_dict_shapes(d: dict[str, "torch.Tensor"]) -> str:
     """printable version of get_dict_shapes"""
     return json.dumps(
         dotlist_to_nested_dict(
@@ -430,8 +428,8 @@ def compare_state_dicts(
         )
 
     # check tensors match
-    shape_failed: typing.List[str] = list()
-    vals_failed: typing.List[str] = list()
+    shape_failed: list[str] = list()
+    vals_failed: list[str] = list()
     for k, v1 in d1.items():
         v2 = d2[k]
         # check shapes first

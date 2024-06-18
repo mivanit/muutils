@@ -16,6 +16,22 @@ from muutils.json_serialize import (
 
 BELOW_PY_3_9: bool = sys.version_info < (3, 9)
 
+
+
+def _loading_test_wrapper(cls, data, assert_record_len: int|None = None) -> Any:
+    """wrapper for testing the load function, which accounts for version differences"""
+    if BELOW_PY_3_9:
+        with pytest.warns(UserWarning) as record:
+            loaded = cls.load(data)
+        print([x.message for x in record])
+        if assert_record_len is not None:
+            assert len(record) == assert_record_len
+        return loaded
+    else:
+        loaded = cls.load(data)
+        return loaded
+
+
 @serializable_dataclass
 class BasicAutofields(SerializableDataclass):
     a: str
@@ -111,16 +127,8 @@ def test_simple_fields_serialization(simple_fields_instance):
 def test_simple_fields_loading(simple_fields_instance):
     serialized = simple_fields_instance.serialize()
 
-    if BELOW_PY_3_9:
-        with pytest.warns(UserWarning) as record:
-            loaded = SimpleFields.load(serialized)
-        print([x.message for x in record])
-        assert len(record) == 4
-    else:
-        loaded = SimpleFields.load(serialized)
-    
+    loaded = _loading_test_wrapper(SimpleFields, serialized, assert_record_len=4)
 
-    loaded = SimpleFields.load(serialized)
     assert loaded == simple_fields_instance
     assert loaded.diff(simple_fields_instance) == {}
     assert simple_fields_instance.diff(loaded) == {}
@@ -138,7 +146,7 @@ def test_field_options_serialization(field_options_instance):
 
 def test_field_options_loading(field_options_instance):
     serialized = field_options_instance.serialize()
-    loaded = FieldOptions.load(serialized)
+    loaded = _loading_test_wrapper(FieldOptions, serialized, assert_record_len=3)
     assert loaded == field_options_instance
 
 
@@ -154,7 +162,7 @@ def test_with_property_serialization(with_property_instance):
 
 def test_with_property_loading(with_property_instance):
     serialized = with_property_instance.serialize()
-    loaded = WithProperty.load(serialized)
+    loaded = _loading_test_wrapper(WithProperty, serialized, assert_record_len=2)
     assert loaded == with_property_instance
 
 
@@ -200,7 +208,7 @@ def test_nested_serialization(person_instance):
 
 def test_nested_loading(person_instance):
     serialized = person_instance.serialize()
-    loaded = Person.load(serialized)
+    loaded = _loading_test_wrapper(Person, serialized, assert_record_len=6)
     assert loaded == person_instance
     assert loaded.address == person_instance.address
 
@@ -223,7 +231,7 @@ def test_with_printing():
     serialized_data = my_instance.serialize()
     print(serialized_data)
 
-    loaded_instance = MyClass.load(serialized_data)
+    loaded_instance = _loading_test_wrapper(MyClass, serialized_data, assert_record_len=3)
     print(loaded_instance)
 
 
@@ -241,7 +249,7 @@ def test_simple_class_serialization():
         "__format__": "SimpleClass(SerializableDataclass)",
     }
 
-    loaded = SimpleClass.load(serialized)
+    loaded = _loading_test_wrapper(SimpleClass, serialized, assert_record_len=2)
     assert loaded == simple
 
 
@@ -275,13 +283,7 @@ def test_person_serialization():
     }
     assert serialized == expected_ser, f"Expected {expected_ser}, got {serialized}"
 
-    if BELOW_PY_3_9:
-        with pytest.warns(UserWarning) as record:
-            loaded = FullPerson.load(serialized)
-        print([x.message for x in record])
-        assert len(record) == 4
-    else:
-        loaded = FullPerson.load(serialized)
+    loaded = _loading_test_wrapper(FullPerson, serialized, assert_record_len=4)
     
     assert loaded == person
 
@@ -300,7 +302,7 @@ def test_custom_serialization():
         "__format__": "CustomSerialization(SerializableDataclass)",
     }
 
-    loaded = CustomSerialization.load(serialized)
+    loaded = _loading_test_wrapper(CustomSerialization, serialized, assert_record_len=1)
     assert loaded == custom
 
 
@@ -348,13 +350,7 @@ def test_nested_with_container():
 
     assert serialized == expected_ser
 
-    if BELOW_PY_3_9:
-        with pytest.warns(UserWarning) as record:
-            loaded = Nested_with_Container.load(serialized)
-        print([x.message for x in record])
-        assert len(record) == 12
-    else:
-        loaded = Nested_with_Container.load(serialized)
+    loaded = _loading_test_wrapper(Nested_with_Container, serialized, assert_record_len=12)
     
     assert loaded == instance
 
@@ -394,5 +390,5 @@ def test_nested_custom():
         "__format__": "nested_custom(SerializableDataclass)",
     }
     assert serialized == expected_ser
-    loaded = nested_custom.load(serialized)
+    loaded = _loading_test_wrapper(nested_custom, serialized)
     assert loaded == instance

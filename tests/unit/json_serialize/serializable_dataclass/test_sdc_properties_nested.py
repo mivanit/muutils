@@ -10,6 +10,23 @@ SUPPORS_KW_ONLY: bool = sys.version_info[1] >= 9
 
 print(f"{SUPPORS_KW_ONLY = }")
 
+BELOW_PY_3_9: bool = sys.version_info < (3, 9)
+
+
+def _loading_test_wrapper(cls, data, assert_record_len: int|None = None) -> Any:
+    """wrapper for testing the load function, which accounts for version differences"""
+    if BELOW_PY_3_9:
+        with pytest.warns(UserWarning) as record:
+            loaded = cls.load(data)
+        print([x.message for x in record])
+        if assert_record_len is not None:
+            assert len(record) == assert_record_len
+        return loaded
+    else:
+        loaded = cls.load(data)
+        return loaded
+
+
 
 @serializable_dataclass
 class Person(SerializableDataclass):
@@ -43,7 +60,7 @@ def test_serialize_person():
         "__format__": "Person(SerializableDataclass)",
     }
 
-    recovered = Person.load(serialized)
+    recovered = _loading_test_wrapper(Person, serialized)
 
     assert recovered == instance
 
@@ -66,6 +83,6 @@ def test_serialize_titled_person():
         "full_title": "Dr. Jane Smith",
     }
 
-    recovered = TitledPerson.load(serialized)
+    recovered = _loading_test_wrapper(TitledPerson, serialized)
 
     assert recovered == instance

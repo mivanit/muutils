@@ -1,4 +1,8 @@
-from typing import Dict
+from __future__ import annotations
+import sys
+from typing import Dict, Any
+
+import pytest
 
 from muutils.json_serialize import (
     JsonSerializer,
@@ -8,6 +12,23 @@ from muutils.json_serialize import (
 )
 
 # pylint: disable=missing-class-docstring
+
+BELOW_PY_3_9: bool = sys.version_info < (3, 9)
+
+
+def _loading_test_wrapper(cls, data, assert_record_len: int|None = None) -> Any:
+    """wrapper for testing the load function, which accounts for version differences"""
+    if BELOW_PY_3_9:
+        with pytest.warns(UserWarning) as record:
+            loaded = cls.load(data)
+        print([x.message for x in record])
+        if assert_record_len is not None:
+            assert len(record) == assert_record_len
+        return loaded
+    else:
+        loaded = cls.load(data)
+        return loaded
+
 
 
 @serializable_dataclass
@@ -26,7 +47,7 @@ def test_sdc_empty():
         "batch_size": 64,
         "__format__": "Config(SerializableDataclass)",
     }
-    recovered = Config.load(serialized)
+    recovered = _loading_test_wrapper(Config, serialized)
     assert recovered == instance
 
 
@@ -40,7 +61,7 @@ def test_sdc_strip_format_jser():
         "batch_size": 64,
         "__write_format__": "Config(SerializableDataclass)",
     }
-    recovered = Config.load(serialized)
+    recovered = _loading_test_wrapper(Config, serialized)
     assert recovered == instance
 
 
@@ -63,5 +84,5 @@ class ComplicatedConfig(SerializableDataclass):
 def test_sdc_empty_complicated():
     instance = ComplicatedConfig()
     serialized = instance.serialize()
-    recovered = ComplicatedConfig.load(serialized)
+    recovered = _loading_test_wrapper(ComplicatedConfig, serialized)
     assert recovered == instance

@@ -7,9 +7,9 @@ import pytest
 
 from muutils.json_serialize import SerializableDataclass, serializable_dataclass
 
-SUPPORS_KW_ONLY: bool = sys.version_info >= (3, 10)
+SUPPORTS_KW_ONLY: bool = sys.version_info >= (3, 10)
 
-print(f"{SUPPORS_KW_ONLY = }")
+print(f"{SUPPORTS_KW_ONLY = }")
 
 BELOW_PY_3_10: bool = sys.version_info < (3, 10)
 
@@ -39,7 +39,7 @@ class Person(SerializableDataclass):
 
 
 @serializable_dataclass(
-    kw_only=SUPPORS_KW_ONLY, properties_to_serialize=["full_name", "full_title"]
+    kw_only=SUPPORTS_KW_ONLY, properties_to_serialize=["full_name", "full_title"]
 )
 class TitledPerson(Person):
     title: str
@@ -68,7 +68,7 @@ def test_serialize_person():
 def test_serialize_titled_person():
     instance = TitledPerson(first_name="Jane", last_name="Smith", title="Dr.")
 
-    if SUPPORS_KW_ONLY:
+    if SUPPORTS_KW_ONLY:
         with pytest.raises(TypeError):
             TitledPerson("Jane", "Smith", "Dr.")
 

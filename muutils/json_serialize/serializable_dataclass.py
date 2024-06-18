@@ -75,7 +75,7 @@ class SerializableField(dataclasses.Field):
             super_kwargs["metadata"] = types.MappingProxyType({})
 
         # special check, kw_only is not supported in python <3.9 and `dataclasses.MISSING` is truthy
-        if sys.version_info[1] < 9:
+        if sys.version_info < (3, 10):
             if super_kwargs["kw_only"] == True:  # noqa: E712
                 raise ValueError("kw_only is not supported in python >=3.9")
             else:

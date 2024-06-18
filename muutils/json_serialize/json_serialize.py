@@ -1,9 +1,10 @@
+from __future__ import annotations
 import inspect
 import types
 import warnings
 from dataclasses import dataclass, is_dataclass
 from pathlib import Path
-from typing import Any, Callable, Iterable, Mapping
+from typing import Any, Callable, Iterable, Mapping, Dict, Set, Union
 
 try:
     from muutils.json_serialize.array import ArrayMode, serialize_array
@@ -39,7 +40,7 @@ SERIALIZER_SPECIAL_KEYS: MonoTuple[str] = (
     "__annotations__",
 )
 
-SERIALIZER_SPECIAL_FUNCS: dict[str, Callable] = {
+SERIALIZER_SPECIAL_FUNCS: Dict[str, Callable] = {
     "str": str,
     "dir": dir,
     "type": try_catch(lambda x: str(type(x).__name__)),
@@ -48,12 +49,12 @@ SERIALIZER_SPECIAL_FUNCS: dict[str, Callable] = {
     "sourcefile": try_catch(lambda x: inspect.getsourcefile(x)),
 }
 
-SERIALIZE_DIRECT_AS_STR: set[str] = {
+SERIALIZE_DIRECT_AS_STR: Set[str] = {
     "<class 'torch.device'>",
     "<class 'torch.dtype'>",
 }
 
-ObjectPath = MonoTuple[str | int]
+ObjectPath = MonoTuple[Union[str,int]]
 
 
 @dataclass

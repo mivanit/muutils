@@ -1,3 +1,4 @@
+from __future__ import annotations
 import json
 import os
 import random
@@ -5,7 +6,7 @@ import typing
 import warnings
 from itertools import islice
 from pathlib import Path
-from typing import Any, Callable, TypeVar
+from typing import Any, Callable, TypeVar, Union, Optional
 
 ARRAY_IMPORTS: bool
 try:
@@ -23,7 +24,7 @@ DEFAULT_SEED: int = 42
 GLOBAL_SEED: int = DEFAULT_SEED
 
 
-def get_device(device: "str|torch.device|None" = None) -> "torch.device":
+def get_device(device: "Union[str,torch.device,None]" = None) -> "torch.device":
     """Get the torch.device instance on which `torch.Tensor`s should be allocated."""
     if not ARRAY_IMPORTS:
         raise ImportError(
@@ -130,7 +131,7 @@ F = TypeVar("F", bound=Callable[..., Any])
 
 def register_method(
     method_dict: dict[str, Callable[..., Any]],
-    custom_name: str | None = None,
+    custom_name: Optional[str] = None,
 ) -> Callable[[F], F]:
     """Decorator to add a method to the method_dict"""
 

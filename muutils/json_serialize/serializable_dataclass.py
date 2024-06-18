@@ -1,10 +1,11 @@
+from __future__ import annotations
 import abc
 import dataclasses
 import json
 import types
 import typing
 import warnings
-from typing import Any, Callable, Optional, Type, TypeVar
+from typing import Any, Callable, Optional, Type, TypeVar, Union
 
 # pylint: disable=bad-mcs-classmethod-argument, too-many-arguments, protected-access
 
@@ -34,17 +35,18 @@ class SerializableField(dataclasses.Field):
 
     def __init__(
         self,
-        default: Any | dataclasses._MISSING_TYPE = dataclasses.MISSING,
-        default_factory: (
-            Callable[[], Any] | dataclasses._MISSING_TYPE
-        ) = dataclasses.MISSING,
+        default: Union[Any, dataclasses._MISSING_TYPE] = dataclasses.MISSING,
+        default_factory: Union[
+            Callable[[], Any],
+            dataclasses._MISSING_TYPE
+        ] = dataclasses.MISSING,
         init: bool = True,
         repr: bool = True,
         hash: Optional[bool] = None,
         compare: bool = True,
         # TODO: add field for custom comparator (such as serializing)
-        metadata: types.MappingProxyType | None = None,
-        kw_only: bool | dataclasses._MISSING_TYPE = dataclasses.MISSING,
+        metadata: Optional[types.MappingProxyType] = None,
+        kw_only: Union[bool, dataclasses._MISSING_TYPE] = dataclasses.MISSING,
         serialize: bool = True,
         serialization_fn: Optional[Callable[[Any], Any]] = None,
         loading_fn: Optional[Callable[[Any], Any]] = None,

@@ -1,9 +1,11 @@
+from __future__ import annotations
 import functools
 import inspect
+import sys
 import types
 import typing
 import warnings
-from typing import Any, Callable, Iterable, Literal, Union
+from typing import Any, Callable, Iterable, Literal, Union, Dict
 
 _NUMPY_WORKING: bool
 try:
@@ -16,11 +18,12 @@ ErrorMode = Literal["ignore", "warn", "except"]
 TypeErrorMode = Union[ErrorMode, Literal["try_convert"]]
 
 
-JSONitem = Union[bool, int, float, str, list, dict[str, Any], None]
-JSONdict = dict[str, JSONitem]
+JSONitem = Union[bool, int, float, str, list, Dict[str, Any], None]
+JSONdict = Dict[str, JSONitem]
 Hashableitem = Union[bool, int, float, str, tuple]
 
-if typing.TYPE_CHECKING:
+# or if python version <3.9
+if typing.TYPE_CHECKING or sys.version_info[1] < 9:
     MonoTuple = typing.Sequence
 else:
 
@@ -38,17 +41,21 @@ else:
         # idk why mypy thinks there is no such function in typing
         @typing._tp_cache  # type: ignore
         def __class_getitem__(cls, params):
-            if isinstance(params, (type, types.UnionType)):
-                return types.GenericAlias(tuple, (params, Ellipsis))
+            if isinstance(params, type):
+                typing.GenericAlias(tuple, (params, Ellipsis))
+            elif any("typing.UnionType" in str(t) for t in params.mro()):
+                # TODO: unsure about this
+                # check via mro
+                return typing.GenericAlias(tuple, (params, Ellipsis))
             # test if has len and is iterable
             elif isinstance(params, Iterable):
                 if len(params) == 0:
                     return tuple
                 elif len(params) == 1:
-                    return types.GenericAlias(tuple, (params[0], Ellipsis))
+                    return typing.GenericAlias(tuple, (params[0], Ellipsis))
             else:
                 raise TypeError(
-                    f"MonoTuple expects 1 type argument, got {len(params) = } \n\t{params = }"
+                    f"MonoTuple expects 1 type argument, got {params = }"
                 )
 
 

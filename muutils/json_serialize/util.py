@@ -1,11 +1,11 @@
 from __future__ import annotations
+
 import functools
 import inspect
 import sys
-import types
 import typing
 import warnings
-from typing import Any, Callable, Iterable, Literal, Union, Dict
+from typing import Any, Callable, Dict, Iterable, Literal, Union
 
 _NUMPY_WORKING: bool
 try:
@@ -54,9 +54,7 @@ else:
                 elif len(params) == 1:
                     return typing.GenericAlias(tuple, (params[0], Ellipsis))
             else:
-                raise TypeError(
-                    f"MonoTuple expects 1 type argument, got {params = }"
-                )
+                raise TypeError(f"MonoTuple expects 1 type argument, got {params = }")
 
 
 class UniversalContainer:

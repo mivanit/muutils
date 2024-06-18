@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 import json
 import math
 from collections import Counter
@@ -54,7 +55,7 @@ class StatCounter(Counter):
 
     def max(self):
         return max(x for x, v in self.items() if v > 0)
-    
+
     def total(self):
         """Sum of the counts"""
         return sum(self.values())

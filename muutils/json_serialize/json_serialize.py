@@ -1,10 +1,10 @@
 from __future__ import annotations
+
 import inspect
-import types
 import warnings
 from dataclasses import dataclass, is_dataclass
 from pathlib import Path
-from typing import Any, Callable, Iterable, Mapping, Dict, Set, Union
+from typing import Any, Callable, Dict, Iterable, Mapping, Set, Union
 
 try:
     from muutils.json_serialize.array import ArrayMode, serialize_array
@@ -54,7 +54,7 @@ SERIALIZE_DIRECT_AS_STR: Set[str] = {
     "<class 'torch.dtype'>",
 }
 
-ObjectPath = MonoTuple[Union[str,int]]
+ObjectPath = MonoTuple[Union[str, int]]
 
 
 @dataclass

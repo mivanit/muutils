@@ -6,7 +6,9 @@ import typing
 from pip._internal.operations.freeze import freeze as pip_freeze
 
 
-def _popen(cmd: typing.List[str], split_out: bool = False) -> typing.Dict[str, typing.Any]:
+def _popen(
+    cmd: typing.List[str], split_out: bool = False
+) -> typing.Dict[str, typing.Any]:
     p: subprocess.Popen = subprocess.Popen(
         cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE
     )

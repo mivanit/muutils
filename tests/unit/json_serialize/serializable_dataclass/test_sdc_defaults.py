@@ -1,4 +1,5 @@
 from typing import Dict
+
 from muutils.json_serialize import (
     JsonSerializer,
     SerializableDataclass,

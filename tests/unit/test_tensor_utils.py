@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 import jaxtyping
 import numpy as np
 import pytest

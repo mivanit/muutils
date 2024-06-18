@@ -1,8 +1,21 @@
 from __future__ import annotations
+
 import typing
 import warnings
 from collections import defaultdict
-from typing import Any, Callable, Generic, Hashable, Iterable, Literal, TypeVar, Dict, Union, Optional, Tuple
+from typing import (
+    Any,
+    Callable,
+    Dict,
+    Generic,
+    Hashable,
+    Iterable,
+    Literal,
+    Optional,
+    Tuple,
+    TypeVar,
+    Union,
+)
 
 _KT = TypeVar("_KT")
 _VT = TypeVar("_VT")

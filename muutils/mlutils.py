@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 import json
 import os
 import random
@@ -6,7 +7,7 @@ import typing
 import warnings
 from itertools import islice
 from pathlib import Path
-from typing import Any, Callable, TypeVar, Union, Optional
+from typing import Any, Callable, Optional, TypeVar, Union
 
 ARRAY_IMPORTS: bool
 try:
@@ -138,12 +139,13 @@ def register_method(
     def decorator(method: F) -> F:
         method_name: str
         if custom_name is None:
-            method_name: str|None = getattr(method, "__name__", None)
+            method_name: str | None = getattr(method, "__name__", None)
             if method_name is None:
                 warnings.warn(
                     f"Method {method} does not have a name, using sanitized repr"
                 )
                 from muutils.misc import sanitize_identifier
+
                 method_name = sanitize_identifier(repr(method))
         else:
             method_name = custom_name

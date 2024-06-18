@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 from muutils.json_serialize.array import arr_metadata, load_array
 from muutils.json_serialize.json_serialize import (
     BASE_HANDLERS,

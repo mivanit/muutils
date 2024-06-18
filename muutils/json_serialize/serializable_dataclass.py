@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 import abc
 import dataclasses
 import json
@@ -38,8 +39,7 @@ class SerializableField(dataclasses.Field):
         self,
         default: Union[Any, dataclasses._MISSING_TYPE] = dataclasses.MISSING,
         default_factory: Union[
-            Callable[[], Any],
-            dataclasses._MISSING_TYPE
+            Callable[[], Any], dataclasses._MISSING_TYPE
         ] = dataclasses.MISSING,
         init: bool = True,
         repr: bool = True,
@@ -74,11 +74,9 @@ class SerializableField(dataclasses.Field):
             super_kwargs["metadata"] = types.MappingProxyType({})
 
         # special check, kw_only is not supported in python <3.9 and `dataclasses.MISSING` is truthy
-        if (sys.version_info[1] < 9):
-            if (super_kwargs["kw_only"] == True):  # noqa: E712
-                raise ValueError(
-                    "kw_only is not supported in python >=3.9"
-                )
+        if sys.version_info[1] < 9:
+            if super_kwargs["kw_only"] == True:  # noqa: E712
+                raise ValueError("kw_only is not supported in python >=3.9")
             else:
                 del super_kwargs["kw_only"]
 
@@ -433,12 +431,10 @@ def serializable_dataclass(
                 setattr(cls, field_name, field_value)
 
         # special check, kw_only is not supported in python <3.9 and `dataclasses.MISSING` is truthy
-        if (sys.version_info[1] < 9):
+        if sys.version_info[1] < 9:
             if "kw_only" in kwargs:
-                if (kwargs["kw_only"] == True):  # noqa: E712
-                    raise ValueError(
-                        "kw_only is not supported in python >=3.9"
-                    )
+                if kwargs["kw_only"] == True:  # noqa: E712
+                    raise ValueError("kw_only is not supported in python >=3.9")
                 else:
                     del kwargs["kw_only"]
 

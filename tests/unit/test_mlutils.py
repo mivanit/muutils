@@ -1,5 +1,5 @@
-from pathlib import Path
 import sys
+from pathlib import Path
 
 from muutils.mlutils import get_checkpoint_paths_for_run, register_method
 

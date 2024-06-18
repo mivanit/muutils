@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 import hashlib
 import typing
 
@@ -65,37 +66,37 @@ def list_join(lst: list, factory: typing.Callable) -> list:
 # name stuff
 # ================================================================================
 
+
 def sanitize_name(
-        name: str | None, 
-        additional_allowed_chars: str = "",
-        replace_invalid: str = "",
-        when_none: str | None = "_None_",
-        leading_digit_prefix: str = "",
-    ) -> str:
+    name: str | None,
+    additional_allowed_chars: str = "",
+    replace_invalid: str = "",
+    when_none: str | None = "_None_",
+    leading_digit_prefix: str = "",
+) -> str:
     """sanitize a string, leaving only alphanumerics and `additional_allowed_chars`
-    
+
     # Parameters:
-     - `name : str | None`   
+     - `name : str | None`
        input string
-     - `additional_allowed_chars : str`   
+     - `additional_allowed_chars : str`
        additional characters to allow, none by default
        (defaults to `""`)
-     - `replace_invalid : str`   
+     - `replace_invalid : str`
         character to replace invalid characters with
        (defaults to `""`)
-     - `when_none : str | None`   
+     - `when_none : str | None`
         string to return if `name` is `None`. if `None`, raises an exception
        (defaults to `"_None_"`)
-     - `leading_digit_prefix : str`   
+     - `leading_digit_prefix : str`
         character to prefix the string with if it starts with a digit
        (defaults to `""`)
-    
-    # Returns:
-     - `str` 
-        sanitized string
-    """    
 
-    
+    # Returns:
+     - `str`
+        sanitized string
+    """
+
     if name is None:
         if when_none is None:
             raise ValueError("name is None")
@@ -110,26 +111,31 @@ def sanitize_name(
             sanitized += char
         else:
             sanitized += replace_invalid
-    
+
     if sanitized[0].isdigit():
         sanitized = leading_digit_prefix + sanitized
 
     return sanitized
 
+
 def sanitize_fname(fname: str | None, **kwargs) -> str:
     """sanitize a filename to posix standards
-    
+
     - leave only alphanumerics, `_` (underscore), '-' (dash) and `.` (period)
     """
     return sanitize_name(fname, additional_allowed_chars="._-", **kwargs)
 
+
 def sanitize_identifier(fname: str | None, **kwargs) -> str:
     """sanitize an identifier (variable or function name)
-    
+
     - leave only alphanumerics and `_` (underscore)
     - prefix with `_` if it starts with a digit
     """
-    return sanitize_name(fname, additional_allowed_chars="_", leading_digit_prefix="_", **kwargs)
+    return sanitize_name(
+        fname, additional_allowed_chars="_", leading_digit_prefix="_", **kwargs
+    )
+
 
 def dict_to_filename(
     data: dict,

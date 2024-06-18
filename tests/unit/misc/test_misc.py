@@ -1,5 +1,5 @@
 from __future__ import annotations
-import pytest
+
 import pytest
 
 from muutils.misc import (
@@ -7,9 +7,9 @@ from muutils.misc import (
     freeze,
     list_join,
     list_split,
-    sanitize_name,
     sanitize_fname,
     sanitize_identifier,
+    sanitize_name,
     stable_hash,
 )
 
@@ -37,8 +37,6 @@ def test_sanitize_fname():
     assert sanitize_fname(None) == "_None_", "None input should return '_None_'"
 
 
-
-
 def test_sanitize_name():
     assert sanitize_name("Hello World") == "HelloWorld"
     assert sanitize_name("Hello_World", additional_allowed_chars="_") == "Hello_World"
@@ -49,6 +47,7 @@ def test_sanitize_name():
         sanitize_name(None, when_none=None)
     assert sanitize_name("123abc") == "123abc"
     assert sanitize_name("123abc", leading_digit_prefix="_") == "_123abc"
+
 
 def test_sanitize_fname_2():
     assert sanitize_fname("file name.txt") == "filename.txt"
@@ -62,6 +61,7 @@ def test_sanitize_fname_2():
     assert sanitize_fname("123file.txt") == "123file.txt"
     assert sanitize_fname("123file.txt", leading_digit_prefix="_") == "_123file.txt"
 
+
 def test_sanitize_identifier():
     assert sanitize_identifier("variable_name") == "variable_name"
     assert sanitize_identifier("VariableName") == "VariableName"
@@ -71,6 +71,7 @@ def test_sanitize_identifier():
     assert sanitize_identifier(None, when_none="Empty") == "Empty"
     with pytest.raises(ValueError):
         sanitize_identifier(None, when_none=None)
+
 
 def test_dict_to_filename():
     data = {"key1": "value1", "key2": "value2"}

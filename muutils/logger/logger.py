@@ -6,6 +6,7 @@
 	this was mostly made with training models in mind and storing both metadata and loss
 - `TimerContext` is a context manager that can be used to time the duration of a block of code
 """
+
 from __future__ import annotations
 
 import json

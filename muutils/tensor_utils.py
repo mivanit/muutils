@@ -280,11 +280,11 @@ TORCH_OPTIMIZERS_MAP: dict[str, typing.Type[torch.optim.Optimizer]] = {
 
 
 def pad_tensor(
-    tensor: jaxtyping.Shaped[torch.Tensor, "dim1"],
+    tensor: jaxtyping.Shaped[torch.Tensor, "dim1"],  # noqa: F821
     padded_length: int,
     pad_value: float = 0.0,
     rpad: bool = False,
-) -> jaxtyping.Shaped[torch.Tensor, "padded_length"]:
+) -> jaxtyping.Shaped[torch.Tensor, "padded_length"]:  # noqa: F821
     """pad a 1-d tensor on the left with pad_value to length `padded_length`
 
     set `rpad = True` to pad on the right instead"""
@@ -319,11 +319,11 @@ def rpad_tensor(
 
 
 def pad_array(
-    array: jaxtyping.Shaped[np.ndarray, "dim1"],
+    array: jaxtyping.Shaped[np.ndarray, "dim1"],  # noqa: F821
     padded_length: int,
     pad_value: float = 0.0,
     rpad: bool = False,
-) -> jaxtyping.Shaped[np.ndarray, "padded_length"]:
+) -> jaxtyping.Shaped[np.ndarray, "padded_length"]:  # noqa: F821
     """pad a 1-d array on the left with pad_value to length `padded_length`
 
     set `rpad = True` to pad on the right instead"""

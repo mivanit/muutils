@@ -136,7 +136,8 @@ verify-git:
 	fi; \
 
 
-EXPORT_ARGS := --all-extras --with dev --without-hashes
+# no zanj, it gets special treatment because it depends on muutils
+EXPORT_ARGS := -E array -E notebook --with dev --without-hashes
 
 .PHONY: dep-dev
 dep-dev:

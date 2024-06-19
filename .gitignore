@@ -1,5 +1,5 @@
 # this one is cursed
-tests/unit/validate_type/_test_validate_type_MODERN.py
+tests/unit/validate_type/test_validate_type_MODERN.py
 # test notebook
 _test.ipynb
 # junk data

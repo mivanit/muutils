@@ -370,28 +370,28 @@ def test_validate_type_complex():
     assert validate_type({1, (2, 3)}, typing.Set[Union[int, typing.Tuple[int, int]]])
     assert validate_type((1, ("a", "b")), typing.Tuple[int, typing.Tuple[str, str]])
     assert validate_type([{"key": "value"}], typing.List[typing.Dict[str, str]])
-    assert validate_type([{"key": 2}], typing.List[typing.Dict[str, str]]) == False
+    assert validate_type([{"key": 2}], typing.List[typing.Dict[str, str]]) is False
     assert validate_type([[1, 2], [3, 4]], typing.List[typing.List[int]])
-    assert validate_type([[1, 2], [3, "4"]], typing.List[typing.List[int]]) == False
+    assert validate_type([[1, 2], [3, "4"]], typing.List[typing.List[int]]) is False
     assert validate_type([(1, 2), (3, 4)], typing.List[typing.Tuple[int, int]])
     assert (
-        validate_type([(1, 2), (3, "4")], typing.List[typing.Tuple[int, int]]) == False
+        validate_type([(1, 2), (3, "4")], typing.List[typing.Tuple[int, int]]) is False
     )
     assert validate_type({1: "one", 2: "two"}, typing.Dict[int, str])
-    assert validate_type({1: "one", 2: 2}, typing.Dict[int, str]) == False
+    assert validate_type({1: "one", 2: 2}, typing.Dict[int, str]) is False
     assert validate_type([(1, "one"), (2, "two")], typing.List[typing.Tuple[int, str]])
     assert (
         validate_type([(1, "one"), (2, 2)], typing.List[typing.Tuple[int, str]])
-        == False
+        is False
     )
     assert validate_type({1: [1, 2], 2: [3, 4]}, typing.Dict[int, typing.List[int]])
     assert (
         validate_type({1: [1, 2], 2: [3, "4"]}, typing.Dict[int, typing.List[int]])
-        == False
+        is False
     )
     assert validate_type([(1, "a"), (2, "b")], typing.List[typing.Tuple[int, str]])
     assert (
-        validate_type([(1, "a"), (2, 2)], typing.List[typing.Tuple[int, str]]) == False
+        validate_type([(1, "a"), (2, 2)], typing.List[typing.Tuple[int, str]]) is False
     )
 
 

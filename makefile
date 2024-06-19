@@ -147,7 +147,7 @@ dep-dev:
 .PHONY: check-dep-dev
 check-dep-dev:
 	@echo "checking requirements.txt matches poetry dependencies"
-	poetry lock --check
+	poetry check --lock
 	poetry export $(EXPORT_ARGS) | diff - dev-requirements.txt
 
 .PHONY: build

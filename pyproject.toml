@@ -42,7 +42,6 @@ array = ["numpy", "torch", "jaxtyping"]
 array_no_torch = ["numpy", "jaxtyping"]
 notebook = ["ipython"]
 zanj = ["zanj"]
-lint = ["ruff", "pycln"]
 
 [build-system]
 requires = ["poetry-core"]

@@ -41,15 +41,15 @@ def test_validate_type_union(value, expected_type, expected_result):
 @pytest.mark.parametrize(
     "value, expected_type",
     [
-        (42, list[int, str]),
-        ([1, 2, 3], list[int, str]),
-        ({"a": 1, "b": 2}, set[str, int]),
-        ({1: "a", 2: "b"}, set[int, str]),
-        ({"a": 1, "b": 2}, set[str, int, str]),
-        ({1: "a", 2: "b"}, set[int, str, int]),
-        ({1, 2, 3}, set[int, str]),
-        ({"a"}, set[int, str]),
-        (42, dict[int, str, bool]),
+        (42, list[int, str]),  # type: ignore[misc]
+        ([1, 2, 3], list[int, str]),  # type: ignore[misc]
+        ({"a": 1, "b": 2}, set[str, int]),  # type: ignore[misc]
+        ({1: "a", 2: "b"}, set[int, str]),  # type: ignore[misc]
+        ({"a": 1, "b": 2}, set[str, int, str]),  # type: ignore[misc]
+        ({1: "a", 2: "b"}, set[int, str, int]),  # type: ignore[misc]
+        ({1, 2, 3}, set[int, str]),  # type: ignore[misc]
+        ({"a"}, set[int, str]),  # type: ignore[misc]
+        (42, dict[int, str, bool]),  # type: ignore[misc]
     ],
 )
 def test_validate_type_unsupported_generic_alias(value, expected_type):

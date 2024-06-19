@@ -15,22 +15,10 @@ from muutils.json_serialize import (
 # pylint: disable=missing-class-docstring, unused-variable
 
 
-BELOW_PY_3_10: bool = False
-# sys.version_info < (3, 10)
-
-
-def _loading_test_wrapper(cls, data, assert_record_len: int | None = None) -> Any:
+def _loading_test_wrapper(cls, data) -> Any:
     """wrapper for testing the load function, which accounts for version differences"""
-    if BELOW_PY_3_10:
-        with pytest.warns(UserWarning) as record:
-            loaded = cls.load(data)
-        print([x.message for x in record])
-        if assert_record_len is not None:
-            assert len(record) == assert_record_len
-        return loaded
-    else:
-        loaded = cls.load(data)
-        return loaded
+    loaded = cls.load(data)
+    return loaded
 
 
 @serializable_dataclass
@@ -128,9 +116,7 @@ def test_simple_fields_serialization(simple_fields_instance):
 def test_simple_fields_loading(simple_fields_instance):
     serialized = simple_fields_instance.serialize()
 
-    loaded = SimpleFields.load(
-        serialized
-    )  # _loading_test_wrapper(SimpleFields, serialized)  # , assert_record_len=4)
+    loaded = SimpleFields.load(serialized)
 
     assert loaded == simple_fields_instance
     assert loaded.diff(simple_fields_instance) == {}

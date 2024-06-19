@@ -14,21 +14,12 @@ from muutils.json_serialize import (
 
 # pylint: disable=missing-class-docstring
 
-BELOW_PY_3_10: bool = False  # sys.version_info < (3, 10)
 
-
-def _loading_test_wrapper(cls, data, assert_record_len: int | None = None) -> Any:
+# TODO: get rid of all _loading_test_wrapper functions across all files
+def _loading_test_wrapper(cls, data) -> Any:
     """wrapper for testing the load function, which accounts for version differences"""
-    if BELOW_PY_3_10:
-        with pytest.warns(UserWarning) as record:
-            loaded = cls.load(data)
-        print([x.message for x in record])
-        if assert_record_len is not None:
-            assert len(record) == assert_record_len
-        return loaded
-    else:
-        loaded = cls.load(data)
-        return loaded
+    loaded = cls.load(data)
+    return loaded
 
 
 @serializable_dataclass

@@ -88,8 +88,8 @@ endif
 # compatibility mode for python <3.10
 
 # Update the PYTEST_OPTIONS to include the conditional ignore option
-# @echo "WARNING: Detected python version less than 3.10, some behavior will be different"
 ifeq ($(COMPATIBILITY_MODE), 1)
+	JUNK := $(info WARNING: Detected python version less than 3.10, some behavior will be different)
     PYTEST_OPTIONS += --ignore=tests/unit/validate_type/
 	TYPECHECK_ARGS += --disable-error-code misc --disable-error-code syntax --disable-error-code import-not-found
 endif
@@ -117,7 +117,7 @@ typing: clean
 
 
 .PHONY: test
-test:
+test: clean
 	@echo "running tests"
 	$(PYTHON) -m pytest $(PYTEST_OPTIONS) $(TESTS_DIR)
 

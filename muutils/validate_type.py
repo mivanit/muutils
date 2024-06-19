@@ -14,7 +14,11 @@ def validate_type(value: typing.Any, expected_type: typing.Any) -> bool:
 
     # base type without args
     if isinstance(expected_type, type):
-        return isinstance(value, expected_type)
+        try:
+            # if you use args on a type like `dict[str, int]`, this will fail
+            return isinstance(value, expected_type)
+        except TypeError:
+            pass
 
     origin: type = typing.get_origin(expected_type)
     args: list = typing.get_args(expected_type)

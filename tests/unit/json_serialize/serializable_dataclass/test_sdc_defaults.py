@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-from typing import Any
 
 
 from muutils.json_serialize import (
@@ -11,13 +10,6 @@ from muutils.json_serialize import (
 )
 
 # pylint: disable=missing-class-docstring
-
-
-# TODO: get rid of all _loading_test_wrapper functions across all files
-def _loading_test_wrapper(cls, data) -> Any:
-    """wrapper for testing the load function, which accounts for version differences"""
-    loaded = cls.load(data)
-    return loaded
 
 
 @serializable_dataclass
@@ -36,7 +28,7 @@ def test_sdc_empty():
         "batch_size": 64,
         "__format__": "Config(SerializableDataclass)",
     }
-    recovered = _loading_test_wrapper(Config, serialized)
+    recovered = Config.load(serialized)
     assert recovered == instance
 
 
@@ -50,7 +42,7 @@ def test_sdc_strip_format_jser():
         "batch_size": 64,
         "__write_format__": "Config(SerializableDataclass)",
     }
-    recovered = _loading_test_wrapper(Config, serialized)
+    recovered = Config.load(serialized)
     assert recovered == instance
 
 
@@ -73,5 +65,5 @@ class ComplicatedConfig(SerializableDataclass):
 def test_sdc_empty_complicated():
     instance = ComplicatedConfig()
     serialized = instance.serialize()
-    recovered = _loading_test_wrapper(ComplicatedConfig, serialized)
+    recovered = ComplicatedConfig.load(serialized)
     assert recovered == instance

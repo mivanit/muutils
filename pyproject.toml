@@ -52,9 +52,6 @@ build-backend = "poetry.core.masonry.api"
 # url = "https://download.pytorch.org/whl/cpu"
 # priority = "explicit"
 
-# TODO: make all of the following ignored across all formatting/linting
-# tests/input_data, tests/junk_data, muutils/_wip 
-
 [tool.pytest.ini_options]
 filterwarnings = [
     "ignore::muutils.nbutils.configure_notebook.UnknownFigureFormatWarning", # don't show warning for unknown figure format
@@ -65,13 +62,6 @@ filterwarnings = [
 [tool.ruff]
 # Exclude the directories specified in the global excludes
 exclude = ["tests/input_data", "tests/junk_data", "muutils/_wip"]
-# # allow trailing commas
-# no-trailing-comma = false
-
-# # Per-file rule ignores
-# [tool.ruff.per-file-ignores]
-# # Ignore the "F401" (unused imports) rule for __init__.py files
-# "__init__.py" = ["F401"]
 
 [tool.pycln]
 all = true

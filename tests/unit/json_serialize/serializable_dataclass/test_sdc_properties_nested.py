@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import sys
-from typing import Any
 
 import pytest
 
@@ -10,12 +9,6 @@ from muutils.json_serialize import SerializableDataclass, serializable_dataclass
 SUPPORTS_KW_ONLY: bool = sys.version_info >= (3, 10)
 
 print(f"{SUPPORTS_KW_ONLY = }")
-
-
-def _loading_test_wrapper(cls, data) -> Any:
-    """wrapper for testing the load function, which accounts for version differences"""
-    loaded = cls.load(data)
-    return loaded
 
 
 @serializable_dataclass
@@ -50,7 +43,7 @@ def test_serialize_person():
         "__format__": "Person(SerializableDataclass)",
     }
 
-    recovered = _loading_test_wrapper(Person, serialized)
+    recovered = Person.load(serialized)
 
     assert recovered == instance
 
@@ -73,6 +66,6 @@ def test_serialize_titled_person():
         "full_title": "Dr. Jane Smith",
     }
 
-    recovered = _loading_test_wrapper(TitledPerson, serialized)
+    recovered = TitledPerson.load(serialized)
 
     assert recovered == instance

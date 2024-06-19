@@ -14,12 +14,6 @@ from muutils.json_serialize import (
 # pylint: disable=missing-class-docstring, unused-variable
 
 
-def _loading_test_wrapper(cls, data) -> Any:
-    """wrapper for testing the load function, which accounts for version differences"""
-    loaded = cls.load(data)
-    return loaded
-
-
 @serializable_dataclass
 class BasicAutofields(SerializableDataclass):
     a: str
@@ -134,7 +128,7 @@ def test_field_options_serialization(field_options_instance):
 
 def test_field_options_loading(field_options_instance):
     serialized = field_options_instance.serialize()
-    loaded = _loading_test_wrapper(FieldOptions, serialized)  # , assert_record_len=3)
+    loaded = FieldOptions.load(serialized)
     assert loaded == field_options_instance
 
 
@@ -150,7 +144,7 @@ def test_with_property_serialization(with_property_instance):
 
 def test_with_property_loading(with_property_instance):
     serialized = with_property_instance.serialize()
-    loaded = _loading_test_wrapper(WithProperty, serialized)  # , assert_record_len=2)
+    loaded = WithProperty.load(serialized)
     assert loaded == with_property_instance
 
 
@@ -196,7 +190,7 @@ def test_nested_serialization(person_instance):
 
 def test_nested_loading(person_instance):
     serialized = person_instance.serialize()
-    loaded = _loading_test_wrapper(Person, serialized)  # , assert_record_len=6)
+    loaded = Person.load(serialized)
     assert loaded == person_instance
     assert loaded.address == person_instance.address
 
@@ -219,10 +213,7 @@ def test_with_printing():
     serialized_data = my_instance.serialize()
     print(serialized_data)
 
-    loaded_instance = _loading_test_wrapper(
-        MyClass,
-        serialized_data,  # , assert_record_len=3
-    )
+    loaded_instance = MyClass.load(serialized_data)
     print(loaded_instance)
 
 
@@ -240,7 +231,7 @@ def test_simple_class_serialization():
         "__format__": "SimpleClass(SerializableDataclass)",
     }
 
-    loaded = _loading_test_wrapper(SimpleClass, serialized)  # , assert_record_len=2)
+    loaded = SimpleClass.load(serialized)
     assert loaded == simple
 
 
@@ -274,7 +265,7 @@ def test_person_serialization():
     }
     assert serialized == expected_ser, f"Expected {expected_ser}, got {serialized}"
 
-    loaded = _loading_test_wrapper(FullPerson, serialized)  # , assert_record_len=4)
+    loaded = FullPerson.load(serialized)
 
     assert loaded == person
 
@@ -293,9 +284,7 @@ def test_custom_serialization():
         "__format__": "CustomSerialization(SerializableDataclass)",
     }
 
-    loaded = _loading_test_wrapper(
-        CustomSerialization, serialized
-    )  # , assert_record_len=1)
+    loaded = CustomSerialization.load(serialized)
     assert loaded == custom
 
 
@@ -343,10 +332,7 @@ def test_nested_with_container():
 
     assert serialized == expected_ser
 
-    loaded = _loading_test_wrapper(
-        Nested_with_Container,
-        serialized,  # , assert_record_len=12
-    )
+    loaded = Nested_with_Container.load(serialized)
 
     assert loaded == instance
 
@@ -386,5 +372,5 @@ def test_nested_custom(recwarn):  # this will send some warnings but whatever
         "__format__": "nested_custom(SerializableDataclass)",
     }
     assert serialized == expected_ser
-    loaded = _loading_test_wrapper(nested_custom, serialized)
+    loaded = nested_custom.load(serialized)
     assert loaded == instance

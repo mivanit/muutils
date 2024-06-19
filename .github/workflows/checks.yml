@@ -39,8 +39,10 @@ jobs:
           python-version: '3.10'
 
       - name: Install Poetry
+        run: curl -sSL https://install.python-poetry.org | python3 -
+      
+      - name: Poetry Plugins
         run: |
-          curl -sSL https://install.python-poetry.org | python3 -
           poetry self add poetry-plugin-export
           poetry self show plugins
 

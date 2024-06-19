@@ -1,25 +1,112 @@
+# configuration
+# ==================================================
+# MODIFY THIS FILE TO SUIT YOUR PROJECT
+# it assumes that the source is in a directory named the same as the package name
 PACKAGE_NAME := muutils
 
+# for checking you are on the right branch when publishing
 PUBLISH_BRANCH := main
-PYPI_TOKEN_FILE := .pypi-token
-LAST_VERSION_FILE := .lastversion
+# where to put the coverage reports
 COVERAGE_REPORTS_DIR := docs/coverage
+# where the tests are (assumes pytest)
 TESTS_DIR := tests/unit
+# temp directory to clean up
+TESTS_TEMP_DIR := tests/_temp
+
+# probably don't change these:
+# --------------------------------------------------
+# will print this token when publishing
+PYPI_TOKEN_FILE := .pypi-token
+# the last version that was auto-uploaded. will use this to create a commit log for version tag
+LAST_VERSION_FILE := .lastversion
+# where the pyproject.toml file is
 PYPROJECT := pyproject.toml
-
-VERSION := $(shell python -c "import re; print(re.search(r'^version\s*=\s*\"(.+?)\"', open('$(PYPROJECT)').read(), re.MULTILINE).group(1))")
-LAST_VERSION := $(shell cat $(LAST_VERSION_FILE))
+# base python to use. Will add `poetry run` in front of this if `RUN_GLOBAL` is not set to 1
 PYTHON_BASE := python
+# where the commit log will be stored
+COMMIT_LOG_FILE := .commit_log
 
+
+
+# reading information and command line options
+# ==================================================
+
+# reading version
+# --------------------------------------------------
+# assuming your pyproject.toml has a line that looks like `version = "0.0.1"`, will get the version
+VERSION := $(shell python -c "import re; print(re.search(r'^version\s*=\s*\"(.+?)\"', open('$(PYPROJECT)').read(), re.MULTILINE).group(1))")
+# read last auto-uploaded version from file
+LAST_VERSION := $(shell [ -f $(LAST_VERSION_FILE) ] && cat $(LAST_VERSION_FILE) || echo NONE)
+
+
+# getting commit log
+# --------------------------------------------------
 # note that the commands at the end:
 # 1) format the git log
 # 2) replace backticks with single quotes, to avoid funny business
 # 3) add a final newline, to make tac happy
 # 4) reverse the order of the lines, so that the oldest commit is first
 # 5) replace newlines with tabs, to prevent the newlines from being lost
-COMMIT_LOG_FILE := .commit_log
-COMMIT_LOG_SINCE_LAST_VERSION := $(shell (git log $(LAST_VERSION)..HEAD --pretty=format:"- %s (%h)" | tr '`' "'" ; echo) | tac | tr '\n' '\t')
+ifeq ($(LAST_VERSION),NONE)
+	COMMIT_LOG_SINCE_LAST_VERSION := "No last version found, cannot generate commit log"
+else
+	COMMIT_LOG_SINCE_LAST_VERSION := $(shell (git log $(LAST_VERSION)..HEAD --pretty=format:"- %s (%h)" | tr '`' "'" ; echo) | tac | tr '\n' '\t')
 #                                                                                    1                2            3       4     5
+endif
+
+
+# RUN_GLOBAL=1 to use global `PYTHON_BASE` instead of `poetry run $(PYTHON_BASE)`
+# --------------------------------------------------
+# for formatting, we might want to run python without setting up all of poetry
+RUN_GLOBAL ?= 0
+ifeq ($(RUN_GLOBAL),0)
+	PYTHON = poetry run $(PYTHON_BASE)
+else
+	PYTHON = $(PYTHON_BASE)
+endif
+
+# get the python version now that we have picked the python command
+# --------------------------------------------------
+PYTHON_VERSION := $(shell $(PYTHON) -c "import sys; print(f'{sys.version_info.major}.{sys.version_info.minor}.{sys.version_info.micro}')")
+
+# looser typing, allow warnings for python <3.10
+# --------------------------------------------------
+COMPATIBILITY_MODE := $(shell $(PYTHON) -c "import sys; print(1 if sys.version_info < (3, 10) else 0)")
+TYPECHECK_ARGS ?= 
+
+# options we might want to pass to pytest
+# --------------------------------------------------
+PYTEST_OPTIONS ?= # using ?= means you can pass extra options from the command line
+COV ?= 1
+
+ifdef VERBOSE
+	PYTEST_OPTIONS += --verbose
+endif
+
+ifeq ($(COV),1)
+    PYTEST_OPTIONS += --cov=.
+endif
+
+# compatibility mode for python <3.10
+# --------------------------------------------------
+
+# whether to run pytest with warnings as errors
+WARN_STRICT ?= 0
+
+ifneq ($(WARN_STRICT), 0)
+    PYTEST_OPTIONS += -W error
+endif
+
+# Update the PYTEST_OPTIONS to include the conditional ignore option
+ifeq ($(COMPATIBILITY_MODE), 1)
+	JUNK := $(info WARNING: Detected python version less than 3.10, some behavior will be different)
+    PYTEST_OPTIONS += --ignore=tests/unit/validate_type/
+	TYPECHECK_ARGS += --disable-error-code misc --disable-error-code syntax --disable-error-code import-not-found
+endif
+
+
+# default target (help)
+# ==================================================
 
 .PHONY: default
 default: help
@@ -35,24 +122,9 @@ version:
 		exit 1; \
 	fi
 
-# command line options
-# --------------------------------------------------
-# for formatting or CI, we might want to run python without setting up all of poetry
-RUN_GLOBAL ?= 0
-ifeq ($(RUN_GLOBAL),0)
-	PYTHON = poetry run $(PYTHON_BASE)
-else
-	PYTHON = $(PYTHON_BASE)
-endif
-
-PYTHON_VERSION := $(shell $(PYTHON) -c "import sys; print(f'{sys.version_info.major}.{sys.version_info.minor}.{sys.version_info.micro}')")
-
-COMPATIBILITY_MODE := $(shell $(PYTHON) -c "import sys; print(1 if sys.version_info < (3, 10) else 0)")
-
-TYPECHECK_ARGS ?= 
 
 # formatting
-# --------------------------------------------------
+# ==================================================
 
 .PHONY: setup-format
 setup-format:
@@ -62,46 +134,17 @@ setup-format:
 .PHONY: format
 format:
 	@echo "format the source code"
-	$(PYTHON) -m ruff format
+	$(PYTHON) -m ruff format --config $(PYPROJECT) .
 	$(PYTHON) -m pycln --config $(PYPROJECT) --all .
-	$(PYTHON) -m isort format .
-	$(PYTHON) -m black .
 
 .PHONY: check-format
 check-format:
 	@echo "run format check"
-	$(PYTHON) -m ruff check
+	$(PYTHON) -m ruff check --config $(PYPROJECT) .
 	$(PYTHON) -m pycln --check --config $(PYPROJECT) .
-	$(PYTHON) -m isort --check-only .
-	$(PYTHON) -m black --check .
 
-# pytest options and coverage
-# --------------------------------------------------
-
-PYTEST_OPTIONS ?=
-
-# whether to run pytest with coverage report generation
-COV ?= 1
-
-ifneq ($(COV), 0)
-	PYTEST_OPTIONS += --cov=.
-endif
-
-# whether to run pytest with warnings as errors
-WARN_STRICT ?= 0
-
-ifneq ($(WARN_STRICT), 0)
-    PYTEST_OPTIONS += -W error
-endif
-
-# compatibility mode for python <3.10
-
-# Update the PYTEST_OPTIONS to include the conditional ignore option
-ifeq ($(COMPATIBILITY_MODE), 1)
-	JUNK := $(info WARNING: Detected python version less than 3.10, some behavior will be different)
-    PYTEST_OPTIONS += --ignore=tests/unit/validate_type/
-	TYPECHECK_ARGS += --disable-error-code misc --disable-error-code syntax --disable-error-code import-not-found
-endif
+# coverage
+# ==================================================
 
 .PHONY: cov
 cov:
@@ -111,7 +154,7 @@ cov:
 	$(PYTHON) -m coverage html	
 
 # tests
-# --------------------------------------------------
+# ==================================================
 
 # at some point, need to add back --check-untyped-defs to mypy call
 # but it complains when we specify arguments by keyword where positional is fine
@@ -141,7 +184,7 @@ check: clean check-format clean test lint
 	@echo "run format check, test, and lint"
 
 # build and publish
-# --------------------------------------------------
+# ==================================================
 
 .PHONY: verify-git
 verify-git: 
@@ -202,7 +245,7 @@ publish: check build verify-git version
 	twine upload dist/* --verbose
 
 # cleanup
-# --------------------------------------------------
+# ==================================================
 
 .PHONY: clean
 clean:
@@ -223,7 +266,7 @@ clean:
 # https://stackoverflow.com/questions/4219255/how-do-you-get-the-list-of-targets-in-a-makefile
 .PHONY: help
 help:
-	@echo -n "# list make targets"
+	@echo -n "list make targets"
 	@echo ":"
 	@cat Makefile | sed -n '/^\.PHONY: / h; /\(^\t@*echo\|^\t:\)/ {H; x; /PHONY/ s/.PHONY: \(.*\)\n.*"\(.*\)"/    make \1\t\2/p; d; x}'| sort -k2,2 |expand -t 25
 	@echo "# makefile variables:"

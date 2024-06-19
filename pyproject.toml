@@ -63,18 +63,21 @@ filterwarnings = [
     "ignore::muutils.json_serialize.serializable_dataclass.ZanjMissingWarning", # don't show warning for missing zanj (can't have as a dep since zanj depends on muutils)
 ]
 
+[tool.ruff]
+# Exclude the directories specified in the global excludes
+exclude = ["tests/input_data", "tests/junk_data", "muutils/_wip"]
+# # allow trailing commas
+# no-trailing-comma = false
+
+# # Per-file rule ignores
+# [tool.ruff.per-file-ignores]
+# # Ignore the "F401" (unused imports) rule for __init__.py files
+# "__init__.py" = ["F401"]
+
 [tool.pycln]
 all = true
-exclude = ["tests/input_data", "tests/junk_data"]
-
-[tool.isort]
-profile = "black"
-ignore_comments = false
-extend_skip = ["tests/input_data", "tests/junk_data"]
-
-[tool.black]
-extend-exclude = "tests/input_data"
+exclude = ["tests/input_data", "tests/junk_data", "muutils/_wip"]
 
 [tool.mypy]
-exclude = ['_wip', "tests/input_data", "tests/junk_data"]
+exclude = ["tests/input_data", "tests/junk_data", "muutils/_wip"]
 show_error_codes = true

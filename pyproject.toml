@@ -27,6 +27,7 @@ zanj = { version = "^0.2.2", optional = true, python = "^3.10" }
 
 [tool.poetry.extras]
 array = ["numpy", "torch", "jaxtyping"]
+array_no_torch = ["numpy", "jaxtyping"]
 notebook = ["ipython"]
 zanj = ["zanj"]
 

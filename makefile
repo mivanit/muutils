@@ -137,8 +137,9 @@ verify-git:
 
 
 # no zanj, it gets special treatment because it depends on muutils
-# without urls since pytorch extra index breaks things?
-EXPORT_ARGS := -E array -E notebook --with dev --without-hashes --without-urls
+# without urls since pytorch extra index breaks things
+# no torch because we install it manually in CI
+EXPORT_ARGS := -E array_no_torch -E notebook --with dev --without-hashes --without-urls
 
 .PHONY: dep-dev
 dep-dev:

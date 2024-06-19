@@ -53,7 +53,7 @@ jobs:
         run: pip install uv
       
       - name: Install dependencies
-        run: uv pip install -r dev-requirements.txt --system
+        run: uv pip install -r dev-requirements.txt --system --no-deps # we already should have all dependencies exported into dev-requirements.txt
 
   test:
     name: Test and Lint

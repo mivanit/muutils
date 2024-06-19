@@ -136,7 +136,7 @@ verify-git:
 	fi; \
 
 
-EXPORT_ARGS := -E zanj -E array -E notebook --with dev --without-hashes
+EXPORT_ARGS := --all-extras --with dev --without-hashes
 
 .PHONY: dep-dev
 dep-dev:

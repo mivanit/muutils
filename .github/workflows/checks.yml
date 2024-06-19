@@ -41,19 +41,16 @@ jobs:
       - name: Install Poetry
         run: curl -sSL https://install.python-poetry.org | python3 -
       
-      # - name: Poetry Plugins
-      #   run: |
-      #     poetry self add poetry-plugin-export
-      #     poetry self show plugins
+      - name: Poetry Plugins
+        run: |
+          poetry self add poetry-plugin-export
+          poetry self show plugins
 
-      # - name: Check poetry.lock and dev-requirements.txt
-      #   run: make check-dep-dev
+      - name: Check poetry.lock and dev-requirements.txt
+        run: make check-dep-dev
 
       - name: Install uv
         run: pip install uv
-          
-      - name: Install problematic dependencies
-        run: uv pip install filelock fsspec --system
 
       - name: Install dependencies
         run: uv pip install -r dev-requirements.txt --system --no-deps # we already should have all dependencies exported into dev-requirements.txt

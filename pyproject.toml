@@ -20,7 +20,7 @@ repository = "https://github.com/mivanit/muutils"
 [tool.poetry.dependencies]
 python = "^3.8"
 numpy = { version = "^1.22.4", optional = true }
-torch = { version = ">=1.13.1", optional = true, source = "torch_cpu" }
+torch = { version = ">=1.13.1", optional = true }
 jaxtyping = { version = "^0.2.12", optional = true }
 ipython = { version = "^8.20.0", optional = true, python = "^3.10" }
 zanj = { version = "^0.2.2", optional = true, python = "^3.10" }
@@ -46,10 +46,10 @@ plotly = "^5.0.0"
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
-[[tool.poetry.source]]
-name = "torch_cpu"
-url = "https://download.pytorch.org/whl/cpu"
-priority = "explicit"
+# [[tool.poetry.source]]
+# name = "torch_cpu"
+# url = "https://download.pytorch.org/whl/cpu"
+# priority = "explicit"
 
 # TODO: make all of the following ignored across all formatting/linting
 # tests/input_data, tests/junk_data, muutils/_wip 

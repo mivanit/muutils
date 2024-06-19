@@ -36,3 +36,21 @@ def test_validate_type_union(value, expected_type, expected_result):
         raise Exception(
             f"{value = }, {expected_type = }, {expected_result = }, {e}"
         ) from e
+
+@pytest.mark.parametrize(
+    "value, expected_type",
+    [
+        (42, typing.List[int, str]),
+        ([1, 2, 3], typing.List[int, str]),
+        ({"a": 1, "b": 2}, typing.Set[str, int]),
+        ({1: "a", 2: "b"}, typing.Set[int, str]),
+        ({"a": 1, "b": 2}, typing.Set[str, int, str]),
+        ({1: "a", 2: "b"}, typing.Set[int, str, int]),
+        ({1, 2, 3}, typing.Set[int, str]),
+        ({"a"}, typing.Set[int, str]),
+    ],
+)
+def test_validate_type_unsupported_generic_alias(value, expected_type):
+    with pytest.raises(TypeError):
+        validate_type(value, expected_type)
+        print(f"Failed to except: {value = }, {expected_type = }")

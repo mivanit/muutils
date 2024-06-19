@@ -1942,4 +1942,4 @@ zanj = ["zanj"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.8"
-content-hash = "ac943e0702af9778b24bc0e2a2ded1b3e59e8f3dd46c8a6636226aeace69a547"
+content-hash = "74fc33c5d521b3121b9894ec25831ab3a7637de2cff3fa04eb2128c211092914"

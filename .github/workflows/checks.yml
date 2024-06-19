@@ -56,7 +56,7 @@ jobs:
         run: uv pip install -r dev-requirements.txt --system --no-deps # we already should have all dependencies exported into dev-requirements.txt
       
       - name: Install torch (special)
-        run: uv pip install torch==1.13.1+cpu --system --extra-index-url https://download.pytorch.org/whl/cpu
+        run: uv pip install torch==2.3.1+cpu --system --extra-index-url https://download.pytorch.org/whl/cpu
 
       - name: Install muutils (local)
         run: uv pip install . --system

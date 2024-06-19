@@ -34,8 +34,8 @@ def validate_type(value: typing.Any, expected_type: typing.Any) -> bool:
         except TypeError:
             pass
 
-    origin: type = typing.get_origin(expected_type)
-    args: list = typing.get_args(expected_type)
+    origin: typing.Any = typing.get_origin(expected_type)
+    args: tuple = typing.get_args(expected_type)
 
     # useful for debugging
     # print(f"{value = },   {expected_type = },   {origin = },   {args = }")
@@ -49,6 +49,7 @@ def validate_type(value: typing.Any, expected_type: typing.Any) -> bool:
         return any(validate_type(value, arg) for arg in args)
 
     # generic alias, more complicated
+    item_type: type
     if isinstance(expected_type, GenericAliasTypes):
 
         if origin is list:
@@ -65,7 +66,7 @@ def validate_type(value: typing.Any, expected_type: typing.Any) -> bool:
             if not isinstance(value, list):
                 return False
             # check all items in list are of the correct type
-            item_type: type = args[0]
+            item_type = args[0]
             return all(validate_type(item, item_type) for item in value)
 
         if origin is dict:
@@ -103,7 +104,7 @@ def validate_type(value: typing.Any, expected_type: typing.Any) -> bool:
             if not isinstance(value, set):
                 return False
             # check all items in set are of the correct type
-            item_type: type = args[0]
+            item_type = args[0]
             return all(validate_type(item, item_type) for item in value)
 
         if origin is tuple:

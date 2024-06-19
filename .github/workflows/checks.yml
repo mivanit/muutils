@@ -120,6 +120,4 @@ jobs:
         run: make test WARN_STRICT=1 RUN_GLOBAL=1
 
       - name: check typing
-        # TODO: idx if this is even possible to fix
-        if: ${{ matrix.versions.python != '3.8' && matrix.versions.python != '3.9' }}
         run: make typing RUN_GLOBAL=1

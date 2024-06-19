@@ -12,19 +12,22 @@ COVERAGE_REPORTS_DIR := docs/coverage
 TESTS_DIR := tests/unit
 # temp directory to clean up
 TESTS_TEMP_DIR := tests/_temp
+# dev and lint requirements.txt files
+REQ_DEV := .github/dev-requirements.txt
+REQ_LINT := .github/lint-requirements.txt
 
 # probably don't change these:
 # --------------------------------------------------
 # will print this token when publishing
-PYPI_TOKEN_FILE := .pypi-token
+PYPI_TOKEN_FILE := .github/local/.pypi-token
 # the last version that was auto-uploaded. will use this to create a commit log for version tag
-LAST_VERSION_FILE := .lastversion
+LAST_VERSION_FILE := .github/.lastversion
 # where the pyproject.toml file is
 PYPROJECT := pyproject.toml
 # base python to use. Will add `poetry run` in front of this if `RUN_GLOBAL` is not set to 1
 PYTHON_BASE := python
 # where the commit log will be stored
-COMMIT_LOG_FILE := .commit_log
+COMMIT_LOG_FILE := .github/local/.commit_log
 
 
 
@@ -129,7 +132,7 @@ version:
 .PHONY: setup-format
 setup-format:
 	@echo "install only packages needed for formatting, direct via pip (useful for CI)"
-	$(PYTHON_BASE) -c 'import re,tomllib; cfg = tomllib.load(open("$(PYPROJECT)", "rb")); deps = [(pkg, re.match(r"^\D*(\d.*)", ver).group(1)) for pkg, ver in cfg["tool"]["poetry"]["group"]["dev"]["dependencies"].items() if pkg in ["ruff", "pycln"]]; print(" ".join([f"{pkg}=={ver}" for pkg,ver in deps]))' | xargs $(PYTHON) -m pip install
+	$(PYTHON) -m pip install -r $(REQ_LINT)
 
 .PHONY: format
 format:
@@ -203,19 +206,21 @@ verify-git:
 # no zanj, it gets special treatment because it depends on muutils
 # without urls since pytorch extra index breaks things
 # no torch because we install it manually in CI
-EXPORT_ARGS := -E array_no_torch -E notebook --with dev --without-hashes --without-urls
+EXPORT_ARGS := -E array_no_torch -E notebook --with dev --with lint --without-hashes --without-urls
 
 .PHONY: dep-dev
 dep-dev:
-	@echo "exporting dev and extras dependencies to dev-requirements.txt"
+	@echo "exporting dev and extras deps to $(REQ_DEV), lint/format deps to $(REQ_LINT)"
 	poetry update
-	poetry export $(EXPORT_ARGS) --output dev-requirements.txt
+	poetry export $(EXPORT_ARGS) --output $(REQ_DEV)
+	poetry export --only lint --without-hashes --without-urls --output $(REQ_LINT)
 
 .PHONY: check-dep-dev
 check-dep-dev:
-	@echo "checking requirements.txt matches poetry dependencies"
+	@echo "checking poetry lock is good, exported requirements match poetry"
 	poetry check --lock
-	poetry export $(EXPORT_ARGS) | diff - dev-requirements.txt
+	poetry export $(EXPORT_ARGS) | diff - $(REQ_DEV)
+	poetry export --only lint --without-hashes --without-urls | diff - $(REQ_LINT)
 
 .PHONY: build
 build: 

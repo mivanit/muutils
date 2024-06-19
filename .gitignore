@@ -1,3 +1,6 @@
+# local stuff (pypi token, commit log)
+.github/local/**
+
 # this one is cursed
 tests/unit/validate_type/test_validate_type_MODERN.py
 # test notebook
@@ -5,9 +8,7 @@ _test.ipynb
 # junk data
 JUNK_DATA_PATH/
 junk_data
-# misc
-.pypi-token
-.commit_log
+
 .vscode/
 # caches
 __pycache__/

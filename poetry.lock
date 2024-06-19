@@ -1935,10 +1935,11 @@ test = ["big-O", "importlib-resources", "jaraco.functools", "jaraco.itertools", 
 [extras]
 array = ["jaxtyping", "numpy", "torch"]
 array-no-torch = ["jaxtyping", "numpy"]
+lint = []
 notebook = ["ipython"]
 zanj = ["zanj"]
 
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.8"
-content-hash = "e2a09de8d7c53e28a74a03217b0d45ccd5f48ba2c3993f0ea07baef8a876d91b"
+content-hash = "ac943e0702af9778b24bc0e2a2ded1b3e59e8f3dd46c8a6636226aeace69a547"

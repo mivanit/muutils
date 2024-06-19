@@ -94,8 +94,8 @@ jobs:
       - name: Install dependencies
         # install torch first to avoid pytorch index messing things up
         run: |
-          uv pip install torch==${{ matrix.versions.torch}}+cpu --system --extra-index-url https://download.pytorch.org/whl/cpu
           uv pip install -r dev-requirements.txt --system --no-deps
+          uv pip install torch==${{ matrix.versions.torch}}+cpu --system --extra-index-url https://download.pytorch.org/whl/cpu
           uv pip install zanj --system
 
       - name: tests

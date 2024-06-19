@@ -57,7 +57,10 @@ jobs:
       
       - name: Install torch (special)
         run: uv pip install torch==1.13.1+cpu --system --extra-index-url https://download.pytorch.org/whl/cpu
-      
+
+      - name: Install muutils (local)
+        run: uv pip install . --system
+
       - name: Install zanj (requires muutils)
         run: uv pip install zanj --system
 
@@ -103,7 +106,7 @@ jobs:
       - name: Install muutils
         run: uv pip install . --system
       
-      - name: Install zanj
+      - name: Install zanj (>=3.10 only)
         # not yet available for python 3.8 and 3.9
         if: ${{ matrix.versions.python != '3.8' && matrix.versions.python != '3.9' }}
         run: uv pip install zanj --system

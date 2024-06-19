@@ -359,8 +359,8 @@ def tuple_dims_replace(
         return tuple(dims_names_map.get(x, x) for x in t)
 
 
-TensorDict = typing.Dict[str, "torch.Tensor|np.ndarray"]  # type: ignore[name-defined]
-TensorIterable = Iterable[typing.Tuple[str, "torch.Tensor|np.ndarray"]]  # type: ignore[name-defined]
+TensorDict = typing.Dict[str, "torch.Tensor|np.ndarray"]  # type: ignore[name-defined] # noqa: F821
+TensorIterable = Iterable[typing.Tuple[str, "torch.Tensor|np.ndarray"]]  # type: ignore[name-defined] # noqa: F821
 TensorDictFormats = Literal["dict", "json", "yaml", "yml"]
 
 
@@ -465,10 +465,10 @@ def condense_tensor_dict(
 
     # identity function for shapes_convert if not provided
     if shapes_convert is None:
-        shapes_convert = lambda x: x
+        shapes_convert = lambda x: x  # noqa: E731
 
     # convert to iterable
-    data_items: "Iterable[tuple[str, Union[torch.Tensor,np.ndarray]]]" = (  # type: ignore
+    data_items: "Iterable[tuple[str, Union[torch.Tensor,np.ndarray]]]" = (  # type: ignore # noqa: F821
         data.items() if hasattr(data, "items") and callable(data.items) else data  # type: ignore
     )
 

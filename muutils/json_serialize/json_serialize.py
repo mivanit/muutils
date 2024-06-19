@@ -10,7 +10,7 @@ try:
     from muutils.json_serialize.array import ArrayMode, serialize_array
 except ImportError as e:
     ArrayMode = str  # type: ignore[misc]
-    serialize_array = lambda *args, **kwargs: None
+    serialize_array = lambda *args, **kwargs: None  # noqa: E731
     warnings.warn(
         f"muutils.json_serialize.array could not be imported probably because missing numpy, array serialization will not work: \n{e}",
         ImportWarning,

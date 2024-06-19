@@ -43,7 +43,7 @@ def arr_metadata(arr) -> dict[str, list[int] | str | int]:
 
 
 def serialize_array(
-    jser: "JsonSerializer",  # type: ignore[name-defined]
+    jser: "JsonSerializer",  # type: ignore[name-defined] # noqa: F821
     arr: np.ndarray,
     path: str | Sequence[str | int],
     array_mode: ArrayMode | None = None,

@@ -62,19 +62,19 @@ class UniversalContainer:
         return True
 
 
-def isinstance_namedtuple(x):
+def isinstance_namedtuple(x: Any) -> bool:
     """checks if `x` is a `namedtuple`
 
     credit to https://stackoverflow.com/questions/2166818/how-to-check-if-an-object-is-an-instance-of-a-namedtuple
     """
-    t = type(x)
-    b = t.__bases__
+    t: type = type(x)
+    b: tuple = t.__bases__
     if len(b) != 1 or b[0] != tuple:
         return False
-    f = getattr(t, "_fields", None)
+    f: tuple = getattr(t, "_fields", None)
     if not isinstance(f, tuple):
         return False
-    return all(type(n) == str for n in f)
+    return all(isinstance(n, str) for n in f)
 
 
 def try_catch(func: Callable):

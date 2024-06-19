@@ -144,7 +144,7 @@ def setup_plots(
     plt.rcParams["savefig.format"] = FIG_OUTPUT_FMT
     if FIG_OUTPUT_FMT in TIKZPLOTLIB_FORMATS:
         try:
-            import tikzplotlib  # type: ignore[import]
+            import tikzplotlib  # type: ignore[import] # noqa: F401
         except ImportError:
             warnings.warn(
                 f"Tikzplotlib not installed. Cannot save figures in Tikz format '{FIG_OUTPUT_FMT}', things might break."

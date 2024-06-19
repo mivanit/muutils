@@ -32,7 +32,9 @@ def test_jaxtype_factory():
     assert "array_type = <class 'torch.Tensor'>" in ATensor.__doc__
 
     x = ATensor[(1, 2, 3), np.float32]
-    x = ATensor["dim1 dim2", np.float32]
+    print(x)
+    y = ATensor["dim1 dim2", np.float32]
+    print(y)
 
 
 def test_numpy_to_torch_dtype():

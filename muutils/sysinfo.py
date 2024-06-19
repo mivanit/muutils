@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import os
 import subprocess
 import sys
 import typing
@@ -105,7 +104,7 @@ class SysInfo:
                                 "device": current_device,
                                 "name": dev_prop.name,
                                 "version": {
-                                    f"major": dev_prop.major,
+                                    "major": dev_prop.major,
                                     "minor": dev_prop.minor,
                                 },
                                 "total_memory": dev_prop.total_memory,

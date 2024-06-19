@@ -286,7 +286,7 @@ def str_to_numeric(
     # fractions
     if "/" in quantity:
         try:
-            assert quantity.count("/") == 1, f"too many '/'"
+            assert quantity.count("/") == 1, "too many '/'"
             # split and strip
             num, den = quantity.split("/")
             num = num.strip()
@@ -299,7 +299,7 @@ def str_to_numeric(
             # assert that both are digits
             assert (
                 num.isdigit() and den.isdigit()
-            ), f"numerator and denominator must be digits"
+            ), "numerator and denominator must be digits"
             # return the fraction
             result = num_sign * (
                 int(num) / int(den)

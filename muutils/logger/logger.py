@@ -195,7 +195,7 @@ class Logger(SimpleLogger):
                 else:
                     lvl = self._default_level
 
-        assert not lvl is None, "lvl should not be None at this point"
+        assert lvl is not None, "lvl should not be None at this point"
 
         # print to console with formatting
         # ========================================

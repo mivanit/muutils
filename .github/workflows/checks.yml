@@ -51,6 +51,9 @@ jobs:
 
       - name: Install uv
         run: pip install uv
+
+      - name: Install filelock
+        run: uv pip install filelock
       
       - name: Install dependencies
         run: uv pip install -r dev-requirements.txt --system --no-deps # we already should have all dependencies exported into dev-requirements.txt
@@ -87,9 +90,6 @@ jobs:
 
       - name: Install uv
         run: pip install uv
-
-      - name: Install filelock
-        run: uv pip install filelock
 
       - name: Install dependencies
         run: uv pip install -r dev-requirements.txt --system

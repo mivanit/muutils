@@ -41,7 +41,8 @@ jobs:
       - name: Install Poetry
         run: |
           curl -sSL https://install.python-poetry.org | python3 -
-            poetry self add poetry-plugin-export
+          poetry self add poetry-plugin-export
+          poetry self show plugins
 
       - name: Check poetry.lock and dev-requirements.txt
         run: make check-dep-dev

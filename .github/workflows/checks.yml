@@ -115,6 +115,8 @@ jobs:
         run: make test RUN_GLOBAL=1
 
       - name: tests in strict mode
+        # until zanj ported to 3.8 and 3.9
+        if: ${{ matrix.versions.python != '3.8' && matrix.versions.python != '3.9' }}
         run: make test WARN_STRICT=1 RUN_GLOBAL=1
 
       - name: check typing

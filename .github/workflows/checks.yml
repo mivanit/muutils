@@ -52,11 +52,11 @@ jobs:
       - name: Install uv
         run: pip install uv
 
-      - name: Install filelock
-        run: uv pip install filelock --system
-      
       - name: Install dependencies
         run: uv pip install -r dev-requirements.txt --system --no-deps # we already should have all dependencies exported into dev-requirements.txt
+        
+      - name: Install zanj (requires muutils)
+        run: uv pip install zanj --system
 
   test:
     name: Test and Lint
@@ -92,7 +92,10 @@ jobs:
         run: pip install uv
 
       - name: Install dependencies
-        run: uv pip install -r dev-requirements.txt --system
+        run: |
+          uv pip install -r dev-requirements.txt --system
+          uv pip install torch==${{ matrix.versions.torch}} --system
+          uv pip install zanj --system
 
       - name: tests
         run: make test RUN_GLOBAL=1

@@ -1,17 +1,25 @@
+# this one is cursed
+tests/unit/validate_type/_test_validate_type_MODERN.py
+# test notebook
 _test.ipynb
+# junk data
 JUNK_DATA_PATH/
 junk_data
+# misc
 .pypi-token
 .commit_log
 .vscode/
+# caches
 __pycache__/
 **/__pycache__/
 **/.mypy_cache/
 **/.pytest_cache/
 
+# coverage
 .coverage
 htmlcov/
 
+# build
 build/
 dist/
 muutils.egg-info/

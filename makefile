@@ -119,6 +119,11 @@ typing: clean
 .PHONY: test
 test: clean
 	@echo "running tests"
+
+	if [ $(COMPATIBILITY_MODE) -eq 1 ]; then \
+		echo "converting certain tests to modern format"; \
+		python tests/util/replace_type_hints.py tests/unit/validate_type/test_validate_type.py > tests/unit/validate_type/_test_validate_type_MODERN.py; \
+	fi; \
 	$(PYTHON) -m pytest $(PYTEST_OPTIONS) $(TESTS_DIR)
 
 

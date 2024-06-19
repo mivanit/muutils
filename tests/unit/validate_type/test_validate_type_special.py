@@ -37,6 +37,7 @@ def test_validate_type_union(value, expected_type, expected_result):
             f"{value = }, {expected_type = }, {expected_result = }, {e}"
         ) from e
 
+
 @pytest.mark.parametrize(
     "value, expected_type",
     [

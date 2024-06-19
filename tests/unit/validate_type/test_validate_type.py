@@ -222,7 +222,9 @@ def test_validate_type_set(value, expected_type, expected_result):
         ([1, "a", 3.14], typing.Tuple[int, str, float], False),
         (
             (1, "a", 3.14, "b", True, None, (1, 2, 3)),
-            typing.Tuple[int, str, float, str, bool, type(None), typing.Tuple[int, int, int]],
+            typing.Tuple[
+                int, str, float, str, bool, type(None), typing.Tuple[int, int, int]
+            ],
             True,
         ),
     ],
@@ -249,7 +251,6 @@ def test_validate_type_unsupported_type_hint(value, expected_type):
     with pytest.raises(ValueError):
         validate_type(value, expected_type)
         print(f"Failed to except: {value = }, {expected_type = }")
-
 
 
 @pytest.mark.parametrize(
@@ -280,7 +281,11 @@ def test_validate_type_collections(value, expected_type, expected_result):
         # empty lists
         ([], typing.List[int], True),
         ([], typing.List[typing.Dict], True),
-        ([], typing.List[typing.Tuple[typing.Dict[typing.Tuple, str], str, None]], True),
+        (
+            [],
+            typing.List[typing.Tuple[typing.Dict[typing.Tuple, str], str, None]],
+            True,
+        ),
         # empty dicts
         ({}, typing.Dict[str, int], True),
         ({}, typing.Dict[str, typing.Dict], True),
@@ -289,7 +294,11 @@ def test_validate_type_collections(value, expected_type, expected_result):
         # empty sets
         (set(), typing.Set[int], True),
         (set(), typing.Set[typing.Dict], True),
-        (set(), typing.Set[typing.Tuple[typing.Dict[typing.Tuple, str], str, None]], True),
+        (
+            set(),
+            typing.Set[typing.Tuple[typing.Dict[typing.Tuple, str], str, None]],
+            True,
+        ),
         # empty tuple
         (tuple(), typing.Tuple, True),
         # empty string
@@ -355,7 +364,9 @@ def test_validate_type_wrong_type(value, expected_type, expected_result):
 
 def test_validate_type_complex():
     assert validate_type([1, 2, [3, 4]], typing.List[Union[int, typing.List[int]]])
-    assert validate_type({"a": 1, "b": {"c": 2}}, typing.Dict[str, Union[int, typing.Dict[str, int]]])
+    assert validate_type(
+        {"a": 1, "b": {"c": 2}}, typing.Dict[str, Union[int, typing.Dict[str, int]]]
+    )
     assert validate_type({1, (2, 3)}, typing.Set[Union[int, typing.Tuple[int, int]]])
     assert validate_type((1, ("a", "b")), typing.Tuple[int, typing.Tuple[str, str]])
     assert validate_type([{"key": "value"}], typing.List[typing.Dict[str, str]])
@@ -389,12 +400,28 @@ def test_validate_type_complex():
     [
         ([[[[1]]]], typing.List[typing.List[typing.List[typing.List[int]]]], True),
         ([[[[1]]]], typing.List[typing.List[typing.List[typing.List[str]]]], False),
-        ({"a": {"b": {"c": 1}}}, typing.Dict[str, typing.Dict[str, typing.Dict[str, int]]], True),
-        ({"a": {"b": {"c": 1}}}, typing.Dict[str, typing.Dict[str, typing.Dict[str, str]]], False),
+        (
+            {"a": {"b": {"c": 1}}},
+            typing.Dict[str, typing.Dict[str, typing.Dict[str, int]]],
+            True,
+        ),
+        (
+            {"a": {"b": {"c": 1}}},
+            typing.Dict[str, typing.Dict[str, typing.Dict[str, str]]],
+            False,
+        ),
         ({1, 2, 3}, typing.Set[int], True),
         ({1, 2, 3}, typing.Set[str], False),
-        (((1, 2), (3, 4)), typing.Tuple[typing.Tuple[int, int], typing.Tuple[int, int]], True),
-        (((1, 2), (3, 4)), typing.Tuple[typing.Tuple[int, int], typing.Tuple[int, str]], False),
+        (
+            ((1, 2), (3, 4)),
+            typing.Tuple[typing.Tuple[int, int], typing.Tuple[int, int]],
+            True,
+        ),
+        (
+            ((1, 2), (3, 4)),
+            typing.Tuple[typing.Tuple[int, int], typing.Tuple[int, str]],
+            False,
+        ),
     ],
 )
 def test_validate_type_nested(value, expected_type, expected_result):

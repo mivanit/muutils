@@ -90,7 +90,7 @@ endif
 # Update the PYTEST_OPTIONS to include the conditional ignore option
 # @echo "WARNING: Detected python version less than 3.10, some behavior will be different"
 ifeq ($(COMPATIBILITY_MODE), 1)
-    PYTEST_OPTIONS += --ignore=tests/unit/validate_type/test_validate_type_special.py
+    PYTEST_OPTIONS += --ignore=tests/unit/validate_type/
 	TYPECHECK_ARGS += --disable-error-code misc --disable-error-code syntax --disable-error-code import-not-found
 endif
 

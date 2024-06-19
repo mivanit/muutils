@@ -25,8 +25,13 @@ def validate_type(value: typing.Any, expected_type: typing.Any) -> bool:
 
     # useful for debugging
     # print(f"{value = },   {expected_type = },   {origin = },   {args = }")
+    UnionType = getattr(types, "UnionType", None)
 
-    if origin is types.UnionType or origin is typing.Union:
+    if (origin is typing.Union) or (  # this works in python <3.10
+        False
+        if UnionType is None  # return False if UnionType is not available
+        else origin is UnionType  # return True if UnionType is available
+    ):
         return any(validate_type(value, arg) for arg in args)
 
     # generic alias, more complicated

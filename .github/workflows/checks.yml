@@ -86,9 +86,10 @@ jobs:
           python-version: ${{ matrix.versions.python }}
 
       - name: Install uv
-        run: | 
-          pip install uv
-          uv pip install filelock
+        run: pip install uv
+
+      - name: Install filelock
+        run: uv pip install filelock
 
       - name: Install dependencies
         run: uv pip install -r dev-requirements.txt --system

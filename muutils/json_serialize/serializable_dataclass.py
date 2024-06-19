@@ -403,13 +403,12 @@ class CantGetTypeHintsWarning(UserWarning):
 
 
 # Step 3: Create a custom serializable_dataclass decorator
-# TODO: add a kwarg for always asserting type for all fields
 def serializable_dataclass(
     # this should be `_cls: Type[T] | None = None,` but mypy doesn't like it
     _cls=None,  # type: ignore
     *,
     init: bool = True,
-    repr: bool = True,  # TODO: this overrides the actual `repr` method, can this be fixed?
+    repr: bool = True,  # this overrides the actual `repr` builtin, but we have to match the interface of `dataclasses.dataclass`
     eq: bool = True,
     order: bool = False,
     unsafe_hash: bool = False,
@@ -466,8 +465,9 @@ def serializable_dataclass(
             result: dict[str, Any] = {
                 "__format__": f"{self.__class__.__name__}(SerializableDataclass)"
             }
-
+            # for each field in the class
             for field in dataclasses.fields(self):
+                # need it to be our special SerializableField
                 if not isinstance(field, SerializableField):
                     raise ValueError(
                         f"Field '{field.name}' on class {self.__class__.__module__}.{self.__class__.__name__} is not a SerializableField, "
@@ -475,15 +475,23 @@ def serializable_dataclass(
                         "this state should be inaccessible, please report this bug!"
                     )
 
+                # try to save it
                 if field.serialize:
                     try:
+                        # get the val
                         value = getattr(self, field.name)
+                        # if it is a serializable dataclass, serialize it
                         if isinstance(value, SerializableDataclass):
                             value = value.serialize()
+                        # if the value has a serialization function, use that
                         if hasattr(value, "serialize") and callable(value.serialize):
                             value = value.serialize()
+                        # if the field has a serialization function, use that
+                        # it would be nice to be able to override a class's `.serialize()`, but that could lead to some inconsistencies!
                         elif field.serialization_fn:
                             value = field.serialization_fn(value)
+
+                        # store the value in the result
                         result[field.name] = value
                     except Exception as e:
                         raise ValueError(
@@ -497,17 +505,24 @@ def serializable_dataclass(
                             )
                         ) from e
 
+            # store each property if we can get it
             for prop in self._properties_to_serialize:
                 if hasattr(cls, prop):
                     value = getattr(self, prop)
                     result[prop] = value
+                else:
+                    raise AttributeError(
+                        f"Cannot serialize property '{prop}' on class {self.__class__.__module__}.{self.__class__.__name__}"
+                        + f"but it is in {self._properties_to_serialize = }"
+                        + f"\n{self = }"
+                    )
 
             return result
 
         # mypy thinks this isnt a classmethod
         @classmethod  # type: ignore[misc]
         def load(cls, data: dict[str, Any] | T) -> Type[T]:
-            # TODO: this is kind of ugly, but it fixes a lot of issues for when we do recursive loading with ZANJ
+            # HACK: this is kind of ugly, but it fixes a lot of issues for when we do recursive loading with ZANJ
             if isinstance(data, cls):
                 return data
 
@@ -565,7 +580,6 @@ def serializable_dataclass(
                     ):
                         # if no loading function but has a type hint with a load method, use that
                         if isinstance(value, dict):
-                            # TODO: should this be passing the whole data dict?
                             value = field_type_hint.load(value)
                         else:
                             raise ValueError(
@@ -579,14 +593,23 @@ def serializable_dataclass(
                     ctor_kwargs[field.name] = value
 
                     # validate the type
-                    if field.assert_type:
+                    if field.assert_type and on_type_assert in ("raise", "warn"):
                         if field.name in ctor_kwargs:
                             if field_type_hint is not None:
-                                # TODO: recursive type hint checking like pydantic?
                                 try:
-                                    assert validate_type(
+                                    # validate the type
+                                    type_is_valid: bool = validate_type(
                                         ctor_kwargs[field.name], field_type_hint
                                     )
+
+                                    # if not valid, raise or warn depending on the setting in the SerializableDataclass
+                                    if not type_is_valid:
+                                        msg: str = f"Field '{field.name}' on class {cls.__name__} has type {type(ctor_kwargs[field.name])}, but expected {field_type_hint}"
+                                        if on_type_assert == "raise":
+                                            raise ValueError(msg)
+                                        else:
+                                            warnings.warn(msg)
+
                                 except Exception as e:
                                     raise ValueError(
                                         f"{field.name = }, {field_type_hint = }, {type(field_type_hint) = }, {ctor_kwargs[field.name] = }"
@@ -605,6 +628,11 @@ def serializable_dataclass(
                             warnings.warn(
                                 f"Field '{field.name}' on class {cls} has no type hint, but {field.assert_type = }\n{field = }\n{cls_type_hints = }\n{data = }",
                                 CantGetTypeHintsWarning,
+                            )
+                    else:
+                        if on_type_assert != "ignore":
+                            raise ValueError(
+                                f"Invalid value for {on_type_assert = }, expected 'raise', 'warn', or 'ignore'"
                             )
 
             return cls(**ctor_kwargs)

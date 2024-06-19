@@ -32,8 +32,27 @@ class TitledPerson(Person):
         return f"{self.title} {self.full_name}"
 
 
+@serializable_dataclass(
+    kw_only=SUPPORTS_KW_ONLY,
+    properties_to_serialize=["full_name", "not_a_real_property"],
+)
+class AgedPerson_not_valid(Person):
+    title: str
+
+    @property
+    def full_title(self) -> str:
+        return f"{self.title} {self.full_name}"
+
+
+def test_invalid_properties_to_serialize():
+    instance = AgedPerson_not_valid(first_name="Jane", last_name="Smith", title="Dr.")
+
+    with pytest.raises(AttributeError):
+        instance.serialize()
+
+
 def test_serialize_person():
-    instance = Person("John", "Doe")
+    instance = Person(first_name="John", last_name="Doe")
 
     serialized = instance.serialize()
 

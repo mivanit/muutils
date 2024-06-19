@@ -49,10 +49,11 @@ jobs:
       - name: Check poetry.lock and dev-requirements.txt
         run: make check-dep-dev
 
-      - name: Try installing all dependencies
-        run: |
-          pip install uv
-          uv pip install -r dev-requirements.txt --system
+      - name: Install uv
+        run: pip install uv
+      
+      - name: Install dependencies
+        run: uv pip install -r dev-requirements.txt --system
 
   test:
     name: Test and Lint

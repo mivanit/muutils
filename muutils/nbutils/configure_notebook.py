@@ -90,7 +90,15 @@ def setup_plots(
     close_after_plotshow: bool = False,
 ) -> None:
     """Set up plot saving/rendering options"""
-    global PLOT_MODE, CONVERSION_PLOTMODE_OVERRIDE, FIG_COUNTER, FIG_OUTPUT_FMT, FIG_NUMBERED_FNAME, FIG_CONFIG, FIG_BASEPATH, CLOSE_AFTER_PLOTSHOW
+    global \
+        PLOT_MODE, \
+        CONVERSION_PLOTMODE_OVERRIDE, \
+        FIG_COUNTER, \
+        FIG_OUTPUT_FMT, \
+        FIG_NUMBERED_FNAME, \
+        FIG_CONFIG, \
+        FIG_BASEPATH, \
+        CLOSE_AFTER_PLOTSHOW
 
     # set plot mode, handling override
     if CONVERSION_PLOTMODE_OVERRIDE is not None:

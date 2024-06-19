@@ -2,8 +2,8 @@
 
 - `SimpleLogger` is an extremely simple logger that can write to both console and a file
 - `Logger` class handles levels in a slightly different way than default python `logging`,
-	and also has "streams" which allow for different sorts of output in the same logger
-	this was mostly made with training models in mind and storing both metadata and loss
+        and also has "streams" which allow for different sorts of output in the same logger
+        this was mostly made with training models in mind and storing both metadata and loss
 - `TimerContext` is a context manager that can be used to time the duration of a block of code
 """
 

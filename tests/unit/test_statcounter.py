@@ -49,7 +49,6 @@ def test_statcounter() -> None:
     #     arrs.append(np.random.randint(i, j, size=1000))
 
     for a in arrs:
-
         r = _compare_np_custom(a)
 
         assert all(

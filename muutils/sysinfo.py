@@ -154,7 +154,6 @@ class SysInfo:
                 "git status": git_status,
             }
         else:
-
             output: dict = {
                 "git version": git_version["stdout"],
                 "git status": git_status,

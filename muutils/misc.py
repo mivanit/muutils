@@ -309,7 +309,6 @@ def str_to_numeric(
 
     # decimals
     else:
-
         try:
             result = int(quantity)
         except ValueError:

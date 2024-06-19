@@ -51,7 +51,6 @@ def validate_type(value: typing.Any, expected_type: typing.Any) -> bool:
     # generic alias, more complicated
     item_type: type
     if isinstance(expected_type, GenericAliasTypes):
-
         if origin is list:
             # no args
             if len(args) == 0:

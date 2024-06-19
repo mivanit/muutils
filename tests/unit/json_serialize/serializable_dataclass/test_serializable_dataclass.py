@@ -221,7 +221,8 @@ def test_with_printing():
     print(serialized_data)
 
     loaded_instance = _loading_test_wrapper(
-        MyClass, serialized_data  # , assert_record_len=3
+        MyClass,
+        serialized_data,  # , assert_record_len=3
     )
     print(loaded_instance)
 
@@ -344,7 +345,8 @@ def test_nested_with_container():
     assert serialized == expected_ser
 
     loaded = _loading_test_wrapper(
-        Nested_with_Container, serialized  # , assert_record_len=12
+        Nested_with_Container,
+        serialized,  # , assert_record_len=12
     )
 
     assert loaded == instance

@@ -3,6 +3,20 @@ from __future__ import annotations
 import types
 import typing
 
+# this is also for python <3.10 compatibility
+_GenericAliasTypeNames: typing.List[str] = [
+    "GenericAlias",
+    "_GenericAlias",
+    "_UnionGenericAlias",
+    "_BaseGenericAlias",
+]
+
+_GenericAliasTypesList: list = [
+    getattr(typing, name, None) for name in _GenericAliasTypeNames
+]
+
+GenericAliasTypes: tuple = tuple([t for t in _GenericAliasTypesList if t is not None])
+
 
 def validate_type(value: typing.Any, expected_type: typing.Any) -> bool:
     """Validate that a value is of the expected type. use `typeguard` for a more robust solution.
@@ -35,15 +49,7 @@ def validate_type(value: typing.Any, expected_type: typing.Any) -> bool:
         return any(validate_type(value, arg) for arg in args)
 
     # generic alias, more complicated
-    if isinstance(
-        expected_type,
-        (
-            typing.GenericAlias,
-            typing._GenericAlias,
-            typing._UnionGenericAlias,
-            typing._BaseGenericAlias,
-        ),
-    ):
+    if isinstance(expected_type, GenericAliasTypes):
 
         if origin is list:
             # no args
@@ -52,7 +58,8 @@ def validate_type(value: typing.Any, expected_type: typing.Any) -> bool:
             # incorrect number of args
             if len(args) != 1:
                 raise TypeError(
-                    f"Too many arguments for list expected 1, got {args = },   {expected_type = },   {value = },   {origin = }"
+                    f"Too many arguments for list expected 1, got {args = },   {expected_type = },   {value = },   {origin = }",
+                    f"{GenericAliasTypes = }",
                 )
             # check is list
             if not isinstance(value, list):
@@ -68,7 +75,8 @@ def validate_type(value: typing.Any, expected_type: typing.Any) -> bool:
             # incorrect number of args
             if len(args) != 2:
                 raise TypeError(
-                    f"Expected 2 arguments for dict, expected 2, got {args = },   {expected_type = },   {value = },   {origin = }"
+                    f"Expected 2 arguments for dict, expected 2, got {args = },   {expected_type = },   {value = },   {origin = }",
+                    f"{GenericAliasTypes = }",
                 )
             # check is dict
             if not isinstance(value, dict):
@@ -88,7 +96,8 @@ def validate_type(value: typing.Any, expected_type: typing.Any) -> bool:
             # incorrect number of args
             if len(args) != 1:
                 raise TypeError(
-                    f"Expected 1 argument for Set, got {args = },   {expected_type = },   {value = },   {origin = }"
+                    f"Expected 1 argument for Set, got {args = },   {expected_type = },   {value = },   {origin = }",
+                    f"{GenericAliasTypes = }",
                 )
             # check is set
             if not isinstance(value, set):
@@ -113,8 +122,12 @@ def validate_type(value: typing.Any, expected_type: typing.Any) -> bool:
         # TODO: Callables, etc.
 
         raise ValueError(
-            f"Unsupported generic alias {expected_type = } for {value = },   {origin = },   {args = }"
+            f"Unsupported generic alias {expected_type = } for {value = },   {origin = },   {args = }",
+            f"{GenericAliasTypes = }",
         )
 
     else:
-        raise ValueError(f"Unsupported type hint {expected_type = } for {value = }")
+        raise ValueError(
+            f"Unsupported type hint {expected_type = } for {value = }",
+            f"{GenericAliasTypes = }",
+        )

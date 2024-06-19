@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import sys
+import typing
 from typing import Any
 
 import pytest
@@ -14,7 +15,8 @@ from muutils.json_serialize import (
 # pylint: disable=missing-class-docstring, unused-variable
 
 
-BELOW_PY_3_10: bool = sys.version_info < (3, 10)
+BELOW_PY_3_10: bool = False
+# sys.version_info < (3, 10)
 
 
 def _loading_test_wrapper(cls, data, assert_record_len: int | None = None) -> Any:
@@ -35,7 +37,7 @@ def _loading_test_wrapper(cls, data, assert_record_len: int | None = None) -> An
 class BasicAutofields(SerializableDataclass):
     a: str
     b: int
-    c: list[int]
+    c: typing.List[int]
 
 
 def test_basic_auto_fields():
@@ -71,7 +73,7 @@ def test_basic_diff():
 class SimpleFields(SerializableDataclass):
     d: str
     e: int = 42
-    f: list[int] = serializable_field(default_factory=list)
+    f: typing.List[int] = serializable_field(default_factory=list)  # noqa: F821
 
 
 @serializable_dataclass
@@ -126,7 +128,9 @@ def test_simple_fields_serialization(simple_fields_instance):
 def test_simple_fields_loading(simple_fields_instance):
     serialized = simple_fields_instance.serialize()
 
-    loaded = _loading_test_wrapper(SimpleFields, serialized)  # , assert_record_len=4)
+    loaded = SimpleFields.load(
+        serialized
+    )  # _loading_test_wrapper(SimpleFields, serialized)  # , assert_record_len=4)
 
     assert loaded == simple_fields_instance
     assert loaded.diff(simple_fields_instance) == {}
@@ -267,7 +271,7 @@ def test_person_serialization():
     class FullPerson(SerializableDataclass):
         name: str = serializable_field()
         age: int = serializable_field(default=-1)
-        items: list[str] = serializable_field(default_factory=list)
+        items: typing.List[str] = serializable_field(default_factory=list)
 
         @property
         def full_name(self) -> str:
@@ -313,7 +317,7 @@ def test_custom_serialization():
 class Nested_with_Container(SerializableDataclass):
     val_int: int
     val_str: str
-    val_list: list[BasicAutofields] = serializable_field(
+    val_list: typing.List[BasicAutofields] = serializable_field(
         default_factory=list,
         serialization_fn=lambda x: [y.serialize() for y in x],
         loading_fn=lambda x: [BasicAutofields.load(y) for y in x["val_list"]],

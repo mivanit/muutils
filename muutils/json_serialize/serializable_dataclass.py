@@ -398,6 +398,10 @@ class SerializableDataclass(abc.ABC):
         return self.__class__.load(self.serialize())
 
 
+class CantGetTypeHintsWarning(UserWarning):
+    pass
+
+
 # Step 3: Create a custom serializable_dataclass decorator
 # TODO: add a kwarg for always asserting type for all fields
 def serializable_dataclass(
@@ -522,7 +526,8 @@ def serializable_dataclass(
                         + "  - use hints like `typing.Dict` instead of `dict` in type hints (this is required on python 3.8.x)\n"
                         + "  - use python 3.9.x or higher\n"
                         + "  - add explicit loading functions to the fields\n"
-                        + f"  {dataclasses.fields(cls) = }"
+                        + f"  {dataclasses.fields(cls) = }",
+                        CantGetTypeHintsWarning,
                     )
                     cls_type_hints = dict()
                 else:
@@ -588,7 +593,8 @@ def serializable_dataclass(
                                     ) from e
                             else:
                                 raise ValueError(
-                                    f"Cannot get type hints for {cls.__name__}, and so cannot validate. Python version is {sys.version_info = }. You can:\n"
+                                    f"Cannot get type hints for {cls.__name__}, field {field.name = } and so cannot validate."
+                                    + f"Python version is {sys.version_info = }. You can:\n"
                                     + f"  - disable `assert_type`. Currently: {field.assert_type = }\n"
                                     + f"  - use hints like `typing.Dict` instead of `dict` in type hints (this is required on python 3.8.x). You had {field.type = }\n"
                                     + "  - use python 3.9.x or higher\n"
@@ -597,7 +603,8 @@ def serializable_dataclass(
                         else:
                             # TODO: raise an exception here? Can't validate if data given
                             warnings.warn(
-                                f"Field '{field.name}' on class {cls} has no type hint, but {field.assert_type = }\n{field = }\n{cls_type_hints = }\n{data = }"
+                                f"Field '{field.name}' on class {cls} has no type hint, but {field.assert_type = }\n{field = }\n{cls_type_hints = }\n{data = }",
+                                CantGetTypeHintsWarning,
                             )
 
             return cls(**ctor_kwargs)

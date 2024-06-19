@@ -14,7 +14,7 @@ from muutils.json_serialize import (
 
 # pylint: disable=missing-class-docstring
 
-BELOW_PY_3_10: bool = sys.version_info < (3, 10)
+BELOW_PY_3_10: bool = False  # sys.version_info < (3, 10)
 
 
 def _loading_test_wrapper(cls, data, assert_record_len: int | None = None) -> Any:

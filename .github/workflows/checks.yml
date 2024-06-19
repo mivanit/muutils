@@ -51,6 +51,9 @@ jobs:
 
       - name: Install uv
         run: pip install uv
+          
+      - name: Install problematic dependencies
+        run: uv pip install filelock ffspec --system
 
       - name: Install dependencies
         run: uv pip install -r dev-requirements.txt --system --no-deps # we already should have all dependencies exported into dev-requirements.txt
@@ -94,7 +97,7 @@ jobs:
       - name: Install dependencies
         run: |
           uv pip install -r dev-requirements.txt --system
-          uv pip install torch==${{ matrix.versions.torch}} --system
+          uv pip install torch==${{ matrix.versions.torch}}+cpu --system --extra-index-url https://download.pytorch.org/whl/cpu
           uv pip install zanj --system
 
       - name: tests

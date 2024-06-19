@@ -45,7 +45,7 @@ else
 	PYTHON = $(PYTHON_BASE)
 endif
 
-PYTHON_VERSION := $(shell $(PYTHON) -c "import sys; print(f'{sys.version_info.major}.{sys.version_info.minor}')")
+PYTHON_VERSION := $(shell $(PYTHON) -c "import sys; print(f'{sys.version_info.major}.{sys.version_info.minor}.{sys.version_info.micro}')")
 
 COMPATIBILITY_MODE := $(shell $(PYTHON) -c "import sys; print(1 if sys.version_info < (3, 10) else 0)")
 
@@ -53,8 +53,16 @@ TYPECHECK_ARGS ?=
 
 # formatting
 # --------------------------------------------------
+
+.PHONY: setup-format
+setup-format:
+	@echo "install only packages needed for formatting, direct via pip (useful for CI)"
+	$(PYTHON_BASE) -c 'import re,tomllib; cfg = tomllib.load(open("$(PYPROJECT)", "rb")); deps = [(pkg, re.match(r"^\D*(\d.*)", ver).group(1)) for pkg, ver in cfg["tool"]["poetry"]["group"]["dev"]["dependencies"].items() if pkg in ["ruff", "pycln"]]; print(" ".join([f"{pkg}=={ver}" for pkg,ver in deps]))' | xargs $(PYTHON) -m pip install
+
 .PHONY: format
 format:
+	@echo "format the source code"
+	$(PYTHON) -m ruff format
 	$(PYTHON) -m pycln --config $(PYPROJECT) --all .
 	$(PYTHON) -m isort format .
 	$(PYTHON) -m black .
@@ -62,6 +70,7 @@ format:
 .PHONY: check-format
 check-format:
 	@echo "run format check"
+	$(PYTHON) -m ruff check
 	$(PYTHON) -m pycln --check --config $(PYPROJECT) .
 	$(PYTHON) -m isort --check-only .
 	$(PYTHON) -m black --check .
@@ -199,14 +208,15 @@ publish: check build verify-git version
 clean:
 	@echo "cleaning up"
 	rm -rf .mypy_cache
+	rm -rf .ruff_cache
 	rm -rf .pytest_cache
 	rm -rf .coverage
 	rm -rf dist
 	rm -rf build
 	rm -rf $(PACKAGE_NAME).egg-info
 	rm -rf tests/junk_data
-	python -Bc "import pathlib; [p.unlink() for p in pathlib.Path('.').rglob('*.py[co]')]"
-	python -Bc "import pathlib; [p.rmdir() for p in pathlib.Path('.').rglob('__pycache__')]"
+	$(PYTHON_BASE) -Bc "import pathlib; [p.unlink() for p in pathlib.Path('.').rglob('*.py[co]')]"
+	$(PYTHON_BASE) -Bc "import pathlib; [p.rmdir() for p in pathlib.Path('.').rglob('__pycache__')]"
 	rm -rf tests/unit/validate_type/test_validate_type_MODERN.py
 
 # listing targets, from stackoverflow

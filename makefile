@@ -135,6 +135,7 @@ setup-format:
 format:
 	@echo "format the source code"
 	$(PYTHON) -m ruff format --config $(PYPROJECT) .
+	$(PYTHON) -m ruff check --fix --config $(PYPROJECT) .
 	$(PYTHON) -m pycln --config $(PYPROJECT) --all .
 
 .PHONY: check-format

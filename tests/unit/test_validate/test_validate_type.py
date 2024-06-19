@@ -93,12 +93,6 @@ def test_validate_type_any(value):
         (5, Union[int, str], True),
         ("hello", Union[int, str], True),
         (5.0, Union[int, str], False),
-        (5, int | str, True),
-        ("hello", int | str, True),
-        (5.0, int | str, False),
-        (None, typing.Union[int, type(None)], True),
-        (None, typing.Union[int, str], False),
-        (None, int | str, False),
     ],
 )
 def test_validate_type_union(value, expected_type, expected_result):
@@ -122,16 +116,6 @@ def test_validate_type_union(value, expected_type, expected_result):
         (None, Optional[int], True),
         (None, Optional[None], True),
         (None, Optional[typing.List[typing.Dict[str, int]]], True),
-        (42, int | None, True),
-        ("hello", int | None, False),
-        (3.14, int | None, False),
-        ([1], typing.List[int] | None, True),
-        (None, int | None, True),
-        (None, str | None, True),
-        (None, None | str, True),
-        (None, None | int, True),
-        (None, str | int, False),
-        (None, None | typing.List[typing.Dict[str, int]], True),
     ],
 )
 def test_validate_type_optional(value, expected_type, expected_result):

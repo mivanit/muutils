@@ -21,8 +21,6 @@ COMMIT_LOG_FILE := .commit_log
 COMMIT_LOG_SINCE_LAST_VERSION := $(shell (git log $(LAST_VERSION)..HEAD --pretty=format:"- %s (%h)" | tr '`' "'" ; echo) | tac | tr '\n' '\t')
 #                                                                                    1                2            3       4     5
 
-TYPECHECK_COMPAT_ARGS := --disable-error-code misc --disable-error-code syntax --disable-error-code import-not-found
-
 .PHONY: default
 default: help
 
@@ -47,6 +45,11 @@ else
 	PYTHON = $(PYTHON_BASE)
 endif
 
+PYTHON_VERSION := $(shell $(PYTHON) -c "import sys; print(f'{sys.version_info.major}.{sys.version_info.minor}')")
+
+COMPATIBILITY_MODE := $(shell $(PYTHON) -c "import sys; print(1 if sys.version_info < (3, 10) else 0)")
+
+TYPECHECK_ARGS ?= 
 
 # formatting
 # --------------------------------------------------
@@ -82,6 +85,14 @@ ifneq ($(WARN_STRICT), 0)
     PYTEST_OPTIONS += -W error
 endif
 
+# compatibility mode for python <3.10
+
+# Update the PYTEST_OPTIONS to include the conditional ignore option
+# @echo "WARNING: Detected python version less than 3.10, some behavior will be different"
+ifeq ($(COMPATIBILITY_MODE), 1)
+    PYTEST_OPTIONS += --ignore=tests/unit/validate_type/test_validate_type_special.py
+	TYPECHECK_ARGS += --disable-error-code misc --disable-error-code syntax --disable-error-code import-not-found
+endif
 
 .PHONY: cov
 cov:
@@ -101,17 +112,12 @@ cov:
 .PHONY: typing
 typing: clean
 	@echo "running type checks"
-	$(PYTHON) -m mypy --config-file $(PYPROJECT) $(PACKAGE_NAME)/
-	$(PYTHON) -m mypy --config-file $(PYPROJECT) tests/
+	$(PYTHON) -m mypy --config-file $(PYPROJECT) $(TYPECHECK_ARGS) $(PACKAGE_NAME)/
+	$(PYTHON) -m mypy --config-file $(PYPROJECT) $(TYPECHECK_ARGS) tests/
 
-.PHONY: typing-compat
-typing-compat: clean
-	@echo "running type checks in compatibility mode for older python versions"
-	$(PYTHON) -m mypy --config-file $(PYPROJECT) $(TYPECHECK_COMPAT_ARGS) $(PACKAGE_NAME)/
-	$(PYTHON) -m mypy --config-file $(PYPROJECT) $(TYPECHECK_COMPAT_ARGS) tests/
 
 .PHONY: test
-test: clean
+test:
 	@echo "running tests"
 	$(PYTHON) -m pytest $(PYTEST_OPTIONS) $(TESTS_DIR)
 
@@ -206,6 +212,7 @@ help:
 	@cat Makefile | sed -n '/^\.PHONY: / h; /\(^\t@*echo\|^\t:\)/ {H; x; /PHONY/ s/.PHONY: \(.*\)\n.*"\(.*\)"/    make \1\t\2/p; d; x}'| sort -k2,2 |expand -t 25
 	@echo "# makefile variables:"
 	@echo "    PYTHON = $(PYTHON)"
+	@echo "    PYTHON_VERSION = $(PYTHON_VERSION)"
 	@echo "    PACKAGE_NAME = $(PACKAGE_NAME)"
 	@echo "    VERSION = $(VERSION)"
 	@echo "    LAST_VERSION = $(LAST_VERSION)"

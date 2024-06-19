@@ -11,22 +11,22 @@ from muutils.validate_type import validate_type
 @pytest.mark.parametrize(
     "value, expected_type, expected_result",
     [
-        (5, int | str, True),
-        ("hello", int | str, True),
-        (5.0, int | str, False),
-        (None, typing.Union[int, type(None)], True),
-        (None, typing.Union[int, str], False),
-        (None, int | str, False),
-        (42, int | None, True),
-        ("hello", int | None, False),
-        (3.14, int | None, False),
-        ([1], typing.List[int] | None, True),
-        (None, int | None, True),
-        (None, str | None, True),
-        (None, None | str, True),
-        (None, None | int, True),
-        (None, str | int, False),
-        (None, None | typing.List[typing.Dict[str, int]], True),
+        (5, int | str, True),  # type: ignore[operator]
+        ("hello", int | str, True),  # type: ignore[operator]
+        (5.0, int | str, False),  # type: ignore[operator]
+        (None, typing.Union[int, type(None)], True),  # type: ignore[operator]
+        (None, typing.Union[int, str], False),  # type: ignore[operator]
+        (None, int | str, False),  # type: ignore[operator]
+        (42, int | None, True),  # type: ignore[operator]
+        ("hello", int | None, False),  # type: ignore[operator]
+        (3.14, int | None, False),  # type: ignore[operator]
+        ([1], typing.List[int] | None, True),  # type: ignore[operator]
+        (None, int | None, True),  # type: ignore[operator]
+        (None, str | None, True),  # type: ignore[operator]
+        (None, None | str, True),  # type: ignore[operator]
+        (None, None | int, True),  # type: ignore[operator]
+        (None, str | int, False),  # type: ignore[operator]
+        (None, None | typing.List[typing.Dict[str, int]], True),  # type: ignore[operator]
     ],
 )
 def test_validate_type_union(value, expected_type, expected_result):

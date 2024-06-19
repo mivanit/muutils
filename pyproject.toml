@@ -64,12 +64,12 @@ filterwarnings = [
 
 [tool.pycln]
 all = true
-exclude = "tests/input_data"
+exclude = ["tests/input_data", "tests/junk_data"]
 
 [tool.isort]
 profile = "black"
 ignore_comments = false
-extend_skip = "tests/input_data"
+extend_skip = ["tests/input_data", "tests/junk_data"]
 
 [tool.black]
 extend-exclude = "tests/input_data"

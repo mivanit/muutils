@@ -1,7 +1,9 @@
+from __future__ import annotations
+
 import typing
 import warnings
 
-from muutils.errormode import ErrorMode
+from muutils.errormode import ErrorMode, ERROR_MODE_ALIASES
 
 import pytest
 
@@ -113,3 +115,80 @@ def test_except_mode_chained_exception():
     else:
         assert False, "Expected RuntimeError with cause KeyError"
 
+
+
+
+@pytest.mark.parametrize("mode, expected_mode", [
+    ("except", ErrorMode.EXCEPT),
+    ("warn", ErrorMode.WARN),
+    ("ignore", ErrorMode.IGNORE),
+    ("Except", ErrorMode.EXCEPT),
+    ("Warn", ErrorMode.WARN),
+    ("Ignore", ErrorMode.IGNORE),
+    ("  \teXcEpT  \n", ErrorMode.EXCEPT),
+    ("WaRn  \t", ErrorMode.WARN),
+    ("  \tIGNORE", ErrorMode.IGNORE),
+])
+def test_from_any_strict_ok(mode, expected_mode):
+    assert ErrorMode.from_any(mode, allow_aliases=False) == expected_mode
+
+@pytest.mark.parametrize("mode, excepted_error", [
+    (42, TypeError),
+    (42.0, TypeError),
+    (None, TypeError),
+    (object(), TypeError),
+    (True, TypeError),
+    (False, TypeError),
+    (["except"], TypeError),
+    ("invalid", KeyError),
+    ("  \tinvalid", KeyError),
+    ("e", KeyError),
+    (" E", KeyError),
+    ("w", KeyError),
+    ("W", KeyError),
+    ("i", KeyError),
+    ("I", KeyError),
+    ("silent", KeyError),
+    ("Silent", KeyError),
+    ("quiet", KeyError),
+    ("Quiet", KeyError),
+    ("raise", KeyError),
+    ("Raise", KeyError),
+    ("error", KeyError),
+    ("Error", KeyError),
+    ("err", KeyError),
+    ("ErR\t", KeyError),
+    ("warning", KeyError),
+    ("Warning", KeyError),
+])
+def test_from_any_strict_error(mode, excepted_error):
+    with pytest.raises(excepted_error):
+        ErrorMode.from_any(mode, allow_aliases=False)
+
+
+@pytest.mark.parametrize("mode, expected_mode", [
+    *list(ERROR_MODE_ALIASES.items()),
+    *list((a.upper(), b) for a, b in ERROR_MODE_ALIASES.items()),
+    *list((a.title(), b) for a, b in ERROR_MODE_ALIASES.items()),
+    *list((a.capitalize(), b) for a, b in ERROR_MODE_ALIASES.items()),
+    *list((f"  \t{a}  \t", b) for a, b in ERROR_MODE_ALIASES.items()),
+])
+def test_from_any_aliases_ok(mode, expected_mode):
+    assert ErrorMode.from_any(mode) == expected_mode
+    assert ErrorMode.from_any(mode, allow_aliases=True) == expected_mode
+
+
+@pytest.mark.parametrize("mode, excepted_error", [
+    (42, TypeError),
+    (42.0, TypeError),
+    (None, TypeError),
+    (object(), TypeError),
+    (True, TypeError),
+    (False, TypeError),
+    (["except"], TypeError),
+    ("invalid", KeyError),
+    ("  \tinvalid", KeyError),
+])
+def test_from_any_aliases_error(mode, excepted_error):
+    with pytest.raises(excepted_error):
+        ErrorMode.from_any(mode, allow_aliases=True)

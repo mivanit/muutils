@@ -1,11 +1,12 @@
 from __future__ import annotations
 
+import dataclasses
 import functools
 import inspect
 import sys
 import typing
 import warnings
-from typing import Any, Callable, Iterable, Literal, Union
+from typing import Any, Callable, Iterable, Literal, TypeVar, Union
 
 _NUMPY_WORKING: bool
 try:
@@ -127,3 +128,132 @@ def safe_getsource(func) -> list[str]:
         return string_as_lines(inspect.getsource(func))
     except Exception as e:
         return string_as_lines(f"Error: Unable to retrieve source code:\n{e}")
+
+
+# credit to https://stackoverflow.com/questions/51743827/how-to-compare-equality-of-dataclasses-holding-numpy-ndarray-boola-b-raises
+def array_safe_eq(a: Any, b: Any) -> bool:
+    """check if two objects are equal, account for if numpy arrays or torch tensors"""
+    if a is b:
+        return True
+
+    if (
+        str(type(a)) == "<class 'numpy.ndarray'>"
+        and str(type(b)) == "<class 'numpy.ndarray'>"
+    ) or (
+        str(type(a)) == "<class 'torch.Tensor'>"
+        and str(type(b)) == "<class 'torch.Tensor'>"
+    ):
+        return (a == b).all()
+
+    if (
+        str(type(a)) == "<class 'pandas.core.frame.DataFrame'>"
+        and str(type(b)) == "<class 'pandas.core.frame.DataFrame'>"
+    ):
+        return a.equals(b)
+
+    if isinstance(a, typing.Sequence) and isinstance(b, typing.Sequence):
+        return len(a) == len(b) and all(array_safe_eq(a1, b1) for a1, b1 in zip(a, b))
+
+    if isinstance(a, (dict, typing.Mapping)) and isinstance(b, (dict, typing.Mapping)):
+        return len(a) == len(b) and all(
+            array_safe_eq(k1, k2) and array_safe_eq(a[k1], b[k2])
+            for k1, k2 in zip(a.keys(), b.keys())
+        )
+
+    try:
+        return bool(a == b)
+    except (TypeError, ValueError) as e:
+        warnings.warn(f"Cannot compare {a} and {b} for equality\n{e}")
+        return NotImplemented  # type: ignore[return-value]
+
+
+def dc_eq(
+    dc1,
+    dc2,
+    except_when_class_mismatch: bool = False,
+    false_when_class_mismatch: bool = True,
+    except_when_field_mismatch: bool = False,
+) -> bool:
+    """checks if two dataclasses which (might) hold numpy arrays are equal
+
+        # Parameters:
+        - `dc1`: the first dataclass
+        - `dc2`: the second dataclass
+        - `except_when_class_mismatch: bool`
+            if `True`, will throw `TypeError` if the classes are different.
+            if not, will return false by default or attempt to compare the fields if `false_when_class_mismatch` is `False`
+            (default: `False`)
+        - `false_when_class_mismatch: bool`
+            only relevant if `except_when_class_mismatch` is `False`.
+            if `True`, will return `False` if the classes are different.
+            if `False`, will attempt to compare the fields.
+        - `except_when_field_mismatch: bool`
+            only relevant if `except_when_class_mismatch` is `False` and `false_when_class_mismatch` is `False`.
+            if `True`, will throw `TypeError` if the fields are different.
+            (default: `True`)
+
+        # Returns:
+        - `bool`: True if the dataclasses are equal, False otherwise
+
+        # Raises:
+        - `TypeError`: if the dataclasses are of different classes
+        - `AttributeError`: if the dataclasses have different fields
+
+    ```
+              [START]
+                 ▼
+           ┌───────────┐  ┌─────────┐
+           │dc1 is dc2?├─►│ classes │
+           └──┬────────┘No│ match?  │
+      ────    │           ├─────────┤
+     (True)◄──┘Yes        │No       │Yes
+      ────                ▼         ▼
+          ┌────────────────┐ ┌────────────┐
+          │ except when    │ │ fields keys│
+          │ class mismatch?│ │ match?     │
+          ├───────────┬────┘ ├───────┬────┘
+          │Yes        │No    │No     │Yes
+          ▼           ▼      ▼       ▼
+     ───────────  ┌──────────┐  ┌────────┐
+    { raise     } │ except   │  │ field  │
+    { TypeError } │ when     │  │ values │
+     ───────────  │ field    │  │ match? │
+                  │ mismatch?│  ├────┬───┘
+                  ├───────┬──┘  │    │Yes
+                  │Yes    │No   │No  ▼
+                  ▼       ▼     │   ────
+     ───────────────     ─────  │  (True)
+    { raise         }   (False)◄┘   ────
+    { AttributeError}    ─────
+     ───────────────
+    ```
+
+    """
+    if dc1 is dc2:
+        return True
+
+    if dc1.__class__ is not dc2.__class__:
+        if except_when_class_mismatch:
+            # if the classes don't match, raise an error
+            raise TypeError(
+                f"Cannot compare dataclasses of different classes: `{dc1.__class__}` and `{dc2.__class__}`"
+            )
+        else:
+            dc1_fields: set = set([fld.name for fld in dataclasses.fields(dc1)])
+            dc2_fields: set = set([fld.name for fld in dataclasses.fields(dc2)])
+            fields_match: bool = set(dc1_fields) == set(dc2_fields)
+
+            if not fields_match:
+                # if the fields match, keep going
+                if except_when_field_mismatch:
+                    raise AttributeError(
+                        f"dataclasses {dc1} and {dc2} have different fields: `{dc1_fields}` and `{dc2_fields}`"
+                    )
+                else:
+                    return False
+
+    return all(
+        array_safe_eq(getattr(dc1, fld.name), getattr(dc2, fld.name))
+        for fld in dataclasses.fields(dc1)
+        if fld.compare
+    )

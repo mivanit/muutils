@@ -28,8 +28,8 @@ class ErrorMode(Enum):
         else:
             raise ValueError(f"Unknown error mode {self}")
         
-    @staticmethod
-    def from_any(mode: "str|ErrorMode", allow_aliases: bool = True) -> ErrorMode:
+    @classmethod
+    def from_any(cls, mode: "str|ErrorMode", allow_aliases: bool = True) -> ErrorMode:
         if isinstance(mode, ErrorMode):
             return mode
         elif isinstance(mode, str):

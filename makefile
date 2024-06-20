@@ -59,45 +59,16 @@ gen-version-info:
 	$(eval PYTHON_VERSION := $(shell $(PYTHON) -c "import sys; print(f'{sys.version_info.major}.{sys.version_info.minor}.{sys.version_info.micro}')") )
 
 # getting commit log
-# note that if gen-version-info has not been run, this will not work
-# --------------------------------------------------
-#   explanation of the commit log generation:
-#   1) in the shell 2) get the git log 3) since the last version
-#   4) format the git log
-#   5) replace backticks with single quotes, to avoid funny business
-#   6) add a final newline, to make tac happy
-#   7) reverse the order of the lines, so that the oldest commit is first
-#   8) replace newlines with tabs, to prevent the newlines from being lost
-#   $(shell (git log $(LAST_VERSION)..HEAD --pretty=format:"- %s (%h)" | tr '`' "'" ; echo) | tac | tr '\n' '\t')
-#      1      2             3                            4                5            6       7     8
-COMMIT_LOG_SINCE_LAST_VERSION := NULL
-COMMIT_LOG_TEMP := NULL
 .PHONY: gen-commit-log
 gen-commit-log: gen-version-info
-	@echo "Generating commit log since last version"
-	@echo "Current version is $(VERSION), last auto-uploaded version is $(LAST_VERSION)"
 	if [ "$(LAST_VERSION)" = "NULL" ]; then \
 		echo "LAST_VERSION is NULL, cant get commit log!"; \
 		exit 1; \
 	fi
-	@echo "Getting commit log since last version $(LAST_VERSION)"
-	$(eval COMMIT_LOG_TEMP := $(shell python -c "import subprocess, re; log=subprocess.check_output(['git', 'log', '$(LAST_VERSION)..HEAD', '--pretty=format:- %s (%h)']).decode('utf-8'); log=re.sub(r'[`()]', lambda m: '\\'+m.group(0), log); print('\\t'.join(log.split('\\n')[::-1]))"))
-
-
-	@echo "Commit log temp:"
-	@echo $(COMMIT_LOG_TEMP)
-	$(eval COMMIT_LOG_SINCE_LAST_VERSION := $(shell (git log $(LAST_VERSION)..HEAD --pretty=format:"- %s (%h)" | tr '`' "'" ; echo) | tac | tr '\n' '\t'))
-	@echo "Commit log since last version:"
-	@echo $(COMMIT_LOG_SINCE_LAST_VERSION)
-
-# $(shell git log $(LAST_VERSION)..HEAD --pretty=format:"- %s (%h)")
-# $(eval COMMIT_LOG_SINCE_LAST_VERSION := )
+	$(shell python -c "import subprocess; open('$(COMMIT_LOG_FILE)', 'w').write('\n'.join(reversed(subprocess.check_output(['git', 'log', '$(LAST_VERSION)'.strip() + '..HEAD', '--pretty=format:- %s (%h)']).decode('utf-8').strip().split('\n'))))")
 
 	
-
-	
-	
-# looser typing, allow warnings for python <3.10
+# loose typing, allow warnings for python <3.10
 # --------------------------------------------------
 TYPECHECK_ARGS ?= 
 # COMPATIBILITY_MODE: whether to run in compatibility mode for python <3.10
@@ -141,10 +112,9 @@ endif
 default: help
 
 .PHONY: version
-version: gen-version-info gen-commit-log
+version: gen-commit-log
 	@echo "Current version is $(VERSION), last auto-uploaded version is $(LAST_VERSION)"
 	@echo "Commit log since last version:"
-	@echo "$(COMMIT_LOG_SINCE_LAST_VERSION)" | tr '\t' '\n' > $(COMMIT_LOG_FILE)
 	@cat $(COMMIT_LOG_FILE)
 	@if [ "$(VERSION)" = "$(LAST_VERSION)" ]; then \
 		echo "Python package $(VERSION) is the same as last published version $(LAST_VERSION), exiting!"; \
@@ -254,7 +224,7 @@ build:
 	poetry build
 
 .PHONY: publish
-publish: gen-version-info check build verify-git version
+publish: gen-commit-log check build verify-git version
 	@echo "run all checks, build, and then publish"
 
 	@echo "Enter the new version number if you want to upload to pypi and create a new tag"

@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "muutils"
 version = "0.5.13"
-description = "A collection of miscellaneous python utilities"
+description = "miscellaneous python utilities"
 license = "GPL-3.0-only"
 authors = ["mivanit <mivanits@umich.edu>"]
 readme = "README.md"
@@ -14,25 +14,33 @@ classifiers=[
     "Development Status :: 4 - Beta",
     "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
     "Operating System :: OS Independent",
+    "Topic :: Utilities",
+    "Typing :: Typed",
 ]
 repository = "https://github.com/mivanit/muutils"
 
 [tool.poetry.dependencies]
 python = "^3.8"
+# [array]
 numpy = [
     { version = "^1.24.4", optional = true, markers = "python_version < '3.9'" },
     { version = "^1.26.4", optional = true, markers = "python_version >= '3.9'" },
 ]
 torch = { version = ">=1.13.1", optional = true }
 jaxtyping = { version = "^0.2.12", optional = true }
+# [notebook]
 ipython = { version = "^8.20.0", optional = true, python = "^3.10" }
+# [zanj]
 zanj = { version = "^0.2.2", optional = true, python = "^3.10" }
 
 [tool.poetry.group.dev.dependencies]
-pytest = "^8.2.2"
+# typing
 mypy = "^1.0.1"
+# tests & coverage
+pytest = "^8.2.2"
 pytest-cov = "^4.1.0"
 coverage-badge = "^1.1.0"
+# for testing plotting
 matplotlib = "^3.0.0"
 plotly = "^5.0.0"
 
@@ -42,6 +50,7 @@ ruff = "^0.4.8"
 
 [tool.poetry.extras]
 array = ["numpy", "torch", "jaxtyping"]
+# special group for CI, where we install cpu torch separately
 array_no_torch = ["numpy", "jaxtyping"]
 notebook = ["ipython"]
 zanj = ["zanj"]

@@ -8,6 +8,7 @@ import jaxtyping
 import numpy as np
 import torch
 
+from muutils.errormode import ErrorMode
 from muutils.dictmagic import dotlist_to_nested_dict
 
 # pylint: disable=missing-class-docstring
@@ -64,7 +65,7 @@ def jaxtype_factory(
     name: str,
     array_type: type,
     default_jax_dtype=jaxtyping.Float,
-    legacy_mode: typing.Literal["error", "warn", "ignore"] = "warn",
+    legacy_mode: ErrorMode = ErrorMode.WARN,
 ) -> type:
     """usage:
     ```
@@ -72,6 +73,7 @@ def jaxtype_factory(
     x: ATensor["dim1 dim2", np.float32]
     ```
     """
+    legacy_mode = ErrorMode.from_any(legacy_mode)
 
     class _BaseArray:
         """jaxtyping shorthand
@@ -117,14 +119,10 @@ def jaxtype_factory(
                     return TYPE_TO_JAX_DTYPE[params[1]][array_type, params[0]]
 
                 elif isinstance(params[0], tuple):
-                    if legacy_mode == "error":
-                        raise Exception(
-                            f"legacy mode is set to error, but legacy type was used:\n{cls.param_info(params)}"
-                        )
-                    elif legacy_mode == "warn":
-                        warnings.warn(
-                            f"legacy type annotation was used:\n{cls.param_info(params)}"
-                        )
+                    legacy_mode.process(
+                        f"legacy type annotation was used:\n{cls.param_info(params) = }",
+                        except_cls=Exception,
+                    )
                     # MyTensor[("dim1", "dim2"), int]
                     shape_anot: list[str] = list()
                     for x in params[0]:

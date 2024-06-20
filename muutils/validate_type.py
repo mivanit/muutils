@@ -133,16 +133,16 @@ def validate_type(value: typing.Any, expected_type: typing.Any) -> bool:
             if origin is type:
                 return True
             
-            
+
         # TODO: Callables, etc.
 
-        raise ValueError(
+        raise NotImplementedError(
             f"Unsupported generic alias {expected_type = } for {value = },   {origin = },   {args = }",
             f"{GenericAliasTypes = }",
         )
 
     else:
-        raise ValueError(
+        raise NotImplementedError(
             f"Unsupported type hint {expected_type = } for {value = }",
             f"{GenericAliasTypes = }",
         )

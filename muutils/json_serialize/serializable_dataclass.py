@@ -10,6 +10,7 @@ import typing
 import warnings
 from typing import Any, Callable, Optional, Type, TypeVar, Union
 
+from muutils.errormode import ErrorMode
 from muutils.validate_type import validate_type
 from muutils.json_serialize.serializable_field import SerializableField, serializable_field
 from muutils.json_serialize.util import array_safe_eq, dc_eq
@@ -17,6 +18,9 @@ from muutils.json_serialize.util import array_safe_eq, dc_eq
 # pylint: disable=bad-mcs-classmethod-argument, too-many-arguments, protected-access
 
 T = TypeVar("T")
+
+class CantGetTypeHintsWarning(UserWarning):
+    pass
 
 
 class ZanjMissingWarning(UserWarning):
@@ -64,22 +68,21 @@ def zanj_register_loader_serializable_dataclass(cls: typing.Type[T]):
 
     return lh
 
-OnTypeAssertDo = typing.Literal["raise", "warn", "ignore"]
 
-DEFAULT_ON_TYPE_ASSERT: OnTypeAssertDo = "warn"
+_DEFAULT_ON_TYPECHECK_MISMATCH: ErrorMode = ErrorMode.WARN
+_DEFAULT_ON_TYPECHECK_ERROR: ErrorMode = ErrorMode.EXCEPT
 
 def SerializableDataclass__validate_field_type(
     self: SerializableDataclass,
     field: SerializableField|str,
-    on_type_assert: OnTypeAssertDo = DEFAULT_ON_TYPE_ASSERT,
+    on_typecheck_error: ErrorMode = _DEFAULT_ON_TYPECHECK_ERROR,
 ) -> bool:
-    # do nothing
+    on_typecheck_error: ErrorMode = ErrorMode.from_any(on_typecheck_error)
+
+    # do nothing case
     if not field.assert_type:
         return True
-    
-    if on_type_assert == "ignore":
-        return True
-    
+
     # get field
     if isinstance(field, str):
         field = self.__dataclass_fields__[field]
@@ -127,19 +130,13 @@ def SerializableDataclass__validate_field_type(
 
 
 
-def SerializableDataclass__validate_fields_types(self: SerializableDataclass, on_type_assert: OnTypeAssertDo = DEFAULT_ON_TYPE_ASSERT) -> bool:
+def SerializableDataclass__validate_fields_types(
+        self: SerializableDataclass,
+        on_typecheck_error: ErrorMode = _DEFAULT_ON_TYPECHECK_ERROR,
+    ) -> bool:
     """validate the types of the fields on a SerializableDataclass"""
-
-    # arg validation
-    if on_type_assert not in ("raise", "warn", "ignore"):
-        raise ValueError(
-            f"Invalid value for {on_type_assert = }, expected 'raise', 'warn', or 'ignore'"
-        )
-    
-    # do nothing if ignore
-    if on_type_assert == "ignore":
-        return
-    
+    on_typecheck_error: ErrorMode = ErrorMode.from_any(on_typecheck_error)
+        
     # if except, bundle the exceptions
     results: dict[str, bool] = dict()
     exceptions: dict[str, Exception] = dict()
@@ -148,25 +145,20 @@ def SerializableDataclass__validate_fields_types(self: SerializableDataclass, on
     cls_fields: typing.Sequence[SerializableField] = dataclasses.fields(self)
     for field in cls_fields:
         try:
-            assert self.validate_field_type(field, on_type_assert)
+            results[field.name] = self.validate_field_type(field, on_typecheck_error)
         except Exception as e:
             exceptions[field.name] = e
 
     # figure out what to do with the exceptions
     if len(exceptions) > 0:
-        if on_type_assert in ("warn", "ignore"):
-            msg: str = (
-                f"Exceptions while validating types of fields on {self.__class__.__name__}: {[x.name for x in cls_fields]}"
-                + f"\n\t" + "\n\t".join([f"{k}:\t{v}" for k, v in exceptions.items()])
-            )
-            if on_type_assert == "warn":
-                warnings.warn(msg)
-            else:
-                raise ValueError(msg) from exceptions[0]
-        else:
-            assert on_type_assert == "ignore"
+        on_typecheck_error.process(
+            f"Exceptions while validating types of fields on {self.__class__.__name__}: {[x.name for x in cls_fields]}"
+            + f"\n\t" + "\n\t".join([f"{k}:\t{v}" for k, v in exceptions.items()]),
+            except_cls=ValueError,
+            except_from=exceptions[0],
+        )
     
-    return True
+    return all(results.values())
 
     
 
@@ -184,11 +176,11 @@ class SerializableDataclass(abc.ABC):
     def load(cls: Type[T], data: dict[str, Any] | T) -> T:
         raise NotImplementedError(f"decorate {cls = } with `@serializable_dataclass`")
     
-    def validate_fields_types(self, on_type_assert: OnTypeAssertDo = DEFAULT_ON_TYPE_ASSERT) -> bool:
-        return SerializableDataclass__validate_fields_types(self, on_type_assert)
+    def validate_fields_types(self, on_typecheck_error: ErrorMode = _DEFAULT_ON_TYPECHECK_ERROR) -> bool:
+        return SerializableDataclass__validate_fields_types(self, on_typecheck_error=on_typecheck_error)
     
-    def validate_field_type(self, field: SerializableField|str, on_type_assert: OnTypeAssertDo = DEFAULT_ON_TYPE_ASSERT) -> bool:
-        return SerializableDataclass__validate_field_type(self, field, on_type_assert)
+    def validate_field_type(self, field: "SerializableField|str", on_typecheck_error: ErrorMode = _DEFAULT_ON_TYPECHECK_ERROR) -> bool:
+        return SerializableDataclass__validate_field_type(self, field, on_typecheck_error=on_typecheck_error)
 
     def __eq__(self, other: Any) -> bool:
         return dc_eq(self, other)
@@ -258,9 +250,6 @@ class SerializableDataclass(abc.ABC):
     def __deepcopy__(self, memo: dict) -> "SerializableDataclass":
         return self.__class__.load(self.serialize())
 
-
-class CantGetTypeHintsWarning(UserWarning):
-    pass
 
 
 # cache this so we don't have to keep getting it
@@ -477,7 +466,7 @@ def serializable_dataclass(
         cls.serialize = serialize  # type: ignore[attr-defined]
         # type is `Callable[[dict], T]`
         cls.load = load  # type: ignore[attr-defined]
-        # type is `Callable[[T, OnTypeAssertDo], bool]`
+        # type is `Callable[[T, ErrorMode], bool]`
         cls.validate_fields_types = SerializableDataclass__validate_fields_types  # type: ignore[attr-defined]
 
         # type is `Callable[[T, T], bool]`

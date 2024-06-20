@@ -18,6 +18,7 @@ from typing import (
 _KT = TypeVar("_KT")
 _VT = TypeVar("_VT")
 
+from muutils.errormode import ErrorMode
 
 class DefaulterDict(typing.Dict[_KT, _VT], Generic[_KT, _VT]):
     """like a defaultdict, but default_factory is passed the key as an argument"""
@@ -144,14 +145,14 @@ def kwargs_to_nested_dict(
     kwargs_dict: dict[str, Any],
     sep: str = ".",
     strip_prefix: Optional[str] = None,
-    when_unknown_prefix: typing.Literal["raise", "warn", "ignore"] = "warn",
+    when_unknown_prefix: ErrorMode = ErrorMode.WARN,
     transform_key: Optional[Callable[[str], str]] = None,
 ) -> dict[str, Any]:
     """given kwargs from fire, convert them to a nested dict
 
     if strip_prefix is not None, then all keys must start with the prefix. by default,
     will warn if an unknown prefix is found, but can be set to raise an error or ignore it:
-    `when_unknown_prefix: typing.Literal["raise", "warn", "ignore"]`
+    `when_unknown_prefix: ErrorMode`
 
     Example:
     ```python
@@ -172,25 +173,20 @@ def kwargs_to_nested_dict(
         the separator to use for nested keys
     - `strip_prefix: Optional[str] = None`
         if not None, then all keys must start with this prefix
-    - `when_unknown_prefix: typing.Literal["raise", "warn", "ignore"] = "warn"`
+    - `when_unknown_prefix: ErrorMode = ErrorMode.WARN`
         what to do when an unknown prefix is found
     - `transform_key: Callable[[str], str] | None = None`
         a function to apply to each key before adding it to the dict (applied after stripping the prefix)
     """
+    when_unknown_prefix: ErrorMode = ErrorMode.from_any(when_unknown_prefix)
     filtered_kwargs: dict[str, Any] = dict()
     for key, value in kwargs_dict.items():
         if strip_prefix is not None:
             if not key.startswith(strip_prefix):
-                if when_unknown_prefix == "raise":
-                    raise ValueError(f"key {key} does not start with {strip_prefix}")
-                elif when_unknown_prefix == "warn":
-                    warnings.warn(f"key {key} does not start with {strip_prefix}")
-                elif when_unknown_prefix == "ignore":
-                    pass
-                else:
-                    raise ValueError(
-                        f"when_unknown_prefix must be one of 'raise', 'warn', or 'ignore', got {when_unknown_prefix}"
-                    )
+                when_unknown_prefix.process(
+                    f"key '{key}' does not start with '{strip_prefix}'",
+                    except_cls=ValueError,
+                )
             else:
                 key = key[len(strip_prefix) :]
 

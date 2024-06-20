@@ -16,7 +16,6 @@ except ImportError:
     _NUMPY_WORKING = False
 
 ErrorMode = Literal["ignore", "warn", "except"]
-TypeErrorMode = Union[ErrorMode, Literal["try_convert"]]
 
 
 JSONitem = Union[bool, int, float, str, list, typing.Dict[str, Any], None]

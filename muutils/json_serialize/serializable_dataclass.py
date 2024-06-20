@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import abc
 import dataclasses
+import functools
 import json
 import sys
 import types
@@ -315,6 +316,112 @@ def zanj_register_loader_serializable_dataclass(cls: Type[T]):
 
     return lh
 
+OnTypeAssertDo = typing.Literal["raise", "warn", "ignore"]
+
+DEFAULT_ON_TYPE_ASSERT: OnTypeAssertDo = "warn"
+
+def SerializableDataclass__validate_field_type(
+    self: SerializableDataclass,
+    field: SerializableField|str,
+    on_type_assert: OnTypeAssertDo = DEFAULT_ON_TYPE_ASSERT,
+) -> bool:
+    # do nothing
+    if not field.assert_type:
+        return True
+    
+    if on_type_assert == "ignore":
+        return True
+    
+    # get field
+    if isinstance(field, str):
+        field = self.__dataclass_fields__[field]
+
+    assert isinstance(
+        field, SerializableField
+    ), f"Field '{field.name = }' on class {self.__class__ = } is not a SerializableField, but a {type(field) = }"
+
+    # get field type hints
+    field_type_hint: Any = get_cls_type_hints(self.__class__).get(field.name, None)
+
+    # get the value
+    value: Any = getattr(self, field.name)
+    
+    # validate the type    
+    if field_type_hint is not None:
+        try:
+            # validate the type
+            type_is_valid: bool = validate_type(
+                value, field_type_hint
+            )
+
+            # if not valid, raise or warn depending on the setting in the SerializableDataclass
+            if not type_is_valid:
+                msg: str = f"Field '{field.name}' on class {self.__class__.__name__} has type {type(value)}, but expected {field_type_hint}"
+                if on_type_assert == "raise":
+                    raise ValueError(msg)
+                else:
+                    warnings.warn(msg)
+
+        except Exception as e:
+            raise ValueError(
+                "exception while validating type: "
+                + f"{field.name = }, {field_type_hint = }, {type(field_type_hint) = }, {value = }"
+            ) from e
+    else:
+        raise ValueError(
+            f"Cannot get type hints for {self.__class__.__name__}, field {field.name = } and so cannot validate."
+            + f"Python version is {sys.version_info = }. You can:\n"
+            + f"  - disable `assert_type`. Currently: {field.assert_type = }\n"
+            + f"  - use hints like `typing.Dict` instead of `dict` in type hints (this is required on python 3.8.x). You had {field.type = }\n"
+            + "  - use python 3.9.x or higher\n"
+            + "  - coming in a future release, specify custom type validation functions\n"
+        )
+
+
+
+def SerializableDataclass__validate_fields_types(self: SerializableDataclass, on_type_assert: OnTypeAssertDo = DEFAULT_ON_TYPE_ASSERT) -> bool:
+    """validate the types of the fields on a SerializableDataclass"""
+
+    # arg validation
+    if on_type_assert not in ("raise", "warn", "ignore"):
+        raise ValueError(
+            f"Invalid value for {on_type_assert = }, expected 'raise', 'warn', or 'ignore'"
+        )
+    
+    # do nothing if ignore
+    if on_type_assert == "ignore":
+        return
+    
+    # if except, bundle the exceptions
+    results: dict[str, bool] = dict()
+    exceptions: dict[str, Exception] = dict()
+    
+    # for each field in the class
+    cls_fields: typing.Sequence[SerializableField] = dataclasses.fields(self)
+    for field in cls_fields:
+        try:
+            assert self.validate_field_type(field, on_type_assert)
+        except Exception as e:
+            exceptions[field.name] = e
+
+    # figure out what to do with the exceptions
+    if len(exceptions) > 0:
+        if on_type_assert in ("warn", "ignore"):
+            msg: str = (
+                f"Exceptions while validating types of fields on {self.__class__.__name__}: {[x.name for x in cls_fields]}"
+                + f"\n\t" + "\n\t".join([f"{k}:\t{v}" for k, v in exceptions.items()])
+            )
+            if on_type_assert == "warn":
+                warnings.warn(msg)
+            else:
+                raise ValueError(msg) from exceptions[0]
+        else:
+            assert on_type_assert == "ignore"
+    
+    return True
+
+    
+
 
 class SerializableDataclass(abc.ABC):
     """Base class for serializable dataclasses
@@ -323,11 +430,17 @@ class SerializableDataclass(abc.ABC):
     """
 
     def serialize(self) -> dict[str, Any]:
-        raise NotImplementedError
+        raise NotImplementedError(f"decorate {self.__class__ = } with `@serializable_dataclass`")
 
     @classmethod
     def load(cls: Type[T], data: dict[str, Any] | T) -> T:
-        raise NotImplementedError
+        raise NotImplementedError(f"decorate {cls = } with `@serializable_dataclass`")
+    
+    def validate_fields_types(self, on_type_assert: OnTypeAssertDo = DEFAULT_ON_TYPE_ASSERT) -> bool:
+        return SerializableDataclass__validate_fields_types(self, on_type_assert)
+    
+    def validate_field_type(self, field: SerializableField|str, on_type_assert: OnTypeAssertDo = DEFAULT_ON_TYPE_ASSERT) -> bool:
+        return SerializableDataclass__validate_field_type(self, field, on_type_assert)
 
     def __eq__(self, other: Any) -> bool:
         return dc_eq(self, other)
@@ -400,6 +513,35 @@ class SerializableDataclass(abc.ABC):
 
 class CantGetTypeHintsWarning(UserWarning):
     pass
+
+
+# cache this so we don't have to keep getting it
+@functools.lru_cache(typed=True)
+def get_cls_type_hints(cls: Type[T]) -> dict[str, Any]:
+    "cached typing.get_type_hints for a class"
+    # get the type hints for the class
+    cls_type_hints: dict[str, Any]
+    try:
+        cls_type_hints = typing.get_type_hints(cls)
+    except TypeError as e:
+        if sys.version_info < (3, 9):
+            warnings.warn(
+                f"Cannot get type hints for {cls.__name__}. Python version is {sys.version_info = }. You can:\n"
+                + "  - use hints like `typing.Dict` instead of `dict` in type hints (this is required on python 3.8.x)\n"
+                + "  - use python 3.9.x or higher\n"
+                + "  - add explicit loading functions to the fields\n"
+                + f"  {dataclasses.fields(cls) = }",
+                CantGetTypeHintsWarning,
+            )
+            cls_type_hints = dict()
+        else:
+            raise TypeError(
+                f"Cannot get type hints for {cls.__name__}. Python version is {sys.version_info = }\n"
+                + f"  {dataclasses.fields(cls) = }\n"
+                + f"   {e = }"
+            ) from e
+    
+    return cls_type_hints
 
 
 # Step 3: Create a custom serializable_dataclass decorator
@@ -530,27 +672,7 @@ def serializable_dataclass(
                 data, typing.Mapping
             ), f"When loading {cls.__name__ = } expected a Mapping, but got {type(data) = }:\n{data = }"
 
-            # get the type hints for the class
-            cls_type_hints: dict[str, Any]
-            try:
-                cls_type_hints = typing.get_type_hints(cls)
-            except TypeError as e:
-                if sys.version_info < (3, 9):
-                    warnings.warn(
-                        f"Cannot get type hints for {cls.__name__}. Python version is {sys.version_info = }. You can:\n"
-                        + "  - use hints like `typing.Dict` instead of `dict` in type hints (this is required on python 3.8.x)\n"
-                        + "  - use python 3.9.x or higher\n"
-                        + "  - add explicit loading functions to the fields\n"
-                        + f"  {dataclasses.fields(cls) = }",
-                        CantGetTypeHintsWarning,
-                    )
-                    cls_type_hints = dict()
-                else:
-                    raise TypeError(
-                        f"Cannot get type hints for {cls.__name__}. Python version is {sys.version_info = }\n"
-                        + f"  {dataclasses.fields(cls) = }\n"
-                        + f"   {e = }"
-                    ) from e
+            cls_type_hints: dict[str, Any] = get_cls_type_hints(cls)
 
             # initialize dict for keeping what we will pass to the constructor
             ctor_kwargs: dict[str, Any] = dict()
@@ -592,57 +714,25 @@ def serializable_dataclass(
                     # store the value in the constructor kwargs
                     ctor_kwargs[field.name] = value
 
-                    # validate the type
-                    if field.assert_type and on_type_assert in ("raise", "warn"):
-                        if field.name in ctor_kwargs:
-                            if field_type_hint is not None:
-                                try:
-                                    # validate the type
-                                    type_is_valid: bool = validate_type(
-                                        ctor_kwargs[field.name], field_type_hint
-                                    )
+            # create a new instance of the class with the constructor kwargs
+            output: cls = cls(**ctor_kwargs)
 
-                                    # if not valid, raise or warn depending on the setting in the SerializableDataclass
-                                    if not type_is_valid:
-                                        msg: str = f"Field '{field.name}' on class {cls.__name__} has type {type(ctor_kwargs[field.name])}, but expected {field_type_hint}"
-                                        if on_type_assert == "raise":
-                                            raise ValueError(msg)
-                                        else:
-                                            warnings.warn(msg)
+            # validate the types of the fields if needed
+            if on_type_assert in ("raise", "warn"):
+                output.validate_fields_types()
 
-                                except Exception as e:
-                                    raise ValueError(
-                                        f"{field.name = }, {field_type_hint = }, {type(field_type_hint) = }, {ctor_kwargs[field.name] = }"
-                                    ) from e
-                            else:
-                                raise ValueError(
-                                    f"Cannot get type hints for {cls.__name__}, field {field.name = } and so cannot validate."
-                                    + f"Python version is {sys.version_info = }. You can:\n"
-                                    + f"  - disable `assert_type`. Currently: {field.assert_type = }\n"
-                                    + f"  - use hints like `typing.Dict` instead of `dict` in type hints (this is required on python 3.8.x). You had {field.type = }\n"
-                                    + "  - use python 3.9.x or higher\n"
-                                    + "  - coming in a future release, specify custom type validation functions\n"
-                                )
-                        else:
-                            # TODO: raise an exception here? Can't validate if data given
-                            warnings.warn(
-                                f"Field '{field.name}' on class {cls} has no type hint, but {field.assert_type = }\n{field = }\n{cls_type_hints = }\n{data = }",
-                                CantGetTypeHintsWarning,
-                            )
-                    else:
-                        if on_type_assert != "ignore":
-                            raise ValueError(
-                                f"Invalid value for {on_type_assert = }, expected 'raise', 'warn', or 'ignore'"
-                            )
-
-            return cls(**ctor_kwargs)
+            # return the new instance
+            return output
 
         # mypy says "Type cannot be declared in assignment to non-self attribute" so thats why I've left the hints in the comments
         # type is `Callable[[T], dict]`
         cls.serialize = serialize  # type: ignore[attr-defined]
         # type is `Callable[[dict], T]`
         cls.load = load  # type: ignore[attr-defined]
+        # type is `Callable[[T, OnTypeAssertDo], bool]`
+        cls.validate_fields_types = SerializableDataclass__validate_fields_types  # type: ignore[attr-defined]
 
+        # type is `Callable[[T, T], bool]`
         cls.__eq__ = lambda self, other: dc_eq(self, other)  # type: ignore[assignment]
 
         # Register the class with ZANJ

@@ -119,6 +119,21 @@ def validate_type(value: typing.Any, expected_type: typing.Any) -> bool:
             # check all items in tuple are of the correct type
             return all(validate_type(item, arg) for item, arg in zip(value, args))
 
+        if origin is type:
+            # no args
+            if len(args) == 0:
+                return isinstance(value, type)
+            # incorrect number of args
+            if len(args) != 1:
+                raise TypeError(
+                    f"Expected 1 argument for Type, got {args = },   {expected_type = },   {value = },   {origin = }",
+                    f"{GenericAliasTypes = }",
+                )
+            # check is type
+            if origin is type:
+                return True
+            
+            
         # TODO: Callables, etc.
 
         raise ValueError(

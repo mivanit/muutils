@@ -395,6 +395,13 @@ def test_validate_type_complex():
     )
 
 
+def test_validate_type_class():
+    class Test:
+        def __init__(self, a: int, b: str):
+            self.a: int = a
+            self.b: str = b
+
+
 @pytest.mark.parametrize(
     "value, expected_type, expected_result",
     [

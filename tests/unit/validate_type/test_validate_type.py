@@ -439,7 +439,7 @@ def test_validate_type_inheritance():
             self.a: int = a
             self.b: str = b
 
-    class Child:
+    class Child(Parent):
         def __init__(self, a: int, b: str):
             self.a: int = 2 * a
             self.b: str = b
@@ -458,7 +458,7 @@ def test_validate_type_class():
             self.a: int = a
             self.b: str = b
 
-    class Child:
+    class Child(Parent):
         def __init__(self, a: int, b: str):
             self.a: int = 2 * a
             self.b: str = b
@@ -480,7 +480,7 @@ def test_validate_type_class_union():
             self.a: int = a
             self.b: str = b
 
-    class Child:
+    class Child(Parent):
         def __init__(self, a: int, b: str):
             self.a: int = 2 * a
             self.b: str = b

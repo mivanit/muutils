@@ -22,14 +22,18 @@ GenericAliasTypes: tuple = tuple([t for t in _GenericAliasTypesList if t is not 
 class IncorrectTypeException(TypeError):
     pass
 
+
 class TypeHintNotImplementedError(NotImplementedError):
     pass
+
 
 class InvalidGenericAliasError(TypeError):
     pass
 
 
-def _return_validation_except(return_val: bool, value: typing.Any, expected_type: typing.Any) -> bool:
+def _return_validation_except(
+    return_val: bool, value: typing.Any, expected_type: typing.Any
+) -> bool:
     if return_val:
         return True
     else:
@@ -43,11 +47,14 @@ def _return_validation_except(return_val: bool, value: typing.Any, expected_type
         )
         return False
 
+
 def _return_validation_bool(return_val: bool, *args, **kwargs) -> bool:
     return return_val
 
 
-def validate_type(value: typing.Any, expected_type: typing.Any, do_except: bool = False) -> bool:
+def validate_type(
+    value: typing.Any, expected_type: typing.Any, do_except: bool = False
+) -> bool:
     """Validate that a `value` is of the `expected_type`
 
     # Parameters
@@ -68,11 +75,13 @@ def validate_type(value: typing.Any, expected_type: typing.Any, do_except: bool 
     """
     if expected_type is typing.Any:
         return True
-    
+
     # set up the return function depending on `do_except`
     _return_func: typing.Callable[[bool, typing.Any], bool] = (
-        functools.partial(_return_validation_except, value=value, expected_type=expected_type)
-        if do_except 
+        functools.partial(
+            _return_validation_except, value=value, expected_type=expected_type
+        )
+        if do_except
         else _return_validation_bool
     )
 
@@ -135,10 +144,12 @@ def validate_type(value: typing.Any, expected_type: typing.Any, do_except: bool 
             # check all items in dict are of the correct type
             key_type: type = args[0]
             value_type: type = args[1]
-            return _return_func(all(
-                validate_type(key, key_type) and validate_type(val, value_type)
-                for key, val in value.items()
-            ))
+            return _return_func(
+                all(
+                    validate_type(key, key_type) and validate_type(val, value_type)
+                    for key, val in value.items()
+                )
+            )
 
         if origin is set:
             # no args
@@ -168,7 +179,9 @@ def validate_type(value: typing.Any, expected_type: typing.Any, do_except: bool 
             if len(value) != len(args):
                 return _return_func(False)
             # check all items in tuple are of the correct type
-            return _return_func(all(validate_type(item, arg) for item, arg in zip(value, args)))
+            return _return_func(
+                all(validate_type(item, arg) for item, arg in zip(value, args))
+            )
 
         if origin is type:
             # no args

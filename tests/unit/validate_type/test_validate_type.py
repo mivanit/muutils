@@ -452,6 +452,7 @@ def test_validate_type_inheritance():
     with pytest.raises(IncorrectTypeException):
         validate_type(Parent(1, "a"), Child, do_except=True)
 
+
 def test_validate_type_class():
     class Parent:
         def __init__(self, a: int, b: str):

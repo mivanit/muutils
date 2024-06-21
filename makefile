@@ -180,8 +180,8 @@ test: clean
 
 
 .PHONY: check
-check: clean check-format clean test lint
-	@echo "run format check, test, and lint"
+check: clean check-format clean test typing
+	@echo "run format and lint checks, tests, and typing checks"
 
 # build and publish
 # ==================================================

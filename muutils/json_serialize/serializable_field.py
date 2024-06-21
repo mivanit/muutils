@@ -36,6 +36,7 @@ class SerializableField(dataclasses.Field):
         "serialization_fn",
         "loading_fn",
         "assert_type",
+        "custom_typecheck_fn",
     )
 
     def __init__(
@@ -55,7 +56,7 @@ class SerializableField(dataclasses.Field):
         serialization_fn: Optional[Callable[[Any], Any]] = None,
         loading_fn: Optional[Callable[[Any], Any]] = None,
         assert_type: bool = True,
-        # TODO: add field for custom type assertion
+        custom_typecheck_fn: Optional[Callable[[type], bool]] = None,
     ):
         # TODO: should we do this check, or assume the user knows what they are doing?
         if init and not serialize:
@@ -92,6 +93,7 @@ class SerializableField(dataclasses.Field):
         self.serialization_fn: Optional[Callable[[Any], Any]] = serialization_fn
         self.loading_fn: Optional[Callable[[Any], Any]] = loading_fn
         self.assert_type: bool = assert_type
+        self.custom_typecheck_fn: Optional[Callable[[type], bool]] = custom_typecheck_fn
 
     @classmethod
     def from_Field(cls, field: dataclasses.Field) -> "SerializableField":
@@ -111,14 +113,9 @@ class SerializableField(dataclasses.Field):
         )
 
 
-# Step 2: Create a serializable_field function
 # no type hint to avoid confusing mypy
 def serializable_field(*args, **kwargs):  # -> SerializableField:
-    """Create a new SerializableField
-
-    note that if not using ZANJ, and you have a class inside a container, you MUST provide
-    `serialization_fn` and `loading_fn` to serialize and load the container.
-    ZANJ will automatically do this for you.
+    """Create a new `SerializableField`. type hinting this func confuses mypy, so scroll down
 
     ```
     default: Any | dataclasses._MISSING_TYPE = dataclasses.MISSING,
@@ -130,10 +127,29 @@ def serializable_field(*args, **kwargs):  # -> SerializableField:
     compare: bool = True,
     metadata: types.MappingProxyType | None = None,
     kw_only: bool | dataclasses._MISSING_TYPE = dataclasses.MISSING,
+    # new in `SerializableField`, not in `dataclasses.Field`
     serialize: bool = True,
     serialization_fn: Optional[Callable[[Any], Any]] = None,
     loading_fn: Optional[Callable[[Any], Any]] = None,
     assert_type: bool = True,
+    custom_typecheck_fn: Optional[Callable[[type], bool]] = None,
     ```
+
+    # new Parameters:
+    - `serialize`: whether to serialize this field when serializing the class'
+    - `serialization_fn`: function taking the instance of the field and returning a serializable object. If not provided, will iterate through the `SerializerHandler`s defined in `muutils.json_serialize.json_serialize`
+    - `loading_fn`: function taking the serialized object and returning the instance of the field. If not provided, will take object as-is.
+
+    # Gotchas:
+    - `loading_fn` takes the dict of the **class**, not the field. if you wanted a `loading_fn` that does nothing, you'd write:
+    ```python
+    class MyClass:
+        my_field: int = serializable_field(loading_fn=lambda x["my_field"]: x)
+    ```
+    issue to add a different way of doing this: https://github.com/mivanit/muutils/issues/40
+
+	note that if not using ZANJ, and you have a class inside a container, you MUST provide
+    `serialization_fn` and `loading_fn` to serialize and load the container.
+    ZANJ will automatically do this for you.
     """
     return SerializableField(*args, **kwargs)

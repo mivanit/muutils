@@ -1,4 +1,4 @@
-def replace_typing_aliases(filename):
+def replace_typing_aliases(filename: str) -> str:
     # Dictionary to map old types from the typing module to the new built-in types
     replacements = {
         "typing.List": "list",
@@ -15,11 +15,16 @@ def replace_typing_aliases(filename):
     for old, new in replacements.items():
         content = content.replace(old, new)
 
-    # Print the modified content to stdout
-    print(content)
+    # return the modified content
+    return content
 
 
 if __name__ == "__main__":
     import sys
 
-    replace_typing_aliases(sys.argv[1])
+    file: str = sys.argv[1]
+    prefix: str = ""
+    if len(sys.argv) > 1:
+        prefix = "\n".join(sys.argv[2:])
+
+    print(prefix + "\n" + replace_typing_aliases(file))

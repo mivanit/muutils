@@ -2,7 +2,7 @@
 .github/local/**
 
 # this one is cursed
-tests/unit/validate_type/test_validate_type_MODERN.py
+tests/unit/validate_type/test_validate_type_GENERATED.py
 # test notebook
 _test.ipynb
 # junk data

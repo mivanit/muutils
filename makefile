@@ -174,7 +174,7 @@ test: clean
 
 	if [ $(COMPATIBILITY_MODE) -eq 0 ]; then \
 		echo "converting certain tests to modern format"; \
-		$(PYTHON) tests/util/replace_type_hints.py tests/unit/validate_type/test_validate_type.py > tests/unit/validate_type/test_validate_type_MODERN.py; \
+		$(PYTHON) tests/util/replace_type_hints.py tests/unit/validate_type/test_validate_type.py "# DO NOT EDIT, GENERATED FILE" > tests/unit/validate_type/test_validate_type_GENERATED.py; \
 	fi; \
 	$(PYTHON) -m pytest $(PYTEST_OPTIONS) $(TESTS_DIR)
 
@@ -262,7 +262,7 @@ clean:
 	rm -rf tests/junk_data
 	$(PYTHON_BASE) -Bc "import pathlib; [p.unlink() for p in pathlib.Path('.').rglob('*.py[co]')]"
 	$(PYTHON_BASE) -Bc "import pathlib; [p.rmdir() for p in pathlib.Path('.').rglob('__pycache__')]"
-	rm -rf tests/unit/validate_type/test_validate_type_MODERN.py
+	rm -rf tests/unit/validate_type/test_validate_type_GENERATED.py
 
 # listing targets, from stackoverflow
 # https://stackoverflow.com/questions/4219255/how-do-you-get-the-list-of-targets-in-a-makefile

@@ -5,7 +5,7 @@ from typing import Any, Optional, Union
 
 import pytest
 
-from muutils.validate_type import IncorrectTypeException, validate_type, validate_type_except
+from muutils.validate_type import IncorrectTypeException, validate_type
 
 
 # Tests for basic types and common use cases
@@ -445,12 +445,12 @@ def test_validate_type_inheritance():
             self.b: str = b
 
     assert validate_type(Parent(1, "a"), Parent)
-    validate_type_except(Child(1, "a"), Parent)
+    validate_type(Child(1, "a"), Parent, do_except=True)
     assert validate_type(Child(1, "a"), Child)
     assert not validate_type(Parent(1, "a"), Child)
 
     with pytest.raises(IncorrectTypeException):
-        validate_type_except(Parent(1, "a"), Child)
+        validate_type(Parent(1, "a"), Child, do_except=True)
 
 def test_validate_type_class():
     class Parent:
@@ -465,7 +465,7 @@ def test_validate_type_class():
 
     assert validate_type(Parent, type)
     assert validate_type(Child, type)
-    assert validate_type(Parent, typing.Type[Parent])
+    assert validate_type(Parent, typing.Type[Parent], do_except=True)
     assert validate_type(Child, typing.Type[Child])
     assert not validate_type(Parent, typing.Type[Child])
 

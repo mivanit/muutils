@@ -48,7 +48,7 @@ def _return_validation_except(
         return False
 
 
-def _return_validation_bool(return_val: bool, *args, **kwargs) -> bool:
+def _return_validation_bool(return_val: bool) -> bool:
     return return_val
 
 
@@ -77,8 +77,9 @@ def validate_type(
         return True
 
     # set up the return function depending on `do_except`
-    _return_func: typing.Callable[[bool, typing.Any], bool] = (
-        functools.partial(
+    _return_func: typing.Callable[[bool], bool] = (
+        # functools.partial doesn't hint the function signature
+        functools.partial(  # type: ignore[assignment]
             _return_validation_except, value=value, expected_type=expected_type
         )
         if do_except

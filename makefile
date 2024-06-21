@@ -54,7 +54,7 @@ LAST_VERSION := NULL
 PYTHON_VERSION := NULL
 .PHONY: gen-version-info
 gen-version-info:
-	$(eval VERSION := $(shell python -c "import re; print(re.search(r'^version\s*=\s*\"(.+?)\"', open('$(PYPROJECT)').read(), re.MULTILINE).group(1))") )
+	$(eval VERSION := $(shell python -c "import re; print('v'+re.search(r'^version\s*=\s*\"(.+?)\"', open('$(PYPROJECT)').read(), re.MULTILINE).group(1))") )
 	$(eval LAST_VERSION := $(shell [ -f $(LAST_VERSION_FILE) ] && cat $(LAST_VERSION_FILE) || echo NULL) )
 	$(eval PYTHON_VERSION := $(shell $(PYTHON) -c "import sys; print(f'{sys.version_info.major}.{sys.version_info.minor}.{sys.version_info.micro}')") )
 
@@ -228,6 +228,7 @@ publish: gen-commit-log check build verify-git version
 	@echo "run all checks, build, and then publish"
 
 	@echo "Enter the new version number if you want to upload to pypi and create a new tag"
+	@echo "Now would also be the time to edit $(COMMIT_LOG_FILE), as that will be used as the tag description"
 	@read -p "Confirm: " NEW_VERSION; \
 	if [ "$$NEW_VERSION" != "$(VERSION)" ]; then \
 		echo "Confirmation failed, exiting!"; \

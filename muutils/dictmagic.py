@@ -179,7 +179,7 @@ def kwargs_to_nested_dict(
     - `transform_key: Callable[[str], str] | None = None`
         a function to apply to each key before adding it to the dict (applied after stripping the prefix)
     """
-    when_unknown_prefix: ErrorMode = ErrorMode.from_any(when_unknown_prefix)
+    when_unknown_prefix = ErrorMode.from_any(when_unknown_prefix)
     filtered_kwargs: dict[str, Any] = dict()
     for key, value in kwargs_dict.items():
         if strip_prefix is not None:

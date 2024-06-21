@@ -15,7 +15,7 @@ class ErrorMode(Enum):
         msg: str,
         except_cls: typing.Type[Exception] = ValueError,
         warn_cls: typing.Type[Warning] = UserWarning,
-        except_from: typing.Optional[typing.Type[Exception]] = None,
+        except_from: typing.Optional[Exception] = None,
     ):
         if self is ErrorMode.EXCEPT:
             if except_from is not None:

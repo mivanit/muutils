@@ -100,52 +100,55 @@ def SerializableDataclass__validate_field_type(
      - `bool`
         if the field type is correct. `False` if the field type is incorrect or an exception is thrown and `on_typecheck_error` is `ignore`
     """
-    on_typecheck_error: ErrorMode = ErrorMode.from_any(on_typecheck_error)
+    on_typecheck_error = ErrorMode.from_any(on_typecheck_error)
+
+    # get field
+    _field: SerializableField
+    if isinstance(field, str):
+        _field = self.__dataclass_fields__[field]  # type: ignore[attr-defined]
+    else:
+        _field = field
 
     # do nothing case
-    if not field.assert_type:
+    if not _field.assert_type:
         return True
 
     # if field is not `init` or not `serialize`, skip but warn
     # TODO: how to handle fields which are not `init` or `serialize`?
-    if not field.init or not field.serialize:
+    if not _field.init or not _field.serialize:
         warnings.warn(
-            f"Field '{field.name}' on class {self.__class__} is not `init` or `serialize`, so will not be type checked",
+            f"Field '{_field.name}' on class {self.__class__} is not `init` or `serialize`, so will not be type checked",
             FieldIsNotInitOrSerializeWarning,
         )
         return True
 
-    # get field
-    if isinstance(field, str):
-        field = self.__dataclass_fields__[field]
-
     assert isinstance(
-        field, SerializableField
-    ), f"Field '{field.name = }' on class {self.__class__ = } is not a SerializableField, but a {type(field) = }"
+        _field, SerializableField
+    ), f"Field '{_field.name = }' on class {self.__class__ = } is not a SerializableField, but a {type(_field) = }"
 
     # get field type hints
-    field_type_hint: Any = get_cls_type_hints(self.__class__).get(field.name, None)
+    field_type_hint: Any = get_cls_type_hints(self.__class__).get(_field.name, None)
 
     # get the value
-    value: Any = getattr(self, field.name)
+    value: Any = getattr(self, _field.name)
 
     # validate the type
     if field_type_hint is not None:
         try:
             type_is_valid: bool
             # validate the type with the default type validator
-            if field.custom_typecheck_fn is None:
+            if _field.custom_typecheck_fn is None:
                 type_is_valid = validate_type(value, field_type_hint)
             # validate the type with a custom type validator
             else:
-                type_is_valid = field.custom_typecheck_fn(field_type_hint)
+                type_is_valid = _field.custom_typecheck_fn(field_type_hint)
 
             return type_is_valid
 
         except Exception as e:
             on_typecheck_error.process(
                 "exception while validating type: "
-                + f"{field.name = }, {field_type_hint = }, {type(field_type_hint) = }, {value = }",
+                + f"{_field.name = }, {field_type_hint = }, {type(field_type_hint) = }, {value = }",
                 except_cls=ValueError,
                 except_from=e,
             )
@@ -153,10 +156,10 @@ def SerializableDataclass__validate_field_type(
     else:
         on_typecheck_error.process(
             (
-                f"Cannot get type hints for {self.__class__.__name__}, field {field.name = } and so cannot validate."
+                f"Cannot get type hints for {self.__class__.__name__}, field {_field.name = } and so cannot validate."
                 + f"Python version is {sys.version_info = }. You can:\n"
-                + f"  - disable `assert_type`. Currently: {field.assert_type = }\n"
-                + f"  - use hints like `typing.Dict` instead of `dict` in type hints (this is required on python 3.8.x). You had {field.type = }\n"
+                + f"  - disable `assert_type`. Currently: {_field.assert_type = }\n"
+                + f"  - use hints like `typing.Dict` instead of `dict` in type hints (this is required on python 3.8.x). You had {_field.type = }\n"
                 + "  - use python 3.9.x or higher\n"
                 + "  - coming in a future release, specify custom type validation functions\n"
             ),
@@ -173,14 +176,14 @@ def SerializableDataclass__validate_fields_types__dict(
 
     returns a dict of field names to bools, where the bool is if the field type is valid
     """
-    on_typecheck_error: ErrorMode = ErrorMode.from_any(on_typecheck_error)
+    on_typecheck_error = ErrorMode.from_any(on_typecheck_error)
 
     # if except, bundle the exceptions
     results: dict[str, bool] = dict()
     exceptions: dict[str, Exception] = dict()
 
     # for each field in the class
-    cls_fields: typing.Sequence[SerializableField] = dataclasses.fields(self)
+    cls_fields: typing.Sequence[SerializableField] = dataclasses.fields(self)  # type: ignore[arg-type, assignment]
     for field in cls_fields:
         try:
             results[field.name] = self.validate_field_type(field, on_typecheck_error)
@@ -373,14 +376,14 @@ def get_cls_type_hints(cls: Type[T]) -> dict[str, Any]:
                 + "  - use hints like `typing.Dict` instead of `dict` in type hints (this is required on python 3.8.x)\n"
                 + "  - use python 3.9.x or higher\n"
                 + "  - add explicit loading functions to the fields\n"
-                + f"  {dataclasses.fields(cls) = }",
+                + f"  {dataclasses.fields(cls) = }",  # type: ignore[arg-type]
                 CantGetTypeHintsWarning,
             )
             cls_type_hints = dict()
         else:
             raise TypeError(
                 f"Cannot get type hints for {cls.__name__}. Python version is {sys.version_info = }\n"
-                + f"  {dataclasses.fields(cls) = }\n"
+                + f"  {dataclasses.fields(cls) = }\n"  # type: ignore[arg-type]
                 + f"   {e = }"
             ) from e
 
@@ -517,7 +520,7 @@ def serializable_dataclass(
                 "__format__": f"{self.__class__.__name__}(SerializableDataclass)"
             }
             # for each field in the class
-            for field in dataclasses.fields(self):
+            for field in dataclasses.fields(self):  # type: ignore[arg-type]
                 # need it to be our special SerializableField
                 if not isinstance(field, SerializableField):
                     raise ValueError(

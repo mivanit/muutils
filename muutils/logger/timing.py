@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import time
 from typing import Literal
 
@@ -79,6 +81,7 @@ class ProgressEstimator:
         timing_raw: dict[str, float] = self.get_timing_raw(i)
 
         percent_str: str = str(int(timing_raw["percent"] * 100)).ljust(2)
-        iters_str: str = f"{str(i).ljust(self.total_str_len)}/{self.n_total}"
-        timing_str: str
+        # TODO: get_progress_default
+        # iters_str: str = f"{str(i).ljust(self.total_str_len)}/{self.n_total}"
+        # timing_str: str
         return f"{percent_str}% {self.get_pbar(i)}"

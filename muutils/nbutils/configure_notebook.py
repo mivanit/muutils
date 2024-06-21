@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import os
 import typing
 import warnings
@@ -31,7 +33,7 @@ except ImportError:
     IN_JUPYTER = False
 
 # muutils imports
-from muutils.mlutils import get_device, set_reproducibility
+from muutils.mlutils import get_device, set_reproducibility  # noqa: E402
 
 # handling figures
 PlottingMode = typing.Literal["ignore", "inline", "widget", "save"]
@@ -88,7 +90,15 @@ def setup_plots(
     close_after_plotshow: bool = False,
 ) -> None:
     """Set up plot saving/rendering options"""
-    global PLOT_MODE, CONVERSION_PLOTMODE_OVERRIDE, FIG_COUNTER, FIG_OUTPUT_FMT, FIG_NUMBERED_FNAME, FIG_CONFIG, FIG_BASEPATH, CLOSE_AFTER_PLOTSHOW
+    global \
+        PLOT_MODE, \
+        CONVERSION_PLOTMODE_OVERRIDE, \
+        FIG_COUNTER, \
+        FIG_OUTPUT_FMT, \
+        FIG_NUMBERED_FNAME, \
+        FIG_CONFIG, \
+        FIG_BASEPATH, \
+        CLOSE_AFTER_PLOTSHOW
 
     # set plot mode, handling override
     if CONVERSION_PLOTMODE_OVERRIDE is not None:
@@ -134,7 +144,7 @@ def setup_plots(
     plt.rcParams["savefig.format"] = FIG_OUTPUT_FMT
     if FIG_OUTPUT_FMT in TIKZPLOTLIB_FORMATS:
         try:
-            import tikzplotlib  # type: ignore[import]
+            import tikzplotlib  # type: ignore[import] # noqa: F401
         except ImportError:
             warnings.warn(
                 f"Tikzplotlib not installed. Cannot save figures in Tikz format '{FIG_OUTPUT_FMT}', things might break."
@@ -188,7 +198,7 @@ def configure_notebook(
     fig_config: dict | None = None,
     fig_basepath: str | None = None,
     close_after_plotshow: bool = False,
-) -> "torch.device|None":  # type: ignore[name-defined]
+) -> "torch.device|None":  # type: ignore[name-defined] # noqa: F821
     """Shared Jupyter notebook setup steps:
     - Set random seeds and library reproducibility settings
     - Set device based on availability

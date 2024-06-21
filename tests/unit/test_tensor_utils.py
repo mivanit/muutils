@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import jaxtyping
 import numpy as np
 import pytest
@@ -22,13 +24,17 @@ from muutils.tensor_utils import (
 
 
 def test_jaxtype_factory():
-    ATensor = jaxtype_factory("ATensor", torch.Tensor, jaxtyping.Float)
+    ATensor = jaxtype_factory(
+        "ATensor", torch.Tensor, jaxtyping.Float, legacy_mode="ignore"
+    )
     assert ATensor.__name__ == "ATensor"
     assert "default_jax_dtype = <class 'jaxtyping.Float'" in ATensor.__doc__
     assert "array_type = <class 'torch.Tensor'>" in ATensor.__doc__
 
     x = ATensor[(1, 2, 3), np.float32]
-    x = ATensor["dim1 dim2", np.float32]
+    print(x)
+    y = ATensor["dim1 dim2", np.float32]
+    print(y)
 
 
 def test_numpy_to_torch_dtype():
@@ -77,7 +83,6 @@ def test_compare_state_dicts():
 
 
 def test_get_dict_shapes():
-
     x = {"a": torch.rand(2, 3), "b": torch.rand(1, 3, 5), "c": torch.rand(2)}
     x_shapes = get_dict_shapes(x)
     assert x_shapes == {"a": (2, 3), "b": (1, 3, 5), "c": (2,)}

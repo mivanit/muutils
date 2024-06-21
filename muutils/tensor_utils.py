@@ -1,11 +1,13 @@
+from __future__ import annotations
+
 import json
 import typing
-import warnings
 
 import jaxtyping
 import numpy as np
 import torch
 
+from muutils.errormode import ErrorMode
 from muutils.dictmagic import dotlist_to_nested_dict
 
 # pylint: disable=missing-class-docstring
@@ -62,7 +64,7 @@ def jaxtype_factory(
     name: str,
     array_type: type,
     default_jax_dtype=jaxtyping.Float,
-    legacy_mode: typing.Literal["error", "warn", "ignore"] = "warn",
+    legacy_mode: ErrorMode = ErrorMode.WARN,
 ) -> type:
     """usage:
     ```
@@ -70,6 +72,7 @@ def jaxtype_factory(
     x: ATensor["dim1 dim2", np.float32]
     ```
     """
+    legacy_mode = ErrorMode.from_any(legacy_mode)
 
     class _BaseArray:
         """jaxtyping shorthand
@@ -99,7 +102,7 @@ def jaxtype_factory(
             )
 
         @typing._tp_cache  # type: ignore
-        def __class_getitem__(cls, params: str | tuple) -> type:
+        def __class_getitem__(cls, params: typing.Union[str, tuple]) -> type:
             # MyTensor["dim1 dim2"]
             if isinstance(params, str):
                 return default_jax_dtype[array_type, params]
@@ -115,14 +118,10 @@ def jaxtype_factory(
                     return TYPE_TO_JAX_DTYPE[params[1]][array_type, params[0]]
 
                 elif isinstance(params[0], tuple):
-                    if legacy_mode == "error":
-                        raise Exception(
-                            f"legacy mode is set to error, but legacy type was used:\n{cls.param_info(params)}"
-                        )
-                    elif legacy_mode == "warn":
-                        warnings.warn(
-                            f"legacy type annotation was used:\n{cls.param_info(params)}"
-                        )
+                    legacy_mode.process(
+                        f"legacy type annotation was used:\n{cls.param_info(params) = }",
+                        except_cls=Exception,
+                    )
                     # MyTensor[("dim1", "dim2"), int]
                     shape_anot: list[str] = list()
                     for x in params[0]:
@@ -178,7 +177,7 @@ ATensor = jaxtype_factory("ATensor", torch.Tensor, jaxtyping.Float)  # type: ign
 NDArray = jaxtype_factory("NDArray", np.ndarray, jaxtyping.Float)  # type: ignore[misc, assignment]
 
 
-def numpy_to_torch_dtype(dtype: np.dtype | torch.dtype) -> torch.dtype:
+def numpy_to_torch_dtype(dtype: typing.Union[np.dtype, torch.dtype]) -> torch.dtype:
     """convert numpy dtype to torch dtype"""
     if isinstance(dtype, torch.dtype):
         return dtype
@@ -278,11 +277,11 @@ TORCH_OPTIMIZERS_MAP: dict[str, typing.Type[torch.optim.Optimizer]] = {
 
 
 def pad_tensor(
-    tensor: jaxtyping.Shaped[torch.Tensor, "dim1"],
+    tensor: jaxtyping.Shaped[torch.Tensor, "dim1"],  # noqa: F821
     padded_length: int,
     pad_value: float = 0.0,
     rpad: bool = False,
-) -> jaxtyping.Shaped[torch.Tensor, "padded_length"]:
+) -> jaxtyping.Shaped[torch.Tensor, "padded_length"]:  # noqa: F821
     """pad a 1-d tensor on the left with pad_value to length `padded_length`
 
     set `rpad = True` to pad on the right instead"""
@@ -317,11 +316,11 @@ def rpad_tensor(
 
 
 def pad_array(
-    array: jaxtyping.Shaped[np.ndarray, "dim1"],
+    array: jaxtyping.Shaped[np.ndarray, "dim1"],  # noqa: F821
     padded_length: int,
     pad_value: float = 0.0,
     rpad: bool = False,
-) -> jaxtyping.Shaped[np.ndarray, "padded_length"]:
+) -> jaxtyping.Shaped[np.ndarray, "padded_length"]:  # noqa: F821
     """pad a 1-d array on the left with pad_value to length `padded_length`
 
     set `rpad = True` to pad on the right instead"""

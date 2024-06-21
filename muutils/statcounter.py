@@ -1,9 +1,10 @@
+from __future__ import annotations
+
 import json
 import math
 from collections import Counter
 from functools import cached_property
 from itertools import chain
-from types import NoneType
 from typing import Callable, Optional, Sequence, Union
 
 # _GeneralArray = Union[np.ndarray, "torch.Tensor"]
@@ -16,7 +17,7 @@ NumericSequence = Sequence[Union[float, int]]
 
 
 def universal_flatten(
-    arr: NumericSequence | float | int, require_rectangular: bool = True
+    arr: Union[NumericSequence, float, int], require_rectangular: bool = True
 ) -> NumericSequence:
     """flattens any iterable"""
 
@@ -47,13 +48,17 @@ class StatCounter(Counter):
 
     def validate(self) -> bool:
         """validate the counter as being all floats or ints"""
-        return all(isinstance(k, (bool, int, float, NoneType)) for k in self.keys())
+        return all(isinstance(k, (bool, int, float, type(None))) for k in self.keys())
 
     def min(self):
         return min(x for x, v in self.items() if v > 0)
 
     def max(self):
         return max(x for x, v in self.items() if v > 0)
+
+    def total(self):
+        """Sum of the counts"""
+        return sum(self.values())
 
     @cached_property
     def keys_sorted(self) -> list:

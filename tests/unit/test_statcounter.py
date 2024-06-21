@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import numpy as np
 
 from muutils.statcounter import StatCounter
@@ -47,7 +49,6 @@ def test_statcounter() -> None:
     #     arrs.append(np.random.randint(i, j, size=1000))
 
     for a in arrs:
-
         r = _compare_np_custom(a)
 
         assert all(

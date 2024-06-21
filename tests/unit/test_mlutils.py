@@ -1,3 +1,4 @@
+import sys
 from pathlib import Path
 
 from muutils.mlutils import get_checkpoint_paths_for_run, register_method
@@ -21,7 +22,10 @@ def test_get_checkpoint_paths_for_run():
     assert checkpoint_paths == [(123, checkpoint1_path), (456, checkpoint2_path)]
 
 
-def test_register_method():
+BELOW_PY_3_10: bool = sys.version_info < (3, 10)
+
+
+def test_register_method(recwarn):
     class TestEvalsA:
         evals = {}
 
@@ -42,7 +46,16 @@ def test_register_method():
         def other_eval_function():
             pass
 
+    if BELOW_PY_3_10:
+        assert len(recwarn) == 2
+    else:
+        assert len(recwarn) == 0
+
     evalsA = TestEvalsA.evals
     evalsB = TestEvalsB.evals
-    assert list(evalsA.keys()) == ["eval_function"]
-    assert list(evalsB.keys()) == ["other_eval_function"]
+    if BELOW_PY_3_10:
+        assert len(evalsA) == 1
+        assert len(evalsB) == 1
+    else:
+        assert list(evalsA.keys()) == ["eval_function"]
+        assert list(evalsB.keys()) == ["other_eval_function"]

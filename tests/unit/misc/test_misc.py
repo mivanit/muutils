@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import pytest
 
 from muutils.misc import (
@@ -6,6 +8,8 @@ from muutils.misc import (
     list_join,
     list_split,
     sanitize_fname,
+    sanitize_identifier,
+    sanitize_name,
     stable_hash,
 )
 
@@ -31,6 +35,42 @@ def test_sanitize_fname():
         sanitize_fname("file@name!?.txt") == "filename.txt"
     ), "Special characters should be removed"
     assert sanitize_fname(None) == "_None_", "None input should return '_None_'"
+
+
+def test_sanitize_name():
+    assert sanitize_name("Hello World") == "HelloWorld"
+    assert sanitize_name("Hello_World", additional_allowed_chars="_") == "Hello_World"
+    assert sanitize_name("Hello!World", replace_invalid="-") == "Hello-World"
+    assert sanitize_name(None) == "_None_"
+    assert sanitize_name(None, when_none="Empty") == "Empty"
+    with pytest.raises(ValueError):
+        sanitize_name(None, when_none=None)
+    assert sanitize_name("123abc") == "123abc"
+    assert sanitize_name("123abc", leading_digit_prefix="_") == "_123abc"
+
+
+def test_sanitize_fname_2():
+    assert sanitize_fname("file name.txt") == "filename.txt"
+    assert sanitize_fname("file_name.txt") == "file_name.txt"
+    assert sanitize_fname("file-name.txt") == "file-name.txt"
+    assert sanitize_fname("file!name.txt") == "filename.txt"
+    assert sanitize_fname(None) == "_None_"
+    assert sanitize_fname(None, when_none="Empty") == "Empty"
+    with pytest.raises(ValueError):
+        sanitize_fname(None, when_none=None)
+    assert sanitize_fname("123file.txt") == "123file.txt"
+    assert sanitize_fname("123file.txt", leading_digit_prefix="_") == "_123file.txt"
+
+
+def test_sanitize_identifier():
+    assert sanitize_identifier("variable_name") == "variable_name"
+    assert sanitize_identifier("VariableName") == "VariableName"
+    assert sanitize_identifier("variable!name") == "variablename"
+    assert sanitize_identifier("123variable") == "_123variable"
+    assert sanitize_identifier(None) == "_None_"
+    assert sanitize_identifier(None, when_none="Empty") == "Empty"
+    with pytest.raises(ValueError):
+        sanitize_identifier(None, when_none=None)
 
 
 def test_dict_to_filename():

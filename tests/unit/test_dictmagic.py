@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import pytest
 
 from muutils.dictmagic import (
@@ -260,7 +262,8 @@ def test_condense_tensor_dict_basic(tensor_data):
 
 
 def test_condense_tensor_dict_shapes_convert(tensor_data):
-    shapes_convert = lambda x: x  # Returning the actual shape tuple
+    # Returning the actual shape tuple
+    shapes_convert = lambda x: x  # noqa: E731
     assert condense_tensor_dict(
         tensor_data,
         shapes_convert=shapes_convert,

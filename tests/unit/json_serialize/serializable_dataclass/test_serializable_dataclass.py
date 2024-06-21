@@ -1,3 +1,6 @@
+from __future__ import annotations
+
+import typing
 from typing import Any
 
 import pytest
@@ -8,6 +11,10 @@ from muutils.json_serialize import (
     serializable_field,
 )
 
+from muutils.json_serialize.serializable_dataclass import (
+    FieldIsNotInitOrSerializeWarning,
+)
+
 # pylint: disable=missing-class-docstring, unused-variable
 
 
@@ -15,7 +22,7 @@ from muutils.json_serialize import (
 class BasicAutofields(SerializableDataclass):
     a: str
     b: int
-    c: list[int]
+    c: typing.List[int]
 
 
 def test_basic_auto_fields():
@@ -51,7 +58,7 @@ def test_basic_diff():
 class SimpleFields(SerializableDataclass):
     d: str
     e: int = 42
-    f: list[int] = serializable_field(default_factory=list)
+    f: typing.List[int] = serializable_field(default_factory=list)  # noqa: F821
 
 
 @serializable_dataclass
@@ -105,7 +112,9 @@ def test_simple_fields_serialization(simple_fields_instance):
 
 def test_simple_fields_loading(simple_fields_instance):
     serialized = simple_fields_instance.serialize()
+
     loaded = SimpleFields.load(serialized)
+
     assert loaded == simple_fields_instance
     assert loaded.diff(simple_fields_instance) == {}
     assert simple_fields_instance.diff(loaded) == {}
@@ -122,8 +131,10 @@ def test_field_options_serialization(field_options_instance):
 
 
 def test_field_options_loading(field_options_instance):
+    # ignore a `FieldIsNotInitOrSerializeWarning`
     serialized = field_options_instance.serialize()
-    loaded = FieldOptions.load(serialized)
+    with pytest.warns(FieldIsNotInitOrSerializeWarning):
+        loaded = FieldOptions.load(serialized)
     assert loaded == field_options_instance
 
 
@@ -243,7 +254,7 @@ def test_person_serialization():
     class FullPerson(SerializableDataclass):
         name: str = serializable_field()
         age: int = serializable_field(default=-1)
-        items: list[str] = serializable_field(default_factory=list)
+        items: typing.List[str] = serializable_field(default_factory=list)
 
         @property
         def full_name(self) -> str:
@@ -261,6 +272,7 @@ def test_person_serialization():
     assert serialized == expected_ser, f"Expected {expected_ser}, got {serialized}"
 
     loaded = FullPerson.load(serialized)
+
     assert loaded == person
 
 
@@ -286,7 +298,7 @@ def test_custom_serialization():
 class Nested_with_Container(SerializableDataclass):
     val_int: int
     val_str: str
-    val_list: list[BasicAutofields] = serializable_field(
+    val_list: typing.List[BasicAutofields] = serializable_field(
         default_factory=list,
         serialization_fn=lambda x: [y.serialize() for y in x],
         loading_fn=lambda x: [BasicAutofields.load(y) for y in x["val_list"]],
@@ -325,7 +337,9 @@ def test_nested_with_container():
     }
 
     assert serialized == expected_ser
+
     loaded = Nested_with_Container.load(serialized)
+
     assert loaded == instance
 
 
@@ -353,7 +367,7 @@ class nested_custom(SerializableDataclass):
     data1: Custom_class_with_serialization
 
 
-def test_nested_custom():
+def test_nested_custom(recwarn):  # this will send some warnings but whatever
     instance = nested_custom(
         value=42.0, data1=Custom_class_with_serialization(1, "hello")
     )
@@ -366,3 +380,23 @@ def test_nested_custom():
     assert serialized == expected_ser
     loaded = nested_custom.load(serialized)
     assert loaded == instance
+
+
+def test_deserialize_fn():
+    @serializable_dataclass
+    class DeserializeFn(SerializableDataclass):
+        data: int = serializable_field(
+            serialization_fn=lambda x: str(x),
+            deserialize_fn=lambda x: int(x),
+        )
+
+    instance = DeserializeFn(data=5)
+    serialized = instance.serialize()
+    assert serialized == {
+        "data": "5",
+        "__format__": "DeserializeFn(SerializableDataclass)",
+    }
+
+    loaded = DeserializeFn.load(serialized)
+    assert loaded == instance
+    assert loaded.data == 5

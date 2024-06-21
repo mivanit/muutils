@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import gzip
 import json
 from typing import Callable, Sequence

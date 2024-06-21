@@ -44,11 +44,13 @@ def test_configure_notebook():
 
 def test_plotshow_save():
     setup_plots(plot_mode="save", fig_basepath=JUNK_DATA_PATH)
-    plt.plot([1, 2, 3], [1, 2, 3])
-    plotshow()
+    with pytest.warns(UnknownFigureFormatWarning):
+        plt.plot([1, 2, 3], [1, 2, 3])
+        plotshow()
     assert os.path.exists(os.path.join(JUNK_DATA_PATH, "figure-1.pdf"))
-    plt.plot([3, 6, 9], [2, 4, 8])
-    plotshow()
+    with pytest.warns(UnknownFigureFormatWarning):
+        plt.plot([3, 6, 9], [2, 4, 8])
+        plotshow()
     assert os.path.exists(os.path.join(JUNK_DATA_PATH, "figure-2.pdf"))
 
 
@@ -68,14 +70,16 @@ def test_plotshow_save_mixed():
         fig_basepath=JUNK_DATA_PATH,
         fig_numbered_fname="mixedfig-{num}",
     )
-    plt.plot([1, 2, 3], [1, 2, 3])
-    plotshow()
+    with pytest.warns(UnknownFigureFormatWarning):
+        plt.plot([1, 2, 3], [1, 2, 3])
+        plotshow()
     assert os.path.exists(os.path.join(JUNK_DATA_PATH, "mixedfig-1.pdf"))
     plt.plot([3, 6, 9], [2, 4, 8])
     plotshow(fname="mixed-test.pdf")
     assert os.path.exists(os.path.join(JUNK_DATA_PATH, "mixed-test.pdf"))
-    plt.plot([1, 1, 1], [1, 9, 9])
-    plotshow()
+    with pytest.warns(UnknownFigureFormatWarning):
+        plt.plot([1, 1, 1], [1, 9, 9])
+        plotshow()
     assert os.path.exists(os.path.join(JUNK_DATA_PATH, "mixedfig-3.pdf"))
 
 
@@ -88,6 +92,17 @@ def test_warn_unknown_format():
         )
         plt.plot([1, 2, 3], [1, 2, 3])
         plotshow()
+
+
+def test_no_warn_unknown_format_2():
+    with pytest.warns(UnknownFigureFormatWarning):
+        setup_plots(
+            plot_mode="save",
+            fig_basepath=JUNK_DATA_PATH,
+            fig_numbered_fname="mixedfig-{num}",
+        )
+        plt.plot([1, 2, 3], [1, 2, 3])
+        plotshow("no-format")
 
 
 def test_no_warn_pdf_format():

@@ -1,15 +1,16 @@
+from __future__ import annotations
+
 import inspect
-import types
 import warnings
 from dataclasses import dataclass, is_dataclass
 from pathlib import Path
-from typing import Any, Callable, Iterable, Mapping
+from typing import Any, Callable, Iterable, Mapping, Set, Union
 
 try:
     from muutils.json_serialize.array import ArrayMode, serialize_array
 except ImportError as e:
     ArrayMode = str  # type: ignore[misc]
-    serialize_array = lambda *args, **kwargs: None
+    serialize_array = lambda *args, **kwargs: None  # noqa: E731
     warnings.warn(
         f"muutils.json_serialize.array could not be imported probably because missing numpy, array serialization will not work: \n{e}",
         ImportWarning,
@@ -48,12 +49,12 @@ SERIALIZER_SPECIAL_FUNCS: dict[str, Callable] = {
     "sourcefile": try_catch(lambda x: inspect.getsourcefile(x)),
 }
 
-SERIALIZE_DIRECT_AS_STR: set[str] = {
+SERIALIZE_DIRECT_AS_STR: Set[str] = {
     "<class 'torch.device'>",
     "<class 'torch.dtype'>",
 }
 
-ObjectPath = MonoTuple[str | int]
+ObjectPath = MonoTuple[Union[str, int]]
 
 
 @dataclass
@@ -99,7 +100,7 @@ class SerializerHandler:
 BASE_HANDLERS: MonoTuple[SerializerHandler] = (
     SerializerHandler(
         check=lambda self, obj, path: isinstance(
-            obj, (bool, int, float, str, types.NoneType)
+            obj, (bool, int, float, str, type(None))
         ),
         serialize_func=lambda self, obj, path: obj,
         uid="base types",
@@ -124,7 +125,7 @@ BASE_HANDLERS: MonoTuple[SerializerHandler] = (
 def _serialize_override_serialize_func(
     self: "JsonSerializer", obj: Any, path: ObjectPath
 ) -> JSONitem:
-    obj_cls: type = type(obj)
+    # obj_cls: type = type(obj)
     # if hasattr(obj_cls, "_register_self") and callable(obj_cls._register_self):
     #     obj_cls._register_self()
 

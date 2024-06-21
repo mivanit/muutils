@@ -1,8 +1,10 @@
+from __future__ import annotations
+
 import json
 import sys
 import time
 import typing
-from typing import TextIO
+from typing import TextIO, Union
 
 from muutils.json_serialize import JSONitem, json_serialize
 
@@ -26,7 +28,7 @@ class NullIO:
         pass
 
 
-AnyIO = TextIO | NullIO
+AnyIO = Union[TextIO, NullIO]
 
 
 class SimpleLogger:

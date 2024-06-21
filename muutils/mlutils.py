@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import json
 import os
 import random
@@ -5,7 +7,7 @@ import typing
 import warnings
 from itertools import islice
 from pathlib import Path
-from typing import Any, Callable, TypeVar
+from typing import Any, Callable, Optional, TypeVar, Union
 
 ARRAY_IMPORTS: bool
 try:
@@ -23,7 +25,7 @@ DEFAULT_SEED: int = 42
 GLOBAL_SEED: int = DEFAULT_SEED
 
 
-def get_device(device: "str|torch.device|None" = None) -> "torch.device":
+def get_device(device: "Union[str,torch.device,None]" = None) -> "torch.device":
     """Get the torch.device instance on which `torch.Tensor`s should be allocated."""
     if not ARRAY_IMPORTS:
         raise ImportError(
@@ -113,9 +115,7 @@ def get_checkpoint_paths_for_run(
      - a wildcard for the iteration number
     """
 
-    assert (
-        run_path.is_dir()
-    ), f"Model path {run_path} is not a directory (expect run directory, not model files)"
+    assert run_path.is_dir(), f"Model path {run_path} is not a directory (expect run directory, not model files)"
 
     return [
         (int(checkpoint_path.stem.split("_")[-1].split(".")[0]), checkpoint_path)
@@ -130,13 +130,23 @@ F = TypeVar("F", bound=Callable[..., Any])
 
 def register_method(
     method_dict: dict[str, Callable[..., Any]],
-    custom_name: str | None = None,
+    custom_name: Optional[str] = None,
 ) -> Callable[[F], F]:
     """Decorator to add a method to the method_dict"""
 
     def decorator(method: F) -> F:
+        method_name: str
         if custom_name is None:
-            method_name: str = method.__name__
+            method_name_orig: str | None = getattr(method, "__name__", None)
+            if method_name_orig is None:
+                warnings.warn(
+                    f"Method {method} does not have a name, using sanitized repr"
+                )
+                from muutils.misc import sanitize_identifier
+
+                method_name = sanitize_identifier(repr(method))
+            else:
+                method_name = method_name_orig
         else:
             method_name = custom_name
             method.__name__ = custom_name

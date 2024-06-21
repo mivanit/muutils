@@ -1,55 +1,62 @@
 Name                                                                              Stmts   Miss  Cover   Missing
 ---------------------------------------------------------------------------------------------------------------
-muutils\__init__.py                                                                   0      0   100%
-muutils\dictmagic.py                                                                162     23    86%   14-19, 22-25, 177, 285, 445-449, 453, 486-498
-muutils\group_equiv.py                                                               28      0   100%
-muutils\json_serialize\__init__.py                                                    5      5     0%   1-15
-muutils\json_serialize\array.py                                                      80     30    62%   1-14, 18-24, 35, 74, 102-105, 114, 118, 121, 125, 129-132, 136, 143, 155, 174-179, 184, 187
-muutils\json_serialize\json_serialize.py                                             64     45    30%   1-80, 124, 208-234, 244, 256, 271-304
-muutils\json_serialize\serializable_dataclass.py                                    187     71    62%   1-35, 69, 82-102, 129, 147, 160-165, 231-248, 257-267, 288-325, 329, 339-340, 344, 353-357, 361, 370, 381-389, 417, 443, 459-460, 483, 510, 516
-muutils\json_serialize\util.py                                                       76     48    37%   1-58, 62, 73, 77, 93, 102, 107-111, 122, 125-126
-muutils\jsonlines.py                                                                 31     31     0%   1-73
-muutils\kappa.py                                                                     14      0   100%
+muutils\__init__.py                                                                   1      1     0%   1
+muutils\dictmagic.py                                                                158     21    87%   28-33, 36-39, 297, 457-461, 465, 498-510
+muutils\errormode.py                                                                 32     13    59%   1-13, 30-33, 49
+muutils\group_equiv.py                                                               29      0   100%
+muutils\json_serialize\__init__.py                                                    6      6     0%   1-17
+muutils\json_serialize\array.py                                                      92     33    64%   1-24, 28-34, 45, 85, 119-122, 131, 135, 139, 142, 146, 150-153, 157, 164, 176, 203-208, 213, 216
+muutils\json_serialize\json_serialize.py                                             63     45    29%   1-81, 125, 209-235, 245, 257, 272-305
+muutils\json_serialize\serializable_dataclass.py                                    216     87    60%   1-36, 50-55, 75-83, 108, 114, 144, 148-171, 190-192, 196, 208, 220-242, 251-257, 286, 299-300, 306, 317-321, 326, 338, 355-366, 372-384, 394, 485, 493-497, 526, 550-551, 585, 627
+muutils\json_serialize\serializable_field.py                                         32     17    47%   1-37, 73, 79-82, 92, 103-123
+muutils\json_serialize\util.py                                                      109     63    42%   1-43, 45, 49-61, 65, 76, 80, 96, 105, 110-114, 125, 128-133, 151, 164-169, 235-252
+muutils\jsonlines.py                                                                 32     32     0%   1-75
+muutils\kappa.py                                                                     15      0   100%
 muutils\logger\__init__.py                                                            5      0   100%
 muutils\logger\exception_context.py                                                  12      6    50%   24, 27, 30-43
-muutils\logger\headerfuncs.py                                                        18      1    94%   53
+muutils\logger\headerfuncs.py                                                        19      1    95%   55
 muutils\logger\log_util.py                                                           32     32     0%   1-80
-muutils\logger\logger.py                                                             97     25    74%   26-34, 85, 88, 133, 153-154, 192, 225, 235, 255-259, 275-278, 293, 297, 304
-muutils\logger\loggingstream.py                                                      39     12    69%   41-74, 79, 89-90
-muutils\logger\simplelogger.py                                                       40     19    52%   14, 18, 22, 26, 53-63, 67-79
-muutils\logger\timing.py                                                             39     19    51%   25-28, 41-46, 50-52, 65-68, 79-84
-muutils\misc.py                                                                     164     12    93%   155, 186, 227-229, 288, 297, 300, 320-321, 334, 373-374
-muutils\mlutils.py                                                                   66     39    41%   1-26, 29, 35-49, 54, 56, 65-73, 96, 104, 128-131, 141-142, 152-153
+muutils\logger\logger.py                                                             98     25    74%   28-36, 87, 90, 135, 155-156, 194, 227, 237, 257-261, 277-280, 295, 299, 306
+muutils\logger\loggingstream.py                                                      40     12    70%   43-76, 81, 91-92
+muutils\logger\simplelogger.py                                                       41     19    54%   16, 20, 24, 28, 55-65, 69-81
+muutils\logger\timing.py                                                             39     18    54%   27-30, 43-48, 52-54, 67-70, 81-87
+muutils\misc.py                                                                     172     11    94%   210, 241, 284, 342, 351, 354, 374-375, 388, 427-428
+muutils\mlutils.py                                                                   72     43    40%   1-28, 31, 37-51, 56, 58, 67-75, 98, 106, 128-131, 142-147, 151-152, 162-163
 muutils\nbutils\__init__.py                                                           2      2     0%   1-3
-muutils\nbutils\configure_notebook.py                                               132     79    40%   1-55, 73-82, 96, 106-107, 112, 115-116, 136-139, 144, 150-159, 166-171, 180, 219-230, 236-241, 264-271, 274
-muutils\nbutils\convert_ipynb_to_script.py                                          118     41    65%   63, 78, 91, 105-139, 228-230, 236, 263, 287-289, 296-349
+muutils\nbutils\configure_notebook.py                                               133     80    40%   1-57, 75-84, 106, 116-117, 122, 125-126, 146-149, 154, 160-169, 176-181, 190, 229-240, 246-251, 274-281, 284
+muutils\nbutils\convert_ipynb_to_script.py                                          119     41    66%   65, 80, 93, 107-141, 230-232, 238, 265, 289-291, 298-351
 muutils\nbutils\mermaid.py                                                           11     11     0%   1-18
 muutils\nbutils\print_tex.py                                                         10     10     0%   1-19
-muutils\nbutils\run_notebook_tests.py                                                58     20    66%   29, 31, 35, 39, 45, 53, 80-82, 86-90, 97-114
-muutils\statcounter.py                                                               87     32    63%   24-35, 50, 70, 98, 110, 120, 136-166, 174, 183, 186, 190-195, 204
-muutils\sysinfo.py                                                                   71     18    75%   21, 60-61, 78-111, 145, 168
-muutils\tensor_utils.py                                                             125     19    85%   83, 86, 105, 109, 119, 130, 133-136, 144, 151, 165-173
-tests\unit\json_serialize\serializable_dataclass\test_helpers.py                     42      0   100%
-tests\unit\json_serialize\serializable_dataclass\test_sdc_defaults.py                31      0   100%
-tests\unit\json_serialize\serializable_dataclass\test_sdc_properties_nested.py       26      0   100%
-tests\unit\json_serialize\serializable_dataclass\test_serializable_dataclass.py     190      0   100%
+muutils\nbutils\run_notebook_tests.py                                                59     20    66%   29, 31, 35, 39, 45, 53, 79-81, 85-89, 96-113
+muutils\statcounter.py                                                               89     32    64%   25-36, 51, 75, 103, 115, 125, 141-171, 179, 188, 191, 195-200, 209
+muutils\sysinfo.py                                                                   78     25    68%   20-23, 64-65, 82-115, 156-165, 177, 195-197
+muutils\tensor_utils.py                                                             124     18    85%   86, 89, 108, 112, 129, 132-135, 143, 150, 164-172
+muutils\validate_type.py                                                             82     19    77%   1-34, 51, 55, 190, 193, 213
+tests\unit\json_serialize\serializable_dataclass\test_helpers.py                     43      0   100%
+tests\unit\json_serialize\serializable_dataclass\test_sdc_defaults.py                32      0   100%
+tests\unit\json_serialize\serializable_dataclass\test_sdc_properties_nested.py       44      1    98%   44
+tests\unit\json_serialize\serializable_dataclass\test_serializable_dataclass.py     204      0   100%
 tests\unit\json_serialize\test_array.py                                              40      0   100%
 tests\unit\json_serialize\test_util.py                                               49      2    96%   66, 73
-tests\unit\logger\test_logger.py                                                     10      0   100%
-tests\unit\logger\test_timer_context.py                                               9      0   100%
-tests\unit\misc\test_freeze.py                                                      120      0   100%
-tests\unit\misc\test_misc.py                                                         43      0   100%
-tests\unit\misc\test_numerical_conversions.py                                        42      0   100%
-tests\unit\nbutils\test_configure_notebook.py                                        61      0   100%
-tests\unit\nbutils\test_conversion.py                                                26      0   100%
+tests\unit\logger\test_logger.py                                                     11      0   100%
+tests\unit\logger\test_timer_context.py                                              11      0   100%
+tests\unit\misc\test_freeze.py                                                      121      0   100%
+tests\unit\misc\test_misc.py                                                         74      0   100%
+tests\unit\misc\test_numerical_conversions.py                                        43      0   100%
+tests\unit\nbutils\test_configure_notebook.py                                        70      0   100%
+tests\unit\nbutils\test_conversion.py                                                27      0   100%
 tests\unit\test_chunks.py                                                            31      0   100%
-tests\unit\test_dictmagic.py                                                        129      0   100%
-tests\unit\test_group_equiv.py                                                       12      0   100%
+tests\unit\test_dictmagic.py                                                        130      0   100%
+tests\unit\test_errormode.py                                                         69      1    99%   122
+tests\unit\test_group_equiv.py                                                       13      0   100%
 tests\unit\test_import_torch.py                                                       4      0   100%
 tests\unit\test_kappa.py                                                             39      0   100%
-tests\unit\test_mlutils.py                                                           35      3    91%   31, 35, 43
-tests\unit\test_statcounter.py                                                       13      0   100%
-tests\unit\test_sysinfo.py                                                            4      0   100%
-tests\unit\test_tensor_utils.py                                                      48      0   100%
+tests\unit\test_mlutils.py                                                           43      6    86%   35, 39, 47, 50, 57-58
+tests\unit\test_statcounter.py                                                       14      0   100%
+tests\unit\test_sysinfo.py                                                            6      0   100%
+tests\unit\test_tensor_utils.py                                                      51      0   100%
+tests\unit\validate_type\test_validate_type.py                                      206     45    78%   49-50, 74-75, 101-102, 124-125, 146-147, 176-177, 202-203, 235-236, 253, 272-273, 334-335, 359-360, 430-431, 459-460, 464-465, 479-497
+tests\unit\validate_type\test_validate_type_GENERATED.py                            206     45    78%   50-51, 75-76, 102-103, 125-126, 147-148, 177-178, 203-204, 236-237, 254, 273-274, 335-336, 360-361, 431-432, 460-461, 465-466, 480-498
+tests\unit\validate_type\test_validate_type_special.py                               15      3    80%   34-35, 57
 ---------------------------------------------------------------------------------------------------------------
-TOTAL                                                                              2777    655    76%
+TOTAL                                                                              3618    846    77%

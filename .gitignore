@@ -1,16 +1,26 @@
+# local stuff (pypi token, commit log)
+.github/local/**
+
+# this one is cursed
+tests/unit/validate_type/test_validate_type_GENERATED.py
+# test notebook
+_test.ipynb
+# junk data
 JUNK_DATA_PATH/
 junk_data
-.pypi-token
-.commit_log
+
 .vscode/
+# caches
 __pycache__/
 **/__pycache__/
 **/.mypy_cache/
 **/.pytest_cache/
 
+# coverage
 .coverage
 htmlcov/
 
+# build
 build/
 dist/
 muutils.egg-info/

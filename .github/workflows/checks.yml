@@ -14,49 +14,110 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with: 
           fetch-depth: 0
 
       - name: Install linters
-        run: pip install pycln isort black
+        run: make setup-format RUN_GLOBAL=1
 
       - name: Run Format Checks
-        run: make check-format
+        run: make check-format RUN_GLOBAL=1
+  
+  check-deps:
+    name: Check dependencies
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Install Poetry
+        run: curl -sSL https://install.python-poetry.org | python3 -
+      
+      - name: Poetry Plugins
+        run: |
+          poetry self add poetry-plugin-export
+          poetry self show plugins
+
+      - name: Check poetry.lock and .github/dev-requirements.txt
+        run: make check-dep-dev
+
+      - name: Install uv
+        run: pip install uv
+
+      - name: Install dependencies
+        run: uv pip install -r .github/dev-requirements.txt --system --no-deps # we already should have all dependencies exported into .github/dev-requirements.txt
+      
+      - name: Install torch (special)
+        run: uv pip install torch==2.3.1+cpu --system --extra-index-url https://download.pytorch.org/whl/cpu
+
+      - name: Install muutils (local)
+        run: uv pip install . --system
+
+      - name: Install zanj (requires muutils)
+        run: uv pip install zanj --system
 
   test:
     name: Test and Lint
     runs-on: ubuntu-latest
+    # needs: [lint, check-deps]
     strategy:
       matrix:
         versions:
-          - python: "3.10"
-            torch: "1.13.1"
-          - python: "3.10"
-            torch: "2.0.1"
-          - python: "3.11"
-            torch: "2.0.1"
+          - python: '3.8'
+            torch: '1.13.1'
+          - python: '3.9'
+            torch: '1.13.1'
+          - python: '3.10'
+            torch: '1.13.1'
+          - python: '3.10'
+            torch: '2.3.1'
+          - python: '3.11'
+            torch: '2.3.1'
+          - python: '3.12'
+            torch: '2.3.1'
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with: 
           fetch-depth: 0
 
       - name: Set up python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.versions.python }}
 
+      - name: Install uv
+        run: pip install uv
+
       - name: Install dependencies
+        # install torch first to avoid pytorch index messing things up
         run: |
-          curl -sSL https://install.python-poetry.org | python3 -
-          poetry lock --check
-          export CUDA_VISIBLE_DEVICES=0
-          poetry add torch@${{ matrix.versions.torch }}+cpu --source torch_cpu
-          poetry install --all-extras
+          uv pip install -r .github/dev-requirements.txt --system --no-deps
+          uv pip install torch==${{ matrix.versions.torch}}+cpu --system --extra-index-url https://download.pytorch.org/whl/cpu
+      
+      - name: Install muutils
+        run: uv pip install . --system
+      
+      - name: Install zanj (>=3.10 only)
+        # TODO: not yet available for python 3.8 and 3.9
+        if: ${{ matrix.versions.python != '3.8' && matrix.versions.python != '3.9' }}
+        run: uv pip install zanj --system
 
       - name: tests
-        run: make test
+        run: make test RUN_GLOBAL=1
 
-      - name: lint
-        run: make lint
+      - name: tests in strict mode
+        # TODO: until zanj ported to 3.8 and 3.9
+        if: ${{ matrix.versions.python != '3.8' && matrix.versions.python != '3.9' }}
+        run: make test WARN_STRICT=1 RUN_GLOBAL=1
+
+      - name: check typing
+        run: make typing RUN_GLOBAL=1

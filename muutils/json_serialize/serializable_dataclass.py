@@ -76,6 +76,10 @@ _DEFAULT_ON_TYPECHECK_MISMATCH: ErrorMode = ErrorMode.WARN
 _DEFAULT_ON_TYPECHECK_ERROR: ErrorMode = ErrorMode.EXCEPT
 
 
+class FieldIsNotInitOrSerializeWarning(UserWarning):
+    pass
+
+
 def SerializableDataclass__validate_field_type(
     self: SerializableDataclass,
     field: SerializableField | str,
@@ -106,7 +110,8 @@ def SerializableDataclass__validate_field_type(
     # TODO: how to handle fields which are not `init` or `serialize`?
     if not field.init or not field.serialize:
         warnings.warn(
-            f"Field '{field.name}' on class {self.__class__} is not `init` or `serialize`, so will not be type checked"
+            f"Field '{field.name}' on class {self.__class__} is not `init` or `serialize`, so will not be type checked",
+            FieldIsNotInitOrSerializeWarning,
         )
         return True
 

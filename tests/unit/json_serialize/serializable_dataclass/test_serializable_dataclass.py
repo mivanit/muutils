@@ -11,6 +11,10 @@ from muutils.json_serialize import (
     serializable_field,
 )
 
+from muutils.json_serialize.serializable_dataclass import (
+    FieldIsNotInitOrSerializeWarning,
+)
+
 # pylint: disable=missing-class-docstring, unused-variable
 
 
@@ -127,8 +131,10 @@ def test_field_options_serialization(field_options_instance):
 
 
 def test_field_options_loading(field_options_instance):
+    # ignore a `FieldIsNotInitOrSerializeWarning`
     serialized = field_options_instance.serialize()
-    loaded = FieldOptions.load(serialized)
+    with pytest.warns(FieldIsNotInitOrSerializeWarning):
+        loaded = FieldOptions.load(serialized)
     assert loaded == field_options_instance
 
 

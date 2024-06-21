@@ -29,6 +29,7 @@ class SerializableField(dataclasses.Field):
         "serialize",
         "serialization_fn",
         "loading_fn",
+        "deserialize_fn",  # new alternative to loading_fn
         "assert_type",
         "custom_typecheck_fn",
     )
@@ -49,6 +50,7 @@ class SerializableField(dataclasses.Field):
         serialize: bool = True,
         serialization_fn: Optional[Callable[[Any], Any]] = None,
         loading_fn: Optional[Callable[[Any], Any]] = None,
+        deserialize_fn: Optional[Callable[[Any], Any]] = None,
         assert_type: bool = True,
         custom_typecheck_fn: Optional[Callable[[type], bool]] = None,
     ):
@@ -85,7 +87,16 @@ class SerializableField(dataclasses.Field):
         # now init the new fields
         self.serialize: bool = serialize
         self.serialization_fn: Optional[Callable[[Any], Any]] = serialization_fn
+
+        if loading_fn is not None and deserialize_fn is not None:
+            raise ValueError(
+                "Cannot pass both loading_fn and deserialize_fn, pass only one. ",
+                "`loading_fn` is the older interface and takes the dict of the class, ",
+                "`deserialize_fn` is the new interface and takes only the field's value.",
+            )
         self.loading_fn: Optional[Callable[[Any], Any]] = loading_fn
+        self.deserialize_fn: Optional[Callable[[Any], Any]] = deserialize_fn
+
         self.assert_type: bool = assert_type
         self.custom_typecheck_fn: Optional[Callable[[type], bool]] = custom_typecheck_fn
 
@@ -101,9 +112,10 @@ class SerializableField(dataclasses.Field):
             compare=field.compare,
             metadata=field.metadata,
             kw_only=getattr(field, "kw_only", dataclasses.MISSING),  # for python <3.9
-            serialize=field.repr,
+            serialize=field.repr,  # serialize if it's going to be repr'd
             serialization_fn=None,
             loading_fn=None,
+            deserialize_fn=None,
         )
 
 
@@ -121,10 +133,12 @@ def serializable_field(*args, **kwargs):  # -> SerializableField:
     compare: bool = True,
     metadata: types.MappingProxyType | None = None,
     kw_only: bool | dataclasses._MISSING_TYPE = dataclasses.MISSING,
+    # ----------------------------------------------------------------------
     # new in `SerializableField`, not in `dataclasses.Field`
     serialize: bool = True,
     serialization_fn: Optional[Callable[[Any], Any]] = None,
     loading_fn: Optional[Callable[[Any], Any]] = None,
+    deserialize_fn: Optional[Callable[[Any], Any]] = None,
     assert_type: bool = True,
     custom_typecheck_fn: Optional[Callable[[type], bool]] = None,
     ```
@@ -133,16 +147,32 @@ def serializable_field(*args, **kwargs):  # -> SerializableField:
     - `serialize`: whether to serialize this field when serializing the class'
     - `serialization_fn`: function taking the instance of the field and returning a serializable object. If not provided, will iterate through the `SerializerHandler`s defined in `muutils.json_serialize.json_serialize`
     - `loading_fn`: function taking the serialized object and returning the instance of the field. If not provided, will take object as-is.
+    - `deserialize_fn`: new alternative to `loading_fn`. takes only the field's value, not the whole class. if both `loading_fn` and `deserialize_fn` are provided, an error will be raised.
 
     # Gotchas:
     - `loading_fn` takes the dict of the **class**, not the field. if you wanted a `loading_fn` that does nothing, you'd write:
+
     ```python
     class MyClass:
-        my_field: int = serializable_field(loading_fn=lambda x["my_field"]: x)
+        my_field: int = serializable_field(
+            serialization_fn=lambda x: str(x),
+            loading_fn=lambda x["my_field"]: int(x)
+        )
     ```
-    issue to add a different way of doing this: https://github.com/mivanit/muutils/issues/40
 
-        note that if not using ZANJ, and you have a class inside a container, you MUST provide
+    using `deserialize_fn` instead:
+
+    ```python
+    class MyClass:
+        my_field: int = serializable_field(
+            serialization_fn=lambda x: str(x),
+            deserialize_fn=lambda x: int(x)
+        )
+    ```
+
+    In the above code, `my_field` is an int but will be serialized as a string.
+
+    note that if not using ZANJ, and you have a class inside a container, you MUST provide
     `serialization_fn` and `loading_fn` to serialize and load the container.
     ZANJ will automatically do this for you.
     """

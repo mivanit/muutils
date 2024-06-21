@@ -380,3 +380,23 @@ def test_nested_custom(recwarn):  # this will send some warnings but whatever
     assert serialized == expected_ser
     loaded = nested_custom.load(serialized)
     assert loaded == instance
+
+
+def test_deserialize_fn():
+    @serializable_dataclass
+    class DeserializeFn(SerializableDataclass):
+        data: int = serializable_field(
+            serialization_fn=lambda x: str(x),
+            deserialize_fn=lambda x: int(x),
+        )
+
+    instance = DeserializeFn(data=5)
+    serialized = instance.serialize()
+    assert serialized == {
+        "data": "5",
+        "__format__": "DeserializeFn(SerializableDataclass)",
+    }
+
+    loaded = DeserializeFn.load(serialized)
+    assert loaded == instance
+    assert loaded.data == 5

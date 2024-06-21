@@ -608,7 +608,11 @@ def serializable_dataclass(
                     # get the type hint for the field
                     field_type_hint: Any = cls_type_hints.get(field.name, None)
 
-                    if field.loading_fn:
+                    # we rely on the init of `SerializableField` to check that only one of `loading_fn` and `deserialize_fn` is set
+                    if field.deserialize_fn:
+                        # if it has a deserialization function, use that
+                        value = field.deserialize_fn(value)
+                    elif field.loading_fn:
                         # if it has a loading function, use that
                         value = field.loading_fn(data)
                     elif (

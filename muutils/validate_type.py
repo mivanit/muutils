@@ -18,10 +18,32 @@ _GenericAliasTypesList: list = [
 GenericAliasTypes: tuple = tuple([t for t in _GenericAliasTypesList if t is not None])
 
 
-def validate_type(value: typing.Any, expected_type: typing.Any) -> bool:
-    """Validate that a value is of the expected type. use `typeguard` for a more robust solution.
+class IncorrectTypeException(TypeError):
+    pass
 
-    https://github.com/agronholm/typeguard
+class TypeHintNotImplementedError(NotImplementedError):
+    pass
+
+class InvalidGenericAliasError(TypeError):
+    pass
+
+
+
+def validate_type(value: typing.Any, expected_type: typing.Any) -> bool:
+    """Validate that a `value` is of the `expected_type`. use `typeguard` for a more robust solution.
+
+    # Parameters
+    - `value`: the value to check the type of
+    - `expected_type`: the type to check against. Not all types are supported
+
+    # Returns
+    - `bool`: `True` if the value is of the expected type, `False` otherwise.
+
+    # Raises
+    - `TypeHintNotImplementedError(NotImplementedError)`: if the type hint is not implemented
+    - `InvalidGenericAliasError(TypeError)`: if the generic alias is invalid
+
+    typeguard: https://github.com/agronholm/typeguard
     """
     if expected_type is typing.Any:
         return True
@@ -57,7 +79,7 @@ def validate_type(value: typing.Any, expected_type: typing.Any) -> bool:
                 return isinstance(value, list)
             # incorrect number of args
             if len(args) != 1:
-                raise TypeError(
+                raise InvalidGenericAliasError(
                     f"Too many arguments for list expected 1, got {args = },   {expected_type = },   {value = },   {origin = }",
                     f"{GenericAliasTypes = }",
                 )
@@ -74,7 +96,7 @@ def validate_type(value: typing.Any, expected_type: typing.Any) -> bool:
                 return isinstance(value, dict)
             # incorrect number of args
             if len(args) != 2:
-                raise TypeError(
+                raise InvalidGenericAliasError(
                     f"Expected 2 arguments for dict, expected 2, got {args = },   {expected_type = },   {value = },   {origin = }",
                     f"{GenericAliasTypes = }",
                 )
@@ -95,7 +117,7 @@ def validate_type(value: typing.Any, expected_type: typing.Any) -> bool:
                 return isinstance(value, set)
             # incorrect number of args
             if len(args) != 1:
-                raise TypeError(
+                raise InvalidGenericAliasError(
                     f"Expected 1 argument for Set, got {args = },   {expected_type = },   {value = },   {origin = }",
                     f"{GenericAliasTypes = }",
                 )
@@ -125,7 +147,7 @@ def validate_type(value: typing.Any, expected_type: typing.Any) -> bool:
                 return isinstance(value, type)
             # incorrect number of args
             if len(args) != 1:
-                raise TypeError(
+                raise InvalidGenericAliasError(
                     f"Expected 1 argument for Type, got {args = },   {expected_type = },   {value = },   {origin = }",
                     f"{GenericAliasTypes = }",
                 )
@@ -137,13 +159,38 @@ def validate_type(value: typing.Any, expected_type: typing.Any) -> bool:
 
         # TODO: Callables, etc.
 
-        raise NotImplementedError(
+        raise TypeHintNotImplementedError(
             f"Unsupported generic alias {expected_type = } for {value = },   {origin = },   {args = }",
             f"{GenericAliasTypes = }",
         )
 
     else:
-        raise NotImplementedError(
+        raise TypeHintNotImplementedError(
             f"Unsupported type hint {expected_type = } for {value = }",
             f"{GenericAliasTypes = }",
+        )
+
+
+def validate_type_except(value: typing.Any, expected_type: typing.Any) -> None:
+    """equvalent to `validate_type` but raises an exception if the type is incorrect
+    
+
+    # Parameters
+    - `value`: the value to check the type of
+    - `expected_type`: the type to check against. Not all types are supported
+
+    # Raises
+    - `IncorrectTypeException(TypeError)`: if the type is incorrect
+    - `TypeHintNotImplementedError(NotImplementedError)`: if the type hint is not implemented
+    - `InvalidGenericAliasError(TypeError)`: if the generic alias is invalid
+
+    # Returns `None`
+
+    """
+    
+    if not validate_type(value, expected_type):
+        raise IncorrectTypeException(
+            f"Expected {expected_type = } but got {type(value) = } for {value = }",
+            f"{typing.get_origin(expected_type) = }",
+            f"{typing.get_args(expected_type) = }",
         )

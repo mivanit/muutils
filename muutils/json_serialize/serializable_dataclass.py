@@ -5,19 +5,22 @@ import dataclasses
 import functools
 import json
 import sys
-import types
 import typing
 import warnings
-from typing import Any, Callable, Optional, Type, TypeVar, Union
+from typing import Any, Optional, Type, TypeVar
 
 from muutils.errormode import ErrorMode
 from muutils.validate_type import validate_type
-from muutils.json_serialize.serializable_field import SerializableField, serializable_field
+from muutils.json_serialize.serializable_field import (
+    SerializableField,
+    serializable_field,
+)
 from muutils.json_serialize.util import array_safe_eq, dc_eq
 
 # pylint: disable=bad-mcs-classmethod-argument, too-many-arguments, protected-access
 
 T = TypeVar("T")
+
 
 class CantGetTypeHintsWarning(UserWarning):
     pass
@@ -72,32 +75,33 @@ def zanj_register_loader_serializable_dataclass(cls: typing.Type[T]):
 _DEFAULT_ON_TYPECHECK_MISMATCH: ErrorMode = ErrorMode.WARN
 _DEFAULT_ON_TYPECHECK_ERROR: ErrorMode = ErrorMode.EXCEPT
 
+
 def SerializableDataclass__validate_field_type(
     self: SerializableDataclass,
-    field: SerializableField|str,
+    field: SerializableField | str,
     on_typecheck_error: ErrorMode = _DEFAULT_ON_TYPECHECK_ERROR,
 ) -> bool:
     """given a dataclass, check the field matches the type hint
-    
+
     # Parameters:
-     - `self : SerializableDataclass`   
+     - `self : SerializableDataclass`
        `SerializableDataclass` instance
-     - `field : SerializableField | str`   
+     - `field : SerializableField | str`
         field to validate, will get from `self.__dataclass_fields__` if an `str`
-     - `on_typecheck_error : ErrorMode`   
+     - `on_typecheck_error : ErrorMode`
         what to do if type checking throws an exception (except, warn, ignore). If `ignore` and an exception is thrown, the function will return `False`
        (defaults to `_DEFAULT_ON_TYPECHECK_ERROR`)
-    
+
     # Returns:
-     - `bool` 
+     - `bool`
         if the field type is correct. `False` if the field type is incorrect or an exception is thrown and `on_typecheck_error` is `ignore`
-    """    
+    """
     on_typecheck_error: ErrorMode = ErrorMode.from_any(on_typecheck_error)
 
     # do nothing case
     if not field.assert_type:
         return True
-    
+
     # if field is not `init` or not `serialize`, skip but warn
     # TODO: how to handle fields which are not `init` or `serialize`?
     if not field.init or not field.serialize:
@@ -119,16 +123,14 @@ def SerializableDataclass__validate_field_type(
 
     # get the value
     value: Any = getattr(self, field.name)
-    
-    # validate the type    
+
+    # validate the type
     if field_type_hint is not None:
         try:
             type_is_valid: bool
             # validate the type with the default type validator
             if field.custom_typecheck_fn is None:
-                type_is_valid = validate_type(
-                    value, field_type_hint
-                )
+                type_is_valid = validate_type(value, field_type_hint)
             # validate the type with a custom type validator
             else:
                 type_is_valid = field.custom_typecheck_fn(field_type_hint)
@@ -158,21 +160,20 @@ def SerializableDataclass__validate_field_type(
         return False
 
 
-
 def SerializableDataclass__validate_fields_types__dict(
-        self: SerializableDataclass,
-        on_typecheck_error: ErrorMode = _DEFAULT_ON_TYPECHECK_ERROR,
-    ) -> dict[str, bool]:
+    self: SerializableDataclass,
+    on_typecheck_error: ErrorMode = _DEFAULT_ON_TYPECHECK_ERROR,
+) -> dict[str, bool]:
     """validate the types of all the fields on a SerializableDataclass. calls `SerializableDataclass__validate_field_type` for each field
-    
+
     returns a dict of field names to bools, where the bool is if the field type is valid
     """
     on_typecheck_error: ErrorMode = ErrorMode.from_any(on_typecheck_error)
-        
+
     # if except, bundle the exceptions
     results: dict[str, bool] = dict()
     exceptions: dict[str, Exception] = dict()
-    
+
     # for each field in the class
     cls_fields: typing.Sequence[SerializableField] = dataclasses.fields(self)
     for field in cls_fields:
@@ -186,20 +187,26 @@ def SerializableDataclass__validate_fields_types__dict(
     if len(exceptions) > 0:
         on_typecheck_error.process(
             f"Exceptions while validating types of fields on {self.__class__.__name__}: {[x.name for x in cls_fields]}"
-            + f"\n\t" + "\n\t".join([f"{k}:\t{v}" for k, v in exceptions.items()]),
+            + "\n\t"
+            + "\n\t".join([f"{k}:\t{v}" for k, v in exceptions.items()]),
             except_cls=ValueError,
             # HACK: ExceptionGroup not supported in py < 3.11, so get a random exception from the dict
             except_from=list(exceptions.values())[0],
         )
-    
+
     return results
+
 
 def SerializableDataclass__validate_fields_types(
     self: SerializableDataclass,
     on_typecheck_error: ErrorMode = _DEFAULT_ON_TYPECHECK_ERROR,
 ) -> bool:
     """validate the types of all the fields on a SerializableDataclass. calls `SerializableDataclass__validate_field_type` for each field"""
-    return all(SerializableDataclass__validate_fields_types__dict(self, on_typecheck_error=on_typecheck_error).values())
+    return all(
+        SerializableDataclass__validate_fields_types__dict(
+            self, on_typecheck_error=on_typecheck_error
+        ).values()
+    )
 
 
 class SerializableDataclass(abc.ABC):
@@ -209,17 +216,29 @@ class SerializableDataclass(abc.ABC):
     """
 
     def serialize(self) -> dict[str, Any]:
-        raise NotImplementedError(f"decorate {self.__class__ = } with `@serializable_dataclass`")
+        raise NotImplementedError(
+            f"decorate {self.__class__ = } with `@serializable_dataclass`"
+        )
 
     @classmethod
     def load(cls: Type[T], data: dict[str, Any] | T) -> T:
         raise NotImplementedError(f"decorate {cls = } with `@serializable_dataclass`")
-    
-    def validate_fields_types(self, on_typecheck_error: ErrorMode = _DEFAULT_ON_TYPECHECK_ERROR) -> bool:
-        return SerializableDataclass__validate_fields_types(self, on_typecheck_error=on_typecheck_error)
-    
-    def validate_field_type(self, field: "SerializableField|str", on_typecheck_error: ErrorMode = _DEFAULT_ON_TYPECHECK_ERROR) -> bool:
-        return SerializableDataclass__validate_field_type(self, field, on_typecheck_error=on_typecheck_error)
+
+    def validate_fields_types(
+        self, on_typecheck_error: ErrorMode = _DEFAULT_ON_TYPECHECK_ERROR
+    ) -> bool:
+        return SerializableDataclass__validate_fields_types(
+            self, on_typecheck_error=on_typecheck_error
+        )
+
+    def validate_field_type(
+        self,
+        field: "SerializableField|str",
+        on_typecheck_error: ErrorMode = _DEFAULT_ON_TYPECHECK_ERROR,
+    ) -> bool:
+        return SerializableDataclass__validate_field_type(
+            self, field, on_typecheck_error=on_typecheck_error
+        )
 
     def __eq__(self, other: Any) -> bool:
         return dc_eq(self, other)
@@ -231,7 +250,7 @@ class SerializableDataclass(abc.ABC):
         self, other: "SerializableDataclass", of_serialized: bool = False
     ) -> dict[str, Any]:
         """get a rich and recursive diff between two instances of a serializable dataclass
-        
+
         ```python
         >>> Myclass(a=1, b=2).diff(Myclass(a=1, b=3))
         {'b': {'self': 2, 'other': 3}}
@@ -240,20 +259,20 @@ class SerializableDataclass(abc.ABC):
         ```
 
         # Parameters:
-         - `other : SerializableDataclass`   
+         - `other : SerializableDataclass`
            other instance to compare against
-         - `of_serialized : bool`   
+         - `of_serialized : bool`
            if true, compare serialized data and not raw values
            (defaults to `False`)
-        
+
         # Returns:
-         - `dict[str, Any]` 
-           
-        
+         - `dict[str, Any]`
+
+
         # Raises:
          - `ValueError` : if the instances are not of the same type
          - `ValueError` : if the instances are `dataclasses.dataclass` but not `SerializableDataclass`
-        """        
+        """
         # match types
         if type(self) != type(other):
             raise ValueError(
@@ -277,7 +296,7 @@ class SerializableDataclass(abc.ABC):
             # skip fields that are not for comparison
             if not field.compare:
                 continue
-            
+
             # get values
             field_name: str = field.name
             self_value = getattr(self, field_name)
@@ -310,7 +329,7 @@ class SerializableDataclass(abc.ABC):
 
     def update_from_nested_dict(self, nested_dict: dict[str, Any]):
         """update the instance from a nested dict, useful for configuration from command line args
-        
+
         # Parameters:
             - `nested_dict : dict[str, Any]`
                 nested dict to update the instance with
@@ -332,7 +351,6 @@ class SerializableDataclass(abc.ABC):
     def __deepcopy__(self, memo: dict) -> "SerializableDataclass":
         "deep copy by serializing and loading the instance to json"
         return self.__class__.load(json.loads(json.dumps(self.serialize())))
-
 
 
 # cache this so we don't have to keep getting it
@@ -360,7 +378,7 @@ def get_cls_type_hints(cls: Type[T]) -> dict[str, Any]:
                 + f"  {dataclasses.fields(cls) = }\n"
                 + f"   {e = }"
             ) from e
-    
+
     return cls_type_hints
 
 
@@ -392,7 +410,7 @@ def serializable_dataclass(
     Examines PEP 526 __annotations__ to determine fields.
 
     If init is true, an __init__() method is added to the class. If repr is true, a __repr__() method is added. If order is true, rich comparison dunder methods are added. If unsafe_hash is true, a __hash__() method function is added. If frozen is true, fields may not be assigned to after instance creation.
-    
+
     ```python
     @serializable_dataclass(kw_only=True)
     class Myclass(SerializableDataclass):
@@ -403,43 +421,43 @@ def serializable_dataclass(
     >>> Myclass(a=1, b="q").serialize()
     {'__format__': 'Myclass(SerializableDataclass)', 'a': 1, 'b': 'q'}
     ```
-    
+
     # Parameters:
-     - `_cls : _type_`   
+     - `_cls : _type_`
        class to decorate. don't pass this arg, just use this as a decorator
        (defaults to `None`)
-     - `init : bool`   
+     - `init : bool`
        (defaults to `True`)
-     - `repr : bool`   
+     - `repr : bool`
        (defaults to `True`)
-     - `order : bool`   
+     - `order : bool`
        (defaults to `False`)
-     - `unsafe_hash : bool`   
+     - `unsafe_hash : bool`
        (defaults to `False`)
-     - `frozen : bool`   
+     - `frozen : bool`
        (defaults to `False`)
-     - `properties_to_serialize : Optional[list[str]]`   
+     - `properties_to_serialize : Optional[list[str]]`
        **SerializableDataclass only:** which properties to add to the serialized data dict
        (defaults to `None`)
-     - `register_handler : bool`   
+     - `register_handler : bool`
         **SerializableDataclass only:** if true, register the class with ZANJ for loading
        (defaults to `True`)
      - `on_typecheck_error : ErrorMode`
         **SerializableDataclass only:** what to do if type checking throws an exception (except, warn, ignore). If `ignore` and an exception is thrown, type validation will still return false
      - `on_typecheck_mismatch : ErrorMode`
         **SerializableDataclass only:** what to do if a type mismatch is found (except, warn, ignore). If `ignore`, type validation will return `True`
-    
+
     # Returns:
-     - `_type_` 
+     - `_type_`
        _description_
-    
+
     # Raises:
      - `ValueError` : _description_
      - `ValueError` : _description_
      - `ValueError` : _description_
      - `AttributeError` : _description_
      - `ValueError` : _description_
-    """    
+    """
     # -> Union[Callable[[Type[T]], Type[T]], Type[T]]:
     on_typecheck_error = ErrorMode.from_any(on_typecheck_error)
     on_typecheck_mismatch = ErrorMode.from_any(on_typecheck_mismatch)

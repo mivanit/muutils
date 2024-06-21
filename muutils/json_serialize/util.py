@@ -6,7 +6,7 @@ import inspect
 import sys
 import typing
 import warnings
-from typing import Any, Callable, Iterable, Literal, TypeVar, Union
+from typing import Any, Callable, Iterable, Literal, Union
 
 _NUMPY_WORKING: bool
 try:

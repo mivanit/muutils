@@ -15,10 +15,11 @@ from typing import (
     Union,
 )
 
+from muutils.errormode import ErrorMode
+
 _KT = TypeVar("_KT")
 _VT = TypeVar("_VT")
 
-from muutils.errormode import ErrorMode
 
 class DefaulterDict(typing.Dict[_KT, _VT], Generic[_KT, _VT]):
     """like a defaultdict, but default_factory is passed the key as an argument"""

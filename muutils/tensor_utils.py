@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import json
 import typing
-import warnings
 
 import jaxtyping
 import numpy as np

@@ -132,7 +132,6 @@ def validate_type(value: typing.Any, expected_type: typing.Any) -> bool:
             # check is type
             if origin is type:
                 return True
-            
 
         # TODO: Callables, etc.
 

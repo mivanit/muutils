@@ -4,18 +4,19 @@ import typing
 import warnings
 from enum import Enum
 
+
 class ErrorMode(Enum):
     EXCEPT = "except"
     WARN = "warn"
     IGNORE = "ignore"
-    
+
     def process(
-            self,
-            msg: str,
-            except_cls: typing.Type[Exception] = ValueError,
-            warn_cls: typing.Type[Warning] = UserWarning,
-            except_from: typing.Optional[typing.Type[Exception]] = None,
-        ):
+        self,
+        msg: str,
+        except_cls: typing.Type[Exception] = ValueError,
+        warn_cls: typing.Type[Warning] = UserWarning,
+        except_from: typing.Optional[typing.Type[Exception]] = None,
+    ):
         if self is ErrorMode.EXCEPT:
             if except_from is not None:
                 raise except_cls(msg) from except_from
@@ -27,7 +28,7 @@ class ErrorMode(Enum):
             pass
         else:
             raise ValueError(f"Unknown error mode {self}")
-        
+
     @classmethod
     def from_any(cls, mode: "str|ErrorMode", allow_aliases: bool = True) -> ErrorMode:
         if isinstance(mode, ErrorMode):
@@ -43,7 +44,7 @@ class ErrorMode(Enum):
                 return ERROR_MODE_ALIASES[mode]
         else:
             raise TypeError(f"Expected {ErrorMode} or str, got {type(mode) = }")
-        
+
 
 ERROR_MODE_ALIASES: dict[str, ErrorMode] = {
     # base

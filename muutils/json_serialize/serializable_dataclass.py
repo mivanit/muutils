@@ -97,6 +97,14 @@ def SerializableDataclass__validate_field_type(
     # do nothing case
     if not field.assert_type:
         return True
+    
+    # if field is not `init` or not `serialize`, skip but warn
+    # TODO: how to handle fields which are not `init` or `serialize`?
+    if not field.init or not field.serialize:
+        warnings.warn(
+            f"Field '{field.name}' on class {self.__class__} is not `init` or `serialize`, so will not be type checked"
+        )
+        return True
 
     # get field
     if isinstance(field, str):
@@ -180,7 +188,8 @@ def SerializableDataclass__validate_fields_types__dict(
             f"Exceptions while validating types of fields on {self.__class__.__name__}: {[x.name for x in cls_fields]}"
             + f"\n\t" + "\n\t".join([f"{k}:\t{v}" for k, v in exceptions.items()]),
             except_cls=ValueError,
-            except_from=exceptions[0],
+            # HACK: ExceptionGroup not supported in py < 3.11, so get a random exception from the dict
+            except_from=list(exceptions.values())[0],
         )
     
     return results

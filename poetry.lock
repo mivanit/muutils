@@ -1888,17 +1888,17 @@ files = [
 
 [[package]]
 name = "zanj"
-version = "0.2.2"
+version = "0.2.3"
 description = "save and load complex objects to disk without pickling"
 optional = true
 python-versions = "<4.0,>=3.10"
 files = [
-    {file = "zanj-0.2.2-py3-none-any.whl", hash = "sha256:91cce89bf8e7041e8acca3071b935899edad0ff776bf4e7bf0d98cfa6cb28f1d"},
-    {file = "zanj-0.2.2.tar.gz", hash = "sha256:71c6110f9b9d1a0fe04c011156b8e2c96f6fac1a6f9dc690b6c380862fd5fb8d"},
+    {file = "zanj-0.2.3-py3-none-any.whl", hash = "sha256:4992eba4b7b48264da9a243922d69f9689c1d6b11e7915b49e84aeda61b43297"},
+    {file = "zanj-0.2.3.tar.gz", hash = "sha256:d0d45ddda07911723d2c2e57db84b1613b1498f66eb418af197d192c89fb87e9"},
 ]
 
 [package.dependencies]
-muutils = {version = ">=0.5.1,<0.6.0", extras = ["array"]}
+muutils = {version = ">=0.5.1,<0.7.0", extras = ["array"]}
 
 [package.extras]
 pandas = ["pandas (>=1.5.3)"]
@@ -1927,4 +1927,4 @@ zanj = ["zanj"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.8"
-content-hash = "ba5985c876532a581082f5dbc55e3ca2237cf82f08044181d55b19a001b00371"
+content-hash = "5d222b1676114ac943bd9abb6048a1eed168c24d32be9ca026bde19f10371702"

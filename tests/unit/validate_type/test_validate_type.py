@@ -248,7 +248,7 @@ def test_validate_type_tuple(value, expected_type, expected_result):
     ],
 )
 def test_validate_type_unsupported_type_hint(value, expected_type):
-    with pytest.raises(ValueError):
+    with pytest.raises(NotImplementedError):
         validate_type(value, expected_type)
         print(f"Failed to except: {value = }, {expected_type = }")
 

@@ -130,8 +130,10 @@ def validate_type(value: typing.Any, expected_type: typing.Any) -> bool:
                     f"{GenericAliasTypes = }",
                 )
             # check is type
-            if origin is type:
+            if origin in value.__mro__:
                 return True
+            else:
+                return False
 
         # TODO: Callables, etc.
 

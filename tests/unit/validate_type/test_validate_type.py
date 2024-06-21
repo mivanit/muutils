@@ -395,13 +395,6 @@ def test_validate_type_complex():
     )
 
 
-def test_validate_type_class():
-    class Test:
-        def __init__(self, a: int, b: str):
-            self.a: int = a
-            self.b: str = b
-
-
 @pytest.mark.parametrize(
     "value, expected_type, expected_result",
     [
@@ -438,3 +431,123 @@ def test_validate_type_nested(value, expected_type, expected_result):
         raise Exception(
             f"{value = }, {expected_type = }, {expected_result = }, {e}"
         ) from e
+
+
+def test_validate_type_inheritance():
+    class Parent:
+        def __init__(self, a: int, b: str):
+            self.a: int = a
+            self.b: str = b
+
+    class Child:
+        def __init__(self, a: int, b: str):
+            self.a: int = 2 * a
+            self.b: str = b
+
+    assert validate_type(Parent(1, "a"), Parent)
+    assert validate_type(Child(1, "a"), Parent)
+    assert validate_type(Child(1, "a"), Child)
+    assert not validate_type(Parent(1, "a"), Child)
+
+
+def test_validate_type_class():
+    class Parent:
+        def __init__(self, a: int, b: str):
+            self.a: int = a
+            self.b: str = b
+
+    class Child:
+        def __init__(self, a: int, b: str):
+            self.a: int = 2 * a
+            self.b: str = b
+
+    assert validate_type(Parent, type)
+    assert validate_type(Child, type)
+    assert validate_type(Parent, typing.Type[Parent])
+    assert validate_type(Child, typing.Type[Child])
+    assert not validate_type(Parent, typing.Type[Child])
+
+    assert validate_type(Child, typing.Union[typing.Type[Child], typing.Type[Parent]])
+    assert validate_type(Child, typing.Union[typing.Type[Child], int])
+
+
+@pytest.mark.skip(reason="Not implemented")
+def test_validate_type_class_union():
+    class Parent:
+        def __init__(self, a: int, b: str):
+            self.a: int = a
+            self.b: str = b
+
+    class Child:
+        def __init__(self, a: int, b: str):
+            self.a: int = 2 * a
+            self.b: str = b
+
+    class Other:
+        def __init__(self, x: int, y: str):
+            self.x: int = x
+            self.y: str = y
+
+    assert validate_type(Child, typing.Type[typing.Union[Child, Parent]])
+    assert validate_type(Child, typing.Type[typing.Union[Child, Other]])
+    assert validate_type(Parent, typing.Type[typing.Union[Child, Other]])
+    assert validate_type(Parent, typing.Type[typing.Union[Parent, Other]])
+
+
+def test_validate_type_aliases():
+    AliasInt = int
+    AliasStr = str
+    AliasListInt = typing.List[int]
+    AliasListStr = typing.List[str]
+    AliasDictIntStr = typing.Dict[int, str]
+    AliasDictStrInt = typing.Dict[str, int]
+    AliasTupleIntStr = typing.Tuple[int, str]
+    AliasTupleStrInt = typing.Tuple[str, int]
+    AliasSetInt = typing.Set[int]
+    AliasSetStr = typing.Set[str]
+    AliasUnionIntStr = typing.Union[int, str]
+    AliasUnionStrInt = typing.Union[str, int]
+    AliasOptionalInt = typing.Optional[int]
+    AliasOptionalStr = typing.Optional[str]
+    AliasOptionalListInt = typing.Optional[typing.List[int]]
+    AliasDictStrListInt = typing.Dict[str, typing.List[int]]
+
+    assert validate_type(42, AliasInt)
+    assert not validate_type("42", AliasInt)
+    assert validate_type(42, AliasInt)
+    assert not validate_type("42", AliasInt)
+    assert validate_type("hello", AliasStr)
+    assert not validate_type(42, AliasStr)
+    assert validate_type([1, 2, 3], AliasListInt)
+    assert not validate_type([1, "2", 3], AliasListInt)
+    assert validate_type(["hello", "world"], AliasListStr)
+    assert not validate_type(["hello", 42], AliasListStr)
+    assert validate_type({1: "a", 2: "b"}, AliasDictIntStr)
+    assert not validate_type({1: 2, 3: 4}, AliasDictIntStr)
+    assert validate_type({"one": 1, "two": 2}, AliasDictStrInt)
+    assert not validate_type({1: "one", 2: "two"}, AliasDictStrInt)
+    assert validate_type((1, "a"), AliasTupleIntStr)
+    assert not validate_type(("a", 1), AliasTupleIntStr)
+    assert validate_type(("a", 1), AliasTupleStrInt)
+    assert not validate_type((1, "a"), AliasTupleStrInt)
+    assert validate_type({1, 2, 3}, AliasSetInt)
+    assert not validate_type({1, "two", 3}, AliasSetInt)
+    assert validate_type({"one", "two"}, AliasSetStr)
+    assert not validate_type({"one", 2}, AliasSetStr)
+    assert validate_type(42, AliasUnionIntStr)
+    assert validate_type("hello", AliasUnionIntStr)
+    assert not validate_type(3.14, AliasUnionIntStr)
+    assert validate_type("hello", AliasUnionStrInt)
+    assert validate_type(42, AliasUnionStrInt)
+    assert not validate_type(3.14, AliasUnionStrInt)
+    assert validate_type(42, AliasOptionalInt)
+    assert validate_type(None, AliasOptionalInt)
+    assert not validate_type("42", AliasOptionalInt)
+    assert validate_type("hello", AliasOptionalStr)
+    assert validate_type(None, AliasOptionalStr)
+    assert not validate_type(42, AliasOptionalStr)
+    assert validate_type([1, 2, 3], AliasOptionalListInt)
+    assert validate_type(None, AliasOptionalListInt)
+    assert not validate_type(["1", "2", "3"], AliasOptionalListInt)
+    assert validate_type({"key": [1, 2, 3]}, AliasDictStrListInt)
+    assert not validate_type({"key": [1, "2", 3]}, AliasDictStrListInt)

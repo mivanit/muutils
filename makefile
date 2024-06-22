@@ -156,31 +156,34 @@ cov:
 # tests
 # ==================================================
 
+.PHONY: gen-extra-tests
+gen-extra-tests:
+	if [ $(COMPATIBILITY_MODE) -eq 0 ]; then \
+		echo "converting certain tests to modern format"; \
+		$(PYTHON) tests/util/replace_type_hints.py tests/unit/validate_type/test_validate_type.py "# DO NOT EDIT, GENERATED FILE" > tests/unit/validate_type/test_validate_type_GENERATED.py; \
+	fi; \
+
 # at some point, need to add back --check-untyped-defs to mypy call
 # but it complains when we specify arguments by keyword where positional is fine
 # not sure how to fix this
 # python -m pylint $(PACKAGE_NAME)/
 # python -m pylint tests/
 .PHONY: typing
-typing: clean
+typing: clean gen-extra-tests
 	@echo "running type checks"
 	$(PYTHON) -m mypy --config-file $(PYPROJECT) $(TYPECHECK_ARGS) $(PACKAGE_NAME)/
 	$(PYTHON) -m mypy --config-file $(PYPROJECT) $(TYPECHECK_ARGS) tests/
 
 
 .PHONY: test
-test: clean
+test: clean gen-extra-tests
 	@echo "running tests"
 
-	if [ $(COMPATIBILITY_MODE) -eq 0 ]; then \
-		echo "converting certain tests to modern format"; \
-		$(PYTHON) tests/util/replace_type_hints.py tests/unit/validate_type/test_validate_type.py "# DO NOT EDIT, GENERATED FILE" > tests/unit/validate_type/test_validate_type_GENERATED.py; \
-	fi; \
 	$(PYTHON) -m pytest $(PYTEST_OPTIONS) $(TESTS_DIR)
 
 
 .PHONY: check
-check: clean check-format clean test typing
+check: clean check-format test typing
 	@echo "run format and lint checks, tests, and typing checks"
 
 # build and publish

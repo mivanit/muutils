@@ -227,16 +227,18 @@ build:
 	poetry build
 
 .PHONY: publish
-publish: gen-commit-log check build verify-git version
+publish: gen-commit-log check build verify-git version gen-version-info
 	@echo "run all checks, build, and then publish"
 
 	@echo "Enter the new version number if you want to upload to pypi and create a new tag"
 	@echo "Now would also be the time to edit $(COMMIT_LOG_FILE), as that will be used as the tag description"
 	@read -p "Confirm: " NEW_VERSION; \
-	if [ "$$NEW_VERSION" != "$(VERSION)" ]; then \
-		echo "Confirmation failed, exiting!"; \
+	if [ "$$NEW_VERSION" = $(VERSION) ]; then \
+		echo "Version confirmed. Proceeding with publish."; \
+	else \
+		echo "Version mismatch, exiting: you gave $$NEW_VERSION but expected $(VERSION)"; \
 		exit 1; \
-	fi; \
+	fi;
 
 	@echo "pypi username: __token__"
 	@echo "pypi token from '$(PYPI_TOKEN_FILE)' :"

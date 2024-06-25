@@ -6,6 +6,8 @@ from dataclasses import dataclass, is_dataclass
 from pathlib import Path
 from typing import Any, Callable, Iterable, Mapping, Set, Union
 
+from muutils.errormode import ErrorMode
+
 try:
     from muutils.json_serialize.array import ArrayMode, serialize_array
 except ImportError as e:
@@ -17,7 +19,6 @@ except ImportError as e:
     )
 
 from muutils.json_serialize.util import (
-    ErrorMode,
     Hashableitem,
     JSONitem,
     MonoTuple,

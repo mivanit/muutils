@@ -54,12 +54,12 @@ class ErrorMode(Enum):
                 try:
                     return ErrorMode(mode)
                 except ValueError as e:
-                    raise KeyError(f"Unknown error mode {mode}") from e
+                    raise KeyError(f"Unknown error mode {mode = }") from e
             else:
                 # look up in aliases map
                 return ERROR_MODE_ALIASES[mode]
         else:
-            raise TypeError(f"Expected {ErrorMode} or str, got {type(mode) = }")
+            raise TypeError(f"Expected {ErrorMode = } or str, got {type(mode) = } {mode = }")
 
     def __str__(self) -> str:
         return f"ErrorMode.{self.value.capitalize()}"

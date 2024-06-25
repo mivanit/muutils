@@ -242,7 +242,7 @@ class JsonSerializer:
 
     # Raises:
         - `ValueError`: on init, if `args` is not empty
-        - `SerializationException`: on `json_serialize()`, if any error occurs when trying to serialize an object and `error_mode` is set to `"except"`
+        - `SerializationException`: on `json_serialize()`, if any error occurs when trying to serialize an object and `error_mode` is set to `ErrorMode.EXCEPT"`
 
     """
 

@@ -30,20 +30,53 @@ class ErrorMode(Enum):
             raise ValueError(f"Unknown error mode {self}")
 
     @classmethod
-    def from_any(cls, mode: "str|ErrorMode", allow_aliases: bool = True) -> ErrorMode:
+    def from_any(
+        cls,
+        mode: "str|ErrorMode",
+        allow_aliases: bool = True,
+        allow_prefix: bool = True,
+    ) -> ErrorMode:
         if isinstance(mode, ErrorMode):
             return mode
         elif isinstance(mode, str):
+            # strip
+            mode = mode.strip()
+
+            # remove prefix
+            if allow_prefix and mode.startswith("ErrorMode."):
+                mode = mode[len("ErrorMode.") :]
+
+            # lowercase and strip again
             mode = mode.strip().lower()
+
             if not allow_aliases:
+                # try without aliases
                 try:
                     return ErrorMode(mode)
                 except ValueError as e:
                     raise KeyError(f"Unknown error mode {mode}") from e
             else:
+                # look up in aliases map
                 return ERROR_MODE_ALIASES[mode]
         else:
             raise TypeError(f"Expected {ErrorMode} or str, got {type(mode) = }")
+
+    def __str__(self) -> str:
+        return f"ErrorMode.{self.value.capitalize()}"
+
+    def __repr__(self) -> str:
+        return str(self)
+
+    def serialize(self) -> str:
+        return str(self)
+
+    @classmethod
+    def load(cls, data: str) -> ErrorMode:
+        return cls.from_any(
+            data,
+            allow_aliases=False,
+            allow_prefix=True,
+        )
 
 
 ERROR_MODE_ALIASES: dict[str, ErrorMode] = {

@@ -156,7 +156,7 @@ def SerializableDataclass__validate_field_type(
     else:
         on_typecheck_error.process(
             (
-                f"Cannot get type hints for {self.__class__.__name__}, field {_field.name = } and so cannot validate."
+                f"Cannot get type hints for {self.__class__.__name__}, field {_field.name = } and so cannot validate. "
                 + f"Python version is {sys.version_info = }. You can:\n"
                 + f"  - disable `assert_type`. Currently: {_field.assert_type = }\n"
                 + f"  - use hints like `typing.Dict` instead of `dict` in type hints (this is required on python 3.8.x). You had {_field.type = }\n"
@@ -369,7 +369,7 @@ def get_cls_type_hints(cls: Type[T]) -> dict[str, Any]:
     cls_type_hints: dict[str, Any]
     try:
         cls_type_hints = typing.get_type_hints(cls)
-    except TypeError as e:
+    except (TypeError, NameError) as e:
         if sys.version_info < (3, 9):
             warnings.warn(
                 f"Cannot get type hints for {cls.__name__}. Python version is {sys.version_info = }. You can:\n"

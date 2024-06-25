@@ -73,8 +73,8 @@ class SerializerHandler:
     serialize_func: Callable[["JsonSerializer", Any, ObjectPath], JSONitem]
     # unique identifier for the handler
     uid: str
-    # optional description of how this serializer works
-    desc: str = "(no description)"
+    # description of this serializer
+    desc: str
 
     def serialize(self) -> dict:
         """serialize the handler info"""
@@ -104,6 +104,7 @@ BASE_HANDLERS: MonoTuple[SerializerHandler] = (
         ),
         serialize_func=lambda self, obj, path: obj,
         uid="base types",
+        desc="base types (bool, int, float, str, None)",
     ),
     SerializerHandler(
         check=lambda self, obj, path: isinstance(obj, Mapping),
@@ -111,6 +112,7 @@ BASE_HANDLERS: MonoTuple[SerializerHandler] = (
             str(k): self.json_serialize(v, tuple(path) + (k,)) for k, v in obj.items()
         },
         uid="dictionaries",
+        desc="dictionaries",
     ),
     SerializerHandler(
         check=lambda self, obj, path: isinstance(obj, (list, tuple)),
@@ -118,6 +120,7 @@ BASE_HANDLERS: MonoTuple[SerializerHandler] = (
             self.json_serialize(x, tuple(path) + (i,)) for i, x in enumerate(obj)
         ],
         uid="(list, tuple) -> list",
+        desc="lists and tuples as lists",
     ),
 )
 
@@ -140,11 +143,13 @@ DEFAULT_HANDLERS: MonoTuple[SerializerHandler] = tuple(BASE_HANDLERS) + (
         and callable(obj.serialize),
         serialize_func=_serialize_override_serialize_func,
         uid=".serialize override",
+        desc="objects with .serialize method",
     ),
     SerializerHandler(
         check=lambda self, obj, path: isinstance_namedtuple(obj),
         serialize_func=lambda self, obj, path: self.json_serialize(dict(obj._asdict())),
         uid="namedtuple -> dict",
+        desc="namedtuples as dicts",
     ),
     SerializerHandler(
         check=lambda self, obj, path: is_dataclass(obj),
@@ -153,21 +158,25 @@ DEFAULT_HANDLERS: MonoTuple[SerializerHandler] = tuple(BASE_HANDLERS) + (
             for k in obj.__dataclass_fields__
         },
         uid="dataclass -> dict",
+        desc="dataclasses as dicts",
     ),
     SerializerHandler(
         check=lambda self, obj, path: isinstance(obj, Path),
         serialize_func=lambda self, obj, path: obj.as_posix(),
         uid="path -> str",
+        desc="Path objects as posix strings",
     ),
     SerializerHandler(
         check=lambda self, obj, path: str(type(obj)) in SERIALIZE_DIRECT_AS_STR,
         serialize_func=lambda self, obj, path: str(obj),
         uid="obj -> str(obj)",
+        desc="directly serialize objects in `SERIALIZE_DIRECT_AS_STR` to strings",
     ),
     SerializerHandler(
         check=lambda self, obj, path: str(type(obj)) == "<class 'numpy.ndarray'>",
         serialize_func=lambda self, obj, path: serialize_array(self, obj, path=path),
         uid="numpy.ndarray",
+        desc="numpy arrays",
     ),
     SerializerHandler(
         check=lambda self, obj, path: str(type(obj)) == "<class 'torch.Tensor'>",
@@ -175,6 +184,7 @@ DEFAULT_HANDLERS: MonoTuple[SerializerHandler] = tuple(BASE_HANDLERS) + (
             self, obj.detach().cpu(), path=path
         ),
         uid="torch.Tensor",
+        desc="pytorch tensors",
     ),
     SerializerHandler(
         check=lambda self, obj, path: str(type(obj))
@@ -186,6 +196,7 @@ DEFAULT_HANDLERS: MonoTuple[SerializerHandler] = tuple(BASE_HANDLERS) + (
             path=path,
         ),
         uid="pandas.DataFrame",
+        desc="pandas DataFrames",
     ),
     SerializerHandler(
         check=lambda self, obj, path: isinstance(obj, (set, list, tuple))
@@ -194,6 +205,7 @@ DEFAULT_HANDLERS: MonoTuple[SerializerHandler] = tuple(BASE_HANDLERS) + (
             self.json_serialize(x, tuple(path) + (i,)) for i, x in enumerate(obj)
         ],
         uid="(set, list, tuple, Iterable) -> list",
+        desc="sets, lists, tuples, and Iterables as lists",
     ),
     SerializerHandler(
         check=lambda self, obj, path: True,
@@ -202,6 +214,7 @@ DEFAULT_HANDLERS: MonoTuple[SerializerHandler] = tuple(BASE_HANDLERS) + (
             **{k: f(obj) for k, f in SERIALIZER_SPECIAL_FUNCS.items()},
         },
         uid="fallback",
+        desc="fallback handler -- serialize object attributes and special functions as strings",
     ),
 )
 
@@ -236,7 +249,7 @@ class JsonSerializer:
         self,
         *args,
         array_mode: ArrayMode = "array_list_meta",
-        error_mode: ErrorMode = "except",
+        error_mode: ErrorMode = ErrorMode.EXCEPT,
         handlers_pre: MonoTuple[SerializerHandler] = tuple(),
         handlers_default: MonoTuple[SerializerHandler] = DEFAULT_HANDLERS,
         write_only_format: bool = False,
@@ -247,7 +260,7 @@ class JsonSerializer:
             )
 
         self.array_mode: ArrayMode = array_mode
-        self.error_mode: ErrorMode = error_mode
+        self.error_mode: ErrorMode = ErrorMode.from_any(error_mode)
         self.write_only_format: bool = write_only_format
         # join up the handlers
         self.handlers: MonoTuple[SerializerHandler] = tuple(handlers_pre) + tuple(

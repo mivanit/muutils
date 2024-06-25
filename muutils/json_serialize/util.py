@@ -15,8 +15,6 @@ except ImportError:
     warnings.warn("numpy not found, cannot serialize numpy arrays!")
     _NUMPY_WORKING = False
 
-ErrorMode = Literal["ignore", "warn", "except"]
-
 
 JSONitem = Union[bool, int, float, str, list, typing.Dict[str, Any], None]
 JSONdict = typing.Dict[str, JSONitem]

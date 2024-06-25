@@ -161,7 +161,7 @@ def SerializableDataclass__validate_field_type(
                 + f"  - disable `assert_type`. Currently: {_field.assert_type = }\n"
                 + f"  - use hints like `typing.Dict` instead of `dict` in type hints (this is required on python 3.8.x). You had {_field.type = }\n"
                 + "  - use python 3.9.x or higher\n"
-                + "  - coming in a future release, specify custom type validation functions\n"
+                + "  - specify custom type validation function via `custom_typecheck_fn`\n"
             ),
             except_cls=ValueError,
         )

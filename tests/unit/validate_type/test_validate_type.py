@@ -223,7 +223,7 @@ def test_validate_type_set(value, expected_type, expected_result):
         (
             (1, "a", 3.14, "b", True, None, (1, 2, 3)),
             # no idea why this throws type error, only locally, and only for the generated modern types
-            typing.Tuple[ # type: ignore[misc]
+            typing.Tuple[  # type: ignore[misc]
                 int, str, float, str, bool, type(None), typing.Tuple[int, int, int]
             ],
             True,

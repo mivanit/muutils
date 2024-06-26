@@ -364,6 +364,7 @@ class SerializableDataclass(abc.ABC):
 
 
 # cache this so we don't have to keep getting it
+# TODO: are the types hashable? does this even make sense?
 @functools.lru_cache(typed=True)
 def get_cls_type_hints_cached(cls: Type[T]) -> dict[str, Any]:
     "cached typing.get_type_hints for a class"
@@ -373,7 +374,7 @@ def get_cls_type_hints_cached(cls: Type[T]) -> dict[str, Any]:
 def get_cls_type_hints(cls: Type[T]) -> dict[str, Any]:
     cls_type_hints: dict[str, Any]
     try:
-        cls_type_hints = get_cls_type_hints_cached(cls)
+        cls_type_hints = get_cls_type_hints_cached(cls)  # type: ignore
         if len(cls_type_hints) == 0:
             cls_type_hints = typing.get_type_hints(cls)
 

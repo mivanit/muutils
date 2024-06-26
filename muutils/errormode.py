@@ -4,7 +4,6 @@ import typing
 import warnings
 from enum import Enum
 
-# type hint a "warnings.warn" - like function with protocol
 class WarningFunc(typing.Protocol):
     def __call__(
             self,
@@ -14,9 +13,15 @@ class WarningFunc(typing.Protocol):
         ) -> None:
         ...
 
+LoggingFunc = typing.Callable[[str], None]
+
+GLOBAL_WARN_FUNC: WarningFunc = warnings.warn
+GLOBAL_LOG_FUNC: LoggingFunc = print
+
 class ErrorMode(Enum):
     EXCEPT = "except"
     WARN = "warn"
+    LOG = "log"
     IGNORE = "ignore"
 
     def process(
@@ -25,7 +30,8 @@ class ErrorMode(Enum):
         except_cls: typing.Type[Exception] = ValueError,
         warn_cls: typing.Type[Warning] = UserWarning,
         except_from: typing.Optional[Exception] = None,
-        warn_func: WarningFunc = warnings.warn,
+        warn_func: WarningFunc = GLOBAL_WARN_FUNC,
+        log_func: LoggingFunc = GLOBAL_LOG_FUNC,
     ):
         if self is ErrorMode.EXCEPT:
             if except_from is not None:
@@ -36,6 +42,8 @@ class ErrorMode(Enum):
             if except_from is not None:
                 msg = f"{msg}\n\tSource of warning: {except_from}"
             warn_func(msg, category=warn_cls, source=except_from)
+        elif self is ErrorMode.LOG:
+            log_func(msg)
         elif self is ErrorMode.IGNORE:
             pass
         else:
@@ -95,6 +103,7 @@ ERROR_MODE_ALIASES: dict[str, ErrorMode] = {
     # base
     "except": ErrorMode.EXCEPT,
     "warn": ErrorMode.WARN,
+    "log": ErrorMode.LOG,
     "ignore": ErrorMode.IGNORE,
     # except
     "e": ErrorMode.EXCEPT,
@@ -104,6 +113,12 @@ ERROR_MODE_ALIASES: dict[str, ErrorMode] = {
     # warn
     "w": ErrorMode.WARN,
     "warning": ErrorMode.WARN,
+    # log
+    "l": ErrorMode.LOG,
+    "print": ErrorMode.LOG,
+    "output": ErrorMode.LOG,
+    "show": ErrorMode.LOG,
+    "display": ErrorMode.LOG,
     # ignore
     "i": ErrorMode.IGNORE,
     "silent": ErrorMode.IGNORE,

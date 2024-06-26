@@ -4,6 +4,15 @@ import typing
 import warnings
 from enum import Enum
 
+# type hint a "warnings.warn" - like function with protocol
+class WarningFunc(typing.Protocol):
+    def __call__(
+            self,
+            msg: str,
+            category: typing.Type[Warning],
+            source: typing.Any = None,
+        ) -> None:
+        ...
 
 class ErrorMode(Enum):
     EXCEPT = "except"
@@ -16,6 +25,7 @@ class ErrorMode(Enum):
         except_cls: typing.Type[Exception] = ValueError,
         warn_cls: typing.Type[Warning] = UserWarning,
         except_from: typing.Optional[Exception] = None,
+        warn_func: WarningFunc = warnings.warn,
     ):
         if self is ErrorMode.EXCEPT:
             if except_from is not None:
@@ -23,7 +33,9 @@ class ErrorMode(Enum):
             else:
                 raise except_cls(msg)
         elif self is ErrorMode.WARN:
-            warnings.warn(msg, warn_cls)
+            if except_from is not None:
+                msg = f"{msg}\n\tSource of warning: {except_from}"
+            warn_func(msg, category=warn_cls, source=except_from)
         elif self is ErrorMode.IGNORE:
             pass
         else:

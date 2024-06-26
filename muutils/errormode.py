@@ -4,19 +4,21 @@ import typing
 import warnings
 from enum import Enum
 
+
 class WarningFunc(typing.Protocol):
     def __call__(
-            self,
-            msg: str,
-            category: typing.Type[Warning],
-            source: typing.Any = None,
-        ) -> None:
-        ...
+        self,
+        msg: str,
+        category: typing.Type[Warning],
+        source: typing.Any = None,
+    ) -> None: ...
+
 
 LoggingFunc = typing.Callable[[str], None]
 
 GLOBAL_WARN_FUNC: WarningFunc = warnings.warn
 GLOBAL_LOG_FUNC: LoggingFunc = print
+
 
 class ErrorMode(Enum):
     EXCEPT = "except"
@@ -79,7 +81,9 @@ class ErrorMode(Enum):
                 # look up in aliases map
                 return ERROR_MODE_ALIASES[mode]
         else:
-            raise TypeError(f"Expected {ErrorMode = } or str, got {type(mode) = } {mode = }")
+            raise TypeError(
+                f"Expected {ErrorMode = } or str, got {type(mode) = } {mode = }"
+            )
 
     def __str__(self) -> str:
         return f"ErrorMode.{self.value.capitalize()}"

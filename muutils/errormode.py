@@ -16,7 +16,7 @@ class WarningFunc(typing.Protocol):
 
 LoggingFunc = typing.Callable[[str], None]
 
-GLOBAL_WARN_FUNC: WarningFunc = warnings.warn
+GLOBAL_WARN_FUNC: WarningFunc = warnings.warn  # type: ignore[assignment]
 GLOBAL_LOG_FUNC: LoggingFunc = print
 
 

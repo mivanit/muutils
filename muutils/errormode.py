@@ -32,21 +32,32 @@ class ErrorMode(Enum):
         except_cls: typing.Type[Exception] = ValueError,
         warn_cls: typing.Type[Warning] = UserWarning,
         except_from: typing.Optional[Exception] = None,
-        warn_func: WarningFunc = GLOBAL_WARN_FUNC,
-        log_func: LoggingFunc = GLOBAL_LOG_FUNC,
+        warn_func: WarningFunc | None = None,
+        log_func: LoggingFunc | None = None,
     ):
         if self is ErrorMode.EXCEPT:
+            # except, possibly with a chained exception
             if except_from is not None:
                 raise except_cls(msg) from except_from
             else:
                 raise except_cls(msg)
         elif self is ErrorMode.WARN:
+            # get global warn function if not passed
+            if warn_func is None:
+                warn_func = GLOBAL_WARN_FUNC
+            # augment warning message with source
             if except_from is not None:
                 msg = f"{msg}\n\tSource of warning: {except_from}"
+            # warn
             warn_func(msg, category=warn_cls, source=except_from)
         elif self is ErrorMode.LOG:
+            # get global log function if not passed
+            if log_func is None:
+                log_func = GLOBAL_LOG_FUNC
+            # log
             log_func(msg)
         elif self is ErrorMode.IGNORE:
+            # do nothing
             pass
         else:
             raise ValueError(f"Unknown error mode {self}")

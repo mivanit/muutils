@@ -85,3 +85,86 @@ def test_except_mode_chained_exception():
         assert repr(e.__cause__) == "KeyError('base exception')"
     else:
         assert False, "Expected RuntimeError with cause KeyError"
+
+
+def test_logging_global():
+    import muutils.errormode as errormode
+
+    log: list[str] = []
+
+    def log_func(msg: str):
+        log.append(msg)
+
+    ErrorMode.LOG.process("test-log-print")
+
+    errormode.GLOBAL_LOG_FUNC = log_func
+
+    ErrorMode.LOG.process("test-log")
+    ErrorMode.LOG.process("test-log-2")
+
+    assert log == ["test-log", "test-log-2"]
+
+    ErrorMode.LOG.process("test-log-3")
+
+    assert log == ["test-log", "test-log-2", "test-log-3"]
+
+
+# def test_logging_pass():
+#     errmode: ErrorMode = ErrorMode.LOG
+
+#     log: list[str] = []
+#     def log_func(msg: str):
+#         log.append(msg)
+
+#     errmode.process(
+#         "test-log",
+#         log_func=log_func,
+#     )
+
+#     errmode.process(
+#         "test-log-2",
+#         log_func=log_func,
+#     )
+
+#     assert log == ["test-log", "test-log-2"]
+
+
+# def test_logging_init():
+#     errmode: ErrorMode = ErrorMode.LOG
+
+#     log: list[str] = []
+#     def log_func(msg: str):
+#         log.append(msg)
+
+#     errmode.set_log_loc(log_func)
+
+#     errmode.process("test-log")
+#     errmode.process("test-log-2")
+
+#     assert log == ["test-log", "test-log-2"]
+
+#     errmode_2: ErrorMode = ErrorMode.LOG
+#     log_2: list[str] = []
+#     def log_func_2(msg: str):
+#         log_2.append(msg)
+
+#     errmode_2.set_log_loc(log_func_2)
+
+#     errmode_2.process("test-log-3")
+#     errmode_2.process("test-log-4")
+
+#     assert log_2 == ["test-log-3", "test-log-4"]
+#     assert log == ["test-log", "test-log-2"]
+
+
+# def test_logging_init_2():
+#     log: list[str] = []
+#     def log_func(msg: str):
+#         log.append(msg)
+
+#     errmode: ErrorMode = ErrorMode.LOG.set_log_loc(log_func)
+
+#     errmode.process("test-log")
+#     errmode.process("test-log-2")
+
+#     assert log == ["test-log", "test-log-2"]

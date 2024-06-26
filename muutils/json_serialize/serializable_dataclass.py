@@ -127,33 +127,9 @@ def SerializableDataclass__validate_field_type(
     ), f"Field '{_field.name = }' on class {self.__class__ = } is not a SerializableField, but a {type(_field) = }"
 
     # get field type hints
-    field_type_hint: Any = get_cls_type_hints(self.__class__).get(_field.name, None)
-
-    # get the value
-    value: Any = getattr(self, _field.name)
-
-    # validate the type
-    if field_type_hint is not None:
-        try:
-            type_is_valid: bool
-            # validate the type with the default type validator
-            if _field.custom_typecheck_fn is None:
-                type_is_valid = validate_type(value, field_type_hint)
-            # validate the type with a custom type validator
-            else:
-                type_is_valid = _field.custom_typecheck_fn(field_type_hint)
-
-            return type_is_valid
-
-        except Exception as e:
-            on_typecheck_error.process(
-                "exception while validating type: "
-                + f"{_field.name = }, {field_type_hint = }, {type(field_type_hint) = }, {value = }",
-                except_cls=ValueError,
-                except_from=e,
-            )
-            return False
-    else:
+    try:
+        field_type_hint: Any = get_cls_type_hints(self.__class__)[_field.name]
+    except KeyError as e:
         on_typecheck_error.process(
             (
                 f"Cannot get type hints for {self.__class__.__name__}, field {_field.name = } and so cannot validate. "
@@ -164,6 +140,31 @@ def SerializableDataclass__validate_field_type(
                 + "  - specify custom type validation function via `custom_typecheck_fn`\n"
             ),
             except_cls=ValueError,
+            except_from=e,
+        )
+        return False
+
+    # get the value
+    value: Any = getattr(self, _field.name)
+
+    # validate the type
+    try:
+        type_is_valid: bool
+        # validate the type with the default type validator
+        if _field.custom_typecheck_fn is None:
+            type_is_valid = validate_type(value, field_type_hint)
+        # validate the type with a custom type validator
+        else:
+            type_is_valid = _field.custom_typecheck_fn(field_type_hint)
+
+        return type_is_valid
+
+    except Exception as e:
+        on_typecheck_error.process(
+            "exception while validating type: "
+            + f"{_field.name = }, {field_type_hint = }, {type(field_type_hint) = }, {value = }",
+            except_cls=ValueError,
+            except_from=e,
         )
         return False
 

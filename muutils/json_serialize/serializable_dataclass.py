@@ -127,43 +127,45 @@ def SerializableDataclass__validate_field_type(
     ), f"Field '{_field.name = }' on class {self.__class__ = } is not a SerializableField, but a {type(_field) = }"
 
     # get field type hints
-    field_type_hint: Any = get_cls_type_hints(self.__class__).get(_field.name, None)
+    try:
+        field_type_hint: Any = get_cls_type_hints(self.__class__)[_field.name]
+    except KeyError as e:
+        on_typecheck_error.process(
+            (
+                f"Cannot get type hints for {self.__class__.__name__}, field {_field.name = } and so cannot validate.\n"
+                + f"{get_cls_type_hints(self.__class__) = }\n"
+                + f"Python version is {sys.version_info = }. You can:\n"
+                + f"  - disable `assert_type`. Currently: {_field.assert_type = }\n"
+                + f"  - use hints like `typing.Dict` instead of `dict` in type hints (this is required on python 3.8.x). You had {_field.type = }\n"
+                + "  - use python 3.9.x or higher\n"
+                + "  - specify custom type validation function via `custom_typecheck_fn`\n"
+            ),
+            except_cls=TypeError,
+            except_from=e,
+        )
+        return False
 
     # get the value
     value: Any = getattr(self, _field.name)
 
     # validate the type
-    if field_type_hint is not None:
-        try:
-            type_is_valid: bool
-            # validate the type with the default type validator
-            if _field.custom_typecheck_fn is None:
-                type_is_valid = validate_type(value, field_type_hint)
-            # validate the type with a custom type validator
-            else:
-                type_is_valid = _field.custom_typecheck_fn(field_type_hint)
+    try:
+        type_is_valid: bool
+        # validate the type with the default type validator
+        if _field.custom_typecheck_fn is None:
+            type_is_valid = validate_type(value, field_type_hint)
+        # validate the type with a custom type validator
+        else:
+            type_is_valid = _field.custom_typecheck_fn(field_type_hint)
 
-            return type_is_valid
+        return type_is_valid
 
-        except Exception as e:
-            on_typecheck_error.process(
-                "exception while validating type: "
-                + f"{_field.name = }, {field_type_hint = }, {type(field_type_hint) = }, {value = }",
-                except_cls=ValueError,
-                except_from=e,
-            )
-            return False
-    else:
+    except Exception as e:
         on_typecheck_error.process(
-            (
-                f"Cannot get type hints for {self.__class__.__name__}, field {_field.name = } and so cannot validate."
-                + f"Python version is {sys.version_info = }. You can:\n"
-                + f"  - disable `assert_type`. Currently: {_field.assert_type = }\n"
-                + f"  - use hints like `typing.Dict` instead of `dict` in type hints (this is required on python 3.8.x). You had {_field.type = }\n"
-                + "  - use python 3.9.x or higher\n"
-                + "  - coming in a future release, specify custom type validation functions\n"
-            ),
+            "exception while validating type: "
+            + f"{_field.name = }, {field_type_hint = }, {type(field_type_hint) = }, {value = }",
             except_cls=ValueError,
+            except_from=e,
         )
         return False
 
@@ -362,30 +364,29 @@ class SerializableDataclass(abc.ABC):
 
 
 # cache this so we don't have to keep getting it
+# TODO: are the types hashable? does this even make sense?
 @functools.lru_cache(typed=True)
-def get_cls_type_hints(cls: Type[T]) -> dict[str, Any]:
+def get_cls_type_hints_cached(cls: Type[T]) -> dict[str, Any]:
     "cached typing.get_type_hints for a class"
-    # get the type hints for the class
+    return typing.get_type_hints(cls)
+
+
+def get_cls_type_hints(cls: Type[T]) -> dict[str, Any]:
     cls_type_hints: dict[str, Any]
     try:
-        cls_type_hints = typing.get_type_hints(cls)
-    except TypeError as e:
-        if sys.version_info < (3, 9):
-            warnings.warn(
-                f"Cannot get type hints for {cls.__name__}. Python version is {sys.version_info = }. You can:\n"
-                + "  - use hints like `typing.Dict` instead of `dict` in type hints (this is required on python 3.8.x)\n"
-                + "  - use python 3.9.x or higher\n"
-                + "  - add explicit loading functions to the fields\n"
-                + f"  {dataclasses.fields(cls) = }",  # type: ignore[arg-type]
-                CantGetTypeHintsWarning,
-            )
-            cls_type_hints = dict()
-        else:
-            raise TypeError(
-                f"Cannot get type hints for {cls.__name__}. Python version is {sys.version_info = }\n"
-                + f"  {dataclasses.fields(cls) = }\n"  # type: ignore[arg-type]
-                + f"   {e = }"
-            ) from e
+        cls_type_hints = get_cls_type_hints_cached(cls)  # type: ignore
+        if len(cls_type_hints) == 0:
+            cls_type_hints = typing.get_type_hints(cls)
+
+        if len(cls_type_hints) == 0:
+            raise ValueError(f"empty type hints for {cls.__name__ = }")
+    except (TypeError, NameError, ValueError) as e:
+        raise TypeError(
+            f"Cannot get type hints for {cls = }\n"
+            + f"  Python version is {sys.version_info = } (use hints like `typing.Dict` instead of `dict` in type hints on python < 3.9)\n"
+            + f"  {dataclasses.fields(cls) = }\n"  # type: ignore[arg-type]
+            + f"  {e = }"
+        ) from e
 
     return cls_type_hints
 

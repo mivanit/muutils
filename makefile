@@ -1,6 +1,5 @@
 # configuration
 # ==================================================
-# MODIFY THIS FILE TO SUIT YOUR PROJECT
 # it assumes that the source is in a directory named the same as the package name
 PACKAGE_NAME := muutils
 

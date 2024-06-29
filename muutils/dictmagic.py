@@ -36,7 +36,9 @@ class DefaulterDict(typing.Dict[_KT, _VT], Generic[_KT, _VT]):
         if k in self:
             return dict.__getitem__(self, k)
         else:
-            return self.default_factory(k)
+            v: _VT = self.default_factory(k)
+            dict.__setitem__(self, k, v)
+            return v
 
 
 def _recursive_defaultdict_ctor() -> defaultdict:

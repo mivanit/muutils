@@ -1,6 +1,7 @@
 from __future__ import annotations
 from typing import Iterable
-
+from dataclasses import dataclass
+import abc
 import pytest
 from pytest import mark, param
 
@@ -15,6 +16,9 @@ from muutils.misc import (
     stable_hash,
     flatten,
     get_all_subclasses,
+    IsDataclass,
+    isinstance_by_type_name,
+    dataclass_set_equals,
 )
 
 
@@ -302,3 +306,165 @@ def test_get_all_subclasses2():
     assert get_all_subclasses(D, include_self=True) == {D, F}
     assert get_all_subclasses(Z) == set()
     assert get_all_subclasses(Z, include_self=True) == {Z}
+
+
+# Test classes
+@dataclass
+class DC1:
+    x: bool
+    y: bool = False
+
+
+@dataclass(frozen=True)
+class DC2:
+    x: bool
+    y: bool = False
+
+
+@dataclass(frozen=True)
+class DC3:
+    x: DC2 = DC2(False, False)
+
+
+@dataclass(frozen=True)
+class DC4:
+    x: DC2
+    y: bool = False
+
+
+@dataclass(frozen=True)
+class DC5:
+    x: int
+
+
+@dataclass(frozen=True)
+class DC6:
+    x: DC5
+    y: bool = False
+
+
+@dataclass(frozen=True)
+class DC7(abc.ABC):
+    x: bool
+
+    @abc.abstractmethod
+    def foo():
+        pass
+
+
+@dataclass(frozen=True)
+class DC8(DC7):
+    x: bool = False
+
+    def foo():
+        pass
+
+
+@dataclass(frozen=True)
+class DC9(DC7):
+    y: bool = True
+
+    def foo():
+        pass
+
+
+@mark.parametrize(
+    "coll1, coll2, result",
+    [
+        param(
+            c1,
+            c2,
+            res,
+            id=f"{c1}_{c2}",
+        )
+        for c1, c2, res in (
+            [
+                (
+                    [
+                        DC1(False, False),
+                        DC1(False, True),
+                    ],
+                    [
+                        DC1(True, False),
+                        DC1(True, True),
+                    ],
+                    False,
+                ),
+                (
+                    [
+                        DC1(False, False),
+                        DC1(False, True),
+                    ],
+                    [
+                        DC1(False, False),
+                        DC1(False, True),
+                    ],
+                    True,
+                ),
+                (
+                    [
+                        DC1(False, False),
+                        DC1(False, True),
+                    ],
+                    [
+                        DC2(False, False),
+                        DC2(False, True),
+                    ],
+                    False,
+                ),
+                (
+                    [
+                        DC3(False),
+                        DC3(False),
+                    ],
+                    [
+                        DC3(False),
+                    ],
+                    True,
+                ),
+                ([], [], True),
+                ([DC5], [DC5], AttributeError),
+            ]
+        )
+    ],
+)
+def test_dataclass_set_equals(
+    coll1: Iterable[IsDataclass],
+    coll2: Iterable[IsDataclass],
+    result: bool | type[Exception],
+):
+    if isinstance(result, type) and issubclass(result, Exception):
+        with pytest.raises(result):
+            dataclass_set_equals(coll1, coll2)
+    else:
+        assert dataclass_set_equals(coll1, coll2) == result
+
+
+@mark.parametrize(
+    "o, type_name, result",
+    [
+        param(
+            o,
+            name,
+            res,
+            id=f"{o}_{name}",
+        )
+        for o, name, res in (
+            [
+                (True, "bool", True),
+                (True, "int", True),
+                (1, "int", True),
+                (1, "bool", False),
+                ([], "list", True),
+            ]
+        )
+    ],
+)
+def test_isinstance_by_type_name(
+    o: object, type_name: str, result: bool | type[Exception]
+):
+    if isinstance(result, type) and issubclass(result, Exception):
+        with pytest.raises(result):
+            isinstance_by_type_name(o, type_name)
+    else:
+        assert isinstance_by_type_name(o, type_name) == result

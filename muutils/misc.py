@@ -1,7 +1,15 @@
 from __future__ import annotations
 
 import hashlib
-from typing import Iterable, Any, Generator, Callable
+from typing import (
+    Iterable,
+    Any,
+    Generator,
+    Callable,
+    Protocol,
+    ClassVar,
+    runtime_checkable,
+)
 
 # hashes
 # ================================================================================
@@ -466,7 +474,7 @@ def flatten(it: Iterable[any], levels_to_flatten: int | None = None) -> Generato
 
     # Parameters
     - `it`: Any arbitrarily nested iterable.
-    - `levels_to_flatten`: Number of levels to flatten by. If `None`, performs full flattening.
+    - `levels_to_flatten`: Number of levels to flatten by, starting at the outermost layer. If `None`, performs full flattening.
     """
     for x in it:
         # TODO: swap type check with more general check for __iter__() or __next__() or whatever
@@ -482,7 +490,10 @@ def flatten(it: Iterable[any], levels_to_flatten: int | None = None) -> Generato
             yield x
 
 
-def is_abstract(cls):
+def is_abstract(cls: type) -> bool:
+    """
+    Returns if a class is abstract.
+    """
     if not hasattr(cls, "__abstractmethods__"):
         return False  # an ordinary class
     elif len(cls.__abstractmethods__) == 0:
@@ -513,3 +524,47 @@ def get_all_subclasses(class_: type, include_self=False) -> set[type]:
     if include_self:
         subs.add((class_))
     return subs
+
+
+@runtime_checkable
+class IsDataclass(Protocol):
+    # Generic type for any dataclass instance
+    # https://stackoverflow.com/questions/54668000/type-hint-for-an-instance-of-a-non-specific-dataclass
+    __dataclass_fields__: ClassVar[dict[str, Any]]
+
+
+def get_hashable_eq_attrs(dc: IsDataclass) -> tuple[Any]:
+    """Returns a tuple of all fields used for equality comparison.
+    Essentially used to generate a hashable dataclass representation of a dataclass for equality comparison even if it's not frozen.
+    """
+    return *(
+        getattr(dc, fld.name)
+        for fld in filter(lambda x: x.compare, dc.__dataclass_fields__.values())
+    ), type(dc)
+
+
+def dataclass_set_equals(
+    coll1: Iterable[IsDataclass], coll2: Iterable[IsDataclass]
+) -> bool:
+    """Compares 2 collections of dataclass instances as if they were sets.
+    Duplicates are ignored in the same manner as a set.
+    Unfrozen dataclasses can't be placed in sets since they're not hashable.
+    Collections of them may be compared using this function.
+    """
+
+    return {get_hashable_eq_attrs(x) for x in coll1} == {
+        get_hashable_eq_attrs(y) for y in coll2
+    }
+
+
+def isinstance_by_type_name(o: object, type_name: str):
+    """Behaves like stdlib `isinstance` except it accepts a string representation of the type rather than the type itself.
+    This is a hacky function intended to circumvent the need to import a type into a module.
+    It is susceptible to type name collisions.
+
+    # Parameters
+    `o`: Object (not the type itself) whose type to interrogate
+    `type_name`: The string returned by `type_.__name__`.
+    Generic types are not supported, only types that would appear in `type_.__mro__`.
+    """
+    return type_name in {s.__name__ for s in type(o).__mro__}

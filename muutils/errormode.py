@@ -61,7 +61,7 @@ class ErrorMode(Enum):
                 original_showwarning = warnings.showwarning
 
                 def custom_showwarning(
-                    message: str,
+                    message: Warning | str,
                     category: typing.Type[Warning],
                     filename: str,
                     lineno: int,

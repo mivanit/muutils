@@ -12,7 +12,7 @@ from typing import Callable, Optional, Sequence, Union, TypeVar, NamedTuple, Any
 
 
 # _GeneralArray = Union[np.ndarray, "torch.Tensor"]
-NumericSequence = Sequence[Union[float, int]]
+NumericSequence = Sequence[Union[float, int, "NumericSequence"]]
 
 # pylint: disable=abstract-method
 

@@ -40,8 +40,10 @@ class ErrorMode(Enum):
         if self is ErrorMode.EXCEPT:
             # except, possibly with a chained exception
             frame: types.FrameType = sys._getframe(1)
-            traceback: types.TracebackType = types.TracebackType(None, frame, frame.f_lasti, frame.f_lineno)
-            
+            traceback: types.TracebackType = types.TracebackType(
+                None, frame, frame.f_lasti, frame.f_lineno
+            )
+
             # Attach the new traceback to the exception and raise it without the internal call stack
             if except_from is not None:
                 raise except_cls(msg).with_traceback(traceback) from except_from
@@ -64,13 +66,22 @@ class ErrorMode(Enum):
                     filename: str,
                     lineno: int,
                     file: typing.Optional[typing.TextIO] = None,
-                    line: typing.Optional[str] = None
+                    line: typing.Optional[str] = None,
                 ) -> None:
                     # Get the frame where process() was called
-                    frame = sys._getframe(3)  # Adjusted to account for the extra function call
+                    frame = sys._getframe(
+                        3
+                    )  # Adjusted to account for the extra function call
                     # Call the original showwarning function
-                    original_showwarning(message, category, frame.f_code.co_filename, frame.f_lineno, file, line)
-                
+                    original_showwarning(
+                        message,
+                        category,
+                        frame.f_code.co_filename,
+                        frame.f_lineno,
+                        file,
+                        line,
+                    )
+
                 try:
                     warnings.showwarning = custom_showwarning
                     warn_func(msg, category=warn_cls)

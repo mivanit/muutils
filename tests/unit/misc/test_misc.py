@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import Iterable
+from typing import Iterable, Any, Type, Union
 from dataclasses import dataclass
 import abc
 import pytest
@@ -272,7 +272,7 @@ def test_get_all_subclasses_include_self():
         )
     ],
 )
-def test_flatten(deep: Iterable[any], flat: Iterable[any], depth: int | None):
+def test_flatten(deep: Iterable[Any], flat: Iterable[Any], depth: Union[int, None]):
     assert list(flatten(deep, depth)) == flat
 
 
@@ -348,7 +348,7 @@ class DC7(abc.ABC):
     x: bool
 
     @abc.abstractmethod
-    def foo():
+    def foo(self):
         pass
 
 
@@ -356,7 +356,7 @@ class DC7(abc.ABC):
 class DC8(DC7):
     x: bool = False
 
-    def foo():
+    def foo(self):
         pass
 
 
@@ -364,7 +364,7 @@ class DC8(DC7):
 class DC9(DC7):
     y: bool = True
 
-    def foo():
+    def foo(self):
         pass
 
 
@@ -414,11 +414,11 @@ class DC9(DC7):
                 ),
                 (
                     [
-                        DC3(False),
-                        DC3(False),
+                        DC3(DC2(False)),
+                        DC3(DC2(False)),
                     ],
                     [
-                        DC3(False),
+                        DC3(DC2(False)),
                     ],
                     True,
                 ),
@@ -431,7 +431,7 @@ class DC9(DC7):
 def test_dataclass_set_equals(
     coll1: Iterable[IsDataclass],
     coll2: Iterable[IsDataclass],
-    result: bool | type[Exception],
+    result: Union[bool, Type[Exception]],
 ):
     if isinstance(result, type) and issubclass(result, Exception):
         with pytest.raises(result):
@@ -461,7 +461,7 @@ def test_dataclass_set_equals(
     ],
 )
 def test_isinstance_by_type_name(
-    o: object, type_name: str, result: bool | type[Exception]
+    o: object, type_name: str, result: Union[bool, Type[Exception]]
 ):
     if isinstance(result, type) and issubclass(result, Exception):
         with pytest.raises(result):

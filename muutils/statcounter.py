@@ -219,8 +219,8 @@ FancyTimeitResult = NamedTuple(
     "FancyTimeitResult",
     [
         ("timings", StatCounter),
-        ("return_value", T | None),
-        ("profile", pstats.Stats | None),
+        ("return_value", Union[T, None]),
+        ("profile", Union[pstats.Stats, None]),
     ],
 )
 
@@ -229,7 +229,7 @@ def timeit_fancy(
     cmd: Callable[[], T] | str,
     setup: str = lambda: None,
     repeats: int = 5,
-    namespace: dict[str, Any] | None = None,
+    namespace: Union[dict[str, Any], None] = None,
     get_return: bool = True,
     do_profiling: bool = False,
 ) -> FancyTimeitResult:

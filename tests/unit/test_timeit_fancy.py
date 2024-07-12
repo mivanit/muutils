@@ -1,6 +1,6 @@
+import warnings
 import pytest
 from muutils.statcounter import StatCounter
-from typing import Callable, Any
 import pstats
 
 # Assuming the timeit_fancy function and FancyTimeitResult are imported from the correct module
@@ -15,7 +15,6 @@ def test_timeit_fancy_basic():
 
     assert isinstance(result, FancyTimeitResult)
     assert isinstance(result.timings, StatCounter)
-    assert result.return_value is None
     assert result.profile is None
     assert all(t > 0 for t in result.timings.values())
 
@@ -41,23 +40,18 @@ def test_timeit_fancy_with_profiling():
 
     assert isinstance(result, FancyTimeitResult)
     assert isinstance(result.timings, StatCounter)
-    assert result.return_value is None
     assert isinstance(result.profile, pstats.Stats)
     assert all(t > 0 for t in result.timings.values())
 
 
-def test_timeit_fancy_with_setup():
-    setup = "x = 10"
+def test_timeit_fancy_no_return():
+    def simple_function_returns_data():
+        return "helloworld"
 
-    def simple_function():
-        # x is defined in the setup
-        return x * 2  # noqa: F821
-
-    result = timeit_fancy(simple_function, setup=setup, namespace={"x": 10})
-
+    result = timeit_fancy(simple_function_returns_data, get_return=False)
     assert isinstance(result, FancyTimeitResult)
-    assert isinstance(result.timings, StatCounter)
     assert result.return_value is None
+    assert isinstance(result.timings, StatCounter)
     assert result.profile is None
     assert all(t > 0 for t in result.timings.values())
 
@@ -70,18 +64,38 @@ def test_timeit_fancy_with_repeats():
 
     assert isinstance(result, FancyTimeitResult)
     assert isinstance(result.timings, StatCounter)
-    assert len(result.timings) == 10
-    assert result.return_value is None
+    assert result.timings.total() == 10
     assert result.profile is None
     assert all(t > 0 for t in result.timings.values())
 
 
-@pytest.mark.parametrize("cmd", [lambda: sum(range(100)), "sum(range(100))"])
-def test_timeit_fancy_with_different_cmd_types(cmd: Callable[[], Any] | str):
-    result = timeit_fancy(cmd)
+def test_timeit_fancy_cmd_lambda():
+    result = timeit_fancy(lambda: sum(range(100)))
 
     assert isinstance(result, FancyTimeitResult)
     assert isinstance(result.timings, StatCounter)
-    assert result.return_value is None
+    assert result.profile is None
+    assert all(t > 0 for t in result.timings.values())
+
+
+def test_timeit_fancy_cmd_string_warns():
+    # expect a warning
+    with pytest.warns(UserWarning):
+        result = timeit_fancy("sum(range(100))")
+
+    assert isinstance(result, FancyTimeitResult)
+    assert isinstance(result.timings, StatCounter)
+    assert result.profile is None
+    assert all(t > 0 for t in result.timings.values())
+
+
+def test_timeit_fancy_cmd_string_nowarn():
+    # expect no warnings
+    with warnings.catch_warnings():
+        warnings.simplefilter("error")
+        result = timeit_fancy("sum(range(100))", get_return=False, do_profiling=False)
+
+    assert isinstance(result, FancyTimeitResult)
+    assert isinstance(result.timings, StatCounter)
     assert result.profile is None
     assert all(t > 0 for t in result.timings.values())

@@ -4,6 +4,7 @@ import pstats
 import timeit
 import cProfile
 from typing import Callable, Union, TypeVar, NamedTuple, Any
+import warnings
 
 from muutils.statcounter import StatCounter
 
@@ -67,13 +68,19 @@ def timeit_fancy(
     # Optionally capture the return value
     profile: pstats.Stats | None = None
 
+    return_value: T | None = None
     if get_return or do_profiling:
         # Optionally perform profiling
         if do_profiling:
             profiler = cProfile.Profile()
             profiler.enable()
 
-        return_value: T | None = cmd()
+        try:
+            return_value = cmd()
+        except TypeError as e:
+            warnings.warn(
+                f"Failed to get return value from `cmd` due to error (probably passing a string). will return `return_value=None`\n{e}",
+            )
 
         if do_profiling:
             profiler.disable()

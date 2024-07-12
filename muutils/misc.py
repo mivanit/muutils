@@ -24,8 +24,62 @@ def stable_hash(s: str) -> int:
     return int.from_bytes(hash_obj.digest(), "big")
 
 
-# string-like operations on lists
+# funky sequence stuff
 # ================================================================================
+
+
+def empty_sequence_if_attr_false(
+    itr: Iterable[Any],
+    attr_owner: Any,
+    attr_name: str,
+) -> Iterable[Any]:
+    """Returns `itr` if `attr_owner` has the attribute `attr_name` and it boolean casts to `True`. Returns an empty sequence otherwise.
+
+    Particularly useful for optionally inserting delimiters into a sequence depending on an `TokenizerElement` attribute.
+
+    # Parameters:
+    - `itr: Iterable[Any]`
+        The iterable to return if the attribute is `True`.
+    - `attr_owner: Any`
+        The object to check for the attribute.
+    - `attr_name: str`
+        The name of the attribute to check.
+
+    # Returns:
+    - `itr: Iterable` if `attr_owner` has the attribute `attr_name` and it boolean casts to `True`, otherwise an empty sequence.
+    - `()` an empty sequence if the attribute is `False` or not present.
+    """
+    return itr if bool(getattr(attr_owner, attr_name, False)) else ()
+
+
+def flatten(it: Iterable[Any], levels_to_flatten: int | None = None) -> Generator:
+    """
+    Flattens an arbitrarily nested iterable.
+    Flattens all iterable data types except for `str` and `bytes`.
+
+    # Returns
+    Generator over the flattened sequence.
+
+    # Parameters
+    - `it`: Any arbitrarily nested iterable.
+    - `levels_to_flatten`: Number of levels to flatten by, starting at the outermost layer. If `None`, performs full flattening.
+    """
+    for x in it:
+        # TODO: swap type check with more general check for __iter__() or __next__() or whatever
+        if (
+            hasattr(x, "__iter__")
+            and not isinstance(x, (str, bytes))
+            and (levels_to_flatten is None or levels_to_flatten > 0)
+        ):
+            yield from flatten(
+                x, None if levels_to_flatten is None else levels_to_flatten - 1
+            )
+        else:
+            yield x
+
+
+# string-like operations on lists
+# --------------------------------------------------------------------------------
 
 
 def list_split(lst: list, val) -> list[list]:
@@ -440,54 +494,8 @@ def freeze(instance: object) -> object:
     return instance
 
 
-def empty_sequence_if_attr_false(
-    itr: Iterable[Any],
-    attr_owner: Any,
-    attr_name: str,
-) -> Iterable[Any]:
-    """Returns `itr` if `attr_owner` has the attribute `attr_name` and it boolean casts to `True`. Returns an empty sequence otherwise.
-
-    Particularly useful for optionally inserting delimiters into a sequence depending on an `TokenizerElement` attribute.
-
-    # Parameters:
-    - `itr: Iterable[Any]`
-        The iterable to return if the attribute is `True`.
-    - `attr_owner: Any`
-        The object to check for the attribute.
-    - `attr_name: str`
-        The name of the attribute to check.
-
-    # Returns:
-    - `itr: Iterable` if `attr_owner` has the attribute `attr_name` and it boolean casts to `True`, otherwise an empty sequence.
-    - `()` an empty sequence if the attribute is `False` or not present.
-    """
-    return itr if bool(getattr(attr_owner, attr_name, False)) else ()
-
-
-def flatten(it: Iterable[Any], levels_to_flatten: int | None = None) -> Generator:
-    """
-    Flattens an arbitrarily nested iterable.
-    Flattens all iterable data types except for `str` and `bytes`.
-
-    # Returns
-    Generator over the flattened sequence.
-
-    # Parameters
-    - `it`: Any arbitrarily nested iterable.
-    - `levels_to_flatten`: Number of levels to flatten by, starting at the outermost layer. If `None`, performs full flattening.
-    """
-    for x in it:
-        # TODO: swap type check with more general check for __iter__() or __next__() or whatever
-        if (
-            hasattr(x, "__iter__")
-            and not isinstance(x, (str, bytes))
-            and (levels_to_flatten is None or levels_to_flatten > 0)
-        ):
-            yield from flatten(
-                x, None if levels_to_flatten is None else levels_to_flatten - 1
-            )
-        else:
-            yield x
+# class and type magic
+# ================================================================================
 
 
 def is_abstract(cls: type) -> bool:
@@ -515,14 +523,33 @@ def get_all_subclasses(class_: type, include_self=False) -> set[type]:
     Since most class hierarchies are small, the inefficiencies of the existing recursive implementation aren't problematic.
     It might be valuable to refactor with memoization if the need arises to use this function on a very large class hierarchy.
     """
-    subs: set[type] = set(flatten(
-        get_all_subclasses(sub, include_self=True)
-        for sub in class_.__subclasses__()
-        if sub is not None
-    ))
+    subs: set[type] = set(
+        flatten(
+            get_all_subclasses(sub, include_self=True)
+            for sub in class_.__subclasses__()
+            if sub is not None
+        )
+    )
     if include_self:
         subs.add((class_))
     return subs
+
+
+def isinstance_by_type_name(o: object, type_name: str):
+    """Behaves like stdlib `isinstance` except it accepts a string representation of the type rather than the type itself.
+    This is a hacky function intended to circumvent the need to import a type into a module.
+    It is susceptible to type name collisions.
+
+    # Parameters
+    `o`: Object (not the type itself) whose type to interrogate
+    `type_name`: The string returned by `type_.__name__`.
+    Generic types are not supported, only types that would appear in `type_.__mro__`.
+    """
+    return type_name in {s.__name__ for s in type(o).__mro__}
+
+
+# dataclass magic
+# --------------------------------------------------------------------------------
 
 
 @runtime_checkable
@@ -554,16 +581,3 @@ def dataclass_set_equals(
     return {get_hashable_eq_attrs(x) for x in coll1} == {
         get_hashable_eq_attrs(y) for y in coll2
     }
-
-
-def isinstance_by_type_name(o: object, type_name: str):
-    """Behaves like stdlib `isinstance` except it accepts a string representation of the type rather than the type itself.
-    This is a hacky function intended to circumvent the need to import a type into a module.
-    It is susceptible to type name collisions.
-
-    # Parameters
-    `o`: Object (not the type itself) whose type to interrogate
-    `type_name`: The string returned by `type_.__name__`.
-    Generic types are not supported, only types that would appear in `type_.__mro__`.
-    """
-    return type_name in {s.__name__ for s in type(o).__mro__}

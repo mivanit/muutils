@@ -444,7 +444,7 @@ def empty_sequence_if_attr_false(
     itr: Iterable[Any],
     attr_owner: Any,
     attr_name: str,
-) -> Iterable[any]:
+) -> Iterable[Any]:
     """Returns `itr` if `attr_owner` has the attribute `attr_name` and it boolean casts to `True`. Returns an empty sequence otherwise.
 
     Particularly useful for optionally inserting delimiters into a sequence depending on an `TokenizerElement` attribute.
@@ -464,7 +464,7 @@ def empty_sequence_if_attr_false(
     return itr if bool(getattr(attr_owner, attr_name, False)) else ()
 
 
-def flatten(it: Iterable[any], levels_to_flatten: int | None = None) -> Generator:
+def flatten(it: Iterable[Any], levels_to_flatten: int | None = None) -> Generator:
     """
     Flattens an arbitrarily nested iterable.
     Flattens all iterable data types except for `str` and `bytes`.
@@ -515,12 +515,11 @@ def get_all_subclasses(class_: type, include_self=False) -> set[type]:
     Since most class hierarchies are small, the inefficiencies of the existing recursive implementation aren't problematic.
     It might be valuable to refactor with memoization if the need arises to use this function on a very large class hierarchy.
     """
-    subs: list[set] = [
+    subs: set[type] = set(flatten(
         get_all_subclasses(sub, include_self=True)
         for sub in class_.__subclasses__()
         if sub is not None
-    ]
-    subs: set = set(flatten(subs))
+    ))
     if include_self:
         subs.add((class_))
     return subs

@@ -226,8 +226,8 @@ FancyTimeitResult = NamedTuple(
 
 
 def timeit_fancy(
-    cmd: Callable[[], T] | str,
-    setup: str = lambda: None,
+    cmd: Callable[[], T],
+    setup: Union[str, Callable[[], Any]] = lambda: None,
     repeats: int = 5,
     namespace: Union[dict[str, Any], None] = None,
     get_return: bool = True,
@@ -271,7 +271,6 @@ def timeit_fancy(
     times: list[float] = timer.repeat(repeats, 1)
 
     # Optionally capture the return value
-    return_value: T | None = None
     profile: pstats.Stats | None = None
 
     if get_return or do_profiling:
@@ -280,7 +279,7 @@ def timeit_fancy(
             profiler = cProfile.Profile()
             profiler.enable()
 
-        return_value: T = cmd()
+        return_value: T | None = cmd()
 
         if do_profiling:
             profiler.disable()

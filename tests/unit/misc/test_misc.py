@@ -1,6 +1,8 @@
 from __future__ import annotations
+from typing import Iterable
 
 import pytest
+from pytest import mark, param
 
 from muutils.misc import (
     dict_to_filename,
@@ -11,6 +13,8 @@ from muutils.misc import (
     sanitize_identifier,
     sanitize_name,
     stable_hash,
+    flatten,
+    get_all_subclasses,
 )
 
 
@@ -183,3 +187,118 @@ def test_list_join():
         1
     ], "Single item list should remain unchanged"
     assert list_join([], lambda: "x") == [], "Empty list should remain unchanged"
+
+
+# Testing the flatten function
+def test_flatten_full_flattening():
+    assert list(flatten([1, [2, [3, 4]], 5])) == [1, 2, 3, 4, 5]
+    assert list(flatten([1, [2, [3, [4, [5]]]]])) == [1, 2, 3, 4, 5]
+    assert list(flatten([])) == []
+
+
+def test_flatten_partial_flattening():
+    assert list(flatten([1, [2, [3, 4]], 5], levels_to_flatten=1)) == [1, 2, [3, 4], 5]
+    assert list(flatten([1, [2, [3, [4, [5]]]]], levels_to_flatten=2)) == [
+        1,
+        2,
+        3,
+        [4, [5]],
+    ]
+
+
+def test_flatten_with_non_iterables():
+    assert list(flatten([1, 2, 3])) == [1, 2, 3]
+    assert list(flatten([1, "abc", 2, [3, 4], 5])) == [1, "abc", 2, 3, 4, 5]
+
+
+# Testing the get_all_subclasses function
+class A:
+    pass
+
+
+class B(A):
+    pass
+
+
+class C(B):
+    pass
+
+
+def test_get_all_subclasses():
+    assert get_all_subclasses(A) == {B, C}
+    assert get_all_subclasses(B) == {C}
+    assert get_all_subclasses(C) == set()
+
+
+def test_get_all_subclasses_include_self():
+    assert get_all_subclasses(A, include_self=True) == {A, B, C}
+    assert get_all_subclasses(B, include_self=True) == {B, C}
+    assert get_all_subclasses(C, include_self=True) == {C}
+
+
+@mark.parametrize(
+    "deep, flat, depth",
+    [
+        param(
+            iter_tuple[0],
+            iter_tuple[1],
+            iter_tuple[2],
+            id=f"{i}",
+        )
+        for i, iter_tuple in enumerate(
+            [
+                ([1, 2, 3, 4], [1, 2, 3, 4], None),
+                ((1, 2, 3, 4), [1, 2, 3, 4], None),
+                ((j for j in [1, 2, 3, 4]), [1, 2, 3, 4], None),
+                (["a", "b", "c", "d"], ["a", "b", "c", "d"], None),
+                ("funky duck", [c for c in "funky duck"], None),
+                (["funky", "duck"], ["funky", "duck"], None),
+                (b"funky duck", [b for b in b"funky duck"], None),
+                ([b"funky", b"duck"], [b"funky", b"duck"], None),
+                ([[1, 2, 3, 4]], [1, 2, 3, 4], None),
+                ([[[[1, 2, 3, 4]]]], [1, 2, 3, 4], None),
+                ([[[[1], 2], 3], 4], [1, 2, 3, 4], None),
+                ([[1, 2], [[3]], (4,)], [1, 2, 3, 4], None),
+                ([[[1, 2, 3, 4]]], [[1, 2, 3, 4]], 1),
+                ([[[1, 2, 3, 4]]], [1, 2, 3, 4], 2),
+                ([[1, 2], [[3]], (4,)], [1, 2, [3], 4], 1),
+                ([[1, 2], [(3,)], (4,)], [1, 2, (3,), 4], 1),
+                ([[[[1], 2], 3], 4], [[1], 2, 3, 4], 2),
+            ]
+        )
+    ],
+)
+def test_flatten(deep: Iterable[any], flat: Iterable[any], depth: int | None):
+    assert list(flatten(deep, depth)) == flat
+
+
+def test_get_all_subclasses2():
+    class A:
+        pass
+
+    class B(A):
+        pass
+
+    class C(A):
+        pass
+
+    class D(B, C):
+        pass
+
+    class E(B):
+        pass
+
+    class F(D):
+        pass
+
+    class Z:
+        pass
+
+    assert get_all_subclasses(A) == {B, C, D, E, F}
+    assert get_all_subclasses(A, include_self=True) == {A, B, C, D, E, F}
+    assert get_all_subclasses(B) == {D, E, F}
+    assert get_all_subclasses(C) == {D, F}
+    assert get_all_subclasses(D) == {F}
+    assert get_all_subclasses(D, include_self=True) == {D, F}
+    assert get_all_subclasses(Z) == set()
+    assert get_all_subclasses(Z, include_self=True) == {Z}

@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import hashlib
-import typing
+from typing import Iterable, Any, Generator, Callable
 
 # hashes
 # ================================================================================
@@ -38,7 +38,7 @@ def list_split(lst: list, val) -> list[list]:
     return output
 
 
-def list_join(lst: list, factory: typing.Callable) -> list:
+def list_join(lst: list, factory: Callable) -> list:
     """add a *new* instance of `val` between each element of `lst`
 
     ```
@@ -430,3 +430,86 @@ def freeze(instance: object) -> object:
             ) from e
 
     return instance
+
+
+def empty_sequence_if_attr_false(
+    itr: Iterable[Any],
+    attr_owner: Any,
+    attr_name: str,
+) -> Iterable[any]:
+    """Returns `itr` if `attr_owner` has the attribute `attr_name` and it boolean casts to `True`. Returns an empty sequence otherwise.
+
+    Particularly useful for optionally inserting delimiters into a sequence depending on an `TokenizerElement` attribute.
+
+    # Parameters:
+    - `itr: Iterable[Any]`
+        The iterable to return if the attribute is `True`.
+    - `attr_owner: Any`
+        The object to check for the attribute.
+    - `attr_name: str`
+        The name of the attribute to check.
+
+    # Returns:
+    - `itr: Iterable` if `attr_owner` has the attribute `attr_name` and it boolean casts to `True`, otherwise an empty sequence.
+    - `()` an empty sequence if the attribute is `False` or not present.
+    """
+    return itr if bool(getattr(attr_owner, attr_name, False)) else ()
+
+
+def flatten(it: Iterable[any], levels_to_flatten: int | None = None) -> Generator:
+    """
+    Flattens an arbitrarily nested iterable.
+    Flattens all iterable data types except for `str` and `bytes`.
+
+    # Returns
+    Generator over the flattened sequence.
+
+    # Parameters
+    - `it`: Any arbitrarily nested iterable.
+    - `levels_to_flatten`: Number of levels to flatten by. If `None`, performs full flattening.
+    """
+    for x in it:
+        # TODO: swap type check with more general check for __iter__() or __next__() or whatever
+        if (
+            hasattr(x, "__iter__")
+            and not isinstance(x, (str, bytes))
+            and (levels_to_flatten is None or levels_to_flatten > 0)
+        ):
+            yield from flatten(
+                x, None if levels_to_flatten is None else levels_to_flatten - 1
+            )
+        else:
+            yield x
+
+
+def is_abstract(cls):
+    if not hasattr(cls, "__abstractmethods__"):
+        return False  # an ordinary class
+    elif len(cls.__abstractmethods__) == 0:
+        return False  # a concrete implementation of an abstract class
+    else:
+        return True  # an abstract class
+
+
+def get_all_subclasses(class_: type, include_self=False) -> set[type]:
+    """
+    Returns a set containing all child classes in the subclass graph of `class_`.
+    I.e., includes subclasses of subclasses, etc.
+
+    # Parameters
+    - `include_self`: Whether to include `class_` itself in the returned list
+    - `class_`: Superclass
+
+    # Development
+    Since most class hierarchies are small, the inefficiencies of the existing recursive implementation aren't problematic.
+    It might be valuable to refactor with memoization if the need arises to use this function on a very large class hierarchy.
+    """
+    subs: list[set] = [
+        get_all_subclasses(sub, include_self=True)
+        for sub in class_.__subclasses__()
+        if sub is not None
+    ]
+    subs: set = set(flatten(subs))
+    if include_self:
+        subs.add((class_))
+    return subs

@@ -516,7 +516,7 @@ def get_all_subclasses(class_: type, include_self=False) -> set[type]:
     I.e., includes subclasses of subclasses, etc.
 
     # Parameters
-    - `include_self`: Whether to include `class_` itself in the returned list
+    - `include_self`: Whether to include `class_` itself in the returned set
     - `class_`: Superclass
 
     # Development
@@ -531,7 +531,7 @@ def get_all_subclasses(class_: type, include_self=False) -> set[type]:
         )
     )
     if include_self:
-        subs.add((class_))
+        subs.add(class_)
     return subs
 
 
@@ -560,8 +560,9 @@ class IsDataclass(Protocol):
 
 
 def get_hashable_eq_attrs(dc: IsDataclass) -> tuple[Any]:
-    """Returns a tuple of all fields used for equality comparison.
-    Essentially used to generate a hashable dataclass representation of a dataclass for equality comparison even if it's not frozen.
+    """Returns a tuple of all fields used for equality comparison, including the type of the dataclass itself.
+    The type is included to preserve the unequal equality behavior of instances of different dataclasses whose fields are identical.
+    Essentially used to generate a hashable dataclass representation for equality comparison even if it's not frozen.
     """
     return *(
         getattr(dc, fld.name)

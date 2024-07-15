@@ -27,3 +27,5 @@ muutils.egg-info/
 
 # setup_build.sh
 
+# pyenv
+.python-version

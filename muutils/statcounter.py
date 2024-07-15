@@ -7,8 +7,9 @@ from functools import cached_property
 from itertools import chain
 from typing import Callable, Optional, Sequence, Union
 
+
 # _GeneralArray = Union[np.ndarray, "torch.Tensor"]
-NumericSequence = Sequence[Union[float, int]]
+NumericSequence = Sequence[Union[float, int, "NumericSequence"]]
 
 # pylint: disable=abstract-method
 

@@ -1,7 +1,15 @@
 from __future__ import annotations
 
 import hashlib
-import typing
+from typing import (
+    Iterable,
+    Any,
+    Generator,
+    Callable,
+    Protocol,
+    ClassVar,
+    runtime_checkable,
+)
 
 # hashes
 # ================================================================================
@@ -16,8 +24,62 @@ def stable_hash(s: str) -> int:
     return int.from_bytes(hash_obj.digest(), "big")
 
 
-# string-like operations on lists
+# funky sequence stuff
 # ================================================================================
+
+
+def empty_sequence_if_attr_false(
+    itr: Iterable[Any],
+    attr_owner: Any,
+    attr_name: str,
+) -> Iterable[Any]:
+    """Returns `itr` if `attr_owner` has the attribute `attr_name` and it boolean casts to `True`. Returns an empty sequence otherwise.
+
+    Particularly useful for optionally inserting delimiters into a sequence depending on an `TokenizerElement` attribute.
+
+    # Parameters:
+    - `itr: Iterable[Any]`
+        The iterable to return if the attribute is `True`.
+    - `attr_owner: Any`
+        The object to check for the attribute.
+    - `attr_name: str`
+        The name of the attribute to check.
+
+    # Returns:
+    - `itr: Iterable` if `attr_owner` has the attribute `attr_name` and it boolean casts to `True`, otherwise an empty sequence.
+    - `()` an empty sequence if the attribute is `False` or not present.
+    """
+    return itr if bool(getattr(attr_owner, attr_name, False)) else ()
+
+
+def flatten(it: Iterable[Any], levels_to_flatten: int | None = None) -> Generator:
+    """
+    Flattens an arbitrarily nested iterable.
+    Flattens all iterable data types except for `str` and `bytes`.
+
+    # Returns
+    Generator over the flattened sequence.
+
+    # Parameters
+    - `it`: Any arbitrarily nested iterable.
+    - `levels_to_flatten`: Number of levels to flatten by, starting at the outermost layer. If `None`, performs full flattening.
+    """
+    for x in it:
+        # TODO: swap type check with more general check for __iter__() or __next__() or whatever
+        if (
+            hasattr(x, "__iter__")
+            and not isinstance(x, (str, bytes))
+            and (levels_to_flatten is None or levels_to_flatten > 0)
+        ):
+            yield from flatten(
+                x, None if levels_to_flatten is None else levels_to_flatten - 1
+            )
+        else:
+            yield x
+
+
+# string-like operations on lists
+# --------------------------------------------------------------------------------
 
 
 def list_split(lst: list, val) -> list[list]:
@@ -38,7 +100,7 @@ def list_split(lst: list, val) -> list[list]:
     return output
 
 
-def list_join(lst: list, factory: typing.Callable) -> list:
+def list_join(lst: list, factory: Callable) -> list:
     """add a *new* instance of `val` between each element of `lst`
 
     ```
@@ -430,3 +492,93 @@ def freeze(instance: object) -> object:
             ) from e
 
     return instance
+
+
+# class and type magic
+# ================================================================================
+
+
+def is_abstract(cls: type) -> bool:
+    """
+    Returns if a class is abstract.
+    """
+    if not hasattr(cls, "__abstractmethods__"):
+        return False  # an ordinary class
+    elif len(cls.__abstractmethods__) == 0:
+        return False  # a concrete implementation of an abstract class
+    else:
+        return True  # an abstract class
+
+
+def get_all_subclasses(class_: type, include_self=False) -> set[type]:
+    """
+    Returns a set containing all child classes in the subclass graph of `class_`.
+    I.e., includes subclasses of subclasses, etc.
+
+    # Parameters
+    - `include_self`: Whether to include `class_` itself in the returned set
+    - `class_`: Superclass
+
+    # Development
+    Since most class hierarchies are small, the inefficiencies of the existing recursive implementation aren't problematic.
+    It might be valuable to refactor with memoization if the need arises to use this function on a very large class hierarchy.
+    """
+    subs: set[type] = set(
+        flatten(
+            get_all_subclasses(sub, include_self=True)
+            for sub in class_.__subclasses__()
+            if sub is not None
+        )
+    )
+    if include_self:
+        subs.add(class_)
+    return subs
+
+
+def isinstance_by_type_name(o: object, type_name: str):
+    """Behaves like stdlib `isinstance` except it accepts a string representation of the type rather than the type itself.
+    This is a hacky function intended to circumvent the need to import a type into a module.
+    It is susceptible to type name collisions.
+
+    # Parameters
+    `o`: Object (not the type itself) whose type to interrogate
+    `type_name`: The string returned by `type_.__name__`.
+    Generic types are not supported, only types that would appear in `type_.__mro__`.
+    """
+    return type_name in {s.__name__ for s in type(o).__mro__}
+
+
+# dataclass magic
+# --------------------------------------------------------------------------------
+
+
+@runtime_checkable
+class IsDataclass(Protocol):
+    # Generic type for any dataclass instance
+    # https://stackoverflow.com/questions/54668000/type-hint-for-an-instance-of-a-non-specific-dataclass
+    __dataclass_fields__: ClassVar[dict[str, Any]]
+
+
+def get_hashable_eq_attrs(dc: IsDataclass) -> tuple[Any]:
+    """Returns a tuple of all fields used for equality comparison, including the type of the dataclass itself.
+    The type is included to preserve the unequal equality behavior of instances of different dataclasses whose fields are identical.
+    Essentially used to generate a hashable dataclass representation for equality comparison even if it's not frozen.
+    """
+    return *(
+        getattr(dc, fld.name)
+        for fld in filter(lambda x: x.compare, dc.__dataclass_fields__.values())
+    ), type(dc)
+
+
+def dataclass_set_equals(
+    coll1: Iterable[IsDataclass], coll2: Iterable[IsDataclass]
+) -> bool:
+    """Compares 2 collections of dataclass instances as if they were sets.
+    Duplicates are ignored in the same manner as a set.
+    Unfrozen dataclasses can't be placed in sets since they're not hashable.
+    Collections of them may be compared using this function.
+    """
+
+    return {get_hashable_eq_attrs(x) for x in coll1} == {
+        get_hashable_eq_attrs(y) for y in coll2
+    }

@@ -22,6 +22,50 @@ GLOBAL_WARN_FUNC: WarningFunc = warnings.warn  # type: ignore[assignment]
 GLOBAL_LOG_FUNC: LoggingFunc = print
 
 
+def custom_showwarning(
+    message: Warning | str,
+    category: typing.Type[Warning] | None = None,
+    filename: str | None = None,
+    lineno: int | None = None,
+    file: typing.Optional[typing.TextIO] = None,
+    line: typing.Optional[str] = None,
+) -> None:
+    if category is None:
+        category = UserWarning
+    # Get the frame where process() was called
+    # Adjusted to account for the extra function call
+    frame: types.FrameType = sys._getframe(2)
+    # get globals and traceback
+    traceback: types.TracebackType = types.TracebackType(
+        None, frame, frame.f_lasti, frame.f_lineno
+    )
+    _globals: dict[str, typing.Any] = frame.f_globals
+    # init the new warning and add the traceback
+    if isinstance(message, str):
+        message = category(message)
+    message = message.with_traceback(traceback)
+
+    # Call the original showwarning function
+    warnings.warn_explicit(
+        message=message,
+        category=category,
+        # filename arg if it's passed, otherwise use the frame's filename
+        filename=frame.f_code.co_filename,
+        lineno=frame.f_lineno,
+        module=frame.f_globals.get("__name__", "__main__"),
+        registry=_globals.setdefault("__warningregistry__", {}),
+        module_globals=_globals,
+    )
+    # warnings._showwarning_orig(
+    #     message,
+    #     category,
+    #     frame.f_code.co_filename,
+    #     frame.f_lineno,
+    #     file,
+    #     line,
+    # )
+
+
 class ErrorMode(Enum):
     EXCEPT = "except"
     WARN = "warn"
@@ -57,37 +101,7 @@ class ErrorMode(Enum):
             if except_from is not None:
                 msg = f"{msg}\n\tSource of warning: {except_from}"
             if warn_func == warnings.warn:
-                # Store the original showwarning function
-                original_showwarning = warnings.showwarning
-
-                def custom_showwarning(
-                    message: Warning | str,
-                    category: typing.Type[Warning],
-                    filename: str,
-                    lineno: int,
-                    file: typing.Optional[typing.TextIO] = None,
-                    line: typing.Optional[str] = None,
-                ) -> None:
-                    # Get the frame where process() was called
-                    frame = sys._getframe(
-                        3
-                    )  # Adjusted to account for the extra function call
-                    # Call the original showwarning function
-                    original_showwarning(
-                        message,
-                        category,
-                        frame.f_code.co_filename,
-                        frame.f_lineno,
-                        file,
-                        line,
-                    )
-
-                try:
-                    warnings.showwarning = custom_showwarning
-                    warn_func(msg, category=warn_cls)
-                finally:
-                    # Restore the original showwarning function
-                    warnings.showwarning = original_showwarning
+                custom_showwarning(msg, category=warn_cls)
             else:
                 # Use the provided warn_func as-is
                 warn_func(msg, category=warn_cls)

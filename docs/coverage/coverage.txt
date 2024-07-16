@@ -4,6 +4,7 @@ muutils\__init__.py                                                             
 muutils\dictmagic.py                                                                160     23    86%   28-33, 36-41, 299, 459-463, 467, 500-512
 muutils\errormode.py                                                                 74     30    59%   1-25, 34, 69-75, 102, 107, 118-121, 154, 157, 160, 163-164, 172
 muutils\group_equiv.py                                                               29      0   100%
+muutils\interval.py                                                                  50      0   100%
 muutils\json_serialize\__init__.py                                                    6      6     0%   1-17
 muutils\json_serialize\array.py                                                      92     33    64%   1-24, 28-34, 45, 85, 119-122, 131, 135, 139, 142, 146, 150-153, 157, 164, 176, 203-208, 213, 216
 muutils\json_serialize\json_serialize.py                                             64     46    28%   1-82, 129, 223-249, 259, 271, 286-319
@@ -52,6 +53,7 @@ tests\unit\test_chunks.py                                                       
 tests\unit\test_dictmagic.py                                                        130      0   100%
 tests\unit\test_group_equiv.py                                                       13      0   100%
 tests\unit\test_import_torch.py                                                       4      0   100%
+tests\unit\test_interval.py                                                          50      1    98%   11
 tests\unit\test_kappa.py                                                             39      0   100%
 tests\unit\test_mlutils.py                                                           43      6    86%   35, 39, 47, 50, 57-58
 tests\unit\test_statcounter.py                                                       14      0   100%
@@ -62,4 +64,4 @@ tests\unit\validate_type\test_validate_type.py                                  
 tests\unit\validate_type\test_validate_type_GENERATED.py                            206     45    78%   50-51, 75-76, 102-103, 125-126, 147-148, 177-178, 203-204, 237-238, 255, 274-275, 336-337, 361-362, 432-433, 461-462, 466-467, 481-499
 tests\unit\validate_type\test_validate_type_special.py                               15      3    80%   34-35, 57
 ---------------------------------------------------------------------------------------------------------------
-TOTAL                                                                              3955    881    78%
+TOTAL                                                                              4055    882    78%

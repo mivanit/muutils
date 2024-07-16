@@ -1,5 +1,5 @@
 import math
-from typing import Union, Tuple
+from typing import Optional, Union, Tuple
 
 import pytest
 
@@ -381,3 +381,236 @@ def test_interval_with_only_one_infinite_bound():
     assert 1e1000 in right_inf
     assert 5 not in right_inf
     assert right_inf.clamp(4) == 5 + _EPSILON
+
+
+@pytest.mark.parametrize(
+    "container,contained,expected",
+    [
+        (Interval(0, 6), Interval(1, 5), True),
+        (Interval(2, 6), Interval(1, 5), False),
+        (OpenInterval(0, 6), ClosedInterval(1, 5), True),
+        (ClosedInterval(1, 5), OpenInterval(1, 5), False),
+        (Interval(1, 5), Interval(1, 5), True),
+        (Interval(1, 5), ClosedInterval(1, 5), True),
+        (Interval(1, 5), OpenInterval(1, 5), True),
+        (Interval(1, 5), Interval(1, 5, closed_L=True), True),
+        (Interval(1, 5), Interval(1, 5, closed_R=True), True),
+        (Interval(1, 5, closed_R=True), ClosedInterval(1, 5), True),
+        (Interval(1, 5, closed_L=True), ClosedInterval(1, 5), True),
+        (ClosedInterval(1, 5), Interval(1, 5, closed_L=True), False),
+        (ClosedInterval(1, 5), Interval(1, 5, closed_R=True), False),
+        (Interval(1, 5, closed_L=True, closed_R=True), Interval(1, 5), True),
+        (Interval(-math.inf, math.inf), Interval(-math.inf, math.inf), True),
+        (Interval(0, 1, closed_L=True), Interval(0, 1), True),
+    ],
+)
+def test_interval_containment(container, contained, expected):
+    assert (contained in container) == expected
+
+
+@pytest.mark.parametrize(
+    "interval1,interval2,expected",
+    [
+        (ClosedInterval(1, 5), Interval(1, 5, is_closed=True), True),
+        (OpenInterval(1, 5), ClosedInterval(1, 5), False),
+        (Interval(1, 5, closed_L=True), ClosedInterval(0, 6), True),
+        (OpenInterval(1, 5), ClosedInterval(1, 5), False),
+    ],
+)
+def test_mixed_interval_types(interval1, interval2, expected):
+    assert (interval1 == interval2) == expected
+
+
+@pytest.mark.parametrize(
+    "interval",
+    [
+        Interval(1, 5),
+        ClosedInterval(1, 5),
+        OpenInterval(1, 5),
+        Interval(1, 5, closed_L=True),
+        Interval(1, 5, closed_R=True),
+        Interval(-math.inf, math.inf),
+        Interval(0, math.inf, closed_L=True),
+        Interval(-math.inf, 0, closed_R=True),
+    ],
+)
+def test_string_representation_round_trip(interval):
+    assert Interval.from_str(str(interval)) == interval
+
+
+@pytest.mark.parametrize(
+    "string,expected",
+    [
+        ("[1, 5]", ClosedInterval(1, 5)),
+        ("(1, 5)", OpenInterval(1, 5)),
+        ("[1, 5)", Interval(1, 5, closed_L=True)),
+        ("(1, 5]", Interval(1, 5, closed_R=True)),
+        ("[-inf, inf]", ClosedInterval(-math.inf, math.inf)),
+        ("(0, inf)", OpenInterval(0, math.inf)),
+        (" [ 1.5, 5.5 ) ", Interval(1.5, 5.5, closed_L=True)),
+        ("(-1e3, 1e3]", Interval(-1000, 1000, closed_R=True)),
+        ("[1K, 1M)", Interval(1000, 1000000, closed_L=True)),
+        ("(1/2, 3/2]", Interval(0.5, 1.5, closed_R=True)),
+    ],
+)
+def test_parsing_from_strings(string, expected):
+    assert Interval.from_str(string) == expected
+
+
+@pytest.mark.parametrize(
+    "interval,expected_size",
+    [
+        (Interval(1, 5), 4),
+        (ClosedInterval(1, 5), 4),
+        (OpenInterval(1, 5), 4),
+        (Interval(0, math.inf), math.inf),
+        (Interval(-math.inf, math.inf), math.inf),
+        (Interval(1, 1), 0),
+        (ClosedInterval(1, 1), 0),
+        (Interval(0.1, 0.2), 0.1),
+    ],
+)
+def test_interval_size(interval, expected_size):
+    assert interval.size() == expected_size
+
+
+@pytest.mark.parametrize(
+    "interval,value,expected",
+    [
+        (ClosedInterval(1, 5), 0, 1),
+        (OpenInterval(1, 5), 5, 5 - _EPSILON),
+    ],
+)
+def test_clamp_mixed_types(interval, value, expected):
+    assert math.isclose(interval.clamp(value), expected, rel_tol=1e-9, abs_tol=1e-15)
+
+
+def test_interval_edge_cases():
+    # Test with very small intervals
+    small = Interval(1, 1 + 1e-15)
+    assert small.size() == 1e-15
+    assert 1 + 0.5e-15 in small
+    assert math.isclose(small.clamp(1), 1 + _EPSILON, rel_tol=1e-9, abs_tol=1e-15)
+    assert math.isclose(
+        small.clamp(2), 1 + 1e-15 - _EPSILON, rel_tol=1e-9, abs_tol=1e-15
+    )
+
+    # Test with intervals smaller than epsilon
+    tiny = Interval(1, 1 + _EPSILON / 2)
+    assert tiny.size() == _EPSILON / 2
+    with pytest.warns(UserWarning):
+        assert math.isclose(
+            tiny.clamp(0), 1 + _EPSILON / 4, rel_tol=1e-9, abs_tol=1e-15
+        )
+
+    # Test with large intervals
+    large = Interval(-1e100, 1e100)
+    assert large.size() == 2e100
+    assert 1e99 in large
+    assert math.isclose(
+        large.clamp(-2e100), -1e100 + _EPSILON, rel_tol=1e-9, abs_tol=1e-15
+    )
+
+
+@pytest.mark.parametrize(
+    "a,b,expected_intersection,expected_union",
+    [
+        (Interval(1, 3), Interval(2, 4), Interval(2, 3), Interval(1, 4)),
+        (
+            ClosedInterval(0, 2),
+            OpenInterval(1, 3),
+            Interval(1, 2, closed_R=True),
+            Interval(0, 3, closed_L=True),
+        ),
+        (
+            OpenInterval(1, 5),
+            ClosedInterval(2, 4),
+            OpenInterval(2, 4),
+            OpenInterval(1, 5),
+        ),
+        (Interval(1, 3), Interval(4, 6), None, None),  # Non-overlapping intervals
+        (
+            Interval(1, 3),
+            Interval(3, 5),
+            Interval(3, 3),
+            Interval(1, 5),
+        ),  # Touching intervals
+        (
+            Interval(1, 5),
+            Interval(2, 3),
+            Interval(2, 3),
+            Interval(1, 5),
+        ),  # Fully contained interval
+        (
+            Interval(-float("inf"), 1),
+            Interval(0, float("inf")),
+            Interval(0, 1),
+            Interval(-float("inf"), float("inf")),
+        ),  # Infinite intervals
+    ],
+)
+def test_interval_arithmetic(
+    a: Interval,
+    b: Interval,
+    expected_intersection: Optional[Interval],
+    expected_union: Optional[Interval],
+):
+    # Test intersection
+    if expected_intersection is None:
+        assert a.intersection(b) is None
+    else:
+        assert a.intersection(b) == expected_intersection
+        assert b.intersection(a) == expected_intersection  # Commutativity
+
+    # Test union
+    if expected_union is None:
+        with pytest.raises(Exception):
+            a.union(b)
+    else:
+        assert a.union(b) == expected_union
+        assert b.union(a) == expected_union  # Commutativity
+
+
+# Additional tests for edge cases
+def test_interval_arithmetic_edge_cases():
+    # Self-intersection and self-union
+    a = Interval(1, 3)
+    assert a.intersection(a) == a
+    assert a.union(a) == a
+
+    # Empty interval intersection
+    empty = Interval(1, 1)
+    assert empty.intersection(Interval(2, 3)) is None
+    assert Interval(2, 3).intersection(empty) is None
+
+    # Intersection with universal set
+    universal = Interval(-float("inf"), float("inf"))
+    assert Interval(1, 2).intersection(universal) == Interval(1, 2)
+    assert universal.intersection(Interval(1, 2)) == Interval(1, 2)
+
+    # Union with universal set
+    assert Interval(1, 2).union(universal) == universal
+    assert universal.union(Interval(1, 2)) == universal
+
+
+# Test for invalid operations
+def test_interval_arithmetic_invalid():
+    with pytest.raises(TypeError):
+        Interval(1, 2).intersection(5)  # Invalid type for intersection
+
+    with pytest.raises(TypeError):
+        Interval(1, 2).union("invalid")  # Invalid type for union
+
+
+@pytest.mark.parametrize(
+    "invalid_string",
+    [
+        "1, 5",  # Missing brackets
+        "[1, 5, 7]",  # Too many values
+        "[5, 1]",  # Lower > Upper
+        "[a, b]",  # Non-numeric values
+    ],
+)
+def test_from_str_errors(invalid_string):
+    with pytest.raises(ValueError):
+        Interval.from_str(invalid_string)

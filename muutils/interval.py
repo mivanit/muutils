@@ -9,6 +9,8 @@ from muutils.misc import str_to_numeric
 
 _EPSILON: float = 1e-10
 
+Number = typing.TypeVar("Number", float, int, typing.SupportsFloat, typing.SupportsInt)
+
 
 class Interval:
     """
@@ -35,7 +37,7 @@ class Interval:
 
     def __init__(
         self,
-        *args: Union[Sequence[float], float],
+        *args: Union[Sequence[Number], Number],
         is_closed: Optional[bool] = None,
         closed_L: Optional[bool] = None,
         closed_R: Optional[bool] = None,
@@ -94,7 +96,9 @@ class Interval:
             raise TypeError(f"Unsupported type for containment check: {type(item)}")
 
     def __repr__(self) -> str:
-        return f"{'[' if self.closed_L else '('}{self.lower}, {self.upper}{']' if self.closed_R else ')'}"
+        left: str = "[" if self.closed_L else "("
+        right: str = "]" if self.closed_R else ")"
+        return f"{left}{self.lower}, {self.upper}{right}"
 
     def __str__(self) -> str:
         return repr(self)
@@ -102,7 +106,10 @@ class Interval:
     @classmethod
     def from_str(cls, input_str: str) -> Interval:
         input_str = input_str.strip()
-        assert input_str.count(",") == 1, "Invalid input string"
+
+        if not input_str.count(",") == 1:
+            raise ValueError("Invalid input string")
+
         lower, upper = input_str.strip("[]()").split(",")
         lower = lower.strip()
         upper = upper.strip()
@@ -193,17 +200,57 @@ class Interval:
                 f"Warning: epsilon is greater than the size of the interval: {epsilon = }, {self.size() = }, {self = }"
             )
 
+        clamped_min: Number
         if self.closed_L:
             clamped_min = self.lower
         else:
             clamped_min = self.lower + epsilon
 
+        clamped_max: Number
         if self.closed_R:
             clamped_max = self.upper
         else:
             clamped_max = self.upper - epsilon
 
         return max(clamped_min, min(value, clamped_max))
+
+    def intersection(self, other: Interval) -> Optional[Interval]:
+        if not isinstance(other, Interval):
+            raise TypeError("Can only intersect with another Interval")
+
+        if self.upper < other.lower or other.upper < self.lower:
+            return None
+
+        lower: Number = max(self.lower, other.lower)
+        upper: Number = min(self.upper, other.upper)
+        closed_L: bool = (
+            (self.closed_L and other.closed_L)
+            or (self.lower < other.lower and other.closed_L)
+            or (other.lower < self.lower and self.closed_L)
+        )
+        closed_R: bool = (
+            (self.closed_R and other.closed_R)
+            or (self.upper > other.upper and other.closed_R)
+            or (other.upper > self.upper and self.closed_R)
+        )
+
+        return Interval(lower, upper, closed_L=closed_L, closed_R=closed_R)
+
+    def union(self, other: Interval) -> Interval:
+        if not isinstance(other, Interval):
+            raise TypeError("Can only union with another Interval")
+
+        if self.intersection(other) is None:
+            raise NotImplementedError(
+                "Union of non-intersecting intervals is not implemented"
+            )
+
+        lower: Number = min(self.lower, other.lower)
+        upper: Number = max(self.upper, other.upper)
+        closed_L: bool = self.closed_L or other.closed_L
+        closed_R: bool = self.closed_R or other.closed_R
+
+        return Interval(lower, upper, closed_L=closed_L, closed_R=closed_R)
 
 
 class ClosedInterval(Interval):

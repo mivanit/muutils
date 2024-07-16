@@ -149,3 +149,45 @@ def test_nan_handling():
 
     with pytest.raises(ValueError):
         Interval(math.nan, 1)
+
+
+def test_interval_tuple_behavior():
+    i = Interval(1, 5)
+    assert len(i) == 2
+    assert i[0] == 1
+    assert i[1] == 5
+    with pytest.raises(IndexError):
+        _ = i[2]
+
+    lower, upper = i
+    assert lower == 1
+    assert upper == 5
+
+    assert tuple(i) == (1, 5)
+    assert list(i) == [1, 5]
+
+
+def test_min_max_intervals():
+    i1 = Interval(1, 5)
+    i2 = Interval([1, 5])
+    i3 = Interval(1, 5, closed_L=True)
+    i4 = Interval(2, 6)
+
+    assert min(i1) == 1
+    assert max(i1) == 5
+    assert min(i2) == 1
+    assert max(i2) == 5
+    assert min(i3) == 1
+    assert max(i3) == 5
+    assert min(i4) == 2
+    assert max(i4) == 6
+
+
+def test_min_max_with_numbers():
+    i1 = Interval(1, 5)
+    i2 = ClosedInterval(2, 6)
+
+    assert min(i1) == 1
+    assert max(i1) == 5
+    assert min(i2) == 2
+    assert max(i2) == 6

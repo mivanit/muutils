@@ -1,12 +1,13 @@
 from __future__ import annotations
 
 import math
+import typing
 from typing import Optional, Sequence, Union, Any
 
 
 class Interval:
     """
-    Represents a mathematical interval.
+    Represents a mathematical interval, open by default.
 
     The Interval class can represent both open and closed intervals, as well as half-open intervals.
     It supports various initialization methods and provides containment checks.
@@ -76,9 +77,13 @@ class Interval:
     def __contains__(self, item: Any) -> bool:
         if math.isnan(item):
             raise ValueError("NaN cannot be checked for containment in an interval")
-        return (self.closed_L and item >= self.lower or item > self.lower) and (
-            self.closed_R and item <= self.upper or item < self.upper
-        )
+
+        if isinstance(item, Interval):
+            return self.lower <= item.lower and self.upper >= item.upper
+        elif isinstance(item, (float, int, typing.SupportsFloat, typing.SupportsInt)):
+            return ((self.closed_L and item >= self.lower) or item > self.lower) and (
+                (self.closed_R and item <= self.upper) or item < self.upper
+            )
 
     def __repr__(self) -> str:
         return f"{'[' if self.closed_L else '('}{self.lower}, {self.upper}{']' if self.closed_R else ')'}"
@@ -95,6 +100,21 @@ class Interval:
             other.closed_L,
             other.closed_R,
         )
+
+    def __iter__(self):
+        yield self.lower
+        yield self.upper
+
+    def __getitem__(self, index: int) -> float:
+        if index == 0:
+            return self.lower
+        elif index == 1:
+            return self.upper
+        else:
+            raise IndexError("Interval index out of range")
+
+    def __len__(self) -> int:
+        return 2
 
 
 class ClosedInterval(Interval):

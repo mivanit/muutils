@@ -2,7 +2,12 @@ from __future__ import annotations
 
 import math
 import typing
-from typing import Optional, Sequence, Union, Any
+from typing import Optional, Iterable, Sequence, Union, Any
+import warnings
+
+from muutils.misc import str_to_numeric
+
+_EPSILON: float = 1e-10
 
 
 class Interval:
@@ -37,7 +42,9 @@ class Interval:
     ):
         try:
             # Handle different types of input arguments
-            if len(args) == 1 and isinstance(args[0], (list, tuple)):
+            if len(args) == 1 and isinstance(
+                args[0], (list, tuple, Sequence, Iterable)
+            ):
                 assert (
                     len(args[0]) == 2
                 ), "if arg is a list or tuple, it must have length 2"
@@ -49,7 +56,7 @@ class Interval:
                 self.lower, self.upper = args
                 default_closed = False  # Default to open interval if two args
             else:
-                raise ValueError("Invalid input arguments")
+                raise ValueError(f"Invalid input arguments: {args}")
 
             # Ensure lower bound is less than upper bound
             if self.lower > self.upper:
@@ -75,21 +82,49 @@ class Interval:
             ) from e
 
     def __contains__(self, item: Any) -> bool:
-        if math.isnan(item):
-            raise ValueError("NaN cannot be checked for containment in an interval")
-
         if isinstance(item, Interval):
             return self.lower <= item.lower and self.upper >= item.upper
         elif isinstance(item, (float, int, typing.SupportsFloat, typing.SupportsInt)):
+            if math.isnan(item):
+                raise ValueError("NaN cannot be checked for containment in an interval")
             return ((self.closed_L and item >= self.lower) or item > self.lower) and (
                 (self.closed_R and item <= self.upper) or item < self.upper
             )
+        else:
+            raise TypeError(f"Unsupported type for containment check: {type(item)}")
 
     def __repr__(self) -> str:
         return f"{'[' if self.closed_L else '('}{self.lower}, {self.upper}{']' if self.closed_R else ')'}"
 
     def __str__(self) -> str:
         return repr(self)
+
+    @classmethod
+    def from_str(cls, input_str: str) -> Interval:
+        input_str = input_str.strip()
+        assert input_str.count(",") == 1, "Invalid input string"
+        lower, upper = input_str.strip("[]()").split(",")
+        lower = lower.strip()
+        upper = upper.strip()
+
+        lower = str_to_numeric(lower)
+        upper = str_to_numeric(upper)
+
+        if input_str[0] == "[":
+            closed_L = True
+        elif input_str[0] == "(":
+            closed_L = False
+        else:
+            raise ValueError("Invalid input string")
+
+        if input_str[-1] == "]":
+            closed_R = True
+        elif input_str[-1] == ")":
+            closed_R = False
+        else:
+            raise ValueError("Invalid input string")
+
+        return cls(lower, upper, closed_L=closed_L, closed_R=closed_R)
 
     def __eq__(self, other: object) -> bool:
         if not isinstance(other, Interval):
@@ -115,6 +150,60 @@ class Interval:
 
     def __len__(self) -> int:
         return 2
+
+    def size(self) -> float:
+        """
+        Returns the size of the interval.
+
+        # Returns:
+         - `float`
+            the size of the interval
+        """
+        return self.upper - self.lower
+
+    def clamp(self, value: Union[int, float], epsilon: float = _EPSILON) -> float:
+        """
+        Clamp the given value to the interval bounds.
+
+        For open bounds, the clamped value will be slightly inside the interval (by epsilon).
+
+        # Parameters:
+         - `value : Union[int, float]`
+           the value to clamp.
+         - `epsilon : float`
+           margin for open bounds
+           (defaults to `_EPSILON`)
+
+        # Returns:
+         - `float`
+            the clamped value
+
+        # Raises:
+         - `ValueError` : If the input value is NaN.
+        """
+
+        if math.isnan(value):
+            raise ValueError("Cannot clamp NaN value")
+
+        if epsilon < 0:
+            raise ValueError(f"Epsilon must be non-negative: {epsilon = }")
+
+        if epsilon > self.size():
+            warnings.warn(
+                f"Warning: epsilon is greater than the size of the interval: {epsilon = }, {self.size() = }, {self = }"
+            )
+
+        if self.closed_L:
+            clamped_min = self.lower
+        else:
+            clamped_min = self.lower + epsilon
+
+        if self.closed_R:
+            clamped_max = self.upper
+        else:
+            clamped_max = self.upper - epsilon
+
+        return max(clamped_min, min(value, clamped_max))
 
 
 class ClosedInterval(Interval):

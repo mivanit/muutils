@@ -8,7 +8,7 @@ from muutils.misc import str_to_numeric
 
 _EPSILON: float = 1e-10
 
-Number = typing.TypeVar("Number", float, int, typing.SupportsFloat, typing.SupportsInt)
+Number = Union[float, int]
 
 _EMPTY_INTERVAL_ARGS: tuple[Number, Number, bool, bool, set[Number]] = (
     math.nan,
@@ -83,7 +83,7 @@ class Interval:
                 self.upper = args[0]
                 default_closed = False
             elif len(args) == 2:
-                self.lower, self.upper = args
+                self.lower, self.upper = args  # type: ignore[assignment]
                 default_closed = False  # Default to open interval if two args
             else:
                 raise ValueError(f"Invalid input arguments: {args}")
@@ -187,7 +187,7 @@ class Interval:
     def singleton(self) -> Number:
         if not self.is_singleton:
             raise ValueError("Interval is not a singleton")
-        return next(iter(self.singleton_set))
+        return next(iter(self.singleton_set))  # type: ignore[arg-type]
 
     @staticmethod
     def get_empty() -> Interval:
@@ -205,7 +205,7 @@ class Interval:
         if math.isnan(item):
             raise ValueError("NaN cannot be checked for containment in an interval")
         if self.is_singleton:
-            return item in self.singleton_set
+            return item in self.singleton_set  # type: ignore[operator]
         return ((self.closed_L and item >= self.lower) or item > self.lower) and (
             (self.closed_R and item <= self.upper) or item < self.upper
         )
@@ -241,10 +241,8 @@ class Interval:
     def __contains__(self, item: Any) -> bool:
         if isinstance(item, Interval):
             return self.interval_contained(item)
-        elif isinstance(item, (float, int, typing.SupportsFloat, typing.SupportsInt)):
-            return self.numerical_contained(item)
         else:
-            raise TypeError(f"Unsupported type for containment check: {type(item)}")
+            return self.numerical_contained(item)
 
     def __repr__(self) -> str:
         if self.is_empty:
@@ -280,14 +278,18 @@ class Interval:
             raise ValueError("Invalid input string")
 
         # get bounds
+        lower: str
+        upper: str
         lower, upper = input_str.strip("[]()").split(",")
         lower = lower.strip()
         upper = upper.strip()
 
-        lower = str_to_numeric(lower)
-        upper = str_to_numeric(upper)
+        lower_num: Number = str_to_numeric(lower)
+        upper_num: Number = str_to_numeric(upper)
 
         # figure out closure
+        closed_L: bool
+        closed_R: bool
         if input_str[0] == "[":
             closed_L = True
         elif input_str[0] == "(":
@@ -302,7 +304,7 @@ class Interval:
         else:
             raise ValueError("Invalid input string")
 
-        return cls(lower, upper, closed_L=closed_L, closed_R=closed_R)
+        return cls(lower_num, upper_num, closed_L=closed_L, closed_R=closed_R)
 
     def __eq__(self, other: object) -> bool:
         if not isinstance(other, Interval):

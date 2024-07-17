@@ -3,7 +3,6 @@ from __future__ import annotations
 import math
 import typing
 from typing import Optional, Iterable, Sequence, Union, Any
-import warnings
 
 from muutils.misc import str_to_numeric
 
@@ -190,15 +189,15 @@ class Interval:
             raise ValueError("Interval is not a singleton")
         return next(iter(self.singleton_set))
 
-    @classmethod
-    def get_empty(cls) -> Interval:
-        return cls(math.nan, math.nan, closed_L=None, closed_R=None)
+    @staticmethod
+    def get_empty() -> Interval:
+        return Interval(math.nan, math.nan, closed_L=None, closed_R=None)
 
-    @classmethod
-    def get_singleton(cls, value: Number) -> Interval:
+    @staticmethod
+    def get_singleton(value: Number) -> Interval:
         if math.isnan(value) or value is None:
-            return cls.get_empty()
-        return cls(value, value, closed_L=True, closed_R=True)
+            return Interval.get_empty()
+        return Interval(value, value, closed_L=True, closed_R=True)
 
     def numerical_contained(self, item: Number) -> bool:
         if self.is_empty:
@@ -393,6 +392,9 @@ class Interval:
         if math.isnan(value):
             raise ValueError("Cannot clamp NaN value")
 
+        if math.isnan(epsilon):
+            raise ValueError("Epsilon cannot be NaN")
+
         if epsilon < 0:
             raise ValueError(f"Epsilon must be non-negative: {epsilon = }")
 
@@ -403,8 +405,8 @@ class Interval:
             return self.singleton
 
         if epsilon > self.size():
-            warnings.warn(
-                f"Warning: epsilon is greater than the size of the interval: {epsilon = }, {self.size() = }, {self = }"
+            raise ValueError(
+                f"epsilon is greater than the size of the interval: {epsilon = }, {self.size() = }, {self = }"
             )
 
         # make type work with decimals and stuff

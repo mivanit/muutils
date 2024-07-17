@@ -1,3 +1,4 @@
+import sys
 import math
 from typing import Optional, Union, Tuple
 
@@ -257,7 +258,7 @@ def test_very_small_intervals():
     assert 1e-20 not in small
     assert 2e-20 in small
 
-    with pytest.warns(Warning):
+    with pytest.raises(ValueError):
         small.clamp(-1)
 
     assert small.clamp(2e-19, epsilon=1e-20) == 1e-19 - 1e-20
@@ -588,7 +589,7 @@ def test_interval_edge_cases():
     assert math.isclose(
         tiny.size(), _EPSILON / 2, rel_tol=1e-9, abs_tol=1e-12
     ), f"Size: {tiny.size()}, Epsilon: {_EPSILON}, {tiny = }"
-    with pytest.warns(UserWarning):
+    with pytest.raises(ValueError):
         assert math.isclose(
             tiny.clamp(0), 1 + _EPSILON / 4, rel_tol=1e-9, abs_tol=1e-15
         )
@@ -1221,7 +1222,7 @@ def test_interval_with_very_close_bounds():
 def test_interval_with_bounds_closer_than_epsilon():
     i = Interval(1, 1 + _EPSILON / 2)
     assert i.size() > 0
-    with pytest.warns(UserWarning):
+    with pytest.raises(ValueError):
         assert math.isclose(i.clamp(0), 1 + _EPSILON / 4)
 
 
@@ -1449,3 +1450,327 @@ def test_potential_bug_overlapping_interval_union():
     assert union == Interval(
         0, 3
     )  # This might fail if overlapping intervals are not handled correctly
+
+
+# Potential bug: Interval containing only infinity
+def test_potential_bug_infinity_only_interval():
+    i = Interval(math.inf, math.inf)
+    assert (
+        i.is_empty
+    )  # This might fail if infinity-only intervals are not handled correctly
+    assert (
+        i.size() == 0
+    )  # This might fail if the size calculation doesn't account for this case
+
+
+# Potential bug: Interval containing only negative infinity
+def test_potential_bug_negative_infinity_only_interval():
+    i = Interval(-math.inf, -math.inf)
+    assert (
+        i.is_empty
+    )  # This might fail if negative infinity-only intervals are not handled correctly
+    assert (
+        i.size() == 0
+    )  # This might fail if the size calculation doesn't account for this case
+
+
+# Potential bug: Clamp with infinity
+def test_potential_bug_clamp_with_infinity():
+    i = Interval(0, 1)
+    assert math.isclose(i.clamp(math.inf), 1)
+    assert i.clamp(math.inf) < 1
+    print(i.clamp(-math.inf))
+    assert math.isclose(i.clamp(-math.inf), 0, rel_tol=1e-6, abs_tol=1e-6)
+    assert i.clamp(-math.inf) > 0
+
+
+# Potential bug: Intersection of intervals with different types
+def test_potential_bug_intersection_different_types():
+    i1 = Interval(0, 1)
+    i2 = ClosedInterval(0.5, 1.5)
+    intersection = i1.intersection(i2)
+    assert intersection == Interval(
+        0.5, 1, closed_L=True
+    )  # This might fail if mixing interval types is not handled correctly
+
+
+# Potential bug: Union of intervals with different types
+def test_potential_bug_union_different_types():
+    i1 = Interval(0, 1)
+    i2 = ClosedInterval(0.5, 1.5)
+    union = i1.union(i2)
+    assert union == Interval(
+        0, 1.5, closed_R=True
+    )  # This might fail if mixing interval types is not handled correctly
+
+
+# Potential bug: Interval bounds very close to each other
+def test_potential_bug_very_close_bounds():
+    i = Interval(1, 1 + sys.float_info.epsilon)
+    assert (
+        not i.is_empty
+    )  # This might fail if very close bounds are not handled correctly
+    assert (
+        i.size() > 0
+    )  # This might fail if size calculation doesn't account for very close bounds
+
+
+# Potential bug: Interval from string with excessive precision
+def test_potential_bug_excessive_precision_from_string():
+    s = "(0.1234567890123456, 0.1234567890123457)"
+    i = Interval.from_str(s)
+    assert (
+        str(i) == s
+    )  # This might fail if string conversion doesn't preserve precision
+
+
+# Potential bug: Interval with bounds that are not exactly representable in binary
+def test_potential_bug_non_binary_representable_bounds():
+    i = Interval(0.1, 0.3)
+    assert 0.2 in i  # This might fail due to binary representation issues
+
+
+# Potential bug: Clamp with value very close to bound
+def test_potential_bug_clamp_near_bound():
+    i = Interval(0, 1)
+    result = i.clamp(1 - sys.float_info.epsilon)
+    assert (
+        result < 1
+    )  # This might fail if clamping near bounds is not handled carefully
+
+
+# Potential bug: Empty interval intersection with itself
+def test_potential_bug_empty_self_intersection():
+    e = Interval.get_empty()
+    assert e.intersection(e) == e  # This should pass, but worth checking
+
+
+# Potential bug: Empty interval union with itself
+def test_potential_bug_empty_self_union():
+    e = Interval.get_empty()
+    assert e.union(e) == e  # This should pass, but worth checking
+
+
+# Potential bug: Interval containing only NaN
+def test_potential_bug_nan_interval():
+    i = Interval(float("nan"), float("nan"))
+    assert i.is_empty
+    assert 0 not in i
+
+
+# Potential bug: Interval with reversed bounds after float operation
+def test_potential_bug_reversed_bounds_after_operation():
+    i = Interval(1, 1 + 1e-15)
+    new_lower = i.lower + 1e-16
+    new_upper = i.upper - 1e-16
+    assert new_lower <= new_upper  # This might fail due to float imprecision
+
+
+# Potential bug: Interval size calculation with small numbers
+def test_potential_bug_small_number_size():
+    i = Interval(1e-300, 1e-300 + 1e-310)
+    assert math.isclose(
+        i.size(), 1e-310, rel_tol=1e-6
+    )  # This might fail due to float imprecision with small numbers
+
+
+# Potential bug: Clamp with large epsilon
+def test_potential_bug_clamp_large_epsilon():
+    i = Interval(0, 1)
+    with pytest.raises(ValueError):
+        i.clamp(2, epsilon=10)
+
+
+# Potential bug: Intersection of intervals with shared bound
+def test_potential_bug_intersection_shared_bound():
+    i1 = Interval(0, 1, closed_R=True)
+    i2 = Interval(1, 2, closed_L=True)
+    intersection = i1.intersection(i2)
+    assert intersection == Interval.get_singleton(
+        1
+    )  # This might fail if shared bounds are not handled correctly
+
+
+# Potential bug: Union of intervals with shared bound
+def test_potential_bug_union_shared_bound():
+    i1 = Interval(0, 1, closed_R=True)
+    i2 = Interval(1, 2, closed_L=True)
+    union = i1.union(i2)
+    assert union == Interval(
+        0, 2
+    )  # This might fail if shared bounds are not handled correctly
+
+
+# Potential bug: Interval containing only zero
+def test_potential_bug_zero_only_interval():
+    i = Interval(0, 0)
+    assert (
+        i.is_empty
+    )  # This might fail if zero-only intervals are not handled correctly
+    assert (
+        i.size() == 0
+    )  # This might fail if the size calculation doesn't account for this case
+
+
+# Potential bug: Interval with custom numeric types
+def test_potential_bug_custom_numeric_types():
+    from decimal import Decimal
+
+    i = Interval(Decimal("0.1"), Decimal("0.3"))
+    assert (
+        Decimal("0.2") in i
+    )  # This might fail if custom numeric types are not handled correctly
+
+
+# Potential bug: Clamp with value equal to bound
+def test_potential_bug_clamp_equal_to_bound():
+    i = Interval(0, 1)
+    assert i.clamp(0) > 0
+    assert i.clamp(1) < 1
+
+
+# Potential bug: Interval containing only infinity with closed bounds
+def test_potential_bug_closed_infinity_interval():
+    i = ClosedInterval(math.inf, math.inf)
+    assert (
+        i.is_singleton
+    )  # This might fail if closed infinity-only intervals are not handled correctly
+    assert (
+        math.inf in i
+    )  # This might fail if membership of infinity in closed intervals is not handled correctly
+
+
+# Potential bug: Interval spanning entire float range
+def test_potential_bug_full_float_range():
+    i = Interval(float("-inf"), float("inf"))
+    assert sys.float_info.max in i
+    assert sys.float_info.min in i
+    assert 0.0 in i
+    assert -0.0 in i
+
+
+# Potential bug: Interval comparison with different types
+def test_potential_bug_comparison_different_types():
+    i1 = Interval(0, 1)
+    i2 = ClosedInterval(0, 1)
+    assert (
+        i1 != i2
+    )  # This might fail if comparison between different interval types is not handled correctly
+
+
+# Potential bug: Interval with bounds differing only in sign (0.0 vs -0.0)
+def test_potential_bug_zero_sign_difference():
+    i1 = Interval(0.0, 1.0)
+    i2 = Interval(-0.0, 1.0)
+    assert i1 == i2  # This might fail if signed zero is not handled correctly
+
+
+# Potential bug: Clamp with NaN epsilon
+def test_potential_bug_clamp_nan_epsilon():
+    i = Interval(0, 1)
+    with pytest.raises(ValueError):
+        i.clamp(0.5, epsilon=float("nan"))
+
+
+# Potential bug: Interval containing only NaN with closed bounds
+def test_potential_bug_closed_inf():
+    i1 = ClosedInterval.get_singleton(float("inf"))
+    i2 = Interval.get_singleton(float("inf"))
+    i3 = ClosedInterval(-float("inf"), float("inf"))
+    i4 = Interval(-float("inf"), float("inf"))
+    i5 = ClosedInterval(float("inf"), float("inf"))
+    i6 = Interval(float("inf"), float("inf"))
+
+    assert i1.is_singleton
+    assert i2.is_singleton
+    assert not i3.is_singleton
+    assert not i4.is_singleton
+    assert not i3.is_empty
+    assert not i4.is_empty
+    assert i5.is_singleton
+    assert i6.is_empty
+
+    assert i1.clamp(1) == float("inf")
+    assert i2.clamp(1) == float("inf")
+    assert i3.clamp(1) == 1
+    assert i4.clamp(1) == 1
+
+
+# Potential bug: Intersection of universal set with itself
+def test_potential_bug_universal_set_self_intersection():
+    u = Interval(float("-inf"), float("inf"))
+    assert u.intersection(u) == u
+
+
+# Potential bug: Union of universal set with any other set
+def test_potential_bug_universal_set_union():
+    u = Interval(float("-inf"), float("inf"))
+    i = Interval(0, 1)
+    assert u.union(i) == u
+
+
+# Potential bug: Clamp with integer bounds and float value
+def test_potential_bug_clamp_integer_bounds_float_value():
+    i = Interval(0, 1)
+    result = i.clamp(0.5)
+    assert isinstance(
+        result, float
+    )  # This might fail if type consistency is not maintained
+
+
+# Potential bug: Interval from string with scientific notation
+def test_potential_bug_interval_from_scientific_notation():
+    i = Interval.from_str("[1e-10, 1e10]")
+    assert i.lower == 1e-10
+    assert i.upper == 1e10
+
+
+# Potential bug: Interval with repeated float operations leading to unexpected results
+def test_potential_bug_repeated_float_operations():
+    i = Interval(0, 1)
+    for _ in range(1000):
+        i = Interval(i.lower + sys.float_info.epsilon, i.upper - sys.float_info.epsilon)
+    assert 0.5 in i  # This might fail due to accumulated float imprecision
+
+
+# Potential bug: Interval size with subnormal numbers
+def test_potential_bug_subnormal_size():
+    tiny = sys.float_info.min * sys.float_info.epsilon
+    i = Interval(tiny, tiny * 2)
+    assert (
+        0 < i.size() < sys.float_info.min
+    )  # This might fail if subnormal numbers are not handled correctly in size calculation
+
+
+# Potential bug: Clamp with subnormal epsilon
+def test_potential_bug_clamp_subnormal_epsilon():
+    i = Interval(0, 1)
+    tiny_epsilon = sys.float_info.min * sys.float_info.epsilon
+    result = i.clamp(-1, epsilon=tiny_epsilon)
+    assert result > 0  # This might fail if subnormal epsilons are not handled correctly
+
+
+# Potential bug: Interval containing maximum and minimum floats
+def test_potential_bug_max_min_float_interval():
+    i = Interval(sys.float_info.min, sys.float_info.max)
+    assert 1.0 in i
+    assert -1.0 not in i
+    assert i.size() == sys.float_info.max - sys.float_info.min
+
+
+# Potential bug: Interval with bounds very close to zero
+def test_potential_bug_near_zero_bounds():
+    epsilon = sys.float_info.epsilon
+    i = Interval(-epsilon, epsilon)
+    assert 0 in i
+    assert i.size() == 2 * epsilon
+
+
+# Potential bug: Clamp with value very close to infinity
+def test_potential_bug_clamp_near_infinity():
+    i = ClosedInterval(0, 1)
+    very_large = sys.float_info.max * 0.99
+    result = i.clamp(very_large)
+    assert (
+        result == 1
+    )  # This might fail if values near infinity are not handled correctly in clamp

@@ -304,6 +304,13 @@ def str_to_numeric(
             f"quantity must be a string, got '{type(quantity) = }' '{quantity = }'"
         )
 
+    # basic int conversion
+    try:
+        quantity_int: int = int(quantity)
+        return quantity_int
+    except ValueError:
+        pass
+
     # basic float conversion
     try:
         quantity_float: float = float(quantity)

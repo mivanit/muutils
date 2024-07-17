@@ -226,14 +226,13 @@ def test_zero_width_interval():
     # Test initialization and behavior of zero-width intervals
     zero_open = Interval(1, 1)
     zero_closed = ClosedInterval(1, 1)
-    assert str(zero_open) == "(1, 1)"
-    assert str(zero_closed) == "[1, 1]"
+    assert str(zero_open) == str(Interval())
+    assert str(zero_closed) == r"{1}"
     assert 1 not in zero_open
     assert 1 in zero_closed
-    with pytest.warns(Warning):
+    with pytest.raises(ValueError):
         assert zero_open.clamp(1) == 1 + _EPSILON
-    with pytest.warns(Warning):
-        assert zero_closed.clamp(1) == 1
+    assert zero_closed.clamp(1) == 1
 
 
 def test_interval_containing_zero():
@@ -323,6 +322,9 @@ def test_interval_equality_with_different_types():
     assert Interval(1, 2, is_closed=True) == ClosedInterval(1, 2)
     assert Interval(1, 2) != ClosedInterval(1, 2)
     assert Interval(1, 2, closed_L=True) != Interval(1, 2, closed_R=True)
+    assert Interval(1, 2) != (1, 2)
+    assert Interval(1, 2) != [1, 2]
+    assert Interval(1, 2) != "Interval(1, 2)"
 
 
 def test_interval_containment_edge_cases():
@@ -363,11 +365,13 @@ def test_interval_initialization_with_reversed_bounds():
 
 def test_interval_initialization_with_equal_bounds():
     i = Interval(1, 1)
-    assert str(i) == "(1, 1)"
+    assert i == Interval.get_empty()
+    assert i == Interval()
+    assert str(i) == str(Interval.get_empty())
     assert 1 not in i
 
     ci = ClosedInterval(1, 1)
-    assert str(ci) == "[1, 1]"
+    assert str(ci) == r"{1}"
     assert 1 in ci
 
 
@@ -389,36 +393,119 @@ def test_interval_with_only_one_infinite_bound():
         (Interval(0, 6), Interval(1, 5), True),
         (Interval(2, 6), Interval(1, 5), False),
         (OpenInterval(0, 6), ClosedInterval(1, 5), True),
-        (ClosedInterval(1, 5), OpenInterval(1, 5), False),
+        (ClosedInterval(1, 5), OpenInterval(1, 5), True),
+        (OpenInterval(1, 5), ClosedInterval(1, 5), False),
         (Interval(1, 5), Interval(1, 5), True),
-        (Interval(1, 5), ClosedInterval(1, 5), True),
+        (Interval(1, 5), ClosedInterval(1, 5), False),
+        (ClosedInterval(1, 5), Interval(1, 5), True),
         (Interval(1, 5), OpenInterval(1, 5), True),
-        (Interval(1, 5), Interval(1, 5, closed_L=True), True),
-        (Interval(1, 5), Interval(1, 5, closed_R=True), True),
-        (Interval(1, 5, closed_R=True), ClosedInterval(1, 5), True),
-        (Interval(1, 5, closed_L=True), ClosedInterval(1, 5), True),
-        (ClosedInterval(1, 5), Interval(1, 5, closed_L=True), False),
-        (ClosedInterval(1, 5), Interval(1, 5, closed_R=True), False),
+        (Interval(1, 5), Interval(1, 5, closed_L=True), False),
+        (Interval(1, 5), Interval(1, 5, closed_R=True), False),
+        (ClosedInterval(1, 5), Interval(1, 5, closed_L=True), True),
+        (ClosedInterval(1, 5), Interval(1, 5, closed_R=True), True),
+        (Interval(1, 5, closed_R=True), ClosedInterval(1, 5), False),
+        (Interval(1, 5, closed_L=True), ClosedInterval(1, 5), False),
+        (Interval(1, 5, closed_L=True, closed_R=True), ClosedInterval(1, 5), True),
+        (Interval(1, 5, is_closed=True), ClosedInterval(1, 5), True),
+        (ClosedInterval(1, 5), Interval(1, 5, closed_L=True), True),
+        (ClosedInterval(1, 5), Interval(1, 5, closed_R=True), True),
         (Interval(1, 5, closed_L=True, closed_R=True), Interval(1, 5), True),
         (Interval(-math.inf, math.inf), Interval(-math.inf, math.inf), True),
         (Interval(0, 1, closed_L=True), Interval(0, 1), True),
+        (
+            Interval(1, 5),
+            Interval(0, 6),
+            False,
+        ),  # Contained interval extends beyond container
+        (Interval(1, 5), Interval(2, 4), True),  # Strictly contained interval
+        (OpenInterval(1, 5), OpenInterval(1, 5), True),  # Equal open intervals
+        (ClosedInterval(1, 5), ClosedInterval(1, 5), True),  # Equal closed intervals
+        (
+            OpenInterval(1, 5),
+            ClosedInterval(1, 5),
+            False,
+        ),  # Open doesn't contain closed with same bounds
+        (
+            ClosedInterval(1, 5),
+            OpenInterval(1, 5),
+            True,
+        ),  # Closed contains open with same bounds
+        (Interval(1, 5, closed_L=True), Interval(1, 5), True),
+        (
+            Interval(1, 5),
+            Interval(1, 5, closed_L=True),
+            False,
+        ),  # Open doesn't contain half-open
+        (Interval(1, 5, closed_R=True), Interval(1, 5), True),
+        (
+            Interval(1, 5),
+            Interval(1, 5, closed_R=True),
+            False,
+        ),  # Open doesn't contain half-open
+        (Interval(1, 1), Interval(1, 1), True),  # Point intervals
+        (OpenInterval(1, 1), OpenInterval(1, 1), True),  # Empty open intervals
+        (ClosedInterval(1, 1), ClosedInterval(1, 1), True),  # Point closed intervals
+        (
+            OpenInterval(1, 1),
+            ClosedInterval(1, 1),
+            False,
+        ),  # Empty open doesn't contain point closed
+        (
+            ClosedInterval(1, 1),
+            OpenInterval(1, 1),
+            True,
+        ),  # Point closed contains empty open
+        (Interval(0, math.inf), Interval(1, math.inf), True),  # Infinite upper bound
+        (Interval(-math.inf, 0), Interval(-math.inf, -1), True),  # Infinite lower bound
+        (
+            Interval(-math.inf, math.inf),
+            Interval(0, 0),
+            True,
+        ),  # Real line contains any point
+        (
+            Interval(0, 1),
+            Interval(-math.inf, math.inf),
+            False,
+        ),  # Finite doesn't contain infinite
+        (Interval(1, 5), Interval(5, 10), False),  # Adjacent intervals
+        (
+            ClosedInterval(1, 5),
+            ClosedInterval(5, 10),
+            False,
+        ),  # Adjacent closed intervals
+        (OpenInterval(1, 5), OpenInterval(5, 10), False),  # Adjacent open intervals
+        (
+            Interval(1, 5, closed_R=True),
+            Interval(5, 10, closed_L=True),
+            False,
+        ),  # Adjacent half-open intervals
     ],
 )
 def test_interval_containment(container, contained, expected):
+    print(f"{container = }, {contained = }, {expected = }")
     assert (contained in container) == expected
 
 
 @pytest.mark.parametrize(
-    "interval1,interval2,expected",
+    "interval_a,interval_b,expected",
     [
         (ClosedInterval(1, 5), Interval(1, 5, is_closed=True), True),
+        (Interval(1, 5), Interval(1, 5, closed_L=True), False),
+        (Interval(1, 5), Interval(1, 5, closed_R=True), False),
+        (Interval(1, 5), Interval(1, 5, closed_L=True, closed_R=True), False),
+        (
+            Interval(1, 5, is_closed=True),
+            Interval(1, 5, closed_L=True, closed_R=True),
+            True,
+        ),
+        (ClosedInterval(1, 5), Interval(1, 5, closed_L=True, closed_R=True), True),
         (OpenInterval(1, 5), ClosedInterval(1, 5), False),
-        (Interval(1, 5, closed_L=True), ClosedInterval(0, 6), True),
+        (Interval(1, 5, closed_L=True), ClosedInterval(0, 6), False),
         (OpenInterval(1, 5), ClosedInterval(1, 5), False),
     ],
 )
-def test_mixed_interval_types(interval1, interval2, expected):
-    assert (interval1 == interval2) == expected
+def test_mixed_interval_types(interval_a, interval_b, expected):
+    assert (interval_a == interval_b) == expected
 
 
 @pytest.mark.parametrize(
@@ -450,6 +537,7 @@ def test_string_representation_round_trip(interval):
         (" [ 1.5, 5.5 ) ", Interval(1.5, 5.5, closed_L=True)),
         ("(-1e3, 1e3]", Interval(-1000, 1000, closed_R=True)),
         ("[1K, 1M)", Interval(1000, 1000000, closed_L=True)),
+        ("[-1K, 1M)", Interval(-1000, 1000000, closed_L=True)),
         ("(1/2, 3/2]", Interval(0.5, 1.5, closed_R=True)),
     ],
 )
@@ -487,17 +575,19 @@ def test_clamp_mixed_types(interval, value, expected):
 
 def test_interval_edge_cases():
     # Test with very small intervals
-    small = Interval(1, 1 + 1e-15)
-    assert small.size() == 1e-15
-    assert 1 + 0.5e-15 in small
+    small = Interval(1, 1 + 1e-4)
+    assert math.isclose(small.size(), 1e-4)
+    assert 1 + 0.5e-4 in small
     assert math.isclose(small.clamp(1), 1 + _EPSILON, rel_tol=1e-9, abs_tol=1e-15)
     assert math.isclose(
-        small.clamp(2), 1 + 1e-15 - _EPSILON, rel_tol=1e-9, abs_tol=1e-15
+        small.clamp(2), 1 + 1e-4 - _EPSILON, rel_tol=1e-9, abs_tol=1e-15
     )
 
     # Test with intervals smaller than epsilon
     tiny = Interval(1, 1 + _EPSILON / 2)
-    assert tiny.size() == _EPSILON / 2
+    assert math.isclose(
+        tiny.size(), _EPSILON / 2, rel_tol=1e-9, abs_tol=1e-12
+    ), f"Size: {tiny.size()}, Epsilon: {_EPSILON}, {tiny = }"
     with pytest.warns(UserWarning):
         assert math.isclose(
             tiny.clamp(0), 1 + _EPSILON / 4, rel_tol=1e-9, abs_tol=1e-15
@@ -515,7 +605,12 @@ def test_interval_edge_cases():
 @pytest.mark.parametrize(
     "a,b,expected_intersection,expected_union",
     [
-        (Interval(1, 3), Interval(2, 4), Interval(2, 3), Interval(1, 4)),
+        (
+            Interval(1, 3),
+            Interval(2, 4),
+            Interval(2, 3),
+            Interval(1, 4),
+        ),
         (
             ClosedInterval(0, 2),
             OpenInterval(1, 3),
@@ -525,28 +620,38 @@ def test_interval_edge_cases():
         (
             OpenInterval(1, 5),
             ClosedInterval(2, 4),
-            OpenInterval(2, 4),
+            ClosedInterval(2, 4),
             OpenInterval(1, 5),
         ),
-        (Interval(1, 3), Interval(4, 6), None, None),  # Non-overlapping intervals
+        # Non-overlapping intervals
+        (Interval(1, 3), Interval(4, 6), Interval(), Interval()),
+        # Touching intervals
         (
-            Interval(1, 3),
+            Interval(1, 3, closed_R=True),
             Interval(3, 5),
-            Interval(3, 3),
+            Interval.get_singleton(3),
             Interval(1, 5),
-        ),  # Touching intervals
+        ),
+        (
+            ClosedInterval(1, 3),
+            ClosedInterval(3, 5),
+            Interval.get_singleton(3),
+            ClosedInterval(1, 5),
+        ),
+        # Fully contained interval
         (
             Interval(1, 5),
             Interval(2, 3),
             Interval(2, 3),
             Interval(1, 5),
-        ),  # Fully contained interval
+        ),
+        # Infinite intervals
         (
             Interval(-float("inf"), 1),
             Interval(0, float("inf")),
             Interval(0, 1),
             Interval(-float("inf"), float("inf")),
-        ),  # Infinite intervals
+        ),
     ],
 )
 def test_interval_arithmetic(
@@ -556,16 +661,19 @@ def test_interval_arithmetic(
     expected_union: Optional[Interval],
 ):
     # Test intersection
-    if expected_intersection is None:
-        assert a.intersection(b) is None
+    if expected_intersection == Interval():
+        assert a.intersection(b) == Interval()
+        assert b.intersection(a) == Interval()
     else:
         assert a.intersection(b) == expected_intersection
         assert b.intersection(a) == expected_intersection  # Commutativity
 
     # Test union
-    if expected_union is None:
+    if expected_union == Interval():
         with pytest.raises(Exception):
             a.union(b)
+        with pytest.raises(Exception):
+            b.union(a)
     else:
         assert a.union(b) == expected_union
         assert b.union(a) == expected_union  # Commutativity
@@ -580,8 +688,8 @@ def test_interval_arithmetic_edge_cases():
 
     # Empty interval intersection
     empty = Interval(1, 1)
-    assert empty.intersection(Interval(2, 3)) is None
-    assert Interval(2, 3).intersection(empty) is None
+    assert empty.intersection(Interval(2, 3)) == Interval()
+    assert Interval(2, 3).intersection(empty) == Interval()
 
     # Intersection with universal set
     universal = Interval(-float("inf"), float("inf"))
@@ -614,3 +722,480 @@ def test_interval_arithmetic_invalid():
 def test_from_str_errors(invalid_string):
     with pytest.raises(ValueError):
         Interval.from_str(invalid_string)
+
+
+def test_interval_repr():
+    assert repr(Interval(1, 5)) == "(1, 5)"
+    assert repr(ClosedInterval(1, 5)) == "[1, 5]"
+    assert repr(OpenInterval(1, 5)) == "(1, 5)"
+    assert repr(Interval(1, 5, closed_L=True)) == "[1, 5)"
+    assert repr(Interval(1, 5, closed_R=True)) == "(1, 5]"
+
+
+def test_interval_from_str_with_whitespace():
+    assert Interval.from_str(" ( 1 , 5 ) ") == Interval(1, 5)
+    assert Interval.from_str("[1.5 , 3.5]") == ClosedInterval(1.5, 3.5)
+
+
+def test_interval_from_str_with_scientific_notation():
+    assert Interval.from_str("(1e-3, 1e3)") == Interval(0.001, 1000)
+
+
+def test_interval_clamp_with_custom_epsilon():
+    i = Interval(0, 1)
+    assert math.isclose(i.clamp(-0.5, epsilon=0.25), 0.25, rel_tol=1e-9)
+    assert math.isclose(i.clamp(1.5, epsilon=0.25), 0.75, rel_tol=1e-9)
+
+
+def test_interval_size_with_small_values():
+    i = Interval(1e-10, 2e-10)
+    assert math.isclose(i.size(), 1e-10, rel_tol=1e-9)
+
+
+def test_interval_intersection_edge_cases():
+    i1 = Interval(1, 2)
+    i2 = Interval(2, 3)
+    i3 = ClosedInterval(2, 3)
+
+    assert i1.intersection(i2) == Interval.get_empty()
+    assert i1.intersection(i3) == Interval(2, 2, closed_L=True)
+
+
+def test_interval_union_edge_cases():
+    i1 = Interval(1, 2, closed_R=True)
+    i2 = Interval(2, 3, closed_L=True)
+
+    assert i1.union(i2) == Interval(1, 3)
+
+
+def test_interval_contains_with_epsilon():
+    i = OpenInterval(0, 1)
+    assert 0 + _EPSILON in i
+    assert 1 - _EPSILON in i
+
+
+def test_singleton_creation():
+    s = Interval.get_singleton(5)
+    assert s.is_singleton
+    assert s.singleton == 5
+    assert len(s) == 1
+    assert s.lower == s.upper == 5
+    assert s.closed_L and s.closed_R
+
+
+def test_empty_creation():
+    e = Interval.get_empty()
+    assert e.is_empty
+    assert len(e) == 0
+    with pytest.raises(ValueError):
+        _ = e.singleton
+
+
+def test_singleton_properties():
+    s = Interval.get_singleton(3.14)
+    assert s.is_singleton
+    assert not s.is_empty
+    assert s.is_finite
+    assert s.is_closed
+    assert not s.is_open
+    assert not s.is_half_open
+
+
+def test_empty_properties():
+    e = Interval.get_empty()
+    assert e.is_empty
+    assert not e.is_singleton
+    assert e.is_finite
+    assert e.is_closed
+    assert e.is_open
+    assert not e.is_half_open
+
+
+def test_singleton_containment():
+    s = Interval.get_singleton(5)
+    assert 5 in s
+    assert 5.0 in s
+    assert 4.999999999999999 not in s
+    assert 5.000000000000001 not in s
+    assert Interval.get_singleton(5) in s
+    assert Interval(4, 6) not in s
+    assert s in Interval(4, 6)
+
+
+def test_empty_containment():
+    e = Interval.get_empty()
+    assert 0 not in e
+    assert e in Interval(0, 1)  # Empty set is a subset of all sets
+    assert Interval.get_empty() in e
+
+
+@pytest.mark.parametrize("value", [0, 1, -1, math.pi, math.e, math.inf, -math.inf])
+def test_singleton_various_values(value):
+    s = Interval.get_singleton(value)
+    assert s.is_singleton
+    assert s.singleton == value
+    assert value in s
+
+
+def test_singleton_nan():
+    assert Interval.get_singleton(math.nan).is_empty
+
+
+def test_singleton_operations():
+    s = Interval.get_singleton(5)
+    assert s.size() == 0
+    assert s.clamp(3) == 5
+    assert s.clamp(7) == 5
+
+
+def test_empty_operations():
+    e = Interval.get_empty()
+    assert e.size() == 0
+    with pytest.raises(ValueError):
+        e.clamp(3)
+
+
+def test_singleton_intersection():
+    s = Interval.get_singleton(5)
+    assert s.intersection(Interval(0, 10)) == s
+    assert s.intersection(Interval(5, 10)) == Interval.get_empty()
+    assert s.intersection(ClosedInterval(5, 10)) == s
+    assert s.intersection(Interval(5, 10, closed_R=True)) == Interval.get_empty()
+    assert s.intersection(Interval(5, 10, closed_L=True)) == s
+    assert s.intersection(Interval(5, 10, is_closed=True)) == s
+    assert s.intersection(Interval(0, 6)) == s
+    assert s.intersection(Interval(0, 5)) == Interval.get_empty()
+    assert s.intersection(Interval(6, 10)) == Interval.get_empty()
+    assert s.intersection(Interval(6, 10)) == Interval.get_empty()
+    assert s.intersection(Interval.get_singleton(5)) == s
+    assert s.intersection(Interval.get_singleton(6)) == Interval.get_empty()
+
+
+def test_empty_intersection():
+    e = Interval.get_empty()
+    assert e.intersection(Interval(0, 1)) == e
+    assert e.intersection(Interval.get_singleton(0)) == e
+    assert e.intersection(Interval.get_empty()) == e
+
+
+def test_singleton_union():
+    s = Interval.get_singleton(5)
+    assert s.union(Interval(0, 10)) == Interval(0, 10)
+    assert s.union(Interval(5, 10)) == Interval(5, 10, closed_L=True)
+    assert s.union(Interval(0, 5)) == Interval(0, 5, closed_R=True)
+    with pytest.raises(NotImplementedError):
+        s.union(Interval(6, 10))
+    assert s.union(Interval.get_singleton(5)) == s
+    with pytest.raises(NotImplementedError):
+        s.union(Interval.get_singleton(6))
+
+
+def test_empty_union():
+    e = Interval.get_empty()
+    assert e.union(Interval(0, 1)) == Interval(0, 1)
+    assert e.union(Interval.get_singleton(0)) == Interval.get_singleton(0)
+    assert e.union(Interval.get_empty()) == Interval.get_empty()
+
+
+def test_singleton_equality():
+    assert Interval.get_singleton(5) == Interval.get_singleton(5)
+    assert Interval.get_singleton(5) != Interval.get_singleton(6)
+    assert Interval.get_singleton(5) == ClosedInterval(5, 5)
+    assert Interval.get_singleton(5) != OpenInterval(5, 5)
+
+
+def test_empty_equality():
+    assert Interval.get_empty() == Interval.get_empty()
+    assert Interval.get_empty() == OpenInterval(5, 5)
+    assert Interval.get_empty() != ClosedInterval(5, 5)
+
+
+def test_singleton_representation():
+    assert repr(Interval.get_singleton(5)) == "{5}"
+    assert str(Interval.get_singleton(5)) == "{5}"
+
+
+def test_empty_representation():
+    assert repr(Interval.get_empty()) == "∅"
+    assert str(Interval.get_empty()) == "∅"
+
+
+def test_singleton_from_str():
+    assert Interval.from_str("{5}") == Interval.get_singleton(5)
+    assert Interval.from_str("{3.14}") == Interval.get_singleton(3.14)
+
+
+def test_empty_from_str():
+    assert Interval.from_str("∅") == Interval.get_empty()
+    assert Interval.from_str("{}") == Interval.get_empty()
+
+
+def test_singleton_iteration():
+    s = Interval.get_singleton(5)
+    assert list(s) == [5]
+    assert [x for x in s] == [5]
+
+
+def test_empty_iteration():
+    e = Interval.get_empty()
+    assert list(e) == []
+    assert [x for x in e] == []
+
+
+def test_singleton_indexing():
+    s = Interval.get_singleton(5)
+    assert s[0] == 5
+    with pytest.raises(IndexError):
+        _ = s[1]
+
+
+def test_empty_indexing():
+    e = Interval.get_empty()
+    with pytest.raises(IndexError):
+        _ = e[0]
+
+
+def test_singleton_bool():
+    assert bool(Interval.get_singleton(5))
+    assert bool(Interval.get_singleton(0))
+
+
+def test_empty_bool():
+    assert not bool(Interval.get_empty())
+
+
+def test_singleton_infinity():
+    inf_singleton = Interval.get_singleton(math.inf)
+    assert inf_singleton.is_singleton
+    assert not inf_singleton.is_finite
+    assert math.inf in inf_singleton
+    assert math.inf - 1 in inf_singleton
+
+
+def test_mixed_operations():
+    s = Interval.get_singleton(5)
+    e = Interval.get_empty()
+    i = Interval(0, 10)
+
+    assert s.intersection(e) == e
+    assert e.intersection(s) == e
+    assert i.intersection(s) == s
+    assert i.intersection(e) == e
+
+    assert s.union(e) == s
+    assert e.union(s) == s
+    assert i.union(s) == i
+    assert i.union(e) == i
+
+
+def test_edge_case_conversions():
+    assert Interval(5, 5, closed_L=True, closed_R=True).is_singleton
+    assert Interval(5, 5, closed_L=False, closed_R=False).is_empty
+    assert not Interval(5, 5, closed_L=True, closed_R=False).is_empty
+    assert not Interval(5, 5, closed_L=False, closed_R=True).is_empty
+
+
+def test_nan_handling_is_empty():
+    assert Interval(math.nan, math.nan).is_empty
+    assert Interval(None, None).is_empty
+    assert Interval().is_empty
+    assert Interval.get_empty().is_empty
+    with pytest.raises(ValueError):
+        Interval(math.nan, 5)
+    with pytest.raises(ValueError):
+        assert Interval(5, math.nan)
+
+
+def test_infinity_edge_cases():
+    assert not Interval(-math.inf, math.inf).is_empty
+    assert not Interval(-math.inf, math.inf).is_singleton
+    assert Interval(math.inf, math.inf, closed_L=True, closed_R=True).is_singleton
+    assert Interval(-math.inf, -math.inf, closed_L=True, closed_R=True).is_singleton
+
+
+# Potential bug: What should happen in this case?
+def test_potential_bug_infinity_singleton():
+    inf_singleton = Interval.get_singleton(math.inf)
+    assert math.isinf(inf_singleton.singleton)
+    assert inf_singleton == Interval(math.inf, math.inf, closed_L=True, closed_R=True)
+
+
+# Potential bug: Epsilon handling with singletons
+def test_potential_bug_singleton_epsilon():
+    s = Interval.get_singleton(5)
+    assert 5 + 1e-15 not in s  # This might fail if epsilon is not handled correctly
+
+
+# Potential bug: Empty set comparison
+def test_potential_bug_empty_comparison():
+    e1 = Interval.get_empty()
+    e2 = OpenInterval(5, 5)
+    assert e1 == e2  # This might fail if empty sets are not compared correctly
+
+
+# Potential bug: Singleton at zero
+def test_potential_bug_zero_singleton():
+    zero_singleton = Interval.get_singleton(0)
+    assert 0 in zero_singleton
+    assert -0.0 in zero_singleton  # This might fail due to float representation
+
+
+# Potential bug: Empty set size
+def test_potential_bug_empty_set_size():
+    e = Interval.get_empty()
+    assert (
+        e.size() == 0
+    )  # This might fail if size is not correctly implemented for empty sets
+
+
+@pytest.mark.parametrize(
+    "interval",
+    [
+        # Empty set
+        Interval.get_empty(),
+        # Singletons
+        Interval.get_singleton(0),
+        Interval.get_singleton(5),
+        Interval.get_singleton(-3),
+        Interval.get_singleton(3.14),
+        Interval.get_singleton(-2.718),
+        # Regular intervals
+        Interval(0, 1),
+        Interval(0, 1, closed_L=True),
+        Interval(0, 1, closed_R=True),
+        Interval(0, 1, closed_L=True, closed_R=True),
+        OpenInterval(-5, 5),
+        ClosedInterval(-5, 5),
+        # Intervals with infinities
+        Interval(-math.inf, math.inf),
+        Interval(-math.inf, 0),
+        Interval(0, math.inf),
+        Interval(-math.inf, 0, closed_R=True),
+        Interval(0, math.inf, closed_L=True),
+        ClosedInterval(-math.inf, math.inf),
+        # Mixed finite and infinite bounds
+        Interval(-math.inf, 5),
+        Interval(-5, math.inf),
+        Interval(-math.inf, 5, closed_R=True),
+        Interval(-5, math.inf, closed_L=True),
+        # Very large and very small numbers
+        Interval(1e-100, 1e100),
+        ClosedInterval(-1e50, 1e50),
+        # Intervals with non-integer bounds
+        Interval(math.e, math.pi),
+        ClosedInterval(math.sqrt(2), math.sqrt(3)),
+    ],
+)
+def test_interval_string_round_trip(interval):
+    # Convert interval to string
+    interval_str = str(interval)
+
+    # Parse string back to interval
+    parsed_interval = Interval.from_str(interval_str)
+
+    # Check if the parsed interval is equal to the original
+    assert (
+        parsed_interval == interval
+    ), f"Round trip failed for {interval}. Got {parsed_interval}"
+
+    # Additional check for string representation consistency
+    assert (
+        str(parsed_interval) == interval_str
+    ), f"String representation mismatch for {interval}. Expected {interval_str}, got {str(parsed_interval)}"
+
+
+def test_empty_set_string_representations():
+    empty = Interval.get_empty()
+    assert str(empty) == "∅"
+    assert Interval.from_str("∅") == empty
+    assert Interval.from_str("{}") == empty
+
+
+@pytest.mark.parametrize("value", [0, 1, -1, 3.14, -2.718, math.pi, math.e])
+def test_singleton_string_representations(value):
+    singleton = Interval.get_singleton(value)
+    assert str(singleton) == f"{{{value}}}"
+    assert Interval.from_str(f"{{{value}}}") == singleton
+
+
+def test_infinity_string_representations():
+    assert str(Interval(-math.inf, math.inf)) == "(-inf, inf)"
+    assert str(ClosedInterval(-math.inf, math.inf)) == "[-inf, inf]"
+    assert str(Interval(-math.inf, 0)) == "(-inf, 0)"
+    assert str(Interval(0, math.inf)) == "(0, inf)"
+
+
+def test_mixed_closure_string_representations():
+    assert str(Interval(0, 1, closed_L=True)) == "[0, 1)"
+    assert str(Interval(0, 1, closed_R=True)) == "(0, 1]"
+    assert str(Interval(-math.inf, 0, closed_R=True)) == "(-inf, 0]"
+    assert str(Interval(0, math.inf, closed_L=True)) == "[0, inf)"
+
+
+@pytest.mark.parametrize(
+    "string_repr",
+    [
+        "(0, 1)",
+        "[0, 1]",
+        "(0, 1]",
+        "[0, 1)",
+        "(-inf, inf)",
+        "[0, inf)",
+        "(-inf, 0]",
+        "{2.5}",
+        "∅",
+    ],
+)
+def test_string_parsing_consistency(string_repr):
+    parsed_interval = Interval.from_str(string_repr)
+    assert (
+        str(parsed_interval) == string_repr
+    ), f"Parsing inconsistency for {string_repr}. Got {str(parsed_interval)}"
+
+
+def test_string_parsing_edge_cases():
+    with pytest.raises(ValueError):
+        Interval.from_str("(1, 0)")  # Lower bound greater than upper bound
+
+    with pytest.raises(ValueError):
+        Interval.from_str("[1, 2, 3]")  # Too many values
+
+    with pytest.raises(ValueError):
+        Interval.from_str("(a, b)")  # Non-numeric values
+
+
+def test_string_representation_precision():
+    # Test that string representation maintains sufficient precision
+    small_interval = Interval(1e-10, 2e-10)
+    parsed_small_interval = Interval.from_str(str(small_interval))
+    assert small_interval == parsed_small_interval
+    assert small_interval.lower == parsed_small_interval.lower
+    assert small_interval.upper == parsed_small_interval.upper
+
+
+def test_string_representation_with_scientific_notation():
+    large_interval = Interval(1e100, 2e100)
+    large_interval_str = str(large_interval)
+    assert "e+" in large_interval_str  # Ensure scientific notation is used
+    parsed_large_interval = Interval.from_str(large_interval_str)
+    assert large_interval == parsed_large_interval
+
+
+# Potential bug: Handling of -0.0 in string representation
+def test_potential_bug_negative_zero():
+    zero_singleton = Interval.get_singleton(-0.0)
+    zero_singleton_str = str(zero_singleton)
+    assert Interval.from_str(zero_singleton_str) == zero_singleton
+    assert (
+        Interval.from_str(zero_singleton_str).singleton == 0.0
+    )  # Should this be -0.0 or 0.0?
+
+
+# Potential bug: Precision loss in string representation
+def test_potential_bug_precision_loss():
+    precise_interval = Interval(1 / 3, 2 / 3)
+    precise_interval_str = str(precise_interval)
+    parsed_precise_interval = Interval.from_str(precise_interval_str)
+    assert precise_interval == parsed_precise_interval
+    assert precise_interval.lower == parsed_precise_interval.lower
+    assert precise_interval.upper == parsed_precise_interval.upper

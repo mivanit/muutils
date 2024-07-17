@@ -11,6 +11,14 @@ _EPSILON: float = 1e-10
 
 Number = typing.TypeVar("Number", float, int, typing.SupportsFloat, typing.SupportsInt)
 
+_EMPTY_INTERVAL_ARGS: tuple[Number, Number, bool, bool, set[Number]] = (
+    math.nan,
+    math.nan,
+    False,
+    False,
+    set(),
+)
+
 
 class Interval:
     """
@@ -42,7 +50,21 @@ class Interval:
         closed_L: Optional[bool] = None,
         closed_R: Optional[bool] = None,
     ):
+        self.lower: Number
+        self.upper: Number
+        self.closed_L: bool
+        self.closed_R: bool
+        self.singleton_set: Optional[set[Number]] = None
         try:
+            if len(args) == 0:
+                (
+                    self.lower,
+                    self.upper,
+                    self.closed_L,
+                    self.closed_R,
+                    self.singleton_set,
+                ) = _EMPTY_INTERVAL_ARGS
+                return
             # Handle different types of input arguments
             if len(args) == 1 and isinstance(
                 args[0], (list, tuple, Sequence, Iterable)
@@ -54,11 +76,38 @@ class Interval:
                 self.upper = args[0][1]
                 # Determine closure type based on the container type
                 default_closed = isinstance(args[0], list)
+            elif len(args) == 1 and isinstance(
+                args[0], (int, float, typing.SupportsFloat, typing.SupportsInt)
+            ):
+                # a singleton, but this will be handled later
+                self.lower = args[0]
+                self.upper = args[0]
+                default_closed = False
             elif len(args) == 2:
                 self.lower, self.upper = args
                 default_closed = False  # Default to open interval if two args
             else:
                 raise ValueError(f"Invalid input arguments: {args}")
+
+            # if both of the bounds are NaN or None, return an empty interval
+            if any(x is None for x in (self.lower, self.upper)) or any(
+                math.isnan(x) for x in (self.lower, self.upper)
+            ):
+                if (self.lower is None and self.upper is None) or (
+                    math.isnan(self.lower) and math.isnan(self.upper)
+                ):
+                    (
+                        self.lower,
+                        self.upper,
+                        self.closed_L,
+                        self.closed_R,
+                        self.singleton_set,
+                    ) = _EMPTY_INTERVAL_ARGS
+                    return
+                else:
+                    raise ValueError(
+                        "Both bounds must be NaN or None to create an empty interval. Also, just use `Interval.get_empty()` instead."
+                    )
 
             # Ensure lower bound is less than upper bound
             if self.lower > self.upper:
@@ -78,24 +127,131 @@ class Interval:
                 self.closed_L = closed_L if closed_L is not None else default_closed
                 self.closed_R = closed_R if closed_R is not None else default_closed
 
+            # handle singleton/empty case
+            if self.lower == self.upper and not (self.closed_L or self.closed_R):
+                (
+                    self.lower,
+                    self.upper,
+                    self.closed_L,
+                    self.closed_R,
+                    self.singleton_set,
+                ) = _EMPTY_INTERVAL_ARGS
+                return
+
+            elif self.lower == self.upper and (self.closed_L or self.closed_R):
+                self.singleton_set = {self.lower}  # Singleton interval
+                self.closed_L = True
+                self.closed_R = True
+                return
+            # otherwise `singleton_set` is `None`
+
         except (AssertionError, ValueError) as e:
             raise ValueError(
-                f"Invalid input arguments to Interval:\n{e}\nUsage:\n{self.__doc__}"
+                f"Invalid input arguments to Interval: {args = }, {is_closed = }, {closed_L = }, {closed_R = }\n{e}\nUsage:\n{self.__doc__}"
             ) from e
+
+    @property
+    def is_closed(self) -> bool:
+        if self.is_empty:
+            return True
+        if self.is_singleton:
+            return True
+        return self.closed_L and self.closed_R
+
+    @property
+    def is_open(self) -> bool:
+        if self.is_empty:
+            return True
+        if self.is_singleton:
+            return False
+        return not self.closed_L and not self.closed_R
+
+    @property
+    def is_half_open(self) -> bool:
+        return (self.closed_L and not self.closed_R) or (
+            not self.closed_L and self.closed_R
+        )
+
+    @property
+    def is_singleton(self) -> bool:
+        return self.singleton_set is not None and len(self.singleton_set) == 1
+
+    @property
+    def is_empty(self) -> bool:
+        return self.singleton_set is not None and len(self.singleton_set) == 0
+
+    @property
+    def is_finite(self) -> bool:
+        return not math.isinf(self.lower) and not math.isinf(self.upper)
+
+    @property
+    def singleton(self) -> Number:
+        if not self.is_singleton:
+            raise ValueError("Interval is not a singleton")
+        return next(iter(self.singleton_set))
+
+    @classmethod
+    def get_empty(cls) -> Interval:
+        return cls(math.nan, math.nan, closed_L=None, closed_R=None)
+
+    @classmethod
+    def get_singleton(cls, value: Number) -> Interval:
+        if math.isnan(value) or value is None:
+            return cls.get_empty()
+        return cls(value, value, closed_L=True, closed_R=True)
+
+    def numerical_contained(self, item: Number) -> bool:
+        if self.is_empty:
+            return False
+        if math.isnan(item):
+            raise ValueError("NaN cannot be checked for containment in an interval")
+        if self.is_singleton:
+            return item in self.singleton_set
+        return ((self.closed_L and item >= self.lower) or item > self.lower) and (
+            (self.closed_R and item <= self.upper) or item < self.upper
+        )
+
+    def interval_contained(self, item: Interval) -> bool:
+        if item.is_empty:
+            return True
+        if self.is_empty:
+            return False
+        if item.is_singleton:
+            return self.numerical_contained(item.singleton)
+        if self.is_singleton:
+            if not item.is_singleton:
+                return False
+            return self.singleton == item.singleton
+
+        lower_contained: bool = (
+            # either strictly wider bound
+            self.lower < item.lower
+            # if same, then self must be closed if item is open
+            or (self.lower == item.lower and self.closed_L >= item.closed_L)
+        )
+
+        upper_contained: bool = (
+            # either strictly wider bound
+            self.upper > item.upper
+            # if same, then self must be closed if item is open
+            or (self.upper == item.upper and self.closed_R >= item.closed_R)
+        )
+
+        return lower_contained and upper_contained
 
     def __contains__(self, item: Any) -> bool:
         if isinstance(item, Interval):
-            return self.lower <= item.lower and self.upper >= item.upper
+            return self.interval_contained(item)
         elif isinstance(item, (float, int, typing.SupportsFloat, typing.SupportsInt)):
-            if math.isnan(item):
-                raise ValueError("NaN cannot be checked for containment in an interval")
-            return ((self.closed_L and item >= self.lower) or item > self.lower) and (
-                (self.closed_R and item <= self.upper) or item < self.upper
-            )
+            return self.numerical_contained(item)
         else:
             raise TypeError(f"Unsupported type for containment check: {type(item)}")
 
     def __repr__(self) -> str:
+        if self.is_empty:
+            return r"∅"
+        if self.is_singleton:
+            return "{" + str(self.singleton) + "}"
         left: str = "[" if self.closed_L else "("
         right: str = "]" if self.closed_R else ")"
         return f"{left}{self.lower}, {self.upper}{right}"
@@ -106,10 +262,25 @@ class Interval:
     @classmethod
     def from_str(cls, input_str: str) -> Interval:
         input_str = input_str.strip()
+        # empty and singleton
+        if input_str.count(",") == 0:
+            # empty set
+            if input_str == "∅":
+                return cls.get_empty()
+            assert input_str.startswith("{") and input_str.endswith(
+                "}"
+            ), "Invalid input string"
+            input_str_set_interior: str = input_str.strip("{}").strip()
+            if len(input_str_set_interior) == 0:
+                return cls.get_empty()
+            # singleton set
+            return cls.get_singleton(str_to_numeric(input_str_set_interior))
 
+        # expect commas
         if not input_str.count(",") == 1:
             raise ValueError("Invalid input string")
 
+        # get bounds
         lower, upper = input_str.strip("[]()").split(",")
         lower = lower.strip()
         upper = upper.strip()
@@ -117,6 +288,7 @@ class Interval:
         lower = str_to_numeric(lower)
         upper = str_to_numeric(upper)
 
+        # figure out closure
         if input_str[0] == "[":
             closed_L = True
         elif input_str[0] == "(":
@@ -136,6 +308,10 @@ class Interval:
     def __eq__(self, other: object) -> bool:
         if not isinstance(other, Interval):
             return False
+        if self.is_empty and other.is_empty:
+            return True
+        if self.is_singleton and other.is_singleton:
+            return self.singleton == other.singleton
         return (self.lower, self.upper, self.closed_L, self.closed_R) == (
             other.lower,
             other.upper,
@@ -144,10 +320,23 @@ class Interval:
         )
 
     def __iter__(self):
-        yield self.lower
-        yield self.upper
+        if self.is_empty:
+            return
+        elif self.is_singleton:
+            yield self.singleton
+            return
+        else:
+            yield self.lower
+            yield self.upper
 
     def __getitem__(self, index: int) -> float:
+        if self.is_empty:
+            raise IndexError("Empty interval has no bounds")
+        if self.is_singleton:
+            if index == 0:
+                return self.singleton
+            else:
+                raise IndexError("Singleton interval has only one bound")
         if index == 0:
             return self.lower
         elif index == 1:
@@ -156,7 +345,16 @@ class Interval:
             raise IndexError("Interval index out of range")
 
     def __len__(self) -> int:
-        return 2
+        return 0 if self.is_empty else 1 if self.is_singleton else 2
+
+    def copy(self) -> Interval:
+        if self.is_empty:
+            return Interval.get_empty()
+        if self.is_singleton:
+            return Interval.get_singleton(self.singleton)
+        return Interval(
+            self.lower, self.upper, closed_L=self.closed_L, closed_R=self.closed_R
+        )
 
     def size(self) -> float:
         """
@@ -166,7 +364,10 @@ class Interval:
          - `float`
             the size of the interval
         """
-        return self.upper - self.lower
+        if self.is_empty or self.is_singleton:
+            return 0
+        else:
+            return self.upper - self.lower
 
     def clamp(self, value: Union[int, float], epsilon: float = _EPSILON) -> float:
         """
@@ -195,6 +396,12 @@ class Interval:
         if epsilon < 0:
             raise ValueError(f"Epsilon must be non-negative: {epsilon = }")
 
+        if self.is_empty:
+            raise ValueError("Cannot clamp to an empty interval")
+
+        if self.is_singleton:
+            return self.singleton
+
         if epsilon > self.size():
             warnings.warn(
                 f"Warning: epsilon is greater than the size of the interval: {epsilon = }, {self.size() = }, {self = }"
@@ -218,21 +425,28 @@ class Interval:
         if not isinstance(other, Interval):
             raise TypeError("Can only intersect with another Interval")
 
+        if self.is_empty or other.is_empty:
+            return Interval.get_empty()
+
+        if self.is_singleton:
+            if other.numerical_contained(self.singleton):
+                return self.copy()
+            else:
+                return Interval.get_empty()
+
+        if other.is_singleton:
+            if self.numerical_contained(other.singleton):
+                return other.copy()
+            else:
+                return Interval.get_empty()
+
         if self.upper < other.lower or other.upper < self.lower:
-            return None
+            return Interval.get_empty()
 
         lower: Number = max(self.lower, other.lower)
         upper: Number = min(self.upper, other.upper)
-        closed_L: bool = (
-            (self.closed_L and other.closed_L)
-            or (self.lower < other.lower and other.closed_L)
-            or (other.lower < self.lower and self.closed_L)
-        )
-        closed_R: bool = (
-            (self.closed_R and other.closed_R)
-            or (self.upper > other.upper and other.closed_R)
-            or (other.upper > self.upper and self.closed_R)
-        )
+        closed_L: bool = self.closed_L if self.lower > other.lower else other.closed_L
+        closed_R: bool = self.closed_R if self.upper < other.upper else other.closed_R
 
         return Interval(lower, upper, closed_L=closed_L, closed_R=closed_R)
 
@@ -240,15 +454,48 @@ class Interval:
         if not isinstance(other, Interval):
             raise TypeError("Can only union with another Interval")
 
-        if self.intersection(other) is None:
+        # empty set case
+        if self.is_empty:
+            return other.copy()
+        if other.is_empty:
+            return self.copy()
+
+        # special case where the intersection is empty but the intervals are contiguous
+        if self.upper == other.lower:
+            if self.closed_R or other.closed_L:
+                return Interval(
+                    self.lower,
+                    other.upper,
+                    closed_L=self.closed_L,
+                    closed_R=other.closed_R,
+                )
+        elif other.upper == self.lower:
+            if other.closed_R or self.closed_L:
+                return Interval(
+                    other.lower,
+                    self.upper,
+                    closed_L=other.closed_L,
+                    closed_R=self.closed_R,
+                )
+
+        # non-intersecting nonempty and non-contiguous intervals
+        if self.intersection(other) == Interval.get_empty():
             raise NotImplementedError(
-                "Union of non-intersecting intervals is not implemented"
+                "Union of non-intersecting nonempty non-contiguous intervals is not implemented "
+                + f"{self = }, {other = }, {self.intersection(other) = }"
             )
 
+        # singleton case
+        if self.is_singleton:
+            return other.copy()
+        if other.is_singleton:
+            return self.copy()
+
+        # regular case
         lower: Number = min(self.lower, other.lower)
         upper: Number = max(self.upper, other.upper)
-        closed_L: bool = self.closed_L or other.closed_L
-        closed_R: bool = self.closed_R or other.closed_R
+        closed_L: bool = self.closed_L if self.lower < other.lower else other.closed_L
+        closed_R: bool = self.closed_R if self.upper > other.upper else other.closed_R
 
         return Interval(lower, upper, closed_L=closed_L, closed_R=closed_R)
 

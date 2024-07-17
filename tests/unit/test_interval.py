@@ -764,14 +764,19 @@ def test_interval_intersection_edge_cases():
 def test_interval_union_edge_cases():
     i1 = Interval(1, 2, closed_R=True)
     i2 = Interval(2, 3, closed_L=True)
+    i3 = Interval(3, 4)
 
     assert i1.union(i2) == Interval(1, 3)
+    with pytest.raises(NotImplementedError):
+        i1.union(i3)
 
 
 def test_interval_contains_with_epsilon():
     i = OpenInterval(0, 1)
     assert 0 + _EPSILON in i
     assert 1 - _EPSILON in i
+    assert 0 not in i
+    assert 1 not in i
 
 
 def test_singleton_creation():
@@ -1190,6 +1195,10 @@ def test_potential_bug_negative_zero():
         Interval.from_str(zero_singleton_str).singleton == 0.0
     )  # Should this be -0.0 or 0.0?
 
+    i = Interval(-1, 1)
+    assert 0.0 in i
+    assert -0.0 in i  # This might fail if -0.0 is not handled correctly
+
 
 # Potential bug: Precision loss in string representation
 def test_potential_bug_precision_loss():
@@ -1199,3 +1208,244 @@ def test_potential_bug_precision_loss():
     assert precise_interval == parsed_precise_interval
     assert precise_interval.lower == parsed_precise_interval.lower
     assert precise_interval.upper == parsed_precise_interval.upper
+
+
+def test_interval_with_very_close_bounds():
+    i = Interval(1, 1 + 2 * _EPSILON)
+    assert i.size() > 0
+    assert 1 + _EPSILON in i
+    assert i.clamp(1) == 1 + _EPSILON
+    assert i.clamp(2) == 1 + _EPSILON
+
+
+def test_interval_with_bounds_closer_than_epsilon():
+    i = Interval(1, 1 + _EPSILON / 2)
+    assert i.size() > 0
+    with pytest.warns(UserWarning):
+        assert math.isclose(i.clamp(0), 1 + _EPSILON / 4)
+
+
+def test_interval_with_extremely_large_bounds():
+    i = Interval(1e300, 1e301)
+    assert 5e300 in i
+    assert i.clamp(0) == 1e300 + _EPSILON
+    assert i.clamp(2e301) == 1e301 - _EPSILON
+
+
+def test_interval_with_mixed_infinities():
+    i = Interval(-math.inf, math.inf)
+    assert i.size() == math.inf
+    assert 0 in i
+    assert math.inf not in i
+    assert -math.inf not in i
+    assert i.clamp(math.inf) == math.inf - _EPSILON
+    assert i.clamp(-math.inf) == -math.inf + _EPSILON
+
+
+def test_interval_with_one_infinity():
+    i1 = Interval(-math.inf, 0)
+    assert i1.size() == math.inf
+    assert -1e300 in i1
+    assert 0 not in i1
+    assert i1.clamp(1) == 0 - _EPSILON
+
+    i2 = Interval(0, math.inf)
+    assert i2.size() == math.inf
+    assert 1e300 in i2
+    assert 0 not in i2
+    assert i2.clamp(-1) == 0 + _EPSILON
+
+
+def test_interval_singleton_edge_cases():
+    s = Interval.get_singleton(0)
+    assert 0 in s
+    assert -0.0 in s
+    assert 1e-16 not in s
+    assert -1e-16 not in s
+
+
+def test_interval_empty_edge_cases():
+    e = Interval.get_empty()
+    assert e.size() == 0
+    assert e.is_open and e.is_closed
+    assert Interval.get_empty() in e
+    assert e in Interval(0, 1)
+
+
+def test_interval_from_str_edge_cases():
+    assert Interval.from_str("(0, 0)") == Interval.get_empty()
+    assert Interval.from_str("[0, 0]") == Interval.get_singleton(0)
+    assert Interval.from_str("(0, 0]") == Interval.get_singleton(0)
+    assert Interval.from_str("[0, 0)") == Interval.get_singleton(0)
+
+
+def test_interval_arithmetic_with_empty_intervals():
+    e = Interval.get_empty()
+    i = Interval(0, 1)
+    assert e.intersection(i) == e
+    assert i.intersection(e) == e
+    assert e.union(i) == i
+    assert i.union(e) == i
+
+
+def test_interval_arithmetic_with_singletons():
+    s = Interval.get_singleton(1)
+    i = Interval(0, 2)
+    assert s.intersection(i) == s
+    assert i.intersection(s) == s
+    assert s.union(i) == i
+    assert i.union(s) == i
+
+
+def test_interval_precision_near_bounds():
+    i = Interval(1, 2)
+    assert 1 + _EPSILON / 2 in i
+    assert 2 - _EPSILON / 2 in i
+    assert 1 - _EPSILON / 2 not in i
+    assert 2 + _EPSILON / 2 not in i
+
+
+def test_interval_serialization_precision():
+    i = Interval(1 / 3, 2 / 3)
+    serialized = str(i)
+    deserialized = Interval.from_str(serialized)
+    assert math.isclose(i.lower, deserialized.lower, rel_tol=1e-15)
+    assert math.isclose(i.upper, deserialized.upper, rel_tol=1e-15)
+
+
+def test_interval_with_repeated_float_operations():
+    i = Interval(0, 1)
+    for _ in range(1000):
+        i = Interval(i.lower + _EPSILON, i.upper - _EPSILON)
+    assert i.lower < i.upper
+    assert 0.5 in i
+
+
+def test_interval_near_float_precision_limit():
+    small_interval = Interval(1, 1 + 1e-15)
+    assert small_interval.size() > 0
+    assert 1 + 5e-16 in small_interval
+
+
+def test_interval_with_irrational_bounds():
+    i = Interval(math.e, math.pi)
+    print(f"{i.size() = }, {math.e - math.pi = }")
+    assert math.isclose(i.size(), math.pi - math.e)
+    assert (math.pi + math.e) / 2 in i
+    assert 3 in i
+
+
+def test_interval_commutativity_of_operations():
+    i1 = Interval(1, 3)
+    i2 = Interval(2, 4)
+    assert i1.intersection(i2) == i2.intersection(i1)
+    assert i1.union(i2) == i2.union(i1)
+
+
+def test_interval_associativity_of_operations():
+    i1 = Interval(1, 4)
+    i2 = Interval(2, 5)
+    i3 = Interval(3, 6)
+    assert (i1.intersection(i2)).intersection(i3) == i1.intersection(
+        i2.intersection(i3)
+    )
+    assert (i1.union(i2)).union(i3) == i1.union(i2.union(i3))
+
+
+def test_interval_distributivity_of_operations():
+    i1 = Interval(1, 3)
+    i2 = Interval(2, 4)
+    i3 = Interval(3, 5)
+    assert i1.intersection(i2.union(i3)) == (i1.intersection(i2)).union(
+        i1.intersection(i3)
+    )
+
+
+def test_interval_comparison():
+    i1 = Interval(1, 3)
+    i2 = Interval(2, 4)
+    i3 = Interval(1, 3)
+    assert i1 != i2
+    assert i1 == i3
+    with pytest.raises(TypeError):
+        i1 < i2
+
+
+def test_interval_copy():
+    i = Interval(1, 2, closed_L=True)
+    i_copy = i.copy()
+    assert i == i_copy
+    assert i is not i_copy
+
+
+def test_interval_pickling():
+    import pickle
+
+    i = Interval(1, 2, closed_L=True)
+    pickled = pickle.dumps(i)
+    unpickled = pickle.loads(pickled)
+    assert i == unpickled
+
+
+def test_interval_with_numpy_types():
+    import numpy as np
+
+    i = Interval(np.float64(1), np.float64(2))
+    assert np.float64(1.5) in i
+    assert isinstance(i.clamp(np.float64(0)), np.float64)
+
+
+def test_interval_with_decimal_types():
+    from decimal import Decimal
+
+    i = Interval(Decimal("1"), Decimal("2"))
+    assert Decimal("1.5") in i
+    assert min(i) == Decimal("1")
+    assert max(i) == Decimal("2")
+    assert isinstance(i.clamp(Decimal("0")), Decimal)
+
+
+def test_interval_with_fractions():
+    from fractions import Fraction
+
+    i = Interval(Fraction(1, 3), Fraction(2, 3))
+    assert Fraction(1, 2) in i
+    assert isinstance(i.clamp(Fraction(0, 1)), Fraction)
+
+
+# Potential bug: Infinity comparisons
+def test_potential_bug_infinity_comparisons():
+    i = Interval(-math.inf, math.inf)
+    assert (
+        math.inf not in i
+    )  # This might fail if infinity comparisons are not handled correctly
+
+
+# Potential bug: NaN handling
+def test_potential_bug_nan_handling():
+    with pytest.raises(ValueError):
+        Interval(0, float("nan"))
+
+    i = Interval(0, 1)
+    with pytest.raises(ValueError):
+        float("nan") in i
+
+
+# Potential bug: Intersection of adjacent intervals
+def test_potential_bug_adjacent_interval_intersection():
+    i1 = Interval(0, 1, closed_R=True)
+    i2 = Interval(1, 2, closed_L=True)
+    intersection = i1.intersection(i2)
+    assert intersection == Interval.get_singleton(
+        1
+    )  # This might fail if adjacent intervals are not handled correctly
+
+
+# Potential bug: Union of overlapping intervals
+def test_potential_bug_overlapping_interval_union():
+    i1 = Interval(0, 2)
+    i2 = Interval(1, 3)
+    union = i1.union(i2)
+    assert union == Interval(
+        0, 3
+    )  # This might fail if overlapping intervals are not handled correctly

@@ -407,6 +407,10 @@ class Interval:
                 f"Warning: epsilon is greater than the size of the interval: {epsilon = }, {self.size() = }, {self = }"
             )
 
+        # make type work with decimals and stuff
+        if not isinstance(value, (int, float)):
+            epsilon = value.__class__(epsilon)
+
         clamped_min: Number
         if self.closed_L:
             clamped_min = self.lower

@@ -108,7 +108,6 @@ def test_dc_eq_case4():
         e: list[int]
         f: dict[str, int]
 
-        
     @dataclass(eq=False)
     class TestClass2:
         a: int
@@ -141,30 +140,25 @@ def test_dc_eq_case5():
     class TestClass:
         a: int
 
-        
     @dataclass(eq=False)
     class TestClass2:
         a: int
 
-    instance1 = TestClass(
-        a=1
-    )
+    instance1 = TestClass(a=1)
 
-    instance2 = TestClass2(
-        a=1
-    )
+    instance2 = TestClass2(a=1)
 
     assert not dc_eq(instance1, instance2)
 
 
-
 def test_dc_eq_case6():
     @dataclass(eq=False)
-    class TestClass: pass
+    class TestClass:
+        pass
 
-        
     @dataclass(eq=False)
-    class TestClass2: pass
+    class TestClass2:
+        pass
 
     instance1 = TestClass()
 
@@ -175,11 +169,12 @@ def test_dc_eq_case6():
 
 def test_dc_eq_case7():
     @dataclass
-    class TestClass: pass
+    class TestClass:
+        pass
 
-        
     @dataclass
-    class TestClass2: pass
+    class TestClass2:
+        pass
 
     instance1 = TestClass()
 

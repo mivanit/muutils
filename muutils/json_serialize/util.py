@@ -246,7 +246,6 @@ def dc_eq(
                 )
         return False
 
-
     return all(
         array_safe_eq(getattr(dc1, fld.name), getattr(dc2, fld.name))
         for fld in dataclasses.fields(dc1)

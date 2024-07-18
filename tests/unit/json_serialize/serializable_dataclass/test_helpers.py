@@ -97,3 +97,92 @@ def test_dc_eq_case3():
     )
 
     assert not dc_eq(instance1, instance2)
+
+
+def test_dc_eq_case4():
+    @dataclass(eq=False)
+    class TestClass:
+        a: int
+        b: np.ndarray
+        c: torch.Tensor
+        e: list[int]
+        f: dict[str, int]
+
+        
+    @dataclass(eq=False)
+    class TestClass2:
+        a: int
+        b: np.ndarray
+        c: torch.Tensor
+        e: list[int]
+        f: dict[str, int]
+
+    instance1 = TestClass(
+        a=1,
+        b=np.array([1, 2, 3]),
+        c=torch.tensor([1, 2, 3]),
+        e=[1, 2, 3],
+        f={"key1": 1, "key2": 2},
+    )
+
+    instance2 = TestClass2(
+        a=1,
+        b=np.array([1, 2, 3]),
+        c=torch.tensor([1, 2, 3]),
+        e=[1, 2, 3],
+        f={"key1": 1, "key2": 2},
+    )
+
+    assert not dc_eq(instance1, instance2)
+
+
+def test_dc_eq_case5():
+    @dataclass(eq=False)
+    class TestClass:
+        a: int
+
+        
+    @dataclass(eq=False)
+    class TestClass2:
+        a: int
+
+    instance1 = TestClass(
+        a=1
+    )
+
+    instance2 = TestClass2(
+        a=1
+    )
+
+    assert not dc_eq(instance1, instance2)
+
+
+
+def test_dc_eq_case6():
+    @dataclass(eq=False)
+    class TestClass: pass
+
+        
+    @dataclass(eq=False)
+    class TestClass2: pass
+
+    instance1 = TestClass()
+
+    instance2 = TestClass2()
+
+    assert not dc_eq(instance1, instance2)
+
+
+def test_dc_eq_case7():
+    @dataclass
+    class TestClass: pass
+
+        
+    @dataclass
+    class TestClass2: pass
+
+    instance1 = TestClass()
+
+    instance2 = TestClass2()
+
+    assert not dc_eq(instance1, instance2)

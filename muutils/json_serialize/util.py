@@ -133,6 +133,9 @@ def array_safe_eq(a: Any, b: Any) -> bool:
     if a is b:
         return True
 
+    if type(a) is not type(b):
+        return False
+
     if (
         str(type(a)) == "<class 'numpy.ndarray'>"
         and str(type(b)) == "<class 'numpy.ndarray'>"
@@ -149,6 +152,8 @@ def array_safe_eq(a: Any, b: Any) -> bool:
         return a.equals(b)
 
     if isinstance(a, typing.Sequence) and isinstance(b, typing.Sequence):
+        if len(a) == 0 and len(b) == 0:
+            return True
         return len(a) == len(b) and all(array_safe_eq(a1, b1) for a1, b1 in zip(a, b))
 
     if isinstance(a, (dict, typing.Mapping)) and isinstance(b, (dict, typing.Mapping)):

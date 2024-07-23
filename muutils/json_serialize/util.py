@@ -240,19 +240,16 @@ def dc_eq(
             raise TypeError(
                 f"Cannot compare dataclasses of different classes: `{dc1.__class__}` and `{dc2.__class__}`"
             )
-        else:
+        if except_when_field_mismatch:
             dc1_fields: set = set([fld.name for fld in dataclasses.fields(dc1)])
             dc2_fields: set = set([fld.name for fld in dataclasses.fields(dc2)])
             fields_match: bool = set(dc1_fields) == set(dc2_fields)
-
             if not fields_match:
                 # if the fields match, keep going
-                if except_when_field_mismatch:
-                    raise AttributeError(
-                        f"dataclasses {dc1} and {dc2} have different fields: `{dc1_fields}` and `{dc2_fields}`"
-                    )
-                else:
-                    return False
+                raise AttributeError(
+                    f"dataclasses {dc1} and {dc2} have different fields: `{dc1_fields}` and `{dc2_fields}`"
+                )
+        return False
 
     return all(
         array_safe_eq(getattr(dc1, fld.name), getattr(dc2, fld.name))

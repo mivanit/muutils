@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "muutils"
-version = "0.6.3"
+version = "0.6.4"
 description = "miscellaneous python utilities"
 license = "GPL-3.0-only"
 authors = ["mivanit <mivanits@umich.edu>"]

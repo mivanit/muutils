@@ -13,6 +13,20 @@ def test_array_safe_eq():
     assert not array_safe_eq(np.array([1, 2, 3]), np.array([4, 5, 6]))
     assert array_safe_eq(torch.tensor([1, 2, 3]), torch.tensor([1, 2, 3]))
     assert not array_safe_eq(torch.tensor([1, 2, 3]), torch.tensor([4, 5, 6]))
+    assert array_safe_eq(np.array([]), np.array([]))
+    assert array_safe_eq(np.array([[]]), np.array([[]]))
+    assert array_safe_eq([], [])
+    assert array_safe_eq(dict(), dict())
+    assert array_safe_eq([1, 2, 3], [1, 2, 3])
+    assert array_safe_eq([np.array([1, 2, 3])], [np.array([1, 2, 3])])
+    assert not array_safe_eq([], [np.array([1, 2, 3])])
+    assert not array_safe_eq([[np.array([1, 2, 3])]], [np.array([1, 2, 3])])
+    assert array_safe_eq(
+        [np.array([1, 2, 3]), torch.tensor([1, 2, 3])],
+        [np.array([1, 2, 3]), torch.tensor([1, 2, 3])],
+    )
+    assert array_safe_eq([np.array([1, 2, 3]), []], [np.array([1, 2, 3]), []])
+    assert not array_safe_eq([[], np.array([1, 2, 3])], [np.array([1, 2, 3]), []])
 
 
 def test_dc_eq_case1():

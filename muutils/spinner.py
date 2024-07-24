@@ -151,6 +151,7 @@ def spinner_decorator(
 
             return result
 
-        return wrapper
+        # TODO: fix this
+        return wrapper  # typing: ignore[return-value]
 
     return decorator

@@ -2,10 +2,41 @@ import time
 import threading
 import sys
 from functools import wraps
-from typing import Callable, Any, Optional, TextIO, TypeVar, Sequence
+from typing import Callable, Any, Optional, TextIO, TypeVar, Sequence, Dict, Union
 
 # Define a generic type for the decorated function
 DecoratedFunction = TypeVar("DecoratedFunction", bound=Callable[..., Any])
+
+SPINNER_CHARS: Dict[str, Sequence[str]] = dict(
+    default=["|", "/", "-", "\\"],
+    dots=[".  ", ".. ", "..."],
+    arrows=["<", "^", ">", "v"],
+    arrows_2=["←", "↖", "↑", "↗", "→", "↘", "↓", "↙"],
+    bouncing_bar=["[    ]", "[=   ]", "[==  ]", "[=== ]", "[ ===]", "[  ==]", "[   =]"],
+    bouncing_ball=[
+        "( ●    )",
+        "(  ●   )",
+        "(   ●  )",
+        "(    ● )",
+        "(     ●)",
+        "(    ● )",
+        "(   ●  )",
+        "(  ●   )",
+        "( ●    )",
+        "(●     )",
+    ],
+    ooo=[".", "o", "O", "o"],
+    braille=["⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏"],
+    clock=["🕛", "🕐", "🕑", "🕒", "🕓", "🕔", "🕕", "🕖", "🕗", "🕘", "🕙", "🕚"],
+    hourglass=["⏳", "⌛"],
+    square_corners=["◰", "◳", "◲", "◱"],
+    triangle=["◢", "◣", "◤", "◥"],
+    square_dot=["⣾", "⣽", "⣻", "⢿", "⡿", "⣟", "⣯", "⣷"],
+    box_bounce=["▌", "▀", "▐", "▄"],
+    hamburger=["☱", "☲", "☴"],
+    earth=["🌍", "🌎", "🌏"],
+    growing_dots=["⣀", "⣄", "⣤", "⣦", "⣶", "⣷", "⣿"],
+)
 
 
 class Spinner:
@@ -17,7 +48,7 @@ class Spinner:
         self,
         format_string: Optional[str] = None,
         show_elapsed_time: bool = True,
-        spinner_chars: Sequence[str] = ("|", "/", "-", "\\"),
+        spinner_chars: Union[str, Sequence[str]] = "default",
         time_fstring: str = "({elapsed_time:.2f}s)",
         update_interval: float = 0.1,
         output_stream: TextIO = sys.stdout,
@@ -26,7 +57,11 @@ class Spinner:
         # copy args
         self.format_string: Optional[str] = format_string
         self.show_elapsed_time: bool = show_elapsed_time
-        self.spinner_chars: Sequence[str] = spinner_chars
+        self.spinner_chars: Sequence[str] = (
+            SPINNER_CHARS[spinner_chars]
+            if isinstance(spinner_chars, str)
+            else spinner_chars
+        )
         self.time_fstring: str = time_fstring
         self.update_interval: float = update_interval
         self.output_stream: TextIO = output_stream

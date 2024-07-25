@@ -31,45 +31,108 @@ SPINNER_CHARS: Dict[str, Sequence[str]] = dict(
     hourglass=["⏳", "⌛"],
     square_corners=["◰", "◳", "◲", "◱"],
     triangle=["◢", "◣", "◤", "◥"],
-    square_dot=["⣾", "⣽", "⣻", "⢿", "⡿", "⣟", "⣯", "⣷"],
+    square_dot=[
+        "⣷",
+        "⣯",
+        "⣟",
+        "⡿",
+        "⢿",
+        "⣻",
+        "⣽",
+        "⣾",
+    ],
     box_bounce=["▌", "▀", "▐", "▄"],
     hamburger=["☱", "☲", "☴"],
     earth=["🌍", "🌎", "🌏"],
     growing_dots=["⣀", "⣄", "⣤", "⣦", "⣶", "⣷", "⣿"],
 )
 
+SPINNER_COMPLETE: Dict[str, str] = dict(
+    default="#",
+    dots="***",
+    arrows="#",
+    arrows_2="#",
+    bouncing_bar="[====]",
+    bouncing_ball="(●●●●●●)",
+    ooo="#",
+    braille="⣿",
+    clock="✔️",
+    hourglass="✔️",
+    square_corners="◼",
+    triangle="◆",
+    square_dot="⣿",
+    box_bounce="■",
+    hamburger="☰",
+    earth="✔️",
+    growing_dots="⣿",
+)
+
 
 class Spinner:
-    """
-    Base class for spinner functionality.
+    """displays a spinner, and optionally elapsed time and a mutable value while a function is running.
+
+    # Parameters:
+        - `spinner_chars : Union[str, Sequence[str]]`
+        sequence of strings, or key to look up in `SPINNER_CHARS`, to use as the spinner characters
+        (defaults to `"default"`)
+        - `update_interval : float`
+        how often to update the spinner display in seconds
+        (defaults to `0.1`)
+        - `spinner_complete : str`
+        string to display when the spinner is complete
+        (defaults to looking up `spinner_chars` in `SPINNER_COMPLETE` or `"#"`)
+        - `initial_value : str`
+        initial value to display after spinner+time. if `format_string` is None, will just always display this value
+        (defaults to `"_"`)
+        - `format_string : Optional[str]`
+        string to format the mutable value value with
+        (defaults to `None`)
+        - `show_elapsed_time : bool`
+        whether to display the elapsed time
+        (defaults to `True`)
+        - `time_fstring : _type_`
+        format string for the elapsed time
+        (defaults to `"({elapsed_time:.2f}s)"`)
+        - `output_stream : TextIO`
+        stream to write the spinner to
+        (defaults to `sys.stdout`)
     """
 
     def __init__(
         self,
+        *args,
+        spinner_chars: Union[str, Sequence[str]] = "default",
+        update_interval: float = 0.1,
+        spinner_complete: Optional[str] = None,
+        initial_value: str = "_",
         format_string: Optional[str] = None,
         show_elapsed_time: bool = True,
-        spinner_chars: Union[str, Sequence[str]] = "default",
         time_fstring: str = "({elapsed_time:.2f}s)",
-        update_interval: float = 0.1,
         output_stream: TextIO = sys.stdout,
-        initial_value: str = "_",
     ):
-        # copy args
-        self.format_string: Optional[str] = format_string
-        self.show_elapsed_time: bool = show_elapsed_time
+        if args:
+            raise ValueError("Spinner does not accept positional arguments")
+        # copy kwargs
+        self.spinner_complete: str = (
+            SPINNER_COMPLETE.get(spinner_chars, "#")
+            if spinner_complete is None
+            else (spinner_complete if isinstance(spinner_complete, str) else "#")
+        )
         self.spinner_chars: Sequence[str] = (
             SPINNER_CHARS[spinner_chars]
             if isinstance(spinner_chars, str)
             else spinner_chars
         )
-        self.time_fstring: str = time_fstring
         self.update_interval: float = update_interval
+        self.current_value: str = initial_value
+        self.format_string: Optional[str] = format_string
+        self.show_elapsed_time: bool = show_elapsed_time
+        self.time_fstring: str = time_fstring
         self.output_stream: TextIO = output_stream
 
         # init
         self.start_time: float = 0
         self.stop_spinner: threading.Event = threading.Event()
-        self.current_value: str = initial_value
         self.spinner_thread: Optional[threading.Thread] = None
 
     def spin(self) -> None:
@@ -119,6 +182,7 @@ class Spinner:
         """
         Stop the spinner.
         """
+        self.output_stream.write(f"\r{self.spinner_complete}")
         self.stop_spinner.set()
         if self.spinner_thread:
             self.spinner_thread.join()
@@ -127,9 +191,7 @@ class Spinner:
 
 
 class SpinnerContext(Spinner):
-    """
-    A context manager that displays a spinner, and optionally elapsed time and a mutable value.
-    """
+    "see `Spinner` for parameters"
 
     def __enter__(self) -> "SpinnerContext":
         self.start()
@@ -139,27 +201,22 @@ class SpinnerContext(Spinner):
         self.stop()
 
 
+SpinnerContext.__doc__ = Spinner.__doc__
+
+
 def spinner_decorator(
     *args,
+    spinner_chars: Sequence[str] = ("|", "/", "-", "\\"),
+    update_interval: float = 0.1,
+    spinner_complete: Optional[str] = None,
     format_string: Optional[str] = None,
     mutable_kwarg_key: Optional[str] = None,
     show_elapsed_time: bool = True,
-    spinner_chars: Sequence[str] = ("|", "/", "-", "\\"),
     time_fstring: str = "({elapsed_time:.2f}s)",
-    update_interval: float = 0.1,
     output_stream: TextIO = sys.stdout,
 ) -> Callable[[DecoratedFunction], DecoratedFunction]:
-    """
-    A decorator that displays a spinner, and optionally elapsed time and a mutable value while a function is running.
+    "see `Spinner` for parameters"
 
-    KwArgs:
-    format_string (Optional[str]): A format string for displaying the mutable value.
-    mutable_kwarg_key (Optional[str]): The keyword argument name for the update function in the decorated function. If None, mutable value feature is disabled.
-    show_elapsed_time (bool): Whether to display the elapsed time.
-
-    Returns:
-    Callable[[F], F]: A decorator function.
-    """
     if args:
         raise ValueError("spinner_decorator does not accept positional arguments")
 
@@ -190,3 +247,19 @@ def spinner_decorator(
         return wrapper  # type: ignore[return-value]
 
     return decorator
+
+
+spinner_decorator.__doc__ = Spinner.__doc__
+
+
+class NoOpContextManager:
+    """A context manager that does nothing."""
+
+    def __init__(self, *args, **kwargs):
+        pass
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc_value, traceback):
+        pass

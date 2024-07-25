@@ -73,7 +73,7 @@ def test_spinner_initialization():
     spinner = Spinner()
     assert spinner.format_string is None
     assert spinner.show_elapsed_time is True
-    assert spinner.spinner_chars == ("|", "/", "-", "\\")
+    assert spinner.spinner_chars == ["|", "/", "-", "\\"]
     assert spinner.time_fstring == "({elapsed_time:.2f}s)"
     assert spinner.update_interval == 0.1
 

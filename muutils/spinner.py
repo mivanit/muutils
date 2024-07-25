@@ -114,9 +114,15 @@ class Spinner:
             raise ValueError("Spinner does not accept positional arguments")
         # copy kwargs
         self.spinner_complete: str = (
-            SPINNER_COMPLETE.get(spinner_chars, "#")
+            (
+                # if None, use `spinner_chars` key as default
+                SPINNER_COMPLETE.get(spinner_chars, "#")
+                if isinstance(spinner_chars, str)
+                else "#"
+            )
             if spinner_complete is None
-            else (spinner_complete if isinstance(spinner_complete, str) else "#")
+            # if not None, use the value provided
+            else spinner_complete
         )
         self.spinner_chars: Sequence[str] = (
             SPINNER_CHARS[spinner_chars]

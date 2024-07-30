@@ -8,7 +8,7 @@ from muutils.spinner import spinner_decorator, SpinnerContext, Spinner
 
 
 def test_spinner_simple():
-    @spinner_decorator(show_elapsed_time=True, update_interval=0.05)
+    @spinner_decorator(update_interval=0.05)
     def long_running_function_simple() -> str:
         """
         An example function decorated with spinner_decorator, using only the spinner and elapsed time.
@@ -28,9 +28,8 @@ def test_spinner_simple():
 def test_spinner_complex():
     # Example usage
     @spinner_decorator(
-        format_string="Current value: {}",
+        message="Current value: ",
         mutable_kwarg_key="update_status",
-        show_elapsed_time=True,
         update_interval=0.05,
     )
     def long_running_function_with_status(
@@ -57,24 +56,38 @@ def test_spinner_complex():
     print(result1)
 
 
+def test_spinner_decorator_bare():
+    @spinner_decorator()
+    def example_function():
+        return "Done"
+
+    result = example_function()
+    assert result == "Done"
+
+
 def test_spinner_ctx_mgr():
-    # Example usage of the context manager
-    def example_usage_context_manager():
-        with SpinnerContext(
-            format_string="Current value: {}", update_interval=0.05
-        ) as spinner:
-            for i in range(1):
-                time.sleep(0.1)
-                spinner.update_value(f"Step {i+1}")
-        print("Done!")
+    with SpinnerContext(message="Current value: ", update_interval=0.05) as spinner:
+        for i in range(1):
+            time.sleep(0.1)
+            spinner.update_value(f"Step {i+1}")
+    print("Done!")
 
 
 def test_spinner_initialization():
     spinner = Spinner()
-    assert spinner.format_string is None
-    assert spinner.show_elapsed_time is True
+    assert isinstance(spinner, Spinner)
+    assert isinstance(spinner.spinner_chars, list)
+    assert isinstance(spinner.update_interval, float)
+    assert isinstance(spinner.spinner_complete, str)
+    assert isinstance(spinner.current_value, str)
+    assert isinstance(spinner.message, str)
+    assert isinstance(spinner.format_string, str)
+    assert hasattr(spinner.output_stream, "write")
+    assert callable(spinner.output_stream.write)
+    assert callable(spinner.update_value)
+
     assert spinner.spinner_chars == ["|", "/", "-", "\\"]
-    assert spinner.time_fstring == "({elapsed_time:.2f}s)"
+    assert spinner.format_string == "\r{spinner} ({elapsed_time:.2f}s) {message}{value}"
     assert spinner.update_interval == 0.1
 
 
@@ -107,14 +120,14 @@ def test_spinner_custom_chars():
 
 
 def test_spinner_custom_time_format():
-    spinner = Spinner(time_fstring="[{elapsed_time:.1f}s]")
-    assert spinner.time_fstring == "[{elapsed_time:.1f}s]"
+    spinner = Spinner(format_string="[{elapsed_time:.1f}s]")
+    assert spinner.format_string == "[{elapsed_time:.1f}s]"
 
 
 def test_spinner_context_manager_with_updates():
     string_io = io.StringIO()
     with SpinnerContext(
-        format_string="Status: {}", output_stream=string_io, update_interval=0.05
+        message="Status: ", output_stream=string_io, update_interval=0.05
     ) as spinner:
         spinner.update_value("Working")
         time.sleep(0.1)
@@ -122,6 +135,7 @@ def test_spinner_context_manager_with_updates():
         time.sleep(0.1)
 
     output = string_io.getvalue()
+    print(output)
     assert "Status: Working" in output
     assert "Status: Finishing" in output
 
@@ -137,6 +151,7 @@ def test_spinner_context_exception_handling():
         pass
 
     output = string_io.getvalue()
+    print(output)
     assert "Before exception" in output
     assert output.endswith("\n")
 
@@ -145,7 +160,7 @@ def test_spinner_long_running_task():
     string_io = io.StringIO()
 
     @spinner_decorator(
-        format_string="Iteration: {}",
+        message="Iteration: ",
         output_stream=string_io,
         update_interval=0.05,
         mutable_kwarg_key="update",
@@ -158,5 +173,6 @@ def test_spinner_long_running_task():
     long_task(3, update=lambda x: x)
 
     output = string_io.getvalue()
+    print(output)
     for i in range(1, 4):
         assert f"Iteration: {i}" in output

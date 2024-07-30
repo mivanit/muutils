@@ -82,20 +82,42 @@ class Spinner:
         string to display when the spinner is complete
         (defaults to looking up `spinner_chars` in `SPINNER_COMPLETE` or `"#"`)
         - `initial_value : str`
-        initial value to display after spinner+time. if `format_string` is None, will just always display this value
-        (defaults to `"_"`)
-        - `format_string : Optional[str]`
-        string to format the mutable value value with
-        (defaults to `None`)
-        - `show_elapsed_time : bool`
-        whether to display the elapsed time
-        (defaults to `True`)
-        - `time_fstring : _type_`
-        format string for the elapsed time
-        (defaults to `"({elapsed_time:.2f}s)"`)
+        initial value to display with the spinner
+        (defaults to `""`)
+        - `message : str`
+        message to display with the spinner
+        (defaults to `""`)
+        - `format_string : str`
+        string to format the spinner with. must have `"\\r"` prepended to clear the line.
+        allowed keys are `spinner`, `elapsed_time`, `message`, and `value`
+        (defaults to `"\\r{spinner} ({elapsed_time:.2f}s) {message}{value}"`)
         - `output_stream : TextIO`
         stream to write the spinner to
         (defaults to `sys.stdout`)
+
+    # Methods:
+    - `update_value(value: Any) -> None`
+        update the current value displayed by the spinner
+
+    # Usage:
+
+    ## As a context manager:
+    ```python
+    with SpinnerContext() as sp:
+        for i in range(1):
+            time.sleep(0.1)
+            spinner.update_value(f"Step {i+1}")
+    ```
+
+    ## As a decorator:
+    ```python
+    @spinner_decorator
+    def long_running_function():
+        for i in range(1):
+            time.sleep(0.1)
+            spinner.update_value(f"Step {i+1}")
+        return "Function completed"
+    ```
     """
 
     def __init__(
@@ -104,15 +126,20 @@ class Spinner:
         spinner_chars: Union[str, Sequence[str]] = "default",
         update_interval: float = 0.1,
         spinner_complete: Optional[str] = None,
-        initial_value: str = "_",
-        format_string: Optional[str] = None,
-        show_elapsed_time: bool = True,
-        time_fstring: str = "({elapsed_time:.2f}s)",
+        initial_value: str = "",
+        message: str = "",
+        format_string: str = "\r{spinner} ({elapsed_time:.2f}s) {message}{value}",
         output_stream: TextIO = sys.stdout,
+        **kwargs: Any,
     ):
         if args:
-            raise ValueError("Spinner does not accept positional arguments")
-        # copy kwargs
+            raise ValueError(f"Spinner does not accept positional arguments: {args}")
+        if kwargs:
+            raise ValueError(
+                f"Spinner did not recognize these keyword arguments: {kwargs}"
+            )
+
+        # spinner display
         self.spinner_complete: str = (
             (
                 # if None, use `spinner_chars` key as default
@@ -129,11 +156,12 @@ class Spinner:
             if isinstance(spinner_chars, str)
             else spinner_chars
         )
+
+        # copy kwargs
         self.update_interval: float = update_interval
-        self.current_value: str = initial_value
-        self.format_string: Optional[str] = format_string
-        self.show_elapsed_time: bool = show_elapsed_time
-        self.time_fstring: str = time_fstring
+        self.message: str = message
+        self.current_value: Any = initial_value
+        self.format_string: str = format_string
         self.output_stream: TextIO = output_stream
 
         # init
@@ -142,52 +170,44 @@ class Spinner:
         self.spinner_thread: Optional[threading.Thread] = None
 
     def spin(self) -> None:
-        """
-        Function to run in a separate thread, displaying the spinner and optional information.
-        """
+        "Function to run in a separate thread, displaying the spinner and optional information"
         i: int = 0
         while not self.stop_spinner.is_set():
+            # get current spinner str
             spinner: str = self.spinner_chars[i % len(self.spinner_chars)]
 
             # Construct the display string
-            display_parts: list[str] = [f"\r{spinner}"]
+            display_parts: dict[str, Any] = dict(
+                spinner=spinner,  # str
+                elapsed_time=time.time() - self.start_time,  # float
+                message=self.message,  # str
+                value=self.current_value,  # Any, but will be formatted as str
+            )
 
-            if self.show_elapsed_time:
-                elapsed_time: float = time.time() - self.start_time
-                display_parts.append(
-                    self.time_fstring.format(elapsed_time=elapsed_time)
-                )
+            # write and flush the display string
+            print(self.format_string)
+            print(display_parts)
 
-            if self.current_value:
-                if self.format_string:
-                    display_parts.append(self.format_string.format(self.current_value))
-                else:
-                    display_parts.append(str(self.current_value))
-
-            display: str = " ".join(display_parts)
-            self.output_stream.write(display)
+            output: str = self.format_string.format(**display_parts)
+            self.output_stream.write(output)
             self.output_stream.flush()
+
+            # wait for the next update
             time.sleep(self.update_interval)
             i += 1
 
-    def update_value(self, new_value: Any) -> None:
-        """
-        Update the current value displayed by the spinner.
-        """
-        self.current_value = str(new_value)
+    def update_value(self, value: Any) -> None:
+        "Update the current value displayed by the spinner"
+        self.current_value = value
 
     def start(self) -> None:
-        """
-        Start the spinner.
-        """
+        "Start the spinner"
         self.start_time = time.time()
         self.spinner_thread = threading.Thread(target=self.spin)
         self.spinner_thread.start()
 
     def stop(self) -> None:
-        """
-        Stop the spinner.
-        """
+        "Stop the spinner"
         self.output_stream.write(f"\r{self.spinner_complete}")
         self.stop_spinner.set()
         if self.spinner_thread:
@@ -212,29 +232,39 @@ SpinnerContext.__doc__ = Spinner.__doc__
 
 def spinner_decorator(
     *args,
-    spinner_chars: Sequence[str] = ("|", "/", "-", "\\"),
+    # passed to `Spinner.__init__`
+    spinner_chars: Union[str, Sequence[str]] = "default",
     update_interval: float = 0.1,
     spinner_complete: Optional[str] = None,
-    format_string: Optional[str] = None,
-    mutable_kwarg_key: Optional[str] = None,
-    show_elapsed_time: bool = True,
-    time_fstring: str = "({elapsed_time:.2f}s)",
+    initial_value: str = "",
+    message: str = "",
+    format_string: str = "{spinner} ({elapsed_time:.2f}s) {message}{value}",
     output_stream: TextIO = sys.stdout,
+    # new kwarg
+    mutable_kwarg_key: Optional[str] = None,
+    **kwargs,
 ) -> Callable[[DecoratedFunction], DecoratedFunction]:
-    "see `Spinner` for parameters"
+    "see `Spinner` for parameters. Also takes `mutable_kwarg_key`, the keyword argument with which to pass `Spinner().update_value` to the decorated function."
 
-    if args:
-        raise ValueError("spinner_decorator does not accept positional arguments")
+    if len(args) > 1:
+        raise ValueError(
+            f"spinner_decorator does not accept positional arguments: {args}"
+        )
+    if kwargs:
+        raise ValueError(
+            f"spinner_decorator did not recognize these keyword arguments: {kwargs}"
+        )
 
     def decorator(func: DecoratedFunction) -> DecoratedFunction:
         @wraps(func)
         def wrapper(*args: Any, **kwargs: Any) -> Any:
             spinner: Spinner = Spinner(
-                format_string=format_string,
-                show_elapsed_time=show_elapsed_time,
                 spinner_chars=spinner_chars,
-                time_fstring=time_fstring,
                 update_interval=update_interval,
+                spinner_complete=spinner_complete,
+                initial_value=initial_value,
+                message=message,
+                format_string=format_string,
                 output_stream=output_stream,
             )
 
@@ -249,10 +279,15 @@ def spinner_decorator(
 
             return result
 
-        # TODO: fix this
+        # TODO: fix this type ignore
         return wrapper  # type: ignore[return-value]
 
-    return decorator
+    if not args:
+        # called as `@spinner_decorator(stuff)`
+        return decorator
+    else:
+        # called as `@spinner_decorator` without parens
+        return decorator(args[0])
 
 
 spinner_decorator.__doc__ = Spinner.__doc__

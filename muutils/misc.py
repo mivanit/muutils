@@ -224,6 +224,15 @@ def dict_to_filename(
     return f"h_{stable_hash(sanitized_str)}"
 
 
+def dynamic_docstring(**doc_params):
+    def decorator(func):
+        if func.__doc__:
+            func.__doc__ = func.__doc__.format(**doc_params)
+        return func
+
+    return decorator
+
+
 # numerical conversions
 # ================================================================================
 

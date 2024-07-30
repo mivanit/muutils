@@ -185,9 +185,6 @@ class Spinner:
             )
 
             # write and flush the display string
-            print(self.format_string)
-            print(display_parts)
-
             output: str = self.format_string.format(**display_parts)
             self.output_stream.write(output)
             self.output_stream.flush()

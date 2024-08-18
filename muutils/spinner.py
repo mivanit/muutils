@@ -164,6 +164,19 @@ class Spinner:
         self.format_string: str = format_string
         self.output_stream: TextIO = output_stream
 
+        # test out format string
+        try:
+            self.format_string.format(
+                spinner=self.spinner_chars[0],
+                elapsed_time=0.0,
+                message=self.message,
+                value=self.current_value,
+            )
+        except Exception as e:
+            raise ValueError(
+                f"Invalid format string: {format_string}. Must take keys 'spinner: str', 'elapsed_time: float', 'message: str', and 'value: Any'."
+            ) from e
+
         # init
         self.start_time: float = 0
         self.stop_spinner: threading.Event = threading.Event()

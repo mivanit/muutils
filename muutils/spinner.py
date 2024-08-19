@@ -72,28 +72,28 @@ class Spinner:
     """displays a spinner, and optionally elapsed time and a mutable value while a function is running.
 
     # Parameters:
-        - `spinner_chars : Union[str, Sequence[str]]`
-        sequence of strings, or key to look up in `SPINNER_CHARS`, to use as the spinner characters
-        (defaults to `"default"`)
-        - `update_interval : float`
-        how often to update the spinner display in seconds
-        (defaults to `0.1`)
-        - `spinner_complete : str`
-        string to display when the spinner is complete
-        (defaults to looking up `spinner_chars` in `SPINNER_COMPLETE` or `"#"`)
-        - `initial_value : str`
-        initial value to display with the spinner
-        (defaults to `""`)
-        - `message : str`
-        message to display with the spinner
-        (defaults to `""`)
-        - `format_string : str`
-        string to format the spinner with. must have `"\\r"` prepended to clear the line.
-        allowed keys are `spinner`, `elapsed_time`, `message`, and `value`
-        (defaults to `"\\r{spinner} ({elapsed_time:.2f}s) {message}{value}"`)
-        - `output_stream : TextIO`
-        stream to write the spinner to
-        (defaults to `sys.stdout`)
+      - `spinner_chars : Union[str, Sequence[str]]`
+      sequence of strings, or key to look up in `SPINNER_CHARS`, to use as the spinner characters
+      (defaults to `"default"`)
+      - `update_interval : float`
+      how often to update the spinner display in seconds
+      (defaults to `0.1`)
+      - `spinner_complete : str`
+      string to display when the spinner is complete
+      (defaults to looking up `spinner_chars` in `SPINNER_COMPLETE` or `"#"`)
+      - `initial_value : str`
+      initial value to display with the spinner
+      (defaults to `""`)
+      - `message : str`
+      message to display with the spinner
+      (defaults to `""`)
+      - `format_string : str`
+      string to format the spinner with. must have `"\\r"` prepended to clear the line.
+      allowed keys are `spinner`, `elapsed_time`, `message`, and `value`
+      (defaults to `"\\r{spinner} ({elapsed_time:.2f}s) {message}{value}"`)
+      - `output_stream : TextIO`
+      stream to write the spinner to
+      (defaults to `sys.stdout`)
 
     # Methods:
     - `update_value(value: Any) -> None`

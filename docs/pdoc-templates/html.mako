@@ -131,7 +131,7 @@
   <%def name="show_func(f)">
     <%
       params = f.params(annotate=show_type_annotations, link=link)
-      return_type = get_annotation(f.return_annotation, '\N{non-breaking hyphen}>')
+      return_type = get_annotation(f.return_annotation, '->')
       
       # Construct the single-line signature
       params_str = ', '.join(params)

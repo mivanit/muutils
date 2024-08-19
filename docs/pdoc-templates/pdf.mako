@@ -36,7 +36,7 @@ ${('#' * level) + ' ' + string + id}
     params = f.params(annotate=show_type_annotations)
     returns = show_type_annotations and f.return_annotation() or ''
     if returns:
-        returns = ' \N{non-breaking hyphen}> ' + returns
+        returns = ' -> ' + returns
 %>
 %if params:
 >     ${f.funcdef()} ${f.name}(

@@ -1,5 +1,6 @@
 <%
   import os
+  import re
 
   import pdoc
   from pdoc.html_helpers import extract_toc, glimpse, to_html as _to_html, format_git_link
@@ -13,9 +14,20 @@
                    top_ancestor=not show_inherited_members)
     return f'<a title="{dobj.refname}" href="{url}">{name}</a>'
 
+  def increment_header_level(html):
+    replacements = {
+        f'<h{i}': f'<h{min(i+2, 6)}' for i in range(1, 7)
+    }
+    replacements.update({
+        f'</h{i}>': f'</h{min(i+2, 6)}>' for i in range(1, 7)
+    })
+    
+    pattern = re.compile('|'.join(map(re.escape, replacements.keys())))
+    return pattern.sub(lambda m: replacements[m.group()], html)
 
   def to_html(text):
-    return _to_html(text, docformat=docformat, module=module, link=link, latex_math=latex_math)
+    html = _to_html(text, docformat=docformat, module=module, link=link, latex_math=latex_math)
+    return increment_header_level(html)
 
 
   def get_annotation(bound_method, sep=':'):

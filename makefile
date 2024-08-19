@@ -5,6 +5,8 @@ PACKAGE_NAME := muutils
 
 # for checking you are on the right branch when publishing
 PUBLISH_BRANCH := main
+# where to put docs
+DOCS_DIR := docs
 # where to put the coverage reports
 COVERAGE_REPORTS_DIR := docs/coverage
 # where the tests are (assumes pytest)
@@ -142,15 +144,30 @@ check-format:
 	$(PYTHON) -m ruff check --config $(PYPROJECT) .
 	$(PYTHON) -m pycln --check --config $(PYPROJECT) .
 
-# coverage
+# coverage & docs
 # ==================================================
+
+.PHONY: docs-html
+docs-html:
+	@echo "generate html docs"
+	$(PYTHON) -m pdoc $(PACKAGE_NAME) --html --output-dir docs/ --force --template-dir docs/pdoc-templates/
+
+.PHONY: docs-md
+docs-md:
+	@echo "generate markdown docs"
+	PYTHONIOENCODING=utf8 $(PYTHON) -m pdoc $(PACKAGE_NAME) --pdf --force --template-dir docs/pdoc-templates/ > $(DOCS_DIR)/full.md 2> /dev/null
 
 .PHONY: cov
 cov:
 	@echo "generate coverage reports"
 	$(PYTHON) -m coverage report -m > $(COVERAGE_REPORTS_DIR)/coverage.txt
 	$(PYTHON) -m coverage_badge -f -o $(COVERAGE_REPORTS_DIR)/coverage.svg
-	$(PYTHON) -m coverage html	
+	$(PYTHON) -m coverage html --directory=$(COVERAGE_REPORTS_DIR)/html/
+
+.PHONY: docs
+docs: cov docs-html docs-md
+	@echo "generate docs"	
+
 
 # tests
 # ==================================================

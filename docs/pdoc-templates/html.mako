@@ -118,13 +118,21 @@
   %>
 
   <%def name="show_func(f)">
-    <dt id="${f.refname}"><code class="name flex">
-        <%
-            params = ', '.join(f.params(annotate=show_type_annotations, link=link))
-            return_type = get_annotation(f.return_annotation, '\N{non-breaking hyphen}>')
-        %>
-        <span>${f.funcdef()} ${ident(f.name)}</span>(<span>${params})${return_type}</span>
-    </code></dt>
+    <%
+      params = f.params(annotate=show_type_annotations, link=link)
+      return_type = get_annotation(f.return_annotation, '\N{non-breaking hyphen}>')
+      
+      # Construct the single-line signature
+      params_str = ', '.join(params)
+      single_line_sig = f"{f.funcdef()} {f.name}({params_str}){return_type}"
+      
+      # Check if the single-line signature is too long
+      if len(single_line_sig) > 80:
+        # If too long, format with arguments on separate lines
+        param_lines = [f"\t{param}," for param in params]
+        params_str = "\n" + "\n".join(param_lines) + "\n"
+    %>
+    <dt id="${f.refname}"><pre><code class="name">${f.funcdef()} ${ident(f.name)}(${params_str})${return_type}</code></pre></dt>
     <dd>${show_desc(f)}</dd>
   </%def>
 

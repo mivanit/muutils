@@ -105,7 +105,7 @@
   pre code {
     font-size: .8em;
     line-height: 1.4em;
-    padding: 1em;
+
     display: block;
   }
   code {

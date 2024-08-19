@@ -55,18 +55,18 @@
     }
 
   h1, h2, h3, h4, h5 {
-    font-weight: 300;
+    font-weight: 700;
   }
   h1 {
     font-size: 2.5em;
     line-height: 1.1em;
   }
   h2 {
-    font-size: 1.75em;
+    font-size: 2.2em;
     margin: 2em 0 .50em 0;
   }
   h3 {
-    font-size: 1.4em;
+    font-size: 1.8em;
     margin: 1.6em 0 .7em 0;
   }
   h4 {

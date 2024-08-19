@@ -1,6 +1,7 @@
 <%
   import os
   import re
+  import inspect
 
   import pdoc
   from pdoc.html_helpers import extract_toc, glimpse, to_html as _to_html, format_git_link
@@ -15,18 +16,22 @@
     return f'<a title="{dobj.refname}" href="{url}">{name}</a>'
 
   def increment_header_level(html):
-    replacements = {
-        f'<h{i}': f'<h{min(i+2, 6)}' for i in range(1, 7)
-    }
-    replacements.update({
-        f'</h{i}>': f'</h{min(i+2, 6)}>' for i in range(1, 7)
-    })
-    
-    pattern = re.compile('|'.join(map(re.escape, replacements.keys())))
-    return pattern.sub(lambda m: replacements[m.group()], html)
+    if header_increment > 0:
+      replacements = {
+          f'<h{i}': f'<h{min(i+header_increment, 6)}' for i in range(1, 7)
+      }
+      replacements.update({
+          f'</h{i}>': f'</h{min(i+header_increment, 6)}>' for i in range(1, 7)
+      })
+      
+      pattern = re.compile('|'.join(map(re.escape, replacements.keys())))
+      return pattern.sub(lambda m: replacements[m.group()], html)
+    else:
+      return html
 
   def to_html(text):
     html = _to_html(text, docformat=docformat, module=module, link=link, latex_math=latex_math)
+
     return increment_header_level(html)
 
 
@@ -41,10 +46,16 @@
 
 <%def name="show_source(d)">
   % if (show_source_code or git_link_template) and \
-        not isinstance(d, pdoc.Module) and d.source and \
         d.obj is not getattr(d.inherits, 'obj', None):
     <% git_link = format_git_link(git_link_template, d) %>
     % if show_source_code:
+      <%
+        d_source = d.source
+        try:
+          d_source = inspect.getsource(d.obj)
+        except Exception:
+          d_source = "Unable to retrieve source code."
+      %>
       <details class="source">
         <summary>
             <span>Expand source code</span>
@@ -52,7 +63,7 @@
               <a href="${git_link}" class="git-link">Browse git</a>
             %endif
         </summary>
-        <pre><code class="python">${d.source | h}</code></pre>
+        <pre><code class="python">${d_source | h}</code></pre>
       </details>
     % elif git_link:
       <div class="git-link-div"><a href="${git_link}" class="git-link">Browse git</a></div>
@@ -76,9 +87,9 @@
       </p>
   % endif
   <div class="desc${inherits}">${docstring | to_html}</div>
-  % if not isinstance(d, pdoc.Module):
   ${show_source(d)}
-  % endif
+  ## % if not isinstance(d, pdoc.Module):
+  ## % endif
 </%def>
 
 <%def name="show_module_list(modules)">
@@ -127,7 +138,7 @@
       single_line_sig = f"{f.funcdef()} {f.name}({params_str}){return_type}"
       
       # Check if the single-line signature is too long
-      if len(single_line_sig) > 80:
+      if len(single_line_sig) > max_line_length_signatures:
         # If too long, format with arguments on separate lines
         param_lines = [f"\t{param}," for param in params]
         params_str = "\n" + "\n".join(param_lines) + "\n"
@@ -205,14 +216,11 @@
       methods = c.methods(show_inherited_members, sort=sort_identifiers)
       mro = c.mro()
       subclasses = c.subclasses()
-      params = ', '.join(c.params(annotate=show_type_annotations, link=link))
+      superclasses = ", ".join([c.name for c in mro])
+      params = c.params(annotate=show_type_annotations, link=link)
+      params_str = "\n\tdef __init__(\n" + "\n".join([f"\t\t{param}," for param in params]) + "\n\t)"
       %>
-      <dt id="${c.refname}"><code class="flex name class">
-          <span>class ${ident(c.name)}</span>
-          % if params:
-              <span>(</span><span>${params})</span>
-          % endif
-      </code></dt>
+      <dt id="${c.refname}"><pre><code class="name class">class ${ident(c.name)}(${superclasses}):${params_str}</code></pre></dt>
 
       <dd>${show_desc(c)}
 
@@ -256,7 +264,7 @@
           <dl>
           % for v in inst_vars:
               <% return_type = get_annotation(v.type_annotation) %>
-              <dt id="${v.refname}"><code class="name">${v.kind} ${ident(v.name)}${return_type}</code></dt>
+              <dt id="${v.refname}"><pre><code class="name">${v.kind} ${ident(v.name)}${return_type}</code></pre></dt>
               <dd>${show_desc(v)}</dd>
           % endfor
           </dl>

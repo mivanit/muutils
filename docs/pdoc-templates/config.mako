@@ -61,4 +61,9 @@
     # Note: in Python docstrings, either all backslashes need to be escaped (\\)
     # or you need to use raw r-strings.
     latex_math = True
+
+
+    # custom
+    header_increment = 2
+    max_line_length_signatures = 70
 %>

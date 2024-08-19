@@ -180,7 +180,7 @@
     }
     .name {
       background: #eee;
-      font-size: .85em;
+      font-size: 1.1em !important;
       padding: 5px 10px;
       display: inline-block;
       min-width: 40%;

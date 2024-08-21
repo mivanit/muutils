@@ -74,9 +74,9 @@ def run_notebook_tests(
         n_notebooks: int = len(converted_notebooks)
         for idx, file in enumerate(converted_notebooks):
             # run the file
-            print(f"Running {idx+1}/{n_notebooks}: {file}")
+            print(f"Running {idx+1}/{n_notebooks}: {file.as_posix()}")
             output_file: Path = file.with_suffix(CI_output_suffix)
-            print(f"    Output in {output_file}")
+            print(f"    Output in {output_file.as_posix()}")
             with SpinnerContext(
                 spinner_chars="braille",
                 update_interval=0.5,
@@ -112,7 +112,7 @@ def run_notebook_tests(
             raise NotebookTestError(
                 exceptions_str
                 + "=" * term_width
-                + f"❌ {len(exceptions)}/{n_notebooks} notebooks failed:\n{list(exceptions.keys())}"
+                + f"\n❌ {len(exceptions)}/{n_notebooks} notebooks failed:\n{list(exceptions.keys())}"
             )
 
     except NotebookTestError as e:

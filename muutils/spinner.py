@@ -1,3 +1,4 @@
+import os
 import time
 import threading
 import sys
@@ -245,6 +246,7 @@ class Spinner:
         self.stop_spinner: threading.Event = threading.Event()
         self.spinner_thread: Optional[threading.Thread] = None
         self.value_changed: bool = False
+        self.term_width: int = os.get_terminal_size().columns
 
     def spin(self) -> None:
         "Function to run in a separate thread, displaying the spinner and optional information"
@@ -268,7 +270,7 @@ class Spinner:
                 format_str = self.format_string_when_updated
 
             # write and flush the display string
-            output: str = format_str.format(**display_parts)
+            output: str = format_str.format(**display_parts).ljust(self.term_width)
             self.output_stream.write(output)
             self.output_stream.flush()
 
@@ -289,7 +291,14 @@ class Spinner:
 
     def stop(self) -> None:
         "Stop the spinner"
-        self.output_stream.write(f"\r{self.spinner_complete}")
+        self.output_stream.write(
+            self.format_string.format(
+                spinner=self.spinner_complete,
+                elapsed_time=time.time() - self.start_time,  # float
+                message=self.message,  # str
+                value=self.current_value,  # Any, but will be formatted as str
+            ).ljust(self.term_width)
+        )
         self.stop_spinner.set()
         if self.spinner_thread:
             self.spinner_thread.join()

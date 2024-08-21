@@ -22,7 +22,7 @@ def run_notebook_tests(
     notebooks_dir = Path(notebooks_dir)
     converted_notebooks_temp_dir = Path(converted_notebooks_temp_dir)
     root_relative_to_notebooks: Path = Path(os.path.relpath(".", notebooks_dir))
-    
+
     term_width: int
     try:
         term_width = os.get_terminal_size().columns
@@ -86,11 +86,9 @@ def run_notebook_tests(
                 process: subprocess.CompletedProcess = subprocess.run(
                     command, shell=True, text=True
                 )
-            
+
             if process.returncode == 0:
-                print(
-                    f"    ✅ Run completed with return code {process.returncode}"
-                )
+                print(f"    ✅ Run completed with return code {process.returncode}")
             else:
                 print(
                     f"    ❌ Run failed with return code {process.returncode}!!! Check {output_file}"
@@ -108,7 +106,9 @@ def run_notebook_tests(
             del process
 
         if len(exceptions) > 0:
-            exceptions_str: str = ("\n" + "=" * term_width + "\n").join(list(exceptions.values()))
+            exceptions_str: str = ("\n" + "=" * term_width + "\n").join(
+                list(exceptions.values())
+            )
             raise NotebookTestError(
                 exceptions_str
                 + "=" * term_width

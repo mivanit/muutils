@@ -1,6 +1,6 @@
 from muutils.misc.hashing import stable_hash
 from muutils.misc.sequence import (
-	WhenMissing,
+    WhenMissing,
     empty_sequence_if_attr_false,
     flatten,
     list_split,

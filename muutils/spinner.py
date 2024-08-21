@@ -248,9 +248,9 @@ class Spinner:
         self.value_changed: bool = False
         self.term_width: int
         try:
-            self.term_width: int = os.get_terminal_size().columns
+            self.term_width = os.get_terminal_size().columns
         except OSError:
-            self.term_width: int = 80
+            self.term_width = 80
 
     def spin(self) -> None:
         "Function to run in a separate thread, displaying the spinner and optional information"

@@ -5,6 +5,7 @@ from typing import (
     Any,
     Generator,
     Callable,
+    Union,
 )
 
 import typing
@@ -138,7 +139,7 @@ def apply_mapping(
     mapping: Mapping[_AM_K, _AM_V],
     iter: Iterable[_AM_K],
     when_missing: WhenMissing = "skip",
-) -> list[_AM_V]:
+) -> list[Union[_AM_K, _AM_V]]:
     """Given an iterable and a mapping, apply the mapping to the iterable with certain options
 
     Gotcha: if `when_missing` is invalid, this is totally fine until a missing key is actually encountered.
@@ -156,7 +157,9 @@ def apply_mapping(
        (defaults to `"skip"`)
 
     # Returns:
-     - `list[_AM_V]`
+    return type is one of:
+     - `list[_AM_V]` if `when_missing` is `"skip"` or `"except"`
+     - `list[Union[_AM_K, _AM_V]]` if `when_missing` is `"include"`
 
     # Raises:
      - `KeyError` : if the item is missing from the mapping and `when_missing` is `"except"`
@@ -168,15 +171,16 @@ def apply_mapping(
         if item in mapping:
             output.append(mapping[item])
             continue
-        match when_missing:
-            case "skip":
-                continue
-            case "include":
-                output.append(item)
-            case "except":
-                raise KeyError(f"item {item} is missing from mapping {mapping}")
-            case _:
-                raise ValueError(f"invalid value for {when_missing = }")
+        if when_missing == "skip":
+            continue
+        elif when_missing == "include":
+            output.append(item)
+        elif when_missing == "except":
+            raise KeyError(f"item {item} is missing from mapping {mapping}")
+        else:
+            raise ValueError(
+                f"invalid value for {when_missing = }\n{item = }\n{mapping = }"
+            )
     return output
 
 
@@ -184,7 +188,7 @@ def apply_mapping_chain(
     mapping: Mapping[_AM_K, Iterable[_AM_V]],
     iter: Iterable[_AM_K],
     when_missing: WhenMissing = "skip",
-) -> list[_AM_V]:
+) -> list[Union[_AM_K, _AM_V]]:
     """Given an iterable and a mapping, chain the mappings together
 
     Gotcha: if `when_missing` is invalid, this is totally fine until a missing key is actually encountered.
@@ -202,7 +206,9 @@ def apply_mapping_chain(
     (defaults to `"skip"`)
 
     # Returns:
-    - `list[_AM_V]`
+    return type is one of:
+     - `list[_AM_V]` if `when_missing` is `"skip"` or `"except"`
+     - `list[Union[_AM_K, _AM_V]]` if `when_missing` is `"include"`
 
     # Raises:
     - `KeyError` : if the item is missing from the mapping and `when_missing` is `"except"`
@@ -215,13 +221,14 @@ def apply_mapping_chain(
         if item in mapping:
             output.extend(mapping[item])
             continue
-        match when_missing:
-            case "skip":
-                continue
-            case "include":
-                output.append(item)
-            case "except":
-                raise KeyError(f"item {item} is missing from mapping {mapping}")
-            case _:
-                raise ValueError(f"invalid value for {when_missing = }")
+        if when_missing == "skip":
+            continue
+        elif when_missing == "include":
+            output.append(item)
+        elif when_missing == "except":
+            raise KeyError(f"item {item} is missing from mapping {mapping}")
+        else:
+            raise ValueError(
+                f"invalid value for {when_missing = }\n{item = }\n{mapping = }"
+            )
     return output

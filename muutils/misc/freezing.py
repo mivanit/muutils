@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 
-
 class FrozenDict(dict):
     def __setitem__(self, key, value):
         raise AttributeError("dict is frozen")

@@ -4,6 +4,8 @@ from muutils.misc.sequence import (
     flatten,
     list_split,
     list_join,
+    apply_mapping,
+    apply_mapping_chain,
 )
 from muutils.misc.string import (
     sanitize_name,
@@ -38,6 +40,8 @@ __all__ = [
     "flatten",
     "list_split",
     "list_join",
+    "apply_mapping",
+    "apply_mapping_chain",
     "sanitize_name",
     "sanitize_fname",
     "sanitize_identifier",

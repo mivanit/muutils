@@ -7,6 +7,15 @@ from typing import (
     Callable,
 )
 
+import typing
+from typing import (
+    Literal,
+    Mapping,
+)
+
+
+WhenMissing = Literal["except", "skip", "include"]
+
 
 def empty_sequence_if_attr_false(
     itr: Iterable[Any],
@@ -102,4 +111,59 @@ def list_join(lst: list, factory: Callable) -> list:
         output.append(factory())
         output.append(x)
 
+    return output
+
+
+# applying mappings
+# --------------------------------------------------------------------------------
+
+_AM_K = typing.TypeVar("_AM_K")
+_AM_V = typing.TypeVar("_AM_V")
+
+
+def apply_mapping(
+    mapping: Mapping[_AM_K, _AM_V],
+    iter: Iterable[_AM_K],
+    when_missing: WhenMissing = "skip",
+) -> list[_AM_V]:
+    """Given an and a mapping, apply the mapping to the iterable with certain options"""
+    output: list[_AM_V] = list()
+    item: _AM_K
+    for item in iter:
+        if item in mapping:
+            output.append(mapping[item])
+            continue
+        match when_missing:
+            case "skip":
+                continue
+            case "include":
+                output.append(item)
+            case "except":
+                raise ValueError(f"item {item} is missing from mapping {mapping}")
+            case _:
+                raise ValueError(f"invalid value for {when_missing = }")
+    return output
+
+
+def apply_mapping_chain(
+    mapping: Mapping[_AM_K, Iterable[_AM_V]],
+    iter: Iterable[_AM_K],
+    when_missing: WhenMissing = "skip",
+) -> list[_AM_V]:
+    """Given a list and a mapping, apply the mapping to the list"""
+    output: list[_AM_V] = list()
+    item: _AM_K
+    for item in iter:
+        if item in mapping:
+            output.extend(mapping[item])
+            continue
+        match when_missing:
+            case "skip":
+                continue
+            case "include":
+                output.append(item)
+            case "except":
+                raise ValueError(f"item {item} is missing from mapping {mapping}")
+            case _:
+                raise ValueError(f"invalid value for {when_missing = }")
     return output

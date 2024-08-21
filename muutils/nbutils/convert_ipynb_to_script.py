@@ -7,6 +7,8 @@ import sys
 import typing
 import warnings
 
+from muutils.spinner import SpinnerContext
+
 DISABLE_PLOTS: dict[str, list[str]] = {
     "matplotlib": [
         """
@@ -269,29 +271,37 @@ def process_dir(
     ]
 
     assert filenames, f"Directory {input_dir} does not contain any Jupyter Notebooks."
+    n_files: int = len(filenames)
+    print(f"Converting {n_files} notebooks:", file=sys.stderr)
 
-    for fname in filenames:
-        print(f"\tConverting {fname}...", file=sys.stderr)
-        in_file: str = os.path.join(input_dir, fname)
-        out_file: str = os.path.join(output_dir, fname.replace(".ipynb", ".py"))
+    with SpinnerContext(
+        spinner_chars="braille",
+        update_interval=0.01,
+        format_string_when_updated=True,
+        output_stream=sys.stderr,
+    ) as spinner:
+        for idx, fname in enumerate(filenames):
+            spinner.update_value(f"\tConverting {idx+1}/{n_files}: {fname}")
+            in_file: str = os.path.join(input_dir, fname)
+            out_file: str = os.path.join(output_dir, fname.replace(".ipynb", ".py"))
 
-        with open(in_file, "r", encoding="utf-8") as file_in:
-            notebook: dict = json.load(file_in)
+            with open(in_file, "r", encoding="utf-8") as file_in:
+                notebook: dict = json.load(file_in)
 
-        try:
-            converted_script: str = convert_ipynb(
-                notebook=notebook,
-                strip_md_cells=strip_md_cells,
-                header_comment=header_comment,
-                disable_plots=disable_plots,
-                filter_out_lines=filter_out_lines,
-            )
-        except AssertionError as e:
-            print(f"Error converting {in_file}: {e}", file=sys.stderr)
-            raise e
+            try:
+                converted_script: str = convert_ipynb(
+                    notebook=notebook,
+                    strip_md_cells=strip_md_cells,
+                    header_comment=header_comment,
+                    disable_plots=disable_plots,
+                    filter_out_lines=filter_out_lines,
+                )
+            except AssertionError as e:
+                spinner.stop()
+                raise Exception(f"Error converting {in_file}") from e
 
-        with open(out_file, "w", encoding="utf-8") as file_out:
-            file_out.write(converted_script)
+            with open(out_file, "w", encoding="utf-8") as file_out:
+                file_out.write(converted_script)
 
 
 if __name__ == "__main__":

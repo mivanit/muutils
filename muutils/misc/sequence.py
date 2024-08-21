@@ -165,7 +165,7 @@ def apply_mapping(
      - `KeyError` : if the item is missing from the mapping and `when_missing` is `"except"`
      - `ValueError` : if `when_missing` is invalid
     """
-    output: list[_AM_V] = list()
+    output: list[Union[_AM_K, _AM_V]] = list()
     item: _AM_K
     for item in iter:
         if item in mapping:
@@ -215,7 +215,7 @@ def apply_mapping_chain(
     - `ValueError` : if `when_missing` is invalid
 
     """
-    output: list[_AM_V] = list()
+    output: list[Union[_AM_K, _AM_V]] = list()
     item: _AM_K
     for item in iter:
         if item in mapping:

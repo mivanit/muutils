@@ -91,7 +91,7 @@ def run_notebook_tests(
                 print(f"    ✅ Run completed with return code {process.returncode}")
             else:
                 print(
-                    f"    ❌ Run failed with return code {process.returncode}!!! Check {output_file}"
+                    f"    ❌ Run failed with return code {process.returncode}!!! Check {output_file.as_posix()}"
                 )
 
             # print the output of the file to the console if it failed

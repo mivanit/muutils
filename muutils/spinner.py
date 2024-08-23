@@ -1,3 +1,4 @@
+import os
 import time
 import threading
 import sys
@@ -7,9 +8,12 @@ from typing import Callable, Any, Optional, TextIO, TypeVar, Sequence, Dict, Uni
 # Define a generic type for the decorated function
 DecoratedFunction = TypeVar("DecoratedFunction", bound=Callable[..., Any])
 
+
+# some of these from [cli-spinners](https://github.com/sindresorhus/cli-spinners), some from Claude 3.5 Sonnet
 SPINNER_CHARS: Dict[str, Sequence[str]] = dict(
     default=["|", "/", "-", "\\"],
     dots=[".  ", ".. ", "..."],
+    bars=["|  ", "|| ", "|||"],
     arrows=["<", "^", ">", "v"],
     arrows_2=["←", "↖", "↑", "↗", "→", "↘", "↓", "↙"],
     bouncing_bar=["[    ]", "[=   ]", "[==  ]", "[=== ]", "[ ===]", "[  ==]", "[   =]"],
@@ -45,16 +49,36 @@ SPINNER_CHARS: Dict[str, Sequence[str]] = dict(
     hamburger=["☱", "☲", "☴"],
     earth=["🌍", "🌎", "🌏"],
     growing_dots=["⣀", "⣄", "⣤", "⣦", "⣶", "⣷", "⣿"],
+    dice=["⚀", "⚁", "⚂", "⚃", "⚄", "⚅"],
+    wifi=["▁", "▂", "▃", "▄", "▅", "▆", "▇", "█"],
+    bounce=["⠁", "⠂", "⠄", "⠂"],
+    arc=["◜", "◠", "◝", "◞", "◡", "◟"],
+    toggle=["⊶", "⊷"],
+    toggle2=["▫", "▪"],
+    toggle3=["□", "■"],
+    toggle4=["■", "□", "▪", "▫"],
+    toggle5=["▮", "▯"],
+    toggle7=["⦾", "⦿"],
+    toggle8=["◍", "◌"],
+    toggle9=["◉", "◎"],
+    arrow2=["⬆️ ", "↗️ ", "➡️ ", "↘️ ", "⬇️ ", "↙️ ", "⬅️ ", "↖️ "],
+    point=["∙∙∙", "●∙∙", "∙●∙", "∙∙●", "∙∙∙"],
+    layer=["-", "=", "≡"],
+    speaker=["🔈 ", "🔉 ", "🔊 ", "🔉 "],
+    orangePulse=["🔸 ", "🔶 ", "🟠 ", "🟠 ", "🔷 "],
+    bluePulse=["🔹 ", "🔷 ", "🔵 ", "🔵 ", "🔷 "],
+    satellite_signal=["📡   ", "📡·  ", "📡·· ", "📡···", "📡 ··", "📡  ·"],
+    rocket_orbit=["🌍🚀  ", "🌏 🚀 ", "🌎  🚀"],
+    ogham=["ᚁ ", "ᚂ ", "ᚃ ", "ᚄ", "ᚅ"],
+    eth=["᛫", "፡", "፥", "፤", "፧", "።", "፨"],
 )
 
 SPINNER_COMPLETE: Dict[str, str] = dict(
     default="#",
     dots="***",
-    arrows="#",
-    arrows_2="#",
+    bars="|||",
     bouncing_bar="[====]",
     bouncing_ball="(●●●●●●)",
-    ooo="#",
     braille="⣿",
     clock="✔️",
     hourglass="✔️",
@@ -65,6 +89,28 @@ SPINNER_COMPLETE: Dict[str, str] = dict(
     hamburger="☰",
     earth="✔️",
     growing_dots="⣿",
+    dice="🎲",
+    wifi="✔️",
+    arc="○",
+    toggle="-",
+    toggle2="▪",
+    toggle3="■",
+    toggle4="■",
+    toggle5="▮",
+    toggle6="၀",
+    toggle7="⦿",
+    toggle8="◍",
+    toggle9="◉",
+    arrow2="➡️",
+    point="●●●",
+    layer="≡",
+    speaker="🔊",
+    orangePulse="🟠",
+    bluePulse="🔵",
+    satellite_signal="📡 ✔️ ",
+    rocket_orbit="🌍  ✨",
+    ogham="᚛᚜",
+    eth="፠",
 )
 
 
@@ -72,28 +118,31 @@ class Spinner:
     """displays a spinner, and optionally elapsed time and a mutable value while a function is running.
 
     # Parameters:
-      - `spinner_chars : Union[str, Sequence[str]]`
-      sequence of strings, or key to look up in `SPINNER_CHARS`, to use as the spinner characters
-      (defaults to `"default"`)
-      - `update_interval : float`
-      how often to update the spinner display in seconds
-      (defaults to `0.1`)
-      - `spinner_complete : str`
-      string to display when the spinner is complete
-      (defaults to looking up `spinner_chars` in `SPINNER_COMPLETE` or `"#"`)
-      - `initial_value : str`
-      initial value to display with the spinner
-      (defaults to `""`)
-      - `message : str`
-      message to display with the spinner
-      (defaults to `""`)
-      - `format_string : str`
-      string to format the spinner with. must have `"\\r"` prepended to clear the line.
-      allowed keys are `spinner`, `elapsed_time`, `message`, and `value`
-      (defaults to `"\\r{spinner} ({elapsed_time:.2f}s) {message}{value}"`)
-      - `output_stream : TextIO`
-      stream to write the spinner to
-      (defaults to `sys.stdout`)
+    - `spinner_chars : Union[str, Sequence[str]]`
+    sequence of strings, or key to look up in `SPINNER_CHARS`, to use as the spinner characters
+    (defaults to `"default"`)
+    - `update_interval : float`
+    how often to update the spinner display in seconds
+    (defaults to `0.1`)
+    - `spinner_complete : str`
+    string to display when the spinner is complete
+    (defaults to looking up `spinner_chars` in `SPINNER_COMPLETE` or `"#"`)
+    - `initial_value : str`
+    initial value to display with the spinner
+    (defaults to `""`)
+    - `message : str`
+    message to display with the spinner
+    (defaults to `""`)
+    - `format_string : str`
+    string to format the spinner with. must have `"\\r"` prepended to clear the line.
+    allowed keys are `spinner`, `elapsed_time`, `message`, and `value`
+    (defaults to `"\\r{spinner} ({elapsed_time:.2f}s) {message}{value}"`)
+    - `output_stream : TextIO`
+    stream to write the spinner to
+    (defaults to `sys.stdout`)
+    - `format_string_when_updated : Union[bool,str]`
+    whether to use a different format string when the value is updated. if `True`, use the default format string with a newline appended. if a string, use that string. this is useful if you want update_value to print to console and be preserved.
+    (defaults to `False`)
 
     # Methods:
     - `update_value(value: Any) -> None`
@@ -130,6 +179,7 @@ class Spinner:
         message: str = "",
         format_string: str = "\r{spinner} ({elapsed_time:.2f}s) {message}{value}",
         output_stream: TextIO = sys.stdout,
+        format_string_when_updated: Union[str, bool] = False,
         **kwargs: Any,
     ):
         if args:
@@ -157,7 +207,21 @@ class Spinner:
             else spinner_chars
         )
 
-        # copy kwargs
+        # special format string for when the value is updated
+        self.format_string_when_updated: Optional[str] = None
+        if format_string_when_updated is not False:
+            if format_string_when_updated is True:
+                # modify the default format string
+                self.format_string_when_updated = format_string + "\n"
+            elif isinstance(format_string_when_updated, str):
+                # use the provided format string
+                self.format_string_when_updated = format_string_when_updated
+            else:
+                raise TypeError(
+                    f"format_string_when_updated must be a string or True, got {type(format_string_when_updated) = }{format_string_when_updated}"
+                )
+
+        # copy other kwargs
         self.update_interval: float = update_interval
         self.message: str = message
         self.current_value: Any = initial_value
@@ -181,6 +245,12 @@ class Spinner:
         self.start_time: float = 0
         self.stop_spinner: threading.Event = threading.Event()
         self.spinner_thread: Optional[threading.Thread] = None
+        self.value_changed: bool = False
+        self.term_width: int
+        try:
+            self.term_width = os.get_terminal_size().columns
+        except OSError:
+            self.term_width = 80
 
     def spin(self) -> None:
         "Function to run in a separate thread, displaying the spinner and optional information"
@@ -189,7 +259,7 @@ class Spinner:
             # get current spinner str
             spinner: str = self.spinner_chars[i % len(self.spinner_chars)]
 
-            # Construct the display string
+            # args for display string
             display_parts: dict[str, Any] = dict(
                 spinner=spinner,  # str
                 elapsed_time=time.time() - self.start_time,  # float
@@ -197,8 +267,14 @@ class Spinner:
                 value=self.current_value,  # Any, but will be formatted as str
             )
 
+            # use the special one if needed
+            format_str: str = self.format_string
+            if self.value_changed and (self.format_string_when_updated is not None):
+                self.value_changed = False
+                format_str = self.format_string_when_updated
+
             # write and flush the display string
-            output: str = self.format_string.format(**display_parts)
+            output: str = format_str.format(**display_parts).ljust(self.term_width)
             self.output_stream.write(output)
             self.output_stream.flush()
 
@@ -209,6 +285,7 @@ class Spinner:
     def update_value(self, value: Any) -> None:
         "Update the current value displayed by the spinner"
         self.current_value = value
+        self.value_changed = True
 
     def start(self) -> None:
         "Start the spinner"
@@ -218,7 +295,14 @@ class Spinner:
 
     def stop(self) -> None:
         "Stop the spinner"
-        self.output_stream.write(f"\r{self.spinner_complete}")
+        self.output_stream.write(
+            self.format_string.format(
+                spinner=self.spinner_complete,
+                elapsed_time=time.time() - self.start_time,  # float
+                message=self.message,  # str
+                value=self.current_value,  # Any, but will be formatted as str
+            ).ljust(self.term_width)
+        )
         self.stop_spinner.set()
         if self.spinner_thread:
             self.spinner_thread.join()

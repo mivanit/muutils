@@ -150,9 +150,9 @@ check-format:
 .PHONY: docs-html
 docs-html:
 	@echo "generate html docs"
-	$(PYTHON) -m pdoc $(PACKAGE_NAME) --html --output-dir docs/ --force --template-dir docs/pdoc-templates/
+	$(PYTHON) -m pdoc $(PACKAGE_NAME) --template-directory docs/templates --output-directory docs/ --math --mermaid --search --show-source
 
-.PHONY: docs-md
+.PHONY: docs-combined
 docs-md:
 	@echo "generate markdown docs"
 	PYTHONIOENCODING=utf8 $(PYTHON) -m pdoc $(PACKAGE_NAME) --pdf --force --template-dir docs/pdoc-templates/ > $(DOCS_DIR)/full.md 2> /dev/null
@@ -165,7 +165,7 @@ cov:
 	$(PYTHON) -m coverage html --directory=$(COVERAGE_REPORTS_DIR)/html/
 
 .PHONY: docs
-docs: cov docs-html docs-md
+docs: cov docs-html
 	@echo "generate docs"	
 
 

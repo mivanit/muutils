@@ -13,20 +13,8 @@
     {% block head %}{% endblock %}
     {% filter minify_css | indent %}
         {% block style %}
-            <style>{% include "resources/bootstrap-reboot.min.css" %}</style>
-            <style>/*! syntax-highlighting.css */{% include "syntax-highlighting.css" %}</style>
-            {#
-            The style_pdoc, style_theme, style_layout, and style_content Jinja2 blocks are deprecated and will be
-            removed in a future release. Custom templates should either provide alternatives for the specific CSS files,
-            or append their own styles by providing `custom.css` (see examples/custom-template/).
-            #}
-            {% block style_pdoc %}
-                {% block style_theme %}<style>/*! theme.css */{% include "theme.css" %}</style>{% endblock %}
-                {% block style_layout %}<style>/*! layout.css */{% include "layout.css" %}</style>{% endblock %}
-                {% block style_content %}<style>/*! content.css */{% include "content.css" %}</style>{% endblock %}
-                {# Use this file in your custom template directory to add additional CSS styling: #}
-                <style>/*! custom.css */{% include "custom.css" %}</style>
-            {% endblock %}
+            <link rel="stylesheet" href="resources/bootstrap-reboot.min.css">
+            <link rel="stylesheet" href="resources/syntax-highlighting.css">
         {% endblock %}
     {% endfilter %}
     {% if math %}{% include "math.html.jinja2" %}{% endif %}
@@ -35,7 +23,9 @@
 <body>
 {% block body %}
     <nav class="pdoc">
-        <label id="navtoggle" for="togglestate" class="pdoc-button">{% include 'resources/navtoggle.svg' %}</label>
+        <label id="navtoggle" for="togglestate" class="pdoc-button">
+            <img src="resources/navtoggle.svg" alt="Toggle navigation"> 
+        </label>
         <input id="togglestate" type="checkbox" aria-hidden="true" tabindex="-1">
         <div>{% block nav %}{% endblock %}</div>
     </nav>

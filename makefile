@@ -150,7 +150,7 @@ check-format:
 .PHONY: docs-html
 docs-html:
 	@echo "generate html docs"
-	$(PYTHON) -m pdoc $(PACKAGE_NAME) --template-directory docs/templates --output-directory docs/ --math --mermaid --search --show-source
+	$(PYTHON) docs/make_docs.py
 
 .PHONY: docs-combined
 docs-md:

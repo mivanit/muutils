@@ -86,3 +86,11 @@ exclude = ["tests/input_data", "tests/junk_data", "muutils/_wip"]
 [tool.mypy]
 exclude = ["tests/input_data", "tests/junk_data", "muutils/_wip"]
 show_error_codes = true
+
+[tool.pdoc]
+warnings_ignore = [
+    "Error parsing type annotation .* for muutils\\..*\\. Import of np failed:",
+    "Error parsing type annotation .* for muutils\\..*\\. Import of JsonSerializer failed:",
+    "Error parsing type annotation .* for muutils\\..*\\. Import of StatCounter failed:",
+    "Error parsing type annotation .* for muutils\\..*\\. Import of Union failed:"
+]

@@ -36,6 +36,14 @@ from muutils.misc.classes import (
 
 
 __all__ = [
+    # submodules
+    "classes",
+    "freezing",
+    "hashing",
+    "numerical",
+    "sequence",
+    "string",
+    # imports
     "stable_hash",
     "WhenMissing",
     "empty_sequence_if_attr_false",

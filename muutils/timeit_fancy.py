@@ -10,8 +10,10 @@ from muutils.statcounter import StatCounter
 
 T = TypeVar("T")
 
+
 class FancyTimeitResult(NamedTuple):
     """return type of `timeit_fancy`"""
+
     timings: StatCounter
     return_value: Union[T, None]
     profile: Union[pstats.Stats, None]

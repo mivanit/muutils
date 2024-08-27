@@ -48,6 +48,9 @@ plotly = "^5.0.0"
 pycln = "^2.1.3"
 ruff = "^0.4.8"
 
+[tool.poetry.group.docs.dependencies]
+pdoc = "^14.6.0"
+
 [tool.poetry.extras]
 array_nb_zanj = ["numpy", "torch", "jaxtyping", "ipython", "zanj"]
 array = ["numpy", "torch", "jaxtyping"]

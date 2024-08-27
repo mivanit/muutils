@@ -366,3 +366,6 @@ if __name__ == "__main__":
             disable_plots=args.disable_plots,
             filter_out_lines=args.filter_out_lines,
         )
+
+
+print("convert_ipynb_to_script.py loaded.")

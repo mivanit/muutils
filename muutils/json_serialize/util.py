@@ -1,3 +1,5 @@
+"""utilities for json_serialize"""
+
 from __future__ import annotations
 
 import dataclasses

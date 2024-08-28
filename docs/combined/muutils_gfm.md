@@ -33,7 +33,7 @@ dependencies:
 
 # documentation
 
-- [hosted html docs](miv.name/muutils)
+- [hosted html docs](https://miv.name/muutils)
 - [single-page html docs](docs/combined/muutils.html) [(absolute
   link)](https://github.com/mivanit/muutils/tree/main/docs/combined/muutils.html)
 - [single-page markdown docs](docs/combined/muutils.md) [(absolute
@@ -190,7 +190,7 @@ dependencies:
 
 ### documentation
 
-- [hosted html docs](miv.name/muutils)
+- [hosted html docs](https://miv.name/muutils)
 - [single-page html docs](docs/combined/muutils.html) [(absolute
   link)](https://github.com/mivanit/muutils/tree/main/docs/combined/muutils.html)
 - [single-page markdown docs](docs/combined/muutils.md) [(absolute
@@ -1879,7 +1879,7 @@ GitHub](https://github.com/mivanit/muutils/blob/main/muutils/json_serialize/json
 
 - `SERIALIZER_SPECIAL_FUNCS: dict[str, typing.Callable] = {'str': <class 'str'>, 'dir': <built-in function dir>, 'type': <function <lambda>>, 'repr': <function <lambda>>, 'code': <function <lambda>>, 'sourcefile': <function <lambda>>}`
 
-- `SERIALIZE_DIRECT_AS_STR: Set[str] = {"<class 'torch.dtype'>", "<class 'torch.device'>"}`
+- `SERIALIZE_DIRECT_AS_STR: Set[str] = {"<class 'torch.device'>", "<class 'torch.dtype'>"}`
 
 - `ObjectPath = tuple[typing.Union[str, int], ...]`
 

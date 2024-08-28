@@ -18,14 +18,8 @@ __pycache__/
 
 # coverage
 .coverage
-htmlcov/
 
 # build
 build/
 dist/
 muutils.egg-info/
-
-# setup_build.sh
-
-# pyenv
-.python-version

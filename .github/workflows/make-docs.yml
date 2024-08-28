@@ -54,4 +54,4 @@ jobs:
         run: make test RUN_GLOBAL=1 COV=1
 
       - name: Build Docs
-        run: make docs
+        run: make docs RUN_GLOBAL=1

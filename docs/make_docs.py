@@ -2,14 +2,69 @@ from pathlib import Path
 import argparse
 import warnings
 import tomllib
+import inspect
+
 
 import pdoc
 import pdoc.render
-from pdoc import doc
-from pdoc import extract
-from pdoc import render
+import pdoc.doc
+import pdoc.extract
+import pdoc.render_helpers
+from markupsafe import Markup
 
 OUTPUT_DIR: Path = Path("docs")
+
+
+def format_signature(sig: inspect.Signature, colon: bool) -> str:
+    """Format a function signature for Markdown. Returns a single-line Markdown string."""
+    # First get a list with all params as strings.
+    result = pdoc.doc._PrettySignature._params(sig)  # type: ignore
+    return_annot = pdoc.doc._PrettySignature._return_annotation_str(sig)  # type: ignore
+
+    def _format_param(param: str) -> str:
+        """Format a parameter for Markdown, including potential links."""
+        # This is a simplified version. You might need to adjust this
+        # to properly handle links in your specific use case.
+        return f"`{param}`"
+
+    # Format each parameter
+    pretty_result = [_format_param(param) for param in result]
+
+    # Join parameters
+    params_str = ", ".join(pretty_result)
+
+    # Add return annotation
+    anno = ")"
+    if return_annot:
+        anno += f" -> `{return_annot}`"
+    if colon:
+        anno += ":"
+
+    # Construct the full signature
+    rendered = f"`(`{params_str}`{anno}`"
+
+    return rendered
+
+
+HTML_TO_MD_MAP: dict[str, str] = {
+    "&gt;": ">",
+    "&lt;": "<",
+    "&amp;": "&",
+    "&quot;": '"',
+    "&#39": "'",
+    "&apos;": "'",
+}
+
+
+def markup_safe(sig: inspect.Signature) -> str:
+    output: str = str(sig)
+    return Markup(output)
+
+
+def use_markdown_format():
+    pdoc.render_helpers.format_signature = format_signature
+    pdoc.render.env.filters["markup_safe"] = markup_safe
+
 
 def pdoc_combined(*modules: Path | str, output_file: Path) -> None:
     """Render the documentation for a list of modules into a single HTML file.
@@ -27,14 +82,14 @@ def pdoc_combined(*modules: Path | str, output_file: Path) -> None:
     Rendering options can be configured by calling `pdoc.render.configure` in advance.
     """
     # Extract all modules and submodules
-    all_modules: dict[str, doc.Module] = {}
-    for module_name in extract.walk_specs(modules):
-        all_modules[module_name] = doc.Module.from_name(module_name)
+    all_modules: dict[str, pdoc.doc.Module] = {}
+    for module_name in pdoc.extract.walk_specs(modules):
+        all_modules[module_name] = pdoc.doc.Module.from_name(module_name)
 
     # Generate HTML content for each module
     module_contents: list[str] = []
     for module in all_modules.values():
-        module_html = render.html_module(module, all_modules)
+        module_html = pdoc.render.html_module(module, all_modules)
         module_contents.append(module_html)
 
     # Combine all module contents
@@ -45,7 +100,7 @@ def pdoc_combined(*modules: Path | str, output_file: Path) -> None:
         f.write(combined_content)
 
 
-def ignore_warnings(config_path: str|Path = Path("pyproject.toml")):
+def ignore_warnings(config_path: str | Path = Path("pyproject.toml")):
     # Read the pyproject.toml file
     config_path = Path(config_path)
     with config_path.open("rb") as f:
@@ -91,7 +146,9 @@ if __name__ == "__main__":
         edit_url_map={
             "muutils": "https://github.com/mivanit/muutils/blob/main/muutils/",
         },
-        template_directory=Path("docs/templates/html/") if not parsed_args.combined else Path("docs/templates/markdown/"),
+        template_directory=Path("docs/templates/html/")
+        if not parsed_args.combined
+        else Path("docs/templates/markdown/"),
         show_source=True,
         math=True,
         mermaid=True,
@@ -104,8 +161,8 @@ if __name__ == "__main__":
             output_directory=OUTPUT_DIR,
         )
     else:
-        pdoc_combined("muutils", output_file=OUTPUT_DIR / "combined.md")
-
+        use_markdown_format()
+        pdoc_combined("muutils", output_file=OUTPUT_DIR / "combined" / "muutils.md")
 
     if parsed_args.serve:
         import os

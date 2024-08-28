@@ -3,7 +3,7 @@
 {% block nav %}
 
 {% block nav_index %}
-{% set index = module.docstring | to_markdown | to_html | attr("toc_html") %}
+{% set index = module.docstring | to_markdown %}
 {% if index %}
 ## Contents
 {{ index | safe }}
@@ -13,8 +13,9 @@
 {% block nav_submodules %}
 {% if module.submodules %}
 ## Submodules
+
 {% for submodule in module.submodules if is_public(submodule) | trim %}
-    - {{ submodule.taken_from | link(text=submodule.name) }}</li>
+- [`{{ submodule.name }}`](#{{ submodule.name }})
 {% endfor %}
 {% endif %}
 {% endblock %}
@@ -22,6 +23,7 @@
 {% block nav_members %}
 {% if module.members %}
 ## API Documentation
+
 {{ nav_members(module.members.values()) }}
 {% endif %}
 {% endblock %}
@@ -39,7 +41,6 @@
 
 {{ module_name() }}
 {{ docstring(module) }}
-{{ view_source_state(module) }}
 {{ view_source_button(module) }}
 {% endblock %}
 
@@ -51,9 +52,10 @@
 {% for m in m.own_members if m.kind != "class" and is_public(m) | trim %}
 {{ member(m) }}
 {% endfor %}
-{% set inherited_members = inherited(m) | trim %}
+{% set inherited_members = inherited(m) %}
 {% if inherited_members %}
-##### Inherited Members                                
+### Inherited Members                                
+
 {{ inherited_members }}
 {% endif %}
 {% endif %}
@@ -70,71 +72,62 @@ See https://pdoc.dev/docs/pdoc/render_helpers.html#DefaultMacroExtension for an 
 #}
 {% defaultmacro bases(cls) %}
 {%- if cls.bases -%}
-({%- for base in cls.bases -%}{{ base[:2] | link(text=base[2]) }}{%- if loop.nextitem %}, {% endif %}{%- endfor -%})
+({%- for base in cls.bases -%}{{base[2]}}{%- if loop.nextitem %}, {% endif %}{%- endfor -%})
 {%- endif -%}
 {% enddefaultmacro %}
 
 {% defaultmacro default_value(var) -%}
 {%- if var.default_value_str %}
-= {{ var.default_value_str | escape }}
+= {{ var.default_value_str | markup_safe }}
 {%- endif -%}
 {% enddefaultmacro %}
 
 {% defaultmacro annotation(var) %}
 {%- if var.annotation_str -%}
-{{ var.annotation_str | escape}}
+{{ var.annotation_str | markup_safe }}
 {%- endif -%}
 {% enddefaultmacro %}
 
-{% defaultmacro decorators(doc) %}
-{% for d in doc.decorators if not d.startswith("@_") %}
-{{ d }}
-{% endfor %}
-{% enddefaultmacro %}
 
 {% defaultmacro function(fn) -%}
-    {{ decorators(fn) }}
-    {% if fn.name == "__init__" %}
-        <span class="name">{{ ".".join(fn.qualname.split(".")[:-1]) }}</span>
-        {{- fn.signature_without_self | format_signature(colon=False) | linkify }}
-    {% else %}
-        <span class="def">{{ fn.funcdef }}</span>
-        <span class="name">{{ fn.name }}</span>
-        {{- fn.signature | format_signature(colon=True) | linkify }}
-    {% endif %}
+{% if fn.name == "__init__" %}
+## `{{ ".".join(fn.qualname.split(".")[:-1]) }}` { #{{ fn.name }} }
+```python
+{{ fn.signature_without_self | markup_safe }}
+```
+{% else %}
+## `{{ fn.funcdef }} {{ fn.name }}` { #{{ fn.name }} }
+```python
+{{ fn.signature | markup_safe }}
+```
+{# {{- fn.signature | format_signature(colon=True) | linkify }} #}
+{% endif %}
 {% enddefaultmacro %}
 
 {% defaultmacro variable(var) -%}
-    {%- if var.is_type_alias_type %}<span class="def">type</span> {% endif -%}
-    <span class="name">{{ var.name }}</span>{{ annotation(var) }}{{ default_value(var) }}
+- {% if var.is_type_alias_type %}type {% endif %}`{{ var.name }}{{ annotation(var) | markup_safe }}{{ default_value(var) | markup_safe }}`
 {% enddefaultmacro %}
 
 {% defaultmacro submodule(mod) -%}
-    <span class="name">{{ mod.taken_from | link }}</span>
+{{ mod.taken_from | link }}
 {% enddefaultmacro %}
 
 {% defaultmacro class(cls) -%}
-    {{ decorators(cls) }}
-    <span class="def">class</span>
-    <span class="name">{{ cls.qualname }}</span>
-    {{- bases(cls) -}}:
+## `class {{ cls.qualname }}{{- bases(cls) -}}:` { #{{ cls.qualname }} }
 {% enddefaultmacro %}
 
 {% defaultmacro member(doc) %}
-    {{- view_source_state(doc) -}}
-    {% if doc.kind == "class" %}
-        {{ class(doc) }}
-    {% elif doc.kind == "function" %}
-        {{ function(doc) }}
-    {% elif doc.kind == "module" %}
-        {{ submodule(doc) }}
-    {% else %}
-        {{ variable(doc) }}
-    {% endif %}
-    {{ view_source_button(doc) }}
-    <a class="headerlink" href="#{{ doc.qualname or doc.name }}"></a>
-    {# {{ view_source_code(doc) }} #}
-    {{ docstring(doc) }}
+{% if doc.kind == "class" %}
+{{ class(doc) }}
+{% elif doc.kind == "function" %}
+{{ function(doc) }}
+{% elif doc.kind == "module" %}
+{{ submodule(doc) }}
+{% else %}
+{{ variable(doc) }}
+{% endif %}
+{{ view_source_button(doc) }}
+{{ docstring(doc) }}
 {% enddefaultmacro %}
 
 {% defaultmacro docstring(var) %}
@@ -183,30 +176,20 @@ See https://pdoc.dev/docs/pdoc/render_helpers.html#DefaultMacroExtension for an 
 
 {# fmt: off #}
 {% defaultmacro inherited(cls) %}
-    {% for base, members in cls.inherited_members.items() %}
-        {% set m = None %}{# workaround for https://github.com/pallets/jinja/issues/1427 #}
-        {% set member_html %}
-            {% for m in members if is_public(m) | trim %}
-                <dd id="{{ m.qualname }}" class="{{ m.kind }}">
-                    {{- m.taken_from | link(text=m.name.replace("__init__",base[1])) -}}
-                </dd>
-            {% endfor %}
-        {% endset %}
-        {# we may not have any public members, in which case we don't want to print anything. #}
-        {% if member_html %}
-            <div><dt>{{ base | link }}</dt>
-                {{ member_html }}
-            </div>
-        {% endif %}
-    {% endfor %}
+{% for base, members in cls.inherited_members.items() %}
+{% set m = None %}{# workaround for https://github.com/pallets/jinja/issues/1427 #}
+{% set member_html %}
+{% for m in members if is_public(m) | trim %}
+- [`{{m.name.replace("__init__",base[1]) | markup_safe }}`](#{{ m.qualname }})
+{% endfor %}
+{% endset %}
+{# we may not have any public members, in which case we don't want to print anything. #}
+{% if member_html %}
+{{ member_html }}
+{% endif %}
+{% endfor %}
 {% enddefaultmacro %}
 
-{# fmt: on #}
-{% defaultmacro view_source_state(doc) %}
-    {% if show_source and doc.source %}
-        <input id="{{ doc.qualname or "mod-" + doc.name }}-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
-    {% endif %}
-{% enddefaultmacro %}
 
 {% defaultmacro view_source_button(doc) %}
 {% if show_source and doc.source %}
@@ -225,18 +208,5 @@ See https://pdoc.dev/docs/pdoc/render_helpers.html#DefaultMacroExtension for an 
 {% enddefaultmacro %}
 
 {% defaultmacro module_name() %}
-    <h1 class="modulename">
-        {% set parts = module.modulename.split(".") %}
-        {% for part in parts %}
-            {%- set fullname = ".".join(parts[:loop.index]) -%}
-            {%- if fullname in all_modules and fullname != module.modulename -%}
-                <a href="./{{ "../" * loop.revindex0 }}{{ part }}.html">{{ part }}</a>
-            {%- else -%}
-                {{ part }}
-            {%- endif -%}
-            {%- if loop.nextitem -%}
-                <wbr>.
-            {%- endif -%}
-        {% endfor %}
-    </h1>
+# `{{ module.modulename }}` { #{{ module.modulename }} }
 {% enddefaultmacro %}

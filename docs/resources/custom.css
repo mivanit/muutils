@@ -1,4 +1,5 @@
-/*
-This file is empty by default.
-Override it in your custom template to provide additional CSS rules.
-*/
+.github-link-button {
+    display: inline-block;
+    float: right;
+	margin-right: 1em;
+}

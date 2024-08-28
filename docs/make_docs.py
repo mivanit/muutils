@@ -8,6 +8,7 @@ import pdoc.render
 
 OUTPUT_DIR: Path = Path("docs")
 
+
 def ignore_warnings():
     # Read the pyproject.toml file
     pyproject_path: Path = Path("pyproject.toml")
@@ -15,22 +16,27 @@ def ignore_warnings():
         pyproject_data = tomllib.load(f)
 
     # Extract the warning messages from the tool.pdoc.ignore section
-    warning_messages: list[str] = pyproject_data.get("tool", {}).get("pdoc", {}).get("warnings_ignore", [])
+    warning_messages: list[str] = (
+        pyproject_data.get("tool", {}).get("pdoc", {}).get("warnings_ignore", [])
+    )
 
     # Process and apply the warning filters
     for message in warning_messages:
         warnings.filterwarnings("ignore", message=message)
 
+
 if __name__ == "__main__":
     argparser: argparse.ArgumentParser = argparse.ArgumentParser()
     # whether to start an HTTP server to serve the documentation
     argparser.add_argument(
-        "--serve", "-s",
+        "--serve",
+        "-s",
         action="store_true",
         help="Whether to start an HTTP server to serve the documentation",
     )
     argparser.add_argument(
-        "--warn-all", "-w",
+        "--warn-all",
+        "-w",
         action="store_true",
         help="Whether to show all warnings, instead of ignoring the ones specified in pyproject.toml:tool.pdoc.ignore",
     )

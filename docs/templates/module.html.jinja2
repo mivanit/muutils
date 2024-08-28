@@ -86,7 +86,9 @@
                 {{ docstring(module) }}
                 {{ view_source_state(module) }}
                 {{ view_source_button(module) }}
+                <br/>
                 {{ view_source_code(module) }}
+                <br/>
             </section>
         {% endblock %}
         {% block module_contents %}
@@ -281,7 +283,16 @@ See https://pdoc.dev/docs/pdoc/render_helpers.html#DefaultMacroExtension for an 
 {% enddefaultmacro %}
 {% defaultmacro view_source_button(doc) %}
     {% if show_source and doc.source %}
-        <label class="view-source-button" for="{{ doc.qualname or "mod-" + doc.name }}-view-source"><span>View Source</span></label>
+        {% set github_line_url = edit_url.replace(module.source_file|string, doc.source_file|string) %}
+        {% set github_line_url = github_line_url + "#L" + doc.source_lines[0]|string + "-L" + doc.source_lines[1]|string %}
+        <div class="source-button-container">
+            <label class="pdoc-button view-source-button" for="{{ doc.qualname or "mod-" + doc.name }}-view-source"><span>View Source</span></label>
+            <div class="github-button-wrapper">
+                <a class="pdoc-button github-link-button" href="{{ github_line_url }}" target="_blank">
+                    <span>View on GitHub</span>
+                </a>
+            </div>
+        </div>
     {% endif %}
 {% enddefaultmacro %}
 {% defaultmacro view_source_code(doc) %}

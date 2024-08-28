@@ -1,3 +1,12 @@
+"""turn a folder of notebooks into scripts, run them, and make sure they work.
+
+made to be called as
+
+```bash
+python -m muutils.nbutils.run_notebook_tests --notebooks-dir <notebooks_dir> --converted-notebooks-temp-dir <converted_notebooks_temp_dir>
+```
+"""
+
 import os
 import subprocess
 import sys

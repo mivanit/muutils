@@ -1,6 +1,6 @@
-"""
-decorator `spinner_decorator` and context manager `SpinnerContext` to display
-a spinner using the base `Spinner` class while some code is running.
+"""decorator `spinner_decorator` and context manager `SpinnerContext` to display a spinner
+
+using the base `Spinner` class while some code is running.
 """
 
 import os

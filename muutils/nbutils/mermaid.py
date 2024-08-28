@@ -1,3 +1,5 @@
+"""display mermaid.js diagrams in jupyter notebooks by the `mermaid.ink/img` service"""
+
 import base64
 
 try:

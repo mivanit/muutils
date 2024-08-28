@@ -1,3 +1,5 @@
+"miscellaneous utilities for ML pipelines"
+
 from __future__ import annotations
 
 import json

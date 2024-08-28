@@ -1,3 +1,5 @@
+"`timeit_fancy` is just a fancier version of timeit with more options"
+
 from __future__ import annotations
 
 import pstats
@@ -33,6 +35,7 @@ def timeit_fancy(
     Approximates the functionality of the %timeit magic or command line interface in a Python callable.
 
     # Parameters
+
     - `cmd: Callable[[], T] | str`
         The callable to time. If a string, it will be passed to `timeit.Timer` as the `stmt` argument.
     - `setup: str`
@@ -51,7 +54,9 @@ def timeit_fancy(
         (default: `False`)
 
     # Returns
+
     `FancyTimeitResult`, which is a NamedTuple with the following fields:
+
     - `time: float`
         The time in seconds it took to run `cmd` the minimum number of times to get a reliable measurement.
     - `return_value: T|None`

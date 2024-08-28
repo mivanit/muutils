@@ -1,3 +1,5 @@
+"""quickly print a sympy expression in latex"""
+
 import sympy as sp  # type: ignore
 from IPython.display import Math, display  # type: ignore
 

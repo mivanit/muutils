@@ -1,3 +1,5 @@
+"""shared utilities for setting up a notebook"""
+
 from __future__ import annotations
 
 import os
@@ -199,12 +201,46 @@ def configure_notebook(
     fig_basepath: str | None = None,
     close_after_plotshow: bool = False,
 ) -> "torch.device|None":  # type: ignore[name-defined] # noqa: F821
-    """Shared Jupyter notebook setup steps:
+    """Shared Jupyter notebook setup steps
+
     - Set random seeds and library reproducibility settings
     - Set device based on availability
     - Set module reloading before code execution
     - Set plot formatting
     - Set plot saving/rendering options
+
+    # Parameters:
+     - `seed : int`
+        random seed across libraries including torch, numpy, and random (defaults to `42`)
+       (defaults to `42`)
+     - `device : typing.Any`
+       pytorch device to use
+       (defaults to `None`)
+     - `dark_mode : bool`
+       figures in dark mode
+       (defaults to `True`)
+     - `plot_mode : PlottingMode`
+       how to display plots, one of `PlottingMode` or `["ignore", "inline", "widget", "save"]`
+       (defaults to `"inline"`)
+     - `fig_output_fmt : str | None`
+       format for saving figures
+       (defaults to `"pdf"`)
+     - `fig_numbered_fname : str`
+        format for saving figures with numbers (if they aren't named)
+       (defaults to `"figure-{num}"`)
+     - `fig_config : dict | None`
+       metadata to save with the figures
+       (defaults to `None`)
+     - `fig_basepath : str | None`
+        base path for saving figures
+       (defaults to `None`)
+     - `close_after_plotshow : bool`
+        close figures after showing them
+       (defaults to `False`)
+
+    # Returns:
+     - `torch.device|None`
+       the device set, if torch is installed
     """
 
     # set some globals related to plotting

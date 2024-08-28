@@ -1,3 +1,11 @@
+"""extends `dataclasses.Field` for use with `SerializableDataclass`
+
+In particular, instead of using `dataclasses.field`, use `serializable_field` to define fields in a `SerializableDataclass`.
+You provide information on how the field should be serialized and loaded (as well as anything that goes into `dataclasses.field`)
+when you define the field, and the `SerializableDataclass` will automatically use those functions.
+
+"""
+
 from __future__ import annotations
 
 import dataclasses

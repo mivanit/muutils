@@ -1,3 +1,5 @@
+"""experimental utility for validating types in python, see `validate_type`"""
+
 from __future__ import annotations
 
 import types

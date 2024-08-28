@@ -1,3 +1,5 @@
+"represents a mathematical `Interval` over the real numbers"
+
 from __future__ import annotations
 
 import math

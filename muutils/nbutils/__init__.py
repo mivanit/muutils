@@ -1,3 +1,12 @@
+"""utilities for working with notebooks
+
+- configuring figures mdoes and torch devices: `configure_notebook`
+- converting them to scripts: `convert_ipynb_to_script`
+- running them as tests: `run_notebook_tests`
+- and working with diagrams/LaTeX: `mermaid`, `print_tex`
+
+"""
+
 from muutils.nbutils.mermaid import mm
 
 __all__ = [

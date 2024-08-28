@@ -1,3 +1,5 @@
+"utilities for reading and writing jsonlines files, including gzip support"
+
 from __future__ import annotations
 
 import gzip

@@ -1,3 +1,14 @@
+"""utilities for working with tensors and arrays.
+
+notably:
+
+- `TYPE_TO_JAX_DTYPE` : a mapping from python, numpy, and torch types to `jaxtyping` types
+- `DTYPE_MAP` mapping string representations of types to their type
+- `TORCH_DTYPE_MAP` mapping string representations of types to torch types
+- `compare_state_dicts` for comparing two state dicts and giving a detailed error message on whether if was keys, shapes, or values that didn't match
+
+"""
+
 from __future__ import annotations
 
 import json
@@ -57,6 +68,7 @@ TYPE_TO_JAX_DTYPE: dict = {
     torch.long: jaxtyping.Int,
     torch.short: jaxtyping.Int,
 }
+"dict mapping python, numpy, and torch types to `jaxtyping` types"
 
 
 # TODO: add proper type annotations to this signature
@@ -245,15 +257,18 @@ DTYPE_LIST: list = [
         np.bool_,
     ],
 ]
+"list of all the python, numpy, and torch numerical types I could think of"
 
 DTYPE_MAP: dict = {
     **{str(x): x for x in DTYPE_LIST},
     **{dtype.__name__: dtype for dtype in DTYPE_LIST if dtype.__module__ == "numpy"},
 }
+"mapping from string representations of types to their type"
 
 TORCH_DTYPE_MAP: dict = {
     key: numpy_to_torch_dtype(dtype) for key, dtype in DTYPE_MAP.items()
 }
+"mapping from string representations of types to specifically torch types"
 
 # no idea why we have to do this, smh
 DTYPE_MAP["bool"] = np.bool_
@@ -305,6 +320,7 @@ def pad_tensor(
 def lpad_tensor(
     tensor: torch.Tensor, padded_length: int, pad_value: float = 0.0
 ) -> torch.Tensor:
+    """pad a 1-d tensor on the left with pad_value to length `padded_length`"""
     return pad_tensor(tensor, padded_length, pad_value, rpad=False)
 
 
@@ -401,6 +417,25 @@ class StateDictValueError(StateDictCompareError):
 def compare_state_dicts(
     d1: dict, d2: dict, rtol: float = 1e-5, atol: float = 1e-8, verbose: bool = True
 ) -> None:
+    """compare two dicts of tensors
+
+    # Parameters:
+
+     - `d1 : dict`
+     - `d2 : dict`
+     - `rtol : float`
+       (defaults to `1e-5`)
+     - `atol : float`
+       (defaults to `1e-8`)
+     - `verbose : bool`
+       (defaults to `True`)
+
+    # Raises:
+
+     - `StateDictKeysError` : keys don't match
+     - `StateDictShapeError` : shapes don't match (but keys do)
+     - `StateDictValueError` : values don't match (but keys and shapes do)
+    """
     # check keys match
     d1_keys: set = set(d1.keys())
     d2_keys: set = set(d2.keys())

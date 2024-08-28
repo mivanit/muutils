@@ -1,3 +1,12 @@
+"""making working with dictionaries easier
+
+- `DefaulterDict`: like a defaultdict, but default_factory is passed the key as an argument
+- various methods for working wit dotlist-nested dicts, converting to and from them
+- `condense_nested_dicts`: condense a nested dict, by condensing numeric or matching keys with matching values to ranges
+- `condense_tensor_dict`: convert a dictionary of tensors to a dictionary of shapes
+- `kwargs_to_nested_dict`: given kwargs from fire, convert them to a nested dict
+"""
+
 from __future__ import annotations
 
 import typing

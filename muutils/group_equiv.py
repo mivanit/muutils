@@ -1,3 +1,5 @@
+"group items by assuming that `eq_func` defines an equivalence relation"
+
 from __future__ import annotations
 
 from itertools import chain

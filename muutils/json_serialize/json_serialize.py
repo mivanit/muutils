@@ -1,3 +1,13 @@
+"""provides the basic framework for json serialization of objects
+
+notably:
+
+- `SerializerHandler` defines how to serialize a specific type of object
+- `JsonSerializer` handles configuration for which handlers to use
+- `json_serialize` provides the default configuration if you don't care -- call it on any object!
+
+"""
+
 from __future__ import annotations
 
 import inspect

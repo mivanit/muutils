@@ -1,3 +1,11 @@
+"""this utilities module handles serialization and loading of numpy and torch arrays as json
+
+- `array_list_meta` is less efficient (arrays are stored as nested lists), but preserves both metadata and human readability.
+- `array_b64_meta` is the most efficient, but is not human readable.
+- `external` is mostly for use in [`ZANJ`](https://github.com/mivanit/ZANJ)
+
+"""
+
 from __future__ import annotations
 
 import base64

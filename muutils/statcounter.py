@@ -1,3 +1,7 @@
+"""`StatCounter` class for counting and calculating statistics on numbers
+
+cleaner and more efficient than just using a `Counter` or array"""
+
 from __future__ import annotations
 
 import json
@@ -42,9 +46,9 @@ def universal_flatten(
 
 
 class StatCounter(Counter):
-    """counter, but with some stat calculation methods which assume the keys are numbers
+    """`Counter`, but with some stat calculation methods which assume the keys are numerical
 
-    works best when the keys are ints
+    works best when the keys are `int`s
     """
 
     def validate(self) -> bool:
@@ -52,9 +56,11 @@ class StatCounter(Counter):
         return all(isinstance(k, (bool, int, float, type(None))) for k in self.keys())
 
     def min(self):
+        "minimum value"
         return min(x for x, v in self.items() if v > 0)
 
     def max(self):
+        "maximum value"
         return max(x for x, v in self.items() if v > 0)
 
     def total(self):
@@ -138,6 +144,7 @@ class StatCounter(Counter):
         *,
         extra_percentiles: Optional[list[float]] = None,
     ) -> dict[str, Union[float, int]]:
+        """return a summary of the stats, without the raw data. human readable and small"""
         # common stats that always work
         output: dict = dict(
             total_items=self.total(),
@@ -177,6 +184,18 @@ class StatCounter(Counter):
         *,
         extra_percentiles: Optional[list[float]] = None,
     ) -> dict:
+        """return a json-serializable version of the counter
+
+        includes both the output of `summary` and the raw data:
+
+        ```json
+        {
+            "StatCounter": { <keys, values from raw data> },
+            "summary": self.summary(typecast, extra_percentiles=extra_percentiles),
+        }
+
+        """
+
         return {
             "StatCounter": {
                 typecast(k): v
@@ -186,6 +205,7 @@ class StatCounter(Counter):
         }
 
     def __str__(self) -> str:
+        "summary as json with 2 space indent, good for printing"
         return json.dumps(self.summary(), indent=2)
 
     def __repr__(self) -> str:
@@ -193,6 +213,7 @@ class StatCounter(Counter):
 
     @classmethod
     def load(cls, data: dict) -> "StatCounter":
+        "load from a the output of `StatCounter.serialize`"
         if "StatCounter" in data:
             loadme = data["StatCounter"]
         else:

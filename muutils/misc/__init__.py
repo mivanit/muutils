@@ -1,3 +1,13 @@
+"""miscellaneous utilities
+
+- `stable_hash` for hashing that is stable across runs
+- `muutils.misc.sequence` for sequence manipulation, applying mappings, and string-like operations on lists
+- `muutils.misc.string` for sanitizing things for filenames, adjusting docstrings, and converting dicts to filenames
+- `muutils.misc.numerical` for turning numbers into nice strings and back
+- `muutils.misc.freezing` for freezing things
+- `muutils.misc.classes` for some weird class utilities
+"""
+
 from muutils.misc.hashing import stable_hash
 from muutils.misc.sequence import (
     WhenMissing,

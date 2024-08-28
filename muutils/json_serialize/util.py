@@ -178,30 +178,32 @@ def dc_eq(
     false_when_class_mismatch: bool = True,
     except_when_field_mismatch: bool = False,
 ) -> bool:
-    """checks if two dataclasses which (might) hold numpy arrays are equal
+    """
+    checks if two dataclasses which (might) hold numpy arrays are equal
 
-        # Parameters:
-        - `dc1`: the first dataclass
-        - `dc2`: the second dataclass
-        - `except_when_class_mismatch: bool`
-            if `True`, will throw `TypeError` if the classes are different.
-            if not, will return false by default or attempt to compare the fields if `false_when_class_mismatch` is `False`
-            (default: `False`)
-        - `false_when_class_mismatch: bool`
-            only relevant if `except_when_class_mismatch` is `False`.
-            if `True`, will return `False` if the classes are different.
-            if `False`, will attempt to compare the fields.
-        - `except_when_field_mismatch: bool`
-            only relevant if `except_when_class_mismatch` is `False` and `false_when_class_mismatch` is `False`.
-            if `True`, will throw `TypeError` if the fields are different.
-            (default: `True`)
+    # Parameters:
 
-        # Returns:
-        - `bool`: True if the dataclasses are equal, False otherwise
+    - `dc1`: the first dataclass
+    - `dc2`: the second dataclass
+    - `except_when_class_mismatch: bool`
+        if `True`, will throw `TypeError` if the classes are different.
+        if not, will return false by default or attempt to compare the fields if `false_when_class_mismatch` is `False`
+        (default: `False`)
+    - `false_when_class_mismatch: bool`
+        only relevant if `except_when_class_mismatch` is `False`.
+        if `True`, will return `False` if the classes are different.
+        if `False`, will attempt to compare the fields.
+    - `except_when_field_mismatch: bool`
+        only relevant if `except_when_class_mismatch` is `False` and `false_when_class_mismatch` is `False`.
+        if `True`, will throw `TypeError` if the fields are different.
+        (default: `True`)
 
-        # Raises:
-        - `TypeError`: if the dataclasses are of different classes
-        - `AttributeError`: if the dataclasses have different fields
+    # Returns:
+    - `bool`: True if the dataclasses are equal, False otherwise
+
+    # Raises:
+    - `TypeError`: if the dataclasses are of different classes
+    - `AttributeError`: if the dataclasses have different fields
 
     ```
               [START]

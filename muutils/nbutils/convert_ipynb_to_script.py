@@ -1,3 +1,5 @@
+"""fast conversion of Jupyter Notebooks to scripts, with some basic and hacky filtering and formatting."""
+
 from __future__ import annotations
 
 import argparse

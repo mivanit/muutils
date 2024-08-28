@@ -1,3 +1,5 @@
+"utilities for getting information about the system, see `SysInfo` class"
+
 from __future__ import annotations
 
 import subprocess

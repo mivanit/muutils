@@ -1,3 +1,12 @@
+"""provides `ErrorMode` enum for handling errors consistently
+
+pass an `error_mode: ErrorMode` to a function to specify how to handle a certain kind of exception.
+That function then instead of `raise`ing or `warnings.warn`ing, calls `error_mode.process` with the message and the exception.
+
+you can also specify the exception class to raise, the warning class to use, and the source of the exception/warning.
+
+"""
+
 from __future__ import annotations
 
 import sys
@@ -67,6 +76,13 @@ def custom_showwarning(
 
 
 class ErrorMode(Enum):
+    """Enum for handling errors consistently
+
+    pass one of the instances of this enum to a function to specify how to handle a certain kind of exception.
+
+    That function then instead of `raise`ing or `warnings.warn`ing, calls `error_mode.process` with the message and the exception.
+    """
+
     EXCEPT = "except"
     WARN = "warn"
     LOG = "log"
@@ -81,6 +97,32 @@ class ErrorMode(Enum):
         warn_func: WarningFunc | None = None,
         log_func: LoggingFunc | None = None,
     ):
+        """process an exception or warning according to the error mode
+
+        # Parameters:
+         - `msg : str`
+           message to pass to `except_cls` or `warn_func`
+         - `except_cls : typing.Type[Exception]`
+            exception class to raise, must be a subclass of `Exception`
+           (defaults to `ValueError`)
+         - `warn_cls : typing.Type[Warning]`
+            warning class to use, must be a subclass of `Warning`
+           (defaults to `UserWarning`)
+         - `except_from : typing.Optional[Exception]`
+            will `raise except_cls(msg) from except_from` if not `None`
+           (defaults to `None`)
+         - `warn_func : WarningFunc | None`
+            function to use for warnings, must have the signature `warn_func(msg: str, category: typing.Type[Warning], source: typing.Any = None) -> None`
+           (defaults to `None`)
+         - `log_func : LoggingFunc | None`
+            function to use for logging, must have the signature `log_func(msg: str) -> None`
+           (defaults to `None`)
+
+        # Raises:
+         - `except_cls` : _description_
+         - `except_cls` : _description_
+         - `ValueError` : _description_
+        """
         if self is ErrorMode.EXCEPT:
             # except, possibly with a chained exception
             frame: types.FrameType = sys._getframe(1)
@@ -124,6 +166,7 @@ class ErrorMode(Enum):
         allow_aliases: bool = True,
         allow_prefix: bool = True,
     ) -> ErrorMode:
+        """initialize an `ErrorMode` from a string or an `ErrorMode` instance"""
         if isinstance(mode, ErrorMode):
             return mode
         elif isinstance(mode, str):
@@ -195,3 +238,4 @@ ERROR_MODE_ALIASES: dict[str, ErrorMode] = {
     "quiet": ErrorMode.IGNORE,
     "nothing": ErrorMode.IGNORE,
 }
+"map of string aliases to `ErrorMode` instances"

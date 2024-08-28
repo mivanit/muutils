@@ -1,3 +1,54 @@
+"""save and load objects to and from json or compatible formats in a recoverable way
+
+`d = dataclasses.asdict(my_obj)` will give you a dict, but if some fields are not json-serializable,
+you will get an error when you call `json.dumps(d)`. This module provides a way around that.
+
+Instead, you define your class:
+
+```python
+@serializable_dataclass
+class MyClass(SerializableDataclass):
+    a: int
+    b: str
+```
+
+and then you can call `my_obj.serialize()` to get a dict that can be serialized to json. So, you can do:
+
+    >>> my_obj = MyClass(a=1, b="q")
+    >>> s = json.dumps(my_obj.serialize())
+    >>> s
+    '{"__format__": "MyClass(SerializableDataclass)", "a": 1, "b": "q"}'
+    >>> read_obj = MyClass.load(json.loads(s))
+    >>> read_obj == my_obj
+    True
+
+This isn't too impressive on its own, but it gets more useful when you have nested classses,
+or fields that are not json-serializable by default:
+
+```python
+@serializable_dataclass
+class NestedClass(SerializableDataclass):
+    x: str
+    y: MyClass
+    act_fun: torch.nn.Module = serializable_field(
+        default=torch.nn.ReLU(),
+        serialization_fn=lambda x: str(x),
+        deserialize_fn=lambda x: getattr(torch.nn, x)(),
+    )
+```
+
+which gives us:
+
+    >>> nc = NestedClass(x="q", y=MyClass(a=1, b="q"), act_fun=torch.nn.Sigmoid())
+    >>> s = json.dumps(nc.serialize())
+    >>> s
+    '{"__format__": "NestedClass(SerializableDataclass)", "x": "q", "y": {"__format__": "MyClass(SerializableDataclass)", "a": 1, "b": "q"}, "act_fun": "Sigmoid"}'
+    >>> read_nc = NestedClass.load(json.loads(s))
+    >>> read_nc == nc
+    True
+
+"""
+
 from __future__ import annotations
 
 import abc
@@ -23,18 +74,25 @@ T = TypeVar("T")
 
 
 class CantGetTypeHintsWarning(UserWarning):
+    "special warning for when we can't get type hints"
+
     pass
 
 
 class ZanjMissingWarning(UserWarning):
+    "special warning for when [`ZANJ`](https://github.com/mivanit/ZANJ) is missing -- `register_loader_serializable_dataclass` will not work"
+
     pass
 
 
 _zanj_loading_needs_import: bool = True
+"flag to keep track of if we have successfully imported ZANJ"
 
 
 def zanj_register_loader_serializable_dataclass(cls: typing.Type[T]):
-    """Register a serializable dataclass with the ZANJ backport
+    """Register a serializable dataclass with the ZANJ import
+
+    this allows `ZANJ().read()` to load the class and not just return plain dicts
 
 
     # TODO: there is some duplication here with register_loader_handler
@@ -86,6 +144,8 @@ def SerializableDataclass__validate_field_type(
     on_typecheck_error: ErrorMode = _DEFAULT_ON_TYPECHECK_ERROR,
 ) -> bool:
     """given a dataclass, check the field matches the type hint
+
+    this function is written to `SerializableDataclass.validate_field_type`
 
     # Parameters:
      - `self : SerializableDataclass`
@@ -174,7 +234,7 @@ def SerializableDataclass__validate_fields_types__dict(
     self: SerializableDataclass,
     on_typecheck_error: ErrorMode = _DEFAULT_ON_TYPECHECK_ERROR,
 ) -> dict[str, bool]:
-    """validate the types of all the fields on a SerializableDataclass. calls `SerializableDataclass__validate_field_type` for each field
+    """validate the types of all the fields on a `SerializableDataclass`. calls `SerializableDataclass__validate_field_type` for each field
 
     returns a dict of field names to bools, where the bool is if the field type is valid
     """
@@ -211,7 +271,7 @@ def SerializableDataclass__validate_fields_types(
     self: SerializableDataclass,
     on_typecheck_error: ErrorMode = _DEFAULT_ON_TYPECHECK_ERROR,
 ) -> bool:
-    """validate the types of all the fields on a SerializableDataclass. calls `SerializableDataclass__validate_field_type` for each field"""
+    """validate the types of all the fields on a `SerializableDataclass`. calls `SerializableDataclass__validate_field_type` for each field"""
     return all(
         SerializableDataclass__validate_fields_types__dict(
             self, on_typecheck_error=on_typecheck_error
@@ -223,20 +283,67 @@ class SerializableDataclass(abc.ABC):
     """Base class for serializable dataclasses
 
     only for linting and type checking, still need to call `serializable_dataclass` decorator
+
+    # Usage:
+
+    ```python
+    @serializable_dataclass
+    class MyClass(SerializableDataclass):
+        a: int
+        b: str
+    ```
+
+    and then you can call `my_obj.serialize()` to get a dict that can be serialized to json. So, you can do:
+
+        >>> my_obj = MyClass(a=1, b="q")
+        >>> s = json.dumps(my_obj.serialize())
+        >>> s
+        '{"__format__": "MyClass(SerializableDataclass)", "a": 1, "b": "q"}'
+        >>> read_obj = MyClass.load(json.loads(s))
+        >>> read_obj == my_obj
+        True
+
+    This isn't too impressive on its own, but it gets more useful when you have nested classses,
+    or fields that are not json-serializable by default:
+
+    ```python
+    @serializable_dataclass
+    class NestedClass(SerializableDataclass):
+        x: str
+        y: MyClass
+        act_fun: torch.nn.Module = serializable_field(
+            default=torch.nn.ReLU(),
+            serialization_fn=lambda x: str(x),
+            deserialize_fn=lambda x: getattr(torch.nn, x)(),
+        )
+    ```
+
+    which gives us:
+
+        >>> nc = NestedClass(x="q", y=MyClass(a=1, b="q"), act_fun=torch.nn.Sigmoid())
+        >>> s = json.dumps(nc.serialize())
+        >>> s
+        '{"__format__": "NestedClass(SerializableDataclass)", "x": "q", "y": {"__format__": "MyClass(SerializableDataclass)", "a": 1, "b": "q"}, "act_fun": "Sigmoid"}'
+        >>> read_nc = NestedClass.load(json.loads(s))
+        >>> read_nc == nc
+        True
     """
 
     def serialize(self) -> dict[str, Any]:
+        "returns the class as a dict, implemented by using `@serializable_dataclass` decorator"
         raise NotImplementedError(
             f"decorate {self.__class__ = } with `@serializable_dataclass`"
         )
 
     @classmethod
     def load(cls: Type[T], data: dict[str, Any] | T) -> T:
+        "takes in an appropriately structured dict and returns an instance of the class, implemented by using `@serializable_dataclass` decorator"
         raise NotImplementedError(f"decorate {cls = } with `@serializable_dataclass`")
 
     def validate_fields_types(
         self, on_typecheck_error: ErrorMode = _DEFAULT_ON_TYPECHECK_ERROR
     ) -> bool:
+        """validate the types of all the fields on a `SerializableDataclass`. calls `SerializableDataclass__validate_field_type` for each field"""
         return SerializableDataclass__validate_fields_types(
             self, on_typecheck_error=on_typecheck_error
         )
@@ -246,6 +353,7 @@ class SerializableDataclass(abc.ABC):
         field: "SerializableField|str",
         on_typecheck_error: ErrorMode = _DEFAULT_ON_TYPECHECK_ERROR,
     ) -> bool:
+        """given a dataclass, check the field matches the type hint"""
         return SerializableDataclass__validate_field_type(
             self, field, on_typecheck_error=on_typecheck_error
         )
@@ -254,6 +362,7 @@ class SerializableDataclass(abc.ABC):
         return dc_eq(self, other)
 
     def __hash__(self) -> int:
+        "hashes the json-serialized representation of the class"
         return hash(json.dumps(self.serialize()))
 
     def diff(
@@ -372,6 +481,7 @@ def get_cls_type_hints_cached(cls: Type[T]) -> dict[str, Any]:
 
 
 def get_cls_type_hints(cls: Type[T]) -> dict[str, Any]:
+    "helper function to get type hints for a class"
     cls_type_hints: dict[str, Any]
     try:
         cls_type_hints = get_cls_type_hints_cached(cls)  # type: ignore
@@ -389,6 +499,36 @@ def get_cls_type_hints(cls: Type[T]) -> dict[str, Any]:
         ) from e
 
     return cls_type_hints
+
+
+class KWOnlyError(NotImplementedError):
+    "kw-only dataclasses are not supported in python <3.9"
+
+    pass
+
+
+class FieldError(ValueError):
+    "base class for field errors"
+
+    pass
+
+
+class NotSerializableFieldException(FieldError):
+    "field is not a `SerializableField`"
+
+    pass
+
+
+class FieldSerializationError(FieldError):
+    "error while serializing a field"
+
+    pass
+
+
+class FieldLoadingError(FieldError):
+    "error while loading a field"
+
+    pass
 
 
 # Step 3: Create a custom serializable_dataclass decorator
@@ -416,9 +556,9 @@ def serializable_dataclass(
 
     Returns the same class as was passed in, with dunder methods added based on the fields defined in the class.
 
-    Examines PEP 526 __annotations__ to determine fields.
+    Examines PEP 526 `__annotations__` to determine fields.
 
-    If init is true, an __init__() method is added to the class. If repr is true, a __repr__() method is added. If order is true, rich comparison dunder methods are added. If unsafe_hash is true, a __hash__() method function is added. If frozen is true, fields may not be assigned to after instance creation.
+    If init is true, an `__init__()` method is added to the class. If repr is true, a `__repr__()` method is added. If order is true, rich comparison dunder methods are added. If unsafe_hash is true, a `__hash__()` method function is added. If frozen is true, fields may not be assigned to after instance creation.
 
     ```python
     @serializable_dataclass(kw_only=True)
@@ -458,14 +598,14 @@ def serializable_dataclass(
 
     # Returns:
      - `_type_`
-       _description_
+       the decorated class
 
     # Raises:
-     - `ValueError` : _description_
-     - `ValueError` : _description_
-     - `ValueError` : _description_
-     - `AttributeError` : _description_
-     - `ValueError` : _description_
+     - `KWOnlyError` : only raised if `kw_only` is `True` and python version is <3.9, since `dataclasses.dataclass` does not support this
+     - `NotSerializableFieldException` : if a field is not a `SerializableField`
+     - `FieldSerializationError` : if there is an error serializing a field
+     - `AttributeError` : if a property is not found on the class
+     - `FieldLoadingError` : if there is an error loading a field
     """
     # -> Union[Callable[[Type[T]], Type[T]], Type[T]]:
     on_typecheck_error = ErrorMode.from_any(on_typecheck_error)
@@ -493,7 +633,7 @@ def serializable_dataclass(
         if sys.version_info < (3, 10):
             if "kw_only" in kwargs:
                 if kwargs["kw_only"] == True:  # noqa: E712
-                    raise ValueError("kw_only is not supported in python >=3.9")
+                    raise KWOnlyError("kw_only is not supported in python >=3.9")
                 else:
                     del kwargs["kw_only"]
 
@@ -524,8 +664,8 @@ def serializable_dataclass(
             for field in dataclasses.fields(self):  # type: ignore[arg-type]
                 # need it to be our special SerializableField
                 if not isinstance(field, SerializableField):
-                    raise ValueError(
-                        f"Field '{field.name}' on class {self.__class__.__module__}.{self.__class__.__name__} is not a SerializableField, "
+                    raise NotSerializableFieldException(
+                        f"Field '{field.name}' on class {self.__class__.__module__}.{self.__class__.__name__} is not a `SerializableField`, "
                         f"but a {type(field)} "
                         "this state should be inaccessible, please report this bug!"
                     )
@@ -549,7 +689,7 @@ def serializable_dataclass(
                         # store the value in the result
                         result[field.name] = value
                     except Exception as e:
-                        raise ValueError(
+                        raise FieldSerializationError(
                             "\n".join(
                                 [
                                     f"Error serializing field '{field.name}' on class {self.__class__.__module__}.{self.__class__.__name__}",
@@ -625,7 +765,7 @@ def serializable_dataclass(
                         if isinstance(value, dict):
                             value = field_type_hint.load(value)
                         else:
-                            raise ValueError(
+                            raise FieldLoadingError(
                                 f"Cannot load value into {field_type_hint}, expected {type(value) = } to be a dict\n{value = }"
                             )
                     else:

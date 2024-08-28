@@ -24,6 +24,9 @@ jobs:
         with:
           packages: pandoc
           version: '3.3'
+      
+      - name: Check pandoc version
+        run: pandoc --version
 
       - name: Checkout code
         uses: actions/checkout@v4

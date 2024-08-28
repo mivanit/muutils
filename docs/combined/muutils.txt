@@ -1,11 +1,11 @@
 Contents
 
-[PyPI] [PyPI - Downloads]
+[PyPI] [PyPI - Downloads] [docs]
 
-[Checks] [Coverage]
+[Checks] [Checks] [Coverage]
 
-[GitHub commit activity] [GitHub closed pull requests] [code size,
-bytes]
+[GitHub commits] [GitHub commit activity] [GitHub closed pull requests]
+[code size, bytes]
 
 muutils, stylized as “μutils” or “μutils”, is a collection of
 miscellaneous python utilities, meant to be small and with no
@@ -135,12 +135,12 @@ View Source on GitHub
 
 muutils
 
-[PyPI] [PyPI - Downloads]
+[PyPI] [PyPI - Downloads] [docs]
 
-[Checks] [Coverage]
+[Checks] [Checks] [Coverage]
 
-[GitHub commit activity] [GitHub closed pull requests] [code size,
-bytes]
+[GitHub commits] [GitHub commit activity] [GitHub closed pull requests]
+[code size, bytes]
 
 muutils, stylized as “μutils” or “μutils”, is a collection of
 miscellaneous python utilities, meant to be small and with no
@@ -1625,7 +1625,7 @@ View Source on GitHub
 
 -   SERIALIZER_SPECIAL_FUNCS: dict[str, typing.Callable] = {'str': <class 'str'>, 'dir': <built-in function dir>, 'type': <function <lambda>>, 'repr': <function <lambda>>, 'code': <function <lambda>>, 'sourcefile': <function <lambda>>}
 
--   SERIALIZE_DIRECT_AS_STR: Set[str] = {"<class 'torch.device'>", "<class 'torch.dtype'>"}
+-   SERIALIZE_DIRECT_AS_STR: Set[str] = {"<class 'torch.dtype'>", "<class 'torch.device'>"}
 
 -   ObjectPath = tuple[typing.Union[str, int], ...]
 

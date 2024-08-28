@@ -1,10 +1,13 @@
 [![PyPI](https://img.shields.io/pypi/v/muutils)](https://pypi.org/project/muutils/)
 ![PyPI - Downloads](https://img.shields.io/pypi/dm/muutils)
+[![docs](https://img.shields.io/badge/docs-latest-blue)](https://miv.name/muutils)
 
 [![Checks](https://github.com/mivanit/muutils/actions/workflows/checks.yml/badge.svg)](https://github.com/mivanit/muutils/actions/workflows/checks.yml)
+[![Checks](https://github.com/mivanit/muutils/actions/workflows/make-docs.yml/badge.svg)](https://github.com/mivanit/muutils/actions/workflows/make-docs.yml)
 [![Coverage](docs/coverage/coverage.svg)](docs/coverage/html/)
 
-![GitHub commit activity](https://img.shields.io/github/commit-activity/t/mivanit/muutils)
+![GitHub commits](https://img.shields.io/github/commit-activity/t/mivanit/muutils)
+![GitHub commit activity](https://img.shields.io/github/commit-activity/m/mivanit/muutils)
 ![GitHub closed pull requests](https://img.shields.io/github/issues-pr-closed/mivanit/muutils)
 ![code size, bytes](https://img.shields.io/github/languages/code-size/mivanit/muutils)
 <!-- ![Lines of code](https://img.shields.io/tokei/lines/github.com/mivanit/muutils) -->

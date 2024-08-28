@@ -3,6 +3,7 @@ import argparse
 import warnings
 import tomllib
 import inspect
+import re
 
 
 import pdoc
@@ -11,6 +12,29 @@ import pdoc.doc
 import pdoc.extract
 import pdoc.render_helpers
 from markupsafe import Markup
+
+
+def increment_markdown_headings(markdown_text: str, increment: int = 2) -> str:
+    """
+    Increment all Markdown headings in the given text by the specified amount.
+
+    Args:
+        markdown_text (str): The input Markdown text.
+        increment (int): The number of levels to increment the headings by. Default is 2.
+
+    Returns:
+        str: The Markdown text with incremented heading levels.
+    """
+    def replace_heading(match):
+        current_level = len(match.group(1))
+        new_level = min(current_level + increment, 6)  # Cap at h6
+        return '#' * new_level + match.group(2)
+
+    # Regular expression to match Markdown headings
+    heading_pattern = re.compile(r'^(#{1,6})(.+)$', re.MULTILINE)
+
+    # Replace all headings with incremented versions
+    return heading_pattern.sub(replace_heading, markdown_text)
 
 OUTPUT_DIR: Path = Path("docs")
 
@@ -64,6 +88,7 @@ def markup_safe(sig: inspect.Signature) -> str:
 def use_markdown_format():
     pdoc.render_helpers.format_signature = format_signature
     pdoc.render.env.filters["markup_safe"] = markup_safe
+    pdoc.render.env.filters["increment_markdown_headings"] = increment_markdown_headings
 
 
 def pdoc_combined(*modules: Path | str, output_file: Path) -> None:

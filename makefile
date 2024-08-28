@@ -29,7 +29,8 @@ PYPROJECT := pyproject.toml
 PYTHON_BASE := python
 # where the commit log will be stored
 COMMIT_LOG_FILE := .github/local/.commit_log
-
+# pandoc commands (for docs)
+PANDOC ?= pandoc
 
 
 # reading information and command line options
@@ -152,10 +153,22 @@ docs-html:
 	@echo "generate html docs"
 	$(PYTHON) docs/make_docs.py
 
-.PHONY: docs-combined
+.PHONY: docs-md
 docs-md:
-	@echo "generate markdown docs"
-	PYTHONIOENCODING=utf8 $(PYTHON) -m pdoc $(PACKAGE_NAME) --pdf --force --template-dir docs/pdoc-templates/ > $(DOCS_DIR)/full.md 2> /dev/null
+	@echo "generate combined docs in markdown"
+	$(PYTHON) docs/make_docs.py --combined
+
+
+.PHONY: docs-combined
+docs-combined: docs-md
+	@echo "generate combined docs in markdown and other formats"
+	@echo "requires pandoc in path"
+	$(PANDOC) -f markdown -t gfm $(DOCS_DIR)/combined/$(PACKAGE_NAME).md -o $(DOCS_DIR)/combined/$(PACKAGE_NAME)_gfm.md
+	$(PANDOC) -f markdown -t plain $(DOCS_DIR)/combined/$(PACKAGE_NAME).md -o $(DOCS_DIR)/combined/$(PACKAGE_NAME).txt
+	$(PANDOC) -f markdown -t html $(DOCS_DIR)/combined/$(PACKAGE_NAME).md -o $(DOCS_DIR)/combined/$(PACKAGE_NAME).html --embed-resources
+
+# $(PANDOC) -f markdown -t pdf $(DOCS_DIR)/combined/$(PACKAGE_NAME).md -o $(DOCS_DIR)/combined/$(PACKAGE_NAME).pdf
+
 
 .PHONY: cov
 cov:
@@ -165,8 +178,8 @@ cov:
 	$(PYTHON) -m coverage html --directory=$(COVERAGE_REPORTS_DIR)/html/
 
 .PHONY: docs
-docs: cov docs-html
-	@echo "generate docs"	
+docs: cov docs-html docs-combined
+	@echo "generate all documentation"
 
 
 # tests

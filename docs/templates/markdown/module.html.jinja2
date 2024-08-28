@@ -46,7 +46,6 @@
 
 {% block module_contents %}
 {% for m in module.flattened_own_members if is_public(m) | trim %}
-{# <section id="{{ m.qualname or m.name }}"> #}
 {{ member(m) }}
 {% if m.kind == "class" %}
 {% for m in m.own_members if m.kind != "class" and is_public(m) | trim %}
@@ -91,16 +90,16 @@ See https://pdoc.dev/docs/pdoc/render_helpers.html#DefaultMacroExtension for an 
 
 {% defaultmacro function(fn) -%}
 {% if fn.name == "__init__" %}
-## `{{ ".".join(fn.qualname.split(".")[:-1]) }}` { #{{ fn.name }} }
+## `{{ ".".join(fn.qualname.split(".")[:-1]) }}` { #{{ fn.qualname }} }
 ```python
 {{ fn.signature_without_self | markup_safe }}
 ```
 {% else %}
-## `{{ fn.funcdef }} {{ fn.name }}` { #{{ fn.name }} }
+## `{{ fn.funcdef }} {{ fn.name }}` { #{{ fn.qualname }} }
 ```python
 {{ fn.signature | markup_safe }}
 ```
-{# {{- fn.signature | format_signature(colon=True) | linkify }} #}
+
 {% endif %}
 {% enddefaultmacro %}
 
@@ -118,9 +117,9 @@ See https://pdoc.dev/docs/pdoc/render_helpers.html#DefaultMacroExtension for an 
 
 {% defaultmacro member(doc) %}
 {% if doc.kind == "class" %}
-{{ class(doc) }}
+#{{- class(doc) }}
 {% elif doc.kind == "function" %}
-{{ function(doc) }}
+#{{- function(doc) }}
 {% elif doc.kind == "module" %}
 {{ submodule(doc) }}
 {% else %}
@@ -132,7 +131,7 @@ See https://pdoc.dev/docs/pdoc/render_helpers.html#DefaultMacroExtension for an 
 
 {% defaultmacro docstring(var) %}
 {% if var.docstring %}
-{{ var.docstring | replace("@public", "") | to_markdown | linkify(namespace=var.qualname) }}
+{{ var.docstring | replace("@public", "") | to_markdown | increment_markdown_headings | linkify(namespace=var.qualname) }}
 {% endif %}
 {% enddefaultmacro %}
 

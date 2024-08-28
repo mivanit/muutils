@@ -176,10 +176,22 @@ cov:
 	$(PYTHON) -m coverage report -m > $(COVERAGE_REPORTS_DIR)/coverage.txt
 	$(PYTHON) -m coverage_badge -f -o $(COVERAGE_REPORTS_DIR)/coverage.svg
 	$(PYTHON) -m coverage html --directory=$(COVERAGE_REPORTS_DIR)/html/
+	rm -rf $(COVERAGE_REPORTS_DIR)/html/.gitignore
 
 .PHONY: docs
 docs: cov docs-html docs-combined
 	@echo "generate all documentation"
+
+.PHONY: clean-docs
+clean-docs:
+	@echo "clean up docs"
+	rm -rf $(DOCS_DIR)/combined/
+	rm -rf $(DOCS_DIR)/muutils/
+	rm -rf $(COVERAGE_REPORTS_DIR)
+	rm $(DOCS_DIR)/muutils.html
+	rm $(DOCS_DIR)/index.html
+	rm $(DOCS_DIR)/search.js
+
 
 
 # tests

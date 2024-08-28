@@ -1,0 +1,75 @@
+# this workflow partially copied from
+# https://github.com/TransformerLensOrg/TransformerLens/blob/main/.github/workflows/checks.yml
+name: make docs
+
+on:
+  pull_request:
+    branches:
+      - main
+      - "*"
+  push:
+    branches:
+      - main
+
+jobs:
+  build-docs:
+    # When running on a PR, this just checks we can build the docs without errors
+    # When running on merge to main, it builds the docs and then another job deploys them
+    name: 'Build Docs'
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/dev') || contains(github.head_ref, 'docs')
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install Poetry
+        run: curl -sSL https://install.python-poetry.org | python3 -
+      
+      - name: Install pandoc
+        uses: awalsh128/cache-apt-pkgs-action@latest
+        with:
+          packages: pandoc
+          version: 1.0
+
+      - name: Install dependencies
+        run: poetry install
+
+      - name: run tests
+        run: make unit COV=1
+
+      - name: Build Docs
+        run: make docs
+
+      - name: Upload Docs Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: documentation
+          path: docs/
+
+  deploy-docs:
+    name: Deploy Docs
+    runs-on: ubuntu-latest
+    # only run if the push is to main
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: build-docs
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download Docs Artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: documentation
+          path: docs/
+
+      - name: Upload to GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: docs/
+          clean-exclude: |
+            *.*.*/

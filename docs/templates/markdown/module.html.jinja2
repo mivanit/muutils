@@ -104,7 +104,7 @@ See https://pdoc.dev/docs/pdoc/render_helpers.html#DefaultMacroExtension for an 
 {% enddefaultmacro %}
 
 {% defaultmacro variable(var) -%}
-- {% if var.is_type_alias_type %}type {% endif %}`{{ var.name }}{{ annotation(var) | markup_safe }}{{ default_value(var) | markup_safe }}`
+- {% if var.is_type_alias_type %}type {% endif %}`{{ var.name }}{{ annotation(var) | markup_safe }} {{ default_value(var) | markup_safe }}`
 {% enddefaultmacro %}
 
 {% defaultmacro submodule(mod) -%}

@@ -187,7 +187,9 @@ clean-docs:
 	@echo "clean up docs"
 	rm -rf $(DOCS_DIR)/combined/
 	rm -rf $(DOCS_DIR)/muutils/
-	rm -rf $(COVERAGE_REPORTS_DIR)
+	rm -rf $(COVERAGE_REPORTS_DIR)/html/**
+	rm $(COVERAGE_REPORTS_DIR)/coverage.txt
+	rm $(COVERAGE_REPORTS_DIR)/coverage.svg
 	rm $(DOCS_DIR)/muutils.html
 	rm $(DOCS_DIR)/index.html
 	rm $(DOCS_DIR)/search.js

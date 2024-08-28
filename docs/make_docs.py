@@ -25,16 +25,18 @@ def increment_markdown_headings(markdown_text: str, increment: int = 2) -> str:
     Returns:
         str: The Markdown text with incremented heading levels.
     """
+
     def replace_heading(match):
         current_level = len(match.group(1))
         new_level = min(current_level + increment, 6)  # Cap at h6
-        return '#' * new_level + match.group(2)
+        return "#" * new_level + match.group(2)
 
     # Regular expression to match Markdown headings
-    heading_pattern = re.compile(r'^(#{1,6})(.+)$', re.MULTILINE)
+    heading_pattern = re.compile(r"^(#{1,6})(.+)$", re.MULTILINE)
 
     # Replace all headings with incremented versions
     return heading_pattern.sub(replace_heading, markdown_text)
+
 
 OUTPUT_DIR: Path = Path("docs")
 

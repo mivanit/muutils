@@ -214,9 +214,9 @@ See https://pdoc.dev/docs/pdoc/render_helpers.html#DefaultMacroExtension for an 
 {% set github_line_url = github_line_url + "#L" + doc.source_lines[0]|string + "-L" + doc.source_lines[1]|string %}
 [View Source on GitHub]({{ github_line_url }})
 
-```python
-{{ doc.source | escape }}
-```
+{# ```python
+{{ doc.source}}
+``` #}
 {# <details>
 <summary>View Source</summary>
 <pre><code>{{ doc.source | escape }}</code></pre>

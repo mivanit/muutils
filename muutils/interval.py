@@ -27,6 +27,7 @@ class Interval:
     It supports various initialization methods and provides containment checks.
 
     Examples:
+
         >>> i1 = Interval(1, 5)  # Default open interval (1, 5)
         >>> 3 in i1
         True
@@ -40,6 +41,7 @@ class Interval:
         '[1, 5)'
         >>> i4 = ClosedInterval(1, 5)  # Closed interval [1, 5]
         >>> i5 = OpenInterval(1, 5)  # Open interval (1, 5)
+
     """
 
     def __init__(
@@ -362,6 +364,7 @@ class Interval:
         Returns the size of the interval.
 
         # Returns:
+
          - `float`
             the size of the interval
         """
@@ -377,6 +380,7 @@ class Interval:
         For open bounds, the clamped value will be slightly inside the interval (by epsilon).
 
         # Parameters:
+
          - `value : Union[int, float]`
            the value to clamp.
          - `epsilon : float`
@@ -384,10 +388,12 @@ class Interval:
            (defaults to `_EPSILON`)
 
         # Returns:
+
          - `float`
             the clamped value
 
         # Raises:
+
          - `ValueError` : If the input value is NaN.
         """
 

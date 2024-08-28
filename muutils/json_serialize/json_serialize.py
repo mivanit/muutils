@@ -224,25 +224,25 @@ class JsonSerializer:
     """Json serialization class (holds configs)
 
     # Parameters:
-        - `array_mode : ArrayMode`
-        how to write arrays
-        (defaults to `"array_list_meta"`)
-        - `error_mode : ErrorMode`
-        what to do when we can't serialize an object (will use repr as fallback if "ignore" or "warn")
-        (defaults to `"except"`)
-        - `handlers_pre : MonoTuple[SerializerHandler]`
-        handlers to use before the default handlers
-        (defaults to `tuple()`)
-        - `handlers_default : MonoTuple[SerializerHandler]`
-        default handlers to use
-        (defaults to `DEFAULT_HANDLERS`)
-        - `write_only_format : bool`
-        changes "__format__" keys in output to "__write_format__" (when you want to serialize something in a way that zanj won't try to recover the object when loading)
-        (defaults to `False`)
+    - `array_mode : ArrayMode`
+    how to write arrays
+    (defaults to `"array_list_meta"`)
+    - `error_mode : ErrorMode`
+    what to do when we can't serialize an object (will use repr as fallback if "ignore" or "warn")
+    (defaults to `"except"`)
+    - `handlers_pre : MonoTuple[SerializerHandler]`
+    handlers to use before the default handlers
+    (defaults to `tuple()`)
+    - `handlers_default : MonoTuple[SerializerHandler]`
+    default handlers to use
+    (defaults to `DEFAULT_HANDLERS`)
+    - `write_only_format : bool`
+    changes "__format__" keys in output to "__write_format__" (when you want to serialize something in a way that zanj won't try to recover the object when loading)
+    (defaults to `False`)
 
     # Raises:
-        - `ValueError`: on init, if `args` is not empty
-        - `SerializationException`: on `json_serialize()`, if any error occurs when trying to serialize an object and `error_mode` is set to `ErrorMode.EXCEPT"`
+    - `ValueError`: on init, if `args` is not empty
+    - `SerializationException`: on `json_serialize()`, if any error occurs when trying to serialize an object and `error_mode` is set to `ErrorMode.EXCEPT"`
 
     """
 

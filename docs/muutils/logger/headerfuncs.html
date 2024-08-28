@@ -1,0 +1,584 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="pdoc 14.6.1"/>
+    <title>muutils.logger.headerfuncs API documentation</title>
+<link rel="stylesheet" href="../../resources/bootstrap-reboot.min.css"><link rel="stylesheet" href="../../resources/syntax-highlighting.css"><link rel="stylesheet" href="../../resources/theme.css"><link rel="stylesheet" href="../../resources/layout.css"><link rel="stylesheet" href="../../resources/content.css"><link rel="stylesheet" href="../../resources/custom.css"><script>
+    window.MathJax = {
+        tex: {
+            inlineMath: [['$', '$'], ['\\(', '\\)']]
+        }
+    };
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<script>
+    /* Re-invoke MathJax when DOM content changes, for example during search. */
+    document.addEventListener("DOMContentLoaded", () => {
+        new MutationObserver(() => MathJax.typeset()).observe(
+            document.querySelector("main.pdoc").parentNode,
+            {childList: true}
+        );
+    })
+</script>
+<style>
+    mjx-container {
+        overflow-x: auto;
+        overflow-y: hidden;
+    }
+</style><style>
+    .pdoc .mermaid-pre {
+        border: none;
+        background: none;
+    }
+</style>
+<script type="module" defer>
+    import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs";
+
+    /* Re-invoke Mermaid when DOM content changes, for example during search. */
+    document.addEventListener("DOMContentLoaded", () => {
+        new MutationObserver(() => mermaid.run()).observe(
+            document.querySelector("main.pdoc").parentNode,
+            {childList: true}
+        );
+    })
+</script></head>
+<body>
+    <nav class="pdoc">
+        <label id="navtoggle" for="togglestate" class="pdoc-button">
+            <img src="resources/navtoggle.svg" alt="Toggle navigation"> 
+        </label>
+        <input id="togglestate" type="checkbox" aria-hidden="true" tabindex="-1">
+        <div>            <a class="pdoc-button module-list-button" href="../logger.html">
+                <img src="resources/box-arrow-in-left.svg" alt="Back to parent module"/>
+                &nbsp;muutils.logger</a>
+
+
+            <input type="search" placeholder="Search..." role="searchbox" aria-label="search"
+                   pattern=".+" required>
+
+
+
+            <h2>API Documentation</h2>
+                <ul class="memberlist">
+            <li>
+                    <a class="class" href="#HeaderFunction">HeaderFunction</a>
+                            <ul class="memberlist">
+                        <li>
+                                <a class="function" href="#HeaderFunction.__init__">HeaderFunction</a>
+                        </li>
+                </ul>
+
+            </li>
+            <li>
+                    <a class="function" href="#md_header_function">md_header_function</a>
+            </li>
+            <li>
+                    <a class="variable" href="#HEADER_FUNCTIONS">HEADER_FUNCTIONS</a>
+            </li>
+    </ul>
+
+
+
+        <a class="attribution" title="pdoc: Python API documentation generator" href="https://pdoc.dev" target="_blank">
+            built with <span class="visually-hidden">pdoc</span>
+            <img src="resources/pdoc-logo.svg" alt="pdoc logo"/>
+        </a>
+</div>
+    </nav>
+    <main class="pdoc">
+            <section class="module-info">
+                        <a class="pdoc-button git-button" href="https://github.com/mivanit/muutils/blob/main/muutils/logger/headerfuncs.py">View Source on GitHub</a>
+                    <h1 class="modulename">
+<a href="./../../muutils.html">muutils</a><wbr>.<a href="./../logger.html">logger</a><wbr>.headerfuncs    </h1>
+
+                
+                        <input id="mod-headerfuncs-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+
+                        <div class="source-button-container">
+            <label class="pdoc-button view-source-button" for="mod-headerfuncs-view-source"><span>View Source</span></label>
+            <div class="github-button-wrapper">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/main/muutils/logger/headerfuncs.py#L0-L67" target="_blank">
+                    <span>View on GitHub</span>
+                </a>
+            </div>
+        </div>
+
+                <br/>
+                        <div class="pdoc-code codehilite"><pre><span></span><span id="L-1"><a href="#L-1"><span class="linenos"> 1</span></a><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+</span><span id="L-2"><a href="#L-2"><span class="linenos"> 2</span></a>
+</span><span id="L-3"><a href="#L-3"><span class="linenos"> 3</span></a><span class="kn">import</span> <span class="nn">json</span>
+</span><span id="L-4"><a href="#L-4"><span class="linenos"> 4</span></a><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">,</span> <span class="n">Protocol</span>
+</span><span id="L-5"><a href="#L-5"><span class="linenos"> 5</span></a>
+</span><span id="L-6"><a href="#L-6"><span class="linenos"> 6</span></a><span class="kn">from</span> <span class="nn">muutils.json_serialize</span> <span class="kn">import</span> <span class="n">json_serialize</span>
+</span><span id="L-7"><a href="#L-7"><span class="linenos"> 7</span></a>
+</span><span id="L-8"><a href="#L-8"><span class="linenos"> 8</span></a><span class="c1"># takes message, level, other data, and outputs message with appropriate header</span>
+</span><span id="L-9"><a href="#L-9"><span class="linenos"> 9</span></a><span class="c1"># HeaderFunction = Callable[[str, int, Any], str]</span>
+</span><span id="L-10"><a href="#L-10"><span class="linenos">10</span></a>
+</span><span id="L-11"><a href="#L-11"><span class="linenos">11</span></a>
+</span><span id="L-12"><a href="#L-12"><span class="linenos">12</span></a><span class="k">class</span> <span class="nc">HeaderFunction</span><span class="p">(</span><span class="n">Protocol</span><span class="p">):</span>
+</span><span id="L-13"><a href="#L-13"><span class="linenos">13</span></a>    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">msg</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">lvl</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span> <span class="o">...</span>
+</span><span id="L-14"><a href="#L-14"><span class="linenos">14</span></a>
+</span><span id="L-15"><a href="#L-15"><span class="linenos">15</span></a>
+</span><span id="L-16"><a href="#L-16"><span class="linenos">16</span></a><span class="k">def</span> <span class="nf">md_header_function</span><span class="p">(</span>
+</span><span id="L-17"><a href="#L-17"><span class="linenos">17</span></a>    <span class="n">msg</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
+</span><span id="L-18"><a href="#L-18"><span class="linenos">18</span></a>    <span class="n">lvl</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+</span><span id="L-19"><a href="#L-19"><span class="linenos">19</span></a>    <span class="n">stream</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+</span><span id="L-20"><a href="#L-20"><span class="linenos">20</span></a>    <span class="n">indent_lvl</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;  &quot;</span><span class="p">,</span>
+</span><span id="L-21"><a href="#L-21"><span class="linenos">21</span></a>    <span class="n">extra_indent</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+</span><span id="L-22"><a href="#L-22"><span class="linenos">22</span></a>    <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+</span><span id="L-23"><a href="#L-23"><span class="linenos">23</span></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+</span><span id="L-24"><a href="#L-24"><span class="linenos">24</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;standard header function. will output</span>
+</span><span id="L-25"><a href="#L-25"><span class="linenos">25</span></a>
+</span><span id="L-26"><a href="#L-26"><span class="linenos">26</span></a><span class="sd">    - `# {msg}`</span>
+</span><span id="L-27"><a href="#L-27"><span class="linenos">27</span></a>
+</span><span id="L-28"><a href="#L-28"><span class="linenos">28</span></a><span class="sd">            for levels in [0, 9]</span>
+</span><span id="L-29"><a href="#L-29"><span class="linenos">29</span></a>
+</span><span id="L-30"><a href="#L-30"><span class="linenos">30</span></a><span class="sd">    - `## {msg}`</span>
+</span><span id="L-31"><a href="#L-31"><span class="linenos">31</span></a>
+</span><span id="L-32"><a href="#L-32"><span class="linenos">32</span></a><span class="sd">            for levels in [10, 19], and so on</span>
+</span><span id="L-33"><a href="#L-33"><span class="linenos">33</span></a>
+</span><span id="L-34"><a href="#L-34"><span class="linenos">34</span></a><span class="sd">    - `[{stream}] # {msg}`</span>
+</span><span id="L-35"><a href="#L-35"><span class="linenos">35</span></a>
+</span><span id="L-36"><a href="#L-36"><span class="linenos">36</span></a><span class="sd">            for a non-`None` stream, with level headers as before</span>
+</span><span id="L-37"><a href="#L-37"><span class="linenos">37</span></a>
+</span><span id="L-38"><a href="#L-38"><span class="linenos">38</span></a><span class="sd">    - `!WARNING! [{stream}] {msg}`</span>
+</span><span id="L-39"><a href="#L-39"><span class="linenos">39</span></a>
+</span><span id="L-40"><a href="#L-40"><span class="linenos">40</span></a><span class="sd">            for level in [-9, -1]</span>
+</span><span id="L-41"><a href="#L-41"><span class="linenos">41</span></a>
+</span><span id="L-42"><a href="#L-42"><span class="linenos">42</span></a><span class="sd">    - `!!WARNING!! [{stream}] {msg}`</span>
+</span><span id="L-43"><a href="#L-43"><span class="linenos">43</span></a>
+</span><span id="L-44"><a href="#L-44"><span class="linenos">44</span></a><span class="sd">            for level in [-19, -10] and so on</span>
+</span><span id="L-45"><a href="#L-45"><span class="linenos">45</span></a>
+</span><span id="L-46"><a href="#L-46"><span class="linenos">46</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="L-47"><a href="#L-47"><span class="linenos">47</span></a>    <span class="n">stream_prefix</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+</span><span id="L-48"><a href="#L-48"><span class="linenos">48</span></a>    <span class="k">if</span> <span class="n">stream</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="L-49"><a href="#L-49"><span class="linenos">49</span></a>        <span class="n">stream_prefix</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;[</span><span class="si">{</span><span class="n">stream</span><span class="si">}</span><span class="s2">] &quot;</span>
+</span><span id="L-50"><a href="#L-50"><span class="linenos">50</span></a>
+</span><span id="L-51"><a href="#L-51"><span class="linenos">51</span></a>    <span class="n">lvl_div_10</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">lvl</span> <span class="o">//</span> <span class="mi">10</span>
+</span><span id="L-52"><a href="#L-52"><span class="linenos">52</span></a>
+</span><span id="L-53"><a href="#L-53"><span class="linenos">53</span></a>    <span class="n">msg_processed</span><span class="p">:</span> <span class="nb">str</span>
+</span><span id="L-54"><a href="#L-54"><span class="linenos">54</span></a>    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">):</span>
+</span><span id="L-55"><a href="#L-55"><span class="linenos">55</span></a>        <span class="n">msg_processed</span> <span class="o">=</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">json_serialize</span><span class="p">(</span><span class="n">v</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">msg</span><span class="o">.</span><span class="n">items</span><span class="p">()])</span>
+</span><span id="L-56"><a href="#L-56"><span class="linenos">56</span></a>    <span class="k">else</span><span class="p">:</span>
+</span><span id="L-57"><a href="#L-57"><span class="linenos">57</span></a>        <span class="n">msg_processed</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">json_serialize</span><span class="p">(</span><span class="n">msg</span><span class="p">))</span>
+</span><span id="L-58"><a href="#L-58"><span class="linenos">58</span></a>
+</span><span id="L-59"><a href="#L-59"><span class="linenos">59</span></a>    <span class="k">if</span> <span class="n">lvl</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span>
+</span><span id="L-60"><a href="#L-60"><span class="linenos">60</span></a>        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">extra_indent</span><span class="si">}{</span><span class="n">indent_lvl</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="n">lvl_div_10</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="si">}{</span><span class="n">stream_prefix</span><span class="si">}</span><span class="s2">#</span><span class="si">{</span><span class="s1">&#39;#&#39;</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">lvl_div_10</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">lvl</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">msg_processed</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span id="L-61"><a href="#L-61"><span class="linenos">61</span></a>    <span class="k">else</span><span class="p">:</span>
+</span><span id="L-62"><a href="#L-62"><span class="linenos">62</span></a>        <span class="n">exclamation_pts</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;!&quot;</span> <span class="o">*</span> <span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">lvl</span><span class="p">)</span> <span class="o">//</span> <span class="mi">10</span><span class="p">)</span>
+</span><span id="L-63"><a href="#L-63"><span class="linenos">63</span></a>        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">extra_indent</span><span class="si">}{</span><span class="n">exclamation_pts</span><span class="si">}</span><span class="s2">WARNING</span><span class="si">{</span><span class="n">exclamation_pts</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">stream_prefix</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">msg_processed</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span id="L-64"><a href="#L-64"><span class="linenos">64</span></a>
+</span><span id="L-65"><a href="#L-65"><span class="linenos">65</span></a>
+</span><span id="L-66"><a href="#L-66"><span class="linenos">66</span></a><span class="n">HEADER_FUNCTIONS</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">HeaderFunction</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+</span><span id="L-67"><a href="#L-67"><span class="linenos">67</span></a>    <span class="s2">&quot;md&quot;</span><span class="p">:</span> <span class="n">md_header_function</span><span class="p">,</span>
+</span><span id="L-68"><a href="#L-68"><span class="linenos">68</span></a><span class="p">}</span>
+</span></pre></div>
+
+
+                <br/>
+            </section>
+                <section id="HeaderFunction">
+                            <input id="HeaderFunction-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr class">
+            
+    <span class="def">class</span>
+    <span class="name">HeaderFunction</span><wbr>(<span class="base">typing.Protocol</span>):
+
+                <div class="source-button-container">
+            <label class="pdoc-button view-source-button" for="HeaderFunction-view-source"><span>View Source</span></label>
+            <div class="github-button-wrapper">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/main/muutils/logger/headerfuncs.py#L12-L13" target="_blank">
+                    <span>View on GitHub</span>
+                </a>
+            </div>
+        </div>
+
+    </div>
+    <a class="headerlink" href="#HeaderFunction"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="HeaderFunction-13"><a href="#HeaderFunction-13"><span class="linenos">13</span></a><span class="k">class</span> <span class="nc">HeaderFunction</span><span class="p">(</span><span class="n">Protocol</span><span class="p">):</span>
+</span><span id="HeaderFunction-14"><a href="#HeaderFunction-14"><span class="linenos">14</span></a>    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">msg</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">lvl</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span> <span class="o">...</span>
+</span></pre></div>
+
+
+            <div class="docstring"><p>Base class for protocol classes.</p>
+
+<p>Protocol classes are defined as::</p>
+
+<pre><code>class Proto(Protocol):
+    def meth(self) -&gt; int:
+        ...
+</code></pre>
+
+<p>Such classes are primarily used with static type checkers that recognize
+structural subtyping (static duck-typing).</p>
+
+<p>For example::</p>
+
+<pre><code>class C:
+    def meth(self) -&gt; int:
+        return 0
+
+def func(x: Proto) -&gt; int:
+    return x.meth()
+
+func(C())  # Passes static type check
+</code></pre>
+
+<p>See PEP 544 for details. Protocol classes decorated with
+@typing.runtime_checkable act as simple-minded runtime protocols that check
+only the presence of given attributes, ignoring their type signatures.
+Protocol classes can be generic, they are defined as::</p>
+
+<pre><code>class GenProto[T](Protocol):
+    def meth(self) -&gt; T:
+        ...
+</code></pre>
+</div>
+
+
+                            <div id="HeaderFunction.__init__" class="classattr">
+                                        <input id="HeaderFunction.__init__-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr function">
+            
+        <span class="name">HeaderFunction</span><span class="signature pdoc-code condensed">(<span class="param"><span class="o">*</span><span class="n">args</span>, </span><span class="param"><span class="o">**</span><span class="n">kwargs</span></span>)</span>
+
+                <div class="source-button-container">
+            <label class="pdoc-button view-source-button" for="HeaderFunction.__init__-view-source"><span>View Source</span></label>
+            <div class="github-button-wrapper">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/main/muutils/logger/headerfuncs.py#L1757-L1783" target="_blank">
+                    <span>View on GitHub</span>
+                </a>
+            </div>
+        </div>
+
+    </div>
+    <a class="headerlink" href="#HeaderFunction.__init__"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="HeaderFunction.__init__-1758"><a href="#HeaderFunction.__init__-1758"><span class="linenos">1758</span></a><span class="k">def</span> <span class="nf">_no_init_or_replace_init</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+</span><span id="HeaderFunction.__init__-1759"><a href="#HeaderFunction.__init__-1759"><span class="linenos">1759</span></a>    <span class="bp">cls</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</span><span id="HeaderFunction.__init__-1760"><a href="#HeaderFunction.__init__-1760"><span class="linenos">1760</span></a>
+</span><span id="HeaderFunction.__init__-1761"><a href="#HeaderFunction.__init__-1761"><span class="linenos">1761</span></a>    <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_is_protocol</span><span class="p">:</span>
+</span><span id="HeaderFunction.__init__-1762"><a href="#HeaderFunction.__init__-1762"><span class="linenos">1762</span></a>        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;Protocols cannot be instantiated&#39;</span><span class="p">)</span>
+</span><span id="HeaderFunction.__init__-1763"><a href="#HeaderFunction.__init__-1763"><span class="linenos">1763</span></a>
+</span><span id="HeaderFunction.__init__-1764"><a href="#HeaderFunction.__init__-1764"><span class="linenos">1764</span></a>    <span class="c1"># Already using a custom `__init__`. No need to calculate correct</span>
+</span><span id="HeaderFunction.__init__-1765"><a href="#HeaderFunction.__init__-1765"><span class="linenos">1765</span></a>    <span class="c1"># `__init__` to call. This can lead to RecursionError. See bpo-45121.</span>
+</span><span id="HeaderFunction.__init__-1766"><a href="#HeaderFunction.__init__-1766"><span class="linenos">1766</span></a>    <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="fm">__init__</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">_no_init_or_replace_init</span><span class="p">:</span>
+</span><span id="HeaderFunction.__init__-1767"><a href="#HeaderFunction.__init__-1767"><span class="linenos">1767</span></a>        <span class="k">return</span>
+</span><span id="HeaderFunction.__init__-1768"><a href="#HeaderFunction.__init__-1768"><span class="linenos">1768</span></a>
+</span><span id="HeaderFunction.__init__-1769"><a href="#HeaderFunction.__init__-1769"><span class="linenos">1769</span></a>    <span class="c1"># Initially, `__init__` of a protocol subclass is set to `_no_init_or_replace_init`.</span>
+</span><span id="HeaderFunction.__init__-1770"><a href="#HeaderFunction.__init__-1770"><span class="linenos">1770</span></a>    <span class="c1"># The first instantiation of the subclass will call `_no_init_or_replace_init` which</span>
+</span><span id="HeaderFunction.__init__-1771"><a href="#HeaderFunction.__init__-1771"><span class="linenos">1771</span></a>    <span class="c1"># searches for a proper new `__init__` in the MRO. The new `__init__`</span>
+</span><span id="HeaderFunction.__init__-1772"><a href="#HeaderFunction.__init__-1772"><span class="linenos">1772</span></a>    <span class="c1"># replaces the subclass&#39; old `__init__` (ie `_no_init_or_replace_init`). Subsequent</span>
+</span><span id="HeaderFunction.__init__-1773"><a href="#HeaderFunction.__init__-1773"><span class="linenos">1773</span></a>    <span class="c1"># instantiation of the protocol subclass will thus use the new</span>
+</span><span id="HeaderFunction.__init__-1774"><a href="#HeaderFunction.__init__-1774"><span class="linenos">1774</span></a>    <span class="c1"># `__init__` and no longer call `_no_init_or_replace_init`.</span>
+</span><span id="HeaderFunction.__init__-1775"><a href="#HeaderFunction.__init__-1775"><span class="linenos">1775</span></a>    <span class="k">for</span> <span class="n">base</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="vm">__mro__</span><span class="p">:</span>
+</span><span id="HeaderFunction.__init__-1776"><a href="#HeaderFunction.__init__-1776"><span class="linenos">1776</span></a>        <span class="n">init</span> <span class="o">=</span> <span class="n">base</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;__init__&#39;</span><span class="p">,</span> <span class="n">_no_init_or_replace_init</span><span class="p">)</span>
+</span><span id="HeaderFunction.__init__-1777"><a href="#HeaderFunction.__init__-1777"><span class="linenos">1777</span></a>        <span class="k">if</span> <span class="n">init</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">_no_init_or_replace_init</span><span class="p">:</span>
+</span><span id="HeaderFunction.__init__-1778"><a href="#HeaderFunction.__init__-1778"><span class="linenos">1778</span></a>            <span class="bp">cls</span><span class="o">.</span><span class="fm">__init__</span> <span class="o">=</span> <span class="n">init</span>
+</span><span id="HeaderFunction.__init__-1779"><a href="#HeaderFunction.__init__-1779"><span class="linenos">1779</span></a>            <span class="k">break</span>
+</span><span id="HeaderFunction.__init__-1780"><a href="#HeaderFunction.__init__-1780"><span class="linenos">1780</span></a>    <span class="k">else</span><span class="p">:</span>
+</span><span id="HeaderFunction.__init__-1781"><a href="#HeaderFunction.__init__-1781"><span class="linenos">1781</span></a>        <span class="c1"># should not happen</span>
+</span><span id="HeaderFunction.__init__-1782"><a href="#HeaderFunction.__init__-1782"><span class="linenos">1782</span></a>        <span class="bp">cls</span><span class="o">.</span><span class="fm">__init__</span> <span class="o">=</span> <span class="nb">object</span><span class="o">.</span><span class="fm">__init__</span>
+</span><span id="HeaderFunction.__init__-1783"><a href="#HeaderFunction.__init__-1783"><span class="linenos">1783</span></a>
+</span><span id="HeaderFunction.__init__-1784"><a href="#HeaderFunction.__init__-1784"><span class="linenos">1784</span></a>    <span class="bp">cls</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</span></pre></div>
+
+
+    
+
+                            </div>
+                </section>
+                <section id="md_header_function">
+                            <input id="md_header_function-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr function">
+            
+        <span class="def">def</span>
+        <span class="name">md_header_function</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">msg</span><span class="p">:</span> <span class="n">Any</span>,</span><span class="param">	<span class="n">lvl</span><span class="p">:</span> <span class="nb">int</span>,</span><span class="param">	<span class="n">stream</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">indent_lvl</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;  &#39;</span>,</span><span class="param">	<span class="n">extra_indent</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>,</span><span class="param">	<span class="o">**</span><span class="n">kwargs</span></span><span class="return-annotation">) -> <span class="nb">str</span>:</span></span>
+
+                <div class="source-button-container">
+            <label class="pdoc-button view-source-button" for="md_header_function-view-source"><span>View Source</span></label>
+            <div class="github-button-wrapper">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/main/muutils/logger/headerfuncs.py#L16-L63" target="_blank">
+                    <span>View on GitHub</span>
+                </a>
+            </div>
+        </div>
+
+    </div>
+    <a class="headerlink" href="#md_header_function"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="md_header_function-17"><a href="#md_header_function-17"><span class="linenos">17</span></a><span class="k">def</span> <span class="nf">md_header_function</span><span class="p">(</span>
+</span><span id="md_header_function-18"><a href="#md_header_function-18"><span class="linenos">18</span></a>    <span class="n">msg</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
+</span><span id="md_header_function-19"><a href="#md_header_function-19"><span class="linenos">19</span></a>    <span class="n">lvl</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+</span><span id="md_header_function-20"><a href="#md_header_function-20"><span class="linenos">20</span></a>    <span class="n">stream</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+</span><span id="md_header_function-21"><a href="#md_header_function-21"><span class="linenos">21</span></a>    <span class="n">indent_lvl</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;  &quot;</span><span class="p">,</span>
+</span><span id="md_header_function-22"><a href="#md_header_function-22"><span class="linenos">22</span></a>    <span class="n">extra_indent</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+</span><span id="md_header_function-23"><a href="#md_header_function-23"><span class="linenos">23</span></a>    <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+</span><span id="md_header_function-24"><a href="#md_header_function-24"><span class="linenos">24</span></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+</span><span id="md_header_function-25"><a href="#md_header_function-25"><span class="linenos">25</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;standard header function. will output</span>
+</span><span id="md_header_function-26"><a href="#md_header_function-26"><span class="linenos">26</span></a>
+</span><span id="md_header_function-27"><a href="#md_header_function-27"><span class="linenos">27</span></a><span class="sd">    - `# {msg}`</span>
+</span><span id="md_header_function-28"><a href="#md_header_function-28"><span class="linenos">28</span></a>
+</span><span id="md_header_function-29"><a href="#md_header_function-29"><span class="linenos">29</span></a><span class="sd">            for levels in [0, 9]</span>
+</span><span id="md_header_function-30"><a href="#md_header_function-30"><span class="linenos">30</span></a>
+</span><span id="md_header_function-31"><a href="#md_header_function-31"><span class="linenos">31</span></a><span class="sd">    - `## {msg}`</span>
+</span><span id="md_header_function-32"><a href="#md_header_function-32"><span class="linenos">32</span></a>
+</span><span id="md_header_function-33"><a href="#md_header_function-33"><span class="linenos">33</span></a><span class="sd">            for levels in [10, 19], and so on</span>
+</span><span id="md_header_function-34"><a href="#md_header_function-34"><span class="linenos">34</span></a>
+</span><span id="md_header_function-35"><a href="#md_header_function-35"><span class="linenos">35</span></a><span class="sd">    - `[{stream}] # {msg}`</span>
+</span><span id="md_header_function-36"><a href="#md_header_function-36"><span class="linenos">36</span></a>
+</span><span id="md_header_function-37"><a href="#md_header_function-37"><span class="linenos">37</span></a><span class="sd">            for a non-`None` stream, with level headers as before</span>
+</span><span id="md_header_function-38"><a href="#md_header_function-38"><span class="linenos">38</span></a>
+</span><span id="md_header_function-39"><a href="#md_header_function-39"><span class="linenos">39</span></a><span class="sd">    - `!WARNING! [{stream}] {msg}`</span>
+</span><span id="md_header_function-40"><a href="#md_header_function-40"><span class="linenos">40</span></a>
+</span><span id="md_header_function-41"><a href="#md_header_function-41"><span class="linenos">41</span></a><span class="sd">            for level in [-9, -1]</span>
+</span><span id="md_header_function-42"><a href="#md_header_function-42"><span class="linenos">42</span></a>
+</span><span id="md_header_function-43"><a href="#md_header_function-43"><span class="linenos">43</span></a><span class="sd">    - `!!WARNING!! [{stream}] {msg}`</span>
+</span><span id="md_header_function-44"><a href="#md_header_function-44"><span class="linenos">44</span></a>
+</span><span id="md_header_function-45"><a href="#md_header_function-45"><span class="linenos">45</span></a><span class="sd">            for level in [-19, -10] and so on</span>
+</span><span id="md_header_function-46"><a href="#md_header_function-46"><span class="linenos">46</span></a>
+</span><span id="md_header_function-47"><a href="#md_header_function-47"><span class="linenos">47</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="md_header_function-48"><a href="#md_header_function-48"><span class="linenos">48</span></a>    <span class="n">stream_prefix</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+</span><span id="md_header_function-49"><a href="#md_header_function-49"><span class="linenos">49</span></a>    <span class="k">if</span> <span class="n">stream</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="md_header_function-50"><a href="#md_header_function-50"><span class="linenos">50</span></a>        <span class="n">stream_prefix</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;[</span><span class="si">{</span><span class="n">stream</span><span class="si">}</span><span class="s2">] &quot;</span>
+</span><span id="md_header_function-51"><a href="#md_header_function-51"><span class="linenos">51</span></a>
+</span><span id="md_header_function-52"><a href="#md_header_function-52"><span class="linenos">52</span></a>    <span class="n">lvl_div_10</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">lvl</span> <span class="o">//</span> <span class="mi">10</span>
+</span><span id="md_header_function-53"><a href="#md_header_function-53"><span class="linenos">53</span></a>
+</span><span id="md_header_function-54"><a href="#md_header_function-54"><span class="linenos">54</span></a>    <span class="n">msg_processed</span><span class="p">:</span> <span class="nb">str</span>
+</span><span id="md_header_function-55"><a href="#md_header_function-55"><span class="linenos">55</span></a>    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">):</span>
+</span><span id="md_header_function-56"><a href="#md_header_function-56"><span class="linenos">56</span></a>        <span class="n">msg_processed</span> <span class="o">=</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">json_serialize</span><span class="p">(</span><span class="n">v</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">msg</span><span class="o">.</span><span class="n">items</span><span class="p">()])</span>
+</span><span id="md_header_function-57"><a href="#md_header_function-57"><span class="linenos">57</span></a>    <span class="k">else</span><span class="p">:</span>
+</span><span id="md_header_function-58"><a href="#md_header_function-58"><span class="linenos">58</span></a>        <span class="n">msg_processed</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">json_serialize</span><span class="p">(</span><span class="n">msg</span><span class="p">))</span>
+</span><span id="md_header_function-59"><a href="#md_header_function-59"><span class="linenos">59</span></a>
+</span><span id="md_header_function-60"><a href="#md_header_function-60"><span class="linenos">60</span></a>    <span class="k">if</span> <span class="n">lvl</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span>
+</span><span id="md_header_function-61"><a href="#md_header_function-61"><span class="linenos">61</span></a>        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">extra_indent</span><span class="si">}{</span><span class="n">indent_lvl</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="n">lvl_div_10</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="si">}{</span><span class="n">stream_prefix</span><span class="si">}</span><span class="s2">#</span><span class="si">{</span><span class="s1">&#39;#&#39;</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">lvl_div_10</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">lvl</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">msg_processed</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span id="md_header_function-62"><a href="#md_header_function-62"><span class="linenos">62</span></a>    <span class="k">else</span><span class="p">:</span>
+</span><span id="md_header_function-63"><a href="#md_header_function-63"><span class="linenos">63</span></a>        <span class="n">exclamation_pts</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;!&quot;</span> <span class="o">*</span> <span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">lvl</span><span class="p">)</span> <span class="o">//</span> <span class="mi">10</span><span class="p">)</span>
+</span><span id="md_header_function-64"><a href="#md_header_function-64"><span class="linenos">64</span></a>        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">extra_indent</span><span class="si">}{</span><span class="n">exclamation_pts</span><span class="si">}</span><span class="s2">WARNING</span><span class="si">{</span><span class="n">exclamation_pts</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">stream_prefix</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">msg_processed</span><span class="si">}</span><span class="s2">&quot;</span>
+</span></pre></div>
+
+
+            <div class="docstring"><p>standard header function. will output</p>
+
+<ul>
+<li><p><code># {msg}</code></p>
+
+<pre><code>for levels in [0, 9]
+</code></pre></li>
+<li><p><code>## {msg}</code></p>
+
+<pre><code>for levels in [10, 19], and so on
+</code></pre></li>
+<li><p><code>[{stream}] # {msg}</code></p>
+
+<pre><code>for a non-`None` stream, with level headers as before
+</code></pre></li>
+<li><p><code>!WARNING! [{stream}] {msg}</code></p>
+
+<pre><code>for level in [-9, -1]
+</code></pre></li>
+<li><p><code>!!WARNING!! [{stream}] {msg}</code></p>
+
+<pre><code>for level in [-19, -10] and so on
+</code></pre></li>
+</ul>
+</div>
+
+
+                </section>
+                <section id="HEADER_FUNCTIONS">
+                    <div class="attr variable">
+            <span class="name">HEADER_FUNCTIONS</span><span class="annotation">: dict[str, <a href="#HeaderFunction">HeaderFunction</a>]</span>        =
+<span class="default_value">{&#39;md&#39;: &lt;function md_header_function&gt;}</span>
+
+        
+    </div>
+    <a class="headerlink" href="#HEADER_FUNCTIONS"></a>
+    
+    
+
+                </section>
+    </main>
+<script>
+    function escapeHTML(html) {
+        return document.createElement('div').appendChild(document.createTextNode(html)).parentNode.innerHTML;
+    }
+
+    const originalContent = document.querySelector("main.pdoc");
+    let currentContent = originalContent;
+
+    function setContent(innerHTML) {
+        let elem;
+        if (innerHTML) {
+            elem = document.createElement("main");
+            elem.classList.add("pdoc");
+            elem.innerHTML = innerHTML;
+        } else {
+            elem = originalContent;
+        }
+        if (currentContent !== elem) {
+            currentContent.replaceWith(elem);
+            currentContent = elem;
+        }
+    }
+
+    function getSearchTerm() {
+        return (new URL(window.location)).searchParams.get("search");
+    }
+
+    const searchBox = document.querySelector(".pdoc input[type=search]");
+    searchBox.addEventListener("input", function () {
+        let url = new URL(window.location);
+        if (searchBox.value.trim()) {
+            url.hash = "";
+            url.searchParams.set("search", searchBox.value);
+        } else {
+            url.searchParams.delete("search");
+        }
+        history.replaceState("", "", url.toString());
+        onInput();
+    });
+    window.addEventListener("popstate", onInput);
+
+
+    let search, searchErr;
+
+    async function initialize() {
+        try {
+            search = await new Promise((resolve, reject) => {
+                const script = document.createElement("script");
+                script.type = "text/javascript";
+                script.async = true;
+                script.onload = () => resolve(window.pdocSearch);
+                script.onerror = (e) => reject(e);
+                script.src = "../../search.js";
+                document.getElementsByTagName("head")[0].appendChild(script);
+            });
+        } catch (e) {
+            console.error("Cannot fetch pdoc search index");
+            searchErr = "Cannot fetch search index.";
+        }
+        onInput();
+
+        document.querySelector("nav.pdoc").addEventListener("click", e => {
+            if (e.target.hash) {
+                searchBox.value = "";
+                searchBox.dispatchEvent(new Event("input"));
+            }
+        });
+    }
+
+    function onInput() {
+        setContent((() => {
+            const term = getSearchTerm();
+            if (!term) {
+                return null
+            }
+            if (searchErr) {
+                return `<h3>Error: ${searchErr}</h3>`
+            }
+            if (!search) {
+                return "<h3>Searching...</h3>"
+            }
+
+            window.scrollTo({top: 0, left: 0, behavior: 'auto'});
+
+            const results = search(term);
+
+            let html;
+            if (results.length === 0) {
+                html = `No search results for '${escapeHTML(term)}'.`
+            } else {
+                html = `<h4>${results.length} search result${results.length > 1 ? "s" : ""} for '${escapeHTML(term)}'.</h4>`;
+            }
+            for (let result of results.slice(0, 10)) {
+                let doc = result.doc;
+                let url = `../../${doc.modulename.replaceAll(".", "/")}.html`;
+                if (doc.qualname) {
+                    url += `#${doc.qualname}`;
+                }
+
+                let heading;
+                switch (result.doc.kind) {
+                    case "function":
+                        if (doc.fullname.endsWith(".__init__")) {
+                            heading = `<span class="name">${doc.fullname.replace(/\.__init__$/, "")}</span>${doc.signature}`;
+                        } else {
+                            heading = `<span class="def">${doc.funcdef}</span> <span class="name">${doc.fullname}</span>${doc.signature}`;
+                        }
+                        break;
+                    case "class":
+                        heading = `<span class="def">class</span> <span class="name">${doc.fullname}</span>`;
+                        if (doc.bases)
+                            heading += `<wbr>(<span class="base">${doc.bases}</span>)`;
+                        heading += `:`;
+                        break;
+                    case "variable":
+                        heading = `<span class="name">${doc.fullname}</span>`;
+                        if (doc.annotation)
+                            heading += `<span class="annotation">${doc.annotation}</span>`;
+                        if (doc.default_value)
+                            heading += `<span class="default_value"> = ${doc.default_value}</span>`;
+                        break;
+                    default:
+                        heading = `<span class="name">${doc.fullname}</span>`;
+                        break;
+                }
+                html += `
+                        <section class="search-result">
+                        <a href="${url}" class="attr ${doc.kind}">${heading}</a>
+                        <div class="docstring">${doc.doc}</div>
+                        </section>
+                    `;
+
+            }
+            return html;
+        })());
+    }
+
+    if (getSearchTerm()) {
+        initialize();
+        searchBox.value = getSearchTerm();
+        onInput();
+    } else {
+        searchBox.addEventListener("focus", initialize, {once: true});
+    }
+
+    searchBox.addEventListener("keydown", e => {
+        if (["ArrowDown", "ArrowUp", "Enter"].includes(e.key)) {
+            let focused = currentContent.querySelector(".search-result.focused");
+            if (!focused) {
+                currentContent.querySelector(".search-result").classList.add("focused");
+            } else if (
+                e.key === "ArrowDown"
+                && focused.nextElementSibling
+                && focused.nextElementSibling.classList.contains("search-result")
+            ) {
+                focused.classList.remove("focused");
+                focused.nextElementSibling.classList.add("focused");
+                focused.nextElementSibling.scrollIntoView({
+                    behavior: "smooth",
+                    block: "nearest",
+                    inline: "nearest"
+                });
+            } else if (
+                e.key === "ArrowUp"
+                && focused.previousElementSibling
+                && focused.previousElementSibling.classList.contains("search-result")
+            ) {
+                focused.classList.remove("focused");
+                focused.previousElementSibling.classList.add("focused");
+                focused.previousElementSibling.scrollIntoView({
+                    behavior: "smooth",
+                    block: "nearest",
+                    inline: "nearest"
+                });
+            } else if (
+                e.key === "Enter"
+            ) {
+                focused.querySelector("a").click();
+            }
+        }
+    });
+</script></body>
+</html>

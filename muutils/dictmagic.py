@@ -63,8 +63,9 @@ def dotlist_to_nested_dict(
     """Convert a dict with dot-separated keys to a nested dict
 
     Example:
-    >>> dotlist_to_nested_dict({'a.b.c': 1, 'a.b.d': 2, 'a.e': 3})
-    {'a': {'b': {'c': 1, 'd': 2}, 'e': 3}}
+
+        >>> dotlist_to_nested_dict({'a.b.c': 1, 'a.b.d': 2, 'a.e': 3})
+        {'a': {'b': {'c': 1, 'd': 2}, 'e': 3}}
     """
     nested_dict: defaultdict = _recursive_defaultdict_ctor()
     for key, value in dot_dict.items():
@@ -263,7 +264,7 @@ def condense_nested_dicts_matching_values(
 ) -> dict[str, Any]:
     """condense a nested dict, by condensing keys with matching values
 
-    # Examples:
+    # Examples: TODO
 
     # Parameters:
      - `data : dict[str, Any]`

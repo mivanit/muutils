@@ -10,14 +10,13 @@ from muutils.statcounter import StatCounter
 
 T = TypeVar("T")
 
-FancyTimeitResult = NamedTuple(
-    "FancyTimeitResult",
-    [
-        ("timings", StatCounter),
-        ("return_value", Union[T, None]),
-        ("profile", Union[pstats.Stats, None]),
-    ],
-)
+
+class FancyTimeitResult(NamedTuple):
+    """return type of `timeit_fancy`"""
+
+    timings: StatCounter
+    return_value: T  # type: ignore[valid-type]
+    profile: Union[pstats.Stats, None]
 
 
 def timeit_fancy(

@@ -1,3 +1,8 @@
+"""
+decorator `spinner_decorator` and context manager `SpinnerContext` to display
+a spinner using the base `Spinner` class while some code is running.
+"""
+
 import os
 import time
 import threading
@@ -5,11 +10,10 @@ import sys
 from functools import wraps
 from typing import Callable, Any, Optional, TextIO, TypeVar, Sequence, Dict, Union
 
-# Define a generic type for the decorated function
 DecoratedFunction = TypeVar("DecoratedFunction", bound=Callable[..., Any])
+"Define a generic type for the decorated function"
 
 
-# some of these from [cli-spinners](https://github.com/sindresorhus/cli-spinners), some from Claude 3.5 Sonnet
 SPINNER_CHARS: Dict[str, Sequence[str]] = dict(
     default=["|", "/", "-", "\\"],
     dots=[".  ", ".. ", "..."],
@@ -72,6 +76,9 @@ SPINNER_CHARS: Dict[str, Sequence[str]] = dict(
     ogham=["ᚁ ", "ᚂ ", "ᚃ ", "ᚄ", "ᚅ"],
     eth=["᛫", "፡", "፥", "፤", "፧", "።", "፨"],
 )
+"""dict of spinner sequences to show. some from Claude 3.5 Sonnet,
+some from [cli-spinners](https://github.com/sindresorhus/cli-spinners)
+"""
 
 SPINNER_COMPLETE: Dict[str, str] = dict(
     default="#",
@@ -112,37 +119,40 @@ SPINNER_COMPLETE: Dict[str, str] = dict(
     ogham="᚛᚜",
     eth="፠",
 )
+"string to display when the spinner is complete"
 
 
 class Spinner:
     """displays a spinner, and optionally elapsed time and a mutable value while a function is running.
 
     # Parameters:
-        - `spinner_chars : Union[str, Sequence[str]]`
-        sequence of strings, or key to look up in `SPINNER_CHARS`, to use as the spinner characters
-        (defaults to `"default"`)
-        - `update_interval : float`
-        how often to update the spinner display in seconds
-        (defaults to `0.1`)
-        - `spinner_complete : str`
-        string to display when the spinner is complete
-        (defaults to looking up `spinner_chars` in `SPINNER_COMPLETE` or `"#"`)
-        - `initial_value : str`
-        initial value to display with the spinner
-        (defaults to `""`)
-        - `message : str`
-        message to display with the spinner
-        (defaults to `""`)
-        - `format_string : str`
-        string to format the spinner with. must have `"\\r"` prepended to clear the line.
-        allowed keys are `spinner`, `elapsed_time`, `message`, and `value`
-        (defaults to `"\\r{spinner} ({elapsed_time:.2f}s) {message}{value}"`)
-        - `output_stream : TextIO`
-        stream to write the spinner to
-        (defaults to `sys.stdout`)
-        - `format_string_when_updated : Union[bool,str]`
-        whether to use a different format string when the value is updated. if `True`, use the default format string with a newline appended. if a string, use that string. this is useful if you want update_value to print to console and be preserved.
-        (defaults to `False`)
+    - `spinner_chars : Union[str, Sequence[str]]`
+    sequence of strings, or key to look up in `SPINNER_CHARS`, to use as the spinner characters
+    (defaults to `"default"`)
+    - `update_interval : float`
+    how often to update the spinner display in seconds
+    (defaults to `0.1`)
+    - `spinner_complete : str`
+    string to display when the spinner is complete
+    (defaults to looking up `spinner_chars` in `SPINNER_COMPLETE` or `"#"`)
+    - `initial_value : str`
+    initial value to display with the spinner
+    (defaults to `""`)
+    - `message : str`
+    message to display with the spinner
+    (defaults to `""`)
+    - `format_string : str`
+    string to format the spinner with. must have `"\\r"` prepended to clear the line.
+    allowed keys are `spinner`, `elapsed_time`, `message`, and `value`
+    (defaults to `"\\r{spinner} ({elapsed_time:.2f}s) {message}{value}"`)
+    - `output_stream : TextIO`
+    stream to write the spinner to
+    (defaults to `sys.stdout`)
+    - `format_string_when_updated : Union[bool,str]`
+    whether to use a different format string when the value is updated.
+    if `True`, use the default format string with a newline appended. if a string, use that string.
+    this is useful if you want update_value to print to console and be preserved.
+    (defaults to `False`)
 
     # Methods:
     - `update_value(value: Any) -> None`
@@ -201,14 +211,18 @@ class Spinner:
             # if not None, use the value provided
             else spinner_complete
         )
+        "string to display when the spinner is complete"
+
         self.spinner_chars: Sequence[str] = (
             SPINNER_CHARS[spinner_chars]
             if isinstance(spinner_chars, str)
             else spinner_chars
         )
+        "sequence of strings to use as the spinner characters"
 
         # special format string for when the value is updated
         self.format_string_when_updated: Optional[str] = None
+        "format string to use when the value is updated"
         if format_string_when_updated is not False:
             if format_string_when_updated is True:
                 # modify the default format string
@@ -218,7 +232,8 @@ class Spinner:
                 self.format_string_when_updated = format_string_when_updated
             else:
                 raise TypeError(
-                    f"format_string_when_updated must be a string or True, got {type(format_string_when_updated) = }{format_string_when_updated}"
+                    "format_string_when_updated must be a string or True, got"
+                    + f" {type(format_string_when_updated) = }{format_string_when_updated}"
                 )
 
         # copy other kwargs
@@ -238,15 +253,21 @@ class Spinner:
             )
         except Exception as e:
             raise ValueError(
-                f"Invalid format string: {format_string}. Must take keys 'spinner: str', 'elapsed_time: float', 'message: str', and 'value: Any'."
+                f"Invalid format string: {format_string}. Must take keys "
+                + "'spinner: str', 'elapsed_time: float', 'message: str', and 'value: Any'."
             ) from e
 
         # init
         self.start_time: float = 0
+        "for measuring elapsed time"
         self.stop_spinner: threading.Event = threading.Event()
+        "to stop the spinner"
         self.spinner_thread: Optional[threading.Thread] = None
+        "the thread running the spinner"
         self.value_changed: bool = False
+        "whether the value has been updated since the last display"
         self.term_width: int
+        "width of the terminal, for padding with spaces"
         try:
             self.term_width = os.get_terminal_size().columns
         except OSError:
@@ -338,7 +359,12 @@ def spinner_decorator(
     mutable_kwarg_key: Optional[str] = None,
     **kwargs,
 ) -> Callable[[DecoratedFunction], DecoratedFunction]:
-    "see `Spinner` for parameters. Also takes `mutable_kwarg_key`, the keyword argument with which to pass `Spinner().update_value` to the decorated function."
+    """see `Spinner` for parameters. Also takes `mutable_kwarg_key`
+
+    `mutable_kwarg_key` is the key with which `Spinner().update_value`
+    will be passed to the decorated function. if `None`, won't pass it.
+
+    """
 
     if len(args) > 1:
         raise ValueError(

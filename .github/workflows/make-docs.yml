@@ -1,0 +1,60 @@
+# this workflow partially copied from
+# https://github.com/TransformerLensOrg/TransformerLens/blob/main/.github/workflows/checks.yml
+name: make docs
+
+on:
+  pull_request:
+    branches:
+      - main
+      - "*"
+  push:
+    branches:
+      - main
+
+jobs:
+  build-docs:
+    # When running on a PR, this just checks we can build the docs without errors
+    # When running on merge to main, it builds the docs and then another job deploys them
+    name: 'Build Docs'
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/dev') || contains(github.head_ref, 'docs')
+    steps:
+      - name: Install pandoc
+        uses: awalsh128/cache-apt-pkgs-action@latest
+        with:
+          packages: pandoc
+          version: '3.3'
+      
+      - name: Check pandoc version
+        run: pandoc --version
+
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install uv
+        run: pip install uv
+  
+      - name: Install dependencies
+        # install torch first to avoid pytorch index messing things up
+        run: |
+          uv pip install -r .github/dev-requirements.txt --system --no-deps
+          uv pip install torch==2.4.0+cpu --system --extra-index-url https://download.pytorch.org/whl/cpu
+        
+      - name: Install muutils
+        run: uv pip install . --system
+      
+      - name: Install zanj (>=3.10 only)
+        run: uv pip install zanj --system
+
+      - name: tests
+        run: make test RUN_GLOBAL=1 COV=1
+
+      - name: Build Docs
+        run: make docs RUN_GLOBAL=1

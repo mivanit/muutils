@@ -1,0 +1,1311 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="pdoc 14.6.1"/>
+    <title>muutils.logger.logger API documentation</title>
+<link rel="stylesheet" href="../../resources/bootstrap-reboot.min.css"><link rel="stylesheet" href="../../resources/syntax-highlighting.css"><link rel="stylesheet" href="../../resources/theme.css"><link rel="stylesheet" href="../../resources/layout.css"><link rel="stylesheet" href="../../resources/content.css"><link rel="stylesheet" href="../../resources/custom.css"><script>
+    window.MathJax = {
+        tex: {
+            inlineMath: [['$', '$'], ['\\(', '\\)']]
+        }
+    };
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<script>
+    /* Re-invoke MathJax when DOM content changes, for example during search. */
+    document.addEventListener("DOMContentLoaded", () => {
+        new MutationObserver(() => MathJax.typeset()).observe(
+            document.querySelector("main.pdoc").parentNode,
+            {childList: true}
+        );
+    })
+</script>
+<style>
+    mjx-container {
+        overflow-x: auto;
+        overflow-y: hidden;
+    }
+</style><style>
+    .pdoc .mermaid-pre {
+        border: none;
+        background: none;
+    }
+</style>
+<script type="module" defer>
+    import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs";
+
+    /* Re-invoke Mermaid when DOM content changes, for example during search. */
+    document.addEventListener("DOMContentLoaded", () => {
+        new MutationObserver(() => mermaid.run()).observe(
+            document.querySelector("main.pdoc").parentNode,
+            {childList: true}
+        );
+    })
+</script></head>
+<body>
+    <nav class="pdoc">
+        <label id="navtoggle" for="togglestate" class="pdoc-button">
+            <img src="resources/navtoggle.svg" alt="Toggle navigation"> 
+        </label>
+        <input id="togglestate" type="checkbox" aria-hidden="true" tabindex="-1">
+        <div>            <a class="pdoc-button module-list-button" href="../logger.html">
+                <img src="resources/box-arrow-in-left.svg" alt="Back to parent module"/>
+                &nbsp;muutils.logger</a>
+
+
+            <input type="search" placeholder="Search..." role="searchbox" aria-label="search"
+                   pattern=".+" required>
+
+
+
+            <h2>API Documentation</h2>
+                <ul class="memberlist">
+            <li>
+                    <a class="function" href="#decode_level">decode_level</a>
+            </li>
+            <li>
+                    <a class="class" href="#Logger">Logger</a>
+                            <ul class="memberlist">
+                        <li>
+                                <a class="function" href="#Logger.__init__">Logger</a>
+                        </li>
+                        <li>
+                                <a class="function" href="#Logger.log">log</a>
+                        </li>
+                        <li>
+                                <a class="function" href="#Logger.log_elapsed_last">log_elapsed_last</a>
+                        </li>
+                        <li>
+                                <a class="function" href="#Logger.flush_all">flush_all</a>
+                        </li>
+                </ul>
+
+            </li>
+    </ul>
+
+
+
+        <a class="attribution" title="pdoc: Python API documentation generator" href="https://pdoc.dev" target="_blank">
+            built with <span class="visually-hidden">pdoc</span>
+            <img src="resources/pdoc-logo.svg" alt="pdoc logo"/>
+        </a>
+</div>
+    </nav>
+    <main class="pdoc">
+            <section class="module-info">
+                        <a class="pdoc-button git-button" href="https://github.com/mivanit/muutils/blob/main/muutils/logger/logger.py">View Source on GitHub</a>
+                    <h1 class="modulename">
+<a href="./../../muutils.html">muutils</a><wbr>.<a href="./../logger.html">logger</a><wbr>.logger    </h1>
+
+                        <div class="docstring"><p>logger with streams &amp; levels, and a timer context manager</p>
+
+<ul>
+<li><code>SimpleLogger</code> is an extremely simple logger that can write to both console and a file</li>
+<li><code><a href="#Logger">Logger</a></code> class handles levels in a slightly different way than default python <code>logging</code>,
+and also has "streams" which allow for different sorts of output in the same logger
+this was mostly made with training models in mind and storing both metadata and loss</li>
+<li><code>TimerContext</code> is a context manager that can be used to time the duration of a block of code</li>
+</ul>
+</div>
+
+                        <input id="mod-logger-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+
+                        <div class="source-button-container">
+            <label class="pdoc-button view-source-button" for="mod-logger-view-source"><span>View Source</span></label>
+            <div class="github-button-wrapper">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/main/muutils/logger/logger.py#L0-L305" target="_blank">
+                    <span>View on GitHub</span>
+                </a>
+            </div>
+        </div>
+
+                <br/>
+                        <div class="pdoc-code codehilite"><pre><span></span><span id="L-1"><a href="#L-1"><span class="linenos">  1</span></a><span class="sd">&quot;&quot;&quot;logger with streams &amp; levels, and a timer context manager</span>
+</span><span id="L-2"><a href="#L-2"><span class="linenos">  2</span></a>
+</span><span id="L-3"><a href="#L-3"><span class="linenos">  3</span></a><span class="sd">- `SimpleLogger` is an extremely simple logger that can write to both console and a file</span>
+</span><span id="L-4"><a href="#L-4"><span class="linenos">  4</span></a><span class="sd">- `Logger` class handles levels in a slightly different way than default python `logging`,</span>
+</span><span id="L-5"><a href="#L-5"><span class="linenos">  5</span></a><span class="sd">        and also has &quot;streams&quot; which allow for different sorts of output in the same logger</span>
+</span><span id="L-6"><a href="#L-6"><span class="linenos">  6</span></a><span class="sd">        this was mostly made with training models in mind and storing both metadata and loss</span>
+</span><span id="L-7"><a href="#L-7"><span class="linenos">  7</span></a><span class="sd">- `TimerContext` is a context manager that can be used to time the duration of a block of code</span>
+</span><span id="L-8"><a href="#L-8"><span class="linenos">  8</span></a><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-9"><a href="#L-9"><span class="linenos">  9</span></a>
+</span><span id="L-10"><a href="#L-10"><span class="linenos"> 10</span></a><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+</span><span id="L-11"><a href="#L-11"><span class="linenos"> 11</span></a>
+</span><span id="L-12"><a href="#L-12"><span class="linenos"> 12</span></a><span class="kn">import</span> <span class="nn">json</span>
+</span><span id="L-13"><a href="#L-13"><span class="linenos"> 13</span></a><span class="kn">import</span> <span class="nn">time</span>
+</span><span id="L-14"><a href="#L-14"><span class="linenos"> 14</span></a><span class="kn">import</span> <span class="nn">typing</span>
+</span><span id="L-15"><a href="#L-15"><span class="linenos"> 15</span></a><span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">partial</span>
+</span><span id="L-16"><a href="#L-16"><span class="linenos"> 16</span></a><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Sequence</span>
+</span><span id="L-17"><a href="#L-17"><span class="linenos"> 17</span></a>
+</span><span id="L-18"><a href="#L-18"><span class="linenos"> 18</span></a><span class="kn">from</span> <span class="nn">muutils.json_serialize</span> <span class="kn">import</span> <span class="n">JSONitem</span><span class="p">,</span> <span class="n">json_serialize</span>
+</span><span id="L-19"><a href="#L-19"><span class="linenos"> 19</span></a><span class="kn">from</span> <span class="nn">muutils.logger.exception_context</span> <span class="kn">import</span> <span class="n">ExceptionContext</span>
+</span><span id="L-20"><a href="#L-20"><span class="linenos"> 20</span></a><span class="kn">from</span> <span class="nn">muutils.logger.headerfuncs</span> <span class="kn">import</span> <span class="n">HEADER_FUNCTIONS</span><span class="p">,</span> <span class="n">HeaderFunction</span>
+</span><span id="L-21"><a href="#L-21"><span class="linenos"> 21</span></a><span class="kn">from</span> <span class="nn">muutils.logger.loggingstream</span> <span class="kn">import</span> <span class="n">LoggingStream</span>
+</span><span id="L-22"><a href="#L-22"><span class="linenos"> 22</span></a><span class="kn">from</span> <span class="nn">muutils.logger.simplelogger</span> <span class="kn">import</span> <span class="n">AnyIO</span><span class="p">,</span> <span class="n">SimpleLogger</span>
+</span><span id="L-23"><a href="#L-23"><span class="linenos"> 23</span></a>
+</span><span id="L-24"><a href="#L-24"><span class="linenos"> 24</span></a><span class="c1"># pylint: disable=arguments-differ, bad-indentation, trailing-whitespace, trailing-newlines, unnecessary-pass, consider-using-with, use-dict-literal</span>
+</span><span id="L-25"><a href="#L-25"><span class="linenos"> 25</span></a>
+</span><span id="L-26"><a href="#L-26"><span class="linenos"> 26</span></a>
+</span><span id="L-27"><a href="#L-27"><span class="linenos"> 27</span></a><span class="k">def</span> <span class="nf">decode_level</span><span class="p">(</span><span class="n">level</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+</span><span id="L-28"><a href="#L-28"><span class="linenos"> 28</span></a>    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">level</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+</span><span id="L-29"><a href="#L-29"><span class="linenos"> 29</span></a>        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;level must be int, got </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">level</span><span class="p">)</span><span class="w"> </span><span class="si">= }</span><span class="s2"> </span><span class="si">{</span><span class="n">level</span><span class="w"> </span><span class="si">= }</span><span class="s2">&quot;</span><span class="p">)</span>
+</span><span id="L-30"><a href="#L-30"><span class="linenos"> 30</span></a>
+</span><span id="L-31"><a href="#L-31"><span class="linenos"> 31</span></a>    <span class="k">if</span> <span class="n">level</span> <span class="o">&lt;</span> <span class="o">-</span><span class="mi">255</span><span class="p">:</span>
+</span><span id="L-32"><a href="#L-32"><span class="linenos"> 32</span></a>        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;FATAL_ERROR(</span><span class="si">{</span><span class="n">level</span><span class="si">}</span><span class="s2">)&quot;</span>
+</span><span id="L-33"><a href="#L-33"><span class="linenos"> 33</span></a>    <span class="k">elif</span> <span class="n">level</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+</span><span id="L-34"><a href="#L-34"><span class="linenos"> 34</span></a>        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;WARNING(</span><span class="si">{</span><span class="n">level</span><span class="si">}</span><span class="s2">)&quot;</span>
+</span><span id="L-35"><a href="#L-35"><span class="linenos"> 35</span></a>    <span class="k">else</span><span class="p">:</span>
+</span><span id="L-36"><a href="#L-36"><span class="linenos"> 36</span></a>        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;INFO(</span><span class="si">{</span><span class="n">level</span><span class="si">}</span><span class="s2">)&quot;</span>
+</span><span id="L-37"><a href="#L-37"><span class="linenos"> 37</span></a>
+</span><span id="L-38"><a href="#L-38"><span class="linenos"> 38</span></a>
+</span><span id="L-39"><a href="#L-39"><span class="linenos"> 39</span></a><span class="c1"># todo: add a context which catches and logs all exceptions</span>
+</span><span id="L-40"><a href="#L-40"><span class="linenos"> 40</span></a><span class="k">class</span> <span class="nc">Logger</span><span class="p">(</span><span class="n">SimpleLogger</span><span class="p">):</span>
+</span><span id="L-41"><a href="#L-41"><span class="linenos"> 41</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;logger with more features, including log levels and streams</span>
+</span><span id="L-42"><a href="#L-42"><span class="linenos"> 42</span></a>
+</span><span id="L-43"><a href="#L-43"><span class="linenos"> 43</span></a><span class="sd">    # Parameters:</span>
+</span><span id="L-44"><a href="#L-44"><span class="linenos"> 44</span></a><span class="sd">            - `log_path : str | None`</span>
+</span><span id="L-45"><a href="#L-45"><span class="linenos"> 45</span></a><span class="sd">            default log file path</span>
+</span><span id="L-46"><a href="#L-46"><span class="linenos"> 46</span></a><span class="sd">            (defaults to `None`)</span>
+</span><span id="L-47"><a href="#L-47"><span class="linenos"> 47</span></a><span class="sd">            - `log_file : AnyIO | None`</span>
+</span><span id="L-48"><a href="#L-48"><span class="linenos"> 48</span></a><span class="sd">            default log io, should have a `.write()` method (pass only this or `log_path`, not both)</span>
+</span><span id="L-49"><a href="#L-49"><span class="linenos"> 49</span></a><span class="sd">            (defaults to `None`)</span>
+</span><span id="L-50"><a href="#L-50"><span class="linenos"> 50</span></a><span class="sd">            - `timestamp : bool`</span>
+</span><span id="L-51"><a href="#L-51"><span class="linenos"> 51</span></a><span class="sd">            whether to add timestamps to every log message (under the `_timestamp` key)</span>
+</span><span id="L-52"><a href="#L-52"><span class="linenos"> 52</span></a><span class="sd">            (defaults to `True`)</span>
+</span><span id="L-53"><a href="#L-53"><span class="linenos"> 53</span></a><span class="sd">            - `default_level : int`</span>
+</span><span id="L-54"><a href="#L-54"><span class="linenos"> 54</span></a><span class="sd">            default log level for streams/messages that don&#39;t specify a level</span>
+</span><span id="L-55"><a href="#L-55"><span class="linenos"> 55</span></a><span class="sd">            (defaults to `0`)</span>
+</span><span id="L-56"><a href="#L-56"><span class="linenos"> 56</span></a><span class="sd">            - `console_print_threshold : int`</span>
+</span><span id="L-57"><a href="#L-57"><span class="linenos"> 57</span></a><span class="sd">            log level at which to print to the console, anything greater will not be printed unless overridden by `console_print`</span>
+</span><span id="L-58"><a href="#L-58"><span class="linenos"> 58</span></a><span class="sd">            (defaults to `50`)</span>
+</span><span id="L-59"><a href="#L-59"><span class="linenos"> 59</span></a><span class="sd">            - `level_header : HeaderFunction`</span>
+</span><span id="L-60"><a href="#L-60"><span class="linenos"> 60</span></a><span class="sd">            function for formatting log messages when printing to console</span>
+</span><span id="L-61"><a href="#L-61"><span class="linenos"> 61</span></a><span class="sd">            (defaults to `HEADER_FUNCTIONS[&quot;md&quot;]`)</span>
+</span><span id="L-62"><a href="#L-62"><span class="linenos"> 62</span></a><span class="sd">    - `keep_last_msg_time : bool`</span>
+</span><span id="L-63"><a href="#L-63"><span class="linenos"> 63</span></a><span class="sd">            whether to keep the last message time</span>
+</span><span id="L-64"><a href="#L-64"><span class="linenos"> 64</span></a><span class="sd">            (defaults to `True`)</span>
+</span><span id="L-65"><a href="#L-65"><span class="linenos"> 65</span></a>
+</span><span id="L-66"><a href="#L-66"><span class="linenos"> 66</span></a>
+</span><span id="L-67"><a href="#L-67"><span class="linenos"> 67</span></a><span class="sd">    # Raises:</span>
+</span><span id="L-68"><a href="#L-68"><span class="linenos"> 68</span></a><span class="sd">            - `ValueError` : _description_</span>
+</span><span id="L-69"><a href="#L-69"><span class="linenos"> 69</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="L-70"><a href="#L-70"><span class="linenos"> 70</span></a>
+</span><span id="L-71"><a href="#L-71"><span class="linenos"> 71</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+</span><span id="L-72"><a href="#L-72"><span class="linenos"> 72</span></a>        <span class="bp">self</span><span class="p">,</span>
+</span><span id="L-73"><a href="#L-73"><span class="linenos"> 73</span></a>        <span class="n">log_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+</span><span id="L-74"><a href="#L-74"><span class="linenos"> 74</span></a>        <span class="n">log_file</span><span class="p">:</span> <span class="n">AnyIO</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+</span><span id="L-75"><a href="#L-75"><span class="linenos"> 75</span></a>        <span class="n">default_level</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+</span><span id="L-76"><a href="#L-76"><span class="linenos"> 76</span></a>        <span class="n">console_print_threshold</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">50</span><span class="p">,</span>
+</span><span id="L-77"><a href="#L-77"><span class="linenos"> 77</span></a>        <span class="n">level_header</span><span class="p">:</span> <span class="n">HeaderFunction</span> <span class="o">=</span> <span class="n">HEADER_FUNCTIONS</span><span class="p">[</span><span class="s2">&quot;md&quot;</span><span class="p">],</span>
+</span><span id="L-78"><a href="#L-78"><span class="linenos"> 78</span></a>        <span class="n">streams</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span> <span class="n">LoggingStream</span><span class="p">]</span> <span class="o">|</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">LoggingStream</span><span class="p">]</span> <span class="o">=</span> <span class="p">(),</span>
+</span><span id="L-79"><a href="#L-79"><span class="linenos"> 79</span></a>        <span class="n">keep_last_msg_time</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+</span><span id="L-80"><a href="#L-80"><span class="linenos"> 80</span></a>        <span class="c1"># junk args</span>
+</span><span id="L-81"><a href="#L-81"><span class="linenos"> 81</span></a>        <span class="n">timestamp</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+</span><span id="L-82"><a href="#L-82"><span class="linenos"> 82</span></a>        <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+</span><span id="L-83"><a href="#L-83"><span class="linenos"> 83</span></a>    <span class="p">):</span>
+</span><span id="L-84"><a href="#L-84"><span class="linenos"> 84</span></a>        <span class="c1"># junk arg checking</span>
+</span><span id="L-85"><a href="#L-85"><span class="linenos"> 85</span></a>        <span class="c1"># ==================================================</span>
+</span><span id="L-86"><a href="#L-86"><span class="linenos"> 86</span></a>        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+</span><span id="L-87"><a href="#L-87"><span class="linenos"> 87</span></a>            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;unrecognized kwargs: </span><span class="si">{</span><span class="n">kwargs</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span><span id="L-88"><a href="#L-88"><span class="linenos"> 88</span></a>
+</span><span id="L-89"><a href="#L-89"><span class="linenos"> 89</span></a>        <span class="k">if</span> <span class="ow">not</span> <span class="n">timestamp</span><span class="p">:</span>
+</span><span id="L-90"><a href="#L-90"><span class="linenos"> 90</span></a>            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+</span><span id="L-91"><a href="#L-91"><span class="linenos"> 91</span></a>                <span class="s2">&quot;timestamp must be True -- why would you not want timestamps?&quot;</span>
+</span><span id="L-92"><a href="#L-92"><span class="linenos"> 92</span></a>            <span class="p">)</span>
+</span><span id="L-93"><a href="#L-93"><span class="linenos"> 93</span></a>
+</span><span id="L-94"><a href="#L-94"><span class="linenos"> 94</span></a>        <span class="c1"># timing</span>
+</span><span id="L-95"><a href="#L-95"><span class="linenos"> 95</span></a>        <span class="c1"># ==================================================</span>
+</span><span id="L-96"><a href="#L-96"><span class="linenos"> 96</span></a>        <span class="c1"># timing compares</span>
+</span><span id="L-97"><a href="#L-97"><span class="linenos"> 97</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_keep_last_msg_time</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">keep_last_msg_time</span>
+</span><span id="L-98"><a href="#L-98"><span class="linenos"> 98</span></a>        <span class="c1"># TODO: handle per stream?</span>
+</span><span id="L-99"><a href="#L-99"><span class="linenos"> 99</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_last_msg_time</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+</span><span id="L-100"><a href="#L-100"><span class="linenos">100</span></a>
+</span><span id="L-101"><a href="#L-101"><span class="linenos">101</span></a>        <span class="c1"># basic setup</span>
+</span><span id="L-102"><a href="#L-102"><span class="linenos">102</span></a>        <span class="c1"># ==================================================</span>
+</span><span id="L-103"><a href="#L-103"><span class="linenos">103</span></a>        <span class="c1"># init BaseLogger</span>
+</span><span id="L-104"><a href="#L-104"><span class="linenos">104</span></a>        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">log_file</span><span class="o">=</span><span class="n">log_file</span><span class="p">,</span> <span class="n">log_path</span><span class="o">=</span><span class="n">log_path</span><span class="p">,</span> <span class="n">timestamp</span><span class="o">=</span><span class="n">timestamp</span><span class="p">)</span>
+</span><span id="L-105"><a href="#L-105"><span class="linenos">105</span></a>
+</span><span id="L-106"><a href="#L-106"><span class="linenos">106</span></a>        <span class="c1"># level-related</span>
+</span><span id="L-107"><a href="#L-107"><span class="linenos">107</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_console_print_threshold</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">console_print_threshold</span>
+</span><span id="L-108"><a href="#L-108"><span class="linenos">108</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_default_level</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">default_level</span>
+</span><span id="L-109"><a href="#L-109"><span class="linenos">109</span></a>
+</span><span id="L-110"><a href="#L-110"><span class="linenos">110</span></a>        <span class="c1"># set up streams</span>
+</span><span id="L-111"><a href="#L-111"><span class="linenos">111</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_streams</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span> <span class="n">LoggingStream</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+</span><span id="L-112"><a href="#L-112"><span class="linenos">112</span></a>            <span class="n">streams</span>
+</span><span id="L-113"><a href="#L-113"><span class="linenos">113</span></a>            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">streams</span><span class="p">,</span> <span class="n">typing</span><span class="o">.</span><span class="n">Mapping</span><span class="p">)</span>
+</span><span id="L-114"><a href="#L-114"><span class="linenos">114</span></a>            <span class="k">else</span> <span class="p">{</span><span class="n">s</span><span class="o">.</span><span class="n">name</span><span class="p">:</span> <span class="n">s</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">streams</span><span class="p">}</span>
+</span><span id="L-115"><a href="#L-115"><span class="linenos">115</span></a>        <span class="p">)</span>
+</span><span id="L-116"><a href="#L-116"><span class="linenos">116</span></a>        <span class="c1"># default error stream</span>
+</span><span id="L-117"><a href="#L-117"><span class="linenos">117</span></a>        <span class="k">if</span> <span class="s2">&quot;error&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_streams</span><span class="p">:</span>
+</span><span id="L-118"><a href="#L-118"><span class="linenos">118</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">_streams</span><span class="p">[</span><span class="s2">&quot;error&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">LoggingStream</span><span class="p">(</span>
+</span><span id="L-119"><a href="#L-119"><span class="linenos">119</span></a>                <span class="s2">&quot;error&quot;</span><span class="p">,</span>
+</span><span id="L-120"><a href="#L-120"><span class="linenos">120</span></a>                <span class="n">aliases</span><span class="o">=</span><span class="p">{</span>
+</span><span id="L-121"><a href="#L-121"><span class="linenos">121</span></a>                    <span class="s2">&quot;err&quot;</span><span class="p">,</span>
+</span><span id="L-122"><a href="#L-122"><span class="linenos">122</span></a>                    <span class="s2">&quot;except&quot;</span><span class="p">,</span>
+</span><span id="L-123"><a href="#L-123"><span class="linenos">123</span></a>                    <span class="s2">&quot;Exception&quot;</span><span class="p">,</span>
+</span><span id="L-124"><a href="#L-124"><span class="linenos">124</span></a>                    <span class="s2">&quot;exception&quot;</span><span class="p">,</span>
+</span><span id="L-125"><a href="#L-125"><span class="linenos">125</span></a>                    <span class="s2">&quot;exceptions&quot;</span><span class="p">,</span>
+</span><span id="L-126"><a href="#L-126"><span class="linenos">126</span></a>                    <span class="s2">&quot;errors&quot;</span><span class="p">,</span>
+</span><span id="L-127"><a href="#L-127"><span class="linenos">127</span></a>                <span class="p">},</span>
+</span><span id="L-128"><a href="#L-128"><span class="linenos">128</span></a>            <span class="p">)</span>
+</span><span id="L-129"><a href="#L-129"><span class="linenos">129</span></a>
+</span><span id="L-130"><a href="#L-130"><span class="linenos">130</span></a>        <span class="c1"># check alias duplicates</span>
+</span><span id="L-131"><a href="#L-131"><span class="linenos">131</span></a>        <span class="n">alias_set</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+</span><span id="L-132"><a href="#L-132"><span class="linenos">132</span></a>        <span class="k">for</span> <span class="n">stream</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_streams</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+</span><span id="L-133"><a href="#L-133"><span class="linenos">133</span></a>            <span class="k">for</span> <span class="n">alias</span> <span class="ow">in</span> <span class="n">stream</span><span class="o">.</span><span class="n">aliases</span><span class="p">:</span>
+</span><span id="L-134"><a href="#L-134"><span class="linenos">134</span></a>                <span class="k">if</span> <span class="n">alias</span> <span class="ow">in</span> <span class="n">alias_set</span><span class="p">:</span>
+</span><span id="L-135"><a href="#L-135"><span class="linenos">135</span></a>                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;alias </span><span class="si">{</span><span class="n">alias</span><span class="si">}</span><span class="s2"> is already in use&quot;</span><span class="p">)</span>
+</span><span id="L-136"><a href="#L-136"><span class="linenos">136</span></a>                <span class="n">alias_set</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">alias</span><span class="p">)</span>
+</span><span id="L-137"><a href="#L-137"><span class="linenos">137</span></a>
+</span><span id="L-138"><a href="#L-138"><span class="linenos">138</span></a>        <span class="c1"># add aliases</span>
+</span><span id="L-139"><a href="#L-139"><span class="linenos">139</span></a>        <span class="k">for</span> <span class="n">stream</span> <span class="ow">in</span> <span class="nb">tuple</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_streams</span><span class="o">.</span><span class="n">values</span><span class="p">()):</span>
+</span><span id="L-140"><a href="#L-140"><span class="linenos">140</span></a>            <span class="k">for</span> <span class="n">alias</span> <span class="ow">in</span> <span class="n">stream</span><span class="o">.</span><span class="n">aliases</span><span class="p">:</span>
+</span><span id="L-141"><a href="#L-141"><span class="linenos">141</span></a>                <span class="k">if</span> <span class="n">alias</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_streams</span><span class="p">:</span>
+</span><span id="L-142"><a href="#L-142"><span class="linenos">142</span></a>                    <span class="bp">self</span><span class="o">.</span><span class="n">_streams</span><span class="p">[</span><span class="n">alias</span><span class="p">]</span> <span class="o">=</span> <span class="n">stream</span>
+</span><span id="L-143"><a href="#L-143"><span class="linenos">143</span></a>
+</span><span id="L-144"><a href="#L-144"><span class="linenos">144</span></a>        <span class="c1"># print formatting</span>
+</span><span id="L-145"><a href="#L-145"><span class="linenos">145</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_level_header</span><span class="p">:</span> <span class="n">HeaderFunction</span> <span class="o">=</span> <span class="n">level_header</span>
+</span><span id="L-146"><a href="#L-146"><span class="linenos">146</span></a>
+</span><span id="L-147"><a href="#L-147"><span class="linenos">147</span></a>        <span class="nb">print</span><span class="p">({</span><span class="n">k</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_streams</span><span class="o">.</span><span class="n">items</span><span class="p">()})</span>
+</span><span id="L-148"><a href="#L-148"><span class="linenos">148</span></a>
+</span><span id="L-149"><a href="#L-149"><span class="linenos">149</span></a>    <span class="k">def</span> <span class="nf">_exception_context</span><span class="p">(</span>
+</span><span id="L-150"><a href="#L-150"><span class="linenos">150</span></a>        <span class="bp">self</span><span class="p">,</span>
+</span><span id="L-151"><a href="#L-151"><span class="linenos">151</span></a>        <span class="n">stream</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;error&quot;</span><span class="p">,</span>
+</span><span id="L-152"><a href="#L-152"><span class="linenos">152</span></a>        <span class="c1"># level: int = -256,</span>
+</span><span id="L-153"><a href="#L-153"><span class="linenos">153</span></a>        <span class="c1"># **kwargs,</span>
+</span><span id="L-154"><a href="#L-154"><span class="linenos">154</span></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ExceptionContext</span><span class="p">:</span>
+</span><span id="L-155"><a href="#L-155"><span class="linenos">155</span></a>        <span class="n">s</span><span class="p">:</span> <span class="n">LoggingStream</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_streams</span><span class="p">[</span><span class="n">stream</span><span class="p">]</span>
+</span><span id="L-156"><a href="#L-156"><span class="linenos">156</span></a>        <span class="k">return</span> <span class="n">ExceptionContext</span><span class="p">(</span><span class="n">stream</span><span class="o">=</span><span class="n">s</span><span class="p">)</span>
+</span><span id="L-157"><a href="#L-157"><span class="linenos">157</span></a>
+</span><span id="L-158"><a href="#L-158"><span class="linenos">158</span></a>    <span class="k">def</span> <span class="nf">log</span><span class="p">(</span>  <span class="c1"># type: ignore # yes, the signatures are different here.</span>
+</span><span id="L-159"><a href="#L-159"><span class="linenos">159</span></a>        <span class="bp">self</span><span class="p">,</span>
+</span><span id="L-160"><a href="#L-160"><span class="linenos">160</span></a>        <span class="n">msg</span><span class="p">:</span> <span class="n">JSONitem</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+</span><span id="L-161"><a href="#L-161"><span class="linenos">161</span></a>        <span class="n">lvl</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+</span><span id="L-162"><a href="#L-162"><span class="linenos">162</span></a>        <span class="n">stream</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+</span><span id="L-163"><a href="#L-163"><span class="linenos">163</span></a>        <span class="n">console_print</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+</span><span id="L-164"><a href="#L-164"><span class="linenos">164</span></a>        <span class="n">extra_indent</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+</span><span id="L-165"><a href="#L-165"><span class="linenos">165</span></a>        <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+</span><span id="L-166"><a href="#L-166"><span class="linenos">166</span></a>    <span class="p">):</span>
+</span><span id="L-167"><a href="#L-167"><span class="linenos">167</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;logging function</span>
+</span><span id="L-168"><a href="#L-168"><span class="linenos">168</span></a>
+</span><span id="L-169"><a href="#L-169"><span class="linenos">169</span></a><span class="sd">        ### Parameters:</span>
+</span><span id="L-170"><a href="#L-170"><span class="linenos">170</span></a><span class="sd">         - `msg : JSONitem`</span>
+</span><span id="L-171"><a href="#L-171"><span class="linenos">171</span></a><span class="sd">           message (usually string or dict) to be logged</span>
+</span><span id="L-172"><a href="#L-172"><span class="linenos">172</span></a><span class="sd">         - `lvl : int | None`</span>
+</span><span id="L-173"><a href="#L-173"><span class="linenos">173</span></a><span class="sd">           level of message (lower levels are more important)</span>
+</span><span id="L-174"><a href="#L-174"><span class="linenos">174</span></a><span class="sd">           (defaults to `None`)</span>
+</span><span id="L-175"><a href="#L-175"><span class="linenos">175</span></a><span class="sd">         - `console_print : bool`</span>
+</span><span id="L-176"><a href="#L-176"><span class="linenos">176</span></a><span class="sd">           override `console_print_threshold` setting</span>
+</span><span id="L-177"><a href="#L-177"><span class="linenos">177</span></a><span class="sd">           (defaults to `False`)</span>
+</span><span id="L-178"><a href="#L-178"><span class="linenos">178</span></a><span class="sd">         - `stream : str | None`</span>
+</span><span id="L-179"><a href="#L-179"><span class="linenos">179</span></a><span class="sd">           whether to log to a stream (defaults to `None`), which logs to the default `None` stream</span>
+</span><span id="L-180"><a href="#L-180"><span class="linenos">180</span></a><span class="sd">           (defaults to `None`)</span>
+</span><span id="L-181"><a href="#L-181"><span class="linenos">181</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="L-182"><a href="#L-182"><span class="linenos">182</span></a>
+</span><span id="L-183"><a href="#L-183"><span class="linenos">183</span></a>        <span class="c1"># add to known stream names if not present</span>
+</span><span id="L-184"><a href="#L-184"><span class="linenos">184</span></a>        <span class="k">if</span> <span class="n">stream</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_streams</span><span class="p">:</span>
+</span><span id="L-185"><a href="#L-185"><span class="linenos">185</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">_streams</span><span class="p">[</span><span class="n">stream</span><span class="p">]</span> <span class="o">=</span> <span class="n">LoggingStream</span><span class="p">(</span><span class="n">stream</span><span class="p">)</span>
+</span><span id="L-186"><a href="#L-186"><span class="linenos">186</span></a>
+</span><span id="L-187"><a href="#L-187"><span class="linenos">187</span></a>        <span class="c1"># set default level to either global or stream-specific default level</span>
+</span><span id="L-188"><a href="#L-188"><span class="linenos">188</span></a>        <span class="c1"># ========================================</span>
+</span><span id="L-189"><a href="#L-189"><span class="linenos">189</span></a>        <span class="k">if</span> <span class="n">lvl</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="L-190"><a href="#L-190"><span class="linenos">190</span></a>            <span class="k">if</span> <span class="n">stream</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="L-191"><a href="#L-191"><span class="linenos">191</span></a>                <span class="n">lvl</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_default_level</span>
+</span><span id="L-192"><a href="#L-192"><span class="linenos">192</span></a>            <span class="k">else</span><span class="p">:</span>
+</span><span id="L-193"><a href="#L-193"><span class="linenos">193</span></a>                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_streams</span><span class="p">[</span><span class="n">stream</span><span class="p">]</span><span class="o">.</span><span class="n">default_level</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="L-194"><a href="#L-194"><span class="linenos">194</span></a>                    <span class="n">lvl</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_streams</span><span class="p">[</span><span class="n">stream</span><span class="p">]</span><span class="o">.</span><span class="n">default_level</span>
+</span><span id="L-195"><a href="#L-195"><span class="linenos">195</span></a>                <span class="k">else</span><span class="p">:</span>
+</span><span id="L-196"><a href="#L-196"><span class="linenos">196</span></a>                    <span class="n">lvl</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_default_level</span>
+</span><span id="L-197"><a href="#L-197"><span class="linenos">197</span></a>
+</span><span id="L-198"><a href="#L-198"><span class="linenos">198</span></a>        <span class="k">assert</span> <span class="n">lvl</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;lvl should not be None at this point&quot;</span>
+</span><span id="L-199"><a href="#L-199"><span class="linenos">199</span></a>
+</span><span id="L-200"><a href="#L-200"><span class="linenos">200</span></a>        <span class="c1"># print to console with formatting</span>
+</span><span id="L-201"><a href="#L-201"><span class="linenos">201</span></a>        <span class="c1"># ========================================</span>
+</span><span id="L-202"><a href="#L-202"><span class="linenos">202</span></a>        <span class="n">_printed</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+</span><span id="L-203"><a href="#L-203"><span class="linenos">203</span></a>        <span class="k">if</span> <span class="n">console_print</span> <span class="ow">or</span> <span class="p">(</span><span class="n">lvl</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_console_print_threshold</span><span class="p">):</span>
+</span><span id="L-204"><a href="#L-204"><span class="linenos">204</span></a>            <span class="c1"># add some formatting</span>
+</span><span id="L-205"><a href="#L-205"><span class="linenos">205</span></a>            <span class="nb">print</span><span class="p">(</span>
+</span><span id="L-206"><a href="#L-206"><span class="linenos">206</span></a>                <span class="bp">self</span><span class="o">.</span><span class="n">_level_header</span><span class="p">(</span>
+</span><span id="L-207"><a href="#L-207"><span class="linenos">207</span></a>                    <span class="n">msg</span><span class="o">=</span><span class="n">msg</span><span class="p">,</span>
+</span><span id="L-208"><a href="#L-208"><span class="linenos">208</span></a>                    <span class="n">lvl</span><span class="o">=</span><span class="n">lvl</span><span class="p">,</span>
+</span><span id="L-209"><a href="#L-209"><span class="linenos">209</span></a>                    <span class="n">stream</span><span class="o">=</span><span class="n">stream</span><span class="p">,</span>
+</span><span id="L-210"><a href="#L-210"><span class="linenos">210</span></a>                    <span class="n">extra_indent</span><span class="o">=</span><span class="n">extra_indent</span><span class="p">,</span>
+</span><span id="L-211"><a href="#L-211"><span class="linenos">211</span></a>                <span class="p">)</span>
+</span><span id="L-212"><a href="#L-212"><span class="linenos">212</span></a>            <span class="p">)</span>
+</span><span id="L-213"><a href="#L-213"><span class="linenos">213</span></a>
+</span><span id="L-214"><a href="#L-214"><span class="linenos">214</span></a>            <span class="c1"># store the last message time</span>
+</span><span id="L-215"><a href="#L-215"><span class="linenos">215</span></a>            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_last_msg_time</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="L-216"><a href="#L-216"><span class="linenos">216</span></a>                <span class="bp">self</span><span class="o">.</span><span class="n">_last_msg_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+</span><span id="L-217"><a href="#L-217"><span class="linenos">217</span></a>
+</span><span id="L-218"><a href="#L-218"><span class="linenos">218</span></a>            <span class="n">_printed</span> <span class="o">=</span> <span class="kc">True</span>
+</span><span id="L-219"><a href="#L-219"><span class="linenos">219</span></a>
+</span><span id="L-220"><a href="#L-220"><span class="linenos">220</span></a>        <span class="c1"># convert and add data</span>
+</span><span id="L-221"><a href="#L-221"><span class="linenos">221</span></a>        <span class="c1"># ========================================</span>
+</span><span id="L-222"><a href="#L-222"><span class="linenos">222</span></a>        <span class="c1"># converting to dict</span>
+</span><span id="L-223"><a href="#L-223"><span class="linenos">223</span></a>        <span class="n">msg_dict</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Mapping</span>
+</span><span id="L-224"><a href="#L-224"><span class="linenos">224</span></a>        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="n">typing</span><span class="o">.</span><span class="n">Mapping</span><span class="p">):</span>
+</span><span id="L-225"><a href="#L-225"><span class="linenos">225</span></a>            <span class="n">msg_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;_msg&quot;</span><span class="p">:</span> <span class="n">msg</span><span class="p">}</span>
+</span><span id="L-226"><a href="#L-226"><span class="linenos">226</span></a>        <span class="k">else</span><span class="p">:</span>
+</span><span id="L-227"><a href="#L-227"><span class="linenos">227</span></a>            <span class="n">msg_dict</span> <span class="o">=</span> <span class="n">msg</span>
+</span><span id="L-228"><a href="#L-228"><span class="linenos">228</span></a>
+</span><span id="L-229"><a href="#L-229"><span class="linenos">229</span></a>        <span class="c1"># level+stream metadata</span>
+</span><span id="L-230"><a href="#L-230"><span class="linenos">230</span></a>        <span class="k">if</span> <span class="n">lvl</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="L-231"><a href="#L-231"><span class="linenos">231</span></a>            <span class="n">msg_dict</span><span class="p">[</span><span class="s2">&quot;_lvl&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">lvl</span>
+</span><span id="L-232"><a href="#L-232"><span class="linenos">232</span></a>
+</span><span id="L-233"><a href="#L-233"><span class="linenos">233</span></a>        <span class="c1"># msg_dict[&quot;_stream&quot;] = stream # moved to LoggingStream</span>
+</span><span id="L-234"><a href="#L-234"><span class="linenos">234</span></a>
+</span><span id="L-235"><a href="#L-235"><span class="linenos">235</span></a>        <span class="c1"># extra data in kwargs</span>
+</span><span id="L-236"><a href="#L-236"><span class="linenos">236</span></a>        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+</span><span id="L-237"><a href="#L-237"><span class="linenos">237</span></a>            <span class="n">msg_dict</span><span class="p">[</span><span class="s2">&quot;_kwargs&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">kwargs</span>
+</span><span id="L-238"><a href="#L-238"><span class="linenos">238</span></a>
+</span><span id="L-239"><a href="#L-239"><span class="linenos">239</span></a>        <span class="c1"># add default contents (timing, etc)</span>
+</span><span id="L-240"><a href="#L-240"><span class="linenos">240</span></a>        <span class="n">msg_dict</span> <span class="o">=</span> <span class="p">{</span>
+</span><span id="L-241"><a href="#L-241"><span class="linenos">241</span></a>            <span class="o">**</span><span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span><span class="p">()</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_streams</span><span class="p">[</span><span class="n">stream</span><span class="p">]</span><span class="o">.</span><span class="n">default_contents</span><span class="o">.</span><span class="n">items</span><span class="p">()},</span>
+</span><span id="L-242"><a href="#L-242"><span class="linenos">242</span></a>            <span class="o">**</span><span class="n">msg_dict</span><span class="p">,</span>
+</span><span id="L-243"><a href="#L-243"><span class="linenos">243</span></a>        <span class="p">}</span>
+</span><span id="L-244"><a href="#L-244"><span class="linenos">244</span></a>
+</span><span id="L-245"><a href="#L-245"><span class="linenos">245</span></a>        <span class="c1"># write</span>
+</span><span id="L-246"><a href="#L-246"><span class="linenos">246</span></a>        <span class="c1"># ========================================</span>
+</span><span id="L-247"><a href="#L-247"><span class="linenos">247</span></a>        <span class="n">logfile_msg</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">json_serialize</span><span class="p">(</span><span class="n">msg_dict</span><span class="p">))</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+</span><span id="L-248"><a href="#L-248"><span class="linenos">248</span></a>        <span class="k">if</span> <span class="p">(</span>
+</span><span id="L-249"><a href="#L-249"><span class="linenos">249</span></a>            <span class="p">(</span><span class="n">stream</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span>
+</span><span id="L-250"><a href="#L-250"><span class="linenos">250</span></a>            <span class="ow">or</span> <span class="p">(</span><span class="n">stream</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_streams</span><span class="p">)</span>
+</span><span id="L-251"><a href="#L-251"><span class="linenos">251</span></a>            <span class="ow">or</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_streams</span><span class="p">[</span><span class="n">stream</span><span class="p">]</span><span class="o">.</span><span class="n">handler</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span>
+</span><span id="L-252"><a href="#L-252"><span class="linenos">252</span></a>        <span class="p">):</span>
+</span><span id="L-253"><a href="#L-253"><span class="linenos">253</span></a>            <span class="c1"># write to the main log file if no stream is specified</span>
+</span><span id="L-254"><a href="#L-254"><span class="linenos">254</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">_log_file_handle</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">logfile_msg</span><span class="p">)</span>
+</span><span id="L-255"><a href="#L-255"><span class="linenos">255</span></a>        <span class="k">else</span><span class="p">:</span>
+</span><span id="L-256"><a href="#L-256"><span class="linenos">256</span></a>            <span class="c1"># otherwise, write to the stream-specific file</span>
+</span><span id="L-257"><a href="#L-257"><span class="linenos">257</span></a>            <span class="n">s_handler</span><span class="p">:</span> <span class="n">AnyIO</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_streams</span><span class="p">[</span><span class="n">stream</span><span class="p">]</span><span class="o">.</span><span class="n">handler</span>
+</span><span id="L-258"><a href="#L-258"><span class="linenos">258</span></a>            <span class="k">if</span> <span class="n">s_handler</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="L-259"><a href="#L-259"><span class="linenos">259</span></a>                <span class="n">s_handler</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">logfile_msg</span><span class="p">)</span>
+</span><span id="L-260"><a href="#L-260"><span class="linenos">260</span></a>            <span class="k">else</span><span class="p">:</span>
+</span><span id="L-261"><a href="#L-261"><span class="linenos">261</span></a>                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+</span><span id="L-262"><a href="#L-262"><span class="linenos">262</span></a>                    <span class="sa">f</span><span class="s2">&quot;stream handler is None! something in the logging stream setup is wrong:</span><span class="se">\n</span><span class="si">{</span><span class="bp">self</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span id="L-263"><a href="#L-263"><span class="linenos">263</span></a>                <span class="p">)</span>
+</span><span id="L-264"><a href="#L-264"><span class="linenos">264</span></a>
+</span><span id="L-265"><a href="#L-265"><span class="linenos">265</span></a>        <span class="c1"># if it was important enough to print, flush all streams</span>
+</span><span id="L-266"><a href="#L-266"><span class="linenos">266</span></a>        <span class="k">if</span> <span class="n">_printed</span><span class="p">:</span>
+</span><span id="L-267"><a href="#L-267"><span class="linenos">267</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">flush_all</span><span class="p">()</span>
+</span><span id="L-268"><a href="#L-268"><span class="linenos">268</span></a>
+</span><span id="L-269"><a href="#L-269"><span class="linenos">269</span></a>    <span class="k">def</span> <span class="nf">log_elapsed_last</span><span class="p">(</span>
+</span><span id="L-270"><a href="#L-270"><span class="linenos">270</span></a>        <span class="bp">self</span><span class="p">,</span>
+</span><span id="L-271"><a href="#L-271"><span class="linenos">271</span></a>        <span class="n">lvl</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+</span><span id="L-272"><a href="#L-272"><span class="linenos">272</span></a>        <span class="n">stream</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+</span><span id="L-273"><a href="#L-273"><span class="linenos">273</span></a>        <span class="n">console_print</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+</span><span id="L-274"><a href="#L-274"><span class="linenos">274</span></a>        <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+</span><span id="L-275"><a href="#L-275"><span class="linenos">275</span></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+</span><span id="L-276"><a href="#L-276"><span class="linenos">276</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;logs the time elapsed since the last message was printed to the console (in any stream)&quot;&quot;&quot;</span>
+</span><span id="L-277"><a href="#L-277"><span class="linenos">277</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_last_msg_time</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="L-278"><a href="#L-278"><span class="linenos">278</span></a>            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;no last message time!&quot;</span><span class="p">)</span>
+</span><span id="L-279"><a href="#L-279"><span class="linenos">279</span></a>        <span class="k">else</span><span class="p">:</span>
+</span><span id="L-280"><a href="#L-280"><span class="linenos">280</span></a>            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="p">(</span>
+</span><span id="L-281"><a href="#L-281"><span class="linenos">281</span></a>                <span class="p">{</span><span class="s2">&quot;elapsed_time&quot;</span><span class="p">:</span> <span class="nb">round</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_last_msg_time</span><span class="p">,</span> <span class="mi">6</span><span class="p">)},</span>
+</span><span id="L-282"><a href="#L-282"><span class="linenos">282</span></a>                <span class="n">lvl</span><span class="o">=</span><span class="p">(</span><span class="n">lvl</span> <span class="k">if</span> <span class="n">lvl</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">_console_print_threshold</span><span class="p">),</span>
+</span><span id="L-283"><a href="#L-283"><span class="linenos">283</span></a>                <span class="n">stream</span><span class="o">=</span><span class="n">stream</span><span class="p">,</span>
+</span><span id="L-284"><a href="#L-284"><span class="linenos">284</span></a>                <span class="n">console_print</span><span class="o">=</span><span class="n">console_print</span><span class="p">,</span>
+</span><span id="L-285"><a href="#L-285"><span class="linenos">285</span></a>                <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+</span><span id="L-286"><a href="#L-286"><span class="linenos">286</span></a>            <span class="p">)</span>
+</span><span id="L-287"><a href="#L-287"><span class="linenos">287</span></a>
+</span><span id="L-288"><a href="#L-288"><span class="linenos">288</span></a>    <span class="k">def</span> <span class="nf">flush_all</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span id="L-289"><a href="#L-289"><span class="linenos">289</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;flush all streams&quot;&quot;&quot;</span>
+</span><span id="L-290"><a href="#L-290"><span class="linenos">290</span></a>
+</span><span id="L-291"><a href="#L-291"><span class="linenos">291</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_log_file_handle</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
+</span><span id="L-292"><a href="#L-292"><span class="linenos">292</span></a>
+</span><span id="L-293"><a href="#L-293"><span class="linenos">293</span></a>        <span class="k">for</span> <span class="n">stream</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_streams</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+</span><span id="L-294"><a href="#L-294"><span class="linenos">294</span></a>            <span class="k">if</span> <span class="n">stream</span><span class="o">.</span><span class="n">handler</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="L-295"><a href="#L-295"><span class="linenos">295</span></a>                <span class="n">stream</span><span class="o">.</span><span class="n">handler</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
+</span><span id="L-296"><a href="#L-296"><span class="linenos">296</span></a>
+</span><span id="L-297"><a href="#L-297"><span class="linenos">297</span></a>    <span class="k">def</span> <span class="fm">__getattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stream</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">:</span>
+</span><span id="L-298"><a href="#L-298"><span class="linenos">298</span></a>        <span class="k">if</span> <span class="n">stream</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">):</span>
+</span><span id="L-299"><a href="#L-299"><span class="linenos">299</span></a>            <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;invalid stream name </span><span class="si">{</span><span class="n">stream</span><span class="si">}</span><span class="s2"> (no underscores)&quot;</span><span class="p">)</span>
+</span><span id="L-300"><a href="#L-300"><span class="linenos">300</span></a>        <span class="k">return</span> <span class="n">partial</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="p">,</span> <span class="n">stream</span><span class="o">=</span><span class="n">stream</span><span class="p">)</span>
+</span><span id="L-301"><a href="#L-301"><span class="linenos">301</span></a>
+</span><span id="L-302"><a href="#L-302"><span class="linenos">302</span></a>    <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stream</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+</span><span id="L-303"><a href="#L-303"><span class="linenos">303</span></a>        <span class="k">return</span> <span class="n">partial</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="p">,</span> <span class="n">stream</span><span class="o">=</span><span class="n">stream</span><span class="p">)</span>
+</span><span id="L-304"><a href="#L-304"><span class="linenos">304</span></a>
+</span><span id="L-305"><a href="#L-305"><span class="linenos">305</span></a>    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+</span><span id="L-306"><a href="#L-306"><span class="linenos">306</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</span></pre></div>
+
+
+                <br/>
+            </section>
+                <section id="decode_level">
+                            <input id="decode_level-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr function">
+            
+        <span class="def">def</span>
+        <span class="name">decode_level</span><span class="signature pdoc-code condensed">(<span class="param"><span class="n">level</span><span class="p">:</span> <span class="nb">int</span></span><span class="return-annotation">) -> <span class="nb">str</span>:</span></span>
+
+                <div class="source-button-container">
+            <label class="pdoc-button view-source-button" for="decode_level-view-source"><span>View Source</span></label>
+            <div class="github-button-wrapper">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/main/muutils/logger/logger.py#L27-L36" target="_blank">
+                    <span>View on GitHub</span>
+                </a>
+            </div>
+        </div>
+
+    </div>
+    <a class="headerlink" href="#decode_level"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="decode_level-28"><a href="#decode_level-28"><span class="linenos">28</span></a><span class="k">def</span> <span class="nf">decode_level</span><span class="p">(</span><span class="n">level</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+</span><span id="decode_level-29"><a href="#decode_level-29"><span class="linenos">29</span></a>    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">level</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+</span><span id="decode_level-30"><a href="#decode_level-30"><span class="linenos">30</span></a>        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;level must be int, got </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">level</span><span class="p">)</span><span class="w"> </span><span class="si">= }</span><span class="s2"> </span><span class="si">{</span><span class="n">level</span><span class="w"> </span><span class="si">= }</span><span class="s2">&quot;</span><span class="p">)</span>
+</span><span id="decode_level-31"><a href="#decode_level-31"><span class="linenos">31</span></a>
+</span><span id="decode_level-32"><a href="#decode_level-32"><span class="linenos">32</span></a>    <span class="k">if</span> <span class="n">level</span> <span class="o">&lt;</span> <span class="o">-</span><span class="mi">255</span><span class="p">:</span>
+</span><span id="decode_level-33"><a href="#decode_level-33"><span class="linenos">33</span></a>        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;FATAL_ERROR(</span><span class="si">{</span><span class="n">level</span><span class="si">}</span><span class="s2">)&quot;</span>
+</span><span id="decode_level-34"><a href="#decode_level-34"><span class="linenos">34</span></a>    <span class="k">elif</span> <span class="n">level</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+</span><span id="decode_level-35"><a href="#decode_level-35"><span class="linenos">35</span></a>        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;WARNING(</span><span class="si">{</span><span class="n">level</span><span class="si">}</span><span class="s2">)&quot;</span>
+</span><span id="decode_level-36"><a href="#decode_level-36"><span class="linenos">36</span></a>    <span class="k">else</span><span class="p">:</span>
+</span><span id="decode_level-37"><a href="#decode_level-37"><span class="linenos">37</span></a>        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;INFO(</span><span class="si">{</span><span class="n">level</span><span class="si">}</span><span class="s2">)&quot;</span>
+</span></pre></div>
+
+
+    
+
+                </section>
+                <section id="Logger">
+                            <input id="Logger-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr class">
+            
+    <span class="def">class</span>
+    <span class="name">Logger</span><wbr>(<span class="base"><a href="simplelogger.html#SimpleLogger">muutils.logger.simplelogger.SimpleLogger</a></span>):
+
+                <div class="source-button-container">
+            <label class="pdoc-button view-source-button" for="Logger-view-source"><span>View Source</span></label>
+            <div class="github-button-wrapper">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/main/muutils/logger/logger.py#L40-L306" target="_blank">
+                    <span>View on GitHub</span>
+                </a>
+            </div>
+        </div>
+
+    </div>
+    <a class="headerlink" href="#Logger"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Logger-41"><a href="#Logger-41"><span class="linenos"> 41</span></a><span class="k">class</span> <span class="nc">Logger</span><span class="p">(</span><span class="n">SimpleLogger</span><span class="p">):</span>
+</span><span id="Logger-42"><a href="#Logger-42"><span class="linenos"> 42</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;logger with more features, including log levels and streams</span>
+</span><span id="Logger-43"><a href="#Logger-43"><span class="linenos"> 43</span></a>
+</span><span id="Logger-44"><a href="#Logger-44"><span class="linenos"> 44</span></a><span class="sd">    # Parameters:</span>
+</span><span id="Logger-45"><a href="#Logger-45"><span class="linenos"> 45</span></a><span class="sd">            - `log_path : str | None`</span>
+</span><span id="Logger-46"><a href="#Logger-46"><span class="linenos"> 46</span></a><span class="sd">            default log file path</span>
+</span><span id="Logger-47"><a href="#Logger-47"><span class="linenos"> 47</span></a><span class="sd">            (defaults to `None`)</span>
+</span><span id="Logger-48"><a href="#Logger-48"><span class="linenos"> 48</span></a><span class="sd">            - `log_file : AnyIO | None`</span>
+</span><span id="Logger-49"><a href="#Logger-49"><span class="linenos"> 49</span></a><span class="sd">            default log io, should have a `.write()` method (pass only this or `log_path`, not both)</span>
+</span><span id="Logger-50"><a href="#Logger-50"><span class="linenos"> 50</span></a><span class="sd">            (defaults to `None`)</span>
+</span><span id="Logger-51"><a href="#Logger-51"><span class="linenos"> 51</span></a><span class="sd">            - `timestamp : bool`</span>
+</span><span id="Logger-52"><a href="#Logger-52"><span class="linenos"> 52</span></a><span class="sd">            whether to add timestamps to every log message (under the `_timestamp` key)</span>
+</span><span id="Logger-53"><a href="#Logger-53"><span class="linenos"> 53</span></a><span class="sd">            (defaults to `True`)</span>
+</span><span id="Logger-54"><a href="#Logger-54"><span class="linenos"> 54</span></a><span class="sd">            - `default_level : int`</span>
+</span><span id="Logger-55"><a href="#Logger-55"><span class="linenos"> 55</span></a><span class="sd">            default log level for streams/messages that don&#39;t specify a level</span>
+</span><span id="Logger-56"><a href="#Logger-56"><span class="linenos"> 56</span></a><span class="sd">            (defaults to `0`)</span>
+</span><span id="Logger-57"><a href="#Logger-57"><span class="linenos"> 57</span></a><span class="sd">            - `console_print_threshold : int`</span>
+</span><span id="Logger-58"><a href="#Logger-58"><span class="linenos"> 58</span></a><span class="sd">            log level at which to print to the console, anything greater will not be printed unless overridden by `console_print`</span>
+</span><span id="Logger-59"><a href="#Logger-59"><span class="linenos"> 59</span></a><span class="sd">            (defaults to `50`)</span>
+</span><span id="Logger-60"><a href="#Logger-60"><span class="linenos"> 60</span></a><span class="sd">            - `level_header : HeaderFunction`</span>
+</span><span id="Logger-61"><a href="#Logger-61"><span class="linenos"> 61</span></a><span class="sd">            function for formatting log messages when printing to console</span>
+</span><span id="Logger-62"><a href="#Logger-62"><span class="linenos"> 62</span></a><span class="sd">            (defaults to `HEADER_FUNCTIONS[&quot;md&quot;]`)</span>
+</span><span id="Logger-63"><a href="#Logger-63"><span class="linenos"> 63</span></a><span class="sd">    - `keep_last_msg_time : bool`</span>
+</span><span id="Logger-64"><a href="#Logger-64"><span class="linenos"> 64</span></a><span class="sd">            whether to keep the last message time</span>
+</span><span id="Logger-65"><a href="#Logger-65"><span class="linenos"> 65</span></a><span class="sd">            (defaults to `True`)</span>
+</span><span id="Logger-66"><a href="#Logger-66"><span class="linenos"> 66</span></a>
+</span><span id="Logger-67"><a href="#Logger-67"><span class="linenos"> 67</span></a>
+</span><span id="Logger-68"><a href="#Logger-68"><span class="linenos"> 68</span></a><span class="sd">    # Raises:</span>
+</span><span id="Logger-69"><a href="#Logger-69"><span class="linenos"> 69</span></a><span class="sd">            - `ValueError` : _description_</span>
+</span><span id="Logger-70"><a href="#Logger-70"><span class="linenos"> 70</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="Logger-71"><a href="#Logger-71"><span class="linenos"> 71</span></a>
+</span><span id="Logger-72"><a href="#Logger-72"><span class="linenos"> 72</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+</span><span id="Logger-73"><a href="#Logger-73"><span class="linenos"> 73</span></a>        <span class="bp">self</span><span class="p">,</span>
+</span><span id="Logger-74"><a href="#Logger-74"><span class="linenos"> 74</span></a>        <span class="n">log_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+</span><span id="Logger-75"><a href="#Logger-75"><span class="linenos"> 75</span></a>        <span class="n">log_file</span><span class="p">:</span> <span class="n">AnyIO</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+</span><span id="Logger-76"><a href="#Logger-76"><span class="linenos"> 76</span></a>        <span class="n">default_level</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+</span><span id="Logger-77"><a href="#Logger-77"><span class="linenos"> 77</span></a>        <span class="n">console_print_threshold</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">50</span><span class="p">,</span>
+</span><span id="Logger-78"><a href="#Logger-78"><span class="linenos"> 78</span></a>        <span class="n">level_header</span><span class="p">:</span> <span class="n">HeaderFunction</span> <span class="o">=</span> <span class="n">HEADER_FUNCTIONS</span><span class="p">[</span><span class="s2">&quot;md&quot;</span><span class="p">],</span>
+</span><span id="Logger-79"><a href="#Logger-79"><span class="linenos"> 79</span></a>        <span class="n">streams</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span> <span class="n">LoggingStream</span><span class="p">]</span> <span class="o">|</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">LoggingStream</span><span class="p">]</span> <span class="o">=</span> <span class="p">(),</span>
+</span><span id="Logger-80"><a href="#Logger-80"><span class="linenos"> 80</span></a>        <span class="n">keep_last_msg_time</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+</span><span id="Logger-81"><a href="#Logger-81"><span class="linenos"> 81</span></a>        <span class="c1"># junk args</span>
+</span><span id="Logger-82"><a href="#Logger-82"><span class="linenos"> 82</span></a>        <span class="n">timestamp</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+</span><span id="Logger-83"><a href="#Logger-83"><span class="linenos"> 83</span></a>        <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+</span><span id="Logger-84"><a href="#Logger-84"><span class="linenos"> 84</span></a>    <span class="p">):</span>
+</span><span id="Logger-85"><a href="#Logger-85"><span class="linenos"> 85</span></a>        <span class="c1"># junk arg checking</span>
+</span><span id="Logger-86"><a href="#Logger-86"><span class="linenos"> 86</span></a>        <span class="c1"># ==================================================</span>
+</span><span id="Logger-87"><a href="#Logger-87"><span class="linenos"> 87</span></a>        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+</span><span id="Logger-88"><a href="#Logger-88"><span class="linenos"> 88</span></a>            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;unrecognized kwargs: </span><span class="si">{</span><span class="n">kwargs</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span><span id="Logger-89"><a href="#Logger-89"><span class="linenos"> 89</span></a>
+</span><span id="Logger-90"><a href="#Logger-90"><span class="linenos"> 90</span></a>        <span class="k">if</span> <span class="ow">not</span> <span class="n">timestamp</span><span class="p">:</span>
+</span><span id="Logger-91"><a href="#Logger-91"><span class="linenos"> 91</span></a>            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+</span><span id="Logger-92"><a href="#Logger-92"><span class="linenos"> 92</span></a>                <span class="s2">&quot;timestamp must be True -- why would you not want timestamps?&quot;</span>
+</span><span id="Logger-93"><a href="#Logger-93"><span class="linenos"> 93</span></a>            <span class="p">)</span>
+</span><span id="Logger-94"><a href="#Logger-94"><span class="linenos"> 94</span></a>
+</span><span id="Logger-95"><a href="#Logger-95"><span class="linenos"> 95</span></a>        <span class="c1"># timing</span>
+</span><span id="Logger-96"><a href="#Logger-96"><span class="linenos"> 96</span></a>        <span class="c1"># ==================================================</span>
+</span><span id="Logger-97"><a href="#Logger-97"><span class="linenos"> 97</span></a>        <span class="c1"># timing compares</span>
+</span><span id="Logger-98"><a href="#Logger-98"><span class="linenos"> 98</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_keep_last_msg_time</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">keep_last_msg_time</span>
+</span><span id="Logger-99"><a href="#Logger-99"><span class="linenos"> 99</span></a>        <span class="c1"># TODO: handle per stream?</span>
+</span><span id="Logger-100"><a href="#Logger-100"><span class="linenos">100</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_last_msg_time</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+</span><span id="Logger-101"><a href="#Logger-101"><span class="linenos">101</span></a>
+</span><span id="Logger-102"><a href="#Logger-102"><span class="linenos">102</span></a>        <span class="c1"># basic setup</span>
+</span><span id="Logger-103"><a href="#Logger-103"><span class="linenos">103</span></a>        <span class="c1"># ==================================================</span>
+</span><span id="Logger-104"><a href="#Logger-104"><span class="linenos">104</span></a>        <span class="c1"># init BaseLogger</span>
+</span><span id="Logger-105"><a href="#Logger-105"><span class="linenos">105</span></a>        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">log_file</span><span class="o">=</span><span class="n">log_file</span><span class="p">,</span> <span class="n">log_path</span><span class="o">=</span><span class="n">log_path</span><span class="p">,</span> <span class="n">timestamp</span><span class="o">=</span><span class="n">timestamp</span><span class="p">)</span>
+</span><span id="Logger-106"><a href="#Logger-106"><span class="linenos">106</span></a>
+</span><span id="Logger-107"><a href="#Logger-107"><span class="linenos">107</span></a>        <span class="c1"># level-related</span>
+</span><span id="Logger-108"><a href="#Logger-108"><span class="linenos">108</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_console_print_threshold</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">console_print_threshold</span>
+</span><span id="Logger-109"><a href="#Logger-109"><span class="linenos">109</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_default_level</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">default_level</span>
+</span><span id="Logger-110"><a href="#Logger-110"><span class="linenos">110</span></a>
+</span><span id="Logger-111"><a href="#Logger-111"><span class="linenos">111</span></a>        <span class="c1"># set up streams</span>
+</span><span id="Logger-112"><a href="#Logger-112"><span class="linenos">112</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_streams</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span> <span class="n">LoggingStream</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+</span><span id="Logger-113"><a href="#Logger-113"><span class="linenos">113</span></a>            <span class="n">streams</span>
+</span><span id="Logger-114"><a href="#Logger-114"><span class="linenos">114</span></a>            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">streams</span><span class="p">,</span> <span class="n">typing</span><span class="o">.</span><span class="n">Mapping</span><span class="p">)</span>
+</span><span id="Logger-115"><a href="#Logger-115"><span class="linenos">115</span></a>            <span class="k">else</span> <span class="p">{</span><span class="n">s</span><span class="o">.</span><span class="n">name</span><span class="p">:</span> <span class="n">s</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">streams</span><span class="p">}</span>
+</span><span id="Logger-116"><a href="#Logger-116"><span class="linenos">116</span></a>        <span class="p">)</span>
+</span><span id="Logger-117"><a href="#Logger-117"><span class="linenos">117</span></a>        <span class="c1"># default error stream</span>
+</span><span id="Logger-118"><a href="#Logger-118"><span class="linenos">118</span></a>        <span class="k">if</span> <span class="s2">&quot;error&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_streams</span><span class="p">:</span>
+</span><span id="Logger-119"><a href="#Logger-119"><span class="linenos">119</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">_streams</span><span class="p">[</span><span class="s2">&quot;error&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">LoggingStream</span><span class="p">(</span>
+</span><span id="Logger-120"><a href="#Logger-120"><span class="linenos">120</span></a>                <span class="s2">&quot;error&quot;</span><span class="p">,</span>
+</span><span id="Logger-121"><a href="#Logger-121"><span class="linenos">121</span></a>                <span class="n">aliases</span><span class="o">=</span><span class="p">{</span>
+</span><span id="Logger-122"><a href="#Logger-122"><span class="linenos">122</span></a>                    <span class="s2">&quot;err&quot;</span><span class="p">,</span>
+</span><span id="Logger-123"><a href="#Logger-123"><span class="linenos">123</span></a>                    <span class="s2">&quot;except&quot;</span><span class="p">,</span>
+</span><span id="Logger-124"><a href="#Logger-124"><span class="linenos">124</span></a>                    <span class="s2">&quot;Exception&quot;</span><span class="p">,</span>
+</span><span id="Logger-125"><a href="#Logger-125"><span class="linenos">125</span></a>                    <span class="s2">&quot;exception&quot;</span><span class="p">,</span>
+</span><span id="Logger-126"><a href="#Logger-126"><span class="linenos">126</span></a>                    <span class="s2">&quot;exceptions&quot;</span><span class="p">,</span>
+</span><span id="Logger-127"><a href="#Logger-127"><span class="linenos">127</span></a>                    <span class="s2">&quot;errors&quot;</span><span class="p">,</span>
+</span><span id="Logger-128"><a href="#Logger-128"><span class="linenos">128</span></a>                <span class="p">},</span>
+</span><span id="Logger-129"><a href="#Logger-129"><span class="linenos">129</span></a>            <span class="p">)</span>
+</span><span id="Logger-130"><a href="#Logger-130"><span class="linenos">130</span></a>
+</span><span id="Logger-131"><a href="#Logger-131"><span class="linenos">131</span></a>        <span class="c1"># check alias duplicates</span>
+</span><span id="Logger-132"><a href="#Logger-132"><span class="linenos">132</span></a>        <span class="n">alias_set</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+</span><span id="Logger-133"><a href="#Logger-133"><span class="linenos">133</span></a>        <span class="k">for</span> <span class="n">stream</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_streams</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+</span><span id="Logger-134"><a href="#Logger-134"><span class="linenos">134</span></a>            <span class="k">for</span> <span class="n">alias</span> <span class="ow">in</span> <span class="n">stream</span><span class="o">.</span><span class="n">aliases</span><span class="p">:</span>
+</span><span id="Logger-135"><a href="#Logger-135"><span class="linenos">135</span></a>                <span class="k">if</span> <span class="n">alias</span> <span class="ow">in</span> <span class="n">alias_set</span><span class="p">:</span>
+</span><span id="Logger-136"><a href="#Logger-136"><span class="linenos">136</span></a>                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;alias </span><span class="si">{</span><span class="n">alias</span><span class="si">}</span><span class="s2"> is already in use&quot;</span><span class="p">)</span>
+</span><span id="Logger-137"><a href="#Logger-137"><span class="linenos">137</span></a>                <span class="n">alias_set</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">alias</span><span class="p">)</span>
+</span><span id="Logger-138"><a href="#Logger-138"><span class="linenos">138</span></a>
+</span><span id="Logger-139"><a href="#Logger-139"><span class="linenos">139</span></a>        <span class="c1"># add aliases</span>
+</span><span id="Logger-140"><a href="#Logger-140"><span class="linenos">140</span></a>        <span class="k">for</span> <span class="n">stream</span> <span class="ow">in</span> <span class="nb">tuple</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_streams</span><span class="o">.</span><span class="n">values</span><span class="p">()):</span>
+</span><span id="Logger-141"><a href="#Logger-141"><span class="linenos">141</span></a>            <span class="k">for</span> <span class="n">alias</span> <span class="ow">in</span> <span class="n">stream</span><span class="o">.</span><span class="n">aliases</span><span class="p">:</span>
+</span><span id="Logger-142"><a href="#Logger-142"><span class="linenos">142</span></a>                <span class="k">if</span> <span class="n">alias</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_streams</span><span class="p">:</span>
+</span><span id="Logger-143"><a href="#Logger-143"><span class="linenos">143</span></a>                    <span class="bp">self</span><span class="o">.</span><span class="n">_streams</span><span class="p">[</span><span class="n">alias</span><span class="p">]</span> <span class="o">=</span> <span class="n">stream</span>
+</span><span id="Logger-144"><a href="#Logger-144"><span class="linenos">144</span></a>
+</span><span id="Logger-145"><a href="#Logger-145"><span class="linenos">145</span></a>        <span class="c1"># print formatting</span>
+</span><span id="Logger-146"><a href="#Logger-146"><span class="linenos">146</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_level_header</span><span class="p">:</span> <span class="n">HeaderFunction</span> <span class="o">=</span> <span class="n">level_header</span>
+</span><span id="Logger-147"><a href="#Logger-147"><span class="linenos">147</span></a>
+</span><span id="Logger-148"><a href="#Logger-148"><span class="linenos">148</span></a>        <span class="nb">print</span><span class="p">({</span><span class="n">k</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_streams</span><span class="o">.</span><span class="n">items</span><span class="p">()})</span>
+</span><span id="Logger-149"><a href="#Logger-149"><span class="linenos">149</span></a>
+</span><span id="Logger-150"><a href="#Logger-150"><span class="linenos">150</span></a>    <span class="k">def</span> <span class="nf">_exception_context</span><span class="p">(</span>
+</span><span id="Logger-151"><a href="#Logger-151"><span class="linenos">151</span></a>        <span class="bp">self</span><span class="p">,</span>
+</span><span id="Logger-152"><a href="#Logger-152"><span class="linenos">152</span></a>        <span class="n">stream</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;error&quot;</span><span class="p">,</span>
+</span><span id="Logger-153"><a href="#Logger-153"><span class="linenos">153</span></a>        <span class="c1"># level: int = -256,</span>
+</span><span id="Logger-154"><a href="#Logger-154"><span class="linenos">154</span></a>        <span class="c1"># **kwargs,</span>
+</span><span id="Logger-155"><a href="#Logger-155"><span class="linenos">155</span></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ExceptionContext</span><span class="p">:</span>
+</span><span id="Logger-156"><a href="#Logger-156"><span class="linenos">156</span></a>        <span class="n">s</span><span class="p">:</span> <span class="n">LoggingStream</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_streams</span><span class="p">[</span><span class="n">stream</span><span class="p">]</span>
+</span><span id="Logger-157"><a href="#Logger-157"><span class="linenos">157</span></a>        <span class="k">return</span> <span class="n">ExceptionContext</span><span class="p">(</span><span class="n">stream</span><span class="o">=</span><span class="n">s</span><span class="p">)</span>
+</span><span id="Logger-158"><a href="#Logger-158"><span class="linenos">158</span></a>
+</span><span id="Logger-159"><a href="#Logger-159"><span class="linenos">159</span></a>    <span class="k">def</span> <span class="nf">log</span><span class="p">(</span>  <span class="c1"># type: ignore # yes, the signatures are different here.</span>
+</span><span id="Logger-160"><a href="#Logger-160"><span class="linenos">160</span></a>        <span class="bp">self</span><span class="p">,</span>
+</span><span id="Logger-161"><a href="#Logger-161"><span class="linenos">161</span></a>        <span class="n">msg</span><span class="p">:</span> <span class="n">JSONitem</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+</span><span id="Logger-162"><a href="#Logger-162"><span class="linenos">162</span></a>        <span class="n">lvl</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+</span><span id="Logger-163"><a href="#Logger-163"><span class="linenos">163</span></a>        <span class="n">stream</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+</span><span id="Logger-164"><a href="#Logger-164"><span class="linenos">164</span></a>        <span class="n">console_print</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+</span><span id="Logger-165"><a href="#Logger-165"><span class="linenos">165</span></a>        <span class="n">extra_indent</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+</span><span id="Logger-166"><a href="#Logger-166"><span class="linenos">166</span></a>        <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+</span><span id="Logger-167"><a href="#Logger-167"><span class="linenos">167</span></a>    <span class="p">):</span>
+</span><span id="Logger-168"><a href="#Logger-168"><span class="linenos">168</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;logging function</span>
+</span><span id="Logger-169"><a href="#Logger-169"><span class="linenos">169</span></a>
+</span><span id="Logger-170"><a href="#Logger-170"><span class="linenos">170</span></a><span class="sd">        ### Parameters:</span>
+</span><span id="Logger-171"><a href="#Logger-171"><span class="linenos">171</span></a><span class="sd">         - `msg : JSONitem`</span>
+</span><span id="Logger-172"><a href="#Logger-172"><span class="linenos">172</span></a><span class="sd">           message (usually string or dict) to be logged</span>
+</span><span id="Logger-173"><a href="#Logger-173"><span class="linenos">173</span></a><span class="sd">         - `lvl : int | None`</span>
+</span><span id="Logger-174"><a href="#Logger-174"><span class="linenos">174</span></a><span class="sd">           level of message (lower levels are more important)</span>
+</span><span id="Logger-175"><a href="#Logger-175"><span class="linenos">175</span></a><span class="sd">           (defaults to `None`)</span>
+</span><span id="Logger-176"><a href="#Logger-176"><span class="linenos">176</span></a><span class="sd">         - `console_print : bool`</span>
+</span><span id="Logger-177"><a href="#Logger-177"><span class="linenos">177</span></a><span class="sd">           override `console_print_threshold` setting</span>
+</span><span id="Logger-178"><a href="#Logger-178"><span class="linenos">178</span></a><span class="sd">           (defaults to `False`)</span>
+</span><span id="Logger-179"><a href="#Logger-179"><span class="linenos">179</span></a><span class="sd">         - `stream : str | None`</span>
+</span><span id="Logger-180"><a href="#Logger-180"><span class="linenos">180</span></a><span class="sd">           whether to log to a stream (defaults to `None`), which logs to the default `None` stream</span>
+</span><span id="Logger-181"><a href="#Logger-181"><span class="linenos">181</span></a><span class="sd">           (defaults to `None`)</span>
+</span><span id="Logger-182"><a href="#Logger-182"><span class="linenos">182</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="Logger-183"><a href="#Logger-183"><span class="linenos">183</span></a>
+</span><span id="Logger-184"><a href="#Logger-184"><span class="linenos">184</span></a>        <span class="c1"># add to known stream names if not present</span>
+</span><span id="Logger-185"><a href="#Logger-185"><span class="linenos">185</span></a>        <span class="k">if</span> <span class="n">stream</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_streams</span><span class="p">:</span>
+</span><span id="Logger-186"><a href="#Logger-186"><span class="linenos">186</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">_streams</span><span class="p">[</span><span class="n">stream</span><span class="p">]</span> <span class="o">=</span> <span class="n">LoggingStream</span><span class="p">(</span><span class="n">stream</span><span class="p">)</span>
+</span><span id="Logger-187"><a href="#Logger-187"><span class="linenos">187</span></a>
+</span><span id="Logger-188"><a href="#Logger-188"><span class="linenos">188</span></a>        <span class="c1"># set default level to either global or stream-specific default level</span>
+</span><span id="Logger-189"><a href="#Logger-189"><span class="linenos">189</span></a>        <span class="c1"># ========================================</span>
+</span><span id="Logger-190"><a href="#Logger-190"><span class="linenos">190</span></a>        <span class="k">if</span> <span class="n">lvl</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="Logger-191"><a href="#Logger-191"><span class="linenos">191</span></a>            <span class="k">if</span> <span class="n">stream</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="Logger-192"><a href="#Logger-192"><span class="linenos">192</span></a>                <span class="n">lvl</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_default_level</span>
+</span><span id="Logger-193"><a href="#Logger-193"><span class="linenos">193</span></a>            <span class="k">else</span><span class="p">:</span>
+</span><span id="Logger-194"><a href="#Logger-194"><span class="linenos">194</span></a>                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_streams</span><span class="p">[</span><span class="n">stream</span><span class="p">]</span><span class="o">.</span><span class="n">default_level</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="Logger-195"><a href="#Logger-195"><span class="linenos">195</span></a>                    <span class="n">lvl</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_streams</span><span class="p">[</span><span class="n">stream</span><span class="p">]</span><span class="o">.</span><span class="n">default_level</span>
+</span><span id="Logger-196"><a href="#Logger-196"><span class="linenos">196</span></a>                <span class="k">else</span><span class="p">:</span>
+</span><span id="Logger-197"><a href="#Logger-197"><span class="linenos">197</span></a>                    <span class="n">lvl</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_default_level</span>
+</span><span id="Logger-198"><a href="#Logger-198"><span class="linenos">198</span></a>
+</span><span id="Logger-199"><a href="#Logger-199"><span class="linenos">199</span></a>        <span class="k">assert</span> <span class="n">lvl</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;lvl should not be None at this point&quot;</span>
+</span><span id="Logger-200"><a href="#Logger-200"><span class="linenos">200</span></a>
+</span><span id="Logger-201"><a href="#Logger-201"><span class="linenos">201</span></a>        <span class="c1"># print to console with formatting</span>
+</span><span id="Logger-202"><a href="#Logger-202"><span class="linenos">202</span></a>        <span class="c1"># ========================================</span>
+</span><span id="Logger-203"><a href="#Logger-203"><span class="linenos">203</span></a>        <span class="n">_printed</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+</span><span id="Logger-204"><a href="#Logger-204"><span class="linenos">204</span></a>        <span class="k">if</span> <span class="n">console_print</span> <span class="ow">or</span> <span class="p">(</span><span class="n">lvl</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_console_print_threshold</span><span class="p">):</span>
+</span><span id="Logger-205"><a href="#Logger-205"><span class="linenos">205</span></a>            <span class="c1"># add some formatting</span>
+</span><span id="Logger-206"><a href="#Logger-206"><span class="linenos">206</span></a>            <span class="nb">print</span><span class="p">(</span>
+</span><span id="Logger-207"><a href="#Logger-207"><span class="linenos">207</span></a>                <span class="bp">self</span><span class="o">.</span><span class="n">_level_header</span><span class="p">(</span>
+</span><span id="Logger-208"><a href="#Logger-208"><span class="linenos">208</span></a>                    <span class="n">msg</span><span class="o">=</span><span class="n">msg</span><span class="p">,</span>
+</span><span id="Logger-209"><a href="#Logger-209"><span class="linenos">209</span></a>                    <span class="n">lvl</span><span class="o">=</span><span class="n">lvl</span><span class="p">,</span>
+</span><span id="Logger-210"><a href="#Logger-210"><span class="linenos">210</span></a>                    <span class="n">stream</span><span class="o">=</span><span class="n">stream</span><span class="p">,</span>
+</span><span id="Logger-211"><a href="#Logger-211"><span class="linenos">211</span></a>                    <span class="n">extra_indent</span><span class="o">=</span><span class="n">extra_indent</span><span class="p">,</span>
+</span><span id="Logger-212"><a href="#Logger-212"><span class="linenos">212</span></a>                <span class="p">)</span>
+</span><span id="Logger-213"><a href="#Logger-213"><span class="linenos">213</span></a>            <span class="p">)</span>
+</span><span id="Logger-214"><a href="#Logger-214"><span class="linenos">214</span></a>
+</span><span id="Logger-215"><a href="#Logger-215"><span class="linenos">215</span></a>            <span class="c1"># store the last message time</span>
+</span><span id="Logger-216"><a href="#Logger-216"><span class="linenos">216</span></a>            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_last_msg_time</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="Logger-217"><a href="#Logger-217"><span class="linenos">217</span></a>                <span class="bp">self</span><span class="o">.</span><span class="n">_last_msg_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+</span><span id="Logger-218"><a href="#Logger-218"><span class="linenos">218</span></a>
+</span><span id="Logger-219"><a href="#Logger-219"><span class="linenos">219</span></a>            <span class="n">_printed</span> <span class="o">=</span> <span class="kc">True</span>
+</span><span id="Logger-220"><a href="#Logger-220"><span class="linenos">220</span></a>
+</span><span id="Logger-221"><a href="#Logger-221"><span class="linenos">221</span></a>        <span class="c1"># convert and add data</span>
+</span><span id="Logger-222"><a href="#Logger-222"><span class="linenos">222</span></a>        <span class="c1"># ========================================</span>
+</span><span id="Logger-223"><a href="#Logger-223"><span class="linenos">223</span></a>        <span class="c1"># converting to dict</span>
+</span><span id="Logger-224"><a href="#Logger-224"><span class="linenos">224</span></a>        <span class="n">msg_dict</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Mapping</span>
+</span><span id="Logger-225"><a href="#Logger-225"><span class="linenos">225</span></a>        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="n">typing</span><span class="o">.</span><span class="n">Mapping</span><span class="p">):</span>
+</span><span id="Logger-226"><a href="#Logger-226"><span class="linenos">226</span></a>            <span class="n">msg_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;_msg&quot;</span><span class="p">:</span> <span class="n">msg</span><span class="p">}</span>
+</span><span id="Logger-227"><a href="#Logger-227"><span class="linenos">227</span></a>        <span class="k">else</span><span class="p">:</span>
+</span><span id="Logger-228"><a href="#Logger-228"><span class="linenos">228</span></a>            <span class="n">msg_dict</span> <span class="o">=</span> <span class="n">msg</span>
+</span><span id="Logger-229"><a href="#Logger-229"><span class="linenos">229</span></a>
+</span><span id="Logger-230"><a href="#Logger-230"><span class="linenos">230</span></a>        <span class="c1"># level+stream metadata</span>
+</span><span id="Logger-231"><a href="#Logger-231"><span class="linenos">231</span></a>        <span class="k">if</span> <span class="n">lvl</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="Logger-232"><a href="#Logger-232"><span class="linenos">232</span></a>            <span class="n">msg_dict</span><span class="p">[</span><span class="s2">&quot;_lvl&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">lvl</span>
+</span><span id="Logger-233"><a href="#Logger-233"><span class="linenos">233</span></a>
+</span><span id="Logger-234"><a href="#Logger-234"><span class="linenos">234</span></a>        <span class="c1"># msg_dict[&quot;_stream&quot;] = stream # moved to LoggingStream</span>
+</span><span id="Logger-235"><a href="#Logger-235"><span class="linenos">235</span></a>
+</span><span id="Logger-236"><a href="#Logger-236"><span class="linenos">236</span></a>        <span class="c1"># extra data in kwargs</span>
+</span><span id="Logger-237"><a href="#Logger-237"><span class="linenos">237</span></a>        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+</span><span id="Logger-238"><a href="#Logger-238"><span class="linenos">238</span></a>            <span class="n">msg_dict</span><span class="p">[</span><span class="s2">&quot;_kwargs&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">kwargs</span>
+</span><span id="Logger-239"><a href="#Logger-239"><span class="linenos">239</span></a>
+</span><span id="Logger-240"><a href="#Logger-240"><span class="linenos">240</span></a>        <span class="c1"># add default contents (timing, etc)</span>
+</span><span id="Logger-241"><a href="#Logger-241"><span class="linenos">241</span></a>        <span class="n">msg_dict</span> <span class="o">=</span> <span class="p">{</span>
+</span><span id="Logger-242"><a href="#Logger-242"><span class="linenos">242</span></a>            <span class="o">**</span><span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span><span class="p">()</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_streams</span><span class="p">[</span><span class="n">stream</span><span class="p">]</span><span class="o">.</span><span class="n">default_contents</span><span class="o">.</span><span class="n">items</span><span class="p">()},</span>
+</span><span id="Logger-243"><a href="#Logger-243"><span class="linenos">243</span></a>            <span class="o">**</span><span class="n">msg_dict</span><span class="p">,</span>
+</span><span id="Logger-244"><a href="#Logger-244"><span class="linenos">244</span></a>        <span class="p">}</span>
+</span><span id="Logger-245"><a href="#Logger-245"><span class="linenos">245</span></a>
+</span><span id="Logger-246"><a href="#Logger-246"><span class="linenos">246</span></a>        <span class="c1"># write</span>
+</span><span id="Logger-247"><a href="#Logger-247"><span class="linenos">247</span></a>        <span class="c1"># ========================================</span>
+</span><span id="Logger-248"><a href="#Logger-248"><span class="linenos">248</span></a>        <span class="n">logfile_msg</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">json_serialize</span><span class="p">(</span><span class="n">msg_dict</span><span class="p">))</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+</span><span id="Logger-249"><a href="#Logger-249"><span class="linenos">249</span></a>        <span class="k">if</span> <span class="p">(</span>
+</span><span id="Logger-250"><a href="#Logger-250"><span class="linenos">250</span></a>            <span class="p">(</span><span class="n">stream</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span>
+</span><span id="Logger-251"><a href="#Logger-251"><span class="linenos">251</span></a>            <span class="ow">or</span> <span class="p">(</span><span class="n">stream</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_streams</span><span class="p">)</span>
+</span><span id="Logger-252"><a href="#Logger-252"><span class="linenos">252</span></a>            <span class="ow">or</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_streams</span><span class="p">[</span><span class="n">stream</span><span class="p">]</span><span class="o">.</span><span class="n">handler</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span>
+</span><span id="Logger-253"><a href="#Logger-253"><span class="linenos">253</span></a>        <span class="p">):</span>
+</span><span id="Logger-254"><a href="#Logger-254"><span class="linenos">254</span></a>            <span class="c1"># write to the main log file if no stream is specified</span>
+</span><span id="Logger-255"><a href="#Logger-255"><span class="linenos">255</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">_log_file_handle</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">logfile_msg</span><span class="p">)</span>
+</span><span id="Logger-256"><a href="#Logger-256"><span class="linenos">256</span></a>        <span class="k">else</span><span class="p">:</span>
+</span><span id="Logger-257"><a href="#Logger-257"><span class="linenos">257</span></a>            <span class="c1"># otherwise, write to the stream-specific file</span>
+</span><span id="Logger-258"><a href="#Logger-258"><span class="linenos">258</span></a>            <span class="n">s_handler</span><span class="p">:</span> <span class="n">AnyIO</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_streams</span><span class="p">[</span><span class="n">stream</span><span class="p">]</span><span class="o">.</span><span class="n">handler</span>
+</span><span id="Logger-259"><a href="#Logger-259"><span class="linenos">259</span></a>            <span class="k">if</span> <span class="n">s_handler</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="Logger-260"><a href="#Logger-260"><span class="linenos">260</span></a>                <span class="n">s_handler</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">logfile_msg</span><span class="p">)</span>
+</span><span id="Logger-261"><a href="#Logger-261"><span class="linenos">261</span></a>            <span class="k">else</span><span class="p">:</span>
+</span><span id="Logger-262"><a href="#Logger-262"><span class="linenos">262</span></a>                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+</span><span id="Logger-263"><a href="#Logger-263"><span class="linenos">263</span></a>                    <span class="sa">f</span><span class="s2">&quot;stream handler is None! something in the logging stream setup is wrong:</span><span class="se">\n</span><span class="si">{</span><span class="bp">self</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span id="Logger-264"><a href="#Logger-264"><span class="linenos">264</span></a>                <span class="p">)</span>
+</span><span id="Logger-265"><a href="#Logger-265"><span class="linenos">265</span></a>
+</span><span id="Logger-266"><a href="#Logger-266"><span class="linenos">266</span></a>        <span class="c1"># if it was important enough to print, flush all streams</span>
+</span><span id="Logger-267"><a href="#Logger-267"><span class="linenos">267</span></a>        <span class="k">if</span> <span class="n">_printed</span><span class="p">:</span>
+</span><span id="Logger-268"><a href="#Logger-268"><span class="linenos">268</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">flush_all</span><span class="p">()</span>
+</span><span id="Logger-269"><a href="#Logger-269"><span class="linenos">269</span></a>
+</span><span id="Logger-270"><a href="#Logger-270"><span class="linenos">270</span></a>    <span class="k">def</span> <span class="nf">log_elapsed_last</span><span class="p">(</span>
+</span><span id="Logger-271"><a href="#Logger-271"><span class="linenos">271</span></a>        <span class="bp">self</span><span class="p">,</span>
+</span><span id="Logger-272"><a href="#Logger-272"><span class="linenos">272</span></a>        <span class="n">lvl</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+</span><span id="Logger-273"><a href="#Logger-273"><span class="linenos">273</span></a>        <span class="n">stream</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+</span><span id="Logger-274"><a href="#Logger-274"><span class="linenos">274</span></a>        <span class="n">console_print</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+</span><span id="Logger-275"><a href="#Logger-275"><span class="linenos">275</span></a>        <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+</span><span id="Logger-276"><a href="#Logger-276"><span class="linenos">276</span></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+</span><span id="Logger-277"><a href="#Logger-277"><span class="linenos">277</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;logs the time elapsed since the last message was printed to the console (in any stream)&quot;&quot;&quot;</span>
+</span><span id="Logger-278"><a href="#Logger-278"><span class="linenos">278</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_last_msg_time</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="Logger-279"><a href="#Logger-279"><span class="linenos">279</span></a>            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;no last message time!&quot;</span><span class="p">)</span>
+</span><span id="Logger-280"><a href="#Logger-280"><span class="linenos">280</span></a>        <span class="k">else</span><span class="p">:</span>
+</span><span id="Logger-281"><a href="#Logger-281"><span class="linenos">281</span></a>            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="p">(</span>
+</span><span id="Logger-282"><a href="#Logger-282"><span class="linenos">282</span></a>                <span class="p">{</span><span class="s2">&quot;elapsed_time&quot;</span><span class="p">:</span> <span class="nb">round</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_last_msg_time</span><span class="p">,</span> <span class="mi">6</span><span class="p">)},</span>
+</span><span id="Logger-283"><a href="#Logger-283"><span class="linenos">283</span></a>                <span class="n">lvl</span><span class="o">=</span><span class="p">(</span><span class="n">lvl</span> <span class="k">if</span> <span class="n">lvl</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">_console_print_threshold</span><span class="p">),</span>
+</span><span id="Logger-284"><a href="#Logger-284"><span class="linenos">284</span></a>                <span class="n">stream</span><span class="o">=</span><span class="n">stream</span><span class="p">,</span>
+</span><span id="Logger-285"><a href="#Logger-285"><span class="linenos">285</span></a>                <span class="n">console_print</span><span class="o">=</span><span class="n">console_print</span><span class="p">,</span>
+</span><span id="Logger-286"><a href="#Logger-286"><span class="linenos">286</span></a>                <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+</span><span id="Logger-287"><a href="#Logger-287"><span class="linenos">287</span></a>            <span class="p">)</span>
+</span><span id="Logger-288"><a href="#Logger-288"><span class="linenos">288</span></a>
+</span><span id="Logger-289"><a href="#Logger-289"><span class="linenos">289</span></a>    <span class="k">def</span> <span class="nf">flush_all</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span id="Logger-290"><a href="#Logger-290"><span class="linenos">290</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;flush all streams&quot;&quot;&quot;</span>
+</span><span id="Logger-291"><a href="#Logger-291"><span class="linenos">291</span></a>
+</span><span id="Logger-292"><a href="#Logger-292"><span class="linenos">292</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_log_file_handle</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
+</span><span id="Logger-293"><a href="#Logger-293"><span class="linenos">293</span></a>
+</span><span id="Logger-294"><a href="#Logger-294"><span class="linenos">294</span></a>        <span class="k">for</span> <span class="n">stream</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_streams</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+</span><span id="Logger-295"><a href="#Logger-295"><span class="linenos">295</span></a>            <span class="k">if</span> <span class="n">stream</span><span class="o">.</span><span class="n">handler</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="Logger-296"><a href="#Logger-296"><span class="linenos">296</span></a>                <span class="n">stream</span><span class="o">.</span><span class="n">handler</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
+</span><span id="Logger-297"><a href="#Logger-297"><span class="linenos">297</span></a>
+</span><span id="Logger-298"><a href="#Logger-298"><span class="linenos">298</span></a>    <span class="k">def</span> <span class="fm">__getattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stream</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">:</span>
+</span><span id="Logger-299"><a href="#Logger-299"><span class="linenos">299</span></a>        <span class="k">if</span> <span class="n">stream</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">):</span>
+</span><span id="Logger-300"><a href="#Logger-300"><span class="linenos">300</span></a>            <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;invalid stream name </span><span class="si">{</span><span class="n">stream</span><span class="si">}</span><span class="s2"> (no underscores)&quot;</span><span class="p">)</span>
+</span><span id="Logger-301"><a href="#Logger-301"><span class="linenos">301</span></a>        <span class="k">return</span> <span class="n">partial</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="p">,</span> <span class="n">stream</span><span class="o">=</span><span class="n">stream</span><span class="p">)</span>
+</span><span id="Logger-302"><a href="#Logger-302"><span class="linenos">302</span></a>
+</span><span id="Logger-303"><a href="#Logger-303"><span class="linenos">303</span></a>    <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stream</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+</span><span id="Logger-304"><a href="#Logger-304"><span class="linenos">304</span></a>        <span class="k">return</span> <span class="n">partial</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="p">,</span> <span class="n">stream</span><span class="o">=</span><span class="n">stream</span><span class="p">)</span>
+</span><span id="Logger-305"><a href="#Logger-305"><span class="linenos">305</span></a>
+</span><span id="Logger-306"><a href="#Logger-306"><span class="linenos">306</span></a>    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+</span><span id="Logger-307"><a href="#Logger-307"><span class="linenos">307</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</span></pre></div>
+
+
+            <div class="docstring"><p>logger with more features, including log levels and streams</p>
+
+<h1 id="parameters">Parameters:</h1>
+
+<pre><code>    - `log_path : str | None`
+    default log file path
+    (defaults to `None`)
+    - `log_file : AnyIO | None`
+    default log io, should have a `.write()` method (pass only this or `log_path`, not both)
+    (defaults to `None`)
+    - `timestamp : bool`
+    whether to add timestamps to every log message (under the `_timestamp` key)
+    (defaults to `True`)
+    - `default_level : int`
+    default log level for streams/messages that don't specify a level
+    (defaults to `0`)
+    - `console_print_threshold : int`
+    log level at which to print to the console, anything greater will not be printed unless overridden by `console_print`
+    (defaults to `50`)
+    - `level_header : HeaderFunction`
+    function for formatting log messages when printing to console
+    (defaults to `HEADER_FUNCTIONS["md"]`)
+</code></pre>
+
+<p></p>
+
+<ul>
+<li><code>keep_last_msg_time : bool</code>
+whether to keep the last message time
+(defaults to <code>True</code>)</li>
+</ul>
+
+<h1 id="raises">Raises:</h1>
+
+<pre><code>    - `ValueError` : _description_
+</code></pre>
+</div>
+
+
+                            <div id="Logger.__init__" class="classattr">
+                                        <input id="Logger.__init__-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr function">
+            
+        <span class="name">Logger</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">log_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">log_file</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">TextIO</span><span class="p">,</span> <span class="n"><a href="simplelogger.html#NullIO">muutils.logger.simplelogger.NullIO</a></span><span class="p">,</span> <span class="n">NoneType</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">default_level</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>,</span><span class="param">	<span class="n">console_print_threshold</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">50</span>,</span><span class="param">	<span class="n">level_header</span><span class="p">:</span> <span class="n"><a href="headerfuncs.html#HeaderFunction">muutils.logger.headerfuncs.HeaderFunction</a></span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">function</span> <span class="n">md_header_function</span><span class="o">&gt;</span>,</span><span class="param">	<span class="n">streams</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">dict</span><span class="p">[</span><span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span> <span class="n"><a href="../logger.html#LoggingStream">muutils.logger.LoggingStream</a></span><span class="p">],</span> <span class="n">Sequence</span><span class="p">[</span><span class="n"><a href="../logger.html#LoggingStream">muutils.logger.LoggingStream</a></span><span class="p">]]</span> <span class="o">=</span> <span class="p">()</span>,</span><span class="param">	<span class="n">keep_last_msg_time</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>,</span><span class="param">	<span class="n">timestamp</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>,</span><span class="param">	<span class="o">**</span><span class="n">kwargs</span></span>)</span>
+
+                <div class="source-button-container">
+            <label class="pdoc-button view-source-button" for="Logger.__init__-view-source"><span>View Source</span></label>
+            <div class="github-button-wrapper">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/main/muutils/logger/logger.py#L71-L147" target="_blank">
+                    <span>View on GitHub</span>
+                </a>
+            </div>
+        </div>
+
+    </div>
+    <a class="headerlink" href="#Logger.__init__"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Logger.__init__-72"><a href="#Logger.__init__-72"><span class="linenos"> 72</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+</span><span id="Logger.__init__-73"><a href="#Logger.__init__-73"><span class="linenos"> 73</span></a>        <span class="bp">self</span><span class="p">,</span>
+</span><span id="Logger.__init__-74"><a href="#Logger.__init__-74"><span class="linenos"> 74</span></a>        <span class="n">log_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+</span><span id="Logger.__init__-75"><a href="#Logger.__init__-75"><span class="linenos"> 75</span></a>        <span class="n">log_file</span><span class="p">:</span> <span class="n">AnyIO</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+</span><span id="Logger.__init__-76"><a href="#Logger.__init__-76"><span class="linenos"> 76</span></a>        <span class="n">default_level</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+</span><span id="Logger.__init__-77"><a href="#Logger.__init__-77"><span class="linenos"> 77</span></a>        <span class="n">console_print_threshold</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">50</span><span class="p">,</span>
+</span><span id="Logger.__init__-78"><a href="#Logger.__init__-78"><span class="linenos"> 78</span></a>        <span class="n">level_header</span><span class="p">:</span> <span class="n">HeaderFunction</span> <span class="o">=</span> <span class="n">HEADER_FUNCTIONS</span><span class="p">[</span><span class="s2">&quot;md&quot;</span><span class="p">],</span>
+</span><span id="Logger.__init__-79"><a href="#Logger.__init__-79"><span class="linenos"> 79</span></a>        <span class="n">streams</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span> <span class="n">LoggingStream</span><span class="p">]</span> <span class="o">|</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">LoggingStream</span><span class="p">]</span> <span class="o">=</span> <span class="p">(),</span>
+</span><span id="Logger.__init__-80"><a href="#Logger.__init__-80"><span class="linenos"> 80</span></a>        <span class="n">keep_last_msg_time</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+</span><span id="Logger.__init__-81"><a href="#Logger.__init__-81"><span class="linenos"> 81</span></a>        <span class="c1"># junk args</span>
+</span><span id="Logger.__init__-82"><a href="#Logger.__init__-82"><span class="linenos"> 82</span></a>        <span class="n">timestamp</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+</span><span id="Logger.__init__-83"><a href="#Logger.__init__-83"><span class="linenos"> 83</span></a>        <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+</span><span id="Logger.__init__-84"><a href="#Logger.__init__-84"><span class="linenos"> 84</span></a>    <span class="p">):</span>
+</span><span id="Logger.__init__-85"><a href="#Logger.__init__-85"><span class="linenos"> 85</span></a>        <span class="c1"># junk arg checking</span>
+</span><span id="Logger.__init__-86"><a href="#Logger.__init__-86"><span class="linenos"> 86</span></a>        <span class="c1"># ==================================================</span>
+</span><span id="Logger.__init__-87"><a href="#Logger.__init__-87"><span class="linenos"> 87</span></a>        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+</span><span id="Logger.__init__-88"><a href="#Logger.__init__-88"><span class="linenos"> 88</span></a>            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;unrecognized kwargs: </span><span class="si">{</span><span class="n">kwargs</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span><span id="Logger.__init__-89"><a href="#Logger.__init__-89"><span class="linenos"> 89</span></a>
+</span><span id="Logger.__init__-90"><a href="#Logger.__init__-90"><span class="linenos"> 90</span></a>        <span class="k">if</span> <span class="ow">not</span> <span class="n">timestamp</span><span class="p">:</span>
+</span><span id="Logger.__init__-91"><a href="#Logger.__init__-91"><span class="linenos"> 91</span></a>            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+</span><span id="Logger.__init__-92"><a href="#Logger.__init__-92"><span class="linenos"> 92</span></a>                <span class="s2">&quot;timestamp must be True -- why would you not want timestamps?&quot;</span>
+</span><span id="Logger.__init__-93"><a href="#Logger.__init__-93"><span class="linenos"> 93</span></a>            <span class="p">)</span>
+</span><span id="Logger.__init__-94"><a href="#Logger.__init__-94"><span class="linenos"> 94</span></a>
+</span><span id="Logger.__init__-95"><a href="#Logger.__init__-95"><span class="linenos"> 95</span></a>        <span class="c1"># timing</span>
+</span><span id="Logger.__init__-96"><a href="#Logger.__init__-96"><span class="linenos"> 96</span></a>        <span class="c1"># ==================================================</span>
+</span><span id="Logger.__init__-97"><a href="#Logger.__init__-97"><span class="linenos"> 97</span></a>        <span class="c1"># timing compares</span>
+</span><span id="Logger.__init__-98"><a href="#Logger.__init__-98"><span class="linenos"> 98</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_keep_last_msg_time</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">keep_last_msg_time</span>
+</span><span id="Logger.__init__-99"><a href="#Logger.__init__-99"><span class="linenos"> 99</span></a>        <span class="c1"># TODO: handle per stream?</span>
+</span><span id="Logger.__init__-100"><a href="#Logger.__init__-100"><span class="linenos">100</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_last_msg_time</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+</span><span id="Logger.__init__-101"><a href="#Logger.__init__-101"><span class="linenos">101</span></a>
+</span><span id="Logger.__init__-102"><a href="#Logger.__init__-102"><span class="linenos">102</span></a>        <span class="c1"># basic setup</span>
+</span><span id="Logger.__init__-103"><a href="#Logger.__init__-103"><span class="linenos">103</span></a>        <span class="c1"># ==================================================</span>
+</span><span id="Logger.__init__-104"><a href="#Logger.__init__-104"><span class="linenos">104</span></a>        <span class="c1"># init BaseLogger</span>
+</span><span id="Logger.__init__-105"><a href="#Logger.__init__-105"><span class="linenos">105</span></a>        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">log_file</span><span class="o">=</span><span class="n">log_file</span><span class="p">,</span> <span class="n">log_path</span><span class="o">=</span><span class="n">log_path</span><span class="p">,</span> <span class="n">timestamp</span><span class="o">=</span><span class="n">timestamp</span><span class="p">)</span>
+</span><span id="Logger.__init__-106"><a href="#Logger.__init__-106"><span class="linenos">106</span></a>
+</span><span id="Logger.__init__-107"><a href="#Logger.__init__-107"><span class="linenos">107</span></a>        <span class="c1"># level-related</span>
+</span><span id="Logger.__init__-108"><a href="#Logger.__init__-108"><span class="linenos">108</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_console_print_threshold</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">console_print_threshold</span>
+</span><span id="Logger.__init__-109"><a href="#Logger.__init__-109"><span class="linenos">109</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_default_level</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">default_level</span>
+</span><span id="Logger.__init__-110"><a href="#Logger.__init__-110"><span class="linenos">110</span></a>
+</span><span id="Logger.__init__-111"><a href="#Logger.__init__-111"><span class="linenos">111</span></a>        <span class="c1"># set up streams</span>
+</span><span id="Logger.__init__-112"><a href="#Logger.__init__-112"><span class="linenos">112</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_streams</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span> <span class="n">LoggingStream</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+</span><span id="Logger.__init__-113"><a href="#Logger.__init__-113"><span class="linenos">113</span></a>            <span class="n">streams</span>
+</span><span id="Logger.__init__-114"><a href="#Logger.__init__-114"><span class="linenos">114</span></a>            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">streams</span><span class="p">,</span> <span class="n">typing</span><span class="o">.</span><span class="n">Mapping</span><span class="p">)</span>
+</span><span id="Logger.__init__-115"><a href="#Logger.__init__-115"><span class="linenos">115</span></a>            <span class="k">else</span> <span class="p">{</span><span class="n">s</span><span class="o">.</span><span class="n">name</span><span class="p">:</span> <span class="n">s</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">streams</span><span class="p">}</span>
+</span><span id="Logger.__init__-116"><a href="#Logger.__init__-116"><span class="linenos">116</span></a>        <span class="p">)</span>
+</span><span id="Logger.__init__-117"><a href="#Logger.__init__-117"><span class="linenos">117</span></a>        <span class="c1"># default error stream</span>
+</span><span id="Logger.__init__-118"><a href="#Logger.__init__-118"><span class="linenos">118</span></a>        <span class="k">if</span> <span class="s2">&quot;error&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_streams</span><span class="p">:</span>
+</span><span id="Logger.__init__-119"><a href="#Logger.__init__-119"><span class="linenos">119</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">_streams</span><span class="p">[</span><span class="s2">&quot;error&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">LoggingStream</span><span class="p">(</span>
+</span><span id="Logger.__init__-120"><a href="#Logger.__init__-120"><span class="linenos">120</span></a>                <span class="s2">&quot;error&quot;</span><span class="p">,</span>
+</span><span id="Logger.__init__-121"><a href="#Logger.__init__-121"><span class="linenos">121</span></a>                <span class="n">aliases</span><span class="o">=</span><span class="p">{</span>
+</span><span id="Logger.__init__-122"><a href="#Logger.__init__-122"><span class="linenos">122</span></a>                    <span class="s2">&quot;err&quot;</span><span class="p">,</span>
+</span><span id="Logger.__init__-123"><a href="#Logger.__init__-123"><span class="linenos">123</span></a>                    <span class="s2">&quot;except&quot;</span><span class="p">,</span>
+</span><span id="Logger.__init__-124"><a href="#Logger.__init__-124"><span class="linenos">124</span></a>                    <span class="s2">&quot;Exception&quot;</span><span class="p">,</span>
+</span><span id="Logger.__init__-125"><a href="#Logger.__init__-125"><span class="linenos">125</span></a>                    <span class="s2">&quot;exception&quot;</span><span class="p">,</span>
+</span><span id="Logger.__init__-126"><a href="#Logger.__init__-126"><span class="linenos">126</span></a>                    <span class="s2">&quot;exceptions&quot;</span><span class="p">,</span>
+</span><span id="Logger.__init__-127"><a href="#Logger.__init__-127"><span class="linenos">127</span></a>                    <span class="s2">&quot;errors&quot;</span><span class="p">,</span>
+</span><span id="Logger.__init__-128"><a href="#Logger.__init__-128"><span class="linenos">128</span></a>                <span class="p">},</span>
+</span><span id="Logger.__init__-129"><a href="#Logger.__init__-129"><span class="linenos">129</span></a>            <span class="p">)</span>
+</span><span id="Logger.__init__-130"><a href="#Logger.__init__-130"><span class="linenos">130</span></a>
+</span><span id="Logger.__init__-131"><a href="#Logger.__init__-131"><span class="linenos">131</span></a>        <span class="c1"># check alias duplicates</span>
+</span><span id="Logger.__init__-132"><a href="#Logger.__init__-132"><span class="linenos">132</span></a>        <span class="n">alias_set</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+</span><span id="Logger.__init__-133"><a href="#Logger.__init__-133"><span class="linenos">133</span></a>        <span class="k">for</span> <span class="n">stream</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_streams</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+</span><span id="Logger.__init__-134"><a href="#Logger.__init__-134"><span class="linenos">134</span></a>            <span class="k">for</span> <span class="n">alias</span> <span class="ow">in</span> <span class="n">stream</span><span class="o">.</span><span class="n">aliases</span><span class="p">:</span>
+</span><span id="Logger.__init__-135"><a href="#Logger.__init__-135"><span class="linenos">135</span></a>                <span class="k">if</span> <span class="n">alias</span> <span class="ow">in</span> <span class="n">alias_set</span><span class="p">:</span>
+</span><span id="Logger.__init__-136"><a href="#Logger.__init__-136"><span class="linenos">136</span></a>                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;alias </span><span class="si">{</span><span class="n">alias</span><span class="si">}</span><span class="s2"> is already in use&quot;</span><span class="p">)</span>
+</span><span id="Logger.__init__-137"><a href="#Logger.__init__-137"><span class="linenos">137</span></a>                <span class="n">alias_set</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">alias</span><span class="p">)</span>
+</span><span id="Logger.__init__-138"><a href="#Logger.__init__-138"><span class="linenos">138</span></a>
+</span><span id="Logger.__init__-139"><a href="#Logger.__init__-139"><span class="linenos">139</span></a>        <span class="c1"># add aliases</span>
+</span><span id="Logger.__init__-140"><a href="#Logger.__init__-140"><span class="linenos">140</span></a>        <span class="k">for</span> <span class="n">stream</span> <span class="ow">in</span> <span class="nb">tuple</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_streams</span><span class="o">.</span><span class="n">values</span><span class="p">()):</span>
+</span><span id="Logger.__init__-141"><a href="#Logger.__init__-141"><span class="linenos">141</span></a>            <span class="k">for</span> <span class="n">alias</span> <span class="ow">in</span> <span class="n">stream</span><span class="o">.</span><span class="n">aliases</span><span class="p">:</span>
+</span><span id="Logger.__init__-142"><a href="#Logger.__init__-142"><span class="linenos">142</span></a>                <span class="k">if</span> <span class="n">alias</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_streams</span><span class="p">:</span>
+</span><span id="Logger.__init__-143"><a href="#Logger.__init__-143"><span class="linenos">143</span></a>                    <span class="bp">self</span><span class="o">.</span><span class="n">_streams</span><span class="p">[</span><span class="n">alias</span><span class="p">]</span> <span class="o">=</span> <span class="n">stream</span>
+</span><span id="Logger.__init__-144"><a href="#Logger.__init__-144"><span class="linenos">144</span></a>
+</span><span id="Logger.__init__-145"><a href="#Logger.__init__-145"><span class="linenos">145</span></a>        <span class="c1"># print formatting</span>
+</span><span id="Logger.__init__-146"><a href="#Logger.__init__-146"><span class="linenos">146</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_level_header</span><span class="p">:</span> <span class="n">HeaderFunction</span> <span class="o">=</span> <span class="n">level_header</span>
+</span><span id="Logger.__init__-147"><a href="#Logger.__init__-147"><span class="linenos">147</span></a>
+</span><span id="Logger.__init__-148"><a href="#Logger.__init__-148"><span class="linenos">148</span></a>        <span class="nb">print</span><span class="p">({</span><span class="n">k</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_streams</span><span class="o">.</span><span class="n">items</span><span class="p">()})</span>
+</span></pre></div>
+
+
+    
+
+                            </div>
+                            <div id="Logger.log" class="classattr">
+                                        <input id="Logger.log-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr function">
+            
+        <span class="def">def</span>
+        <span class="name">log</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="bp">self</span>,</span><span class="param">	<span class="n">msg</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">bool</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">NoneType</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">lvl</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">stream</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">console_print</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>,</span><span class="param">	<span class="n">extra_indent</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>,</span><span class="param">	<span class="o">**</span><span class="n">kwargs</span></span><span class="return-annotation">):</span></span>
+
+                <div class="source-button-container">
+            <label class="pdoc-button view-source-button" for="Logger.log-view-source"><span>View Source</span></label>
+            <div class="github-button-wrapper">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/main/muutils/logger/logger.py#L158-L267" target="_blank">
+                    <span>View on GitHub</span>
+                </a>
+            </div>
+        </div>
+
+    </div>
+    <a class="headerlink" href="#Logger.log"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Logger.log-159"><a href="#Logger.log-159"><span class="linenos">159</span></a>    <span class="k">def</span> <span class="nf">log</span><span class="p">(</span>  <span class="c1"># type: ignore # yes, the signatures are different here.</span>
+</span><span id="Logger.log-160"><a href="#Logger.log-160"><span class="linenos">160</span></a>        <span class="bp">self</span><span class="p">,</span>
+</span><span id="Logger.log-161"><a href="#Logger.log-161"><span class="linenos">161</span></a>        <span class="n">msg</span><span class="p">:</span> <span class="n">JSONitem</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+</span><span id="Logger.log-162"><a href="#Logger.log-162"><span class="linenos">162</span></a>        <span class="n">lvl</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+</span><span id="Logger.log-163"><a href="#Logger.log-163"><span class="linenos">163</span></a>        <span class="n">stream</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+</span><span id="Logger.log-164"><a href="#Logger.log-164"><span class="linenos">164</span></a>        <span class="n">console_print</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+</span><span id="Logger.log-165"><a href="#Logger.log-165"><span class="linenos">165</span></a>        <span class="n">extra_indent</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+</span><span id="Logger.log-166"><a href="#Logger.log-166"><span class="linenos">166</span></a>        <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+</span><span id="Logger.log-167"><a href="#Logger.log-167"><span class="linenos">167</span></a>    <span class="p">):</span>
+</span><span id="Logger.log-168"><a href="#Logger.log-168"><span class="linenos">168</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;logging function</span>
+</span><span id="Logger.log-169"><a href="#Logger.log-169"><span class="linenos">169</span></a>
+</span><span id="Logger.log-170"><a href="#Logger.log-170"><span class="linenos">170</span></a><span class="sd">        ### Parameters:</span>
+</span><span id="Logger.log-171"><a href="#Logger.log-171"><span class="linenos">171</span></a><span class="sd">         - `msg : JSONitem`</span>
+</span><span id="Logger.log-172"><a href="#Logger.log-172"><span class="linenos">172</span></a><span class="sd">           message (usually string or dict) to be logged</span>
+</span><span id="Logger.log-173"><a href="#Logger.log-173"><span class="linenos">173</span></a><span class="sd">         - `lvl : int | None`</span>
+</span><span id="Logger.log-174"><a href="#Logger.log-174"><span class="linenos">174</span></a><span class="sd">           level of message (lower levels are more important)</span>
+</span><span id="Logger.log-175"><a href="#Logger.log-175"><span class="linenos">175</span></a><span class="sd">           (defaults to `None`)</span>
+</span><span id="Logger.log-176"><a href="#Logger.log-176"><span class="linenos">176</span></a><span class="sd">         - `console_print : bool`</span>
+</span><span id="Logger.log-177"><a href="#Logger.log-177"><span class="linenos">177</span></a><span class="sd">           override `console_print_threshold` setting</span>
+</span><span id="Logger.log-178"><a href="#Logger.log-178"><span class="linenos">178</span></a><span class="sd">           (defaults to `False`)</span>
+</span><span id="Logger.log-179"><a href="#Logger.log-179"><span class="linenos">179</span></a><span class="sd">         - `stream : str | None`</span>
+</span><span id="Logger.log-180"><a href="#Logger.log-180"><span class="linenos">180</span></a><span class="sd">           whether to log to a stream (defaults to `None`), which logs to the default `None` stream</span>
+</span><span id="Logger.log-181"><a href="#Logger.log-181"><span class="linenos">181</span></a><span class="sd">           (defaults to `None`)</span>
+</span><span id="Logger.log-182"><a href="#Logger.log-182"><span class="linenos">182</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="Logger.log-183"><a href="#Logger.log-183"><span class="linenos">183</span></a>
+</span><span id="Logger.log-184"><a href="#Logger.log-184"><span class="linenos">184</span></a>        <span class="c1"># add to known stream names if not present</span>
+</span><span id="Logger.log-185"><a href="#Logger.log-185"><span class="linenos">185</span></a>        <span class="k">if</span> <span class="n">stream</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_streams</span><span class="p">:</span>
+</span><span id="Logger.log-186"><a href="#Logger.log-186"><span class="linenos">186</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">_streams</span><span class="p">[</span><span class="n">stream</span><span class="p">]</span> <span class="o">=</span> <span class="n">LoggingStream</span><span class="p">(</span><span class="n">stream</span><span class="p">)</span>
+</span><span id="Logger.log-187"><a href="#Logger.log-187"><span class="linenos">187</span></a>
+</span><span id="Logger.log-188"><a href="#Logger.log-188"><span class="linenos">188</span></a>        <span class="c1"># set default level to either global or stream-specific default level</span>
+</span><span id="Logger.log-189"><a href="#Logger.log-189"><span class="linenos">189</span></a>        <span class="c1"># ========================================</span>
+</span><span id="Logger.log-190"><a href="#Logger.log-190"><span class="linenos">190</span></a>        <span class="k">if</span> <span class="n">lvl</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="Logger.log-191"><a href="#Logger.log-191"><span class="linenos">191</span></a>            <span class="k">if</span> <span class="n">stream</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="Logger.log-192"><a href="#Logger.log-192"><span class="linenos">192</span></a>                <span class="n">lvl</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_default_level</span>
+</span><span id="Logger.log-193"><a href="#Logger.log-193"><span class="linenos">193</span></a>            <span class="k">else</span><span class="p">:</span>
+</span><span id="Logger.log-194"><a href="#Logger.log-194"><span class="linenos">194</span></a>                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_streams</span><span class="p">[</span><span class="n">stream</span><span class="p">]</span><span class="o">.</span><span class="n">default_level</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="Logger.log-195"><a href="#Logger.log-195"><span class="linenos">195</span></a>                    <span class="n">lvl</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_streams</span><span class="p">[</span><span class="n">stream</span><span class="p">]</span><span class="o">.</span><span class="n">default_level</span>
+</span><span id="Logger.log-196"><a href="#Logger.log-196"><span class="linenos">196</span></a>                <span class="k">else</span><span class="p">:</span>
+</span><span id="Logger.log-197"><a href="#Logger.log-197"><span class="linenos">197</span></a>                    <span class="n">lvl</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_default_level</span>
+</span><span id="Logger.log-198"><a href="#Logger.log-198"><span class="linenos">198</span></a>
+</span><span id="Logger.log-199"><a href="#Logger.log-199"><span class="linenos">199</span></a>        <span class="k">assert</span> <span class="n">lvl</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;lvl should not be None at this point&quot;</span>
+</span><span id="Logger.log-200"><a href="#Logger.log-200"><span class="linenos">200</span></a>
+</span><span id="Logger.log-201"><a href="#Logger.log-201"><span class="linenos">201</span></a>        <span class="c1"># print to console with formatting</span>
+</span><span id="Logger.log-202"><a href="#Logger.log-202"><span class="linenos">202</span></a>        <span class="c1"># ========================================</span>
+</span><span id="Logger.log-203"><a href="#Logger.log-203"><span class="linenos">203</span></a>        <span class="n">_printed</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+</span><span id="Logger.log-204"><a href="#Logger.log-204"><span class="linenos">204</span></a>        <span class="k">if</span> <span class="n">console_print</span> <span class="ow">or</span> <span class="p">(</span><span class="n">lvl</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_console_print_threshold</span><span class="p">):</span>
+</span><span id="Logger.log-205"><a href="#Logger.log-205"><span class="linenos">205</span></a>            <span class="c1"># add some formatting</span>
+</span><span id="Logger.log-206"><a href="#Logger.log-206"><span class="linenos">206</span></a>            <span class="nb">print</span><span class="p">(</span>
+</span><span id="Logger.log-207"><a href="#Logger.log-207"><span class="linenos">207</span></a>                <span class="bp">self</span><span class="o">.</span><span class="n">_level_header</span><span class="p">(</span>
+</span><span id="Logger.log-208"><a href="#Logger.log-208"><span class="linenos">208</span></a>                    <span class="n">msg</span><span class="o">=</span><span class="n">msg</span><span class="p">,</span>
+</span><span id="Logger.log-209"><a href="#Logger.log-209"><span class="linenos">209</span></a>                    <span class="n">lvl</span><span class="o">=</span><span class="n">lvl</span><span class="p">,</span>
+</span><span id="Logger.log-210"><a href="#Logger.log-210"><span class="linenos">210</span></a>                    <span class="n">stream</span><span class="o">=</span><span class="n">stream</span><span class="p">,</span>
+</span><span id="Logger.log-211"><a href="#Logger.log-211"><span class="linenos">211</span></a>                    <span class="n">extra_indent</span><span class="o">=</span><span class="n">extra_indent</span><span class="p">,</span>
+</span><span id="Logger.log-212"><a href="#Logger.log-212"><span class="linenos">212</span></a>                <span class="p">)</span>
+</span><span id="Logger.log-213"><a href="#Logger.log-213"><span class="linenos">213</span></a>            <span class="p">)</span>
+</span><span id="Logger.log-214"><a href="#Logger.log-214"><span class="linenos">214</span></a>
+</span><span id="Logger.log-215"><a href="#Logger.log-215"><span class="linenos">215</span></a>            <span class="c1"># store the last message time</span>
+</span><span id="Logger.log-216"><a href="#Logger.log-216"><span class="linenos">216</span></a>            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_last_msg_time</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="Logger.log-217"><a href="#Logger.log-217"><span class="linenos">217</span></a>                <span class="bp">self</span><span class="o">.</span><span class="n">_last_msg_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+</span><span id="Logger.log-218"><a href="#Logger.log-218"><span class="linenos">218</span></a>
+</span><span id="Logger.log-219"><a href="#Logger.log-219"><span class="linenos">219</span></a>            <span class="n">_printed</span> <span class="o">=</span> <span class="kc">True</span>
+</span><span id="Logger.log-220"><a href="#Logger.log-220"><span class="linenos">220</span></a>
+</span><span id="Logger.log-221"><a href="#Logger.log-221"><span class="linenos">221</span></a>        <span class="c1"># convert and add data</span>
+</span><span id="Logger.log-222"><a href="#Logger.log-222"><span class="linenos">222</span></a>        <span class="c1"># ========================================</span>
+</span><span id="Logger.log-223"><a href="#Logger.log-223"><span class="linenos">223</span></a>        <span class="c1"># converting to dict</span>
+</span><span id="Logger.log-224"><a href="#Logger.log-224"><span class="linenos">224</span></a>        <span class="n">msg_dict</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Mapping</span>
+</span><span id="Logger.log-225"><a href="#Logger.log-225"><span class="linenos">225</span></a>        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="n">typing</span><span class="o">.</span><span class="n">Mapping</span><span class="p">):</span>
+</span><span id="Logger.log-226"><a href="#Logger.log-226"><span class="linenos">226</span></a>            <span class="n">msg_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;_msg&quot;</span><span class="p">:</span> <span class="n">msg</span><span class="p">}</span>
+</span><span id="Logger.log-227"><a href="#Logger.log-227"><span class="linenos">227</span></a>        <span class="k">else</span><span class="p">:</span>
+</span><span id="Logger.log-228"><a href="#Logger.log-228"><span class="linenos">228</span></a>            <span class="n">msg_dict</span> <span class="o">=</span> <span class="n">msg</span>
+</span><span id="Logger.log-229"><a href="#Logger.log-229"><span class="linenos">229</span></a>
+</span><span id="Logger.log-230"><a href="#Logger.log-230"><span class="linenos">230</span></a>        <span class="c1"># level+stream metadata</span>
+</span><span id="Logger.log-231"><a href="#Logger.log-231"><span class="linenos">231</span></a>        <span class="k">if</span> <span class="n">lvl</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="Logger.log-232"><a href="#Logger.log-232"><span class="linenos">232</span></a>            <span class="n">msg_dict</span><span class="p">[</span><span class="s2">&quot;_lvl&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">lvl</span>
+</span><span id="Logger.log-233"><a href="#Logger.log-233"><span class="linenos">233</span></a>
+</span><span id="Logger.log-234"><a href="#Logger.log-234"><span class="linenos">234</span></a>        <span class="c1"># msg_dict[&quot;_stream&quot;] = stream # moved to LoggingStream</span>
+</span><span id="Logger.log-235"><a href="#Logger.log-235"><span class="linenos">235</span></a>
+</span><span id="Logger.log-236"><a href="#Logger.log-236"><span class="linenos">236</span></a>        <span class="c1"># extra data in kwargs</span>
+</span><span id="Logger.log-237"><a href="#Logger.log-237"><span class="linenos">237</span></a>        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+</span><span id="Logger.log-238"><a href="#Logger.log-238"><span class="linenos">238</span></a>            <span class="n">msg_dict</span><span class="p">[</span><span class="s2">&quot;_kwargs&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">kwargs</span>
+</span><span id="Logger.log-239"><a href="#Logger.log-239"><span class="linenos">239</span></a>
+</span><span id="Logger.log-240"><a href="#Logger.log-240"><span class="linenos">240</span></a>        <span class="c1"># add default contents (timing, etc)</span>
+</span><span id="Logger.log-241"><a href="#Logger.log-241"><span class="linenos">241</span></a>        <span class="n">msg_dict</span> <span class="o">=</span> <span class="p">{</span>
+</span><span id="Logger.log-242"><a href="#Logger.log-242"><span class="linenos">242</span></a>            <span class="o">**</span><span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span><span class="p">()</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_streams</span><span class="p">[</span><span class="n">stream</span><span class="p">]</span><span class="o">.</span><span class="n">default_contents</span><span class="o">.</span><span class="n">items</span><span class="p">()},</span>
+</span><span id="Logger.log-243"><a href="#Logger.log-243"><span class="linenos">243</span></a>            <span class="o">**</span><span class="n">msg_dict</span><span class="p">,</span>
+</span><span id="Logger.log-244"><a href="#Logger.log-244"><span class="linenos">244</span></a>        <span class="p">}</span>
+</span><span id="Logger.log-245"><a href="#Logger.log-245"><span class="linenos">245</span></a>
+</span><span id="Logger.log-246"><a href="#Logger.log-246"><span class="linenos">246</span></a>        <span class="c1"># write</span>
+</span><span id="Logger.log-247"><a href="#Logger.log-247"><span class="linenos">247</span></a>        <span class="c1"># ========================================</span>
+</span><span id="Logger.log-248"><a href="#Logger.log-248"><span class="linenos">248</span></a>        <span class="n">logfile_msg</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">json_serialize</span><span class="p">(</span><span class="n">msg_dict</span><span class="p">))</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+</span><span id="Logger.log-249"><a href="#Logger.log-249"><span class="linenos">249</span></a>        <span class="k">if</span> <span class="p">(</span>
+</span><span id="Logger.log-250"><a href="#Logger.log-250"><span class="linenos">250</span></a>            <span class="p">(</span><span class="n">stream</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span>
+</span><span id="Logger.log-251"><a href="#Logger.log-251"><span class="linenos">251</span></a>            <span class="ow">or</span> <span class="p">(</span><span class="n">stream</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_streams</span><span class="p">)</span>
+</span><span id="Logger.log-252"><a href="#Logger.log-252"><span class="linenos">252</span></a>            <span class="ow">or</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_streams</span><span class="p">[</span><span class="n">stream</span><span class="p">]</span><span class="o">.</span><span class="n">handler</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span>
+</span><span id="Logger.log-253"><a href="#Logger.log-253"><span class="linenos">253</span></a>        <span class="p">):</span>
+</span><span id="Logger.log-254"><a href="#Logger.log-254"><span class="linenos">254</span></a>            <span class="c1"># write to the main log file if no stream is specified</span>
+</span><span id="Logger.log-255"><a href="#Logger.log-255"><span class="linenos">255</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">_log_file_handle</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">logfile_msg</span><span class="p">)</span>
+</span><span id="Logger.log-256"><a href="#Logger.log-256"><span class="linenos">256</span></a>        <span class="k">else</span><span class="p">:</span>
+</span><span id="Logger.log-257"><a href="#Logger.log-257"><span class="linenos">257</span></a>            <span class="c1"># otherwise, write to the stream-specific file</span>
+</span><span id="Logger.log-258"><a href="#Logger.log-258"><span class="linenos">258</span></a>            <span class="n">s_handler</span><span class="p">:</span> <span class="n">AnyIO</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_streams</span><span class="p">[</span><span class="n">stream</span><span class="p">]</span><span class="o">.</span><span class="n">handler</span>
+</span><span id="Logger.log-259"><a href="#Logger.log-259"><span class="linenos">259</span></a>            <span class="k">if</span> <span class="n">s_handler</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="Logger.log-260"><a href="#Logger.log-260"><span class="linenos">260</span></a>                <span class="n">s_handler</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">logfile_msg</span><span class="p">)</span>
+</span><span id="Logger.log-261"><a href="#Logger.log-261"><span class="linenos">261</span></a>            <span class="k">else</span><span class="p">:</span>
+</span><span id="Logger.log-262"><a href="#Logger.log-262"><span class="linenos">262</span></a>                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+</span><span id="Logger.log-263"><a href="#Logger.log-263"><span class="linenos">263</span></a>                    <span class="sa">f</span><span class="s2">&quot;stream handler is None! something in the logging stream setup is wrong:</span><span class="se">\n</span><span class="si">{</span><span class="bp">self</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span id="Logger.log-264"><a href="#Logger.log-264"><span class="linenos">264</span></a>                <span class="p">)</span>
+</span><span id="Logger.log-265"><a href="#Logger.log-265"><span class="linenos">265</span></a>
+</span><span id="Logger.log-266"><a href="#Logger.log-266"><span class="linenos">266</span></a>        <span class="c1"># if it was important enough to print, flush all streams</span>
+</span><span id="Logger.log-267"><a href="#Logger.log-267"><span class="linenos">267</span></a>        <span class="k">if</span> <span class="n">_printed</span><span class="p">:</span>
+</span><span id="Logger.log-268"><a href="#Logger.log-268"><span class="linenos">268</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">flush_all</span><span class="p">()</span>
+</span></pre></div>
+
+
+            <div class="docstring"><p>logging function</p>
+
+<h3 id="parameters">Parameters:</h3>
+
+<ul>
+<li><code>msg : JSONitem</code>
+message (usually string or dict) to be logged</li>
+<li><code>lvl : int | None</code>
+level of message (lower levels are more important)
+(defaults to <code>None</code>)</li>
+<li><code>console_print : bool</code>
+override <code>console_print_threshold</code> setting
+(defaults to <code>False</code>)</li>
+<li><code>stream : str | None</code>
+whether to log to a stream (defaults to <code>None</code>), which logs to the default <code>None</code> stream
+(defaults to <code>None</code>)</li>
+</ul>
+</div>
+
+
+                            </div>
+                            <div id="Logger.log_elapsed_last" class="classattr">
+                                        <input id="Logger.log_elapsed_last-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr function">
+            
+        <span class="def">def</span>
+        <span class="name">log_elapsed_last</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="bp">self</span>,</span><span class="param">	<span class="n">lvl</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">stream</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">console_print</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>,</span><span class="param">	<span class="o">**</span><span class="n">kwargs</span></span><span class="return-annotation">) -> <span class="nb">float</span>:</span></span>
+
+                <div class="source-button-container">
+            <label class="pdoc-button view-source-button" for="Logger.log_elapsed_last-view-source"><span>View Source</span></label>
+            <div class="github-button-wrapper">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/main/muutils/logger/logger.py#L269-L286" target="_blank">
+                    <span>View on GitHub</span>
+                </a>
+            </div>
+        </div>
+
+    </div>
+    <a class="headerlink" href="#Logger.log_elapsed_last"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Logger.log_elapsed_last-270"><a href="#Logger.log_elapsed_last-270"><span class="linenos">270</span></a>    <span class="k">def</span> <span class="nf">log_elapsed_last</span><span class="p">(</span>
+</span><span id="Logger.log_elapsed_last-271"><a href="#Logger.log_elapsed_last-271"><span class="linenos">271</span></a>        <span class="bp">self</span><span class="p">,</span>
+</span><span id="Logger.log_elapsed_last-272"><a href="#Logger.log_elapsed_last-272"><span class="linenos">272</span></a>        <span class="n">lvl</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+</span><span id="Logger.log_elapsed_last-273"><a href="#Logger.log_elapsed_last-273"><span class="linenos">273</span></a>        <span class="n">stream</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+</span><span id="Logger.log_elapsed_last-274"><a href="#Logger.log_elapsed_last-274"><span class="linenos">274</span></a>        <span class="n">console_print</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+</span><span id="Logger.log_elapsed_last-275"><a href="#Logger.log_elapsed_last-275"><span class="linenos">275</span></a>        <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+</span><span id="Logger.log_elapsed_last-276"><a href="#Logger.log_elapsed_last-276"><span class="linenos">276</span></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+</span><span id="Logger.log_elapsed_last-277"><a href="#Logger.log_elapsed_last-277"><span class="linenos">277</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;logs the time elapsed since the last message was printed to the console (in any stream)&quot;&quot;&quot;</span>
+</span><span id="Logger.log_elapsed_last-278"><a href="#Logger.log_elapsed_last-278"><span class="linenos">278</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_last_msg_time</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="Logger.log_elapsed_last-279"><a href="#Logger.log_elapsed_last-279"><span class="linenos">279</span></a>            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;no last message time!&quot;</span><span class="p">)</span>
+</span><span id="Logger.log_elapsed_last-280"><a href="#Logger.log_elapsed_last-280"><span class="linenos">280</span></a>        <span class="k">else</span><span class="p">:</span>
+</span><span id="Logger.log_elapsed_last-281"><a href="#Logger.log_elapsed_last-281"><span class="linenos">281</span></a>            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="p">(</span>
+</span><span id="Logger.log_elapsed_last-282"><a href="#Logger.log_elapsed_last-282"><span class="linenos">282</span></a>                <span class="p">{</span><span class="s2">&quot;elapsed_time&quot;</span><span class="p">:</span> <span class="nb">round</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_last_msg_time</span><span class="p">,</span> <span class="mi">6</span><span class="p">)},</span>
+</span><span id="Logger.log_elapsed_last-283"><a href="#Logger.log_elapsed_last-283"><span class="linenos">283</span></a>                <span class="n">lvl</span><span class="o">=</span><span class="p">(</span><span class="n">lvl</span> <span class="k">if</span> <span class="n">lvl</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">_console_print_threshold</span><span class="p">),</span>
+</span><span id="Logger.log_elapsed_last-284"><a href="#Logger.log_elapsed_last-284"><span class="linenos">284</span></a>                <span class="n">stream</span><span class="o">=</span><span class="n">stream</span><span class="p">,</span>
+</span><span id="Logger.log_elapsed_last-285"><a href="#Logger.log_elapsed_last-285"><span class="linenos">285</span></a>                <span class="n">console_print</span><span class="o">=</span><span class="n">console_print</span><span class="p">,</span>
+</span><span id="Logger.log_elapsed_last-286"><a href="#Logger.log_elapsed_last-286"><span class="linenos">286</span></a>                <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+</span><span id="Logger.log_elapsed_last-287"><a href="#Logger.log_elapsed_last-287"><span class="linenos">287</span></a>            <span class="p">)</span>
+</span></pre></div>
+
+
+            <div class="docstring"><p>logs the time elapsed since the last message was printed to the console (in any stream)</p>
+</div>
+
+
+                            </div>
+                            <div id="Logger.flush_all" class="classattr">
+                                        <input id="Logger.flush_all-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr function">
+            
+        <span class="def">def</span>
+        <span class="name">flush_all</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span></span><span class="return-annotation">):</span></span>
+
+                <div class="source-button-container">
+            <label class="pdoc-button view-source-button" for="Logger.flush_all-view-source"><span>View Source</span></label>
+            <div class="github-button-wrapper">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/main/muutils/logger/logger.py#L288-L295" target="_blank">
+                    <span>View on GitHub</span>
+                </a>
+            </div>
+        </div>
+
+    </div>
+    <a class="headerlink" href="#Logger.flush_all"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Logger.flush_all-289"><a href="#Logger.flush_all-289"><span class="linenos">289</span></a>    <span class="k">def</span> <span class="nf">flush_all</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span id="Logger.flush_all-290"><a href="#Logger.flush_all-290"><span class="linenos">290</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;flush all streams&quot;&quot;&quot;</span>
+</span><span id="Logger.flush_all-291"><a href="#Logger.flush_all-291"><span class="linenos">291</span></a>
+</span><span id="Logger.flush_all-292"><a href="#Logger.flush_all-292"><span class="linenos">292</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_log_file_handle</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
+</span><span id="Logger.flush_all-293"><a href="#Logger.flush_all-293"><span class="linenos">293</span></a>
+</span><span id="Logger.flush_all-294"><a href="#Logger.flush_all-294"><span class="linenos">294</span></a>        <span class="k">for</span> <span class="n">stream</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_streams</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+</span><span id="Logger.flush_all-295"><a href="#Logger.flush_all-295"><span class="linenos">295</span></a>            <span class="k">if</span> <span class="n">stream</span><span class="o">.</span><span class="n">handler</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="Logger.flush_all-296"><a href="#Logger.flush_all-296"><span class="linenos">296</span></a>                <span class="n">stream</span><span class="o">.</span><span class="n">handler</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
+</span></pre></div>
+
+
+            <div class="docstring"><p>flush all streams</p>
+</div>
+
+
+                            </div>
+                </section>
+    </main>
+<script>
+    function escapeHTML(html) {
+        return document.createElement('div').appendChild(document.createTextNode(html)).parentNode.innerHTML;
+    }
+
+    const originalContent = document.querySelector("main.pdoc");
+    let currentContent = originalContent;
+
+    function setContent(innerHTML) {
+        let elem;
+        if (innerHTML) {
+            elem = document.createElement("main");
+            elem.classList.add("pdoc");
+            elem.innerHTML = innerHTML;
+        } else {
+            elem = originalContent;
+        }
+        if (currentContent !== elem) {
+            currentContent.replaceWith(elem);
+            currentContent = elem;
+        }
+    }
+
+    function getSearchTerm() {
+        return (new URL(window.location)).searchParams.get("search");
+    }
+
+    const searchBox = document.querySelector(".pdoc input[type=search]");
+    searchBox.addEventListener("input", function () {
+        let url = new URL(window.location);
+        if (searchBox.value.trim()) {
+            url.hash = "";
+            url.searchParams.set("search", searchBox.value);
+        } else {
+            url.searchParams.delete("search");
+        }
+        history.replaceState("", "", url.toString());
+        onInput();
+    });
+    window.addEventListener("popstate", onInput);
+
+
+    let search, searchErr;
+
+    async function initialize() {
+        try {
+            search = await new Promise((resolve, reject) => {
+                const script = document.createElement("script");
+                script.type = "text/javascript";
+                script.async = true;
+                script.onload = () => resolve(window.pdocSearch);
+                script.onerror = (e) => reject(e);
+                script.src = "../../search.js";
+                document.getElementsByTagName("head")[0].appendChild(script);
+            });
+        } catch (e) {
+            console.error("Cannot fetch pdoc search index");
+            searchErr = "Cannot fetch search index.";
+        }
+        onInput();
+
+        document.querySelector("nav.pdoc").addEventListener("click", e => {
+            if (e.target.hash) {
+                searchBox.value = "";
+                searchBox.dispatchEvent(new Event("input"));
+            }
+        });
+    }
+
+    function onInput() {
+        setContent((() => {
+            const term = getSearchTerm();
+            if (!term) {
+                return null
+            }
+            if (searchErr) {
+                return `<h3>Error: ${searchErr}</h3>`
+            }
+            if (!search) {
+                return "<h3>Searching...</h3>"
+            }
+
+            window.scrollTo({top: 0, left: 0, behavior: 'auto'});
+
+            const results = search(term);
+
+            let html;
+            if (results.length === 0) {
+                html = `No search results for '${escapeHTML(term)}'.`
+            } else {
+                html = `<h4>${results.length} search result${results.length > 1 ? "s" : ""} for '${escapeHTML(term)}'.</h4>`;
+            }
+            for (let result of results.slice(0, 10)) {
+                let doc = result.doc;
+                let url = `../../${doc.modulename.replaceAll(".", "/")}.html`;
+                if (doc.qualname) {
+                    url += `#${doc.qualname}`;
+                }
+
+                let heading;
+                switch (result.doc.kind) {
+                    case "function":
+                        if (doc.fullname.endsWith(".__init__")) {
+                            heading = `<span class="name">${doc.fullname.replace(/\.__init__$/, "")}</span>${doc.signature}`;
+                        } else {
+                            heading = `<span class="def">${doc.funcdef}</span> <span class="name">${doc.fullname}</span>${doc.signature}`;
+                        }
+                        break;
+                    case "class":
+                        heading = `<span class="def">class</span> <span class="name">${doc.fullname}</span>`;
+                        if (doc.bases)
+                            heading += `<wbr>(<span class="base">${doc.bases}</span>)`;
+                        heading += `:`;
+                        break;
+                    case "variable":
+                        heading = `<span class="name">${doc.fullname}</span>`;
+                        if (doc.annotation)
+                            heading += `<span class="annotation">${doc.annotation}</span>`;
+                        if (doc.default_value)
+                            heading += `<span class="default_value"> = ${doc.default_value}</span>`;
+                        break;
+                    default:
+                        heading = `<span class="name">${doc.fullname}</span>`;
+                        break;
+                }
+                html += `
+                        <section class="search-result">
+                        <a href="${url}" class="attr ${doc.kind}">${heading}</a>
+                        <div class="docstring">${doc.doc}</div>
+                        </section>
+                    `;
+
+            }
+            return html;
+        })());
+    }
+
+    if (getSearchTerm()) {
+        initialize();
+        searchBox.value = getSearchTerm();
+        onInput();
+    } else {
+        searchBox.addEventListener("focus", initialize, {once: true});
+    }
+
+    searchBox.addEventListener("keydown", e => {
+        if (["ArrowDown", "ArrowUp", "Enter"].includes(e.key)) {
+            let focused = currentContent.querySelector(".search-result.focused");
+            if (!focused) {
+                currentContent.querySelector(".search-result").classList.add("focused");
+            } else if (
+                e.key === "ArrowDown"
+                && focused.nextElementSibling
+                && focused.nextElementSibling.classList.contains("search-result")
+            ) {
+                focused.classList.remove("focused");
+                focused.nextElementSibling.classList.add("focused");
+                focused.nextElementSibling.scrollIntoView({
+                    behavior: "smooth",
+                    block: "nearest",
+                    inline: "nearest"
+                });
+            } else if (
+                e.key === "ArrowUp"
+                && focused.previousElementSibling
+                && focused.previousElementSibling.classList.contains("search-result")
+            ) {
+                focused.classList.remove("focused");
+                focused.previousElementSibling.classList.add("focused");
+                focused.previousElementSibling.scrollIntoView({
+                    behavior: "smooth",
+                    block: "nearest",
+                    inline: "nearest"
+                });
+            } else if (
+                e.key === "Enter"
+            ) {
+                focused.querySelector("a").click();
+            }
+        }
+    });
+</script></body>
+</html>

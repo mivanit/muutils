@@ -5,6 +5,8 @@ PACKAGE_NAME := muutils
 
 # for checking you are on the right branch when publishing
 PUBLISH_BRANCH := main
+# where to put docs
+DOCS_DIR := docs
 # where to put the coverage reports
 COVERAGE_REPORTS_DIR := docs/coverage
 # where the tests are (assumes pytest)
@@ -27,7 +29,8 @@ PYPROJECT := pyproject.toml
 PYTHON_BASE := python
 # where the commit log will be stored
 COMMIT_LOG_FILE := .github/local/.commit_log
-
+# pandoc commands (for docs)
+PANDOC ?= pandoc
 
 
 # reading information and command line options
@@ -142,15 +145,56 @@ check-format:
 	$(PYTHON) -m ruff check --config $(PYPROJECT) .
 	$(PYTHON) -m pycln --check --config $(PYPROJECT) .
 
-# coverage
+# coverage & docs
 # ==================================================
+
+.PHONY: docs-html
+docs-html:
+	@echo "generate html docs"
+	$(PYTHON) docs/make_docs.py
+
+.PHONY: docs-md
+docs-md:
+	@echo "generate combined docs in markdown"
+	mkdir $(DOCS_DIR)/combined -p
+	$(PYTHON) docs/make_docs.py --combined
+
+
+.PHONY: docs-combined
+docs-combined: docs-md
+	@echo "generate combined docs in markdown and other formats"
+	@echo "requires pandoc in path"
+	$(PANDOC) -f markdown -t gfm $(DOCS_DIR)/combined/$(PACKAGE_NAME).md -o $(DOCS_DIR)/combined/$(PACKAGE_NAME)_gfm.md
+	$(PANDOC) -f markdown -t plain $(DOCS_DIR)/combined/$(PACKAGE_NAME).md -o $(DOCS_DIR)/combined/$(PACKAGE_NAME).txt
+	$(PANDOC) -f markdown -t html $(DOCS_DIR)/combined/$(PACKAGE_NAME).md -o $(DOCS_DIR)/combined/$(PACKAGE_NAME).html
+
+# $(PANDOC) -f markdown -t pdf $(DOCS_DIR)/combined/$(PACKAGE_NAME).md -o $(DOCS_DIR)/combined/$(PACKAGE_NAME).pdf
+
 
 .PHONY: cov
 cov:
 	@echo "generate coverage reports"
+	mkdir $(COVERAGE_REPORTS_DIR) -p
 	$(PYTHON) -m coverage report -m > $(COVERAGE_REPORTS_DIR)/coverage.txt
 	$(PYTHON) -m coverage_badge -f -o $(COVERAGE_REPORTS_DIR)/coverage.svg
-	$(PYTHON) -m coverage html	
+	$(PYTHON) -m coverage html --directory=$(COVERAGE_REPORTS_DIR)/html/
+	rm -rf $(COVERAGE_REPORTS_DIR)/html/.gitignore
+
+.PHONY: docs
+docs: cov docs-html docs-combined
+	@echo "generate all documentation"
+
+.PHONY: clean-docs
+clean-docs:
+	@echo "clean up docs"
+	rm -rf $(DOCS_DIR)/combined/
+	rm -rf $(DOCS_DIR)/muutils/
+	rm -rf $(COVERAGE_REPORTS_DIR)/
+	rm $(DOCS_DIR)/muutils.html
+	rm $(DOCS_DIR)/index.html
+	rm $(DOCS_DIR)/search.js
+
+
 
 # tests
 # ==================================================

@@ -32,7 +32,9 @@ def run_notebook_tests(
     exceptions: dict[str, str] = dict()
 
     print(f"# testing notebooks in '{notebooks_dir}'")
-    print(f"# reading converted notebooks from '{converted_notebooks_temp_dir.as_posix()}'")
+    print(
+        f"# reading converted notebooks from '{converted_notebooks_temp_dir.as_posix()}'"
+    )
 
     try:
         # check things exist

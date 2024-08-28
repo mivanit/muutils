@@ -2,7 +2,7 @@
 ![PyPI - Downloads](https://img.shields.io/pypi/dm/muutils)
 
 [![Checks](https://github.com/mivanit/muutils/actions/workflows/checks.yml/badge.svg)](https://github.com/mivanit/muutils/actions/workflows/checks.yml)
-[![Coverage](docs/coverage/coverage.svg)](docs/coverage/coverage.txt)
+[![Coverage](docs/coverage/coverage.svg)](docs/coverage/html/)
 
 ![GitHub commit activity](https://img.shields.io/github/commit-activity/t/mivanit/muutils)
 ![GitHub closed pull requests](https://img.shields.io/github/issues-pr-closed/mivanit/muutils)
@@ -10,6 +10,27 @@
 <!-- ![Lines of code](https://img.shields.io/tokei/lines/github.com/mivanit/muutils) -->
 
 `muutils`, stylized as "$\mu$utils" or "μutils", is a collection of miscellaneous python utilities, meant to be small and with no dependencies outside of standard python.
+
+# installation
+
+PyPi: [muutils](https://pypi.org/project/muutils/)
+
+```
+pip install muutils
+```
+
+Note that for using `mlutils`, `tensor_utils`, `nbutils.configure_notebook`, or the array serialization features of `json_serialize`, you will need to install with optional `array` dependencies:
+```
+pip install muutils[array]
+```
+
+# documentation
+
+- [hosted html docs](miv.name/muutils)
+- [single-page html docs](docs/combined/muutils.html) [(absolute link)](https://github.com/mivanit/muutils/tree/main/docs/combined/muutils.html)
+- [single-page markdown docs](docs/combined/muutils.md) [(absolute link)](https://github.com/mivanit/muutils/tree/main/docs/combined/muutils.md)
+- Test coverage: [![Test Coverage](docs/coverage/coverage.svg)](docs/coverage/html/) [(absolute link)](https://github.com/mivanit/muutils/tree/main/docs/coverage/html/) [(plain text)](https://github.com/mivanit/muutils/tree/main/docs/coverage/coverage.txt)
+
 
 
 ## [`statcounter`](https://github.com/mivanit/muutils/tree/main/muutils/statcounter.py)
@@ -104,20 +125,3 @@ an extremely simple utility for reading/writing `jsonl` files
 is a human-readable and simple format for ML models, datasets, and arbitrary objects. It's build around having a zip file with `json` and `npy` files, and has been spun off into its [own project](https://github.com/mivanit/ZANJ/).
 
 There are a couple work-in-progress utilities in [`_wip`](https://github.com/mivanit/muutils/tree/main/muutils/_wip/) that aren't ready for anything, but nothing in this repo is suitable for production. Use at your own risk!
-
-# installation
-
-PyPi: [muutils](https://pypi.org/project/muutils/)
-
-```
-pip install muutils
-```
-
-Note that for using `mlutils`, `tensor_utils`, `nbutils.configure_notebook`, or the array serialization features of `json_serialize`, you will need to install with optional `array` dependencies:
-```
-pip install muutils[array]
-```
-
-# todos:
-
-- [ ] option to have notebook conversion create pytest-compatible tests

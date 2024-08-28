@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>Coverage for muutils\json_serialize\json_serialize.py: 9%</title>
+    <title>Coverage for muutils\json_serialize\json_serialize.py: 28%</title>
     <link rel="icon" sizes="32x32" href="favicon_32_cb_58284776.png">
     <link rel="stylesheet" href="style_cb_718ce007.css" type="text/css">
     <script src="coverage_html_cb_497bf287.js" defer></script>
@@ -12,7 +12,7 @@
     <div class="content">
         <h1>
             <span class="text">Coverage for </span><b>muutils\json_serialize\json_serialize.py</b>:
-            <span class="pc_cov">9%</span>
+            <span class="pc_cov">28%</span>
         </h1>
         <aside id="help_panel_wrapper">
             <input id="help_panel_state" type="checkbox">
@@ -55,8 +55,8 @@
         </aside>
         <h2>
             <span class="text">64 statements &nbsp;</span>
-            <button type="button" class="run button_toggle_run" value="run" data-shortcut="r" title="Toggle lines run">6<span class="text"> run</span></button>
-            <button type="button" class="mis show_mis button_toggle_mis" value="mis" data-shortcut="m" title="Toggle lines missing">58<span class="text"> missing</span></button>
+            <button type="button" class="run button_toggle_run" value="run" data-shortcut="r" title="Toggle lines run">18<span class="text"> run</span></button>
+            <button type="button" class="mis show_mis button_toggle_mis" value="mis" data-shortcut="m" title="Toggle lines missing">46<span class="text"> missing</span></button>
             <button type="button" class="exc show_exc button_toggle_exc" value="exc" data-shortcut="x" title="Toggle lines excluded">0<span class="text"> excluded</span></button>
         </h2>
         <p class="text">
@@ -65,7 +65,7 @@
             <a id="nextFileLink" class="nav" href="z_7be737ddb150a48e_serializable_dataclass_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.6.1">coverage.py v7.6.1</a>,
-            created at 2024-08-28 14:22 -0600
+            created at 2024-08-28 14:24 -0600
         </p>
         <aside class="hidden">
             <button type="button" class="button_next_chunk" data-shortcut="j"></button>
@@ -171,7 +171,7 @@
     <p class="pln"><span class="n"><a id="t89" href="#t89">89</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="mis show_mis"><span class="n"><a id="t90" href="#t90">90</a></span><span class="t">    <span class="key">def</span> <span class="nam">serialize</span><span class="op">(</span><span class="nam">self</span><span class="op">)</span> <span class="op">-></span> <span class="nam">dict</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t91" href="#t91">91</a></span><span class="t">        <span class="str">"""serialize the handler info"""</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t92" href="#t92">92</a></span><span class="t">        <span class="key">return</span> <span class="op">{</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t92" href="#t92">92</a></span><span class="t">        <span class="key">return</span> <span class="op">{</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t93" href="#t93">93</a></span><span class="t">            <span class="com"># get the code and doc of the check function</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t94" href="#t94">94</a></span><span class="t">            <span class="str">"check"</span><span class="op">:</span> <span class="op">{</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t95" href="#t95">95</a></span><span class="t">                <span class="str">"code"</span><span class="op">:</span> <span class="nam">safe_getsource</span><span class="op">(</span><span class="nam">self</span><span class="op">.</span><span class="nam">check</span><span class="op">)</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
@@ -226,10 +226,10 @@
     <p class="pln"><span class="n"><a id="t144" href="#t144">144</a></span><span class="t">    <span class="com">#     obj_cls._register_self()</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t145" href="#t145">145</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t146" href="#t146">146</a></span><span class="t">    <span class="com"># get the serialized object</span>&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t147" href="#t147">147</a></span><span class="t">    <span class="key">return</span> <span class="nam">obj</span><span class="op">.</span><span class="nam">serialize</span><span class="op">(</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t147" href="#t147">147</a></span><span class="t">    <span class="key">return</span> <span class="nam">obj</span><span class="op">.</span><span class="nam">serialize</span><span class="op">(</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t148" href="#t148">148</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t149" href="#t149">149</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t150" href="#t150">150</a></span><span class="t"><span class="nam">DEFAULT_HANDLERS</span><span class="op">:</span> <span class="nam">MonoTuple</span><span class="op">[</span><span class="nam">SerializerHandler</span><span class="op">]</span> <span class="op">=</span> <span class="nam">tuple</span><span class="op">(</span><span class="nam">BASE_HANDLERS</span><span class="op">)</span> <span class="op">+</span> <span class="op">(</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t150" href="#t150">150</a></span><span class="t"><span class="nam">DEFAULT_HANDLERS</span><span class="op">:</span> <span class="nam">MonoTuple</span><span class="op">[</span><span class="nam">SerializerHandler</span><span class="op">]</span> <span class="op">=</span> <span class="nam">tuple</span><span class="op">(</span><span class="nam">BASE_HANDLERS</span><span class="op">)</span> <span class="op">+</span> <span class="op">(</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t151" href="#t151">151</a></span><span class="t">    <span class="nam">SerializerHandler</span><span class="op">(</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t152" href="#t152">152</a></span><span class="t">        <span class="com"># TODO: allow for custom serialization handler name</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t153" href="#t153">153</a></span><span class="t">        <span class="nam">check</span><span class="op">=</span><span class="key">lambda</span> <span class="nam">self</span><span class="op">,</span> <span class="nam">obj</span><span class="op">,</span> <span class="nam">path</span><span class="op">:</span> <span class="nam">hasattr</span><span class="op">(</span><span class="nam">obj</span><span class="op">,</span> <span class="str">"serialize"</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
@@ -338,7 +338,7 @@
     <p class="pln"><span class="n"><a id="t256" href="#t256">256</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t257" href="#t257">257</a></span><span class="t"><span class="str">    """</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t258" href="#t258">258</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t259" href="#t259">259</a></span><span class="t">    <span class="key">def</span> <span class="nam">__init__</span><span class="op">(</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t259" href="#t259">259</a></span><span class="t">    <span class="key">def</span> <span class="nam">__init__</span><span class="op">(</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t260" href="#t260">260</a></span><span class="t">        <span class="nam">self</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t261" href="#t261">261</a></span><span class="t">        <span class="op">*</span><span class="nam">args</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t262" href="#t262">262</a></span><span class="t">        <span class="nam">array_mode</span><span class="op">:</span> <span class="nam">ArrayMode</span> <span class="op">=</span> <span class="str">"array_list_meta"</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
@@ -352,28 +352,28 @@
     <p class="pln"><span class="n"><a id="t270" href="#t270">270</a></span><span class="t">                <span class="fst">f"</span><span class="fst">JsonSerializer takes no positional arguments!\n</span><span class="op">{</span><span class="nam">args</span> <span class="op">=</span> <span class="op">}</span><span class="fst">"</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t271" href="#t271">271</a></span><span class="t">            <span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t272" href="#t272">272</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t273" href="#t273">273</a></span><span class="t">        <span class="nam">self</span><span class="op">.</span><span class="nam">array_mode</span><span class="op">:</span> <span class="nam">ArrayMode</span> <span class="op">=</span> <span class="nam">array_mode</span>&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t274" href="#t274">274</a></span><span class="t">        <span class="nam">self</span><span class="op">.</span><span class="nam">error_mode</span><span class="op">:</span> <span class="nam">ErrorMode</span> <span class="op">=</span> <span class="nam">ErrorMode</span><span class="op">.</span><span class="nam">from_any</span><span class="op">(</span><span class="nam">error_mode</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t275" href="#t275">275</a></span><span class="t">        <span class="nam">self</span><span class="op">.</span><span class="nam">write_only_format</span><span class="op">:</span> <span class="nam">bool</span> <span class="op">=</span> <span class="nam">write_only_format</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t273" href="#t273">273</a></span><span class="t">        <span class="nam">self</span><span class="op">.</span><span class="nam">array_mode</span><span class="op">:</span> <span class="nam">ArrayMode</span> <span class="op">=</span> <span class="nam">array_mode</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t274" href="#t274">274</a></span><span class="t">        <span class="nam">self</span><span class="op">.</span><span class="nam">error_mode</span><span class="op">:</span> <span class="nam">ErrorMode</span> <span class="op">=</span> <span class="nam">ErrorMode</span><span class="op">.</span><span class="nam">from_any</span><span class="op">(</span><span class="nam">error_mode</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t275" href="#t275">275</a></span><span class="t">        <span class="nam">self</span><span class="op">.</span><span class="nam">write_only_format</span><span class="op">:</span> <span class="nam">bool</span> <span class="op">=</span> <span class="nam">write_only_format</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t276" href="#t276">276</a></span><span class="t">        <span class="com"># join up the handlers</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t277" href="#t277">277</a></span><span class="t">        <span class="nam">self</span><span class="op">.</span><span class="nam">handlers</span><span class="op">:</span> <span class="nam">MonoTuple</span><span class="op">[</span><span class="nam">SerializerHandler</span><span class="op">]</span> <span class="op">=</span> <span class="nam">tuple</span><span class="op">(</span><span class="nam">handlers_pre</span><span class="op">)</span> <span class="op">+</span> <span class="nam">tuple</span><span class="op">(</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t278" href="#t278">278</a></span><span class="t">            <span class="nam">handlers_default</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t279" href="#t279">279</a></span><span class="t">        <span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t280" href="#t280">280</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t281" href="#t281">281</a></span><span class="t">    <span class="key">def</span> <span class="nam">json_serialize</span><span class="op">(</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t281" href="#t281">281</a></span><span class="t">    <span class="key">def</span> <span class="nam">json_serialize</span><span class="op">(</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t282" href="#t282">282</a></span><span class="t">        <span class="nam">self</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t283" href="#t283">283</a></span><span class="t">        <span class="nam">obj</span><span class="op">:</span> <span class="nam">Any</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t284" href="#t284">284</a></span><span class="t">        <span class="nam">path</span><span class="op">:</span> <span class="nam">ObjectPath</span> <span class="op">=</span> <span class="nam">tuple</span><span class="op">(</span><span class="op">)</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t285" href="#t285">285</a></span><span class="t">    <span class="op">)</span> <span class="op">-></span> <span class="nam">JSONitem</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t286" href="#t286">286</a></span><span class="t">        <span class="key">try</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t287" href="#t287">287</a></span><span class="t">            <span class="key">for</span> <span class="nam">handler</span> <span class="key">in</span> <span class="nam">self</span><span class="op">.</span><span class="nam">handlers</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t288" href="#t288">288</a></span><span class="t">                <span class="key">if</span> <span class="nam">handler</span><span class="op">.</span><span class="nam">check</span><span class="op">(</span><span class="nam">self</span><span class="op">,</span> <span class="nam">obj</span><span class="op">,</span> <span class="nam">path</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t289" href="#t289">289</a></span><span class="t">                    <span class="nam">output</span><span class="op">:</span> <span class="nam">JSONitem</span> <span class="op">=</span> <span class="nam">handler</span><span class="op">.</span><span class="nam">serialize_func</span><span class="op">(</span><span class="nam">self</span><span class="op">,</span> <span class="nam">obj</span><span class="op">,</span> <span class="nam">path</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t290" href="#t290">290</a></span><span class="t">                    <span class="key">if</span> <span class="nam">self</span><span class="op">.</span><span class="nam">write_only_format</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t291" href="#t291">291</a></span><span class="t">                        <span class="key">if</span> <span class="nam">isinstance</span><span class="op">(</span><span class="nam">output</span><span class="op">,</span> <span class="nam">dict</span><span class="op">)</span> <span class="key">and</span> <span class="str">"__format__"</span> <span class="key">in</span> <span class="nam">output</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t292" href="#t292">292</a></span><span class="t">                            <span class="nam">new_fmt</span><span class="op">:</span> <span class="nam">JSONitem</span> <span class="op">=</span> <span class="nam">output</span><span class="op">.</span><span class="nam">pop</span><span class="op">(</span><span class="str">"__format__"</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t293" href="#t293">293</a></span><span class="t">                            <span class="nam">output</span><span class="op">[</span><span class="str">"__write_format__"</span><span class="op">]</span> <span class="op">=</span> <span class="nam">new_fmt</span>&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t294" href="#t294">294</a></span><span class="t">                    <span class="key">return</span> <span class="nam">output</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t286" href="#t286">286</a></span><span class="t">        <span class="key">try</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t287" href="#t287">287</a></span><span class="t">            <span class="key">for</span> <span class="nam">handler</span> <span class="key">in</span> <span class="nam">self</span><span class="op">.</span><span class="nam">handlers</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t288" href="#t288">288</a></span><span class="t">                <span class="key">if</span> <span class="nam">handler</span><span class="op">.</span><span class="nam">check</span><span class="op">(</span><span class="nam">self</span><span class="op">,</span> <span class="nam">obj</span><span class="op">,</span> <span class="nam">path</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t289" href="#t289">289</a></span><span class="t">                    <span class="nam">output</span><span class="op">:</span> <span class="nam">JSONitem</span> <span class="op">=</span> <span class="nam">handler</span><span class="op">.</span><span class="nam">serialize_func</span><span class="op">(</span><span class="nam">self</span><span class="op">,</span> <span class="nam">obj</span><span class="op">,</span> <span class="nam">path</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t290" href="#t290">290</a></span><span class="t">                    <span class="key">if</span> <span class="nam">self</span><span class="op">.</span><span class="nam">write_only_format</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t291" href="#t291">291</a></span><span class="t">                        <span class="key">if</span> <span class="nam">isinstance</span><span class="op">(</span><span class="nam">output</span><span class="op">,</span> <span class="nam">dict</span><span class="op">)</span> <span class="key">and</span> <span class="str">"__format__"</span> <span class="key">in</span> <span class="nam">output</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t292" href="#t292">292</a></span><span class="t">                            <span class="nam">new_fmt</span><span class="op">:</span> <span class="nam">JSONitem</span> <span class="op">=</span> <span class="nam">output</span><span class="op">.</span><span class="nam">pop</span><span class="op">(</span><span class="str">"__format__"</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t293" href="#t293">293</a></span><span class="t">                            <span class="nam">output</span><span class="op">[</span><span class="str">"__write_format__"</span><span class="op">]</span> <span class="op">=</span> <span class="nam">new_fmt</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t294" href="#t294">294</a></span><span class="t">                    <span class="key">return</span> <span class="nam">output</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t295" href="#t295">295</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="mis show_mis"><span class="n"><a id="t296" href="#t296">296</a></span><span class="t">            <span class="key">raise</span> <span class="nam">ValueError</span><span class="op">(</span><span class="fst">f"</span><span class="fst">no handler found for object with </span><span class="op">{</span><span class="nam">type</span><span class="op">(</span><span class="nam">obj</span><span class="op">)</span> <span class="op">=</span> <span class="op">}</span><span class="fst">"</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t297" href="#t297">297</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
@@ -410,7 +410,7 @@
     <p class="pln"><span class="n"><a id="t328" href="#t328">328</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="mis show_mis"><span class="n"><a id="t329" href="#t329">329</a></span><span class="t"><span class="key">def</span> <span class="nam">json_serialize</span><span class="op">(</span><span class="nam">obj</span><span class="op">:</span> <span class="nam">Any</span><span class="op">,</span> <span class="nam">path</span><span class="op">:</span> <span class="nam">ObjectPath</span> <span class="op">=</span> <span class="nam">tuple</span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">-></span> <span class="nam">JSONitem</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t330" href="#t330">330</a></span><span class="t">    <span class="str">"""serialize object to json-serializable object with default config"""</span>&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t331" href="#t331">331</a></span><span class="t">    <span class="key">return</span> <span class="nam">GLOBAL_JSON_SERIALIZER</span><span class="op">.</span><span class="nam">json_serialize</span><span class="op">(</span><span class="nam">obj</span><span class="op">,</span> <span class="nam">path</span><span class="op">=</span><span class="nam">path</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t331" href="#t331">331</a></span><span class="t">    <span class="key">return</span> <span class="nam">GLOBAL_JSON_SERIALIZER</span><span class="op">.</span><span class="nam">json_serialize</span><span class="op">(</span><span class="nam">obj</span><span class="op">,</span> <span class="nam">path</span><span class="op">=</span><span class="nam">path</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
 </main>
 <footer>
     <div class="content">
@@ -420,7 +420,7 @@
             <a class="nav" href="z_7be737ddb150a48e_serializable_dataclass_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.6.1">coverage.py v7.6.1</a>,
-            created at 2024-08-28 14:22 -0600
+            created at 2024-08-28 14:24 -0600
         </p>
     </div>
 </footer>

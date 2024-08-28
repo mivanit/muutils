@@ -2,6 +2,7 @@
 decorator `spinner_decorator` and context manager `SpinnerContext` to display
 a spinner using the base `Spinner` class while some code is running.
 """
+
 import os
 import time
 import threading
@@ -142,7 +143,7 @@ class Spinner:
     (defaults to `""`)
     - `format_string : str`
     string to format the spinner with. must have `"\\r"` prepended to clear the line.
-    allowed keys are `spinner`, `elapsed_time`, `message`, and `value`  
+    allowed keys are `spinner`, `elapsed_time`, `message`, and `value`
     (defaults to `"\\r{spinner} ({elapsed_time:.2f}s) {message}{value}"`)
     - `output_stream : TextIO`
     stream to write the spinner to
@@ -359,7 +360,7 @@ def spinner_decorator(
     **kwargs,
 ) -> Callable[[DecoratedFunction], DecoratedFunction]:
     """see `Spinner` for parameters. Also takes `mutable_kwarg_key`
-    
+
     `mutable_kwarg_key` is the key with which `Spinner().update_value`
     will be passed to the decorated function. if `None`, won't pass it.
 

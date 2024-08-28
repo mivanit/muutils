@@ -15,7 +15,7 @@ class FancyTimeitResult(NamedTuple):
     """return type of `timeit_fancy`"""
 
     timings: StatCounter
-    return_value: Union[T, None]
+    return_value: T  # type: ignore[valid-type]
     profile: Union[pstats.Stats, None]
 
 

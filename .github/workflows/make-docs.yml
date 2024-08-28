@@ -42,7 +42,7 @@ jobs:
         run: poetry install
 
       - name: run tests
-        run: make unit COV=1
+        run: make test COV=1
 
       - name: Build Docs
         run: make docs

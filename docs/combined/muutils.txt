@@ -252,6 +252,21 @@ at your own risk!
 
 View Source on GitHub
 
+Contents
+
+making working with dictionaries easier
+
+-   DefaulterDict: like a defaultdict, but default_factory is passed the
+    key as an argument
+-   various methods for working wit dotlist-nested dicts, converting to
+    and from them
+-   condense_nested_dicts: condense a nested dict, by condensing numeric
+    or matching keys with matching values to ranges
+-   condense_tensor_dict: convert a dictionary of tensors to a
+    dictionary of shapes
+-   kwargs_to_nested_dict: given kwargs from fire, convert them to a
+    nested dict
+
 API Documentation
 
 -   DefaulterDict
@@ -273,6 +288,19 @@ API Documentation
 View Source on GitHub
 
 muutils.dictmagic
+
+making working with dictionaries easier
+
+-   DefaulterDict: like a defaultdict, but default_factory is passed the
+    key as an argument
+-   various methods for working wit dotlist-nested dicts, converting to
+    and from them
+-   condense_nested_dicts: condense a nested dict, by condensing numeric
+    or matching keys with matching values to ranges
+-   condense_tensor_dict: convert a dictionary of tensors to a
+    dictionary of shapes
+-   kwargs_to_nested_dict: given kwargs from fire, convert them to a
+    nested dict
 
 View Source on GitHub
 
@@ -577,6 +605,18 @@ Raises:
     ‘yaml’, or if you try to use ‘yaml’ output without having PyYAML
     installed
 
+Contents
+
+provides ErrorMode enum for handling errors consistently
+
+pass an error_mode: ErrorMode to a function to specify how to handle a
+certain kind of exception. That function then instead of raiseing or
+warnings.warning, calls error_mode.process with the message and the
+exception.
+
+you can also specify the exception class to raise, the warning class to
+use, and the source of the exception/warning.
+
 API Documentation
 
 -   WarningFunc
@@ -590,6 +630,16 @@ API Documentation
 View Source on GitHub
 
 muutils.errormode
+
+provides ErrorMode enum for handling errors consistently
+
+pass an error_mode: ErrorMode to a function to specify how to handle a
+certain kind of exception. That function then instead of raiseing or
+warnings.warning, calls error_mode.process with the message and the
+exception.
+
+you can also specify the exception class to raise, the warning class to
+use, and the source of the exception/warning.
 
 View Source on GitHub
 
@@ -678,6 +728,14 @@ class ErrorMode(enum.Enum):
 
 View Source on GitHub
 
+Enum for handling errors consistently
+
+pass one of the instances of this enum to a function to specify how to
+handle a certain kind of exception.
+
+That function then instead of raiseing or warnings.warning, calls
+error_mode.process with the message and the exception.
+
 -   EXCEPT = ErrorMode.Except
 
 -   WARN = ErrorMode.Warn
@@ -700,6 +758,31 @@ def process
 
 View Source on GitHub
 
+process an exception or warning according to the error mode
+
+Parameters:
+
+-   msg : str message to pass to except_cls or warn_func
+-   except_cls : typing.Type[Exception] exception class to raise, must
+    be a subclass of Exception (defaults to ValueError)
+-   warn_cls : typing.Type[Warning] warning class to use, must be a
+    subclass of Warning (defaults to UserWarning)
+-   except_from : typing.Optional[Exception] will
+    raise except_cls(msg) from except_from if not None (defaults to
+    None)
+-   warn_func : WarningFunc | None function to use for warnings, must
+    have the signature
+    warn_func(msg: str, category: typing.Type[Warning], source: typing.Any = None) -> None
+    (defaults to None)
+-   log_func : LoggingFunc | None function to use for logging, must have
+    the signature log_func(msg: str) -> None (defaults to None)
+
+Raises:
+
+-   except_cls : description
+-   except_cls : description
+-   ValueError : description
+
 def from_any
 
     (
@@ -710,6 +793,8 @@ def from_any
     ) -> muutils.errormode.ErrorMode
 
 View Source on GitHub
+
+initialize an ErrorMode from a string or an ErrorMode instance
 
 def serialize
 
@@ -731,6 +816,12 @@ Inherited Members
 
 -   ERROR_MODE_ALIASES: dict[str, muutils.errormode.ErrorMode] = {'except': ErrorMode.Except, 'warn': ErrorMode.Warn, 'log': ErrorMode.Log, 'ignore': ErrorMode.Ignore, 'e': ErrorMode.Except, 'error': ErrorMode.Except, 'err': ErrorMode.Except, 'raise': ErrorMode.Except, 'w': ErrorMode.Warn, 'warning': ErrorMode.Warn, 'l': ErrorMode.Log, 'print': ErrorMode.Log, 'output': ErrorMode.Log, 'show': ErrorMode.Log, 'display': ErrorMode.Log, 'i': ErrorMode.Ignore, 'silent': ErrorMode.Ignore, 'quiet': ErrorMode.Ignore, 'nothing': ErrorMode.Ignore}
 
+map of string aliases to ErrorMode instances
+
+Contents
+
+group items by assuming that eq_func defines an equivalence relation
+
 API Documentation
 
 -   group_by_equivalence
@@ -738,6 +829,8 @@ API Documentation
 View Source on GitHub
 
 muutils.group_equiv
+
+group items by assuming that eq_func defines an equivalence relation
 
 View Source on GitHub
 
@@ -765,6 +858,10 @@ Arguments
 -   eq_func: Callable[[T, T], bool] a function that returns true if two
     items are equivalent. need not be transitive
 
+Contents
+
+represents a mathematical Interval over the real numbers
+
 API Documentation
 
 -   Number
@@ -775,6 +872,8 @@ API Documentation
 View Source on GitHub
 
 muutils.interval
+
+represents a mathematical Interval over the real numbers
 
 View Source on GitHub
 
@@ -1056,6 +1155,38 @@ Inherited Members
 -   intersection
 -   union
 
+Contents
+
+submodule for serializing things to json in a recoverable way
+
+you can throw any object into muutils.json_serialize.json_serialize and
+it will return a JSONitem, meaning a bool, int, float, str, None, list
+of JSONitems, or a dict mappting to JSONitem.
+
+The goal of this is if you want to just be able to store something as
+relatively human-readable JSON, and don’t care as much about recovering
+it, you can throw it into json_serialize and it will just work. If you
+want to do so in a recoverable way, check out ZANJ.
+
+it will do so by looking in DEFAULT_HANDLERS, which will keep it as-is
+if its already valid, then try to find a .serialize() method on the
+object, and then have a bunch of special cases. You can add handlers by
+initializing a JsonSerializer object and passing a sequence of them to
+handlers_pre
+
+additionally, SerializeableDataclass is a special kind of dataclass
+where you specify how to serialize each field, and a .serialize() method
+is automatically added to the class. This is done by using the
+serializable_dataclass decorator, inheriting from
+SerializeableDataclass, and serializable_field in place of
+dataclasses.field when defining non-standard fields.
+
+This module plays nicely with and is a dependency of the ZANJ library,
+which extends this to support saving things to disk in a more efficient
+way than just plain json (arrays are saved as npy files, for example),
+and automatically detecting how to load saved objects into their
+original classes.
+
 Submodules
 
 -   array
@@ -1081,6 +1212,37 @@ API Documentation
 View Source on GitHub
 
 muutils.json_serialize
+
+submodule for serializing things to json in a recoverable way
+
+you can throw any object into
+<a href="json_serialize/json_serialize.html">muutils.json_serialize.json_serialize</a>
+and it will return a JSONitem, meaning a bool, int, float, str, None,
+list of JSONitems, or a dict mappting to JSONitem.
+
+The goal of this is if you want to just be able to store something as
+relatively human-readable JSON, and don’t care as much about recovering
+it, you can throw it into json_serialize and it will just work. If you
+want to do so in a recoverable way, check out ZANJ.
+
+it will do so by looking in DEFAULT_HANDLERS, which will keep it as-is
+if its already valid, then try to find a .serialize() method on the
+object, and then have a bunch of special cases. You can add handlers by
+initializing a JsonSerializer object and passing a sequence of them to
+handlers_pre
+
+additionally, SerializeableDataclass is a special kind of dataclass
+where you specify how to serialize each field, and a .serialize() method
+is automatically added to the class. This is done by using the
+serializable_dataclass decorator, inheriting from
+SerializeableDataclass, and serializable_field in place of
+dataclasses.field when defining non-standard fields.
+
+This module plays nicely with and is a dependency of the ZANJ library,
+which extends this to support saving things to disk in a more efficient
+way than just plain json (arrays are saved as npy files, for example),
+and automatically detecting how to load saved objects into their
+original classes.
 
 View Source on GitHub
 
@@ -1127,13 +1289,13 @@ some additional kwargs
 Returns the same class as was passed in, with dunder methods added based
 on the fields defined in the class.
 
-Examines PEP 526 annotations to determine fields.
+Examines PEP 526 __annotations__ to determine fields.
 
-If init is true, an init() method is added to the class. If repr is
-true, a repr() method is added. If order is true, rich comparison dunder
-methods are added. If unsafe_hash is true, a hash() method function is
-added. If frozen is true, fields may not be assigned to after instance
-creation.
+If init is true, an __init__() method is added to the class. If repr is
+true, a __repr__() method is added. If order is true, rich comparison
+dunder methods are added. If unsafe_hash is true, a __hash__() method
+function is added. If frozen is true, fields may not be assigned to
+after instance creation.
 
     @serializable_dataclass(kw_only=True)
     class Myclass(SerializableDataclass):
@@ -1167,15 +1329,17 @@ Parameters:
 
 Returns:
 
--   _type_ description
+-   _type_ the decorated class
 
 Raises:
 
--   ValueError : description
--   ValueError : description
--   ValueError : description
--   AttributeError : description
--   ValueError : description
+-   KWOnlyError : only raised if kw_only is True and python version is
+    <3.9, since dataclasses.dataclass does not support this
+-   NotSerializableFieldException : if a field is not a
+    SerializableField
+-   FieldSerializationError : if there is an error serializing a field
+-   AttributeError : if a property is not found on the class
+-   FieldLoadingError : if there is an error loading a field
 
 def serializable_field
 
@@ -1366,28 +1530,31 @@ View Source on GitHub
 
 checks if two dataclasses which (might) hold numpy arrays are equal
 
-    # Parameters:
-    - `dc1`: the first dataclass
-    - `dc2`: the second dataclass
-    - `except_when_class_mismatch: bool`
-        if `True`, will throw `TypeError` if the classes are different.
-        if not, will return false by default or attempt to compare the fields if `false_when_class_mismatch` is `False`
-        (default: `False`)
-    - `false_when_class_mismatch: bool`
-        only relevant if `except_when_class_mismatch` is `False`.
-        if `True`, will return `False` if the classes are different.
-        if `False`, will attempt to compare the fields.
-    - `except_when_field_mismatch: bool`
-        only relevant if `except_when_class_mismatch` is `False` and `false_when_class_mismatch` is `False`.
-        if `True`, will throw `TypeError` if the fields are different.
-        (default: `True`)
+Parameters:
 
-    # Returns:
-    - `bool`: True if the dataclasses are equal, False otherwise
+-   dc1: the first dataclass
+-   dc2: the second dataclass
+-   except_when_class_mismatch: bool if True, will throw TypeError if
+    the classes are different. if not, will return false by default or
+    attempt to compare the fields if false_when_class_mismatch is False
+    (default: False)
+-   false_when_class_mismatch: bool only relevant if
+    except_when_class_mismatch is False. if True, will return False if
+    the classes are different. if False, will attempt to compare the
+    fields.
+-   except_when_field_mismatch: bool only relevant if
+    except_when_class_mismatch is False and false_when_class_mismatch is
+    False. if True, will throw TypeError if the fields are different.
+    (default: True)
 
-    # Raises:
-    - `TypeError`: if the dataclasses are of different classes
-    - `AttributeError`: if the dataclasses have different fields
+Returns:
+
+-   bool: True if the dataclasses are equal, False otherwise
+
+Raises:
+
+-   TypeError: if the dataclasses are of different classes
+-   AttributeError: if the dataclasses have different fields
 
               [START]
                  ▼
@@ -1425,17 +1592,65 @@ Base class for serializable dataclasses
 only for linting and type checking, still need to call
 serializable_dataclass decorator
 
+Usage:
+
+    @serializable_dataclass
+    class MyClass(SerializableDataclass):
+        a: int
+        b: str
+
+and then you can call my_obj.serialize() to get a dict that can be
+serialized to json. So, you can do:
+
+    >>> my_obj = MyClass(a=1, b="q")
+    >>> s = json.dumps(my_obj.serialize())
+    >>> s
+    '{"__format__": "MyClass(SerializableDataclass)", "a": 1, "b": "q"}'
+    >>> read_obj = MyClass.load(json.loads(s))
+    >>> read_obj == my_obj
+    True
+
+This isn’t too impressive on its own, but it gets more useful when you
+have nested classses, or fields that are not json-serializable by
+default:
+
+    @serializable_dataclass
+    class NestedClass(SerializableDataclass):
+        x: str
+        y: MyClass
+        act_fun: torch.nn.Module = serializable_field(
+            default=torch.nn.ReLU(),
+            serialization_fn=lambda x: str(x),
+            deserialize_fn=lambda x: getattr(torch.nn, x)(),
+        )
+
+which gives us:
+
+    >>> nc = NestedClass(x="q", y=MyClass(a=1, b="q"), act_fun=torch.nn.Sigmoid())
+    >>> s = json.dumps(nc.serialize())
+    >>> s
+    '{"__format__": "NestedClass(SerializableDataclass)", "x": "q", "y": {"__format__": "MyClass(SerializableDataclass)", "a": 1, "b": "q"}, "act_fun": "Sigmoid"}'
+    >>> read_nc = NestedClass.load(json.loads(s))
+    >>> read_nc == nc
+    True
+
 def serialize
 
     (self) -> dict[str, typing.Any]
 
 View Source on GitHub
 
+returns the class as a dict, implemented by using
+@serializable_dataclass decorator
+
 def load
 
     (cls: Type[~T], data: Union[dict[str, Any], ~T]) -> ~T
 
 View Source on GitHub
+
+takes in an appropriately structured dict and returns an instance of the
+class, implemented by using @serializable_dataclass decorator
 
 def validate_fields_types
 
@@ -1446,6 +1661,9 @@ def validate_fields_types
 
 View Source on GitHub
 
+validate the types of all the fields on a SerializableDataclass. calls
+SerializableDataclass__validate_field_type for each field
+
 def validate_field_type
 
     (
@@ -1455,6 +1673,8 @@ def validate_field_type
     ) -> bool
 
 View Source on GitHub
+
+given a dataclass, check the field matches the type hint
 
 def diff
 
@@ -1504,6 +1724,16 @@ Parameters:
     - `nested_dict : dict[str, Any]`
         nested dict to update the instance with
 
+Contents
+
+this utilities module handles serialization and loading of numpy and
+torch arrays as json
+
+-   array_list_meta is less efficient (arrays are stored as nested
+    lists), but preserves both metadata and human readability.
+-   array_b64_meta is the most efficient, but is not human readable.
+-   external is mostly for use in ZANJ
+
 API Documentation
 
 -   ArrayMode
@@ -1516,6 +1746,14 @@ API Documentation
 View Source on GitHub
 
 muutils.json_serialize.array
+
+this utilities module handles serialization and loading of numpy and
+torch arrays as json
+
+-   array_list_meta is less efficient (arrays are stored as nested
+    lists), but preserves both metadata and human readability.
+-   array_b64_meta is the most efficient, but is not human readable.
+-   external is mostly for use in ZANJ
 
 View Source on GitHub
 
@@ -1606,6 +1844,17 @@ View Source on GitHub
 
 load a json-serialized array, infer the mode if not specified
 
+Contents
+
+provides the basic framework for json serialization of objects
+
+notably:
+
+-   SerializerHandler defines how to serialize a specific type of object
+-   JsonSerializer handles configuration for which handlers to use
+-   json_serialize provides the default configuration if you don’t care
+    – call it on any object!
+
 API Documentation
 
 -   SERIALIZER_SPECIAL_KEYS
@@ -1622,6 +1871,15 @@ API Documentation
 View Source on GitHub
 
 muutils.json_serialize.json_serialize
+
+provides the basic framework for json serialization of objects
+
+notably:
+
+-   SerializerHandler defines how to serialize a specific type of object
+-   JsonSerializer handles configuration for which handlers to use
+-   json_serialize provides the default configuration if you don’t care
+    – call it on any object!
 
 View Source on GitHub
 
@@ -1760,6 +2018,57 @@ View Source on GitHub
 
 serialize object to json-serializable object with default config
 
+Contents
+
+save and load objects to and from json or compatible formats in a
+recoverable way
+
+d = dataclasses.asdict(my_obj) will give you a dict, but if some fields
+are not json-serializable, you will get an error when you call
+json.dumps(d). This module provides a way around that.
+
+Instead, you define your class:
+
+    @serializable_dataclass
+    class MyClass(SerializableDataclass):
+        a: int
+        b: str
+
+and then you can call my_obj.serialize() to get a dict that can be
+serialized to json. So, you can do:
+
+    >>> my_obj = MyClass(a=1, b="q")
+    >>> s = json.dumps(my_obj.serialize())
+    >>> s
+    '{"__format__": "MyClass(SerializableDataclass)", "a": 1, "b": "q"}'
+    >>> read_obj = MyClass.load(json.loads(s))
+    >>> read_obj == my_obj
+    True
+
+This isn’t too impressive on its own, but it gets more useful when you
+have nested classses, or fields that are not json-serializable by
+default:
+
+    @serializable_dataclass
+    class NestedClass(SerializableDataclass):
+        x: str
+        y: MyClass
+        act_fun: torch.nn.Module = serializable_field(
+            default=torch.nn.ReLU(),
+            serialization_fn=lambda x: str(x),
+            deserialize_fn=lambda x: getattr(torch.nn, x)(),
+        )
+
+which gives us:
+
+    >>> nc = NestedClass(x="q", y=MyClass(a=1, b="q"), act_fun=torch.nn.Sigmoid())
+    >>> s = json.dumps(nc.serialize())
+    >>> s
+    '{"__format__": "NestedClass(SerializableDataclass)", "x": "q", "y": {"__format__": "MyClass(SerializableDataclass)", "a": 1, "b": "q"}, "act_fun": "Sigmoid"}'
+    >>> read_nc = NestedClass.load(json.loads(s))
+    >>> read_nc == nc
+    True
+
 API Documentation
 
 -   CantGetTypeHintsWarning
@@ -1772,11 +2081,65 @@ API Documentation
 -   SerializableDataclass
 -   get_cls_type_hints_cached
 -   get_cls_type_hints
+-   KWOnlyError
+-   FieldError
+-   NotSerializableFieldException
+-   FieldSerializationError
+-   FieldLoadingError
 -   serializable_dataclass
 
 View Source on GitHub
 
 muutils.json_serialize.serializable_dataclass
+
+save and load objects to and from json or compatible formats in a
+recoverable way
+
+d = dataclasses.asdict(my_obj) will give you a dict, but if some fields
+are not json-serializable, you will get an error when you call
+json.dumps(d). This module provides a way around that.
+
+Instead, you define your class:
+
+    @serializable_dataclass
+    class MyClass(SerializableDataclass):
+        a: int
+        b: str
+
+and then you can call my_obj.serialize() to get a dict that can be
+serialized to json. So, you can do:
+
+    >>> my_obj = MyClass(a=1, b="q")
+    >>> s = json.dumps(my_obj.serialize())
+    >>> s
+    '{"__format__": "MyClass(SerializableDataclass)", "a": 1, "b": "q"}'
+    >>> read_obj = MyClass.load(json.loads(s))
+    >>> read_obj == my_obj
+    True
+
+This isn’t too impressive on its own, but it gets more useful when you
+have nested classses, or fields that are not json-serializable by
+default:
+
+    @serializable_dataclass
+    class NestedClass(SerializableDataclass):
+        x: str
+        y: MyClass
+        act_fun: torch.nn.Module = serializable_field(
+            default=torch.nn.ReLU(),
+            serialization_fn=lambda x: str(x),
+            deserialize_fn=lambda x: getattr(torch.nn, x)(),
+        )
+
+which gives us:
+
+    >>> nc = NestedClass(x="q", y=MyClass(a=1, b="q"), act_fun=torch.nn.Sigmoid())
+    >>> s = json.dumps(nc.serialize())
+    >>> s
+    '{"__format__": "NestedClass(SerializableDataclass)", "x": "q", "y": {"__format__": "MyClass(SerializableDataclass)", "a": 1, "b": "q"}, "act_fun": "Sigmoid"}'
+    >>> read_nc = NestedClass.load(json.loads(s))
+    >>> read_nc == nc
+    True
 
 View Source on GitHub
 
@@ -1784,7 +2147,7 @@ class CantGetTypeHintsWarning(builtins.UserWarning):
 
 View Source on GitHub
 
-Base class for warnings generated by user code.
+special warning for when we can’t get type hints
 
 Inherited Members
 
@@ -1800,7 +2163,8 @@ class ZanjMissingWarning(builtins.UserWarning):
 
 View Source on GitHub
 
-Base class for warnings generated by user code.
+special warning for when ZANJ is missing –
+register_loader_serializable_dataclass will not work
 
 Inherited Members
 
@@ -1818,7 +2182,10 @@ def zanj_register_loader_serializable_dataclass
 
 View Source on GitHub
 
-Register a serializable dataclass with the ZANJ backport
+Register a serializable dataclass with the ZANJ import
+
+this allows ZANJ().read() to load the class and not just return plain
+dicts
 
 TODO: there is some duplication here with register_loader_handler
 
@@ -1849,6 +2216,9 @@ def SerializableDataclass__validate_field_type
 View Source on GitHub
 
 given a dataclass, check the field matches the type hint
+
+this function is written to
+<a href="#SerializableDataclass.validate_field_type">SerializableDataclass.validate_field_type</a>
 
 Parameters:
 
@@ -1901,17 +2271,65 @@ Base class for serializable dataclasses
 only for linting and type checking, still need to call
 serializable_dataclass decorator
 
+Usage:
+
+    @serializable_dataclass
+    class MyClass(SerializableDataclass):
+        a: int
+        b: str
+
+and then you can call my_obj.serialize() to get a dict that can be
+serialized to json. So, you can do:
+
+    >>> my_obj = MyClass(a=1, b="q")
+    >>> s = json.dumps(my_obj.serialize())
+    >>> s
+    '{"__format__": "MyClass(SerializableDataclass)", "a": 1, "b": "q"}'
+    >>> read_obj = MyClass.load(json.loads(s))
+    >>> read_obj == my_obj
+    True
+
+This isn’t too impressive on its own, but it gets more useful when you
+have nested classses, or fields that are not json-serializable by
+default:
+
+    @serializable_dataclass
+    class NestedClass(SerializableDataclass):
+        x: str
+        y: MyClass
+        act_fun: torch.nn.Module = serializable_field(
+            default=torch.nn.ReLU(),
+            serialization_fn=lambda x: str(x),
+            deserialize_fn=lambda x: getattr(torch.nn, x)(),
+        )
+
+which gives us:
+
+    >>> nc = NestedClass(x="q", y=MyClass(a=1, b="q"), act_fun=torch.nn.Sigmoid())
+    >>> s = json.dumps(nc.serialize())
+    >>> s
+    '{"__format__": "NestedClass(SerializableDataclass)", "x": "q", "y": {"__format__": "MyClass(SerializableDataclass)", "a": 1, "b": "q"}, "act_fun": "Sigmoid"}'
+    >>> read_nc = NestedClass.load(json.loads(s))
+    >>> read_nc == nc
+    True
+
 def serialize
 
     (self) -> dict[str, typing.Any]
 
 View Source on GitHub
 
+returns the class as a dict, implemented by using
+@serializable_dataclass decorator
+
 def load
 
     (cls: Type[~T], data: Union[dict[str, Any], ~T]) -> ~T
 
 View Source on GitHub
+
+takes in an appropriately structured dict and returns an instance of the
+class, implemented by using @serializable_dataclass decorator
 
 def validate_fields_types
 
@@ -1922,6 +2340,9 @@ def validate_fields_types
 
 View Source on GitHub
 
+validate the types of all the fields on a SerializableDataclass. calls
+SerializableDataclass__validate_field_type for each field
+
 def validate_field_type
 
     (
@@ -1931,6 +2352,8 @@ def validate_field_type
     ) -> bool
 
 View Source on GitHub
+
+given a dataclass, check the field matches the type hint
 
 def diff
 
@@ -1994,6 +2417,88 @@ def get_cls_type_hints
 
 View Source on GitHub
 
+helper function to get type hints for a class
+
+class KWOnlyError(builtins.NotImplementedError):
+
+View Source on GitHub
+
+kw-only dataclasses are not supported in python <3.9
+
+Inherited Members
+
+-   NotImplementedError
+
+-   with_traceback
+
+-   add_note
+
+-   args
+
+class FieldError(builtins.ValueError):
+
+View Source on GitHub
+
+base class for field errors
+
+Inherited Members
+
+-   ValueError
+
+-   with_traceback
+
+-   add_note
+
+-   args
+
+class NotSerializableFieldException(FieldError):
+
+View Source on GitHub
+
+field is not a SerializableField
+
+Inherited Members
+
+-   ValueError
+
+-   with_traceback
+
+-   add_note
+
+-   args
+
+class FieldSerializationError(FieldError):
+
+View Source on GitHub
+
+error while serializing a field
+
+Inherited Members
+
+-   ValueError
+
+-   with_traceback
+
+-   add_note
+
+-   args
+
+class FieldLoadingError(FieldError):
+
+View Source on GitHub
+
+error while loading a field
+
+Inherited Members
+
+-   ValueError
+
+-   with_traceback
+
+-   add_note
+
+-   args
+
 def serializable_dataclass
 
     (
@@ -2026,13 +2531,13 @@ some additional kwargs
 Returns the same class as was passed in, with dunder methods added based
 on the fields defined in the class.
 
-Examines PEP 526 annotations to determine fields.
+Examines PEP 526 __annotations__ to determine fields.
 
-If init is true, an init() method is added to the class. If repr is
-true, a repr() method is added. If order is true, rich comparison dunder
-methods are added. If unsafe_hash is true, a hash() method function is
-added. If frozen is true, fields may not be assigned to after instance
-creation.
+If init is true, an __init__() method is added to the class. If repr is
+true, a __repr__() method is added. If order is true, rich comparison
+dunder methods are added. If unsafe_hash is true, a __hash__() method
+function is added. If frozen is true, fields may not be assigned to
+after instance creation.
 
     @serializable_dataclass(kw_only=True)
     class Myclass(SerializableDataclass):
@@ -2066,15 +2571,28 @@ Parameters:
 
 Returns:
 
--   _type_ description
+-   _type_ the decorated class
 
 Raises:
 
--   ValueError : description
--   ValueError : description
--   ValueError : description
--   AttributeError : description
--   ValueError : description
+-   KWOnlyError : only raised if kw_only is True and python version is
+    <3.9, since dataclasses.dataclass does not support this
+-   NotSerializableFieldException : if a field is not a
+    SerializableField
+-   FieldSerializationError : if there is an error serializing a field
+-   AttributeError : if a property is not found on the class
+-   FieldLoadingError : if there is an error loading a field
+
+Contents
+
+extends dataclasses.Field for use with SerializableDataclass
+
+In particular, instead of using dataclasses.field, use
+serializable_field to define fields in a SerializableDataclass. You
+provide information on how the field should be serialized and loaded (as
+well as anything that goes into dataclasses.field) when you define the
+field, and the SerializableDataclass will automatically use those
+functions.
 
 API Documentation
 
@@ -2084,6 +2602,15 @@ API Documentation
 View Source on GitHub
 
 muutils.json_serialize.serializable_field
+
+extends dataclasses.Field for use with SerializableDataclass
+
+In particular, instead of using dataclasses.field, use
+serializable_field to define fields in a SerializableDataclass. You
+provide information on how the field should be serialized and loaded (as
+well as anything that goes into dataclasses.field) when you define the
+field, and the SerializableDataclass will automatically use those
+functions.
 
 View Source on GitHub
 
@@ -2341,28 +2868,31 @@ View Source on GitHub
 
 checks if two dataclasses which (might) hold numpy arrays are equal
 
-    # Parameters:
-    - `dc1`: the first dataclass
-    - `dc2`: the second dataclass
-    - `except_when_class_mismatch: bool`
-        if `True`, will throw `TypeError` if the classes are different.
-        if not, will return false by default or attempt to compare the fields if `false_when_class_mismatch` is `False`
-        (default: `False`)
-    - `false_when_class_mismatch: bool`
-        only relevant if `except_when_class_mismatch` is `False`.
-        if `True`, will return `False` if the classes are different.
-        if `False`, will attempt to compare the fields.
-    - `except_when_field_mismatch: bool`
-        only relevant if `except_when_class_mismatch` is `False` and `false_when_class_mismatch` is `False`.
-        if `True`, will throw `TypeError` if the fields are different.
-        (default: `True`)
+Parameters:
 
-    # Returns:
-    - `bool`: True if the dataclasses are equal, False otherwise
+-   dc1: the first dataclass
+-   dc2: the second dataclass
+-   except_when_class_mismatch: bool if True, will throw TypeError if
+    the classes are different. if not, will return false by default or
+    attempt to compare the fields if false_when_class_mismatch is False
+    (default: False)
+-   false_when_class_mismatch: bool only relevant if
+    except_when_class_mismatch is False. if True, will return False if
+    the classes are different. if False, will attempt to compare the
+    fields.
+-   except_when_field_mismatch: bool only relevant if
+    except_when_class_mismatch is False and false_when_class_mismatch is
+    False. if True, will throw TypeError if the fields are different.
+    (default: True)
 
-    # Raises:
-    - `TypeError`: if the dataclasses are of different classes
-    - `AttributeError`: if the dataclasses have different fields
+Returns:
+
+-   bool: True if the dataclasses are equal, False otherwise
+
+Raises:
+
+-   TypeError: if the dataclasses are of different classes
+-   AttributeError: if the dataclasses have different fields
 
               [START]
                  ▼
@@ -2397,6 +2927,11 @@ View Source on GitHub
 
 tuple type hint, but for a tuple of any length with all the same type
 
+Contents
+
+utilities for reading and writing jsonlines files, including gzip
+support
+
 API Documentation
 
 -   jsonl_load
@@ -2406,6 +2941,9 @@ API Documentation
 View Source on GitHub
 
 muutils.jsonlines
+
+utilities for reading and writing jsonlines files, including gzip
+support
 
 View Source on GitHub
 
@@ -2491,6 +3029,10 @@ Inherited Members
 -   items
 -   values
 
+Contents
+
+(deprecated) experimenting with logging utilities
+
 Submodules
 
 -   exception_context
@@ -2511,6 +3053,8 @@ API Documentation
 View Source on GitHub
 
 muutils.logger
+
+(deprecated) experimenting with logging utilities
 
 View Source on GitHub
 
@@ -3250,6 +3794,20 @@ View Source on GitHub
 
 returns a progress string
 
+Contents
+
+miscellaneous utilities
+
+-   stable_hash for hashing that is stable across runs
+-   muutils.misc.sequence for sequence manipulation, applying mappings,
+    and string-like operations on lists
+-   muutils.misc.string for sanitizing things for filenames, adjusting
+    docstrings, and converting dicts to filenames
+-   muutils.misc.numerical for turning numbers into nice strings and
+    back
+-   muutils.misc.freezing for freezing things
+-   muutils.misc.classes for some weird class utilities
+
 Submodules
 
 -   classes
@@ -3290,6 +3848,21 @@ API Documentation
 View Source on GitHub
 
 muutils.misc
+
+miscellaneous utilities
+
+-   stable_hash for hashing that is stable across runs
+-   <a href="misc/sequence.html">muutils.misc.sequence</a> for sequence
+    manipulation, applying mappings, and string-like operations on lists
+-   <a href="misc/string.html">muutils.misc.string</a> for sanitizing
+    things for filenames, adjusting docstrings, and converting dicts to
+    filenames
+-   <a href="misc/numerical.html">muutils.misc.numerical</a> for turning
+    numbers into nice strings and back
+-   <a href="misc/freezing.html">muutils.misc.freezing</a> for freezing
+    things
+-   <a href="misc/classes.html">muutils.misc.classes</a> for some weird
+    class utilities
 
 View Source on GitHub
 
@@ -4361,6 +4934,10 @@ def dynamic_docstring
 
 View Source on GitHub
 
+Contents
+
+miscellaneous utilities for ML pipelines
+
 API Documentation
 
 -   ARRAY_IMPORTS
@@ -4376,6 +4953,8 @@ API Documentation
 View Source on GitHub
 
 muutils.mlutils
+
+miscellaneous utilities for ML pipelines
 
 View Source on GitHub
 
@@ -4449,6 +5028,15 @@ def pprint_summary
 
 View Source on GitHub
 
+Contents
+
+utilities for working with notebooks
+
+-   configuring figures mdoes and torch devices: configure_notebook
+-   converting them to scripts: convert_ipynb_to_script
+-   running them as tests: run_notebook_tests
+-   and working with diagrams/LaTeX: mermaid, print_tex
+
 Submodules
 
 -   configure_notebook
@@ -4465,6 +5053,13 @@ View Source on GitHub
 
 muutils.nbutils
 
+utilities for working with notebooks
+
+-   configuring figures mdoes and torch devices: configure_notebook
+-   converting them to scripts: convert_ipynb_to_script
+-   running them as tests: run_notebook_tests
+-   and working with diagrams/LaTeX: mermaid, print_tex
+
 View Source on GitHub
 
 def mm
@@ -4474,6 +5069,10 @@ def mm
 View Source on GitHub
 
 for plotting mermaid.js diagrams
+
+Contents
+
+shared utilities for setting up a notebook
 
 API Documentation
 
@@ -4499,6 +5098,8 @@ API Documentation
 View Source on GitHub
 
 muutils.nbutils.configure_notebook
+
+shared utilities for setting up a notebook
 
 View Source on GitHub
 
@@ -4596,10 +5197,36 @@ def configure_notebook
 
 View Source on GitHub
 
-Shared Jupyter notebook setup steps: - Set random seeds and library
-reproducibility settings - Set device based on availability - Set module
-reloading before code execution - Set plot formatting - Set plot
-saving/rendering options
+Shared Jupyter notebook setup steps
+
+-   Set random seeds and library reproducibility settings
+-   Set device based on availability
+-   Set module reloading before code execution
+-   Set plot formatting
+-   Set plot saving/rendering options
+
+Parameters:
+
+-   seed : int random seed across libraries including torch, numpy, and
+    random (defaults to 42) (defaults to 42)
+-   device : typing.Any pytorch device to use (defaults to None)
+-   dark_mode : bool figures in dark mode (defaults to True)
+-   plot_mode : PlottingMode how to display plots, one of PlottingMode
+    or ["ignore", "inline", "widget", "save"] (defaults to "inline")
+-   fig_output_fmt : str | None format for saving figures (defaults to
+    "pdf")
+-   fig_numbered_fname : str format for saving figures with numbers (if
+    they aren’t named) (defaults to "figure-{num}")
+-   fig_config : dict | None metadata to save with the figures (defaults
+    to None)
+-   fig_basepath : str | None base path for saving figures (defaults to
+    None)
+-   close_after_plotshow : bool close figures after showing them
+    (defaults to False)
+
+Returns:
+
+-   torch.device|None the device set, if torch is installed
 
 def plotshow
 
@@ -4613,6 +5240,11 @@ View Source on GitHub
 
 Show the active plot, depending on global configs
 
+Contents
+
+fast conversion of Jupyter Notebooks to scripts, with some basic and
+hacky filtering and formatting.
+
 API Documentation
 
 -   DISABLE_PLOTS
@@ -4625,6 +5257,9 @@ API Documentation
 View Source on GitHub
 
 muutils.nbutils.convert_ipynb_to_script
+
+fast conversion of Jupyter Notebooks to scripts, with some basic and
+hacky filtering and formatting.
 
 View Source on GitHub
 
@@ -4707,6 +5342,11 @@ Arguments
     - `filter_out_lines: str|typing.Sequence[str] = ('%', '!')`: comment out lines starting with these strings (in code blocks).
         if a string is passed, it will be split by char and each char will be treated as a separate filter.
 
+Contents
+
+display mermaid.js diagrams in jupyter notebooks by the mermaid.ink/img
+service
+
 API Documentation
 
 -   mm
@@ -4714,6 +5354,9 @@ API Documentation
 View Source on GitHub
 
 muutils.nbutils.mermaid
+
+display mermaid.js diagrams in jupyter notebooks by the mermaid.ink/img
+service
 
 View Source on GitHub
 
@@ -4725,6 +5368,10 @@ View Source on GitHub
 
 for plotting mermaid.js diagrams
 
+Contents
+
+quickly print a sympy expression in latex
+
 API Documentation
 
 -   print_tex
@@ -4732,6 +5379,8 @@ API Documentation
 View Source on GitHub
 
 muutils.nbutils.print_tex
+
+quickly print a sympy expression in latex
 
 View Source on GitHub
 
@@ -4748,6 +5397,15 @@ View Source on GitHub
 
 function for easily rendering a sympy expression in latex
 
+Contents
+
+turn a folder of notebooks into scripts, run them, and make sure they
+work.
+
+made to be called as
+
+    python -m muutils.nbutils.run_notebook_tests --notebooks-dir <notebooks_dir> --converted-notebooks-temp-dir <converted_notebooks_temp_dir>
+
 API Documentation
 
 -   NotebookTestError
@@ -4756,6 +5414,13 @@ API Documentation
 View Source on GitHub
 
 muutils.nbutils.run_notebook_tests
+
+turn a folder of notebooks into scripts, run them, and make sure they
+work.
+
+made to be called as
+
+    python -m <a href="">muutils.nbutils.run_notebook_tests</a> --notebooks-dir <notebooks_dir> --converted-notebooks-temp-dir <converted_notebooks_temp_dir>
 
 View Source on GitHub
 
@@ -4790,8 +5455,9 @@ View Source on GitHub
 Contents
 
 decorator spinner_decorator and context manager SpinnerContext to
-display a spinner using the base Spinner class while some code is
-running.
+display a spinner
+
+using the base Spinner class while some code is running.
 
 API Documentation
 
@@ -4808,8 +5474,9 @@ View Source on GitHub
 muutils.spinner
 
 decorator spinner_decorator and context manager SpinnerContext to
-display a spinner using the base Spinner class while some code is
-running.
+display a spinner
+
+using the base Spinner class while some code is running.
 
 View Source on GitHub
 
@@ -5129,6 +5796,12 @@ NoOpContextManager
 
 View Source on GitHub
 
+Contents
+
+StatCounter class for counting and calculating statistics on numbers
+
+cleaner and more efficient than just using a Counter or array
+
 API Documentation
 
 -   NumericSequence
@@ -5138,6 +5811,10 @@ API Documentation
 View Source on GitHub
 
 muutils.statcounter
+
+StatCounter class for counting and calculating statistics on numbers
+
+cleaner and more efficient than just using a Counter or array
 
 View Source on GitHub
 
@@ -5158,8 +5835,8 @@ class StatCounter(collections.Counter):
 
 View Source on GitHub
 
-counter, but with some stat calculation methods which assume the keys
-are numbers
+Counter, but with some stat calculation methods which assume the keys
+are numerical
 
 works best when the keys are ints
 
@@ -5177,11 +5854,15 @@ def min
 
 View Source on GitHub
 
+minimum value
+
 def max
 
     (self)
 
 View Source on GitHub
+
+maximum value
 
 def total
 
@@ -5247,6 +5928,9 @@ def summary
 
 View Source on GitHub
 
+return a summary of the stats, without the raw data. human readable and
+small
+
 def serialize
 
     (
@@ -5258,11 +5942,24 @@ def serialize
 
 View Source on GitHub
 
-def load
+return a json-serializable version of the counter
 
+includes both the output of summary and the raw data:
+
+    {
+        "StatCounter": { <keys, values from raw data> },
+        "summary": self.summary(typecast, extra_percentiles=extra_percentiles),
+    }
+
+
+    ### `def load` { #StatCounter.load }
+    ```python
     (cls, data: dict) -> muutils.statcounter.StatCounter
 
 View Source on GitHub
+
+load from a the output of
+<a href="#StatCounter.serialize">StatCounter.serialize</a>
 
 def from_list_arrays
 
@@ -5308,6 +6005,10 @@ Inherited Members
 
 -   clear
 
+Contents
+
+utilities for getting information about the system, see SysInfo class
+
 API Documentation
 
 -   SysInfo
@@ -5315,6 +6016,8 @@ API Documentation
 View Source on GitHub
 
 muutils.sysinfo
+
+utilities for getting information about the system, see SysInfo class
 
 View Source on GitHub
 
@@ -5370,6 +6073,21 @@ def get_all
 
 View Source on GitHub
 
+Contents
+
+utilities for working with tensors and arrays.
+
+notably:
+
+-   TYPE_TO_JAX_DTYPE : a mapping from python, numpy, and torch types to
+    jaxtyping types
+-   DTYPE_MAP mapping string representations of types to their type
+-   TORCH_DTYPE_MAP mapping string representations of types to torch
+    types
+-   compare_state_dicts for comparing two state dicts and giving a
+    detailed error message on whether if was keys, shapes, or values
+    that didn’t match
+
 API Documentation
 
 -   TYPE_TO_JAX_DTYPE
@@ -5399,9 +6117,24 @@ View Source on GitHub
 
 muutils.tensor_utils
 
+utilities for working with tensors and arrays.
+
+notably:
+
+-   TYPE_TO_JAX_DTYPE : a mapping from python, numpy, and torch types to
+    jaxtyping types
+-   DTYPE_MAP mapping string representations of types to their type
+-   TORCH_DTYPE_MAP mapping string representations of types to torch
+    types
+-   compare_state_dicts for comparing two state dicts and giving a
+    detailed error message on whether if was keys, shapes, or values
+    that didn’t match
+
 View Source on GitHub
 
 -   TYPE_TO_JAX_DTYPE: dict = {<class 'float'>: <class 'jaxtyping.Float'>, <class 'int'>: <class 'jaxtyping.Int'>, <class 'jaxtyping.Float'>: <class 'jaxtyping.Float'>, <class 'jaxtyping.Int'>: <class 'jaxtyping.Int'>, <class 'bool'>: <class 'jaxtyping.Bool'>, <class 'jaxtyping.Bool'>: <class 'jaxtyping.Bool'>, <class 'numpy.bool_'>: <class 'jaxtyping.Bool'>, torch.bool: <class 'jaxtyping.Bool'>, <class 'numpy.float64'>: <class 'jaxtyping.Float'>, <class 'numpy.float16'>: <class 'jaxtyping.Float'>, <class 'numpy.float32'>: <class 'jaxtyping.Float'>, <class 'numpy.int32'>: <class 'jaxtyping.Int'>, <class 'numpy.int8'>: <class 'jaxtyping.Int'>, <class 'numpy.int16'>: <class 'jaxtyping.Int'>, <class 'numpy.int64'>: <class 'jaxtyping.Int'>, <class 'numpy.uint8'>: <class 'jaxtyping.Int'>, torch.float32: <class 'jaxtyping.Float'>, torch.float16: <class 'jaxtyping.Float'>, torch.float64: <class 'jaxtyping.Float'>, torch.bfloat16: <class 'jaxtyping.Float'>, torch.int32: <class 'jaxtyping.Int'>, torch.int8: <class 'jaxtyping.Int'>, torch.int16: <class 'jaxtyping.Int'>, torch.int64: <class 'jaxtyping.Int'>}
+
+dict mapping python, numpy, and torch types to jaxtyping types
 
 def jaxtype_factory
 
@@ -5433,9 +6166,16 @@ convert numpy dtype to torch dtype
 
 -   DTYPE_LIST: list = [<class 'bool'>, <class 'int'>, <class 'float'>, torch.float32, torch.float32, torch.float64, torch.float16, torch.float64, torch.bfloat16, torch.complex64, torch.complex128, torch.int32, torch.int8, torch.int16, torch.int32, torch.int64, torch.int64, torch.int16, torch.uint8, torch.bool, <class 'numpy.float64'>, <class 'numpy.float16'>, <class 'numpy.float32'>, <class 'numpy.float64'>, <class 'numpy.float16'>, <class 'numpy.float32'>, <class 'numpy.float64'>, <class 'numpy.complex64'>, <class 'numpy.complex128'>, <class 'numpy.int8'>, <class 'numpy.int16'>, <class 'numpy.int32'>, <class 'numpy.int64'>, <class 'numpy.int32'>, <class 'numpy.int64'>, <class 'numpy.int16'>, <class 'numpy.uint8'>, <class 'numpy.bool_'>]
 
+list of all the python, numpy, and torch numerical types I could think
+of
+
 -   DTYPE_MAP: dict = {"<class 'bool'>": <class 'bool'>, "<class 'int'>": <class 'int'>, "<class 'float'>": <class 'float'>, 'torch.float32': torch.float32, 'torch.float64': torch.float64, 'torch.float16': torch.float16, 'torch.bfloat16': torch.bfloat16, 'torch.complex64': torch.complex64, 'torch.complex128': torch.complex128, 'torch.int32': torch.int32, 'torch.int8': torch.int8, 'torch.int16': torch.int16, 'torch.int64': torch.int64, 'torch.uint8': torch.uint8, 'torch.bool': torch.bool, "<class 'numpy.float64'>": <class 'numpy.float64'>, "<class 'numpy.float16'>": <class 'numpy.float16'>, "<class 'numpy.float32'>": <class 'numpy.float32'>, "<class 'numpy.complex64'>": <class 'numpy.complex64'>, "<class 'numpy.complex128'>": <class 'numpy.complex128'>, "<class 'numpy.int8'>": <class 'numpy.int8'>, "<class 'numpy.int16'>": <class 'numpy.int16'>, "<class 'numpy.int32'>": <class 'numpy.int32'>, "<class 'numpy.int64'>": <class 'numpy.int64'>, "<class 'numpy.uint8'>": <class 'numpy.uint8'>, "<class 'numpy.bool_'>": <class 'numpy.bool_'>, 'float64': <class 'numpy.float64'>, 'float16': <class 'numpy.float16'>, 'float32': <class 'numpy.float32'>, 'complex64': <class 'numpy.complex64'>, 'complex128': <class 'numpy.complex128'>, 'int8': <class 'numpy.int8'>, 'int16': <class 'numpy.int16'>, 'int32': <class 'numpy.int32'>, 'int64': <class 'numpy.int64'>, 'uint8': <class 'numpy.uint8'>, 'bool_': <class 'numpy.bool_'>, 'bool': <class 'numpy.bool_'>}
 
+mapping from string representations of types to their type
+
 -   TORCH_DTYPE_MAP: dict = {"<class 'bool'>": torch.bool, "<class 'int'>": torch.int32, "<class 'float'>": torch.float64, 'torch.float32': torch.float32, 'torch.float64': torch.float64, 'torch.float16': torch.float16, 'torch.bfloat16': torch.bfloat16, 'torch.complex64': torch.complex64, 'torch.complex128': torch.complex128, 'torch.int32': torch.int32, 'torch.int8': torch.int8, 'torch.int16': torch.int16, 'torch.int64': torch.int64, 'torch.uint8': torch.uint8, 'torch.bool': torch.bool, "<class 'numpy.float64'>": torch.float64, "<class 'numpy.float16'>": torch.float16, "<class 'numpy.float32'>": torch.float32, "<class 'numpy.complex64'>": torch.complex64, "<class 'numpy.complex128'>": torch.complex128, "<class 'numpy.int8'>": torch.int8, "<class 'numpy.int16'>": torch.int16, "<class 'numpy.int32'>": torch.int32, "<class 'numpy.int64'>": torch.int64, "<class 'numpy.uint8'>": torch.uint8, "<class 'numpy.bool_'>": torch.bool, 'float64': torch.float64, 'float16': torch.float16, 'float32': torch.float32, 'complex64': torch.complex64, 'complex128': torch.complex128, 'int8': torch.int8, 'int16': torch.int16, 'int32': torch.int32, 'int64': torch.int64, 'uint8': torch.uint8, 'bool_': torch.bool, 'bool': torch.bool}
+
+mapping from string representations of types to specifically torch types
 
 -   TORCH_OPTIMIZERS_MAP: dict[str, typing.Type[torch.optim.optimizer.Optimizer]] = {'Adagrad': <class 'torch.optim.adagrad.Adagrad'>, 'Adam': <class 'torch.optim.adam.Adam'>, 'AdamW': <class 'torch.optim.adamw.AdamW'>, 'SparseAdam': <class 'torch.optim.sparse_adam.SparseAdam'>, 'Adamax': <class 'torch.optim.adamax.Adamax'>, 'ASGD': <class 'torch.optim.asgd.ASGD'>, 'LBFGS': <class 'torch.optim.lbfgs.LBFGS'>, 'NAdam': <class 'torch.optim.nadam.NAdam'>, 'RAdam': <class 'torch.optim.radam.RAdam'>, 'RMSprop': <class 'torch.optim.rmsprop.RMSprop'>, 'Rprop': <class 'torch.optim.rprop.Rprop'>, 'SGD': <class 'torch.optim.sgd.SGD'>}
 
@@ -5463,6 +6203,8 @@ def lpad_tensor
     ) -> torch.Tensor
 
 View Source on GitHub
+
+pad a 1-d tensor on the left with pad_value to length padded_length
 
 def rpad_tensor
 
@@ -5608,6 +6350,26 @@ def compare_state_dicts
 
 View Source on GitHub
 
+compare two dicts of tensors
+
+Parameters:
+
+-   d1 : dict
+-   d2 : dict
+-   rtol : float (defaults to 1e-5)
+-   atol : float (defaults to 1e-8)
+-   verbose : bool (defaults to True)
+
+Raises:
+
+-   StateDictKeysError : keys don’t match
+-   StateDictShapeError : shapes don’t match (but keys do)
+-   StateDictValueError : values don’t match (but keys and shapes do)
+
+Contents
+
+timeit_fancy is just a fancier version of timeit with more options
+
 API Documentation
 
 -   FancyTimeitResult
@@ -5616,6 +6378,8 @@ API Documentation
 View Source on GitHub
 
 muutils.timeit_fancy
+
+timeit_fancy is just a fancier version of timeit with more options
 
 View Source on GitHub
 
@@ -5692,12 +6456,18 @@ Parameters
 
 Returns
 
-FancyTimeitResult, which is a NamedTuple with the following fields: -
-time: float The time in seconds it took to run cmd the minimum number of
-times to get a reliable measurement. - return_value: T|None The return
-value of cmd if get_return is True, otherwise None. -
-profile: pstats.Stats|None A pstats.Stats object if do_profiling is
-True, otherwise None.
+FancyTimeitResult, which is a NamedTuple with the following fields:
+
+-   time: float The time in seconds it took to run cmd the minimum
+    number of times to get a reliable measurement.
+-   return_value: T|None The return value of cmd if get_return is True,
+    otherwise None.
+-   profile: pstats.Stats|None A pstats.Stats object if do_profiling is
+    True, otherwise None.
+
+Contents
+
+experimental utility for validating types in python, see validate_type
 
 API Documentation
 
@@ -5710,6 +6480,8 @@ API Documentation
 View Source on GitHub
 
 muutils.validate_type
+
+experimental utility for validating types in python, see validate_type
 
 View Source on GitHub
 

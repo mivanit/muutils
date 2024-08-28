@@ -131,7 +131,7 @@
                         <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="mod-util-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/main/muutils/json_serialize/util.py#L0-L259" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/main/muutils/json_serialize/util.py#L0-L261" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -318,86 +318,88 @@
 </span><span id="L-178"><a href="#L-178"><span class="linenos">178</span></a>    <span class="n">false_when_class_mismatch</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
 </span><span id="L-179"><a href="#L-179"><span class="linenos">179</span></a>    <span class="n">except_when_field_mismatch</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
 </span><span id="L-180"><a href="#L-180"><span class="linenos">180</span></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-</span><span id="L-181"><a href="#L-181"><span class="linenos">181</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;checks if two dataclasses which (might) hold numpy arrays are equal</span>
-</span><span id="L-182"><a href="#L-182"><span class="linenos">182</span></a>
-</span><span id="L-183"><a href="#L-183"><span class="linenos">183</span></a><span class="sd">        # Parameters:</span>
-</span><span id="L-184"><a href="#L-184"><span class="linenos">184</span></a><span class="sd">        - `dc1`: the first dataclass</span>
-</span><span id="L-185"><a href="#L-185"><span class="linenos">185</span></a><span class="sd">        - `dc2`: the second dataclass</span>
-</span><span id="L-186"><a href="#L-186"><span class="linenos">186</span></a><span class="sd">        - `except_when_class_mismatch: bool`</span>
-</span><span id="L-187"><a href="#L-187"><span class="linenos">187</span></a><span class="sd">            if `True`, will throw `TypeError` if the classes are different.</span>
-</span><span id="L-188"><a href="#L-188"><span class="linenos">188</span></a><span class="sd">            if not, will return false by default or attempt to compare the fields if `false_when_class_mismatch` is `False`</span>
-</span><span id="L-189"><a href="#L-189"><span class="linenos">189</span></a><span class="sd">            (default: `False`)</span>
-</span><span id="L-190"><a href="#L-190"><span class="linenos">190</span></a><span class="sd">        - `false_when_class_mismatch: bool`</span>
-</span><span id="L-191"><a href="#L-191"><span class="linenos">191</span></a><span class="sd">            only relevant if `except_when_class_mismatch` is `False`.</span>
-</span><span id="L-192"><a href="#L-192"><span class="linenos">192</span></a><span class="sd">            if `True`, will return `False` if the classes are different.</span>
-</span><span id="L-193"><a href="#L-193"><span class="linenos">193</span></a><span class="sd">            if `False`, will attempt to compare the fields.</span>
-</span><span id="L-194"><a href="#L-194"><span class="linenos">194</span></a><span class="sd">        - `except_when_field_mismatch: bool`</span>
-</span><span id="L-195"><a href="#L-195"><span class="linenos">195</span></a><span class="sd">            only relevant if `except_when_class_mismatch` is `False` and `false_when_class_mismatch` is `False`.</span>
-</span><span id="L-196"><a href="#L-196"><span class="linenos">196</span></a><span class="sd">            if `True`, will throw `TypeError` if the fields are different.</span>
-</span><span id="L-197"><a href="#L-197"><span class="linenos">197</span></a><span class="sd">            (default: `True`)</span>
-</span><span id="L-198"><a href="#L-198"><span class="linenos">198</span></a>
-</span><span id="L-199"><a href="#L-199"><span class="linenos">199</span></a><span class="sd">        # Returns:</span>
-</span><span id="L-200"><a href="#L-200"><span class="linenos">200</span></a><span class="sd">        - `bool`: True if the dataclasses are equal, False otherwise</span>
-</span><span id="L-201"><a href="#L-201"><span class="linenos">201</span></a>
-</span><span id="L-202"><a href="#L-202"><span class="linenos">202</span></a><span class="sd">        # Raises:</span>
-</span><span id="L-203"><a href="#L-203"><span class="linenos">203</span></a><span class="sd">        - `TypeError`: if the dataclasses are of different classes</span>
-</span><span id="L-204"><a href="#L-204"><span class="linenos">204</span></a><span class="sd">        - `AttributeError`: if the dataclasses have different fields</span>
-</span><span id="L-205"><a href="#L-205"><span class="linenos">205</span></a>
-</span><span id="L-206"><a href="#L-206"><span class="linenos">206</span></a><span class="sd">    ```</span>
-</span><span id="L-207"><a href="#L-207"><span class="linenos">207</span></a><span class="sd">              [START]</span>
-</span><span id="L-208"><a href="#L-208"><span class="linenos">208</span></a><span class="sd">                 ▼</span>
-</span><span id="L-209"><a href="#L-209"><span class="linenos">209</span></a><span class="sd">           ┌───────────┐  ┌─────────┐</span>
-</span><span id="L-210"><a href="#L-210"><span class="linenos">210</span></a><span class="sd">           │dc1 is dc2?├─►│ classes │</span>
-</span><span id="L-211"><a href="#L-211"><span class="linenos">211</span></a><span class="sd">           └──┬────────┘No│ match?  │</span>
-</span><span id="L-212"><a href="#L-212"><span class="linenos">212</span></a><span class="sd">      ────    │           ├─────────┤</span>
-</span><span id="L-213"><a href="#L-213"><span class="linenos">213</span></a><span class="sd">     (True)◄──┘Yes        │No       │Yes</span>
-</span><span id="L-214"><a href="#L-214"><span class="linenos">214</span></a><span class="sd">      ────                ▼         ▼</span>
-</span><span id="L-215"><a href="#L-215"><span class="linenos">215</span></a><span class="sd">          ┌────────────────┐ ┌────────────┐</span>
-</span><span id="L-216"><a href="#L-216"><span class="linenos">216</span></a><span class="sd">          │ except when    │ │ fields keys│</span>
-</span><span id="L-217"><a href="#L-217"><span class="linenos">217</span></a><span class="sd">          │ class mismatch?│ │ match?     │</span>
-</span><span id="L-218"><a href="#L-218"><span class="linenos">218</span></a><span class="sd">          ├───────────┬────┘ ├───────┬────┘</span>
-</span><span id="L-219"><a href="#L-219"><span class="linenos">219</span></a><span class="sd">          │Yes        │No    │No     │Yes</span>
-</span><span id="L-220"><a href="#L-220"><span class="linenos">220</span></a><span class="sd">          ▼           ▼      ▼       ▼</span>
-</span><span id="L-221"><a href="#L-221"><span class="linenos">221</span></a><span class="sd">     ───────────  ┌──────────┐  ┌────────┐</span>
-</span><span id="L-222"><a href="#L-222"><span class="linenos">222</span></a><span class="sd">    { raise     } │ except   │  │ field  │</span>
-</span><span id="L-223"><a href="#L-223"><span class="linenos">223</span></a><span class="sd">    { TypeError } │ when     │  │ values │</span>
-</span><span id="L-224"><a href="#L-224"><span class="linenos">224</span></a><span class="sd">     ───────────  │ field    │  │ match? │</span>
-</span><span id="L-225"><a href="#L-225"><span class="linenos">225</span></a><span class="sd">                  │ mismatch?│  ├────┬───┘</span>
-</span><span id="L-226"><a href="#L-226"><span class="linenos">226</span></a><span class="sd">                  ├───────┬──┘  │    │Yes</span>
-</span><span id="L-227"><a href="#L-227"><span class="linenos">227</span></a><span class="sd">                  │Yes    │No   │No  ▼</span>
-</span><span id="L-228"><a href="#L-228"><span class="linenos">228</span></a><span class="sd">                  ▼       ▼     │   ────</span>
-</span><span id="L-229"><a href="#L-229"><span class="linenos">229</span></a><span class="sd">     ───────────────     ─────  │  (True)</span>
-</span><span id="L-230"><a href="#L-230"><span class="linenos">230</span></a><span class="sd">    { raise         }   (False)◄┘   ────</span>
-</span><span id="L-231"><a href="#L-231"><span class="linenos">231</span></a><span class="sd">    { AttributeError}    ─────</span>
-</span><span id="L-232"><a href="#L-232"><span class="linenos">232</span></a><span class="sd">     ───────────────</span>
-</span><span id="L-233"><a href="#L-233"><span class="linenos">233</span></a><span class="sd">    ```</span>
-</span><span id="L-234"><a href="#L-234"><span class="linenos">234</span></a>
-</span><span id="L-235"><a href="#L-235"><span class="linenos">235</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="L-236"><a href="#L-236"><span class="linenos">236</span></a>    <span class="k">if</span> <span class="n">dc1</span> <span class="ow">is</span> <span class="n">dc2</span><span class="p">:</span>
-</span><span id="L-237"><a href="#L-237"><span class="linenos">237</span></a>        <span class="k">return</span> <span class="kc">True</span>
-</span><span id="L-238"><a href="#L-238"><span class="linenos">238</span></a>
-</span><span id="L-239"><a href="#L-239"><span class="linenos">239</span></a>    <span class="k">if</span> <span class="n">dc1</span><span class="o">.</span><span class="vm">__class__</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">dc2</span><span class="o">.</span><span class="vm">__class__</span><span class="p">:</span>
-</span><span id="L-240"><a href="#L-240"><span class="linenos">240</span></a>        <span class="k">if</span> <span class="n">except_when_class_mismatch</span><span class="p">:</span>
-</span><span id="L-241"><a href="#L-241"><span class="linenos">241</span></a>            <span class="c1"># if the classes don&#39;t match, raise an error</span>
-</span><span id="L-242"><a href="#L-242"><span class="linenos">242</span></a>            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
-</span><span id="L-243"><a href="#L-243"><span class="linenos">243</span></a>                <span class="sa">f</span><span class="s2">&quot;Cannot compare dataclasses of different classes: `</span><span class="si">{</span><span class="n">dc1</span><span class="o">.</span><span class="vm">__class__</span><span class="si">}</span><span class="s2">` and `</span><span class="si">{</span><span class="n">dc2</span><span class="o">.</span><span class="vm">__class__</span><span class="si">}</span><span class="s2">`&quot;</span>
-</span><span id="L-244"><a href="#L-244"><span class="linenos">244</span></a>            <span class="p">)</span>
-</span><span id="L-245"><a href="#L-245"><span class="linenos">245</span></a>        <span class="k">if</span> <span class="n">except_when_field_mismatch</span><span class="p">:</span>
-</span><span id="L-246"><a href="#L-246"><span class="linenos">246</span></a>            <span class="n">dc1_fields</span><span class="p">:</span> <span class="nb">set</span> <span class="o">=</span> <span class="nb">set</span><span class="p">([</span><span class="n">fld</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">fld</span> <span class="ow">in</span> <span class="n">dataclasses</span><span class="o">.</span><span class="n">fields</span><span class="p">(</span><span class="n">dc1</span><span class="p">)])</span>
-</span><span id="L-247"><a href="#L-247"><span class="linenos">247</span></a>            <span class="n">dc2_fields</span><span class="p">:</span> <span class="nb">set</span> <span class="o">=</span> <span class="nb">set</span><span class="p">([</span><span class="n">fld</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">fld</span> <span class="ow">in</span> <span class="n">dataclasses</span><span class="o">.</span><span class="n">fields</span><span class="p">(</span><span class="n">dc2</span><span class="p">)])</span>
-</span><span id="L-248"><a href="#L-248"><span class="linenos">248</span></a>            <span class="n">fields_match</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">dc1_fields</span><span class="p">)</span> <span class="o">==</span> <span class="nb">set</span><span class="p">(</span><span class="n">dc2_fields</span><span class="p">)</span>
-</span><span id="L-249"><a href="#L-249"><span class="linenos">249</span></a>            <span class="k">if</span> <span class="ow">not</span> <span class="n">fields_match</span><span class="p">:</span>
-</span><span id="L-250"><a href="#L-250"><span class="linenos">250</span></a>                <span class="c1"># if the fields match, keep going</span>
-</span><span id="L-251"><a href="#L-251"><span class="linenos">251</span></a>                <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span>
-</span><span id="L-252"><a href="#L-252"><span class="linenos">252</span></a>                    <span class="sa">f</span><span class="s2">&quot;dataclasses </span><span class="si">{</span><span class="n">dc1</span><span class="si">}</span><span class="s2"> and </span><span class="si">{</span><span class="n">dc2</span><span class="si">}</span><span class="s2"> have different fields: `</span><span class="si">{</span><span class="n">dc1_fields</span><span class="si">}</span><span class="s2">` and `</span><span class="si">{</span><span class="n">dc2_fields</span><span class="si">}</span><span class="s2">`&quot;</span>
-</span><span id="L-253"><a href="#L-253"><span class="linenos">253</span></a>                <span class="p">)</span>
-</span><span id="L-254"><a href="#L-254"><span class="linenos">254</span></a>        <span class="k">return</span> <span class="kc">False</span>
-</span><span id="L-255"><a href="#L-255"><span class="linenos">255</span></a>
-</span><span id="L-256"><a href="#L-256"><span class="linenos">256</span></a>    <span class="k">return</span> <span class="nb">all</span><span class="p">(</span>
-</span><span id="L-257"><a href="#L-257"><span class="linenos">257</span></a>        <span class="n">array_safe_eq</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">dc1</span><span class="p">,</span> <span class="n">fld</span><span class="o">.</span><span class="n">name</span><span class="p">),</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">dc2</span><span class="p">,</span> <span class="n">fld</span><span class="o">.</span><span class="n">name</span><span class="p">))</span>
-</span><span id="L-258"><a href="#L-258"><span class="linenos">258</span></a>        <span class="k">for</span> <span class="n">fld</span> <span class="ow">in</span> <span class="n">dataclasses</span><span class="o">.</span><span class="n">fields</span><span class="p">(</span><span class="n">dc1</span><span class="p">)</span>
-</span><span id="L-259"><a href="#L-259"><span class="linenos">259</span></a>        <span class="k">if</span> <span class="n">fld</span><span class="o">.</span><span class="n">compare</span>
-</span><span id="L-260"><a href="#L-260"><span class="linenos">260</span></a>    <span class="p">)</span>
+</span><span id="L-181"><a href="#L-181"><span class="linenos">181</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-182"><a href="#L-182"><span class="linenos">182</span></a><span class="sd">    checks if two dataclasses which (might) hold numpy arrays are equal</span>
+</span><span id="L-183"><a href="#L-183"><span class="linenos">183</span></a>
+</span><span id="L-184"><a href="#L-184"><span class="linenos">184</span></a><span class="sd">    # Parameters:</span>
+</span><span id="L-185"><a href="#L-185"><span class="linenos">185</span></a>
+</span><span id="L-186"><a href="#L-186"><span class="linenos">186</span></a><span class="sd">    - `dc1`: the first dataclass</span>
+</span><span id="L-187"><a href="#L-187"><span class="linenos">187</span></a><span class="sd">    - `dc2`: the second dataclass</span>
+</span><span id="L-188"><a href="#L-188"><span class="linenos">188</span></a><span class="sd">    - `except_when_class_mismatch: bool`</span>
+</span><span id="L-189"><a href="#L-189"><span class="linenos">189</span></a><span class="sd">        if `True`, will throw `TypeError` if the classes are different.</span>
+</span><span id="L-190"><a href="#L-190"><span class="linenos">190</span></a><span class="sd">        if not, will return false by default or attempt to compare the fields if `false_when_class_mismatch` is `False`</span>
+</span><span id="L-191"><a href="#L-191"><span class="linenos">191</span></a><span class="sd">        (default: `False`)</span>
+</span><span id="L-192"><a href="#L-192"><span class="linenos">192</span></a><span class="sd">    - `false_when_class_mismatch: bool`</span>
+</span><span id="L-193"><a href="#L-193"><span class="linenos">193</span></a><span class="sd">        only relevant if `except_when_class_mismatch` is `False`.</span>
+</span><span id="L-194"><a href="#L-194"><span class="linenos">194</span></a><span class="sd">        if `True`, will return `False` if the classes are different.</span>
+</span><span id="L-195"><a href="#L-195"><span class="linenos">195</span></a><span class="sd">        if `False`, will attempt to compare the fields.</span>
+</span><span id="L-196"><a href="#L-196"><span class="linenos">196</span></a><span class="sd">    - `except_when_field_mismatch: bool`</span>
+</span><span id="L-197"><a href="#L-197"><span class="linenos">197</span></a><span class="sd">        only relevant if `except_when_class_mismatch` is `False` and `false_when_class_mismatch` is `False`.</span>
+</span><span id="L-198"><a href="#L-198"><span class="linenos">198</span></a><span class="sd">        if `True`, will throw `TypeError` if the fields are different.</span>
+</span><span id="L-199"><a href="#L-199"><span class="linenos">199</span></a><span class="sd">        (default: `True`)</span>
+</span><span id="L-200"><a href="#L-200"><span class="linenos">200</span></a>
+</span><span id="L-201"><a href="#L-201"><span class="linenos">201</span></a><span class="sd">    # Returns:</span>
+</span><span id="L-202"><a href="#L-202"><span class="linenos">202</span></a><span class="sd">    - `bool`: True if the dataclasses are equal, False otherwise</span>
+</span><span id="L-203"><a href="#L-203"><span class="linenos">203</span></a>
+</span><span id="L-204"><a href="#L-204"><span class="linenos">204</span></a><span class="sd">    # Raises:</span>
+</span><span id="L-205"><a href="#L-205"><span class="linenos">205</span></a><span class="sd">    - `TypeError`: if the dataclasses are of different classes</span>
+</span><span id="L-206"><a href="#L-206"><span class="linenos">206</span></a><span class="sd">    - `AttributeError`: if the dataclasses have different fields</span>
+</span><span id="L-207"><a href="#L-207"><span class="linenos">207</span></a>
+</span><span id="L-208"><a href="#L-208"><span class="linenos">208</span></a><span class="sd">    ```</span>
+</span><span id="L-209"><a href="#L-209"><span class="linenos">209</span></a><span class="sd">              [START]</span>
+</span><span id="L-210"><a href="#L-210"><span class="linenos">210</span></a><span class="sd">                 ▼</span>
+</span><span id="L-211"><a href="#L-211"><span class="linenos">211</span></a><span class="sd">           ┌───────────┐  ┌─────────┐</span>
+</span><span id="L-212"><a href="#L-212"><span class="linenos">212</span></a><span class="sd">           │dc1 is dc2?├─►│ classes │</span>
+</span><span id="L-213"><a href="#L-213"><span class="linenos">213</span></a><span class="sd">           └──┬────────┘No│ match?  │</span>
+</span><span id="L-214"><a href="#L-214"><span class="linenos">214</span></a><span class="sd">      ────    │           ├─────────┤</span>
+</span><span id="L-215"><a href="#L-215"><span class="linenos">215</span></a><span class="sd">     (True)◄──┘Yes        │No       │Yes</span>
+</span><span id="L-216"><a href="#L-216"><span class="linenos">216</span></a><span class="sd">      ────                ▼         ▼</span>
+</span><span id="L-217"><a href="#L-217"><span class="linenos">217</span></a><span class="sd">          ┌────────────────┐ ┌────────────┐</span>
+</span><span id="L-218"><a href="#L-218"><span class="linenos">218</span></a><span class="sd">          │ except when    │ │ fields keys│</span>
+</span><span id="L-219"><a href="#L-219"><span class="linenos">219</span></a><span class="sd">          │ class mismatch?│ │ match?     │</span>
+</span><span id="L-220"><a href="#L-220"><span class="linenos">220</span></a><span class="sd">          ├───────────┬────┘ ├───────┬────┘</span>
+</span><span id="L-221"><a href="#L-221"><span class="linenos">221</span></a><span class="sd">          │Yes        │No    │No     │Yes</span>
+</span><span id="L-222"><a href="#L-222"><span class="linenos">222</span></a><span class="sd">          ▼           ▼      ▼       ▼</span>
+</span><span id="L-223"><a href="#L-223"><span class="linenos">223</span></a><span class="sd">     ───────────  ┌──────────┐  ┌────────┐</span>
+</span><span id="L-224"><a href="#L-224"><span class="linenos">224</span></a><span class="sd">    { raise     } │ except   │  │ field  │</span>
+</span><span id="L-225"><a href="#L-225"><span class="linenos">225</span></a><span class="sd">    { TypeError } │ when     │  │ values │</span>
+</span><span id="L-226"><a href="#L-226"><span class="linenos">226</span></a><span class="sd">     ───────────  │ field    │  │ match? │</span>
+</span><span id="L-227"><a href="#L-227"><span class="linenos">227</span></a><span class="sd">                  │ mismatch?│  ├────┬───┘</span>
+</span><span id="L-228"><a href="#L-228"><span class="linenos">228</span></a><span class="sd">                  ├───────┬──┘  │    │Yes</span>
+</span><span id="L-229"><a href="#L-229"><span class="linenos">229</span></a><span class="sd">                  │Yes    │No   │No  ▼</span>
+</span><span id="L-230"><a href="#L-230"><span class="linenos">230</span></a><span class="sd">                  ▼       ▼     │   ────</span>
+</span><span id="L-231"><a href="#L-231"><span class="linenos">231</span></a><span class="sd">     ───────────────     ─────  │  (True)</span>
+</span><span id="L-232"><a href="#L-232"><span class="linenos">232</span></a><span class="sd">    { raise         }   (False)◄┘   ────</span>
+</span><span id="L-233"><a href="#L-233"><span class="linenos">233</span></a><span class="sd">    { AttributeError}    ─────</span>
+</span><span id="L-234"><a href="#L-234"><span class="linenos">234</span></a><span class="sd">     ───────────────</span>
+</span><span id="L-235"><a href="#L-235"><span class="linenos">235</span></a><span class="sd">    ```</span>
+</span><span id="L-236"><a href="#L-236"><span class="linenos">236</span></a>
+</span><span id="L-237"><a href="#L-237"><span class="linenos">237</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="L-238"><a href="#L-238"><span class="linenos">238</span></a>    <span class="k">if</span> <span class="n">dc1</span> <span class="ow">is</span> <span class="n">dc2</span><span class="p">:</span>
+</span><span id="L-239"><a href="#L-239"><span class="linenos">239</span></a>        <span class="k">return</span> <span class="kc">True</span>
+</span><span id="L-240"><a href="#L-240"><span class="linenos">240</span></a>
+</span><span id="L-241"><a href="#L-241"><span class="linenos">241</span></a>    <span class="k">if</span> <span class="n">dc1</span><span class="o">.</span><span class="vm">__class__</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">dc2</span><span class="o">.</span><span class="vm">__class__</span><span class="p">:</span>
+</span><span id="L-242"><a href="#L-242"><span class="linenos">242</span></a>        <span class="k">if</span> <span class="n">except_when_class_mismatch</span><span class="p">:</span>
+</span><span id="L-243"><a href="#L-243"><span class="linenos">243</span></a>            <span class="c1"># if the classes don&#39;t match, raise an error</span>
+</span><span id="L-244"><a href="#L-244"><span class="linenos">244</span></a>            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+</span><span id="L-245"><a href="#L-245"><span class="linenos">245</span></a>                <span class="sa">f</span><span class="s2">&quot;Cannot compare dataclasses of different classes: `</span><span class="si">{</span><span class="n">dc1</span><span class="o">.</span><span class="vm">__class__</span><span class="si">}</span><span class="s2">` and `</span><span class="si">{</span><span class="n">dc2</span><span class="o">.</span><span class="vm">__class__</span><span class="si">}</span><span class="s2">`&quot;</span>
+</span><span id="L-246"><a href="#L-246"><span class="linenos">246</span></a>            <span class="p">)</span>
+</span><span id="L-247"><a href="#L-247"><span class="linenos">247</span></a>        <span class="k">if</span> <span class="n">except_when_field_mismatch</span><span class="p">:</span>
+</span><span id="L-248"><a href="#L-248"><span class="linenos">248</span></a>            <span class="n">dc1_fields</span><span class="p">:</span> <span class="nb">set</span> <span class="o">=</span> <span class="nb">set</span><span class="p">([</span><span class="n">fld</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">fld</span> <span class="ow">in</span> <span class="n">dataclasses</span><span class="o">.</span><span class="n">fields</span><span class="p">(</span><span class="n">dc1</span><span class="p">)])</span>
+</span><span id="L-249"><a href="#L-249"><span class="linenos">249</span></a>            <span class="n">dc2_fields</span><span class="p">:</span> <span class="nb">set</span> <span class="o">=</span> <span class="nb">set</span><span class="p">([</span><span class="n">fld</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">fld</span> <span class="ow">in</span> <span class="n">dataclasses</span><span class="o">.</span><span class="n">fields</span><span class="p">(</span><span class="n">dc2</span><span class="p">)])</span>
+</span><span id="L-250"><a href="#L-250"><span class="linenos">250</span></a>            <span class="n">fields_match</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">dc1_fields</span><span class="p">)</span> <span class="o">==</span> <span class="nb">set</span><span class="p">(</span><span class="n">dc2_fields</span><span class="p">)</span>
+</span><span id="L-251"><a href="#L-251"><span class="linenos">251</span></a>            <span class="k">if</span> <span class="ow">not</span> <span class="n">fields_match</span><span class="p">:</span>
+</span><span id="L-252"><a href="#L-252"><span class="linenos">252</span></a>                <span class="c1"># if the fields match, keep going</span>
+</span><span id="L-253"><a href="#L-253"><span class="linenos">253</span></a>                <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span>
+</span><span id="L-254"><a href="#L-254"><span class="linenos">254</span></a>                    <span class="sa">f</span><span class="s2">&quot;dataclasses </span><span class="si">{</span><span class="n">dc1</span><span class="si">}</span><span class="s2"> and </span><span class="si">{</span><span class="n">dc2</span><span class="si">}</span><span class="s2"> have different fields: `</span><span class="si">{</span><span class="n">dc1_fields</span><span class="si">}</span><span class="s2">` and `</span><span class="si">{</span><span class="n">dc2_fields</span><span class="si">}</span><span class="s2">`&quot;</span>
+</span><span id="L-255"><a href="#L-255"><span class="linenos">255</span></a>                <span class="p">)</span>
+</span><span id="L-256"><a href="#L-256"><span class="linenos">256</span></a>        <span class="k">return</span> <span class="kc">False</span>
+</span><span id="L-257"><a href="#L-257"><span class="linenos">257</span></a>
+</span><span id="L-258"><a href="#L-258"><span class="linenos">258</span></a>    <span class="k">return</span> <span class="nb">all</span><span class="p">(</span>
+</span><span id="L-259"><a href="#L-259"><span class="linenos">259</span></a>        <span class="n">array_safe_eq</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">dc1</span><span class="p">,</span> <span class="n">fld</span><span class="o">.</span><span class="n">name</span><span class="p">),</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">dc2</span><span class="p">,</span> <span class="n">fld</span><span class="o">.</span><span class="n">name</span><span class="p">))</span>
+</span><span id="L-260"><a href="#L-260"><span class="linenos">260</span></a>        <span class="k">for</span> <span class="n">fld</span> <span class="ow">in</span> <span class="n">dataclasses</span><span class="o">.</span><span class="n">fields</span><span class="p">(</span><span class="n">dc1</span><span class="p">)</span>
+</span><span id="L-261"><a href="#L-261"><span class="linenos">261</span></a>        <span class="k">if</span> <span class="n">fld</span><span class="o">.</span><span class="n">compare</span>
+</span><span id="L-262"><a href="#L-262"><span class="linenos">262</span></a>    <span class="p">)</span>
 </span></pre></div>
 
 
@@ -737,7 +739,7 @@
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="dc_eq-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/main/muutils/json_serialize/util.py#L174-L260" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/main/muutils/json_serialize/util.py#L174-L262" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -752,114 +754,124 @@
 </span><span id="dc_eq-179"><a href="#dc_eq-179"><span class="linenos">179</span></a>    <span class="n">false_when_class_mismatch</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
 </span><span id="dc_eq-180"><a href="#dc_eq-180"><span class="linenos">180</span></a>    <span class="n">except_when_field_mismatch</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
 </span><span id="dc_eq-181"><a href="#dc_eq-181"><span class="linenos">181</span></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-</span><span id="dc_eq-182"><a href="#dc_eq-182"><span class="linenos">182</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;checks if two dataclasses which (might) hold numpy arrays are equal</span>
-</span><span id="dc_eq-183"><a href="#dc_eq-183"><span class="linenos">183</span></a>
-</span><span id="dc_eq-184"><a href="#dc_eq-184"><span class="linenos">184</span></a><span class="sd">        # Parameters:</span>
-</span><span id="dc_eq-185"><a href="#dc_eq-185"><span class="linenos">185</span></a><span class="sd">        - `dc1`: the first dataclass</span>
-</span><span id="dc_eq-186"><a href="#dc_eq-186"><span class="linenos">186</span></a><span class="sd">        - `dc2`: the second dataclass</span>
-</span><span id="dc_eq-187"><a href="#dc_eq-187"><span class="linenos">187</span></a><span class="sd">        - `except_when_class_mismatch: bool`</span>
-</span><span id="dc_eq-188"><a href="#dc_eq-188"><span class="linenos">188</span></a><span class="sd">            if `True`, will throw `TypeError` if the classes are different.</span>
-</span><span id="dc_eq-189"><a href="#dc_eq-189"><span class="linenos">189</span></a><span class="sd">            if not, will return false by default or attempt to compare the fields if `false_when_class_mismatch` is `False`</span>
-</span><span id="dc_eq-190"><a href="#dc_eq-190"><span class="linenos">190</span></a><span class="sd">            (default: `False`)</span>
-</span><span id="dc_eq-191"><a href="#dc_eq-191"><span class="linenos">191</span></a><span class="sd">        - `false_when_class_mismatch: bool`</span>
-</span><span id="dc_eq-192"><a href="#dc_eq-192"><span class="linenos">192</span></a><span class="sd">            only relevant if `except_when_class_mismatch` is `False`.</span>
-</span><span id="dc_eq-193"><a href="#dc_eq-193"><span class="linenos">193</span></a><span class="sd">            if `True`, will return `False` if the classes are different.</span>
-</span><span id="dc_eq-194"><a href="#dc_eq-194"><span class="linenos">194</span></a><span class="sd">            if `False`, will attempt to compare the fields.</span>
-</span><span id="dc_eq-195"><a href="#dc_eq-195"><span class="linenos">195</span></a><span class="sd">        - `except_when_field_mismatch: bool`</span>
-</span><span id="dc_eq-196"><a href="#dc_eq-196"><span class="linenos">196</span></a><span class="sd">            only relevant if `except_when_class_mismatch` is `False` and `false_when_class_mismatch` is `False`.</span>
-</span><span id="dc_eq-197"><a href="#dc_eq-197"><span class="linenos">197</span></a><span class="sd">            if `True`, will throw `TypeError` if the fields are different.</span>
-</span><span id="dc_eq-198"><a href="#dc_eq-198"><span class="linenos">198</span></a><span class="sd">            (default: `True`)</span>
-</span><span id="dc_eq-199"><a href="#dc_eq-199"><span class="linenos">199</span></a>
-</span><span id="dc_eq-200"><a href="#dc_eq-200"><span class="linenos">200</span></a><span class="sd">        # Returns:</span>
-</span><span id="dc_eq-201"><a href="#dc_eq-201"><span class="linenos">201</span></a><span class="sd">        - `bool`: True if the dataclasses are equal, False otherwise</span>
-</span><span id="dc_eq-202"><a href="#dc_eq-202"><span class="linenos">202</span></a>
-</span><span id="dc_eq-203"><a href="#dc_eq-203"><span class="linenos">203</span></a><span class="sd">        # Raises:</span>
-</span><span id="dc_eq-204"><a href="#dc_eq-204"><span class="linenos">204</span></a><span class="sd">        - `TypeError`: if the dataclasses are of different classes</span>
-</span><span id="dc_eq-205"><a href="#dc_eq-205"><span class="linenos">205</span></a><span class="sd">        - `AttributeError`: if the dataclasses have different fields</span>
-</span><span id="dc_eq-206"><a href="#dc_eq-206"><span class="linenos">206</span></a>
-</span><span id="dc_eq-207"><a href="#dc_eq-207"><span class="linenos">207</span></a><span class="sd">    ```</span>
-</span><span id="dc_eq-208"><a href="#dc_eq-208"><span class="linenos">208</span></a><span class="sd">              [START]</span>
-</span><span id="dc_eq-209"><a href="#dc_eq-209"><span class="linenos">209</span></a><span class="sd">                 ▼</span>
-</span><span id="dc_eq-210"><a href="#dc_eq-210"><span class="linenos">210</span></a><span class="sd">           ┌───────────┐  ┌─────────┐</span>
-</span><span id="dc_eq-211"><a href="#dc_eq-211"><span class="linenos">211</span></a><span class="sd">           │dc1 is dc2?├─►│ classes │</span>
-</span><span id="dc_eq-212"><a href="#dc_eq-212"><span class="linenos">212</span></a><span class="sd">           └──┬────────┘No│ match?  │</span>
-</span><span id="dc_eq-213"><a href="#dc_eq-213"><span class="linenos">213</span></a><span class="sd">      ────    │           ├─────────┤</span>
-</span><span id="dc_eq-214"><a href="#dc_eq-214"><span class="linenos">214</span></a><span class="sd">     (True)◄──┘Yes        │No       │Yes</span>
-</span><span id="dc_eq-215"><a href="#dc_eq-215"><span class="linenos">215</span></a><span class="sd">      ────                ▼         ▼</span>
-</span><span id="dc_eq-216"><a href="#dc_eq-216"><span class="linenos">216</span></a><span class="sd">          ┌────────────────┐ ┌────────────┐</span>
-</span><span id="dc_eq-217"><a href="#dc_eq-217"><span class="linenos">217</span></a><span class="sd">          │ except when    │ │ fields keys│</span>
-</span><span id="dc_eq-218"><a href="#dc_eq-218"><span class="linenos">218</span></a><span class="sd">          │ class mismatch?│ │ match?     │</span>
-</span><span id="dc_eq-219"><a href="#dc_eq-219"><span class="linenos">219</span></a><span class="sd">          ├───────────┬────┘ ├───────┬────┘</span>
-</span><span id="dc_eq-220"><a href="#dc_eq-220"><span class="linenos">220</span></a><span class="sd">          │Yes        │No    │No     │Yes</span>
-</span><span id="dc_eq-221"><a href="#dc_eq-221"><span class="linenos">221</span></a><span class="sd">          ▼           ▼      ▼       ▼</span>
-</span><span id="dc_eq-222"><a href="#dc_eq-222"><span class="linenos">222</span></a><span class="sd">     ───────────  ┌──────────┐  ┌────────┐</span>
-</span><span id="dc_eq-223"><a href="#dc_eq-223"><span class="linenos">223</span></a><span class="sd">    { raise     } │ except   │  │ field  │</span>
-</span><span id="dc_eq-224"><a href="#dc_eq-224"><span class="linenos">224</span></a><span class="sd">    { TypeError } │ when     │  │ values │</span>
-</span><span id="dc_eq-225"><a href="#dc_eq-225"><span class="linenos">225</span></a><span class="sd">     ───────────  │ field    │  │ match? │</span>
-</span><span id="dc_eq-226"><a href="#dc_eq-226"><span class="linenos">226</span></a><span class="sd">                  │ mismatch?│  ├────┬───┘</span>
-</span><span id="dc_eq-227"><a href="#dc_eq-227"><span class="linenos">227</span></a><span class="sd">                  ├───────┬──┘  │    │Yes</span>
-</span><span id="dc_eq-228"><a href="#dc_eq-228"><span class="linenos">228</span></a><span class="sd">                  │Yes    │No   │No  ▼</span>
-</span><span id="dc_eq-229"><a href="#dc_eq-229"><span class="linenos">229</span></a><span class="sd">                  ▼       ▼     │   ────</span>
-</span><span id="dc_eq-230"><a href="#dc_eq-230"><span class="linenos">230</span></a><span class="sd">     ───────────────     ─────  │  (True)</span>
-</span><span id="dc_eq-231"><a href="#dc_eq-231"><span class="linenos">231</span></a><span class="sd">    { raise         }   (False)◄┘   ────</span>
-</span><span id="dc_eq-232"><a href="#dc_eq-232"><span class="linenos">232</span></a><span class="sd">    { AttributeError}    ─────</span>
-</span><span id="dc_eq-233"><a href="#dc_eq-233"><span class="linenos">233</span></a><span class="sd">     ───────────────</span>
-</span><span id="dc_eq-234"><a href="#dc_eq-234"><span class="linenos">234</span></a><span class="sd">    ```</span>
-</span><span id="dc_eq-235"><a href="#dc_eq-235"><span class="linenos">235</span></a>
-</span><span id="dc_eq-236"><a href="#dc_eq-236"><span class="linenos">236</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="dc_eq-237"><a href="#dc_eq-237"><span class="linenos">237</span></a>    <span class="k">if</span> <span class="n">dc1</span> <span class="ow">is</span> <span class="n">dc2</span><span class="p">:</span>
-</span><span id="dc_eq-238"><a href="#dc_eq-238"><span class="linenos">238</span></a>        <span class="k">return</span> <span class="kc">True</span>
-</span><span id="dc_eq-239"><a href="#dc_eq-239"><span class="linenos">239</span></a>
-</span><span id="dc_eq-240"><a href="#dc_eq-240"><span class="linenos">240</span></a>    <span class="k">if</span> <span class="n">dc1</span><span class="o">.</span><span class="vm">__class__</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">dc2</span><span class="o">.</span><span class="vm">__class__</span><span class="p">:</span>
-</span><span id="dc_eq-241"><a href="#dc_eq-241"><span class="linenos">241</span></a>        <span class="k">if</span> <span class="n">except_when_class_mismatch</span><span class="p">:</span>
-</span><span id="dc_eq-242"><a href="#dc_eq-242"><span class="linenos">242</span></a>            <span class="c1"># if the classes don&#39;t match, raise an error</span>
-</span><span id="dc_eq-243"><a href="#dc_eq-243"><span class="linenos">243</span></a>            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
-</span><span id="dc_eq-244"><a href="#dc_eq-244"><span class="linenos">244</span></a>                <span class="sa">f</span><span class="s2">&quot;Cannot compare dataclasses of different classes: `</span><span class="si">{</span><span class="n">dc1</span><span class="o">.</span><span class="vm">__class__</span><span class="si">}</span><span class="s2">` and `</span><span class="si">{</span><span class="n">dc2</span><span class="o">.</span><span class="vm">__class__</span><span class="si">}</span><span class="s2">`&quot;</span>
-</span><span id="dc_eq-245"><a href="#dc_eq-245"><span class="linenos">245</span></a>            <span class="p">)</span>
-</span><span id="dc_eq-246"><a href="#dc_eq-246"><span class="linenos">246</span></a>        <span class="k">if</span> <span class="n">except_when_field_mismatch</span><span class="p">:</span>
-</span><span id="dc_eq-247"><a href="#dc_eq-247"><span class="linenos">247</span></a>            <span class="n">dc1_fields</span><span class="p">:</span> <span class="nb">set</span> <span class="o">=</span> <span class="nb">set</span><span class="p">([</span><span class="n">fld</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">fld</span> <span class="ow">in</span> <span class="n">dataclasses</span><span class="o">.</span><span class="n">fields</span><span class="p">(</span><span class="n">dc1</span><span class="p">)])</span>
-</span><span id="dc_eq-248"><a href="#dc_eq-248"><span class="linenos">248</span></a>            <span class="n">dc2_fields</span><span class="p">:</span> <span class="nb">set</span> <span class="o">=</span> <span class="nb">set</span><span class="p">([</span><span class="n">fld</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">fld</span> <span class="ow">in</span> <span class="n">dataclasses</span><span class="o">.</span><span class="n">fields</span><span class="p">(</span><span class="n">dc2</span><span class="p">)])</span>
-</span><span id="dc_eq-249"><a href="#dc_eq-249"><span class="linenos">249</span></a>            <span class="n">fields_match</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">dc1_fields</span><span class="p">)</span> <span class="o">==</span> <span class="nb">set</span><span class="p">(</span><span class="n">dc2_fields</span><span class="p">)</span>
-</span><span id="dc_eq-250"><a href="#dc_eq-250"><span class="linenos">250</span></a>            <span class="k">if</span> <span class="ow">not</span> <span class="n">fields_match</span><span class="p">:</span>
-</span><span id="dc_eq-251"><a href="#dc_eq-251"><span class="linenos">251</span></a>                <span class="c1"># if the fields match, keep going</span>
-</span><span id="dc_eq-252"><a href="#dc_eq-252"><span class="linenos">252</span></a>                <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span>
-</span><span id="dc_eq-253"><a href="#dc_eq-253"><span class="linenos">253</span></a>                    <span class="sa">f</span><span class="s2">&quot;dataclasses </span><span class="si">{</span><span class="n">dc1</span><span class="si">}</span><span class="s2"> and </span><span class="si">{</span><span class="n">dc2</span><span class="si">}</span><span class="s2"> have different fields: `</span><span class="si">{</span><span class="n">dc1_fields</span><span class="si">}</span><span class="s2">` and `</span><span class="si">{</span><span class="n">dc2_fields</span><span class="si">}</span><span class="s2">`&quot;</span>
-</span><span id="dc_eq-254"><a href="#dc_eq-254"><span class="linenos">254</span></a>                <span class="p">)</span>
-</span><span id="dc_eq-255"><a href="#dc_eq-255"><span class="linenos">255</span></a>        <span class="k">return</span> <span class="kc">False</span>
-</span><span id="dc_eq-256"><a href="#dc_eq-256"><span class="linenos">256</span></a>
-</span><span id="dc_eq-257"><a href="#dc_eq-257"><span class="linenos">257</span></a>    <span class="k">return</span> <span class="nb">all</span><span class="p">(</span>
-</span><span id="dc_eq-258"><a href="#dc_eq-258"><span class="linenos">258</span></a>        <span class="n">array_safe_eq</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">dc1</span><span class="p">,</span> <span class="n">fld</span><span class="o">.</span><span class="n">name</span><span class="p">),</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">dc2</span><span class="p">,</span> <span class="n">fld</span><span class="o">.</span><span class="n">name</span><span class="p">))</span>
-</span><span id="dc_eq-259"><a href="#dc_eq-259"><span class="linenos">259</span></a>        <span class="k">for</span> <span class="n">fld</span> <span class="ow">in</span> <span class="n">dataclasses</span><span class="o">.</span><span class="n">fields</span><span class="p">(</span><span class="n">dc1</span><span class="p">)</span>
-</span><span id="dc_eq-260"><a href="#dc_eq-260"><span class="linenos">260</span></a>        <span class="k">if</span> <span class="n">fld</span><span class="o">.</span><span class="n">compare</span>
-</span><span id="dc_eq-261"><a href="#dc_eq-261"><span class="linenos">261</span></a>    <span class="p">)</span>
+</span><span id="dc_eq-182"><a href="#dc_eq-182"><span class="linenos">182</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="dc_eq-183"><a href="#dc_eq-183"><span class="linenos">183</span></a><span class="sd">    checks if two dataclasses which (might) hold numpy arrays are equal</span>
+</span><span id="dc_eq-184"><a href="#dc_eq-184"><span class="linenos">184</span></a>
+</span><span id="dc_eq-185"><a href="#dc_eq-185"><span class="linenos">185</span></a><span class="sd">    # Parameters:</span>
+</span><span id="dc_eq-186"><a href="#dc_eq-186"><span class="linenos">186</span></a>
+</span><span id="dc_eq-187"><a href="#dc_eq-187"><span class="linenos">187</span></a><span class="sd">    - `dc1`: the first dataclass</span>
+</span><span id="dc_eq-188"><a href="#dc_eq-188"><span class="linenos">188</span></a><span class="sd">    - `dc2`: the second dataclass</span>
+</span><span id="dc_eq-189"><a href="#dc_eq-189"><span class="linenos">189</span></a><span class="sd">    - `except_when_class_mismatch: bool`</span>
+</span><span id="dc_eq-190"><a href="#dc_eq-190"><span class="linenos">190</span></a><span class="sd">        if `True`, will throw `TypeError` if the classes are different.</span>
+</span><span id="dc_eq-191"><a href="#dc_eq-191"><span class="linenos">191</span></a><span class="sd">        if not, will return false by default or attempt to compare the fields if `false_when_class_mismatch` is `False`</span>
+</span><span id="dc_eq-192"><a href="#dc_eq-192"><span class="linenos">192</span></a><span class="sd">        (default: `False`)</span>
+</span><span id="dc_eq-193"><a href="#dc_eq-193"><span class="linenos">193</span></a><span class="sd">    - `false_when_class_mismatch: bool`</span>
+</span><span id="dc_eq-194"><a href="#dc_eq-194"><span class="linenos">194</span></a><span class="sd">        only relevant if `except_when_class_mismatch` is `False`.</span>
+</span><span id="dc_eq-195"><a href="#dc_eq-195"><span class="linenos">195</span></a><span class="sd">        if `True`, will return `False` if the classes are different.</span>
+</span><span id="dc_eq-196"><a href="#dc_eq-196"><span class="linenos">196</span></a><span class="sd">        if `False`, will attempt to compare the fields.</span>
+</span><span id="dc_eq-197"><a href="#dc_eq-197"><span class="linenos">197</span></a><span class="sd">    - `except_when_field_mismatch: bool`</span>
+</span><span id="dc_eq-198"><a href="#dc_eq-198"><span class="linenos">198</span></a><span class="sd">        only relevant if `except_when_class_mismatch` is `False` and `false_when_class_mismatch` is `False`.</span>
+</span><span id="dc_eq-199"><a href="#dc_eq-199"><span class="linenos">199</span></a><span class="sd">        if `True`, will throw `TypeError` if the fields are different.</span>
+</span><span id="dc_eq-200"><a href="#dc_eq-200"><span class="linenos">200</span></a><span class="sd">        (default: `True`)</span>
+</span><span id="dc_eq-201"><a href="#dc_eq-201"><span class="linenos">201</span></a>
+</span><span id="dc_eq-202"><a href="#dc_eq-202"><span class="linenos">202</span></a><span class="sd">    # Returns:</span>
+</span><span id="dc_eq-203"><a href="#dc_eq-203"><span class="linenos">203</span></a><span class="sd">    - `bool`: True if the dataclasses are equal, False otherwise</span>
+</span><span id="dc_eq-204"><a href="#dc_eq-204"><span class="linenos">204</span></a>
+</span><span id="dc_eq-205"><a href="#dc_eq-205"><span class="linenos">205</span></a><span class="sd">    # Raises:</span>
+</span><span id="dc_eq-206"><a href="#dc_eq-206"><span class="linenos">206</span></a><span class="sd">    - `TypeError`: if the dataclasses are of different classes</span>
+</span><span id="dc_eq-207"><a href="#dc_eq-207"><span class="linenos">207</span></a><span class="sd">    - `AttributeError`: if the dataclasses have different fields</span>
+</span><span id="dc_eq-208"><a href="#dc_eq-208"><span class="linenos">208</span></a>
+</span><span id="dc_eq-209"><a href="#dc_eq-209"><span class="linenos">209</span></a><span class="sd">    ```</span>
+</span><span id="dc_eq-210"><a href="#dc_eq-210"><span class="linenos">210</span></a><span class="sd">              [START]</span>
+</span><span id="dc_eq-211"><a href="#dc_eq-211"><span class="linenos">211</span></a><span class="sd">                 ▼</span>
+</span><span id="dc_eq-212"><a href="#dc_eq-212"><span class="linenos">212</span></a><span class="sd">           ┌───────────┐  ┌─────────┐</span>
+</span><span id="dc_eq-213"><a href="#dc_eq-213"><span class="linenos">213</span></a><span class="sd">           │dc1 is dc2?├─►│ classes │</span>
+</span><span id="dc_eq-214"><a href="#dc_eq-214"><span class="linenos">214</span></a><span class="sd">           └──┬────────┘No│ match?  │</span>
+</span><span id="dc_eq-215"><a href="#dc_eq-215"><span class="linenos">215</span></a><span class="sd">      ────    │           ├─────────┤</span>
+</span><span id="dc_eq-216"><a href="#dc_eq-216"><span class="linenos">216</span></a><span class="sd">     (True)◄──┘Yes        │No       │Yes</span>
+</span><span id="dc_eq-217"><a href="#dc_eq-217"><span class="linenos">217</span></a><span class="sd">      ────                ▼         ▼</span>
+</span><span id="dc_eq-218"><a href="#dc_eq-218"><span class="linenos">218</span></a><span class="sd">          ┌────────────────┐ ┌────────────┐</span>
+</span><span id="dc_eq-219"><a href="#dc_eq-219"><span class="linenos">219</span></a><span class="sd">          │ except when    │ │ fields keys│</span>
+</span><span id="dc_eq-220"><a href="#dc_eq-220"><span class="linenos">220</span></a><span class="sd">          │ class mismatch?│ │ match?     │</span>
+</span><span id="dc_eq-221"><a href="#dc_eq-221"><span class="linenos">221</span></a><span class="sd">          ├───────────┬────┘ ├───────┬────┘</span>
+</span><span id="dc_eq-222"><a href="#dc_eq-222"><span class="linenos">222</span></a><span class="sd">          │Yes        │No    │No     │Yes</span>
+</span><span id="dc_eq-223"><a href="#dc_eq-223"><span class="linenos">223</span></a><span class="sd">          ▼           ▼      ▼       ▼</span>
+</span><span id="dc_eq-224"><a href="#dc_eq-224"><span class="linenos">224</span></a><span class="sd">     ───────────  ┌──────────┐  ┌────────┐</span>
+</span><span id="dc_eq-225"><a href="#dc_eq-225"><span class="linenos">225</span></a><span class="sd">    { raise     } │ except   │  │ field  │</span>
+</span><span id="dc_eq-226"><a href="#dc_eq-226"><span class="linenos">226</span></a><span class="sd">    { TypeError } │ when     │  │ values │</span>
+</span><span id="dc_eq-227"><a href="#dc_eq-227"><span class="linenos">227</span></a><span class="sd">     ───────────  │ field    │  │ match? │</span>
+</span><span id="dc_eq-228"><a href="#dc_eq-228"><span class="linenos">228</span></a><span class="sd">                  │ mismatch?│  ├────┬───┘</span>
+</span><span id="dc_eq-229"><a href="#dc_eq-229"><span class="linenos">229</span></a><span class="sd">                  ├───────┬──┘  │    │Yes</span>
+</span><span id="dc_eq-230"><a href="#dc_eq-230"><span class="linenos">230</span></a><span class="sd">                  │Yes    │No   │No  ▼</span>
+</span><span id="dc_eq-231"><a href="#dc_eq-231"><span class="linenos">231</span></a><span class="sd">                  ▼       ▼     │   ────</span>
+</span><span id="dc_eq-232"><a href="#dc_eq-232"><span class="linenos">232</span></a><span class="sd">     ───────────────     ─────  │  (True)</span>
+</span><span id="dc_eq-233"><a href="#dc_eq-233"><span class="linenos">233</span></a><span class="sd">    { raise         }   (False)◄┘   ────</span>
+</span><span id="dc_eq-234"><a href="#dc_eq-234"><span class="linenos">234</span></a><span class="sd">    { AttributeError}    ─────</span>
+</span><span id="dc_eq-235"><a href="#dc_eq-235"><span class="linenos">235</span></a><span class="sd">     ───────────────</span>
+</span><span id="dc_eq-236"><a href="#dc_eq-236"><span class="linenos">236</span></a><span class="sd">    ```</span>
+</span><span id="dc_eq-237"><a href="#dc_eq-237"><span class="linenos">237</span></a>
+</span><span id="dc_eq-238"><a href="#dc_eq-238"><span class="linenos">238</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="dc_eq-239"><a href="#dc_eq-239"><span class="linenos">239</span></a>    <span class="k">if</span> <span class="n">dc1</span> <span class="ow">is</span> <span class="n">dc2</span><span class="p">:</span>
+</span><span id="dc_eq-240"><a href="#dc_eq-240"><span class="linenos">240</span></a>        <span class="k">return</span> <span class="kc">True</span>
+</span><span id="dc_eq-241"><a href="#dc_eq-241"><span class="linenos">241</span></a>
+</span><span id="dc_eq-242"><a href="#dc_eq-242"><span class="linenos">242</span></a>    <span class="k">if</span> <span class="n">dc1</span><span class="o">.</span><span class="vm">__class__</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">dc2</span><span class="o">.</span><span class="vm">__class__</span><span class="p">:</span>
+</span><span id="dc_eq-243"><a href="#dc_eq-243"><span class="linenos">243</span></a>        <span class="k">if</span> <span class="n">except_when_class_mismatch</span><span class="p">:</span>
+</span><span id="dc_eq-244"><a href="#dc_eq-244"><span class="linenos">244</span></a>            <span class="c1"># if the classes don&#39;t match, raise an error</span>
+</span><span id="dc_eq-245"><a href="#dc_eq-245"><span class="linenos">245</span></a>            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+</span><span id="dc_eq-246"><a href="#dc_eq-246"><span class="linenos">246</span></a>                <span class="sa">f</span><span class="s2">&quot;Cannot compare dataclasses of different classes: `</span><span class="si">{</span><span class="n">dc1</span><span class="o">.</span><span class="vm">__class__</span><span class="si">}</span><span class="s2">` and `</span><span class="si">{</span><span class="n">dc2</span><span class="o">.</span><span class="vm">__class__</span><span class="si">}</span><span class="s2">`&quot;</span>
+</span><span id="dc_eq-247"><a href="#dc_eq-247"><span class="linenos">247</span></a>            <span class="p">)</span>
+</span><span id="dc_eq-248"><a href="#dc_eq-248"><span class="linenos">248</span></a>        <span class="k">if</span> <span class="n">except_when_field_mismatch</span><span class="p">:</span>
+</span><span id="dc_eq-249"><a href="#dc_eq-249"><span class="linenos">249</span></a>            <span class="n">dc1_fields</span><span class="p">:</span> <span class="nb">set</span> <span class="o">=</span> <span class="nb">set</span><span class="p">([</span><span class="n">fld</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">fld</span> <span class="ow">in</span> <span class="n">dataclasses</span><span class="o">.</span><span class="n">fields</span><span class="p">(</span><span class="n">dc1</span><span class="p">)])</span>
+</span><span id="dc_eq-250"><a href="#dc_eq-250"><span class="linenos">250</span></a>            <span class="n">dc2_fields</span><span class="p">:</span> <span class="nb">set</span> <span class="o">=</span> <span class="nb">set</span><span class="p">([</span><span class="n">fld</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">fld</span> <span class="ow">in</span> <span class="n">dataclasses</span><span class="o">.</span><span class="n">fields</span><span class="p">(</span><span class="n">dc2</span><span class="p">)])</span>
+</span><span id="dc_eq-251"><a href="#dc_eq-251"><span class="linenos">251</span></a>            <span class="n">fields_match</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">dc1_fields</span><span class="p">)</span> <span class="o">==</span> <span class="nb">set</span><span class="p">(</span><span class="n">dc2_fields</span><span class="p">)</span>
+</span><span id="dc_eq-252"><a href="#dc_eq-252"><span class="linenos">252</span></a>            <span class="k">if</span> <span class="ow">not</span> <span class="n">fields_match</span><span class="p">:</span>
+</span><span id="dc_eq-253"><a href="#dc_eq-253"><span class="linenos">253</span></a>                <span class="c1"># if the fields match, keep going</span>
+</span><span id="dc_eq-254"><a href="#dc_eq-254"><span class="linenos">254</span></a>                <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span>
+</span><span id="dc_eq-255"><a href="#dc_eq-255"><span class="linenos">255</span></a>                    <span class="sa">f</span><span class="s2">&quot;dataclasses </span><span class="si">{</span><span class="n">dc1</span><span class="si">}</span><span class="s2"> and </span><span class="si">{</span><span class="n">dc2</span><span class="si">}</span><span class="s2"> have different fields: `</span><span class="si">{</span><span class="n">dc1_fields</span><span class="si">}</span><span class="s2">` and `</span><span class="si">{</span><span class="n">dc2_fields</span><span class="si">}</span><span class="s2">`&quot;</span>
+</span><span id="dc_eq-256"><a href="#dc_eq-256"><span class="linenos">256</span></a>                <span class="p">)</span>
+</span><span id="dc_eq-257"><a href="#dc_eq-257"><span class="linenos">257</span></a>        <span class="k">return</span> <span class="kc">False</span>
+</span><span id="dc_eq-258"><a href="#dc_eq-258"><span class="linenos">258</span></a>
+</span><span id="dc_eq-259"><a href="#dc_eq-259"><span class="linenos">259</span></a>    <span class="k">return</span> <span class="nb">all</span><span class="p">(</span>
+</span><span id="dc_eq-260"><a href="#dc_eq-260"><span class="linenos">260</span></a>        <span class="n">array_safe_eq</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">dc1</span><span class="p">,</span> <span class="n">fld</span><span class="o">.</span><span class="n">name</span><span class="p">),</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">dc2</span><span class="p">,</span> <span class="n">fld</span><span class="o">.</span><span class="n">name</span><span class="p">))</span>
+</span><span id="dc_eq-261"><a href="#dc_eq-261"><span class="linenos">261</span></a>        <span class="k">for</span> <span class="n">fld</span> <span class="ow">in</span> <span class="n">dataclasses</span><span class="o">.</span><span class="n">fields</span><span class="p">(</span><span class="n">dc1</span><span class="p">)</span>
+</span><span id="dc_eq-262"><a href="#dc_eq-262"><span class="linenos">262</span></a>        <span class="k">if</span> <span class="n">fld</span><span class="o">.</span><span class="n">compare</span>
+</span><span id="dc_eq-263"><a href="#dc_eq-263"><span class="linenos">263</span></a>    <span class="p">)</span>
 </span></pre></div>
 
 
             <div class="docstring"><p>checks if two dataclasses which (might) hold numpy arrays are equal</p>
 
-<pre><code># Parameters:
-- `dc1`: the first dataclass
-- `dc2`: the second dataclass
-- `except_when_class_mismatch: bool`
-    if `True`, will throw `TypeError` if the classes are different.
-    if not, will return false by default or attempt to compare the fields if `false_when_class_mismatch` is `False`
-    (default: `False`)
-- `false_when_class_mismatch: bool`
-    only relevant if `except_when_class_mismatch` is `False`.
-    if `True`, will return `False` if the classes are different.
-    if `False`, will attempt to compare the fields.
-- `except_when_field_mismatch: bool`
-    only relevant if `except_when_class_mismatch` is `False` and `false_when_class_mismatch` is `False`.
-    if `True`, will throw `TypeError` if the fields are different.
-    (default: `True`)
+<h1 id="parameters">Parameters:</h1>
 
-# Returns:
-- `bool`: True if the dataclasses are equal, False otherwise
+<ul>
+<li><code>dc1</code>: the first dataclass</li>
+<li><code>dc2</code>: the second dataclass</li>
+<li><code>except_when_class_mismatch: bool</code>
+if <code>True</code>, will throw <code>TypeError</code> if the classes are different.
+if not, will return false by default or attempt to compare the fields if <code>false_when_class_mismatch</code> is <code>False</code>
+(default: <code>False</code>)</li>
+<li><code>false_when_class_mismatch: bool</code>
+only relevant if <code>except_when_class_mismatch</code> is <code>False</code>.
+if <code>True</code>, will return <code>False</code> if the classes are different.
+if <code>False</code>, will attempt to compare the fields.</li>
+<li><code>except_when_field_mismatch: bool</code>
+only relevant if <code>except_when_class_mismatch</code> is <code>False</code> and <code>false_when_class_mismatch</code> is <code>False</code>.
+if <code>True</code>, will throw <code>TypeError</code> if the fields are different.
+(default: <code>True</code>)</li>
+</ul>
 
-# Raises:
-- `TypeError`: if the dataclasses are of different classes
-- `AttributeError`: if the dataclasses have different fields
-</code></pre>
+<h1 id="returns">Returns:</h1>
+
+<ul>
+<li><code>bool</code>: True if the dataclasses are equal, False otherwise</li>
+</ul>
+
+<h1 id="raises">Raises:</h1>
+
+<ul>
+<li><code>TypeError</code>: if the dataclasses are of different classes</li>
+<li><code>AttributeError</code>: if the dataclasses have different fields</li>
+</ul>
 
 <pre><code>          [START]
              ▼

@@ -89,31 +89,49 @@
                     <h1 class="modulename">
 <a href="./../muutils.html">muutils</a><wbr>.nbutils    </h1>
 
-                
+                        <div class="docstring"><p>utilities for working with notebooks</p>
+
+<ul>
+<li>configuring figures mdoes and torch devices: <code>configure_notebook</code></li>
+<li>converting them to scripts: <code>convert_ipynb_to_script</code></li>
+<li>running them as tests: <code>run_notebook_tests</code></li>
+<li>and working with diagrams/LaTeX: <code>mermaid</code>, <code>print_tex</code></li>
+</ul>
+</div>
+
                         <input id="mod-nbutils-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 
                         <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="mod-nbutils-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/main/muutils/nbutils/__init__.py#L0-L11" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/main/muutils/nbutils/__init__.py#L0-L20" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
         </div>
 
                 <br/>
-                        <div class="pdoc-code codehilite"><pre><span></span><span id="L-1"><a href="#L-1"><span class="linenos"> 1</span></a><span class="kn">from</span> <span class="nn">muutils.nbutils.mermaid</span> <span class="kn">import</span> <span class="n">mm</span>
+                        <div class="pdoc-code codehilite"><pre><span></span><span id="L-1"><a href="#L-1"><span class="linenos"> 1</span></a><span class="sd">&quot;&quot;&quot;utilities for working with notebooks</span>
 </span><span id="L-2"><a href="#L-2"><span class="linenos"> 2</span></a>
-</span><span id="L-3"><a href="#L-3"><span class="linenos"> 3</span></a><span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
-</span><span id="L-4"><a href="#L-4"><span class="linenos"> 4</span></a>    <span class="c1"># sub-modules</span>
-</span><span id="L-5"><a href="#L-5"><span class="linenos"> 5</span></a>    <span class="s2">&quot;configure_notebook&quot;</span><span class="p">,</span>
-</span><span id="L-6"><a href="#L-6"><span class="linenos"> 6</span></a>    <span class="s2">&quot;convert_ipynb_to_script&quot;</span><span class="p">,</span>
-</span><span id="L-7"><a href="#L-7"><span class="linenos"> 7</span></a>    <span class="s2">&quot;mermaid&quot;</span><span class="p">,</span>
-</span><span id="L-8"><a href="#L-8"><span class="linenos"> 8</span></a>    <span class="s2">&quot;print_tex&quot;</span><span class="p">,</span>
-</span><span id="L-9"><a href="#L-9"><span class="linenos"> 9</span></a>    <span class="s2">&quot;run_notebook_tests&quot;</span><span class="p">,</span>
-</span><span id="L-10"><a href="#L-10"><span class="linenos">10</span></a>    <span class="c1"># functions</span>
-</span><span id="L-11"><a href="#L-11"><span class="linenos">11</span></a>    <span class="s2">&quot;mm&quot;</span><span class="p">,</span>
-</span><span id="L-12"><a href="#L-12"><span class="linenos">12</span></a><span class="p">]</span>
+</span><span id="L-3"><a href="#L-3"><span class="linenos"> 3</span></a><span class="sd">- configuring figures mdoes and torch devices: `configure_notebook`</span>
+</span><span id="L-4"><a href="#L-4"><span class="linenos"> 4</span></a><span class="sd">- converting them to scripts: `convert_ipynb_to_script`</span>
+</span><span id="L-5"><a href="#L-5"><span class="linenos"> 5</span></a><span class="sd">- running them as tests: `run_notebook_tests`</span>
+</span><span id="L-6"><a href="#L-6"><span class="linenos"> 6</span></a><span class="sd">- and working with diagrams/LaTeX: `mermaid`, `print_tex`</span>
+</span><span id="L-7"><a href="#L-7"><span class="linenos"> 7</span></a>
+</span><span id="L-8"><a href="#L-8"><span class="linenos"> 8</span></a><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-9"><a href="#L-9"><span class="linenos"> 9</span></a>
+</span><span id="L-10"><a href="#L-10"><span class="linenos">10</span></a><span class="kn">from</span> <span class="nn">muutils.nbutils.mermaid</span> <span class="kn">import</span> <span class="n">mm</span>
+</span><span id="L-11"><a href="#L-11"><span class="linenos">11</span></a>
+</span><span id="L-12"><a href="#L-12"><span class="linenos">12</span></a><span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
+</span><span id="L-13"><a href="#L-13"><span class="linenos">13</span></a>    <span class="c1"># sub-modules</span>
+</span><span id="L-14"><a href="#L-14"><span class="linenos">14</span></a>    <span class="s2">&quot;configure_notebook&quot;</span><span class="p">,</span>
+</span><span id="L-15"><a href="#L-15"><span class="linenos">15</span></a>    <span class="s2">&quot;convert_ipynb_to_script&quot;</span><span class="p">,</span>
+</span><span id="L-16"><a href="#L-16"><span class="linenos">16</span></a>    <span class="s2">&quot;mermaid&quot;</span><span class="p">,</span>
+</span><span id="L-17"><a href="#L-17"><span class="linenos">17</span></a>    <span class="s2">&quot;print_tex&quot;</span><span class="p">,</span>
+</span><span id="L-18"><a href="#L-18"><span class="linenos">18</span></a>    <span class="s2">&quot;run_notebook_tests&quot;</span><span class="p">,</span>
+</span><span id="L-19"><a href="#L-19"><span class="linenos">19</span></a>    <span class="c1"># functions</span>
+</span><span id="L-20"><a href="#L-20"><span class="linenos">20</span></a>    <span class="s2">&quot;mm&quot;</span><span class="p">,</span>
+</span><span id="L-21"><a href="#L-21"><span class="linenos">21</span></a><span class="p">]</span>
 </span></pre></div>
 
 
@@ -129,7 +147,7 @@
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="mm-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/main/muutils/nbutils/__init__.py#L13-L18" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/main/muutils/nbutils/__init__.py#L15-L20" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -137,12 +155,12 @@
 
     </div>
     <a class="headerlink" href="#mm"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="mm-14"><a href="#mm-14"><span class="linenos">14</span></a><span class="k">def</span> <span class="nf">mm</span><span class="p">(</span><span class="n">graph</span><span class="p">):</span>
-</span><span id="mm-15"><a href="#mm-15"><span class="linenos">15</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;for plotting mermaid.js diagrams&quot;&quot;&quot;</span>
-</span><span id="mm-16"><a href="#mm-16"><span class="linenos">16</span></a>    <span class="n">graphbytes</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">&quot;ascii&quot;</span><span class="p">)</span>
-</span><span id="mm-17"><a href="#mm-17"><span class="linenos">17</span></a>    <span class="n">base64_bytes</span> <span class="o">=</span> <span class="n">base64</span><span class="o">.</span><span class="n">b64encode</span><span class="p">(</span><span class="n">graphbytes</span><span class="p">)</span>
-</span><span id="mm-18"><a href="#mm-18"><span class="linenos">18</span></a>    <span class="n">base64_string</span> <span class="o">=</span> <span class="n">base64_bytes</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;ascii&quot;</span><span class="p">)</span>
-</span><span id="mm-19"><a href="#mm-19"><span class="linenos">19</span></a>    <span class="n">display</span><span class="p">(</span><span class="n">Image</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="s2">&quot;https://mermaid.ink/img/&quot;</span> <span class="o">+</span> <span class="n">base64_string</span><span class="p">))</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="mm-16"><a href="#mm-16"><span class="linenos">16</span></a><span class="k">def</span> <span class="nf">mm</span><span class="p">(</span><span class="n">graph</span><span class="p">):</span>
+</span><span id="mm-17"><a href="#mm-17"><span class="linenos">17</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;for plotting mermaid.js diagrams&quot;&quot;&quot;</span>
+</span><span id="mm-18"><a href="#mm-18"><span class="linenos">18</span></a>    <span class="n">graphbytes</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">&quot;ascii&quot;</span><span class="p">)</span>
+</span><span id="mm-19"><a href="#mm-19"><span class="linenos">19</span></a>    <span class="n">base64_bytes</span> <span class="o">=</span> <span class="n">base64</span><span class="o">.</span><span class="n">b64encode</span><span class="p">(</span><span class="n">graphbytes</span><span class="p">)</span>
+</span><span id="mm-20"><a href="#mm-20"><span class="linenos">20</span></a>    <span class="n">base64_string</span> <span class="o">=</span> <span class="n">base64_bytes</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;ascii&quot;</span><span class="p">)</span>
+</span><span id="mm-21"><a href="#mm-21"><span class="linenos">21</span></a>    <span class="n">display</span><span class="p">(</span><span class="n">Image</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="s2">&quot;https://mermaid.ink/img/&quot;</span> <span class="o">+</span> <span class="n">base64_string</span><span class="p">))</span>
 </span></pre></div>
 
 

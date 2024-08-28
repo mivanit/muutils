@@ -1,0 +1,631 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="pdoc 14.6.1"/>
+    <title>muutils.timeit_fancy API documentation</title>
+<link rel="stylesheet" href="../resources/bootstrap-reboot.min.css"><link rel="stylesheet" href="../resources/syntax-highlighting.css"><link rel="stylesheet" href="../resources/theme.css"><link rel="stylesheet" href="../resources/layout.css"><link rel="stylesheet" href="../resources/content.css"><link rel="stylesheet" href="../resources/custom.css"><script>
+    window.MathJax = {
+        tex: {
+            inlineMath: [['$', '$'], ['\\(', '\\)']]
+        }
+    };
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<script>
+    /* Re-invoke MathJax when DOM content changes, for example during search. */
+    document.addEventListener("DOMContentLoaded", () => {
+        new MutationObserver(() => MathJax.typeset()).observe(
+            document.querySelector("main.pdoc").parentNode,
+            {childList: true}
+        );
+    })
+</script>
+<style>
+    mjx-container {
+        overflow-x: auto;
+        overflow-y: hidden;
+    }
+</style><style>
+    .pdoc .mermaid-pre {
+        border: none;
+        background: none;
+    }
+</style>
+<script type="module" defer>
+    import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs";
+
+    /* Re-invoke Mermaid when DOM content changes, for example during search. */
+    document.addEventListener("DOMContentLoaded", () => {
+        new MutationObserver(() => mermaid.run()).observe(
+            document.querySelector("main.pdoc").parentNode,
+            {childList: true}
+        );
+    })
+</script></head>
+<body>
+    <nav class="pdoc">
+        <label id="navtoggle" for="togglestate" class="pdoc-button">
+            <img src="resources/navtoggle.svg" alt="Toggle navigation"> 
+        </label>
+        <input id="togglestate" type="checkbox" aria-hidden="true" tabindex="-1">
+        <div>            <a class="pdoc-button module-list-button" href="../muutils.html">
+                <img src="resources/box-arrow-in-left.svg" alt="Back to parent module"/>
+                &nbsp;muutils</a>
+
+
+            <input type="search" placeholder="Search..." role="searchbox" aria-label="search"
+                   pattern=".+" required>
+
+
+
+            <h2>API Documentation</h2>
+                <ul class="memberlist">
+            <li>
+                    <a class="class" href="#FancyTimeitResult">FancyTimeitResult</a>
+                            <ul class="memberlist">
+                        <li>
+                                <a class="function" href="#FancyTimeitResult.__init__">FancyTimeitResult</a>
+                        </li>
+                        <li>
+                                <a class="variable" href="#FancyTimeitResult.timings">timings</a>
+                        </li>
+                        <li>
+                                <a class="variable" href="#FancyTimeitResult.return_value">return_value</a>
+                        </li>
+                        <li>
+                                <a class="variable" href="#FancyTimeitResult.profile">profile</a>
+                        </li>
+                </ul>
+
+            </li>
+            <li>
+                    <a class="function" href="#timeit_fancy">timeit_fancy</a>
+            </li>
+    </ul>
+
+
+
+        <a class="attribution" title="pdoc: Python API documentation generator" href="https://pdoc.dev" target="_blank">
+            built with <span class="visually-hidden">pdoc</span>
+            <img src="resources/pdoc-logo.svg" alt="pdoc logo"/>
+        </a>
+</div>
+    </nav>
+    <main class="pdoc">
+            <section class="module-info">
+                        <a class="pdoc-button git-button" href="https://github.com/mivanit/muutils/blob/main/muutils/timeit_fancy.py">View Source on GitHub</a>
+                    <h1 class="modulename">
+<a href="./../muutils.html">muutils</a><wbr>.timeit_fancy    </h1>
+
+                
+                        <input id="mod-timeit_fancy-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+
+                        <div class="source-button-container">
+            <label class="pdoc-button view-source-button" for="mod-timeit_fancy-view-source"><span>View Source</span></label>
+            <div class="github-button-wrapper">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/main/muutils/timeit_fancy.py#L0-L95" target="_blank">
+                    <span>View on GitHub</span>
+                </a>
+            </div>
+        </div>
+
+                <br/>
+                        <div class="pdoc-code codehilite"><pre><span></span><span id="L-1"><a href="#L-1"><span class="linenos"> 1</span></a><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+</span><span id="L-2"><a href="#L-2"><span class="linenos"> 2</span></a>
+</span><span id="L-3"><a href="#L-3"><span class="linenos"> 3</span></a><span class="kn">import</span> <span class="nn">pstats</span>
+</span><span id="L-4"><a href="#L-4"><span class="linenos"> 4</span></a><span class="kn">import</span> <span class="nn">timeit</span>
+</span><span id="L-5"><a href="#L-5"><span class="linenos"> 5</span></a><span class="kn">import</span> <span class="nn">cProfile</span>
+</span><span id="L-6"><a href="#L-6"><span class="linenos"> 6</span></a><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">TypeVar</span><span class="p">,</span> <span class="n">NamedTuple</span><span class="p">,</span> <span class="n">Any</span>
+</span><span id="L-7"><a href="#L-7"><span class="linenos"> 7</span></a><span class="kn">import</span> <span class="nn">warnings</span>
+</span><span id="L-8"><a href="#L-8"><span class="linenos"> 8</span></a>
+</span><span id="L-9"><a href="#L-9"><span class="linenos"> 9</span></a><span class="kn">from</span> <span class="nn">muutils.statcounter</span> <span class="kn">import</span> <span class="n">StatCounter</span>
+</span><span id="L-10"><a href="#L-10"><span class="linenos">10</span></a>
+</span><span id="L-11"><a href="#L-11"><span class="linenos">11</span></a><span class="n">T</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s2">&quot;T&quot;</span><span class="p">)</span>
+</span><span id="L-12"><a href="#L-12"><span class="linenos">12</span></a>
+</span><span id="L-13"><a href="#L-13"><span class="linenos">13</span></a>
+</span><span id="L-14"><a href="#L-14"><span class="linenos">14</span></a><span class="k">class</span> <span class="nc">FancyTimeitResult</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
+</span><span id="L-15"><a href="#L-15"><span class="linenos">15</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;return type of `timeit_fancy`&quot;&quot;&quot;</span>
+</span><span id="L-16"><a href="#L-16"><span class="linenos">16</span></a>
+</span><span id="L-17"><a href="#L-17"><span class="linenos">17</span></a>    <span class="n">timings</span><span class="p">:</span> <span class="n">StatCounter</span>
+</span><span id="L-18"><a href="#L-18"><span class="linenos">18</span></a>    <span class="n">return_value</span><span class="p">:</span> <span class="n">T</span>  <span class="c1"># type: ignore[valid-type]</span>
+</span><span id="L-19"><a href="#L-19"><span class="linenos">19</span></a>    <span class="n">profile</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">pstats</span><span class="o">.</span><span class="n">Stats</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span>
+</span><span id="L-20"><a href="#L-20"><span class="linenos">20</span></a>
+</span><span id="L-21"><a href="#L-21"><span class="linenos">21</span></a>
+</span><span id="L-22"><a href="#L-22"><span class="linenos">22</span></a><span class="k">def</span> <span class="nf">timeit_fancy</span><span class="p">(</span>
+</span><span id="L-23"><a href="#L-23"><span class="linenos">23</span></a>    <span class="n">cmd</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[],</span> <span class="n">T</span><span class="p">],</span>
+</span><span id="L-24"><a href="#L-24"><span class="linenos">24</span></a>    <span class="n">setup</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Callable</span><span class="p">[[],</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="k">lambda</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+</span><span id="L-25"><a href="#L-25"><span class="linenos">25</span></a>    <span class="n">repeats</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span>
+</span><span id="L-26"><a href="#L-26"><span class="linenos">26</span></a>    <span class="n">namespace</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+</span><span id="L-27"><a href="#L-27"><span class="linenos">27</span></a>    <span class="n">get_return</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+</span><span id="L-28"><a href="#L-28"><span class="linenos">28</span></a>    <span class="n">do_profiling</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+</span><span id="L-29"><a href="#L-29"><span class="linenos">29</span></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FancyTimeitResult</span><span class="p">:</span>
+</span><span id="L-30"><a href="#L-30"><span class="linenos">30</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-31"><a href="#L-31"><span class="linenos">31</span></a><span class="sd">    Wrapper for `timeit` to get the fastest run of a callable with more customization options.</span>
+</span><span id="L-32"><a href="#L-32"><span class="linenos">32</span></a>
+</span><span id="L-33"><a href="#L-33"><span class="linenos">33</span></a><span class="sd">    Approximates the functionality of the %timeit magic or command line interface in a Python callable.</span>
+</span><span id="L-34"><a href="#L-34"><span class="linenos">34</span></a>
+</span><span id="L-35"><a href="#L-35"><span class="linenos">35</span></a><span class="sd">    # Parameters</span>
+</span><span id="L-36"><a href="#L-36"><span class="linenos">36</span></a><span class="sd">    - `cmd: Callable[[], T] | str`</span>
+</span><span id="L-37"><a href="#L-37"><span class="linenos">37</span></a><span class="sd">        The callable to time. If a string, it will be passed to `timeit.Timer` as the `stmt` argument.</span>
+</span><span id="L-38"><a href="#L-38"><span class="linenos">38</span></a><span class="sd">    - `setup: str`</span>
+</span><span id="L-39"><a href="#L-39"><span class="linenos">39</span></a><span class="sd">        The setup code to run before `cmd`. If a string, it will be passed to `timeit.Timer` as the `setup` argument.</span>
+</span><span id="L-40"><a href="#L-40"><span class="linenos">40</span></a><span class="sd">    - `repeats: int`</span>
+</span><span id="L-41"><a href="#L-41"><span class="linenos">41</span></a><span class="sd">        The number of times to run `cmd` to get a reliable measurement.</span>
+</span><span id="L-42"><a href="#L-42"><span class="linenos">42</span></a><span class="sd">    - `namespace: dict[str, Any]`</span>
+</span><span id="L-43"><a href="#L-43"><span class="linenos">43</span></a><span class="sd">        Passed to `timeit.Timer` constructor.</span>
+</span><span id="L-44"><a href="#L-44"><span class="linenos">44</span></a><span class="sd">        If `cmd` or `setup` use local or global variables, they must be passed here. See `timeit` documentation for details.</span>
+</span><span id="L-45"><a href="#L-45"><span class="linenos">45</span></a><span class="sd">    - `get_return: bool`</span>
+</span><span id="L-46"><a href="#L-46"><span class="linenos">46</span></a><span class="sd">        Whether to pass the value returned from `cmd`. If True, the return value will be appended in a tuple with execution time.</span>
+</span><span id="L-47"><a href="#L-47"><span class="linenos">47</span></a><span class="sd">        This is for speed and convenience so that `cmd` doesn&#39;t need to be run again in the calling scope if the return values are needed.</span>
+</span><span id="L-48"><a href="#L-48"><span class="linenos">48</span></a><span class="sd">        (default: `False`)</span>
+</span><span id="L-49"><a href="#L-49"><span class="linenos">49</span></a><span class="sd">    - `do_profiling: bool`</span>
+</span><span id="L-50"><a href="#L-50"><span class="linenos">50</span></a><span class="sd">        Whether to return a `pstats.Stats` object in addition to the time and return value.</span>
+</span><span id="L-51"><a href="#L-51"><span class="linenos">51</span></a><span class="sd">        (default: `False`)</span>
+</span><span id="L-52"><a href="#L-52"><span class="linenos">52</span></a>
+</span><span id="L-53"><a href="#L-53"><span class="linenos">53</span></a><span class="sd">    # Returns</span>
+</span><span id="L-54"><a href="#L-54"><span class="linenos">54</span></a><span class="sd">    `FancyTimeitResult`, which is a NamedTuple with the following fields:</span>
+</span><span id="L-55"><a href="#L-55"><span class="linenos">55</span></a><span class="sd">    - `time: float`</span>
+</span><span id="L-56"><a href="#L-56"><span class="linenos">56</span></a><span class="sd">        The time in seconds it took to run `cmd` the minimum number of times to get a reliable measurement.</span>
+</span><span id="L-57"><a href="#L-57"><span class="linenos">57</span></a><span class="sd">    - `return_value: T|None`</span>
+</span><span id="L-58"><a href="#L-58"><span class="linenos">58</span></a><span class="sd">        The return value of `cmd` if `get_return` is `True`, otherwise `None`.</span>
+</span><span id="L-59"><a href="#L-59"><span class="linenos">59</span></a><span class="sd">    - `profile: pstats.Stats|None`</span>
+</span><span id="L-60"><a href="#L-60"><span class="linenos">60</span></a><span class="sd">        A `pstats.Stats` object if `do_profiling` is `True`, otherwise `None`.</span>
+</span><span id="L-61"><a href="#L-61"><span class="linenos">61</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="L-62"><a href="#L-62"><span class="linenos">62</span></a>    <span class="n">timer</span><span class="p">:</span> <span class="n">timeit</span><span class="o">.</span><span class="n">Timer</span> <span class="o">=</span> <span class="n">timeit</span><span class="o">.</span><span class="n">Timer</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">setup</span><span class="p">,</span> <span class="nb">globals</span><span class="o">=</span><span class="n">namespace</span><span class="p">)</span>
+</span><span id="L-63"><a href="#L-63"><span class="linenos">63</span></a>
+</span><span id="L-64"><a href="#L-64"><span class="linenos">64</span></a>    <span class="c1"># Perform the timing</span>
+</span><span id="L-65"><a href="#L-65"><span class="linenos">65</span></a>    <span class="n">times</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="n">timer</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">repeats</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+</span><span id="L-66"><a href="#L-66"><span class="linenos">66</span></a>
+</span><span id="L-67"><a href="#L-67"><span class="linenos">67</span></a>    <span class="c1"># Optionally capture the return value</span>
+</span><span id="L-68"><a href="#L-68"><span class="linenos">68</span></a>    <span class="n">profile</span><span class="p">:</span> <span class="n">pstats</span><span class="o">.</span><span class="n">Stats</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span id="L-69"><a href="#L-69"><span class="linenos">69</span></a>
+</span><span id="L-70"><a href="#L-70"><span class="linenos">70</span></a>    <span class="n">return_value</span><span class="p">:</span> <span class="n">T</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span id="L-71"><a href="#L-71"><span class="linenos">71</span></a>    <span class="k">if</span> <span class="n">get_return</span> <span class="ow">or</span> <span class="n">do_profiling</span><span class="p">:</span>
+</span><span id="L-72"><a href="#L-72"><span class="linenos">72</span></a>        <span class="c1"># Optionally perform profiling</span>
+</span><span id="L-73"><a href="#L-73"><span class="linenos">73</span></a>        <span class="k">if</span> <span class="n">do_profiling</span><span class="p">:</span>
+</span><span id="L-74"><a href="#L-74"><span class="linenos">74</span></a>            <span class="n">profiler</span> <span class="o">=</span> <span class="n">cProfile</span><span class="o">.</span><span class="n">Profile</span><span class="p">()</span>
+</span><span id="L-75"><a href="#L-75"><span class="linenos">75</span></a>            <span class="n">profiler</span><span class="o">.</span><span class="n">enable</span><span class="p">()</span>
+</span><span id="L-76"><a href="#L-76"><span class="linenos">76</span></a>
+</span><span id="L-77"><a href="#L-77"><span class="linenos">77</span></a>        <span class="k">try</span><span class="p">:</span>
+</span><span id="L-78"><a href="#L-78"><span class="linenos">78</span></a>            <span class="n">return_value</span> <span class="o">=</span> <span class="n">cmd</span><span class="p">()</span>
+</span><span id="L-79"><a href="#L-79"><span class="linenos">79</span></a>        <span class="k">except</span> <span class="ne">TypeError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+</span><span id="L-80"><a href="#L-80"><span class="linenos">80</span></a>            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+</span><span id="L-81"><a href="#L-81"><span class="linenos">81</span></a>                <span class="sa">f</span><span class="s2">&quot;Failed to get return value from `cmd` due to error (probably passing a string). will return `return_value=None`</span><span class="se">\n</span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+</span><span id="L-82"><a href="#L-82"><span class="linenos">82</span></a>            <span class="p">)</span>
+</span><span id="L-83"><a href="#L-83"><span class="linenos">83</span></a>
+</span><span id="L-84"><a href="#L-84"><span class="linenos">84</span></a>        <span class="k">if</span> <span class="n">do_profiling</span><span class="p">:</span>
+</span><span id="L-85"><a href="#L-85"><span class="linenos">85</span></a>            <span class="n">profiler</span><span class="o">.</span><span class="n">disable</span><span class="p">()</span>
+</span><span id="L-86"><a href="#L-86"><span class="linenos">86</span></a>            <span class="n">profile</span> <span class="o">=</span> <span class="n">pstats</span><span class="o">.</span><span class="n">Stats</span><span class="p">(</span><span class="n">profiler</span><span class="p">)</span><span class="o">.</span><span class="n">strip_dirs</span><span class="p">()</span><span class="o">.</span><span class="n">sort_stats</span><span class="p">(</span><span class="s2">&quot;cumulative&quot;</span><span class="p">)</span>
+</span><span id="L-87"><a href="#L-87"><span class="linenos">87</span></a>
+</span><span id="L-88"><a href="#L-88"><span class="linenos">88</span></a>    <span class="c1"># reset the return value if it wasn&#39;t requested</span>
+</span><span id="L-89"><a href="#L-89"><span class="linenos">89</span></a>    <span class="k">if</span> <span class="ow">not</span> <span class="n">get_return</span><span class="p">:</span>
+</span><span id="L-90"><a href="#L-90"><span class="linenos">90</span></a>        <span class="n">return_value</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span id="L-91"><a href="#L-91"><span class="linenos">91</span></a>
+</span><span id="L-92"><a href="#L-92"><span class="linenos">92</span></a>    <span class="k">return</span> <span class="n">FancyTimeitResult</span><span class="p">(</span>
+</span><span id="L-93"><a href="#L-93"><span class="linenos">93</span></a>        <span class="n">timings</span><span class="o">=</span><span class="n">StatCounter</span><span class="p">(</span><span class="n">times</span><span class="p">),</span>
+</span><span id="L-94"><a href="#L-94"><span class="linenos">94</span></a>        <span class="n">return_value</span><span class="o">=</span><span class="n">return_value</span><span class="p">,</span>
+</span><span id="L-95"><a href="#L-95"><span class="linenos">95</span></a>        <span class="n">profile</span><span class="o">=</span><span class="n">profile</span><span class="p">,</span>
+</span><span id="L-96"><a href="#L-96"><span class="linenos">96</span></a>    <span class="p">)</span>
+</span></pre></div>
+
+
+                <br/>
+            </section>
+                <section id="FancyTimeitResult">
+                            <input id="FancyTimeitResult-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr class">
+            
+    <span class="def">class</span>
+    <span class="name">FancyTimeitResult</span><wbr>(<span class="base">typing.NamedTuple</span>):
+
+                <div class="source-button-container">
+            <label class="pdoc-button view-source-button" for="FancyTimeitResult-view-source"><span>View Source</span></label>
+            <div class="github-button-wrapper">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/main/muutils/timeit_fancy.py#L14-L19" target="_blank">
+                    <span>View on GitHub</span>
+                </a>
+            </div>
+        </div>
+
+    </div>
+    <a class="headerlink" href="#FancyTimeitResult"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="FancyTimeitResult-15"><a href="#FancyTimeitResult-15"><span class="linenos">15</span></a><span class="k">class</span> <span class="nc">FancyTimeitResult</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
+</span><span id="FancyTimeitResult-16"><a href="#FancyTimeitResult-16"><span class="linenos">16</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;return type of `timeit_fancy`&quot;&quot;&quot;</span>
+</span><span id="FancyTimeitResult-17"><a href="#FancyTimeitResult-17"><span class="linenos">17</span></a>
+</span><span id="FancyTimeitResult-18"><a href="#FancyTimeitResult-18"><span class="linenos">18</span></a>    <span class="n">timings</span><span class="p">:</span> <span class="n">StatCounter</span>
+</span><span id="FancyTimeitResult-19"><a href="#FancyTimeitResult-19"><span class="linenos">19</span></a>    <span class="n">return_value</span><span class="p">:</span> <span class="n">T</span>  <span class="c1"># type: ignore[valid-type]</span>
+</span><span id="FancyTimeitResult-20"><a href="#FancyTimeitResult-20"><span class="linenos">20</span></a>    <span class="n">profile</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">pstats</span><span class="o">.</span><span class="n">Stats</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span>
+</span></pre></div>
+
+
+            <div class="docstring"><p>return type of <code><a href="#timeit_fancy">timeit_fancy</a></code></p>
+</div>
+
+
+                            <div id="FancyTimeitResult.__init__" class="classattr">
+                                <div class="attr function">
+            
+        <span class="name">FancyTimeitResult</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">timings</span><span class="p">:</span> <span class="n">ForwardRef</span><span class="p">(</span><span class="s1">&#39;StatCounter&#39;</span><span class="p">)</span>,</span><span class="param">	<span class="n">return_value</span><span class="p">:</span> <span class="n">ForwardRef</span><span class="p">(</span><span class="s1">&#39;T&#39;</span><span class="p">)</span>,</span><span class="param">	<span class="n">profile</span><span class="p">:</span> <span class="n">ForwardRef</span><span class="p">(</span><span class="s1">&#39;Union[pstats.Stats, None]&#39;</span><span class="p">)</span></span>)</span>
+
+        
+    </div>
+    <a class="headerlink" href="#FancyTimeitResult.__init__"></a>
+    
+            <div class="docstring"><p>Create new instance of FancyTimeitResult(timings, return_value, profile)</p>
+</div>
+
+
+                            </div>
+                            <div id="FancyTimeitResult.timings" class="classattr">
+                                <div class="attr variable">
+            <span class="name">timings</span><span class="annotation">: <a href="statcounter.html#StatCounter">muutils.statcounter.StatCounter</a></span>
+
+        
+    </div>
+    <a class="headerlink" href="#FancyTimeitResult.timings"></a>
+    
+            <div class="docstring"><p>Alias for field number 0</p>
+</div>
+
+
+                            </div>
+                            <div id="FancyTimeitResult.return_value" class="classattr">
+                                <div class="attr variable">
+            <span class="name">return_value</span><span class="annotation">: ~T</span>
+
+        
+    </div>
+    <a class="headerlink" href="#FancyTimeitResult.return_value"></a>
+    
+            <div class="docstring"><p>Alias for field number 1</p>
+</div>
+
+
+                            </div>
+                            <div id="FancyTimeitResult.profile" class="classattr">
+                                <div class="attr variable">
+            <span class="name">profile</span><span class="annotation">: Optional[pstats.Stats]</span>
+
+        
+    </div>
+    <a class="headerlink" href="#FancyTimeitResult.profile"></a>
+    
+            <div class="docstring"><p>Alias for field number 2</p>
+</div>
+
+
+                            </div>
+                            <div class="inherited">
+                                <h5>Inherited Members</h5>
+                                <dl>
+                                    <div><dt>builtins.tuple</dt>
+                                <dd id="FancyTimeitResult.index" class="function">index</dd>
+                <dd id="FancyTimeitResult.count" class="function">count</dd>
+
+            </div>
+                                </dl>
+                            </div>
+                </section>
+                <section id="timeit_fancy">
+                            <input id="timeit_fancy-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr function">
+            
+        <span class="def">def</span>
+        <span class="name">timeit_fancy</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">cmd</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[],</span> <span class="o">~</span><span class="n">T</span><span class="p">]</span>,</span><span class="param">	<span class="n">setup</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Callable</span><span class="p">[[],</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">function</span> <span class="o">&lt;</span><span class="k">lambda</span><span class="o">&gt;&gt;</span>,</span><span class="param">	<span class="n">repeats</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">5</span>,</span><span class="param">	<span class="n">namespace</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">get_return</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>,</span><span class="param">	<span class="n">do_profiling</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span></span><span class="return-annotation">) -> <span class="n"><a href="#FancyTimeitResult">FancyTimeitResult</a></span>:</span></span>
+
+                <div class="source-button-container">
+            <label class="pdoc-button view-source-button" for="timeit_fancy-view-source"><span>View Source</span></label>
+            <div class="github-button-wrapper">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/main/muutils/timeit_fancy.py#L22-L96" target="_blank">
+                    <span>View on GitHub</span>
+                </a>
+            </div>
+        </div>
+
+    </div>
+    <a class="headerlink" href="#timeit_fancy"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="timeit_fancy-23"><a href="#timeit_fancy-23"><span class="linenos">23</span></a><span class="k">def</span> <span class="nf">timeit_fancy</span><span class="p">(</span>
+</span><span id="timeit_fancy-24"><a href="#timeit_fancy-24"><span class="linenos">24</span></a>    <span class="n">cmd</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[],</span> <span class="n">T</span><span class="p">],</span>
+</span><span id="timeit_fancy-25"><a href="#timeit_fancy-25"><span class="linenos">25</span></a>    <span class="n">setup</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Callable</span><span class="p">[[],</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="k">lambda</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+</span><span id="timeit_fancy-26"><a href="#timeit_fancy-26"><span class="linenos">26</span></a>    <span class="n">repeats</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span>
+</span><span id="timeit_fancy-27"><a href="#timeit_fancy-27"><span class="linenos">27</span></a>    <span class="n">namespace</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+</span><span id="timeit_fancy-28"><a href="#timeit_fancy-28"><span class="linenos">28</span></a>    <span class="n">get_return</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+</span><span id="timeit_fancy-29"><a href="#timeit_fancy-29"><span class="linenos">29</span></a>    <span class="n">do_profiling</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+</span><span id="timeit_fancy-30"><a href="#timeit_fancy-30"><span class="linenos">30</span></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FancyTimeitResult</span><span class="p">:</span>
+</span><span id="timeit_fancy-31"><a href="#timeit_fancy-31"><span class="linenos">31</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="timeit_fancy-32"><a href="#timeit_fancy-32"><span class="linenos">32</span></a><span class="sd">    Wrapper for `timeit` to get the fastest run of a callable with more customization options.</span>
+</span><span id="timeit_fancy-33"><a href="#timeit_fancy-33"><span class="linenos">33</span></a>
+</span><span id="timeit_fancy-34"><a href="#timeit_fancy-34"><span class="linenos">34</span></a><span class="sd">    Approximates the functionality of the %timeit magic or command line interface in a Python callable.</span>
+</span><span id="timeit_fancy-35"><a href="#timeit_fancy-35"><span class="linenos">35</span></a>
+</span><span id="timeit_fancy-36"><a href="#timeit_fancy-36"><span class="linenos">36</span></a><span class="sd">    # Parameters</span>
+</span><span id="timeit_fancy-37"><a href="#timeit_fancy-37"><span class="linenos">37</span></a><span class="sd">    - `cmd: Callable[[], T] | str`</span>
+</span><span id="timeit_fancy-38"><a href="#timeit_fancy-38"><span class="linenos">38</span></a><span class="sd">        The callable to time. If a string, it will be passed to `timeit.Timer` as the `stmt` argument.</span>
+</span><span id="timeit_fancy-39"><a href="#timeit_fancy-39"><span class="linenos">39</span></a><span class="sd">    - `setup: str`</span>
+</span><span id="timeit_fancy-40"><a href="#timeit_fancy-40"><span class="linenos">40</span></a><span class="sd">        The setup code to run before `cmd`. If a string, it will be passed to `timeit.Timer` as the `setup` argument.</span>
+</span><span id="timeit_fancy-41"><a href="#timeit_fancy-41"><span class="linenos">41</span></a><span class="sd">    - `repeats: int`</span>
+</span><span id="timeit_fancy-42"><a href="#timeit_fancy-42"><span class="linenos">42</span></a><span class="sd">        The number of times to run `cmd` to get a reliable measurement.</span>
+</span><span id="timeit_fancy-43"><a href="#timeit_fancy-43"><span class="linenos">43</span></a><span class="sd">    - `namespace: dict[str, Any]`</span>
+</span><span id="timeit_fancy-44"><a href="#timeit_fancy-44"><span class="linenos">44</span></a><span class="sd">        Passed to `timeit.Timer` constructor.</span>
+</span><span id="timeit_fancy-45"><a href="#timeit_fancy-45"><span class="linenos">45</span></a><span class="sd">        If `cmd` or `setup` use local or global variables, they must be passed here. See `timeit` documentation for details.</span>
+</span><span id="timeit_fancy-46"><a href="#timeit_fancy-46"><span class="linenos">46</span></a><span class="sd">    - `get_return: bool`</span>
+</span><span id="timeit_fancy-47"><a href="#timeit_fancy-47"><span class="linenos">47</span></a><span class="sd">        Whether to pass the value returned from `cmd`. If True, the return value will be appended in a tuple with execution time.</span>
+</span><span id="timeit_fancy-48"><a href="#timeit_fancy-48"><span class="linenos">48</span></a><span class="sd">        This is for speed and convenience so that `cmd` doesn&#39;t need to be run again in the calling scope if the return values are needed.</span>
+</span><span id="timeit_fancy-49"><a href="#timeit_fancy-49"><span class="linenos">49</span></a><span class="sd">        (default: `False`)</span>
+</span><span id="timeit_fancy-50"><a href="#timeit_fancy-50"><span class="linenos">50</span></a><span class="sd">    - `do_profiling: bool`</span>
+</span><span id="timeit_fancy-51"><a href="#timeit_fancy-51"><span class="linenos">51</span></a><span class="sd">        Whether to return a `pstats.Stats` object in addition to the time and return value.</span>
+</span><span id="timeit_fancy-52"><a href="#timeit_fancy-52"><span class="linenos">52</span></a><span class="sd">        (default: `False`)</span>
+</span><span id="timeit_fancy-53"><a href="#timeit_fancy-53"><span class="linenos">53</span></a>
+</span><span id="timeit_fancy-54"><a href="#timeit_fancy-54"><span class="linenos">54</span></a><span class="sd">    # Returns</span>
+</span><span id="timeit_fancy-55"><a href="#timeit_fancy-55"><span class="linenos">55</span></a><span class="sd">    `FancyTimeitResult`, which is a NamedTuple with the following fields:</span>
+</span><span id="timeit_fancy-56"><a href="#timeit_fancy-56"><span class="linenos">56</span></a><span class="sd">    - `time: float`</span>
+</span><span id="timeit_fancy-57"><a href="#timeit_fancy-57"><span class="linenos">57</span></a><span class="sd">        The time in seconds it took to run `cmd` the minimum number of times to get a reliable measurement.</span>
+</span><span id="timeit_fancy-58"><a href="#timeit_fancy-58"><span class="linenos">58</span></a><span class="sd">    - `return_value: T|None`</span>
+</span><span id="timeit_fancy-59"><a href="#timeit_fancy-59"><span class="linenos">59</span></a><span class="sd">        The return value of `cmd` if `get_return` is `True`, otherwise `None`.</span>
+</span><span id="timeit_fancy-60"><a href="#timeit_fancy-60"><span class="linenos">60</span></a><span class="sd">    - `profile: pstats.Stats|None`</span>
+</span><span id="timeit_fancy-61"><a href="#timeit_fancy-61"><span class="linenos">61</span></a><span class="sd">        A `pstats.Stats` object if `do_profiling` is `True`, otherwise `None`.</span>
+</span><span id="timeit_fancy-62"><a href="#timeit_fancy-62"><span class="linenos">62</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="timeit_fancy-63"><a href="#timeit_fancy-63"><span class="linenos">63</span></a>    <span class="n">timer</span><span class="p">:</span> <span class="n">timeit</span><span class="o">.</span><span class="n">Timer</span> <span class="o">=</span> <span class="n">timeit</span><span class="o">.</span><span class="n">Timer</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">setup</span><span class="p">,</span> <span class="nb">globals</span><span class="o">=</span><span class="n">namespace</span><span class="p">)</span>
+</span><span id="timeit_fancy-64"><a href="#timeit_fancy-64"><span class="linenos">64</span></a>
+</span><span id="timeit_fancy-65"><a href="#timeit_fancy-65"><span class="linenos">65</span></a>    <span class="c1"># Perform the timing</span>
+</span><span id="timeit_fancy-66"><a href="#timeit_fancy-66"><span class="linenos">66</span></a>    <span class="n">times</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="n">timer</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">repeats</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+</span><span id="timeit_fancy-67"><a href="#timeit_fancy-67"><span class="linenos">67</span></a>
+</span><span id="timeit_fancy-68"><a href="#timeit_fancy-68"><span class="linenos">68</span></a>    <span class="c1"># Optionally capture the return value</span>
+</span><span id="timeit_fancy-69"><a href="#timeit_fancy-69"><span class="linenos">69</span></a>    <span class="n">profile</span><span class="p">:</span> <span class="n">pstats</span><span class="o">.</span><span class="n">Stats</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span id="timeit_fancy-70"><a href="#timeit_fancy-70"><span class="linenos">70</span></a>
+</span><span id="timeit_fancy-71"><a href="#timeit_fancy-71"><span class="linenos">71</span></a>    <span class="n">return_value</span><span class="p">:</span> <span class="n">T</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span id="timeit_fancy-72"><a href="#timeit_fancy-72"><span class="linenos">72</span></a>    <span class="k">if</span> <span class="n">get_return</span> <span class="ow">or</span> <span class="n">do_profiling</span><span class="p">:</span>
+</span><span id="timeit_fancy-73"><a href="#timeit_fancy-73"><span class="linenos">73</span></a>        <span class="c1"># Optionally perform profiling</span>
+</span><span id="timeit_fancy-74"><a href="#timeit_fancy-74"><span class="linenos">74</span></a>        <span class="k">if</span> <span class="n">do_profiling</span><span class="p">:</span>
+</span><span id="timeit_fancy-75"><a href="#timeit_fancy-75"><span class="linenos">75</span></a>            <span class="n">profiler</span> <span class="o">=</span> <span class="n">cProfile</span><span class="o">.</span><span class="n">Profile</span><span class="p">()</span>
+</span><span id="timeit_fancy-76"><a href="#timeit_fancy-76"><span class="linenos">76</span></a>            <span class="n">profiler</span><span class="o">.</span><span class="n">enable</span><span class="p">()</span>
+</span><span id="timeit_fancy-77"><a href="#timeit_fancy-77"><span class="linenos">77</span></a>
+</span><span id="timeit_fancy-78"><a href="#timeit_fancy-78"><span class="linenos">78</span></a>        <span class="k">try</span><span class="p">:</span>
+</span><span id="timeit_fancy-79"><a href="#timeit_fancy-79"><span class="linenos">79</span></a>            <span class="n">return_value</span> <span class="o">=</span> <span class="n">cmd</span><span class="p">()</span>
+</span><span id="timeit_fancy-80"><a href="#timeit_fancy-80"><span class="linenos">80</span></a>        <span class="k">except</span> <span class="ne">TypeError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+</span><span id="timeit_fancy-81"><a href="#timeit_fancy-81"><span class="linenos">81</span></a>            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+</span><span id="timeit_fancy-82"><a href="#timeit_fancy-82"><span class="linenos">82</span></a>                <span class="sa">f</span><span class="s2">&quot;Failed to get return value from `cmd` due to error (probably passing a string). will return `return_value=None`</span><span class="se">\n</span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+</span><span id="timeit_fancy-83"><a href="#timeit_fancy-83"><span class="linenos">83</span></a>            <span class="p">)</span>
+</span><span id="timeit_fancy-84"><a href="#timeit_fancy-84"><span class="linenos">84</span></a>
+</span><span id="timeit_fancy-85"><a href="#timeit_fancy-85"><span class="linenos">85</span></a>        <span class="k">if</span> <span class="n">do_profiling</span><span class="p">:</span>
+</span><span id="timeit_fancy-86"><a href="#timeit_fancy-86"><span class="linenos">86</span></a>            <span class="n">profiler</span><span class="o">.</span><span class="n">disable</span><span class="p">()</span>
+</span><span id="timeit_fancy-87"><a href="#timeit_fancy-87"><span class="linenos">87</span></a>            <span class="n">profile</span> <span class="o">=</span> <span class="n">pstats</span><span class="o">.</span><span class="n">Stats</span><span class="p">(</span><span class="n">profiler</span><span class="p">)</span><span class="o">.</span><span class="n">strip_dirs</span><span class="p">()</span><span class="o">.</span><span class="n">sort_stats</span><span class="p">(</span><span class="s2">&quot;cumulative&quot;</span><span class="p">)</span>
+</span><span id="timeit_fancy-88"><a href="#timeit_fancy-88"><span class="linenos">88</span></a>
+</span><span id="timeit_fancy-89"><a href="#timeit_fancy-89"><span class="linenos">89</span></a>    <span class="c1"># reset the return value if it wasn&#39;t requested</span>
+</span><span id="timeit_fancy-90"><a href="#timeit_fancy-90"><span class="linenos">90</span></a>    <span class="k">if</span> <span class="ow">not</span> <span class="n">get_return</span><span class="p">:</span>
+</span><span id="timeit_fancy-91"><a href="#timeit_fancy-91"><span class="linenos">91</span></a>        <span class="n">return_value</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span id="timeit_fancy-92"><a href="#timeit_fancy-92"><span class="linenos">92</span></a>
+</span><span id="timeit_fancy-93"><a href="#timeit_fancy-93"><span class="linenos">93</span></a>    <span class="k">return</span> <span class="n">FancyTimeitResult</span><span class="p">(</span>
+</span><span id="timeit_fancy-94"><a href="#timeit_fancy-94"><span class="linenos">94</span></a>        <span class="n">timings</span><span class="o">=</span><span class="n">StatCounter</span><span class="p">(</span><span class="n">times</span><span class="p">),</span>
+</span><span id="timeit_fancy-95"><a href="#timeit_fancy-95"><span class="linenos">95</span></a>        <span class="n">return_value</span><span class="o">=</span><span class="n">return_value</span><span class="p">,</span>
+</span><span id="timeit_fancy-96"><a href="#timeit_fancy-96"><span class="linenos">96</span></a>        <span class="n">profile</span><span class="o">=</span><span class="n">profile</span><span class="p">,</span>
+</span><span id="timeit_fancy-97"><a href="#timeit_fancy-97"><span class="linenos">97</span></a>    <span class="p">)</span>
+</span></pre></div>
+
+
+            <div class="docstring"><p>Wrapper for <code>timeit</code> to get the fastest run of a callable with more customization options.</p>
+
+<p>Approximates the functionality of the %timeit magic or command line interface in a Python callable.</p>
+
+<h1 id="parameters">Parameters</h1>
+
+<ul>
+<li><code>cmd: Callable[[], T] | str</code>
+The callable to time. If a string, it will be passed to <code>timeit.Timer</code> as the <code>stmt</code> argument.</li>
+<li><code>setup: str</code>
+The setup code to run before <code>cmd</code>. If a string, it will be passed to <code>timeit.Timer</code> as the <code>setup</code> argument.</li>
+<li><code>repeats: int</code>
+The number of times to run <code>cmd</code> to get a reliable measurement.</li>
+<li><code>namespace: dict[str, Any]</code>
+Passed to <code>timeit.Timer</code> constructor.
+If <code>cmd</code> or <code>setup</code> use local or global variables, they must be passed here. See <code>timeit</code> documentation for details.</li>
+<li><code>get_return: bool</code>
+Whether to pass the value returned from <code>cmd</code>. If True, the return value will be appended in a tuple with execution time.
+This is for speed and convenience so that <code>cmd</code> doesn't need to be run again in the calling scope if the return values are needed.
+(default: <code>False</code>)</li>
+<li><code>do_profiling: bool</code>
+Whether to return a <code>pstats.Stats</code> object in addition to the time and return value.
+(default: <code>False</code>)</li>
+</ul>
+
+<h1 id="returns">Returns</h1>
+
+<p><code><a href="#FancyTimeitResult">FancyTimeitResult</a></code>, which is a NamedTuple with the following fields:</p>
+
+<ul>
+<li><code>time: float</code>
+The time in seconds it took to run <code>cmd</code> the minimum number of times to get a reliable measurement.</li>
+<li><code>return_value: T|None</code>
+The return value of <code>cmd</code> if <code>get_return</code> is <code>True</code>, otherwise <code>None</code>.</li>
+<li><code>profile: pstats.Stats|None</code>
+A <code>pstats.Stats</code> object if <code>do_profiling</code> is <code>True</code>, otherwise <code>None</code>.</li>
+</ul>
+</div>
+
+
+                </section>
+    </main>
+<script>
+    function escapeHTML(html) {
+        return document.createElement('div').appendChild(document.createTextNode(html)).parentNode.innerHTML;
+    }
+
+    const originalContent = document.querySelector("main.pdoc");
+    let currentContent = originalContent;
+
+    function setContent(innerHTML) {
+        let elem;
+        if (innerHTML) {
+            elem = document.createElement("main");
+            elem.classList.add("pdoc");
+            elem.innerHTML = innerHTML;
+        } else {
+            elem = originalContent;
+        }
+        if (currentContent !== elem) {
+            currentContent.replaceWith(elem);
+            currentContent = elem;
+        }
+    }
+
+    function getSearchTerm() {
+        return (new URL(window.location)).searchParams.get("search");
+    }
+
+    const searchBox = document.querySelector(".pdoc input[type=search]");
+    searchBox.addEventListener("input", function () {
+        let url = new URL(window.location);
+        if (searchBox.value.trim()) {
+            url.hash = "";
+            url.searchParams.set("search", searchBox.value);
+        } else {
+            url.searchParams.delete("search");
+        }
+        history.replaceState("", "", url.toString());
+        onInput();
+    });
+    window.addEventListener("popstate", onInput);
+
+
+    let search, searchErr;
+
+    async function initialize() {
+        try {
+            search = await new Promise((resolve, reject) => {
+                const script = document.createElement("script");
+                script.type = "text/javascript";
+                script.async = true;
+                script.onload = () => resolve(window.pdocSearch);
+                script.onerror = (e) => reject(e);
+                script.src = "../search.js";
+                document.getElementsByTagName("head")[0].appendChild(script);
+            });
+        } catch (e) {
+            console.error("Cannot fetch pdoc search index");
+            searchErr = "Cannot fetch search index.";
+        }
+        onInput();
+
+        document.querySelector("nav.pdoc").addEventListener("click", e => {
+            if (e.target.hash) {
+                searchBox.value = "";
+                searchBox.dispatchEvent(new Event("input"));
+            }
+        });
+    }
+
+    function onInput() {
+        setContent((() => {
+            const term = getSearchTerm();
+            if (!term) {
+                return null
+            }
+            if (searchErr) {
+                return `<h3>Error: ${searchErr}</h3>`
+            }
+            if (!search) {
+                return "<h3>Searching...</h3>"
+            }
+
+            window.scrollTo({top: 0, left: 0, behavior: 'auto'});
+
+            const results = search(term);
+
+            let html;
+            if (results.length === 0) {
+                html = `No search results for '${escapeHTML(term)}'.`
+            } else {
+                html = `<h4>${results.length} search result${results.length > 1 ? "s" : ""} for '${escapeHTML(term)}'.</h4>`;
+            }
+            for (let result of results.slice(0, 10)) {
+                let doc = result.doc;
+                let url = `../${doc.modulename.replaceAll(".", "/")}.html`;
+                if (doc.qualname) {
+                    url += `#${doc.qualname}`;
+                }
+
+                let heading;
+                switch (result.doc.kind) {
+                    case "function":
+                        if (doc.fullname.endsWith(".__init__")) {
+                            heading = `<span class="name">${doc.fullname.replace(/\.__init__$/, "")}</span>${doc.signature}`;
+                        } else {
+                            heading = `<span class="def">${doc.funcdef}</span> <span class="name">${doc.fullname}</span>${doc.signature}`;
+                        }
+                        break;
+                    case "class":
+                        heading = `<span class="def">class</span> <span class="name">${doc.fullname}</span>`;
+                        if (doc.bases)
+                            heading += `<wbr>(<span class="base">${doc.bases}</span>)`;
+                        heading += `:`;
+                        break;
+                    case "variable":
+                        heading = `<span class="name">${doc.fullname}</span>`;
+                        if (doc.annotation)
+                            heading += `<span class="annotation">${doc.annotation}</span>`;
+                        if (doc.default_value)
+                            heading += `<span class="default_value"> = ${doc.default_value}</span>`;
+                        break;
+                    default:
+                        heading = `<span class="name">${doc.fullname}</span>`;
+                        break;
+                }
+                html += `
+                        <section class="search-result">
+                        <a href="${url}" class="attr ${doc.kind}">${heading}</a>
+                        <div class="docstring">${doc.doc}</div>
+                        </section>
+                    `;
+
+            }
+            return html;
+        })());
+    }
+
+    if (getSearchTerm()) {
+        initialize();
+        searchBox.value = getSearchTerm();
+        onInput();
+    } else {
+        searchBox.addEventListener("focus", initialize, {once: true});
+    }
+
+    searchBox.addEventListener("keydown", e => {
+        if (["ArrowDown", "ArrowUp", "Enter"].includes(e.key)) {
+            let focused = currentContent.querySelector(".search-result.focused");
+            if (!focused) {
+                currentContent.querySelector(".search-result").classList.add("focused");
+            } else if (
+                e.key === "ArrowDown"
+                && focused.nextElementSibling
+                && focused.nextElementSibling.classList.contains("search-result")
+            ) {
+                focused.classList.remove("focused");
+                focused.nextElementSibling.classList.add("focused");
+                focused.nextElementSibling.scrollIntoView({
+                    behavior: "smooth",
+                    block: "nearest",
+                    inline: "nearest"
+                });
+            } else if (
+                e.key === "ArrowUp"
+                && focused.previousElementSibling
+                && focused.previousElementSibling.classList.contains("search-result")
+            ) {
+                focused.classList.remove("focused");
+                focused.previousElementSibling.classList.add("focused");
+                focused.previousElementSibling.scrollIntoView({
+                    behavior: "smooth",
+                    block: "nearest",
+                    inline: "nearest"
+                });
+            } else if (
+                e.key === "Enter"
+            ) {
+                focused.querySelector("a").click();
+            }
+        }
+    });
+</script></body>
+</html>

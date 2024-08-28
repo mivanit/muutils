@@ -1,0 +1,738 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="pdoc 14.6.1"/>
+    <title>muutils.misc.classes API documentation</title>
+<link rel="stylesheet" href="../../resources/bootstrap-reboot.min.css"><link rel="stylesheet" href="../../resources/syntax-highlighting.css"><link rel="stylesheet" href="../../resources/theme.css"><link rel="stylesheet" href="../../resources/layout.css"><link rel="stylesheet" href="../../resources/content.css"><link rel="stylesheet" href="../../resources/custom.css"><script>
+    window.MathJax = {
+        tex: {
+            inlineMath: [['$', '$'], ['\\(', '\\)']]
+        }
+    };
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<script>
+    /* Re-invoke MathJax when DOM content changes, for example during search. */
+    document.addEventListener("DOMContentLoaded", () => {
+        new MutationObserver(() => MathJax.typeset()).observe(
+            document.querySelector("main.pdoc").parentNode,
+            {childList: true}
+        );
+    })
+</script>
+<style>
+    mjx-container {
+        overflow-x: auto;
+        overflow-y: hidden;
+    }
+</style><style>
+    .pdoc .mermaid-pre {
+        border: none;
+        background: none;
+    }
+</style>
+<script type="module" defer>
+    import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs";
+
+    /* Re-invoke Mermaid when DOM content changes, for example during search. */
+    document.addEventListener("DOMContentLoaded", () => {
+        new MutationObserver(() => mermaid.run()).observe(
+            document.querySelector("main.pdoc").parentNode,
+            {childList: true}
+        );
+    })
+</script></head>
+<body>
+    <nav class="pdoc">
+        <label id="navtoggle" for="togglestate" class="pdoc-button">
+            <img src="resources/navtoggle.svg" alt="Toggle navigation"> 
+        </label>
+        <input id="togglestate" type="checkbox" aria-hidden="true" tabindex="-1">
+        <div>            <a class="pdoc-button module-list-button" href="../misc.html">
+                <img src="resources/box-arrow-in-left.svg" alt="Back to parent module"/>
+                &nbsp;muutils.misc</a>
+
+
+            <input type="search" placeholder="Search..." role="searchbox" aria-label="search"
+                   pattern=".+" required>
+
+
+
+            <h2>API Documentation</h2>
+                <ul class="memberlist">
+            <li>
+                    <a class="function" href="#is_abstract">is_abstract</a>
+            </li>
+            <li>
+                    <a class="function" href="#get_all_subclasses">get_all_subclasses</a>
+            </li>
+            <li>
+                    <a class="function" href="#isinstance_by_type_name">isinstance_by_type_name</a>
+            </li>
+            <li>
+                    <a class="class" href="#IsDataclass">IsDataclass</a>
+                            <ul class="memberlist">
+                        <li>
+                                <a class="function" href="#IsDataclass.__init__">IsDataclass</a>
+                        </li>
+                </ul>
+
+            </li>
+            <li>
+                    <a class="function" href="#get_hashable_eq_attrs">get_hashable_eq_attrs</a>
+            </li>
+            <li>
+                    <a class="function" href="#dataclass_set_equals">dataclass_set_equals</a>
+            </li>
+    </ul>
+
+
+
+        <a class="attribution" title="pdoc: Python API documentation generator" href="https://pdoc.dev" target="_blank">
+            built with <span class="visually-hidden">pdoc</span>
+            <img src="resources/pdoc-logo.svg" alt="pdoc logo"/>
+        </a>
+</div>
+    </nav>
+    <main class="pdoc">
+            <section class="module-info">
+                        <a class="pdoc-button git-button" href="https://github.com/mivanit/muutils/blob/main/muutils/misc/classes.py">View Source on GitHub</a>
+                    <h1 class="modulename">
+<a href="./../../muutils.html">muutils</a><wbr>.<a href="./../misc.html">misc</a><wbr>.classes    </h1>
+
+                
+                        <input id="mod-classes-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+
+                        <div class="source-button-container">
+            <label class="pdoc-button view-source-button" for="mod-classes-view-source"><span>View Source</span></label>
+            <div class="github-button-wrapper">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/main/muutils/misc/classes.py#L0-L96" target="_blank">
+                    <span>View on GitHub</span>
+                </a>
+            </div>
+        </div>
+
+                <br/>
+                        <div class="pdoc-code codehilite"><pre><span></span><span id="L-1"><a href="#L-1"><span class="linenos"> 1</span></a><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+</span><span id="L-2"><a href="#L-2"><span class="linenos"> 2</span></a>
+</span><span id="L-3"><a href="#L-3"><span class="linenos"> 3</span></a><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="p">(</span>
+</span><span id="L-4"><a href="#L-4"><span class="linenos"> 4</span></a>    <span class="n">Iterable</span><span class="p">,</span>
+</span><span id="L-5"><a href="#L-5"><span class="linenos"> 5</span></a>    <span class="n">Any</span><span class="p">,</span>
+</span><span id="L-6"><a href="#L-6"><span class="linenos"> 6</span></a>    <span class="n">Protocol</span><span class="p">,</span>
+</span><span id="L-7"><a href="#L-7"><span class="linenos"> 7</span></a>    <span class="n">ClassVar</span><span class="p">,</span>
+</span><span id="L-8"><a href="#L-8"><span class="linenos"> 8</span></a>    <span class="n">runtime_checkable</span><span class="p">,</span>
+</span><span id="L-9"><a href="#L-9"><span class="linenos"> 9</span></a><span class="p">)</span>
+</span><span id="L-10"><a href="#L-10"><span class="linenos">10</span></a>
+</span><span id="L-11"><a href="#L-11"><span class="linenos">11</span></a><span class="kn">from</span> <span class="nn">muutils.misc.sequence</span> <span class="kn">import</span> <span class="n">flatten</span>
+</span><span id="L-12"><a href="#L-12"><span class="linenos">12</span></a>
+</span><span id="L-13"><a href="#L-13"><span class="linenos">13</span></a>
+</span><span id="L-14"><a href="#L-14"><span class="linenos">14</span></a><span class="k">def</span> <span class="nf">is_abstract</span><span class="p">(</span><span class="bp">cls</span><span class="p">:</span> <span class="nb">type</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</span><span id="L-15"><a href="#L-15"><span class="linenos">15</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-16"><a href="#L-16"><span class="linenos">16</span></a><span class="sd">    Returns if a class is abstract.</span>
+</span><span id="L-17"><a href="#L-17"><span class="linenos">17</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="L-18"><a href="#L-18"><span class="linenos">18</span></a>    <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="s2">&quot;__abstractmethods__&quot;</span><span class="p">):</span>
+</span><span id="L-19"><a href="#L-19"><span class="linenos">19</span></a>        <span class="k">return</span> <span class="kc">False</span>  <span class="c1"># an ordinary class</span>
+</span><span id="L-20"><a href="#L-20"><span class="linenos">20</span></a>    <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">__abstractmethods__</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+</span><span id="L-21"><a href="#L-21"><span class="linenos">21</span></a>        <span class="k">return</span> <span class="kc">False</span>  <span class="c1"># a concrete implementation of an abstract class</span>
+</span><span id="L-22"><a href="#L-22"><span class="linenos">22</span></a>    <span class="k">else</span><span class="p">:</span>
+</span><span id="L-23"><a href="#L-23"><span class="linenos">23</span></a>        <span class="k">return</span> <span class="kc">True</span>  <span class="c1"># an abstract class</span>
+</span><span id="L-24"><a href="#L-24"><span class="linenos">24</span></a>
+</span><span id="L-25"><a href="#L-25"><span class="linenos">25</span></a>
+</span><span id="L-26"><a href="#L-26"><span class="linenos">26</span></a><span class="k">def</span> <span class="nf">get_all_subclasses</span><span class="p">(</span><span class="n">class_</span><span class="p">:</span> <span class="nb">type</span><span class="p">,</span> <span class="n">include_self</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">set</span><span class="p">[</span><span class="nb">type</span><span class="p">]:</span>
+</span><span id="L-27"><a href="#L-27"><span class="linenos">27</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-28"><a href="#L-28"><span class="linenos">28</span></a><span class="sd">    Returns a set containing all child classes in the subclass graph of `class_`.</span>
+</span><span id="L-29"><a href="#L-29"><span class="linenos">29</span></a><span class="sd">    I.e., includes subclasses of subclasses, etc.</span>
+</span><span id="L-30"><a href="#L-30"><span class="linenos">30</span></a>
+</span><span id="L-31"><a href="#L-31"><span class="linenos">31</span></a><span class="sd">    # Parameters</span>
+</span><span id="L-32"><a href="#L-32"><span class="linenos">32</span></a><span class="sd">    - `include_self`: Whether to include `class_` itself in the returned set</span>
+</span><span id="L-33"><a href="#L-33"><span class="linenos">33</span></a><span class="sd">    - `class_`: Superclass</span>
+</span><span id="L-34"><a href="#L-34"><span class="linenos">34</span></a>
+</span><span id="L-35"><a href="#L-35"><span class="linenos">35</span></a><span class="sd">    # Development</span>
+</span><span id="L-36"><a href="#L-36"><span class="linenos">36</span></a><span class="sd">    Since most class hierarchies are small, the inefficiencies of the existing recursive implementation aren&#39;t problematic.</span>
+</span><span id="L-37"><a href="#L-37"><span class="linenos">37</span></a><span class="sd">    It might be valuable to refactor with memoization if the need arises to use this function on a very large class hierarchy.</span>
+</span><span id="L-38"><a href="#L-38"><span class="linenos">38</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="L-39"><a href="#L-39"><span class="linenos">39</span></a>    <span class="n">subs</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="nb">type</span><span class="p">]</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span>
+</span><span id="L-40"><a href="#L-40"><span class="linenos">40</span></a>        <span class="n">flatten</span><span class="p">(</span>
+</span><span id="L-41"><a href="#L-41"><span class="linenos">41</span></a>            <span class="n">get_all_subclasses</span><span class="p">(</span><span class="n">sub</span><span class="p">,</span> <span class="n">include_self</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span id="L-42"><a href="#L-42"><span class="linenos">42</span></a>            <span class="k">for</span> <span class="n">sub</span> <span class="ow">in</span> <span class="n">class_</span><span class="o">.</span><span class="n">__subclasses__</span><span class="p">()</span>
+</span><span id="L-43"><a href="#L-43"><span class="linenos">43</span></a>            <span class="k">if</span> <span class="n">sub</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+</span><span id="L-44"><a href="#L-44"><span class="linenos">44</span></a>        <span class="p">)</span>
+</span><span id="L-45"><a href="#L-45"><span class="linenos">45</span></a>    <span class="p">)</span>
+</span><span id="L-46"><a href="#L-46"><span class="linenos">46</span></a>    <span class="k">if</span> <span class="n">include_self</span><span class="p">:</span>
+</span><span id="L-47"><a href="#L-47"><span class="linenos">47</span></a>        <span class="n">subs</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">class_</span><span class="p">)</span>
+</span><span id="L-48"><a href="#L-48"><span class="linenos">48</span></a>    <span class="k">return</span> <span class="n">subs</span>
+</span><span id="L-49"><a href="#L-49"><span class="linenos">49</span></a>
+</span><span id="L-50"><a href="#L-50"><span class="linenos">50</span></a>
+</span><span id="L-51"><a href="#L-51"><span class="linenos">51</span></a><span class="k">def</span> <span class="nf">isinstance_by_type_name</span><span class="p">(</span><span class="n">o</span><span class="p">:</span> <span class="nb">object</span><span class="p">,</span> <span class="n">type_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+</span><span id="L-52"><a href="#L-52"><span class="linenos">52</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Behaves like stdlib `isinstance` except it accepts a string representation of the type rather than the type itself.</span>
+</span><span id="L-53"><a href="#L-53"><span class="linenos">53</span></a><span class="sd">    This is a hacky function intended to circumvent the need to import a type into a module.</span>
+</span><span id="L-54"><a href="#L-54"><span class="linenos">54</span></a><span class="sd">    It is susceptible to type name collisions.</span>
+</span><span id="L-55"><a href="#L-55"><span class="linenos">55</span></a>
+</span><span id="L-56"><a href="#L-56"><span class="linenos">56</span></a><span class="sd">    # Parameters</span>
+</span><span id="L-57"><a href="#L-57"><span class="linenos">57</span></a><span class="sd">    `o`: Object (not the type itself) whose type to interrogate</span>
+</span><span id="L-58"><a href="#L-58"><span class="linenos">58</span></a><span class="sd">    `type_name`: The string returned by `type_.__name__`.</span>
+</span><span id="L-59"><a href="#L-59"><span class="linenos">59</span></a><span class="sd">    Generic types are not supported, only types that would appear in `type_.__mro__`.</span>
+</span><span id="L-60"><a href="#L-60"><span class="linenos">60</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="L-61"><a href="#L-61"><span class="linenos">61</span></a>    <span class="k">return</span> <span class="n">type_name</span> <span class="ow">in</span> <span class="p">{</span><span class="n">s</span><span class="o">.</span><span class="vm">__name__</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">type</span><span class="p">(</span><span class="n">o</span><span class="p">)</span><span class="o">.</span><span class="vm">__mro__</span><span class="p">}</span>
+</span><span id="L-62"><a href="#L-62"><span class="linenos">62</span></a>
+</span><span id="L-63"><a href="#L-63"><span class="linenos">63</span></a>
+</span><span id="L-64"><a href="#L-64"><span class="linenos">64</span></a><span class="c1"># dataclass magic</span>
+</span><span id="L-65"><a href="#L-65"><span class="linenos">65</span></a><span class="c1"># --------------------------------------------------------------------------------</span>
+</span><span id="L-66"><a href="#L-66"><span class="linenos">66</span></a>
+</span><span id="L-67"><a href="#L-67"><span class="linenos">67</span></a>
+</span><span id="L-68"><a href="#L-68"><span class="linenos">68</span></a><span class="nd">@runtime_checkable</span>
+</span><span id="L-69"><a href="#L-69"><span class="linenos">69</span></a><span class="k">class</span> <span class="nc">IsDataclass</span><span class="p">(</span><span class="n">Protocol</span><span class="p">):</span>
+</span><span id="L-70"><a href="#L-70"><span class="linenos">70</span></a>    <span class="c1"># Generic type for any dataclass instance</span>
+</span><span id="L-71"><a href="#L-71"><span class="linenos">71</span></a>    <span class="c1"># https://stackoverflow.com/questions/54668000/type-hint-for-an-instance-of-a-non-specific-dataclass</span>
+</span><span id="L-72"><a href="#L-72"><span class="linenos">72</span></a>    <span class="n">__dataclass_fields__</span><span class="p">:</span> <span class="n">ClassVar</span><span class="p">[</span><span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span>
+</span><span id="L-73"><a href="#L-73"><span class="linenos">73</span></a>
+</span><span id="L-74"><a href="#L-74"><span class="linenos">74</span></a>
+</span><span id="L-75"><a href="#L-75"><span class="linenos">75</span></a><span class="k">def</span> <span class="nf">get_hashable_eq_attrs</span><span class="p">(</span><span class="n">dc</span><span class="p">:</span> <span class="n">IsDataclass</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Any</span><span class="p">]:</span>
+</span><span id="L-76"><a href="#L-76"><span class="linenos">76</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns a tuple of all fields used for equality comparison, including the type of the dataclass itself.</span>
+</span><span id="L-77"><a href="#L-77"><span class="linenos">77</span></a><span class="sd">    The type is included to preserve the unequal equality behavior of instances of different dataclasses whose fields are identical.</span>
+</span><span id="L-78"><a href="#L-78"><span class="linenos">78</span></a><span class="sd">    Essentially used to generate a hashable dataclass representation for equality comparison even if it&#39;s not frozen.</span>
+</span><span id="L-79"><a href="#L-79"><span class="linenos">79</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="L-80"><a href="#L-80"><span class="linenos">80</span></a>    <span class="k">return</span> <span class="o">*</span><span class="p">(</span>
+</span><span id="L-81"><a href="#L-81"><span class="linenos">81</span></a>        <span class="nb">getattr</span><span class="p">(</span><span class="n">dc</span><span class="p">,</span> <span class="n">fld</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+</span><span id="L-82"><a href="#L-82"><span class="linenos">82</span></a>        <span class="k">for</span> <span class="n">fld</span> <span class="ow">in</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">compare</span><span class="p">,</span> <span class="n">dc</span><span class="o">.</span><span class="n">__dataclass_fields__</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+</span><span id="L-83"><a href="#L-83"><span class="linenos">83</span></a>    <span class="p">),</span> <span class="nb">type</span><span class="p">(</span><span class="n">dc</span><span class="p">)</span>
+</span><span id="L-84"><a href="#L-84"><span class="linenos">84</span></a>
+</span><span id="L-85"><a href="#L-85"><span class="linenos">85</span></a>
+</span><span id="L-86"><a href="#L-86"><span class="linenos">86</span></a><span class="k">def</span> <span class="nf">dataclass_set_equals</span><span class="p">(</span>
+</span><span id="L-87"><a href="#L-87"><span class="linenos">87</span></a>    <span class="n">coll1</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">IsDataclass</span><span class="p">],</span> <span class="n">coll2</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">IsDataclass</span><span class="p">]</span>
+</span><span id="L-88"><a href="#L-88"><span class="linenos">88</span></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</span><span id="L-89"><a href="#L-89"><span class="linenos">89</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Compares 2 collections of dataclass instances as if they were sets.</span>
+</span><span id="L-90"><a href="#L-90"><span class="linenos">90</span></a><span class="sd">    Duplicates are ignored in the same manner as a set.</span>
+</span><span id="L-91"><a href="#L-91"><span class="linenos">91</span></a><span class="sd">    Unfrozen dataclasses can&#39;t be placed in sets since they&#39;re not hashable.</span>
+</span><span id="L-92"><a href="#L-92"><span class="linenos">92</span></a><span class="sd">    Collections of them may be compared using this function.</span>
+</span><span id="L-93"><a href="#L-93"><span class="linenos">93</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="L-94"><a href="#L-94"><span class="linenos">94</span></a>
+</span><span id="L-95"><a href="#L-95"><span class="linenos">95</span></a>    <span class="k">return</span> <span class="p">{</span><span class="n">get_hashable_eq_attrs</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">coll1</span><span class="p">}</span> <span class="o">==</span> <span class="p">{</span>
+</span><span id="L-96"><a href="#L-96"><span class="linenos">96</span></a>        <span class="n">get_hashable_eq_attrs</span><span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">coll2</span>
+</span><span id="L-97"><a href="#L-97"><span class="linenos">97</span></a>    <span class="p">}</span>
+</span></pre></div>
+
+
+                <br/>
+            </section>
+                <section id="is_abstract">
+                            <input id="is_abstract-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr function">
+            
+        <span class="def">def</span>
+        <span class="name">is_abstract</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">cls</span><span class="p">:</span> <span class="nb">type</span></span><span class="return-annotation">) -> <span class="nb">bool</span>:</span></span>
+
+                <div class="source-button-container">
+            <label class="pdoc-button view-source-button" for="is_abstract-view-source"><span>View Source</span></label>
+            <div class="github-button-wrapper">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/main/muutils/misc/classes.py#L14-L23" target="_blank">
+                    <span>View on GitHub</span>
+                </a>
+            </div>
+        </div>
+
+    </div>
+    <a class="headerlink" href="#is_abstract"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="is_abstract-15"><a href="#is_abstract-15"><span class="linenos">15</span></a><span class="k">def</span> <span class="nf">is_abstract</span><span class="p">(</span><span class="bp">cls</span><span class="p">:</span> <span class="nb">type</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</span><span id="is_abstract-16"><a href="#is_abstract-16"><span class="linenos">16</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="is_abstract-17"><a href="#is_abstract-17"><span class="linenos">17</span></a><span class="sd">    Returns if a class is abstract.</span>
+</span><span id="is_abstract-18"><a href="#is_abstract-18"><span class="linenos">18</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="is_abstract-19"><a href="#is_abstract-19"><span class="linenos">19</span></a>    <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="s2">&quot;__abstractmethods__&quot;</span><span class="p">):</span>
+</span><span id="is_abstract-20"><a href="#is_abstract-20"><span class="linenos">20</span></a>        <span class="k">return</span> <span class="kc">False</span>  <span class="c1"># an ordinary class</span>
+</span><span id="is_abstract-21"><a href="#is_abstract-21"><span class="linenos">21</span></a>    <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">__abstractmethods__</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+</span><span id="is_abstract-22"><a href="#is_abstract-22"><span class="linenos">22</span></a>        <span class="k">return</span> <span class="kc">False</span>  <span class="c1"># a concrete implementation of an abstract class</span>
+</span><span id="is_abstract-23"><a href="#is_abstract-23"><span class="linenos">23</span></a>    <span class="k">else</span><span class="p">:</span>
+</span><span id="is_abstract-24"><a href="#is_abstract-24"><span class="linenos">24</span></a>        <span class="k">return</span> <span class="kc">True</span>  <span class="c1"># an abstract class</span>
+</span></pre></div>
+
+
+            <div class="docstring"><p>Returns if a class is abstract.</p>
+</div>
+
+
+                </section>
+                <section id="get_all_subclasses">
+                            <input id="get_all_subclasses-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr function">
+            
+        <span class="def">def</span>
+        <span class="name">get_all_subclasses</span><span class="signature pdoc-code condensed">(<span class="param"><span class="n">class_</span><span class="p">:</span> <span class="nb">type</span>, </span><span class="param"><span class="n">include_self</span><span class="o">=</span><span class="kc">False</span></span><span class="return-annotation">) -> <span class="nb">set</span><span class="p">[</span><span class="nb">type</span><span class="p">]</span>:</span></span>
+
+                <div class="source-button-container">
+            <label class="pdoc-button view-source-button" for="get_all_subclasses-view-source"><span>View Source</span></label>
+            <div class="github-button-wrapper">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/main/muutils/misc/classes.py#L26-L48" target="_blank">
+                    <span>View on GitHub</span>
+                </a>
+            </div>
+        </div>
+
+    </div>
+    <a class="headerlink" href="#get_all_subclasses"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="get_all_subclasses-27"><a href="#get_all_subclasses-27"><span class="linenos">27</span></a><span class="k">def</span> <span class="nf">get_all_subclasses</span><span class="p">(</span><span class="n">class_</span><span class="p">:</span> <span class="nb">type</span><span class="p">,</span> <span class="n">include_self</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">set</span><span class="p">[</span><span class="nb">type</span><span class="p">]:</span>
+</span><span id="get_all_subclasses-28"><a href="#get_all_subclasses-28"><span class="linenos">28</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="get_all_subclasses-29"><a href="#get_all_subclasses-29"><span class="linenos">29</span></a><span class="sd">    Returns a set containing all child classes in the subclass graph of `class_`.</span>
+</span><span id="get_all_subclasses-30"><a href="#get_all_subclasses-30"><span class="linenos">30</span></a><span class="sd">    I.e., includes subclasses of subclasses, etc.</span>
+</span><span id="get_all_subclasses-31"><a href="#get_all_subclasses-31"><span class="linenos">31</span></a>
+</span><span id="get_all_subclasses-32"><a href="#get_all_subclasses-32"><span class="linenos">32</span></a><span class="sd">    # Parameters</span>
+</span><span id="get_all_subclasses-33"><a href="#get_all_subclasses-33"><span class="linenos">33</span></a><span class="sd">    - `include_self`: Whether to include `class_` itself in the returned set</span>
+</span><span id="get_all_subclasses-34"><a href="#get_all_subclasses-34"><span class="linenos">34</span></a><span class="sd">    - `class_`: Superclass</span>
+</span><span id="get_all_subclasses-35"><a href="#get_all_subclasses-35"><span class="linenos">35</span></a>
+</span><span id="get_all_subclasses-36"><a href="#get_all_subclasses-36"><span class="linenos">36</span></a><span class="sd">    # Development</span>
+</span><span id="get_all_subclasses-37"><a href="#get_all_subclasses-37"><span class="linenos">37</span></a><span class="sd">    Since most class hierarchies are small, the inefficiencies of the existing recursive implementation aren&#39;t problematic.</span>
+</span><span id="get_all_subclasses-38"><a href="#get_all_subclasses-38"><span class="linenos">38</span></a><span class="sd">    It might be valuable to refactor with memoization if the need arises to use this function on a very large class hierarchy.</span>
+</span><span id="get_all_subclasses-39"><a href="#get_all_subclasses-39"><span class="linenos">39</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="get_all_subclasses-40"><a href="#get_all_subclasses-40"><span class="linenos">40</span></a>    <span class="n">subs</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="nb">type</span><span class="p">]</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span>
+</span><span id="get_all_subclasses-41"><a href="#get_all_subclasses-41"><span class="linenos">41</span></a>        <span class="n">flatten</span><span class="p">(</span>
+</span><span id="get_all_subclasses-42"><a href="#get_all_subclasses-42"><span class="linenos">42</span></a>            <span class="n">get_all_subclasses</span><span class="p">(</span><span class="n">sub</span><span class="p">,</span> <span class="n">include_self</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span id="get_all_subclasses-43"><a href="#get_all_subclasses-43"><span class="linenos">43</span></a>            <span class="k">for</span> <span class="n">sub</span> <span class="ow">in</span> <span class="n">class_</span><span class="o">.</span><span class="n">__subclasses__</span><span class="p">()</span>
+</span><span id="get_all_subclasses-44"><a href="#get_all_subclasses-44"><span class="linenos">44</span></a>            <span class="k">if</span> <span class="n">sub</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+</span><span id="get_all_subclasses-45"><a href="#get_all_subclasses-45"><span class="linenos">45</span></a>        <span class="p">)</span>
+</span><span id="get_all_subclasses-46"><a href="#get_all_subclasses-46"><span class="linenos">46</span></a>    <span class="p">)</span>
+</span><span id="get_all_subclasses-47"><a href="#get_all_subclasses-47"><span class="linenos">47</span></a>    <span class="k">if</span> <span class="n">include_self</span><span class="p">:</span>
+</span><span id="get_all_subclasses-48"><a href="#get_all_subclasses-48"><span class="linenos">48</span></a>        <span class="n">subs</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">class_</span><span class="p">)</span>
+</span><span id="get_all_subclasses-49"><a href="#get_all_subclasses-49"><span class="linenos">49</span></a>    <span class="k">return</span> <span class="n">subs</span>
+</span></pre></div>
+
+
+            <div class="docstring"><p>Returns a set containing all child classes in the subclass graph of <code>class_</code>.
+I.e., includes subclasses of subclasses, etc.</p>
+
+<h1 id="parameters">Parameters</h1>
+
+<ul>
+<li><code>include_self</code>: Whether to include <code>class_</code> itself in the returned set</li>
+<li><code>class_</code>: Superclass</li>
+</ul>
+
+<h1 id="development">Development</h1>
+
+<p>Since most class hierarchies are small, the inefficiencies of the existing recursive implementation aren't problematic.
+It might be valuable to refactor with memoization if the need arises to use this function on a very large class hierarchy.</p>
+</div>
+
+
+                </section>
+                <section id="isinstance_by_type_name">
+                            <input id="isinstance_by_type_name-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr function">
+            
+        <span class="def">def</span>
+        <span class="name">isinstance_by_type_name</span><span class="signature pdoc-code condensed">(<span class="param"><span class="n">o</span><span class="p">:</span> <span class="nb">object</span>, </span><span class="param"><span class="n">type_name</span><span class="p">:</span> <span class="nb">str</span></span><span class="return-annotation">):</span></span>
+
+                <div class="source-button-container">
+            <label class="pdoc-button view-source-button" for="isinstance_by_type_name-view-source"><span>View Source</span></label>
+            <div class="github-button-wrapper">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/main/muutils/misc/classes.py#L51-L61" target="_blank">
+                    <span>View on GitHub</span>
+                </a>
+            </div>
+        </div>
+
+    </div>
+    <a class="headerlink" href="#isinstance_by_type_name"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="isinstance_by_type_name-52"><a href="#isinstance_by_type_name-52"><span class="linenos">52</span></a><span class="k">def</span> <span class="nf">isinstance_by_type_name</span><span class="p">(</span><span class="n">o</span><span class="p">:</span> <span class="nb">object</span><span class="p">,</span> <span class="n">type_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+</span><span id="isinstance_by_type_name-53"><a href="#isinstance_by_type_name-53"><span class="linenos">53</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Behaves like stdlib `isinstance` except it accepts a string representation of the type rather than the type itself.</span>
+</span><span id="isinstance_by_type_name-54"><a href="#isinstance_by_type_name-54"><span class="linenos">54</span></a><span class="sd">    This is a hacky function intended to circumvent the need to import a type into a module.</span>
+</span><span id="isinstance_by_type_name-55"><a href="#isinstance_by_type_name-55"><span class="linenos">55</span></a><span class="sd">    It is susceptible to type name collisions.</span>
+</span><span id="isinstance_by_type_name-56"><a href="#isinstance_by_type_name-56"><span class="linenos">56</span></a>
+</span><span id="isinstance_by_type_name-57"><a href="#isinstance_by_type_name-57"><span class="linenos">57</span></a><span class="sd">    # Parameters</span>
+</span><span id="isinstance_by_type_name-58"><a href="#isinstance_by_type_name-58"><span class="linenos">58</span></a><span class="sd">    `o`: Object (not the type itself) whose type to interrogate</span>
+</span><span id="isinstance_by_type_name-59"><a href="#isinstance_by_type_name-59"><span class="linenos">59</span></a><span class="sd">    `type_name`: The string returned by `type_.__name__`.</span>
+</span><span id="isinstance_by_type_name-60"><a href="#isinstance_by_type_name-60"><span class="linenos">60</span></a><span class="sd">    Generic types are not supported, only types that would appear in `type_.__mro__`.</span>
+</span><span id="isinstance_by_type_name-61"><a href="#isinstance_by_type_name-61"><span class="linenos">61</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="isinstance_by_type_name-62"><a href="#isinstance_by_type_name-62"><span class="linenos">62</span></a>    <span class="k">return</span> <span class="n">type_name</span> <span class="ow">in</span> <span class="p">{</span><span class="n">s</span><span class="o">.</span><span class="vm">__name__</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">type</span><span class="p">(</span><span class="n">o</span><span class="p">)</span><span class="o">.</span><span class="vm">__mro__</span><span class="p">}</span>
+</span></pre></div>
+
+
+            <div class="docstring"><p>Behaves like stdlib <code>isinstance</code> except it accepts a string representation of the type rather than the type itself.
+This is a hacky function intended to circumvent the need to import a type into a module.
+It is susceptible to type name collisions.</p>
+
+<h1 id="parameters">Parameters</h1>
+
+<p><code>o</code>: Object (not the type itself) whose type to interrogate
+<code>type_name</code>: The string returned by <code>type_.__name__</code>.
+Generic types are not supported, only types that would appear in <code>type_.__mro__</code>.</p>
+</div>
+
+
+                </section>
+                <section id="IsDataclass">
+                            <input id="IsDataclass-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr class">
+                    <div class="decorator">@runtime_checkable</div>
+
+    <span class="def">class</span>
+    <span class="name">IsDataclass</span><wbr>(<span class="base">typing.Protocol</span>):
+
+                <div class="source-button-container">
+            <label class="pdoc-button view-source-button" for="IsDataclass-view-source"><span>View Source</span></label>
+            <div class="github-button-wrapper">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/main/muutils/misc/classes.py#L68-L72" target="_blank">
+                    <span>View on GitHub</span>
+                </a>
+            </div>
+        </div>
+
+    </div>
+    <a class="headerlink" href="#IsDataclass"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="IsDataclass-69"><a href="#IsDataclass-69"><span class="linenos">69</span></a><span class="nd">@runtime_checkable</span>
+</span><span id="IsDataclass-70"><a href="#IsDataclass-70"><span class="linenos">70</span></a><span class="k">class</span> <span class="nc">IsDataclass</span><span class="p">(</span><span class="n">Protocol</span><span class="p">):</span>
+</span><span id="IsDataclass-71"><a href="#IsDataclass-71"><span class="linenos">71</span></a>    <span class="c1"># Generic type for any dataclass instance</span>
+</span><span id="IsDataclass-72"><a href="#IsDataclass-72"><span class="linenos">72</span></a>    <span class="c1"># https://stackoverflow.com/questions/54668000/type-hint-for-an-instance-of-a-non-specific-dataclass</span>
+</span><span id="IsDataclass-73"><a href="#IsDataclass-73"><span class="linenos">73</span></a>    <span class="n">__dataclass_fields__</span><span class="p">:</span> <span class="n">ClassVar</span><span class="p">[</span><span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span>
+</span></pre></div>
+
+
+            <div class="docstring"><p>Base class for protocol classes.</p>
+
+<p>Protocol classes are defined as::</p>
+
+<pre><code>class Proto(Protocol):
+    def meth(self) -&gt; int:
+        ...
+</code></pre>
+
+<p>Such classes are primarily used with static type checkers that recognize
+structural subtyping (static duck-typing).</p>
+
+<p>For example::</p>
+
+<pre><code>class C:
+    def meth(self) -&gt; int:
+        return 0
+
+def func(x: Proto) -&gt; int:
+    return x.meth()
+
+func(C())  # Passes static type check
+</code></pre>
+
+<p>See PEP 544 for details. Protocol classes decorated with
+@typing.runtime_checkable act as simple-minded runtime protocols that check
+only the presence of given attributes, ignoring their type signatures.
+Protocol classes can be generic, they are defined as::</p>
+
+<pre><code>class GenProto[T](Protocol):
+    def meth(self) -&gt; T:
+        ...
+</code></pre>
+</div>
+
+
+                            <div id="IsDataclass.__init__" class="classattr">
+                                        <input id="IsDataclass.__init__-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr function">
+            
+        <span class="name">IsDataclass</span><span class="signature pdoc-code condensed">(<span class="param"><span class="o">*</span><span class="n">args</span>, </span><span class="param"><span class="o">**</span><span class="n">kwargs</span></span>)</span>
+
+                <div class="source-button-container">
+            <label class="pdoc-button view-source-button" for="IsDataclass.__init__-view-source"><span>View Source</span></label>
+            <div class="github-button-wrapper">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/main/muutils/misc/classes.py#L1757-L1783" target="_blank">
+                    <span>View on GitHub</span>
+                </a>
+            </div>
+        </div>
+
+    </div>
+    <a class="headerlink" href="#IsDataclass.__init__"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="IsDataclass.__init__-1758"><a href="#IsDataclass.__init__-1758"><span class="linenos">1758</span></a><span class="k">def</span> <span class="nf">_no_init_or_replace_init</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+</span><span id="IsDataclass.__init__-1759"><a href="#IsDataclass.__init__-1759"><span class="linenos">1759</span></a>    <span class="bp">cls</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</span><span id="IsDataclass.__init__-1760"><a href="#IsDataclass.__init__-1760"><span class="linenos">1760</span></a>
+</span><span id="IsDataclass.__init__-1761"><a href="#IsDataclass.__init__-1761"><span class="linenos">1761</span></a>    <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_is_protocol</span><span class="p">:</span>
+</span><span id="IsDataclass.__init__-1762"><a href="#IsDataclass.__init__-1762"><span class="linenos">1762</span></a>        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;Protocols cannot be instantiated&#39;</span><span class="p">)</span>
+</span><span id="IsDataclass.__init__-1763"><a href="#IsDataclass.__init__-1763"><span class="linenos">1763</span></a>
+</span><span id="IsDataclass.__init__-1764"><a href="#IsDataclass.__init__-1764"><span class="linenos">1764</span></a>    <span class="c1"># Already using a custom `__init__`. No need to calculate correct</span>
+</span><span id="IsDataclass.__init__-1765"><a href="#IsDataclass.__init__-1765"><span class="linenos">1765</span></a>    <span class="c1"># `__init__` to call. This can lead to RecursionError. See bpo-45121.</span>
+</span><span id="IsDataclass.__init__-1766"><a href="#IsDataclass.__init__-1766"><span class="linenos">1766</span></a>    <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="fm">__init__</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">_no_init_or_replace_init</span><span class="p">:</span>
+</span><span id="IsDataclass.__init__-1767"><a href="#IsDataclass.__init__-1767"><span class="linenos">1767</span></a>        <span class="k">return</span>
+</span><span id="IsDataclass.__init__-1768"><a href="#IsDataclass.__init__-1768"><span class="linenos">1768</span></a>
+</span><span id="IsDataclass.__init__-1769"><a href="#IsDataclass.__init__-1769"><span class="linenos">1769</span></a>    <span class="c1"># Initially, `__init__` of a protocol subclass is set to `_no_init_or_replace_init`.</span>
+</span><span id="IsDataclass.__init__-1770"><a href="#IsDataclass.__init__-1770"><span class="linenos">1770</span></a>    <span class="c1"># The first instantiation of the subclass will call `_no_init_or_replace_init` which</span>
+</span><span id="IsDataclass.__init__-1771"><a href="#IsDataclass.__init__-1771"><span class="linenos">1771</span></a>    <span class="c1"># searches for a proper new `__init__` in the MRO. The new `__init__`</span>
+</span><span id="IsDataclass.__init__-1772"><a href="#IsDataclass.__init__-1772"><span class="linenos">1772</span></a>    <span class="c1"># replaces the subclass&#39; old `__init__` (ie `_no_init_or_replace_init`). Subsequent</span>
+</span><span id="IsDataclass.__init__-1773"><a href="#IsDataclass.__init__-1773"><span class="linenos">1773</span></a>    <span class="c1"># instantiation of the protocol subclass will thus use the new</span>
+</span><span id="IsDataclass.__init__-1774"><a href="#IsDataclass.__init__-1774"><span class="linenos">1774</span></a>    <span class="c1"># `__init__` and no longer call `_no_init_or_replace_init`.</span>
+</span><span id="IsDataclass.__init__-1775"><a href="#IsDataclass.__init__-1775"><span class="linenos">1775</span></a>    <span class="k">for</span> <span class="n">base</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="vm">__mro__</span><span class="p">:</span>
+</span><span id="IsDataclass.__init__-1776"><a href="#IsDataclass.__init__-1776"><span class="linenos">1776</span></a>        <span class="n">init</span> <span class="o">=</span> <span class="n">base</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;__init__&#39;</span><span class="p">,</span> <span class="n">_no_init_or_replace_init</span><span class="p">)</span>
+</span><span id="IsDataclass.__init__-1777"><a href="#IsDataclass.__init__-1777"><span class="linenos">1777</span></a>        <span class="k">if</span> <span class="n">init</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">_no_init_or_replace_init</span><span class="p">:</span>
+</span><span id="IsDataclass.__init__-1778"><a href="#IsDataclass.__init__-1778"><span class="linenos">1778</span></a>            <span class="bp">cls</span><span class="o">.</span><span class="fm">__init__</span> <span class="o">=</span> <span class="n">init</span>
+</span><span id="IsDataclass.__init__-1779"><a href="#IsDataclass.__init__-1779"><span class="linenos">1779</span></a>            <span class="k">break</span>
+</span><span id="IsDataclass.__init__-1780"><a href="#IsDataclass.__init__-1780"><span class="linenos">1780</span></a>    <span class="k">else</span><span class="p">:</span>
+</span><span id="IsDataclass.__init__-1781"><a href="#IsDataclass.__init__-1781"><span class="linenos">1781</span></a>        <span class="c1"># should not happen</span>
+</span><span id="IsDataclass.__init__-1782"><a href="#IsDataclass.__init__-1782"><span class="linenos">1782</span></a>        <span class="bp">cls</span><span class="o">.</span><span class="fm">__init__</span> <span class="o">=</span> <span class="nb">object</span><span class="o">.</span><span class="fm">__init__</span>
+</span><span id="IsDataclass.__init__-1783"><a href="#IsDataclass.__init__-1783"><span class="linenos">1783</span></a>
+</span><span id="IsDataclass.__init__-1784"><a href="#IsDataclass.__init__-1784"><span class="linenos">1784</span></a>    <span class="bp">cls</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</span></pre></div>
+
+
+    
+
+                            </div>
+                </section>
+                <section id="get_hashable_eq_attrs">
+                            <input id="get_hashable_eq_attrs-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr function">
+            
+        <span class="def">def</span>
+        <span class="name">get_hashable_eq_attrs</span><span class="signature pdoc-code condensed">(<span class="param"><span class="n">dc</span><span class="p">:</span> <span class="n"><a href="#IsDataclass">IsDataclass</a></span></span><span class="return-annotation">) -> <span class="nb">tuple</span><span class="p">[</span><span class="n">typing</span><span class="o">.</span><span class="n">Any</span><span class="p">]</span>:</span></span>
+
+                <div class="source-button-container">
+            <label class="pdoc-button view-source-button" for="get_hashable_eq_attrs-view-source"><span>View Source</span></label>
+            <div class="github-button-wrapper">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/main/muutils/misc/classes.py#L75-L83" target="_blank">
+                    <span>View on GitHub</span>
+                </a>
+            </div>
+        </div>
+
+    </div>
+    <a class="headerlink" href="#get_hashable_eq_attrs"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="get_hashable_eq_attrs-76"><a href="#get_hashable_eq_attrs-76"><span class="linenos">76</span></a><span class="k">def</span> <span class="nf">get_hashable_eq_attrs</span><span class="p">(</span><span class="n">dc</span><span class="p">:</span> <span class="n">IsDataclass</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Any</span><span class="p">]:</span>
+</span><span id="get_hashable_eq_attrs-77"><a href="#get_hashable_eq_attrs-77"><span class="linenos">77</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns a tuple of all fields used for equality comparison, including the type of the dataclass itself.</span>
+</span><span id="get_hashable_eq_attrs-78"><a href="#get_hashable_eq_attrs-78"><span class="linenos">78</span></a><span class="sd">    The type is included to preserve the unequal equality behavior of instances of different dataclasses whose fields are identical.</span>
+</span><span id="get_hashable_eq_attrs-79"><a href="#get_hashable_eq_attrs-79"><span class="linenos">79</span></a><span class="sd">    Essentially used to generate a hashable dataclass representation for equality comparison even if it&#39;s not frozen.</span>
+</span><span id="get_hashable_eq_attrs-80"><a href="#get_hashable_eq_attrs-80"><span class="linenos">80</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="get_hashable_eq_attrs-81"><a href="#get_hashable_eq_attrs-81"><span class="linenos">81</span></a>    <span class="k">return</span> <span class="o">*</span><span class="p">(</span>
+</span><span id="get_hashable_eq_attrs-82"><a href="#get_hashable_eq_attrs-82"><span class="linenos">82</span></a>        <span class="nb">getattr</span><span class="p">(</span><span class="n">dc</span><span class="p">,</span> <span class="n">fld</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+</span><span id="get_hashable_eq_attrs-83"><a href="#get_hashable_eq_attrs-83"><span class="linenos">83</span></a>        <span class="k">for</span> <span class="n">fld</span> <span class="ow">in</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">compare</span><span class="p">,</span> <span class="n">dc</span><span class="o">.</span><span class="n">__dataclass_fields__</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+</span><span id="get_hashable_eq_attrs-84"><a href="#get_hashable_eq_attrs-84"><span class="linenos">84</span></a>    <span class="p">),</span> <span class="nb">type</span><span class="p">(</span><span class="n">dc</span><span class="p">)</span>
+</span></pre></div>
+
+
+            <div class="docstring"><p>Returns a tuple of all fields used for equality comparison, including the type of the dataclass itself.
+The type is included to preserve the unequal equality behavior of instances of different dataclasses whose fields are identical.
+Essentially used to generate a hashable dataclass representation for equality comparison even if it's not frozen.</p>
+</div>
+
+
+                </section>
+                <section id="dataclass_set_equals">
+                            <input id="dataclass_set_equals-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr function">
+            
+        <span class="def">def</span>
+        <span class="name">dataclass_set_equals</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">coll1</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="n"><a href="#IsDataclass">IsDataclass</a></span><span class="p">]</span>,</span><span class="param">	<span class="n">coll2</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="n"><a href="#IsDataclass">IsDataclass</a></span><span class="p">]</span></span><span class="return-annotation">) -> <span class="nb">bool</span>:</span></span>
+
+                <div class="source-button-container">
+            <label class="pdoc-button view-source-button" for="dataclass_set_equals-view-source"><span>View Source</span></label>
+            <div class="github-button-wrapper">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/main/muutils/misc/classes.py#L86-L97" target="_blank">
+                    <span>View on GitHub</span>
+                </a>
+            </div>
+        </div>
+
+    </div>
+    <a class="headerlink" href="#dataclass_set_equals"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="dataclass_set_equals-87"><a href="#dataclass_set_equals-87"><span class="linenos">87</span></a><span class="k">def</span> <span class="nf">dataclass_set_equals</span><span class="p">(</span>
+</span><span id="dataclass_set_equals-88"><a href="#dataclass_set_equals-88"><span class="linenos">88</span></a>    <span class="n">coll1</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">IsDataclass</span><span class="p">],</span> <span class="n">coll2</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">IsDataclass</span><span class="p">]</span>
+</span><span id="dataclass_set_equals-89"><a href="#dataclass_set_equals-89"><span class="linenos">89</span></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</span><span id="dataclass_set_equals-90"><a href="#dataclass_set_equals-90"><span class="linenos">90</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Compares 2 collections of dataclass instances as if they were sets.</span>
+</span><span id="dataclass_set_equals-91"><a href="#dataclass_set_equals-91"><span class="linenos">91</span></a><span class="sd">    Duplicates are ignored in the same manner as a set.</span>
+</span><span id="dataclass_set_equals-92"><a href="#dataclass_set_equals-92"><span class="linenos">92</span></a><span class="sd">    Unfrozen dataclasses can&#39;t be placed in sets since they&#39;re not hashable.</span>
+</span><span id="dataclass_set_equals-93"><a href="#dataclass_set_equals-93"><span class="linenos">93</span></a><span class="sd">    Collections of them may be compared using this function.</span>
+</span><span id="dataclass_set_equals-94"><a href="#dataclass_set_equals-94"><span class="linenos">94</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="dataclass_set_equals-95"><a href="#dataclass_set_equals-95"><span class="linenos">95</span></a>
+</span><span id="dataclass_set_equals-96"><a href="#dataclass_set_equals-96"><span class="linenos">96</span></a>    <span class="k">return</span> <span class="p">{</span><span class="n">get_hashable_eq_attrs</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">coll1</span><span class="p">}</span> <span class="o">==</span> <span class="p">{</span>
+</span><span id="dataclass_set_equals-97"><a href="#dataclass_set_equals-97"><span class="linenos">97</span></a>        <span class="n">get_hashable_eq_attrs</span><span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">coll2</span>
+</span><span id="dataclass_set_equals-98"><a href="#dataclass_set_equals-98"><span class="linenos">98</span></a>    <span class="p">}</span>
+</span></pre></div>
+
+
+            <div class="docstring"><p>Compares 2 collections of dataclass instances as if they were sets.
+Duplicates are ignored in the same manner as a set.
+Unfrozen dataclasses can't be placed in sets since they're not hashable.
+Collections of them may be compared using this function.</p>
+</div>
+
+
+                </section>
+    </main>
+<script>
+    function escapeHTML(html) {
+        return document.createElement('div').appendChild(document.createTextNode(html)).parentNode.innerHTML;
+    }
+
+    const originalContent = document.querySelector("main.pdoc");
+    let currentContent = originalContent;
+
+    function setContent(innerHTML) {
+        let elem;
+        if (innerHTML) {
+            elem = document.createElement("main");
+            elem.classList.add("pdoc");
+            elem.innerHTML = innerHTML;
+        } else {
+            elem = originalContent;
+        }
+        if (currentContent !== elem) {
+            currentContent.replaceWith(elem);
+            currentContent = elem;
+        }
+    }
+
+    function getSearchTerm() {
+        return (new URL(window.location)).searchParams.get("search");
+    }
+
+    const searchBox = document.querySelector(".pdoc input[type=search]");
+    searchBox.addEventListener("input", function () {
+        let url = new URL(window.location);
+        if (searchBox.value.trim()) {
+            url.hash = "";
+            url.searchParams.set("search", searchBox.value);
+        } else {
+            url.searchParams.delete("search");
+        }
+        history.replaceState("", "", url.toString());
+        onInput();
+    });
+    window.addEventListener("popstate", onInput);
+
+
+    let search, searchErr;
+
+    async function initialize() {
+        try {
+            search = await new Promise((resolve, reject) => {
+                const script = document.createElement("script");
+                script.type = "text/javascript";
+                script.async = true;
+                script.onload = () => resolve(window.pdocSearch);
+                script.onerror = (e) => reject(e);
+                script.src = "../../search.js";
+                document.getElementsByTagName("head")[0].appendChild(script);
+            });
+        } catch (e) {
+            console.error("Cannot fetch pdoc search index");
+            searchErr = "Cannot fetch search index.";
+        }
+        onInput();
+
+        document.querySelector("nav.pdoc").addEventListener("click", e => {
+            if (e.target.hash) {
+                searchBox.value = "";
+                searchBox.dispatchEvent(new Event("input"));
+            }
+        });
+    }
+
+    function onInput() {
+        setContent((() => {
+            const term = getSearchTerm();
+            if (!term) {
+                return null
+            }
+            if (searchErr) {
+                return `<h3>Error: ${searchErr}</h3>`
+            }
+            if (!search) {
+                return "<h3>Searching...</h3>"
+            }
+
+            window.scrollTo({top: 0, left: 0, behavior: 'auto'});
+
+            const results = search(term);
+
+            let html;
+            if (results.length === 0) {
+                html = `No search results for '${escapeHTML(term)}'.`
+            } else {
+                html = `<h4>${results.length} search result${results.length > 1 ? "s" : ""} for '${escapeHTML(term)}'.</h4>`;
+            }
+            for (let result of results.slice(0, 10)) {
+                let doc = result.doc;
+                let url = `../../${doc.modulename.replaceAll(".", "/")}.html`;
+                if (doc.qualname) {
+                    url += `#${doc.qualname}`;
+                }
+
+                let heading;
+                switch (result.doc.kind) {
+                    case "function":
+                        if (doc.fullname.endsWith(".__init__")) {
+                            heading = `<span class="name">${doc.fullname.replace(/\.__init__$/, "")}</span>${doc.signature}`;
+                        } else {
+                            heading = `<span class="def">${doc.funcdef}</span> <span class="name">${doc.fullname}</span>${doc.signature}`;
+                        }
+                        break;
+                    case "class":
+                        heading = `<span class="def">class</span> <span class="name">${doc.fullname}</span>`;
+                        if (doc.bases)
+                            heading += `<wbr>(<span class="base">${doc.bases}</span>)`;
+                        heading += `:`;
+                        break;
+                    case "variable":
+                        heading = `<span class="name">${doc.fullname}</span>`;
+                        if (doc.annotation)
+                            heading += `<span class="annotation">${doc.annotation}</span>`;
+                        if (doc.default_value)
+                            heading += `<span class="default_value"> = ${doc.default_value}</span>`;
+                        break;
+                    default:
+                        heading = `<span class="name">${doc.fullname}</span>`;
+                        break;
+                }
+                html += `
+                        <section class="search-result">
+                        <a href="${url}" class="attr ${doc.kind}">${heading}</a>
+                        <div class="docstring">${doc.doc}</div>
+                        </section>
+                    `;
+
+            }
+            return html;
+        })());
+    }
+
+    if (getSearchTerm()) {
+        initialize();
+        searchBox.value = getSearchTerm();
+        onInput();
+    } else {
+        searchBox.addEventListener("focus", initialize, {once: true});
+    }
+
+    searchBox.addEventListener("keydown", e => {
+        if (["ArrowDown", "ArrowUp", "Enter"].includes(e.key)) {
+            let focused = currentContent.querySelector(".search-result.focused");
+            if (!focused) {
+                currentContent.querySelector(".search-result").classList.add("focused");
+            } else if (
+                e.key === "ArrowDown"
+                && focused.nextElementSibling
+                && focused.nextElementSibling.classList.contains("search-result")
+            ) {
+                focused.classList.remove("focused");
+                focused.nextElementSibling.classList.add("focused");
+                focused.nextElementSibling.scrollIntoView({
+                    behavior: "smooth",
+                    block: "nearest",
+                    inline: "nearest"
+                });
+            } else if (
+                e.key === "ArrowUp"
+                && focused.previousElementSibling
+                && focused.previousElementSibling.classList.contains("search-result")
+            ) {
+                focused.classList.remove("focused");
+                focused.previousElementSibling.classList.add("focused");
+                focused.previousElementSibling.scrollIntoView({
+                    behavior: "smooth",
+                    block: "nearest",
+                    inline: "nearest"
+                });
+            } else if (
+                e.key === "Enter"
+            ) {
+                focused.querySelector("a").click();
+            }
+        }
+    });
+</script></body>
+</html>

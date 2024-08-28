@@ -49,6 +49,8 @@ dependencies:
   [(plain
   text)](https://github.com/mivanit/muutils/tree/main/docs/coverage/coverage.txt)
 
+# modules
+
 ## [`statcounter`](https://github.com/mivanit/muutils/tree/main/muutils/statcounter.py)
 
 an extension of `collections.Counter` that provides “smart” computation
@@ -209,6 +211,8 @@ dependencies:
   link)](https://github.com/mivanit/muutils/tree/main/docs/coverage/html/)
   [(plain
   text)](https://github.com/mivanit/muutils/tree/main/docs/coverage/coverage.txt)
+
+### modules
 
 #### [`statcounter`](https://github.com/mivanit/muutils/tree/main/muutils/statcounter.py)
 

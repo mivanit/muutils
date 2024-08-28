@@ -30,6 +30,8 @@ documentation
 -   single-page markdown docs (absolute link)
 -   Test coverage: [Test Coverage] (absolute link) (plain text)
 
+modules
+
 statcounter
 
 an extension of collections.Counter that provides “smart” computation of
@@ -164,6 +166,8 @@ documentation
 -   single-page html docs (absolute link)
 -   single-page markdown docs (absolute link)
 -   Test coverage: [Test Coverage] (absolute link) (plain text)
+
+modules
 
 statcounter
 

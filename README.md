@@ -34,7 +34,7 @@ pip install muutils[array]
 - [single-page markdown docs](docs/combined/muutils.md) [(absolute link)](https://github.com/mivanit/muutils/tree/main/docs/combined/muutils.md)
 - Test coverage: [![Test Coverage](docs/coverage/coverage.svg)](docs/coverage/html/) [(absolute link)](https://github.com/mivanit/muutils/tree/main/docs/coverage/html/) [(plain text)](https://github.com/mivanit/muutils/tree/main/docs/coverage/coverage.txt)
 
-
+# modules
 
 ## [`statcounter`](https://github.com/mivanit/muutils/tree/main/muutils/statcounter.py)
 

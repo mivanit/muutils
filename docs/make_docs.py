@@ -49,7 +49,7 @@ if __name__ == "__main__":
         edit_url_map={
             "muutils": "https://github.com/mivanit/muutils/blob/main/muutils/",
         },
-        template_directory=Path("docs/templates"),
+        template_directory=Path("docs/templates/html/"),
         show_source=True,
         math=True,
         mermaid=True,

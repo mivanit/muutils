@@ -42,14 +42,12 @@ jobs:
         # install torch first to avoid pytorch index messing things up
         run: |
           uv pip install -r .github/dev-requirements.txt --system --no-deps
-          uv pip install torch==${{ matrix.versions.torch}}+cpu --system --extra-index-url https://download.pytorch.org/whl/cpu
+          uv pip install torch==2.4.0+cpu --system --extra-index-url https://download.pytorch.org/whl/cpu
         
       - name: Install muutils
         run: uv pip install . --system
       
       - name: Install zanj (>=3.10 only)
-        # TODO: not yet available for python 3.8 and 3.9
-        if: ${{ matrix.versions.python != '3.8' && matrix.versions.python != '3.9' }}
         run: uv pip install zanj --system
 
       - name: tests

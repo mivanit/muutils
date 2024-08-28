@@ -23,7 +23,7 @@ jobs:
         uses: awalsh128/cache-apt-pkgs-action@latest
         with:
           packages: pandoc
-          version: 1.0
+          version: '3.3'
 
       - name: Checkout code
         uses: actions/checkout@v4

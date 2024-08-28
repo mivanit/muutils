@@ -18,6 +18,7 @@ classifiers=[
     "Typing :: Typed",
 ]
 repository = "https://github.com/mivanit/muutils"
+documentation = "https://mivanit.github.io/muutils/"
 
 [tool.poetry.dependencies]
 python = "^3.8"

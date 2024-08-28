@@ -156,6 +156,7 @@ docs-html:
 .PHONY: docs-md
 docs-md:
 	@echo "generate combined docs in markdown"
+	mkdir $(DOCS_DIR)/combined -p
 	$(PYTHON) docs/make_docs.py --combined
 
 
@@ -173,6 +174,7 @@ docs-combined: docs-md
 .PHONY: cov
 cov:
 	@echo "generate coverage reports"
+	mkdir $(COVERAGE_REPORTS_DIR) -p
 	$(PYTHON) -m coverage report -m > $(COVERAGE_REPORTS_DIR)/coverage.txt
 	$(PYTHON) -m coverage_badge -f -o $(COVERAGE_REPORTS_DIR)/coverage.svg
 	$(PYTHON) -m coverage html --directory=$(COVERAGE_REPORTS_DIR)/html/
@@ -187,9 +189,7 @@ clean-docs:
 	@echo "clean up docs"
 	rm -rf $(DOCS_DIR)/combined/
 	rm -rf $(DOCS_DIR)/muutils/
-	rm -rf $(COVERAGE_REPORTS_DIR)/html/**
-	rm $(COVERAGE_REPORTS_DIR)/coverage.txt
-	rm $(COVERAGE_REPORTS_DIR)/coverage.svg
+	rm -rf $(COVERAGE_REPORTS_DIR)/
 	rm $(DOCS_DIR)/muutils.html
 	rm $(DOCS_DIR)/index.html
 	rm $(DOCS_DIR)/search.js

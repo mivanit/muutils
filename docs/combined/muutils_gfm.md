@@ -1,3 +1,5 @@
+docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.11
+
 ## Contents
 
 [![PyPI](https://img.shields.io/pypi/v/muutils)](https://pypi.org/project/muutils/)
@@ -313,6 +315,8 @@ production. Use at your own risk!
 
 [View Source on
 GitHub](https://github.com/mivanit/muutils/blob/main/muutils/__init__.py#L0-L26)
+
+docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.11
 
 ## Contents
 
@@ -714,6 +718,8 @@ unembed:
   ‘yaml’, or if you try to use ‘yaml’ output without having PyYAML
   installed
 
+docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.11
+
 ## Contents
 
 provides `ErrorMode` enum for handling errors consistently
@@ -953,6 +959,8 @@ GitHub](https://github.com/mivanit/muutils/blob/main/muutils/errormode.py#L206-L
 
 map of string aliases to `ErrorMode` instances
 
+docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.11
+
 ## Contents
 
 group items by assuming that `eq_func` defines an equivalence relation
@@ -997,6 +1005,8 @@ allow for duplicates
 - `items_in: Sequence[T]` the items to group
 - `eq_func: Callable[[T, T], bool]` a function that returns true if two
   items are equivalent. need not be transitive
+
+docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.11
 
 ## Contents
 
@@ -1345,6 +1355,8 @@ GitHub](https://github.com/mivanit/muutils/blob/main/muutils/interval.py#L527-L5
 - [`clamp`](#OpenInterval.clamp)
 - [`intersection`](#OpenInterval.intersection)
 - [`union`](#OpenInterval.union)
+
+docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.11
 
 ## Contents
 
@@ -1985,6 +1997,8 @@ command line args
     - `nested_dict : dict[str, Any]`
         nested dict to update the instance with
 
+docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.11
+
 ## Contents
 
 this utilities module handles serialization and loading of numpy and
@@ -2123,6 +2137,8 @@ assumes the array was serialized via `serialize_array()`
 GitHub](https://github.com/mivanit/muutils/blob/main/muutils/json_serialize/array.py#L161-L224)
 
 load a json-serialized array, infer the mode if not specified
+
+docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.11
 
 ## Contents
 
@@ -2318,6 +2334,8 @@ try to turn any object into something hashable
 GitHub](https://github.com/mivanit/muutils/blob/main/muutils/json_serialize/json_serialize.py#L329-L331)
 
 serialize object to json-serializable object with default config
+
+docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.11
 
 ## Contents
 
@@ -2953,6 +2971,8 @@ class Myclass(SerializableDataclass):
 - `AttributeError` : if a property is not found on the class
 - `FieldLoadingError` : if there is an error loading a field
 
+docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.11
+
 ## Contents
 
 extends `dataclasses.Field` for use with `SerializableDataclass`
@@ -3137,6 +3157,8 @@ string.
 note that if not using ZANJ, and you have a class inside a container,
 you MUST provide `serialization_fn` and `loading_fn` to serialize and
 load the container. ZANJ will automatically do this for you.
+
+docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.11
 
 ## Contents
 
@@ -3339,6 +3361,8 @@ GitHub](https://github.com/mivanit/muutils/blob/main/muutils/json_serialize/util
 
 tuple type hint, but for a tuple of any length with all the same type
 
+docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.11
+
 ## Contents
 
 utilities for reading and writing jsonlines files, including gzip
@@ -3397,6 +3421,8 @@ GitHub](https://github.com/mivanit/muutils/blob/main/muutils/jsonlines.py#L46-L6
 
 [View Source on
 GitHub](https://github.com/mivanit/muutils/blob/main/muutils/jsonlines.py#L63-L77)
+
+docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.11
 
 ## Contents
 
@@ -3457,6 +3483,8 @@ GitHub](https://github.com/mivanit/muutils/blob/main/muutils/kappa.py#L27-L33)
 - [`keys`](#Kappa.keys)
 - [`items`](#Kappa.items)
 - [`values`](#Kappa.values)
+
+docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.11
 
 ## Contents
 
@@ -3706,6 +3734,8 @@ context manager for timing code
 
 - `elapsed_time: float`
 
+docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.11
+
 ## API Documentation
 
 - [`ExceptionContext`](#ExceptionContext)
@@ -3748,6 +3778,8 @@ with ExceptionContext(errorfile):
 GitHub](https://github.com/mivanit/muutils/blob/main/muutils/logger/exception_context.py#L23-L24)
 
 - `stream`
+
+docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.11
 
 ## API Documentation
 
@@ -3848,6 +3880,8 @@ standard header function. will output
 
 - `HEADER_FUNCTIONS: dict[str, muutils.logger.headerfuncs.HeaderFunction] = {'md': <function md_header_function>}`
 
+docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.11
+
 ## API Documentation
 
 - [`get_any_from_stream`](#get_any_from_stream)
@@ -3928,6 +3962,8 @@ then `gather_val("log.jsonl", "s1", ("a", "b"))` will return
     [4, 5]
 ]
 ```
+
+docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.11
 
 ## Contents
 
@@ -4087,6 +4123,8 @@ GitHub](https://github.com/mivanit/muutils/blob/main/muutils/logger/logger.py#L2
 
 flush all streams
 
+docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.11
+
 ## API Documentation
 
 - [`LoggingStream`](#LoggingStream)
@@ -4154,6 +4192,8 @@ properties of a logging stream
 
 [View Source on
 GitHub](https://github.com/mivanit/muutils/blob/main/muutils/logger/loggingstream.py#L40-L76)
+
+docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.11
 
 ## API Documentation
 
@@ -4246,6 +4286,8 @@ GitHub](https://github.com/mivanit/muutils/blob/main/muutils/logger/simplelogger
 GitHub](https://github.com/mivanit/muutils/blob/main/muutils/logger/simplelogger.py#L67-L81)
 
 log a message to the log file, and optionally to the console
+
+docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.11
 
 ## API Documentation
 
@@ -4350,6 +4392,8 @@ returns a progress bar
 GitHub](https://github.com/mivanit/muutils/blob/main/muutils/logger/timing.py#L79-L87)
 
 returns a progress string
+
+docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.11
 
 ## Contents
 
@@ -5015,6 +5059,8 @@ Duplicates are ignored in the same manner as a set. Unfrozen dataclasses
 can’t be placed in sets since they’re not hashable. Collections of them
 may be compared using this function.
 
+docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.11
+
 ## API Documentation
 
 - [`is_abstract`](#is_abstract)
@@ -5164,6 +5210,8 @@ Duplicates are ignored in the same manner as a set. Unfrozen dataclasses
 can’t be placed in sets since they’re not hashable. Collections of them
 may be compared using this function.
 
+docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.11
+
 ## API Documentation
 
 - [`FrozenDict`](#FrozenDict)
@@ -5304,6 +5352,8 @@ you can’t rely on that. always use the return value.
 the [gelidum](https://github.com/diegojromerolopez/gelidum/) package is
 a more complete implementation of this idea
 
+docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.11
+
 ## API Documentation
 
 - [`stable_hash`](#stable_hash)
@@ -5327,6 +5377,8 @@ GitHub](https://github.com/mivanit/muutils/blob/main/muutils/misc/hashing.py#L6-
 
 Returns a stable hash of the given string. not cryptographically secure,
 but stable between runs
+
+docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.11
 
 ## API Documentation
 
@@ -5390,6 +5442,8 @@ shortened via `shorten_numerical_to_str`.
     1500000.0
     >>> str_to_numeric("1.2e2")
     120.0
+
+docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.11
 
 ## API Documentation
 
@@ -5592,6 +5646,8 @@ return type is one of: - `list[_AM_V]` if `when_missing` is `"skip"` or
   `when_missing` is `"except"`
 - `ValueError` : if `when_missing` is invalid
 
+docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.11
+
 ## API Documentation
 
 - [`sanitize_name`](#sanitize_name)
@@ -5692,6 +5748,8 @@ GitHub](https://github.com/mivanit/muutils/blob/main/muutils/misc/string.py#L77-
 
 [View Source on
 GitHub](https://github.com/mivanit/muutils/blob/main/muutils/misc/string.py#L102-L108)
+
+docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.11
 
 ## Contents
 
@@ -5807,6 +5865,8 @@ Decorator to add a method to the method_dict
 [View Source on
 GitHub](https://github.com/mivanit/muutils/blob/main/muutils/mlutils.py#L164-L165)
 
+docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.11
+
 ## Contents
 
 utilities for working with notebooks
@@ -5853,6 +5913,8 @@ GitHub](https://github.com/mivanit/muutils/blob/main/muutils/nbutils/__init__.py
 GitHub](https://github.com/mivanit/muutils/blob/main/muutils/nbutils/__init__.py#L15-L20)
 
 for plotting mermaid.js diagrams
+
+docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.11
 
 ## Contents
 
@@ -6040,6 +6102,8 @@ GitHub](https://github.com/mivanit/muutils/blob/main/muutils/nbutils/configure_n
 
 Show the active plot, depending on global configs
 
+docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.11
+
 ## Contents
 
 fast conversion of Jupyter Notebooks to scripts, with some basic and
@@ -6156,6 +6220,8 @@ Convert all Jupyter Notebooks in a directory to scripts.
     - `filter_out_lines: str|typing.Sequence[str] = ('%', '!')`: comment out lines starting with these strings (in code blocks).
         if a string is passed, it will be split by char and each char will be treated as a separate filter.
 
+docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.11
+
 ## Contents
 
 display mermaid.js diagrams in jupyter notebooks by the
@@ -6186,6 +6252,8 @@ GitHub](https://github.com/mivanit/muutils/blob/main/muutils/nbutils/mermaid.py#
 GitHub](https://github.com/mivanit/muutils/blob/main/muutils/nbutils/mermaid.py#L15-L20)
 
 for plotting mermaid.js diagrams
+
+docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.11
 
 ## Contents
 
@@ -6220,6 +6288,8 @@ GitHub](https://github.com/mivanit/muutils/blob/main/muutils/nbutils/print_tex.p
 GitHub](https://github.com/mivanit/muutils/blob/main/muutils/nbutils/print_tex.py#L7-L21)
 
 function for easily rendering a sympy expression in latex
+
+docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.11
 
 ## Contents
 
@@ -6285,6 +6355,8 @@ Common base class for all non-exit exceptions.
 
 [View Source on
 GitHub](https://github.com/mivanit/muutils/blob/main/muutils/nbutils/run_notebook_tests.py#L22-L136)
+
+docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.11
 
 ## Contents
 
@@ -6668,6 +6740,8 @@ A context manager that does nothing.
 [View Source on
 GitHub](https://github.com/mivanit/muutils/blob/main/muutils/spinner.py#L419-L420)
 
+docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.11
+
 ## Contents
 
 `StatCounter` class for counting and calculating statistics on numbers
@@ -6923,6 +6997,8 @@ calls `map_func` on each element of `universal_flatten(arr)`
 
 - [`clear`](#StatCounter.clear)
 
+docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.11
+
 ## Contents
 
 utilities for getting information about the system, see `SysInfo` class
@@ -7011,6 +7087,8 @@ GitHub](https://github.com/mivanit/muutils/blob/main/muutils/sysinfo.py#L146-L16
 
 [View Source on
 GitHub](https://github.com/mivanit/muutils/blob/main/muutils/sysinfo.py#L169-L193)
+
+docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.11
 
 ## Contents
 
@@ -7344,6 +7422,8 @@ compare two dicts of tensors
 - `StateDictShapeError` : shapes don’t match (but keys do)
 - `StateDictValueError` : values don’t match (but keys and shapes do)
 
+docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.11
+
 ## Contents
 
 `timeit_fancy` is just a fancier version of timeit with more options
@@ -7450,6 +7530,8 @@ interface in a Python callable.
   `True`, otherwise `None`.
 - `profile: pstats.Stats|None` A `pstats.Stats` object if `do_profiling`
   is `True`, otherwise `None`.
+
+docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.11
 
 ## Contents
 

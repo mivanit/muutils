@@ -1,3 +1,5 @@
+docs for muutils v0.6.11
+
 Contents
 
 [PyPI] [PyPI - Downloads] [docs]
@@ -255,6 +257,8 @@ for anything, but nothing in this repo is suitable for production. Use
 at your own risk!
 
 View Source on GitHub
+
+docs for muutils v0.6.11
 
 Contents
 
@@ -609,6 +613,8 @@ Raises:
     ‘yaml’, or if you try to use ‘yaml’ output without having PyYAML
     installed
 
+docs for muutils v0.6.11
+
 Contents
 
 provides ErrorMode enum for handling errors consistently
@@ -822,6 +828,8 @@ Inherited Members
 
 map of string aliases to ErrorMode instances
 
+docs for muutils v0.6.11
+
 Contents
 
 group items by assuming that eq_func defines an equivalence relation
@@ -861,6 +869,8 @@ Arguments
 -   items_in: Sequence[T] the items to group
 -   eq_func: Callable[[T, T], bool] a function that returns true if two
     items are equivalent. need not be transitive
+
+docs for muutils v0.6.11
 
 Contents
 
@@ -1158,6 +1168,8 @@ Inherited Members
 -   clamp
 -   intersection
 -   union
+
+docs for muutils v0.6.11
 
 Contents
 
@@ -1728,6 +1740,8 @@ Parameters:
     - `nested_dict : dict[str, Any]`
         nested dict to update the instance with
 
+docs for muutils v0.6.11
+
 Contents
 
 this utilities module handles serialization and loading of numpy and
@@ -1847,6 +1861,8 @@ def load_array
 View Source on GitHub
 
 load a json-serialized array, infer the mode if not specified
+
+docs for muutils v0.6.11
 
 Contents
 
@@ -2021,6 +2037,8 @@ def json_serialize
 View Source on GitHub
 
 serialize object to json-serializable object with default config
+
+docs for muutils v0.6.11
 
 Contents
 
@@ -2587,6 +2605,8 @@ Raises:
 -   AttributeError : if a property is not found on the class
 -   FieldLoadingError : if there is an error loading a field
 
+docs for muutils v0.6.11
+
 Contents
 
 extends dataclasses.Field for use with SerializableDataclass
@@ -2754,6 +2774,8 @@ string.
 note that if not using ZANJ, and you have a class inside a container,
 you MUST provide serialization_fn and loading_fn to serialize and load
 the container. ZANJ will automatically do this for you.
+
+docs for muutils v0.6.11
 
 Contents
 
@@ -2931,6 +2953,8 @@ View Source on GitHub
 
 tuple type hint, but for a tuple of any length with all the same type
 
+docs for muutils v0.6.11
+
 Contents
 
 utilities for reading and writing jsonlines files, including gzip
@@ -2978,6 +3002,8 @@ def jsonl_write
     ) -> None
 
 View Source on GitHub
+
+docs for muutils v0.6.11
 
 Contents
 
@@ -3032,6 +3058,8 @@ Inherited Members
 -   keys
 -   items
 -   values
+
+docs for muutils v0.6.11
 
 Contents
 
@@ -3252,6 +3280,8 @@ context manager for timing code
 
 -   elapsed_time: float
 
+docs for muutils v0.6.11
+
 API Documentation
 
 -   ExceptionContext
@@ -3286,6 +3316,8 @@ ExceptionContext
 View Source on GitHub
 
 -   stream
+
+docs for muutils v0.6.11
 
 API Documentation
 
@@ -3377,6 +3409,8 @@ standard header function. will output
 
 -   HEADER_FUNCTIONS: dict[str, muutils.logger.headerfuncs.HeaderFunction] = {'md': <function md_header_function>}
 
+docs for muutils v0.6.11
+
 API Documentation
 
 -   get_any_from_stream
@@ -3439,6 +3473,8 @@ then gather_val("log.jsonl", "s1", ("a", "b")) will return
         [1, 2],
         [4, 5]
     ]
+
+docs for muutils v0.6.11
 
 Contents
 
@@ -3580,6 +3616,8 @@ View Source on GitHub
 
 flush all streams
 
+docs for muutils v0.6.11
+
 API Documentation
 
 -   LoggingStream
@@ -3639,6 +3677,8 @@ def make_handler
     (self) -> Union[TextIO, muutils.logger.simplelogger.NullIO, NoneType]
 
 View Source on GitHub
+
+docs for muutils v0.6.11
 
 API Documentation
 
@@ -3712,6 +3752,8 @@ def log
 View Source on GitHub
 
 log a message to the log file, and optionally to the console
+
+docs for muutils v0.6.11
 
 API Documentation
 
@@ -3797,6 +3839,8 @@ def get_progress_default
 View Source on GitHub
 
 returns a progress string
+
+docs for muutils v0.6.11
 
 Contents
 
@@ -4366,6 +4410,8 @@ Duplicates are ignored in the same manner as a set. Unfrozen dataclasses
 can’t be placed in sets since they’re not hashable. Collections of them
 may be compared using this function.
 
+docs for muutils v0.6.11
+
 API Documentation
 
 -   is_abstract
@@ -4494,6 +4540,8 @@ Duplicates are ignored in the same manner as a set. Unfrozen dataclasses
 can’t be placed in sets since they’re not hashable. Collections of them
 may be compared using this function.
 
+docs for muutils v0.6.11
+
 API Documentation
 
 -   FrozenDict
@@ -4608,6 +4656,8 @@ you can’t rely on that. always use the return value.
 
 the gelidum package is a more complete implementation of this idea
 
+docs for muutils v0.6.11
+
 API Documentation
 
 -   stable_hash
@@ -4626,6 +4676,8 @@ View Source on GitHub
 
 Returns a stable hash of the given string. not cryptographically secure,
 but stable between runs
+
+docs for muutils v0.6.11
 
 API Documentation
 
@@ -4681,6 +4733,8 @@ Examples:
     1500000.0
     >>> str_to_numeric("1.2e2")
     120.0
+
+docs for muutils v0.6.11
 
 API Documentation
 
@@ -4855,6 +4909,8 @@ Raises:
     is "except"
 -   ValueError : if when_missing is invalid
 
+docs for muutils v0.6.11
+
 API Documentation
 
 -   sanitize_name
@@ -4937,6 +4993,8 @@ def dynamic_docstring
     (**doc_params)
 
 View Source on GitHub
+
+docs for muutils v0.6.11
 
 Contents
 
@@ -5032,6 +5090,8 @@ def pprint_summary
 
 View Source on GitHub
 
+docs for muutils v0.6.11
+
 Contents
 
 utilities for working with notebooks
@@ -5073,6 +5133,8 @@ def mm
 View Source on GitHub
 
 for plotting mermaid.js diagrams
+
+docs for muutils v0.6.11
 
 Contents
 
@@ -5244,6 +5306,8 @@ View Source on GitHub
 
 Show the active plot, depending on global configs
 
+docs for muutils v0.6.11
+
 Contents
 
 fast conversion of Jupyter Notebooks to scripts, with some basic and
@@ -5346,6 +5410,8 @@ Arguments
     - `filter_out_lines: str|typing.Sequence[str] = ('%', '!')`: comment out lines starting with these strings (in code blocks).
         if a string is passed, it will be split by char and each char will be treated as a separate filter.
 
+docs for muutils v0.6.11
+
 Contents
 
 display mermaid.js diagrams in jupyter notebooks by the mermaid.ink/img
@@ -5371,6 +5437,8 @@ def mm
 View Source on GitHub
 
 for plotting mermaid.js diagrams
+
+docs for muutils v0.6.11
 
 Contents
 
@@ -5400,6 +5468,8 @@ def print_tex
 View Source on GitHub
 
 function for easily rendering a sympy expression in latex
+
+docs for muutils v0.6.11
 
 Contents
 
@@ -5455,6 +5525,8 @@ def run_notebook_tests
     )
 
 View Source on GitHub
+
+docs for muutils v0.6.11
 
 Contents
 
@@ -5800,6 +5872,8 @@ NoOpContextManager
 
 View Source on GitHub
 
+docs for muutils v0.6.11
+
 Contents
 
 StatCounter class for counting and calculating statistics on numbers
@@ -6009,6 +6083,8 @@ Inherited Members
 
 -   clear
 
+docs for muutils v0.6.11
+
 Contents
 
 utilities for getting information about the system, see SysInfo class
@@ -6076,6 +6152,8 @@ def get_all
     ) -> dict
 
 View Source on GitHub
+
+docs for muutils v0.6.11
 
 Contents
 
@@ -6370,6 +6448,8 @@ Raises:
 -   StateDictShapeError : shapes don’t match (but keys do)
 -   StateDictValueError : values don’t match (but keys and shapes do)
 
+docs for muutils v0.6.11
+
 Contents
 
 timeit_fancy is just a fancier version of timeit with more options
@@ -6468,6 +6548,8 @@ FancyTimeitResult, which is a NamedTuple with the following fields:
     otherwise None.
 -   profile: pstats.Stats|None A pstats.Stats object if do_profiling is
     True, otherwise None.
+
+docs for muutils v0.6.11
 
 Contents
 

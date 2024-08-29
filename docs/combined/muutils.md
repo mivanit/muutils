@@ -1,3 +1,5 @@
+docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.11
+
 
 ## Contents
 [![PyPI](https://img.shields.io/pypi/v/muutils)](https://pypi.org/project/muutils/)
@@ -300,6 +302,8 @@ There are a couple work-in-progress utilities in [`_wip`](https://github.com/miv
 
 
 
+
+docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.11
 
 
 ## Contents
@@ -711,6 +715,8 @@ unembed:
 
 
 
+docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.11
+
 
 ## Contents
 provides `ErrorMode` enum for handling errors consistently
@@ -990,6 +996,8 @@ map of string aliases to `ErrorMode` instances
 
 
 
+docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.11
+
 
 ## Contents
 group items by assuming that `eq_func` defines an equivalence relation
@@ -1036,6 +1044,8 @@ note that lists are used to avoid the need for hashable items, and to allow for 
 
 
 
+
+docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.11
 
 
 ## Contents
@@ -1449,6 +1459,8 @@ Examples:
 
 
 
+
+docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.11
 
 
 ## Contents
@@ -2059,6 +2071,8 @@ update the instance from a nested dict, useful for configuration from command li
 
 
 
+docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.11
+
 
 ## Contents
 this utilities module handles serialization and loading of numpy and torch arrays as json
@@ -2202,6 +2216,8 @@ load a json-serialized array, infer the mode if not specified
 
 
 
+
+docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.11
 
 
 ## Contents
@@ -2453,6 +2469,8 @@ serialize object to json-serializable object with default config
 
 
 
+
+docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.11
 
 
 ## Contents
@@ -3073,6 +3091,8 @@ class Myclass(SerializableDataclass):
 
 
 
+docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.11
+
 
 ## Contents
 extends `dataclasses.Field` for use with `SerializableDataclass`
@@ -3299,6 +3319,8 @@ ZANJ will automatically do this for you.
 
 
 
+docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.11
+
 
 ## Contents
 utilities for json_serialize
@@ -3518,6 +3540,8 @@ tuple type hint, but for a tuple of any length with all the same type
 
 
 
+docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.11
+
 
 ## Contents
 utilities for reading and writing jsonlines files, including gzip support
@@ -3586,6 +3610,8 @@ utilities for reading and writing jsonlines files, including gzip support
 
 
 
+
+docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.11
 
 
 ## Contents
@@ -3660,6 +3686,8 @@ methods except for __getitem__, __iter__, and __len__.
 
 
 
+
+docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.11
 
 
 ## Contents
@@ -3955,6 +3983,8 @@ context manager for timing code
 
 
 
+docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.11
+
 
 
 
@@ -4010,6 +4040,8 @@ with ExceptionContext(errorfile):
 
 
 
+
+docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.11
 
 
 
@@ -4125,6 +4157,8 @@ standard header function. will output
 
 
 
+docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.11
+
 
 
 
@@ -4216,6 +4250,8 @@ then `gather_val("log.jsonl", "s1", ("a", "b"))` will return
 
 
 
+
+docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.11
 
 
 ## Contents
@@ -4383,6 +4419,8 @@ flush all streams
 
 
 
+docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.11
+
 
 
 
@@ -4481,6 +4519,8 @@ properties of a logging stream
 
 
 
+
+docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.11
 
 
 
@@ -4592,6 +4632,8 @@ log a message to the log file, and optionally to the console
 
 
 
+
+docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.11
 
 
 
@@ -4739,6 +4781,8 @@ returns a progress string
 
 
 
+
+docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.11
 
 
 ## Contents
@@ -5410,6 +5454,8 @@ Collections of them may be compared using this function.
 
 
 
+docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.11
+
 
 
 
@@ -5566,6 +5612,8 @@ Collections of them may be compared using this function.
 
 
 
+
+docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.11
 
 
 
@@ -5725,6 +5773,8 @@ the [gelidum](https://github.com/diegojromerolopez/gelidum/) package is a more c
 
 
 
+docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.11
+
 
 
 
@@ -5757,6 +5807,8 @@ Returns a stable hash of the given string. not cryptographically secure, but sta
 
 
 
+
+docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.11
 
 
 
@@ -5831,6 +5883,8 @@ The string can represent an integer, python float, fraction, or shortened via `s
 
 
 
+
+docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.11
 
 
 
@@ -6030,6 +6084,8 @@ return type is one of:
 
 
 
+docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.11
+
 
 
 
@@ -6148,6 +6204,8 @@ sanitize an identifier (variable or function name)
 
 
 
+
+docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.11
 
 
 ## Contents
@@ -6281,6 +6339,8 @@ Decorator to add a method to the method_dict
 
 
 
+docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.11
+
 
 ## Contents
 utilities for working with notebooks
@@ -6333,6 +6393,8 @@ for plotting mermaid.js diagrams
 
 
 
+
+docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.11
 
 
 ## Contents
@@ -6577,6 +6639,8 @@ Show the active plot, depending on global configs
 
 
 
+docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.11
+
 
 ## Contents
 fast conversion of Jupyter Notebooks to scripts, with some basic and hacky filtering and formatting.
@@ -6703,6 +6767,8 @@ Convert all Jupyter Notebooks in a directory to scripts.
 
 
 
+docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.11
+
 
 ## Contents
 display mermaid.js diagrams in jupyter notebooks by the `mermaid.ink/img` service
@@ -6738,6 +6804,8 @@ for plotting mermaid.js diagrams
 
 
 
+
+docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.11
 
 
 ## Contents
@@ -6779,6 +6847,8 @@ function for easily rendering a sympy expression in latex
 
 
 
+
+docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.11
 
 
 ## Contents
@@ -6850,6 +6920,8 @@ Common base class for all non-exit exceptions.
 
 
 
+
+docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.11
 
 
 ## Contents
@@ -7284,6 +7356,8 @@ A context manager that does nothing.
 
 
 
+docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.11
+
 
 ## Contents
 `StatCounter` class for counting and calculating statistics on numbers
@@ -7550,6 +7624,8 @@ calls `map_func` on each element of `universal_flatten(arr)`
 
 
 
+docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.11
+
 
 ## Contents
 utilities for getting information about the system, see `SysInfo` class
@@ -7654,6 +7730,8 @@ pytorch and cuda information
 
 
 
+
+docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.11
 
 
 ## Contents
@@ -8015,6 +8093,8 @@ compare two dicts of tensors
 
 
 
+docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.11
+
 
 ## Contents
 `timeit_fancy` is just a fancier version of timeit with more options
@@ -8135,6 +8215,8 @@ Approximates the functionality of the %timeit magic or command line interface in
 
 
 
+
+docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.11
 
 
 ## Contents

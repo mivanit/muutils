@@ -13,6 +13,9 @@ import pdoc.extract
 import pdoc.render_helpers
 from markupsafe import Markup
 
+pdoc.render_helpers.markdown_extensions["alerts"] = True
+pdoc.render_helpers.markdown_extensions["admonitions"] = True
+
 
 def increment_markdown_headings(markdown_text: str, increment: int = 2) -> str:
     """

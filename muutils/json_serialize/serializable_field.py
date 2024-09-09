@@ -127,8 +127,24 @@ class SerializableField(dataclasses.Field):
         )
 
 
-# no type hint to avoid confusing mypy
-def serializable_field(*args, **kwargs):  # -> SerializableField:
+def serializable_field(
+    default: Union[Any, dataclasses._MISSING_TYPE] = dataclasses.MISSING,
+    default_factory: Union[
+        Callable[[], Any], dataclasses._MISSING_TYPE
+    ] = dataclasses.MISSING,
+    init: bool = True,
+    repr: bool = True,
+    hash: Optional[bool] = None,
+    compare: bool = True,
+    metadata: Optional[types.MappingProxyType] = None,
+    kw_only: Union[bool, dataclasses._MISSING_TYPE] = dataclasses.MISSING,
+    serialize: bool = True,
+    serialization_fn: Optional[Callable[[Any], Any]] = None,
+    deserialize_fn: Optional[Callable[[Any], Any]] = None,
+    assert_type: bool = True,
+    custom_typecheck_fn: Optional[Callable[[type], bool]] = None,
+    **kwargs: Any,
+) -> "SerializableField":
     """Create a new `SerializableField`. type hinting this func confuses mypy, so scroll down
 
     ```
@@ -184,4 +200,19 @@ def serializable_field(*args, **kwargs):  # -> SerializableField:
     `serialization_fn` and `loading_fn` to serialize and load the container.
     ZANJ will automatically do this for you.
     """
-    return SerializableField(*args, **kwargs)
+    return SerializableField(
+        default=default,
+        default_factory=default_factory,
+        init=init,
+        repr=repr,
+        hash=hash,
+        compare=compare,
+        metadata=metadata,
+        kw_only=kw_only,
+        serialize=serialize,
+        serialization_fn=serialization_fn,
+        deserialize_fn=deserialize_fn,
+        assert_type=assert_type,
+        custom_typecheck_fn=custom_typecheck_fn,
+        **kwargs,
+    )

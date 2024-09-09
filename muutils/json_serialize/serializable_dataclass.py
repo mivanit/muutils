@@ -279,6 +279,9 @@ def SerializableDataclass__validate_fields_types(
     )
 
 
+@typing.dataclass_transform(
+    field_specifiers=(serializable_field, SerializableField),
+)
 class SerializableDataclass(abc.ABC):
     """Base class for serializable dataclasses
 
@@ -531,7 +534,9 @@ class FieldLoadingError(FieldError):
     pass
 
 
-# Step 3: Create a custom serializable_dataclass decorator
+@typing.dataclass_transform(
+    field_specifiers=(serializable_field, SerializableField),
+)
 def serializable_dataclass(
     # this should be `_cls: Type[T] | None = None,` but mypy doesn't like it
     _cls=None,  # type: ignore

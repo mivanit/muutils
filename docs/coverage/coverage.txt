@@ -8,8 +8,8 @@ muutils\interval.py                                                             
 muutils\json_serialize\__init__.py                                                    6      6     0%   16-31
 muutils\json_serialize\array.py                                                      92     33    64%   9-32, 36-42, 53, 93, 127-130, 139, 143, 147, 150, 154, 158-161, 165, 172, 184, 211-216, 221, 224
 muutils\json_serialize\json_serialize.py                                             64     46    28%   11-92, 139, 233-259, 269, 281, 296-329
-muutils\json_serialize\serializable_dataclass.py                                    231     99    57%   52-92, 108-113, 133-141, 168, 174, 192-206, 219, 223-233, 252-254, 258, 270, 282-351, 361-368, 397, 410-411, 417, 428-432, 437, 449, 466-478, 483, 489, 492-494, 504-535, 626, 634-638, 667, 691-692, 726, 768
-muutils\json_serialize\serializable_field.py                                         32     17    47%   9-45, 81, 87-90, 100, 111-131
+muutils\json_serialize\serializable_dataclass.py                                    242    110    55%   52-125, 141-146, 166-174, 201, 207, 225-239, 252, 256-266, 285-287, 291, 303, 315-387, 397-404, 433, 446-447, 453, 464-468, 473, 485, 502-514, 519, 525, 528-530, 540-573, 664, 672-676, 705, 729-730, 764, 806
+muutils\json_serialize\serializable_field.py                                         40     24    40%   9-45, 81, 87-90, 100, 111-187
 muutils\json_serialize\util.py                                                      112     62    45%   3-61, 65, 76, 80, 96, 105, 110-114, 125, 128-133, 154, 169-174, 244, 248-253
 muutils\jsonlines.py                                                                 32     32     0%   3-77
 muutils\kappa.py                                                                     15      0   100%
@@ -24,7 +24,7 @@ muutils\logger\timing.py                                                        
 muutils\misc\__init__.py                                                              7      0   100%
 muutils\misc\classes.py                                                              23      5    78%   18-23
 muutils\misc\freezing.py                                                             61      8    87%   17, 26, 29, 49-50, 63, 102-103
-muutils\misc\hashing.py                                                               6      0   100%
+muutils\misc\hashing.py                                                              16      7    56%   14, 23-29
 muutils\misc\numerical.py                                                            68      3    96%   46, 77, 127
 muutils\misc\sequence.py                                                             59      1    98%   42
 muutils\misc\string.py                                                               34      5    85%   103-108
@@ -35,7 +35,7 @@ muutils\nbutils\convert_ipynb_to_script.py                                      
 muutils\nbutils\mermaid.py                                                           11     11     0%   3-20
 muutils\nbutils\print_tex.py                                                         10     10     0%   3-21
 muutils\nbutils\run_notebook_tests.py                                                74     26    65%   51, 53, 57, 61, 67, 75, 104, 110-115, 120-133, 140-157
-muutils\spinner.py                                                                  116     13    89%   196, 198, 230-234, 254-255, 370, 374, 410, 420, 423, 426
+muutils\spinner.py                                                                  116     15    87%   196, 198, 230-234, 254-255, 294-295, 370, 374, 410, 420, 423, 426
 muutils\statcounter.py                                                               89     32    64%   30-41, 56, 82, 110, 122, 132, 149-179, 199, 209, 212, 217-222, 231
 muutils\sysinfo.py                                                                   78     25    68%   22-25, 66-67, 84-117, 158-167, 179, 197-199
 muutils\tensor_utils.py                                                             128     18    86%   98, 101, 120, 124, 141, 144-147, 155, 162, 176-184
@@ -73,4 +73,4 @@ tests\unit\validate_type\test_validate_type.py                                  
 tests\unit\validate_type\test_validate_type_GENERATED.py                            206     45    78%   50-51, 75-76, 102-103, 125-126, 147-148, 177-178, 203-204, 237-238, 255, 274-275, 336-337, 361-362, 432-433, 461-462, 466-467, 481-499
 tests\unit\validate_type\test_validate_type_special.py                               15      3    80%   34-35, 57
 ---------------------------------------------------------------------------------------------------------------
-TOTAL                                                                              5562    921    83%
+TOTAL                                                                              5591    948    83%

@@ -1,4 +1,4 @@
-docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.11
+docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.12
 
 
 ## Contents
@@ -303,7 +303,7 @@ There are a couple work-in-progress utilities in [`_wip`](https://github.com/miv
 
 
 
-docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.11
+docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.12
 
 
 ## Contents
@@ -715,7 +715,7 @@ unembed:
 
 
 
-docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.11
+docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.12
 
 
 ## Contents
@@ -996,7 +996,7 @@ map of string aliases to `ErrorMode` instances
 
 
 
-docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.11
+docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.12
 
 
 ## Contents
@@ -1045,7 +1045,7 @@ note that lists are used to avoid the need for hashable items, and to allow for 
 
 
 
-docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.11
+docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.12
 
 
 ## Contents
@@ -1460,7 +1460,7 @@ Examples:
 
 
 
-docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.11
+docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.12
 
 
 ## Contents
@@ -1558,7 +1558,7 @@ serialize object to json-serializable object with default config
 ```
 
 
-[View Source on GitHub](https://github.com/mivanit/muutils/blob/main/muutils/json_serialize/__init__.py#L535-L808)
+[View Source on GitHub](https://github.com/mivanit/muutils/blob/main/muutils/json_serialize/__init__.py#L570-L846)
 
 
 decorator to make a dataclass serializable. must also make it inherit from `SerializableDataclass`
@@ -1623,18 +1623,34 @@ class Myclass(SerializableDataclass):
 
 ### `def serializable_field` { #serializable_field }
 ```python
-(*args, **kwargs)
+(
+    *_args,
+    default: Union[Any, dataclasses._MISSING_TYPE] = <dataclasses._MISSING_TYPE object>,
+    default_factory: Union[Any, dataclasses._MISSING_TYPE] = <dataclasses._MISSING_TYPE object>,
+    init: bool = True,
+    repr: bool = True,
+    hash: Optional[bool] = None,
+    compare: bool = True,
+    metadata: Optional[mappingproxy] = None,
+    kw_only: Union[bool, dataclasses._MISSING_TYPE] = <dataclasses._MISSING_TYPE object>,
+    serialize: bool = True,
+    serialization_fn: Optional[Callable[[Any], Any]] = None,
+    deserialize_fn: Optional[Callable[[Any], Any]] = None,
+    assert_type: bool = True,
+    custom_typecheck_fn: Optional[Callable[[type], bool]] = None,
+    **kwargs: Any
+) -> Any
 ```
 
 
-[View Source on GitHub](https://github.com/mivanit/muutils/blob/main/muutils/json_serialize/__init__.py#L131-L187)
+[View Source on GitHub](https://github.com/mivanit/muutils/blob/main/muutils/json_serialize/__init__.py#L187-L275)
 
 
-Create a new `SerializableField`. type hinting this func confuses mypy, so scroll down
+Create a new `SerializableField`
 
 ```
-default: Any | dataclasses._MISSING_TYPE = dataclasses.MISSING,
-default_factory: Callable[[], Any]
+default: Sfield_T | dataclasses._MISSING_TYPE = dataclasses.MISSING,
+default_factory: Callable[[], Sfield_T]
 | dataclasses._MISSING_TYPE = dataclasses.MISSING,
 init: bool = True,
 repr: bool = True,
@@ -1908,7 +1924,7 @@ checks if two dataclasses which (might) hold numpy arrays are equal
 
 ### `class SerializableDataclass(abc.ABC):` { #SerializableDataclass }
 
-[View Source on GitHub](https://github.com/mivanit/muutils/blob/main/muutils/json_serialize/__init__.py#L282-L472)
+[View Source on GitHub](https://github.com/mivanit/muutils/blob/main/muutils/json_serialize/__init__.py#L315-L508)
 
 
 Base class for serializable dataclasses
@@ -1966,7 +1982,7 @@ which gives us:
 ```
 
 
-[View Source on GitHub](https://github.com/mivanit/muutils/blob/main/muutils/json_serialize/__init__.py#L332-L336)
+[View Source on GitHub](https://github.com/mivanit/muutils/blob/main/muutils/json_serialize/__init__.py#L368-L372)
 
 
 returns the class as a dict, implemented by using `@serializable_dataclass` decorator
@@ -1978,7 +1994,7 @@ returns the class as a dict, implemented by using `@serializable_dataclass` deco
 ```
 
 
-[View Source on GitHub](https://github.com/mivanit/muutils/blob/main/muutils/json_serialize/__init__.py#L338-L341)
+[View Source on GitHub](https://github.com/mivanit/muutils/blob/main/muutils/json_serialize/__init__.py#L374-L377)
 
 
 takes in an appropriately structured dict and returns an instance of the class, implemented by using `@serializable_dataclass` decorator
@@ -1993,7 +2009,7 @@ takes in an appropriately structured dict and returns an instance of the class, 
 ```
 
 
-[View Source on GitHub](https://github.com/mivanit/muutils/blob/main/muutils/json_serialize/__init__.py#L343-L349)
+[View Source on GitHub](https://github.com/mivanit/muutils/blob/main/muutils/json_serialize/__init__.py#L379-L385)
 
 
 validate the types of all the fields on a `SerializableDataclass`. calls `SerializableDataclass__validate_field_type` for each field
@@ -2009,7 +2025,7 @@ validate the types of all the fields on a `SerializableDataclass`. calls `Serial
 ```
 
 
-[View Source on GitHub](https://github.com/mivanit/muutils/blob/main/muutils/json_serialize/__init__.py#L351-L359)
+[View Source on GitHub](https://github.com/mivanit/muutils/blob/main/muutils/json_serialize/__init__.py#L387-L395)
 
 
 given a dataclass, check the field matches the type hint
@@ -2025,7 +2041,7 @@ given a dataclass, check the field matches the type hint
 ```
 
 
-[View Source on GitHub](https://github.com/mivanit/muutils/blob/main/muutils/json_serialize/__init__.py#L368-L447)
+[View Source on GitHub](https://github.com/mivanit/muutils/blob/main/muutils/json_serialize/__init__.py#L404-L483)
 
 
 get a rich and recursive diff between two instances of a serializable dataclass
@@ -2059,7 +2075,7 @@ get a rich and recursive diff between two instances of a serializable dataclass
 ```
 
 
-[View Source on GitHub](https://github.com/mivanit/muutils/blob/main/muutils/json_serialize/__init__.py#L449-L464)
+[View Source on GitHub](https://github.com/mivanit/muutils/blob/main/muutils/json_serialize/__init__.py#L485-L500)
 
 
 update the instance from a nested dict, useful for configuration from command line args
@@ -2071,7 +2087,7 @@ update the instance from a nested dict, useful for configuration from command li
 
 
 
-docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.11
+docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.12
 
 
 ## Contents
@@ -2217,7 +2233,7 @@ load a json-serialized array, infer the mode if not specified
 
 
 
-docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.11
+docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.12
 
 
 ## Contents
@@ -2470,7 +2486,7 @@ serialize object to json-serializable object with default config
 
 
 
-docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.11
+docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.12
 
 
 ## Contents
@@ -2526,6 +2542,7 @@ which gives us:
 
 ## API Documentation
 
+ - [`dataclass_transform`](#dataclass_transform)
  - [`CantGetTypeHintsWarning`](#CantGetTypeHintsWarning)
  - [`ZanjMissingWarning`](#ZanjMissingWarning)
  - [`zanj_register_loader_serializable_dataclass`](#zanj_register_loader_serializable_dataclass)
@@ -2599,13 +2616,93 @@ which gives us:
     >>> read_nc == nc
     True
 
-[View Source on GitHub](https://github.com/mivanit/muutils/blob/main/muutils/json_serialize/serializable_dataclass.py#L0-L807)
+[View Source on GitHub](https://github.com/mivanit/muutils/blob/main/muutils/json_serialize/serializable_dataclass.py#L0-L845)
 
+
+
+### `def dataclass_transform` { #dataclass_transform }
+```python
+(
+    *,
+    eq_default: bool = True,
+    order_default: bool = False,
+    kw_only_default: bool = False,
+    frozen_default: bool = False,
+    field_specifiers: tuple[typing.Union[type[typing.Any], typing.Callable[..., typing.Any]], ...] = (),
+    **kwargs: Any
+) -> <class '_IdentityCallable'>
+```
+
+
+[View Source on GitHub](https://github.com/mivanit/muutils/blob/main/muutils/json_serialize/serializable_dataclass.py#L3361-L3442)
+
+
+Decorator to mark an object as providing dataclass-like behaviour.
+
+The decorator can be applied to a function, class, or metaclass.
+
+Example usage with a decorator function::
+
+    @dataclass_transform()
+    def create_model[T](cls: type[T]) -> type[T]:
+        ...
+        return cls
+
+    @create_model
+    class CustomerModel:
+        id: int
+        name: str
+
+On a base class::
+
+    @dataclass_transform()
+    class ModelBase: ...
+
+    class CustomerModel(ModelBase):
+        id: int
+        name: str
+
+On a metaclass::
+
+    @dataclass_transform()
+    class ModelMeta(type): ...
+
+    class ModelBase(metaclass=ModelMeta): ...
+
+    class CustomerModel(ModelBase):
+        id: int
+        name: str
+
+The ``CustomerModel`` classes defined above will
+be treated by type checkers similarly to classes created with
+``@dataclasses.dataclass``.
+For example, type checkers will assume these classes have
+``__init__`` methods that accept ``id`` and ``name``.
+
+The arguments to this decorator can be used to customize this behavior:
+- ``eq_default`` indicates whether the ``eq`` parameter is assumed to be
+    ``True`` or ``False`` if it is omitted by the caller.
+- ``order_default`` indicates whether the ``order`` parameter is
+    assumed to be True or False if it is omitted by the caller.
+- ``kw_only_default`` indicates whether the ``kw_only`` parameter is
+    assumed to be True or False if it is omitted by the caller.
+- ``frozen_default`` indicates whether the ``frozen`` parameter is
+    assumed to be True or False if it is omitted by the caller.
+- ``field_specifiers`` specifies a static list of supported classes
+    or functions that describe fields, similar to ``dataclasses.field()``.
+- Arbitrary other keyword arguments are accepted in order to allow for
+    possible future extensions.
+
+At runtime, this decorator records its arguments in the
+``__dataclass_transform__`` attribute on the decorated object.
+It has no other runtime effect.
+
+See PEP 681 for more details.
 
 
 ### `class CantGetTypeHintsWarning(builtins.UserWarning):` { #CantGetTypeHintsWarning }
 
-[View Source on GitHub](https://github.com/mivanit/muutils/blob/main/muutils/json_serialize/serializable_dataclass.py#L76-L79)
+[View Source on GitHub](https://github.com/mivanit/muutils/blob/main/muutils/json_serialize/serializable_dataclass.py#L109-L112)
 
 
 special warning for when we can't get type hints
@@ -2622,7 +2719,7 @@ special warning for when we can't get type hints
 
 ### `class ZanjMissingWarning(builtins.UserWarning):` { #ZanjMissingWarning }
 
-[View Source on GitHub](https://github.com/mivanit/muutils/blob/main/muutils/json_serialize/serializable_dataclass.py#L82-L85)
+[View Source on GitHub](https://github.com/mivanit/muutils/blob/main/muutils/json_serialize/serializable_dataclass.py#L115-L118)
 
 
 special warning for when [`ZANJ`](https://github.com/mivanit/ZANJ) is missing -- `register_loader_serializable_dataclass` will not work
@@ -2643,7 +2740,7 @@ special warning for when [`ZANJ`](https://github.com/mivanit/ZANJ) is missing --
 ```
 
 
-[View Source on GitHub](https://github.com/mivanit/muutils/blob/main/muutils/json_serialize/serializable_dataclass.py#L92-L130)
+[View Source on GitHub](https://github.com/mivanit/muutils/blob/main/muutils/json_serialize/serializable_dataclass.py#L125-L163)
 
 
 Register a serializable dataclass with the ZANJ import
@@ -2656,7 +2753,7 @@ this allows `ZANJ().read()` to load the class and not just return plain dicts
 
 ### `class FieldIsNotInitOrSerializeWarning(builtins.UserWarning):` { #FieldIsNotInitOrSerializeWarning }
 
-[View Source on GitHub](https://github.com/mivanit/muutils/blob/main/muutils/json_serialize/serializable_dataclass.py#L137-L138)
+[View Source on GitHub](https://github.com/mivanit/muutils/blob/main/muutils/json_serialize/serializable_dataclass.py#L170-L171)
 
 
 Base class for warnings generated by user code.
@@ -2681,7 +2778,7 @@ Base class for warnings generated by user code.
 ```
 
 
-[View Source on GitHub](https://github.com/mivanit/muutils/blob/main/muutils/json_serialize/serializable_dataclass.py#L141-L230)
+[View Source on GitHub](https://github.com/mivanit/muutils/blob/main/muutils/json_serialize/serializable_dataclass.py#L174-L263)
 
 
 given a dataclass, check the field matches the type hint
@@ -2711,7 +2808,7 @@ this function is written to `<a href="#SerializableDataclass.validate_field_type
 ```
 
 
-[View Source on GitHub](https://github.com/mivanit/muutils/blob/main/muutils/json_serialize/serializable_dataclass.py#L233-L267)
+[View Source on GitHub](https://github.com/mivanit/muutils/blob/main/muutils/json_serialize/serializable_dataclass.py#L266-L300)
 
 
 validate the types of all the fields on a `SerializableDataclass`. calls `SerializableDataclass__validate_field_type` for each field
@@ -2728,7 +2825,7 @@ returns a dict of field names to bools, where the bool is if the field type is v
 ```
 
 
-[View Source on GitHub](https://github.com/mivanit/muutils/blob/main/muutils/json_serialize/serializable_dataclass.py#L270-L279)
+[View Source on GitHub](https://github.com/mivanit/muutils/blob/main/muutils/json_serialize/serializable_dataclass.py#L303-L312)
 
 
 validate the types of all the fields on a `SerializableDataclass`. calls `SerializableDataclass__validate_field_type` for each field
@@ -2736,7 +2833,7 @@ validate the types of all the fields on a `SerializableDataclass`. calls `Serial
 
 ### `class SerializableDataclass(abc.ABC):` { #SerializableDataclass }
 
-[View Source on GitHub](https://github.com/mivanit/muutils/blob/main/muutils/json_serialize/serializable_dataclass.py#L282-L472)
+[View Source on GitHub](https://github.com/mivanit/muutils/blob/main/muutils/json_serialize/serializable_dataclass.py#L315-L508)
 
 
 Base class for serializable dataclasses
@@ -2794,7 +2891,7 @@ which gives us:
 ```
 
 
-[View Source on GitHub](https://github.com/mivanit/muutils/blob/main/muutils/json_serialize/serializable_dataclass.py#L332-L336)
+[View Source on GitHub](https://github.com/mivanit/muutils/blob/main/muutils/json_serialize/serializable_dataclass.py#L368-L372)
 
 
 returns the class as a dict, implemented by using `@serializable_dataclass` decorator
@@ -2806,7 +2903,7 @@ returns the class as a dict, implemented by using `@serializable_dataclass` deco
 ```
 
 
-[View Source on GitHub](https://github.com/mivanit/muutils/blob/main/muutils/json_serialize/serializable_dataclass.py#L338-L341)
+[View Source on GitHub](https://github.com/mivanit/muutils/blob/main/muutils/json_serialize/serializable_dataclass.py#L374-L377)
 
 
 takes in an appropriately structured dict and returns an instance of the class, implemented by using `@serializable_dataclass` decorator
@@ -2821,7 +2918,7 @@ takes in an appropriately structured dict and returns an instance of the class, 
 ```
 
 
-[View Source on GitHub](https://github.com/mivanit/muutils/blob/main/muutils/json_serialize/serializable_dataclass.py#L343-L349)
+[View Source on GitHub](https://github.com/mivanit/muutils/blob/main/muutils/json_serialize/serializable_dataclass.py#L379-L385)
 
 
 validate the types of all the fields on a `SerializableDataclass`. calls `SerializableDataclass__validate_field_type` for each field
@@ -2837,7 +2934,7 @@ validate the types of all the fields on a `SerializableDataclass`. calls `Serial
 ```
 
 
-[View Source on GitHub](https://github.com/mivanit/muutils/blob/main/muutils/json_serialize/serializable_dataclass.py#L351-L359)
+[View Source on GitHub](https://github.com/mivanit/muutils/blob/main/muutils/json_serialize/serializable_dataclass.py#L387-L395)
 
 
 given a dataclass, check the field matches the type hint
@@ -2853,7 +2950,7 @@ given a dataclass, check the field matches the type hint
 ```
 
 
-[View Source on GitHub](https://github.com/mivanit/muutils/blob/main/muutils/json_serialize/serializable_dataclass.py#L368-L447)
+[View Source on GitHub](https://github.com/mivanit/muutils/blob/main/muutils/json_serialize/serializable_dataclass.py#L404-L483)
 
 
 get a rich and recursive diff between two instances of a serializable dataclass
@@ -2887,7 +2984,7 @@ get a rich and recursive diff between two instances of a serializable dataclass
 ```
 
 
-[View Source on GitHub](https://github.com/mivanit/muutils/blob/main/muutils/json_serialize/serializable_dataclass.py#L449-L464)
+[View Source on GitHub](https://github.com/mivanit/muutils/blob/main/muutils/json_serialize/serializable_dataclass.py#L485-L500)
 
 
 update the instance from a nested dict, useful for configuration from command line args
@@ -2903,7 +3000,7 @@ update the instance from a nested dict, useful for configuration from command li
 ```
 
 
-[View Source on GitHub](https://github.com/mivanit/muutils/blob/main/muutils/json_serialize/serializable_dataclass.py#L477-L480)
+[View Source on GitHub](https://github.com/mivanit/muutils/blob/main/muutils/json_serialize/serializable_dataclass.py#L513-L516)
 
 
 cached typing.get_type_hints for a class
@@ -2915,7 +3012,7 @@ cached typing.get_type_hints for a class
 ```
 
 
-[View Source on GitHub](https://github.com/mivanit/muutils/blob/main/muutils/json_serialize/serializable_dataclass.py#L483-L501)
+[View Source on GitHub](https://github.com/mivanit/muutils/blob/main/muutils/json_serialize/serializable_dataclass.py#L519-L537)
 
 
 helper function to get type hints for a class
@@ -2923,7 +3020,7 @@ helper function to get type hints for a class
 
 ### `class KWOnlyError(builtins.NotImplementedError):` { #KWOnlyError }
 
-[View Source on GitHub](https://github.com/mivanit/muutils/blob/main/muutils/json_serialize/serializable_dataclass.py#L504-L507)
+[View Source on GitHub](https://github.com/mivanit/muutils/blob/main/muutils/json_serialize/serializable_dataclass.py#L540-L543)
 
 
 kw-only dataclasses are not supported in python <3.9
@@ -2940,7 +3037,7 @@ kw-only dataclasses are not supported in python <3.9
 
 ### `class FieldError(builtins.ValueError):` { #FieldError }
 
-[View Source on GitHub](https://github.com/mivanit/muutils/blob/main/muutils/json_serialize/serializable_dataclass.py#L510-L513)
+[View Source on GitHub](https://github.com/mivanit/muutils/blob/main/muutils/json_serialize/serializable_dataclass.py#L546-L549)
 
 
 base class for field errors
@@ -2957,7 +3054,7 @@ base class for field errors
 
 ### `class NotSerializableFieldException(FieldError):` { #NotSerializableFieldException }
 
-[View Source on GitHub](https://github.com/mivanit/muutils/blob/main/muutils/json_serialize/serializable_dataclass.py#L516-L519)
+[View Source on GitHub](https://github.com/mivanit/muutils/blob/main/muutils/json_serialize/serializable_dataclass.py#L552-L555)
 
 
 field is not a `SerializableField`
@@ -2974,7 +3071,7 @@ field is not a `SerializableField`
 
 ### `class FieldSerializationError(FieldError):` { #FieldSerializationError }
 
-[View Source on GitHub](https://github.com/mivanit/muutils/blob/main/muutils/json_serialize/serializable_dataclass.py#L522-L525)
+[View Source on GitHub](https://github.com/mivanit/muutils/blob/main/muutils/json_serialize/serializable_dataclass.py#L558-L561)
 
 
 error while serializing a field
@@ -2991,7 +3088,7 @@ error while serializing a field
 
 ### `class FieldLoadingError(FieldError):` { #FieldLoadingError }
 
-[View Source on GitHub](https://github.com/mivanit/muutils/blob/main/muutils/json_serialize/serializable_dataclass.py#L528-L531)
+[View Source on GitHub](https://github.com/mivanit/muutils/blob/main/muutils/json_serialize/serializable_dataclass.py#L564-L567)
 
 
 error while loading a field
@@ -3026,7 +3123,7 @@ error while loading a field
 ```
 
 
-[View Source on GitHub](https://github.com/mivanit/muutils/blob/main/muutils/json_serialize/serializable_dataclass.py#L535-L808)
+[View Source on GitHub](https://github.com/mivanit/muutils/blob/main/muutils/json_serialize/serializable_dataclass.py#L570-L846)
 
 
 decorator to make a dataclass serializable. must also make it inherit from `SerializableDataclass`
@@ -3091,7 +3188,7 @@ class Myclass(SerializableDataclass):
 
 
 
-docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.11
+docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.12
 
 
 ## Contents
@@ -3120,7 +3217,7 @@ In particular, instead of using `dataclasses.field`, use `serializable_field` to
 You provide information on how the field should be serialized and loaded (as well as anything that goes into `dataclasses.field`)
 when you define the field, and the `SerializableDataclass` will automatically use those functions.
 
-[View Source on GitHub](https://github.com/mivanit/muutils/blob/main/muutils/json_serialize/serializable_field.py#L0-L186)
+[View Source on GitHub](https://github.com/mivanit/muutils/blob/main/muutils/json_serialize/serializable_field.py#L0-L274)
 
 
 
@@ -3254,18 +3351,34 @@ copy all values from a `dataclasses.Field` to new `SerializableField`
 
 ### `def serializable_field` { #serializable_field }
 ```python
-(*args, **kwargs)
+(
+    *_args,
+    default: Union[Any, dataclasses._MISSING_TYPE] = <dataclasses._MISSING_TYPE object>,
+    default_factory: Union[Any, dataclasses._MISSING_TYPE] = <dataclasses._MISSING_TYPE object>,
+    init: bool = True,
+    repr: bool = True,
+    hash: Optional[bool] = None,
+    compare: bool = True,
+    metadata: Optional[mappingproxy] = None,
+    kw_only: Union[bool, dataclasses._MISSING_TYPE] = <dataclasses._MISSING_TYPE object>,
+    serialize: bool = True,
+    serialization_fn: Optional[Callable[[Any], Any]] = None,
+    deserialize_fn: Optional[Callable[[Any], Any]] = None,
+    assert_type: bool = True,
+    custom_typecheck_fn: Optional[Callable[[type], bool]] = None,
+    **kwargs: Any
+) -> Any
 ```
 
 
-[View Source on GitHub](https://github.com/mivanit/muutils/blob/main/muutils/json_serialize/serializable_field.py#L131-L187)
+[View Source on GitHub](https://github.com/mivanit/muutils/blob/main/muutils/json_serialize/serializable_field.py#L187-L275)
 
 
-Create a new `SerializableField`. type hinting this func confuses mypy, so scroll down
+Create a new `SerializableField`
 
 ```
-default: Any | dataclasses._MISSING_TYPE = dataclasses.MISSING,
-default_factory: Callable[[], Any]
+default: Sfield_T | dataclasses._MISSING_TYPE = dataclasses.MISSING,
+default_factory: Callable[[], Sfield_T]
 | dataclasses._MISSING_TYPE = dataclasses.MISSING,
 init: bool = True,
 repr: bool = True,
@@ -3319,7 +3432,7 @@ ZANJ will automatically do this for you.
 
 
 
-docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.11
+docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.12
 
 
 ## Contents
@@ -3540,7 +3653,7 @@ tuple type hint, but for a tuple of any length with all the same type
 
 
 
-docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.11
+docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.12
 
 
 ## Contents
@@ -3611,7 +3724,7 @@ utilities for reading and writing jsonlines files, including gzip support
 
 
 
-docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.11
+docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.12
 
 
 ## Contents
@@ -3687,7 +3800,7 @@ methods except for __getitem__, __iter__, and __len__.
 
 
 
-docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.11
+docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.12
 
 
 ## Contents
@@ -3983,7 +4096,7 @@ context manager for timing code
 
 
 
-docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.11
+docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.12
 
 
 
@@ -4041,7 +4154,7 @@ with ExceptionContext(errorfile):
 
 
 
-docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.11
+docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.12
 
 
 
@@ -4157,7 +4270,7 @@ standard header function. will output
 
 
 
-docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.11
+docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.12
 
 
 
@@ -4251,7 +4364,7 @@ then `gather_val("log.jsonl", "s1", ("a", "b"))` will return
 
 
 
-docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.11
+docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.12
 
 
 ## Contents
@@ -4419,7 +4532,7 @@ flush all streams
 
 
 
-docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.11
+docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.12
 
 
 
@@ -4520,7 +4633,7 @@ properties of a logging stream
 
 
 
-docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.11
+docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.12
 
 
 
@@ -4633,7 +4746,7 @@ log a message to the log file, and optionally to the console
 
 
 
-docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.11
+docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.12
 
 
 
@@ -4782,7 +4895,7 @@ returns a progress string
 
 
 
-docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.11
+docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.12
 
 
 ## Contents
@@ -4854,11 +4967,11 @@ miscellaneous utilities
 
 ### `def stable_hash` { #stable_hash }
 ```python
-(s: str) -> int
+(s: str | bytes) -> int
 ```
 
 
-[View Source on GitHub](https://github.com/mivanit/muutils/blob/main/muutils/misc/__init__.py#L6-L12)
+[View Source on GitHub](https://github.com/mivanit/muutils/blob/main/muutils/misc/__init__.py#L7-L17)
 
 
 Returns a stable hash of the given string. not cryptographically secure, but stable between runs
@@ -5454,7 +5567,7 @@ Collections of them may be compared using this function.
 
 
 
-docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.11
+docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.12
 
 
 
@@ -5613,7 +5726,7 @@ Collections of them may be compared using this function.
 
 
 
-docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.11
+docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.12
 
 
 
@@ -5773,7 +5886,7 @@ the [gelidum](https://github.com/diegojromerolopez/gelidum/) package is a more c
 
 
 
-docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.11
+docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.12
 
 
 
@@ -5781,6 +5894,7 @@ docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.11
 ## API Documentation
 
  - [`stable_hash`](#stable_hash)
+ - [`base64_hash`](#base64_hash)
 
 
 
@@ -5790,25 +5904,37 @@ docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.11
 # `muutils.misc.hashing` { #muutils.misc.hashing }
 
 
-[View Source on GitHub](https://github.com/mivanit/muutils/blob/main/muutils/misc/hashing.py#L0-L11)
+[View Source on GitHub](https://github.com/mivanit/muutils/blob/main/muutils/misc/hashing.py#L0-L28)
 
 
 
 ### `def stable_hash` { #stable_hash }
 ```python
-(s: str) -> int
+(s: str | bytes) -> int
 ```
 
 
-[View Source on GitHub](https://github.com/mivanit/muutils/blob/main/muutils/misc/hashing.py#L6-L12)
+[View Source on GitHub](https://github.com/mivanit/muutils/blob/main/muutils/misc/hashing.py#L7-L17)
 
 
 Returns a stable hash of the given string. not cryptographically secure, but stable between runs
 
 
+### `def base64_hash` { #base64_hash }
+```python
+(s: str | bytes) -> str
+```
 
 
-docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.11
+[View Source on GitHub](https://github.com/mivanit/muutils/blob/main/muutils/misc/hashing.py#L20-L29)
+
+
+Returns a base64 representation of the hash of the given string. not cryptographically secure
+
+
+
+
+docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.12
 
 
 
@@ -5884,7 +6010,7 @@ The string can represent an integer, python float, fraction, or shortened via `s
 
 
 
-docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.11
+docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.12
 
 
 
@@ -6084,7 +6210,7 @@ return type is one of:
 
 
 
-docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.11
+docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.12
 
 
 
@@ -6205,7 +6331,7 @@ sanitize an identifier (variable or function name)
 
 
 
-docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.11
+docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.12
 
 
 ## Contents
@@ -6339,7 +6465,7 @@ Decorator to add a method to the method_dict
 
 
 
-docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.11
+docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.12
 
 
 ## Contents
@@ -6394,7 +6520,7 @@ for plotting mermaid.js diagrams
 
 
 
-docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.11
+docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.12
 
 
 ## Contents
@@ -6639,7 +6765,7 @@ Show the active plot, depending on global configs
 
 
 
-docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.11
+docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.12
 
 
 ## Contents
@@ -6767,7 +6893,7 @@ Convert all Jupyter Notebooks in a directory to scripts.
 
 
 
-docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.11
+docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.12
 
 
 ## Contents
@@ -6805,7 +6931,7 @@ for plotting mermaid.js diagrams
 
 
 
-docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.11
+docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.12
 
 
 ## Contents
@@ -6848,7 +6974,7 @@ function for easily rendering a sympy expression in latex
 
 
 
-docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.11
+docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.12
 
 
 ## Contents
@@ -6921,7 +7047,7 @@ Common base class for all non-exit exceptions.
 
 
 
-docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.11
+docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.12
 
 
 ## Contents
@@ -7356,7 +7482,7 @@ A context manager that does nothing.
 
 
 
-docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.11
+docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.12
 
 
 ## Contents
@@ -7624,7 +7750,7 @@ calls `map_func` on each element of `universal_flatten(arr)`
 
 
 
-docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.11
+docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.12
 
 
 ## Contents
@@ -7731,7 +7857,7 @@ pytorch and cuda information
 
 
 
-docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.11
+docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.12
 
 
 ## Contents
@@ -8093,7 +8219,7 @@ compare two dicts of tensors
 
 
 
-docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.11
+docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.12
 
 
 ## Contents
@@ -8216,7 +8342,7 @@ Approximates the functionality of the %timeit magic or command line interface in
 
 
 
-docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.11
+docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.12
 
 
 ## Contents

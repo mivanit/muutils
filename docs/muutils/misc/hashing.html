@@ -46,7 +46,7 @@
 </script></head>
 <body>
 <div class="package-version">
-    docs for <a href="https://github.com/mivanit/muutils">muutils</a> v0.6.11<br>
+    docs for <a href="https://github.com/mivanit/muutils">muutils</a> v0.6.12<br>
 </div>
     <nav class="pdoc">
         <label id="navtoggle" for="togglestate" class="pdoc-button">
@@ -67,6 +67,9 @@
                 <ul class="memberlist">
             <li>
                     <a class="function" href="#stable_hash">stable_hash</a>
+            </li>
+            <li>
+                    <a class="function" href="#base64_hash">base64_hash</a>
             </li>
     </ul>
 
@@ -90,7 +93,7 @@
                         <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="mod-hashing-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/main/muutils/misc/hashing.py#L0-L11" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/main/muutils/misc/hashing.py#L0-L28" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -99,16 +102,33 @@
                 <br/>
                         <div class="pdoc-code codehilite"><pre><span></span><span id="L-1"><a href="#L-1"><span class="linenos"> 1</span></a><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
 </span><span id="L-2"><a href="#L-2"><span class="linenos"> 2</span></a>
-</span><span id="L-3"><a href="#L-3"><span class="linenos"> 3</span></a><span class="kn">import</span> <span class="nn">hashlib</span>
-</span><span id="L-4"><a href="#L-4"><span class="linenos"> 4</span></a>
+</span><span id="L-3"><a href="#L-3"><span class="linenos"> 3</span></a><span class="kn">import</span> <span class="nn">base64</span>
+</span><span id="L-4"><a href="#L-4"><span class="linenos"> 4</span></a><span class="kn">import</span> <span class="nn">hashlib</span>
 </span><span id="L-5"><a href="#L-5"><span class="linenos"> 5</span></a>
-</span><span id="L-6"><a href="#L-6"><span class="linenos"> 6</span></a><span class="k">def</span> <span class="nf">stable_hash</span><span class="p">(</span><span class="n">s</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-</span><span id="L-7"><a href="#L-7"><span class="linenos"> 7</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns a stable hash of the given string. not cryptographically secure, but stable between runs&quot;&quot;&quot;</span>
-</span><span id="L-8"><a href="#L-8"><span class="linenos"> 8</span></a>    <span class="c1"># init hash object and update with string</span>
-</span><span id="L-9"><a href="#L-9"><span class="linenos"> 9</span></a>    <span class="n">hash_obj</span><span class="p">:</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">_Hash</span> <span class="o">=</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">sha256</span><span class="p">()</span>
-</span><span id="L-10"><a href="#L-10"><span class="linenos">10</span></a>    <span class="n">hash_obj</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="nb">bytes</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="s2">&quot;UTF-8&quot;</span><span class="p">))</span>
-</span><span id="L-11"><a href="#L-11"><span class="linenos">11</span></a>    <span class="c1"># get digest and convert to int</span>
-</span><span id="L-12"><a href="#L-12"><span class="linenos">12</span></a>    <span class="k">return</span> <span class="nb">int</span><span class="o">.</span><span class="n">from_bytes</span><span class="p">(</span><span class="n">hash_obj</span><span class="o">.</span><span class="n">digest</span><span class="p">(),</span> <span class="s2">&quot;big&quot;</span><span class="p">)</span>
+</span><span id="L-6"><a href="#L-6"><span class="linenos"> 6</span></a>
+</span><span id="L-7"><a href="#L-7"><span class="linenos"> 7</span></a><span class="k">def</span> <span class="nf">stable_hash</span><span class="p">(</span><span class="n">s</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="nb">bytes</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+</span><span id="L-8"><a href="#L-8"><span class="linenos"> 8</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns a stable hash of the given string. not cryptographically secure, but stable between runs&quot;&quot;&quot;</span>
+</span><span id="L-9"><a href="#L-9"><span class="linenos"> 9</span></a>    <span class="c1"># init hash object and update with string</span>
+</span><span id="L-10"><a href="#L-10"><span class="linenos">10</span></a>    <span class="n">s_bytes</span><span class="p">:</span> <span class="nb">bytes</span>
+</span><span id="L-11"><a href="#L-11"><span class="linenos">11</span></a>    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+</span><span id="L-12"><a href="#L-12"><span class="linenos">12</span></a>        <span class="n">s_bytes</span> <span class="o">=</span> <span class="nb">bytes</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="s2">&quot;UTF-8&quot;</span><span class="p">)</span>
+</span><span id="L-13"><a href="#L-13"><span class="linenos">13</span></a>    <span class="k">else</span><span class="p">:</span>
+</span><span id="L-14"><a href="#L-14"><span class="linenos">14</span></a>        <span class="n">s_bytes</span> <span class="o">=</span> <span class="n">s</span>
+</span><span id="L-15"><a href="#L-15"><span class="linenos">15</span></a>    <span class="n">hash_obj</span><span class="p">:</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">_Hash</span> <span class="o">=</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">sha256</span><span class="p">(</span><span class="n">s_bytes</span><span class="p">)</span>
+</span><span id="L-16"><a href="#L-16"><span class="linenos">16</span></a>    <span class="c1"># get digest and convert to int</span>
+</span><span id="L-17"><a href="#L-17"><span class="linenos">17</span></a>    <span class="k">return</span> <span class="nb">int</span><span class="o">.</span><span class="n">from_bytes</span><span class="p">(</span><span class="n">hash_obj</span><span class="o">.</span><span class="n">digest</span><span class="p">(),</span> <span class="s2">&quot;big&quot;</span><span class="p">)</span>
+</span><span id="L-18"><a href="#L-18"><span class="linenos">18</span></a>
+</span><span id="L-19"><a href="#L-19"><span class="linenos">19</span></a>
+</span><span id="L-20"><a href="#L-20"><span class="linenos">20</span></a><span class="k">def</span> <span class="nf">base64_hash</span><span class="p">(</span><span class="n">s</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="nb">bytes</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+</span><span id="L-21"><a href="#L-21"><span class="linenos">21</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns a base64 representation of the hash of the given string. not cryptographically secure&quot;&quot;&quot;</span>
+</span><span id="L-22"><a href="#L-22"><span class="linenos">22</span></a>    <span class="n">s_bytes</span><span class="p">:</span> <span class="nb">bytes</span>
+</span><span id="L-23"><a href="#L-23"><span class="linenos">23</span></a>    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+</span><span id="L-24"><a href="#L-24"><span class="linenos">24</span></a>        <span class="n">s_bytes</span> <span class="o">=</span> <span class="nb">bytes</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="s2">&quot;UTF-8&quot;</span><span class="p">)</span>
+</span><span id="L-25"><a href="#L-25"><span class="linenos">25</span></a>    <span class="k">else</span><span class="p">:</span>
+</span><span id="L-26"><a href="#L-26"><span class="linenos">26</span></a>        <span class="n">s_bytes</span> <span class="o">=</span> <span class="n">s</span>
+</span><span id="L-27"><a href="#L-27"><span class="linenos">27</span></a>    <span class="n">hash_bytes</span><span class="p">:</span> <span class="nb">bytes</span> <span class="o">=</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">sha256</span><span class="p">(</span><span class="n">s_bytes</span><span class="p">)</span><span class="o">.</span><span class="n">digest</span><span class="p">()</span>
+</span><span id="L-28"><a href="#L-28"><span class="linenos">28</span></a>    <span class="n">hash_b64</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">base64</span><span class="o">.</span><span class="n">b64encode</span><span class="p">(</span><span class="n">hash_bytes</span><span class="p">,</span> <span class="n">altchars</span><span class="o">=</span><span class="sa">b</span><span class="s2">&quot;-_&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">()</span>
+</span><span id="L-29"><a href="#L-29"><span class="linenos">29</span></a>    <span class="k">return</span> <span class="n">hash_b64</span>
 </span></pre></div>
 
 
@@ -119,12 +139,12 @@
 <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">stable_hash</span><span class="signature pdoc-code condensed">(<span class="param"><span class="n">s</span><span class="p">:</span> <span class="nb">str</span></span><span class="return-annotation">) -> <span class="nb">int</span>:</span></span>
+        <span class="name">stable_hash</span><span class="signature pdoc-code condensed">(<span class="param"><span class="n">s</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="nb">bytes</span></span><span class="return-annotation">) -> <span class="nb">int</span>:</span></span>
 
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="stable_hash-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/main/muutils/misc/hashing.py#L6-L12" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/main/muutils/misc/hashing.py#L7-L17" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -132,17 +152,57 @@
 
     </div>
     <a class="headerlink" href="#stable_hash"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="stable_hash-7"><a href="#stable_hash-7"><span class="linenos"> 7</span></a><span class="k">def</span> <span class="nf">stable_hash</span><span class="p">(</span><span class="n">s</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-</span><span id="stable_hash-8"><a href="#stable_hash-8"><span class="linenos"> 8</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns a stable hash of the given string. not cryptographically secure, but stable between runs&quot;&quot;&quot;</span>
-</span><span id="stable_hash-9"><a href="#stable_hash-9"><span class="linenos"> 9</span></a>    <span class="c1"># init hash object and update with string</span>
-</span><span id="stable_hash-10"><a href="#stable_hash-10"><span class="linenos">10</span></a>    <span class="n">hash_obj</span><span class="p">:</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">_Hash</span> <span class="o">=</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">sha256</span><span class="p">()</span>
-</span><span id="stable_hash-11"><a href="#stable_hash-11"><span class="linenos">11</span></a>    <span class="n">hash_obj</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="nb">bytes</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="s2">&quot;UTF-8&quot;</span><span class="p">))</span>
-</span><span id="stable_hash-12"><a href="#stable_hash-12"><span class="linenos">12</span></a>    <span class="c1"># get digest and convert to int</span>
-</span><span id="stable_hash-13"><a href="#stable_hash-13"><span class="linenos">13</span></a>    <span class="k">return</span> <span class="nb">int</span><span class="o">.</span><span class="n">from_bytes</span><span class="p">(</span><span class="n">hash_obj</span><span class="o">.</span><span class="n">digest</span><span class="p">(),</span> <span class="s2">&quot;big&quot;</span><span class="p">)</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="stable_hash-8"><a href="#stable_hash-8"><span class="linenos"> 8</span></a><span class="k">def</span> <span class="nf">stable_hash</span><span class="p">(</span><span class="n">s</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="nb">bytes</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+</span><span id="stable_hash-9"><a href="#stable_hash-9"><span class="linenos"> 9</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns a stable hash of the given string. not cryptographically secure, but stable between runs&quot;&quot;&quot;</span>
+</span><span id="stable_hash-10"><a href="#stable_hash-10"><span class="linenos">10</span></a>    <span class="c1"># init hash object and update with string</span>
+</span><span id="stable_hash-11"><a href="#stable_hash-11"><span class="linenos">11</span></a>    <span class="n">s_bytes</span><span class="p">:</span> <span class="nb">bytes</span>
+</span><span id="stable_hash-12"><a href="#stable_hash-12"><span class="linenos">12</span></a>    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+</span><span id="stable_hash-13"><a href="#stable_hash-13"><span class="linenos">13</span></a>        <span class="n">s_bytes</span> <span class="o">=</span> <span class="nb">bytes</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="s2">&quot;UTF-8&quot;</span><span class="p">)</span>
+</span><span id="stable_hash-14"><a href="#stable_hash-14"><span class="linenos">14</span></a>    <span class="k">else</span><span class="p">:</span>
+</span><span id="stable_hash-15"><a href="#stable_hash-15"><span class="linenos">15</span></a>        <span class="n">s_bytes</span> <span class="o">=</span> <span class="n">s</span>
+</span><span id="stable_hash-16"><a href="#stable_hash-16"><span class="linenos">16</span></a>    <span class="n">hash_obj</span><span class="p">:</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">_Hash</span> <span class="o">=</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">sha256</span><span class="p">(</span><span class="n">s_bytes</span><span class="p">)</span>
+</span><span id="stable_hash-17"><a href="#stable_hash-17"><span class="linenos">17</span></a>    <span class="c1"># get digest and convert to int</span>
+</span><span id="stable_hash-18"><a href="#stable_hash-18"><span class="linenos">18</span></a>    <span class="k">return</span> <span class="nb">int</span><span class="o">.</span><span class="n">from_bytes</span><span class="p">(</span><span class="n">hash_obj</span><span class="o">.</span><span class="n">digest</span><span class="p">(),</span> <span class="s2">&quot;big&quot;</span><span class="p">)</span>
 </span></pre></div>
 
 
             <div class="docstring"><p>Returns a stable hash of the given string. not cryptographically secure, but stable between runs</p>
+</div>
+
+
+                </section>
+                <section id="base64_hash">
+                            <input id="base64_hash-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr function">
+            
+        <span class="def">def</span>
+        <span class="name">base64_hash</span><span class="signature pdoc-code condensed">(<span class="param"><span class="n">s</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="nb">bytes</span></span><span class="return-annotation">) -> <span class="nb">str</span>:</span></span>
+
+                <div class="source-button-container">
+            <label class="pdoc-button view-source-button" for="base64_hash-view-source"><span>View Source</span></label>
+            <div class="github-button-wrapper">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/main/muutils/misc/hashing.py#L20-L29" target="_blank">
+                    <span>View on GitHub</span>
+                </a>
+            </div>
+        </div>
+
+    </div>
+    <a class="headerlink" href="#base64_hash"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="base64_hash-21"><a href="#base64_hash-21"><span class="linenos">21</span></a><span class="k">def</span> <span class="nf">base64_hash</span><span class="p">(</span><span class="n">s</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="nb">bytes</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+</span><span id="base64_hash-22"><a href="#base64_hash-22"><span class="linenos">22</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns a base64 representation of the hash of the given string. not cryptographically secure&quot;&quot;&quot;</span>
+</span><span id="base64_hash-23"><a href="#base64_hash-23"><span class="linenos">23</span></a>    <span class="n">s_bytes</span><span class="p">:</span> <span class="nb">bytes</span>
+</span><span id="base64_hash-24"><a href="#base64_hash-24"><span class="linenos">24</span></a>    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+</span><span id="base64_hash-25"><a href="#base64_hash-25"><span class="linenos">25</span></a>        <span class="n">s_bytes</span> <span class="o">=</span> <span class="nb">bytes</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="s2">&quot;UTF-8&quot;</span><span class="p">)</span>
+</span><span id="base64_hash-26"><a href="#base64_hash-26"><span class="linenos">26</span></a>    <span class="k">else</span><span class="p">:</span>
+</span><span id="base64_hash-27"><a href="#base64_hash-27"><span class="linenos">27</span></a>        <span class="n">s_bytes</span> <span class="o">=</span> <span class="n">s</span>
+</span><span id="base64_hash-28"><a href="#base64_hash-28"><span class="linenos">28</span></a>    <span class="n">hash_bytes</span><span class="p">:</span> <span class="nb">bytes</span> <span class="o">=</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">sha256</span><span class="p">(</span><span class="n">s_bytes</span><span class="p">)</span><span class="o">.</span><span class="n">digest</span><span class="p">()</span>
+</span><span id="base64_hash-29"><a href="#base64_hash-29"><span class="linenos">29</span></a>    <span class="n">hash_b64</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">base64</span><span class="o">.</span><span class="n">b64encode</span><span class="p">(</span><span class="n">hash_bytes</span><span class="p">,</span> <span class="n">altchars</span><span class="o">=</span><span class="sa">b</span><span class="s2">&quot;-_&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">()</span>
+</span><span id="base64_hash-30"><a href="#base64_hash-30"><span class="linenos">30</span></a>    <span class="k">return</span> <span class="n">hash_b64</span>
+</span></pre></div>
+
+
+            <div class="docstring"><p>Returns a base64 representation of the hash of the given string. not cryptographically secure</p>
 </div>
 
 

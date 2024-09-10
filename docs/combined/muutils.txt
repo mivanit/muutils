@@ -1,4 +1,4 @@
-docs for muutils v0.6.11
+docs for muutils v0.6.12
 
 Contents
 
@@ -258,7 +258,7 @@ at your own risk!
 
 View Source on GitHub
 
-docs for muutils v0.6.11
+docs for muutils v0.6.12
 
 Contents
 
@@ -613,7 +613,7 @@ Raises:
     ‘yaml’, or if you try to use ‘yaml’ output without having PyYAML
     installed
 
-docs for muutils v0.6.11
+docs for muutils v0.6.12
 
 Contents
 
@@ -828,7 +828,7 @@ Inherited Members
 
 map of string aliases to ErrorMode instances
 
-docs for muutils v0.6.11
+docs for muutils v0.6.12
 
 Contents
 
@@ -870,7 +870,7 @@ Arguments
 -   eq_func: Callable[[T, T], bool] a function that returns true if two
     items are equivalent. need not be transitive
 
-docs for muutils v0.6.11
+docs for muutils v0.6.12
 
 Contents
 
@@ -1169,7 +1169,7 @@ Inherited Members
 -   intersection
 -   union
 
-docs for muutils v0.6.11
+docs for muutils v0.6.12
 
 Contents
 
@@ -1359,15 +1359,30 @@ Raises:
 
 def serializable_field
 
-    (*args, **kwargs)
+    (
+        *_args,
+        default: Union[Any, dataclasses._MISSING_TYPE] = <dataclasses._MISSING_TYPE object>,
+        default_factory: Union[Any, dataclasses._MISSING_TYPE] = <dataclasses._MISSING_TYPE object>,
+        init: bool = True,
+        repr: bool = True,
+        hash: Optional[bool] = None,
+        compare: bool = True,
+        metadata: Optional[mappingproxy] = None,
+        kw_only: Union[bool, dataclasses._MISSING_TYPE] = <dataclasses._MISSING_TYPE object>,
+        serialize: bool = True,
+        serialization_fn: Optional[Callable[[Any], Any]] = None,
+        deserialize_fn: Optional[Callable[[Any], Any]] = None,
+        assert_type: bool = True,
+        custom_typecheck_fn: Optional[Callable[[type], bool]] = None,
+        **kwargs: Any
+    ) -> Any
 
 View Source on GitHub
 
-Create a new SerializableField. type hinting this func confuses mypy, so
-scroll down
+Create a new SerializableField
 
-    default: Any | dataclasses._MISSING_TYPE = dataclasses.MISSING,
-    default_factory: Callable[[], Any]
+    default: Sfield_T | dataclasses._MISSING_TYPE = dataclasses.MISSING,
+    default_factory: Callable[[], Sfield_T]
     | dataclasses._MISSING_TYPE = dataclasses.MISSING,
     init: bool = True,
     repr: bool = True,
@@ -1740,7 +1755,7 @@ Parameters:
     - `nested_dict : dict[str, Any]`
         nested dict to update the instance with
 
-docs for muutils v0.6.11
+docs for muutils v0.6.12
 
 Contents
 
@@ -1862,7 +1877,7 @@ View Source on GitHub
 
 load a json-serialized array, infer the mode if not specified
 
-docs for muutils v0.6.11
+docs for muutils v0.6.12
 
 Contents
 
@@ -2038,7 +2053,7 @@ View Source on GitHub
 
 serialize object to json-serializable object with default config
 
-docs for muutils v0.6.11
+docs for muutils v0.6.12
 
 Contents
 
@@ -2093,6 +2108,7 @@ which gives us:
 
 API Documentation
 
+-   dataclass_transform
 -   CantGetTypeHintsWarning
 -   ZanjMissingWarning
 -   zanj_register_loader_serializable_dataclass
@@ -2164,6 +2180,80 @@ which gives us:
     True
 
 View Source on GitHub
+
+def dataclass_transform
+
+    (
+        *,
+        eq_default: bool = True,
+        order_default: bool = False,
+        kw_only_default: bool = False,
+        frozen_default: bool = False,
+        field_specifiers: tuple[typing.Union[type[typing.Any], typing.Callable[..., typing.Any]], ...] = (),
+        **kwargs: Any
+    ) -> <class '_IdentityCallable'>
+
+View Source on GitHub
+
+Decorator to mark an object as providing dataclass-like behaviour.
+
+The decorator can be applied to a function, class, or metaclass.
+
+Example usage with a decorator function::
+
+    @dataclass_transform()
+    def create_model[T](cls: type[T]) -> type[T]:
+        ...
+        return cls
+
+    @create_model
+    class CustomerModel:
+        id: int
+        name: str
+
+On a base class::
+
+    @dataclass_transform()
+    class ModelBase: ...
+
+    class CustomerModel(ModelBase):
+        id: int
+        name: str
+
+On a metaclass::
+
+    @dataclass_transform()
+    class ModelMeta(type): ...
+
+    class ModelBase(metaclass=ModelMeta): ...
+
+    class CustomerModel(ModelBase):
+        id: int
+        name: str
+
+The CustomerModel classes defined above will be treated by type checkers
+similarly to classes created with @dataclasses.dataclass. For example,
+type checkers will assume these classes have __init__ methods that
+accept id and name.
+
+The arguments to this decorator can be used to customize this
+behavior: - eq_default indicates whether the eq parameter is assumed to
+be True or False if it is omitted by the caller. - order_default
+indicates whether the order parameter is assumed to be True or False if
+it is omitted by the caller. - kw_only_default indicates whether the
+kw_only parameter is assumed to be True or False if it is omitted by the
+caller. - frozen_default indicates whether the frozen parameter is
+assumed to be True or False if it is omitted by the caller. -
+field_specifiers specifies a static list of supported classes or
+functions that describe fields, similar to dataclasses.field(). -
+Arbitrary other keyword arguments are accepted in order to allow for
+possible future extensions.
+
+At runtime, this decorator records its arguments in the
+__dataclass_transform__ attribute on the decorated object. It has no
+other runtime effect.
+
+See PEP 681 for more details.
 
 class CantGetTypeHintsWarning(builtins.UserWarning):
 
@@ -2605,7 +2695,7 @@ Raises:
 -   AttributeError : if a property is not found on the class
 -   FieldLoadingError : if there is an error loading a field
 
-docs for muutils v0.6.11
+docs for muutils v0.6.12
 
 Contents
 
@@ -2710,15 +2800,30 @@ copy all values from a dataclasses.Field to new SerializableField
 
 def serializable_field
 
-    (*args, **kwargs)
+    (
+        *_args,
+        default: Union[Any, dataclasses._MISSING_TYPE] = <dataclasses._MISSING_TYPE object>,
+        default_factory: Union[Any, dataclasses._MISSING_TYPE] = <dataclasses._MISSING_TYPE object>,
+        init: bool = True,
+        repr: bool = True,
+        hash: Optional[bool] = None,
+        compare: bool = True,
+        metadata: Optional[mappingproxy] = None,
+        kw_only: Union[bool, dataclasses._MISSING_TYPE] = <dataclasses._MISSING_TYPE object>,
+        serialize: bool = True,
+        serialization_fn: Optional[Callable[[Any], Any]] = None,
+        deserialize_fn: Optional[Callable[[Any], Any]] = None,
+        assert_type: bool = True,
+        custom_typecheck_fn: Optional[Callable[[type], bool]] = None,
+        **kwargs: Any
+    ) -> Any
 
 View Source on GitHub
 
-Create a new SerializableField. type hinting this func confuses mypy, so
-scroll down
+Create a new SerializableField
 
-    default: Any | dataclasses._MISSING_TYPE = dataclasses.MISSING,
-    default_factory: Callable[[], Any]
+    default: Sfield_T | dataclasses._MISSING_TYPE = dataclasses.MISSING,
+    default_factory: Callable[[], Sfield_T]
     | dataclasses._MISSING_TYPE = dataclasses.MISSING,
     init: bool = True,
     repr: bool = True,
@@ -2775,7 +2880,7 @@ note that if not using ZANJ, and you have a class inside a container,
 you MUST provide serialization_fn and loading_fn to serialize and load
 the container. ZANJ will automatically do this for you.
 
-docs for muutils v0.6.11
+docs for muutils v0.6.12
 
 Contents
 
@@ -2953,7 +3058,7 @@ View Source on GitHub
 
 tuple type hint, but for a tuple of any length with all the same type
 
-docs for muutils v0.6.11
+docs for muutils v0.6.12
 
 Contents
 
@@ -3003,7 +3108,7 @@ def jsonl_write
 
 View Source on GitHub
 
-docs for muutils v0.6.11
+docs for muutils v0.6.12
 
 Contents
 
@@ -3059,7 +3164,7 @@ Inherited Members
 -   items
 -   values
 
-docs for muutils v0.6.11
+docs for muutils v0.6.12
 
 Contents
 
@@ -3280,7 +3385,7 @@ context manager for timing code
 
 -   elapsed_time: float
 
-docs for muutils v0.6.11
+docs for muutils v0.6.12
 
 API Documentation
 
@@ -3317,7 +3422,7 @@ View Source on GitHub
 
 -   stream
 
-docs for muutils v0.6.11
+docs for muutils v0.6.12
 
 API Documentation
 
@@ -3409,7 +3514,7 @@ standard header function. will output
 
 -   HEADER_FUNCTIONS: dict[str, muutils.logger.headerfuncs.HeaderFunction] = {'md': <function md_header_function>}
 
-docs for muutils v0.6.11
+docs for muutils v0.6.12
 
 API Documentation
 
@@ -3474,7 +3579,7 @@ then gather_val("log.jsonl", "s1", ("a", "b")) will return
         [4, 5]
     ]
 
-docs for muutils v0.6.11
+docs for muutils v0.6.12
 
 Contents
 
@@ -3616,7 +3721,7 @@ View Source on GitHub
 
 flush all streams
 
-docs for muutils v0.6.11
+docs for muutils v0.6.12
 
 API Documentation
 
@@ -3678,7 +3783,7 @@ def make_handler
 
 View Source on GitHub
 
-docs for muutils v0.6.11
+docs for muutils v0.6.12
 
 API Documentation
 
@@ -3753,7 +3858,7 @@ View Source on GitHub
 
 log a message to the log file, and optionally to the console
 
-docs for muutils v0.6.11
+docs for muutils v0.6.12
 
 API Documentation
 
@@ -3840,7 +3945,7 @@ View Source on GitHub
 
 returns a progress string
 
-docs for muutils v0.6.11
+docs for muutils v0.6.12
 
 Contents
 
@@ -3916,7 +4021,7 @@ View Source on GitHub
 
 def stable_hash
 
-    (s: str) -> int
+    (s: str | bytes) -> int
 
 View Source on GitHub
 
@@ -4410,7 +4515,7 @@ Duplicates are ignored in the same manner as a set. Unfrozen dataclasses
 can’t be placed in sets since they’re not hashable. Collections of them
 may be compared using this function.
 
-docs for muutils v0.6.11
+docs for muutils v0.6.12
 
 API Documentation
 
@@ -4540,7 +4645,7 @@ Duplicates are ignored in the same manner as a set. Unfrozen dataclasses
 can’t be placed in sets since they’re not hashable. Collections of them
 may be compared using this function.
 
-docs for muutils v0.6.11
+docs for muutils v0.6.12
 
 API Documentation
 
@@ -4656,11 +4761,12 @@ you can’t rely on that. always use the return value.
 
 the gelidum package is a more complete implementation of this idea
 
-docs for muutils v0.6.11
+docs for muutils v0.6.12
 
 API Documentation
 
 -   stable_hash
+-   base64_hash
 
 View Source on GitHub
 
@@ -4670,14 +4776,23 @@ View Source on GitHub
 
 def stable_hash
 
-    (s: str) -> int
+    (s: str | bytes) -> int
 
 View Source on GitHub
 
 Returns a stable hash of the given string. not cryptographically secure,
 but stable between runs
 
-docs for muutils v0.6.11
+def base64_hash
+
+    (s: str | bytes) -> str
+
+View Source on GitHub
+
+Returns a base64 representation of the hash of the given string. not
+cryptographically secure
+
+docs for muutils v0.6.12
 
 API Documentation
 
@@ -4734,7 +4849,7 @@ Examples:
     >>> str_to_numeric("1.2e2")
     120.0
 
-docs for muutils v0.6.11
+docs for muutils v0.6.12
 
 API Documentation
 
@@ -4909,7 +5024,7 @@ Raises:
     is "except"
 -   ValueError : if when_missing is invalid
 
-docs for muutils v0.6.11
+docs for muutils v0.6.12
 
 API Documentation
 
@@ -4994,7 +5109,7 @@ def dynamic_docstring
 
 View Source on GitHub
 
-docs for muutils v0.6.11
+docs for muutils v0.6.12
 
 Contents
 
@@ -5090,7 +5205,7 @@ def pprint_summary
 
 View Source on GitHub
 
-docs for muutils v0.6.11
+docs for muutils v0.6.12
 
 Contents
 
@@ -5134,7 +5249,7 @@ View Source on GitHub
 
 for plotting mermaid.js diagrams
 
-docs for muutils v0.6.11
+docs for muutils v0.6.12
 
 Contents
 
@@ -5306,7 +5421,7 @@ View Source on GitHub
 
 Show the active plot, depending on global configs
 
-docs for muutils v0.6.11
+docs for muutils v0.6.12
 
 Contents
 
@@ -5410,7 +5525,7 @@ Arguments
     - `filter_out_lines: str|typing.Sequence[str] = ('%', '!')`: comment out lines starting with these strings (in code blocks).
         if a string is passed, it will be split by char and each char will be treated as a separate filter.
 
-docs for muutils v0.6.11
+docs for muutils v0.6.12
 
 Contents
 
@@ -5438,7 +5553,7 @@ View Source on GitHub
 
 for plotting mermaid.js diagrams
 
-docs for muutils v0.6.11
+docs for muutils v0.6.12
 
 Contents
 
@@ -5469,7 +5584,7 @@ View Source on GitHub
 
 function for easily rendering a sympy expression in latex
 
-docs for muutils v0.6.11
+docs for muutils v0.6.12
 
 Contents
 
@@ -5526,7 +5641,7 @@ def run_notebook_tests
 
 View Source on GitHub
 
-docs for muutils v0.6.11
+docs for muutils v0.6.12
 
 Contents
 
@@ -5872,7 +5987,7 @@ NoOpContextManager
 
 View Source on GitHub
 
-docs for muutils v0.6.11
+docs for muutils v0.6.12
 
 Contents
 
@@ -6083,7 +6198,7 @@ Inherited Members
 
 -   clear
 
-docs for muutils v0.6.11
+docs for muutils v0.6.12
 
 Contents
 
@@ -6153,7 +6268,7 @@ def get_all
 
 View Source on GitHub
 
-docs for muutils v0.6.11
+docs for muutils v0.6.12
 
 Contents
 
@@ -6448,7 +6563,7 @@ Raises:
 -   StateDictShapeError : shapes don’t match (but keys do)
 -   StateDictValueError : values don’t match (but keys and shapes do)
 
-docs for muutils v0.6.11
+docs for muutils v0.6.12
 
 Contents
 
@@ -6549,7 +6664,7 @@ FancyTimeitResult, which is a NamedTuple with the following fields:
 -   profile: pstats.Stats|None A pstats.Stats object if do_profiling is
     True, otherwise None.
 
-docs for muutils v0.6.11
+docs for muutils v0.6.12
 
 Contents
 

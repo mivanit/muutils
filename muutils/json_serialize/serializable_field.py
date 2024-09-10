@@ -132,7 +132,9 @@ Sfield_T = TypeVar("Sfield_T")
 
 @overload
 def serializable_field(
+    *_args,
     default_factory: Callable[[], Sfield_T],
+    default: dataclasses._MISSING_TYPE = dataclasses.MISSING,
     init: bool = True,
     repr: bool = True,
     hash: Optional[bool] = None,
@@ -148,7 +150,9 @@ def serializable_field(
 ) -> Sfield_T: ...
 @overload
 def serializable_field(
+    *_args,
     default: Sfield_T,
+    default_factory: dataclasses._MISSING_TYPE = dataclasses.MISSING,
     init: bool = True,
     repr: bool = True,
     hash: Optional[bool] = None,
@@ -164,7 +168,9 @@ def serializable_field(
 ) -> Sfield_T: ...
 @overload
 def serializable_field(
-    *,
+    *_args,
+    default: dataclasses._MISSING_TYPE = dataclasses.MISSING,
+    default_factory: dataclasses._MISSING_TYPE = dataclasses.MISSING,
     init: bool = True,
     repr: bool = True,
     hash: Optional[bool] = None,
@@ -179,8 +185,9 @@ def serializable_field(
     **kwargs: Any,
 ) -> Any: ...
 def serializable_field(
-    default=dataclasses.MISSING,
-    default_factory=dataclasses.MISSING,
+    *_args,
+    default: Union[Any, dataclasses._MISSING_TYPE] = dataclasses.MISSING,
+    default_factory: Union[Any, dataclasses._MISSING_TYPE] = dataclasses.MISSING,
     init: bool = True,
     repr: bool = True,
     hash: Optional[bool] = None,
@@ -193,12 +200,12 @@ def serializable_field(
     assert_type: bool = True,
     custom_typecheck_fn: Optional[Callable[[type], bool]] = None,
     **kwargs: Any,
-):
-    """Create a new `SerializableField`. type hinting this func confuses mypy, so scroll down
+) -> Any:
+    """Create a new `SerializableField`
 
     ```
-    default: Any | dataclasses._MISSING_TYPE = dataclasses.MISSING,
-    default_factory: Callable[[], Any]
+    default: Sfield_T | dataclasses._MISSING_TYPE = dataclasses.MISSING,
+    default_factory: Callable[[], Sfield_T]
     | dataclasses._MISSING_TYPE = dataclasses.MISSING,
     init: bool = True,
     repr: bool = True,
@@ -249,6 +256,7 @@ def serializable_field(
     `serialization_fn` and `loading_fn` to serialize and load the container.
     ZANJ will automatically do this for you.
     """
+    assert len(_args) == 0, f"unexpected positional arguments: {_args}"
     return SerializableField(
         default=default,
         default_factory=default_factory,

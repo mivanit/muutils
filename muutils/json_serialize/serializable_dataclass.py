@@ -70,6 +70,39 @@ from muutils.json_serialize.util import array_safe_eq, dc_eq
 
 # pylint: disable=bad-mcs-classmethod-argument, too-many-arguments, protected-access
 
+
+def _dataclass_transform_mock(
+    *,
+    eq_default: bool = True,
+    order_default: bool = False,
+    kw_only_default: bool = False,
+    frozen_default: bool = False,
+    field_specifiers: tuple[type[Any] | typing.Callable[..., Any], ...] = (),
+    **kwargs: Any,
+) -> typing.Callable:
+    "mock `typing.dataclass_transform` for python <3.11"
+
+    def decorator(cls_or_fn):
+        cls_or_fn.__dataclass_transform__ = {
+            "eq_default": eq_default,
+            "order_default": order_default,
+            "kw_only_default": kw_only_default,
+            "frozen_default": frozen_default,
+            "field_specifiers": field_specifiers,
+            "kwargs": kwargs,
+        }
+        return cls_or_fn
+
+    return decorator
+
+
+dataclass_transform: typing.Callable
+if sys.version_info < (3, 11):
+    dataclass_transform = _dataclass_transform_mock
+else:
+    dataclass_transform = typing.dataclass_transform
+
+
 T = TypeVar("T")
 
 
@@ -279,7 +312,7 @@ def SerializableDataclass__validate_fields_types(
     )
 
 
-@typing.dataclass_transform(
+@dataclass_transform(
     field_specifiers=(serializable_field, SerializableField),
 )
 class SerializableDataclass(abc.ABC):
@@ -534,7 +567,7 @@ class FieldLoadingError(FieldError):
     pass
 
 
-@typing.dataclass_transform(
+@dataclass_transform(
     field_specifiers=(serializable_field, SerializableField),
 )
 def serializable_dataclass(

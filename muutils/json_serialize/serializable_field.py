@@ -11,7 +11,7 @@ from __future__ import annotations
 import dataclasses
 import sys
 import types
-from typing import Any, Callable, Optional, Union
+from typing import Any, Callable, Optional, Union, overload, TypeVar
 
 
 # pylint: disable=bad-mcs-classmethod-argument, too-many-arguments, protected-access
@@ -127,11 +127,12 @@ class SerializableField(dataclasses.Field):
         )
 
 
+Sfield_T = TypeVar("Sfield_T")
+
+
+@overload
 def serializable_field(
-    default: Union[Any, dataclasses._MISSING_TYPE] = dataclasses.MISSING,
-    default_factory: Union[
-        Callable[[], Any], dataclasses._MISSING_TYPE
-    ] = dataclasses.MISSING,
+    default_factory: Callable[[], Sfield_T],
     init: bool = True,
     repr: bool = True,
     hash: Optional[bool] = None,
@@ -144,7 +145,55 @@ def serializable_field(
     assert_type: bool = True,
     custom_typecheck_fn: Optional[Callable[[type], bool]] = None,
     **kwargs: Any,
-) -> "SerializableField":
+) -> Sfield_T: ...
+@overload
+def serializable_field(
+    default: Sfield_T,
+    init: bool = True,
+    repr: bool = True,
+    hash: Optional[bool] = None,
+    compare: bool = True,
+    metadata: Optional[types.MappingProxyType] = None,
+    kw_only: Union[bool, dataclasses._MISSING_TYPE] = dataclasses.MISSING,
+    serialize: bool = True,
+    serialization_fn: Optional[Callable[[Any], Any]] = None,
+    deserialize_fn: Optional[Callable[[Any], Any]] = None,
+    assert_type: bool = True,
+    custom_typecheck_fn: Optional[Callable[[type], bool]] = None,
+    **kwargs: Any,
+) -> Sfield_T: ...
+@overload
+def serializable_field(
+    *,
+    init: bool = True,
+    repr: bool = True,
+    hash: Optional[bool] = None,
+    compare: bool = True,
+    metadata: Optional[types.MappingProxyType] = None,
+    kw_only: Union[bool, dataclasses._MISSING_TYPE] = dataclasses.MISSING,
+    serialize: bool = True,
+    serialization_fn: Optional[Callable[[Any], Any]] = None,
+    deserialize_fn: Optional[Callable[[Any], Any]] = None,
+    assert_type: bool = True,
+    custom_typecheck_fn: Optional[Callable[[type], bool]] = None,
+    **kwargs: Any,
+) -> Any: ...
+def serializable_field(
+    default=dataclasses.MISSING,
+    default_factory=dataclasses.MISSING,
+    init: bool = True,
+    repr: bool = True,
+    hash: Optional[bool] = None,
+    compare: bool = True,
+    metadata: Optional[types.MappingProxyType] = None,
+    kw_only: Union[bool, dataclasses._MISSING_TYPE] = dataclasses.MISSING,
+    serialize: bool = True,
+    serialization_fn: Optional[Callable[[Any], Any]] = None,
+    deserialize_fn: Optional[Callable[[Any], Any]] = None,
+    assert_type: bool = True,
+    custom_typecheck_fn: Optional[Callable[[type], bool]] = None,
+    **kwargs: Any,
+):
     """Create a new `SerializableField`. type hinting this func confuses mypy, so scroll down
 
     ```

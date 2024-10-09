@@ -8,6 +8,7 @@ _test.ipynb
 # junk data
 JUNK_DATA_PATH/
 junk_data
+tests/_temp/
 
 .vscode/
 # caches

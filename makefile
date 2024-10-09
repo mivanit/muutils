@@ -22,10 +22,11 @@ TESTS_TEMP_DIR := tests/_temp
 # where the pyproject.toml file is. no idea why you would change this but just in case
 PYPROJECT := pyproject.toml
 
-# requirements.txt files for base package, all extras, and dev
+# requirements.txt files for base package, all extras, dev, and all
 REQ_BASE := .github/requirements.txt
 REQ_EXTRAS := .github/requirements-extras.txt
 REQ_DEV := .github/requirements-dev.txt
+REQ_ALL := .github/requirements-all.txt
 
 # local files (don't push this to git)
 LOCAL_DIR := .github/local
@@ -186,11 +187,12 @@ setup: dep-check
 
 .PHONY: dep
 dep:
-	@echo "sync and export deps to $(REQ_BASE), $(REQ_EXTRAS), and $(REQ_DEV)"
+	@echo "sync and export deps to $(REQ_BASE), $(REQ_EXTRAS), $(REQ_DEV), and $(REQ_ALL)"
 	uv sync --all-extras
 	uv export --no-dev --no-hashes > $(REQ_BASE)
 	uv export --all-extras --no-dev --no-hashes > $(REQ_EXTRAS)
-	uv export --all-extras --no-hashes > $(REQ_DEV)
+	uv export --no-hashes > $(REQ_DEV)
+	uv export --all-extras --no-hashes > $(REQ_ALL)
 
 .PHONY: dep-check
 dep-check:
@@ -198,7 +200,8 @@ dep-check:
 	uv sync --all-extras --locked
 	uv export --no-dev --no-hashes | diff - $(REQ_BASE)
 	uv export --all-extras --no-dev --no-hashes | diff - $(REQ_EXTRAS)
-	uv export --all-extras --no-hashes | diff - $(REQ_DEV)
+	uv export --no-hashes | diff - $(REQ_DEV)
+	uv export --all-extras --no-hashes | diff - $(REQ_ALL)
 
 
 

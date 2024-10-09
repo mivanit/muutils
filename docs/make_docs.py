@@ -1,29 +1,56 @@
-from pathlib import Path
 import argparse
-import warnings
-import tomllib
 import inspect
 import re
+import tomllib
+import warnings
+from pathlib import Path
 
-
-import pdoc
-import pdoc.render
-import pdoc.doc
-import pdoc.extract
-import pdoc.render_helpers
+import pdoc  # type: ignore[import-not-found]
+import pdoc.doc  # type: ignore[import-not-found]
+import pdoc.extract  # type: ignore[import-not-found]
+import pdoc.render  # type: ignore[import-not-found]
+import pdoc.render_helpers  # type: ignore[import-not-found]
 from markupsafe import Markup
+
+# ====================================================================================================
+# CONFIGURATION
+PACKAGE_NAME: str
+PACKAGE_REPO_URL: str
+PACKAGE_CODE_URL: str
+PACKAGE_VERSION: str
+# ====================================================================================================
 
 pdoc.render_helpers.markdown_extensions["alerts"] = True
 pdoc.render_helpers.markdown_extensions["admonitions"] = True
 
 
-def add_package_version_global(config_path: str | Path = Path("pyproject.toml")):
-    # Read the pyproject.toml file
+def get_package_meta_global(config_path: str | Path = Path("pyproject.toml")):
+    """set global vars from pyproject.toml
+
+    sets the global vars:
+
+    - `PACKAGE_NAME`
+    - `PACKAGE_REPO_URL`
+    - `PACKAGE_CODE_URL`
+    - `PACKAGE_VERSION`
+    """
+    global PACKAGE_NAME, PACKAGE_REPO_URL, PACKAGE_CODE_URL, PACKAGE_VERSION
     config_path = Path(config_path)
     with config_path.open("rb") as f:
         pyproject_data = tomllib.load(f)
-    package_version: str = pyproject_data["tool"]["poetry"]["version"]
-    pdoc.render.env.globals["package_version"] = package_version
+    PACKAGE_VERSION = pyproject_data["project"]["version"]
+    PACKAGE_NAME = pyproject_data["project"]["name"]
+    PACKAGE_REPO_URL = pyproject_data["project"]["urls"]["Repository"]
+    PACKAGE_CODE_URL = f"{PACKAGE_REPO_URL}/blob/{PACKAGE_VERSION}/"
+
+
+def add_package_meta_pdoc_globals(config_path: str | Path = Path("pyproject.toml")):
+    "adds the package meta to the pdoc globals"
+    get_package_meta_global(config_path)
+    pdoc.render.env.globals["package_version"] = PACKAGE_VERSION
+    pdoc.render.env.globals["package_name"] = PACKAGE_NAME
+    pdoc.render.env.globals["package_repo_url"] = PACKAGE_REPO_URL
+    pdoc.render.env.globals["package_code_url"] = PACKAGE_CODE_URL
 
 
 def increment_markdown_headings(markdown_text: str, increment: int = 2) -> str:
@@ -178,18 +205,20 @@ if __name__ == "__main__":
     )
     parsed_args = argparser.parse_args()
 
-    add_package_version_global()
+    add_package_meta_pdoc_globals()
 
     if not parsed_args.warn_all:
         ignore_warnings()
 
     pdoc.render.configure(
         edit_url_map={
-            "muutils": "https://github.com/mivanit/muutils/blob/main/muutils/",
+            PACKAGE_NAME: PACKAGE_CODE_URL,
         },
-        template_directory=Path("docs/templates/html/")
-        if not parsed_args.combined
-        else Path("docs/templates/markdown/"),
+        template_directory=(
+            Path("docs/templates/html/")
+            if not parsed_args.combined
+            else Path("docs/templates/markdown/")
+        ),
         show_source=True,
         math=True,
         mermaid=True,
@@ -198,16 +227,18 @@ if __name__ == "__main__":
 
     if not parsed_args.combined:
         pdoc.pdoc(
-            "muutils",
+            PACKAGE_NAME,
             output_directory=OUTPUT_DIR,
         )
     else:
         use_markdown_format()
-        pdoc_combined("muutils", output_file=OUTPUT_DIR / "combined" / "muutils.md")
+        pdoc_combined(
+            PACKAGE_NAME, output_file=OUTPUT_DIR / "combined" / f"{PACKAGE_NAME}.md"
+        )
 
     if parsed_args.serve:
-        import os
         import http.server
+        import os
         import socketserver
 
         port: int = 8000

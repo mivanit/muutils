@@ -178,9 +178,8 @@ version: gen-commit-log
 # ==================================================
 
 .PHONY: setup
-setup:
+setup: dep-check
 	@echo "install and update via uv"
-	uv sync --all-extras
 	@echo "To activate the virtual environment, run one of:"
 	@echo "  source .venv/bin/activate"
 	@echo "  source .venv/Scripts/activate"
@@ -188,7 +187,7 @@ setup:
 .PHONY: dep
 dep:
 	@echo "sync and export deps to $(REQ_BASE), $(REQ_EXTRAS), and $(REQ_DEV)"
-	uv sync
+	uv sync --all-extras
 	uv export --no-dev --no-hashes > $(REQ_BASE)
 	uv export --all-extras --no-dev --no-hashes > $(REQ_EXTRAS)
 	uv export --all-extras --no-hashes > $(REQ_DEV)
@@ -196,7 +195,7 @@ dep:
 .PHONY: dep-check
 dep-check:
 	@echo "checking uv.lock is good, exported requirements up to date"
-	uv sync --locked
+	uv sync --all-extras --locked
 	uv export --no-dev --no-hashes | diff - $(REQ_BASE)
 	uv export --all-extras --no-dev --no-hashes | diff - $(REQ_EXTRAS)
 	uv export --all-extras --no-hashes | diff - $(REQ_DEV)

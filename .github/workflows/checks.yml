@@ -17,13 +17,16 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
         with: 
-          fetch-depth: 0
+          fetch-depth: 1
 
-      - name: Install linters
-        run: make setup-format RUN_GLOBAL=1
+      - name: set up uv
+        run: curl -LsSf https://astral.sh/uv/install.sh | sh
+
+      - name: install format tools
+        run: uv pip sync .github/requirements-dev.txt
 
       - name: Run Format Checks
-        run: make check-format RUN_GLOBAL=1
+        run: make check-format
   
   check-deps:
     name: Check dependencies
@@ -32,43 +35,23 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0
+          fetch-depth: 1
 
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.10'
 
-      - name: Install Poetry
-        run: curl -sSL https://install.python-poetry.org | python3 -
-      
-      - name: Poetry Plugins
-        run: |
-          poetry self add poetry-plugin-export
-          poetry self show plugins
+      - name: set up uv
+        run: curl -LsSf https://astral.sh/uv/install.sh | sh
 
-      - name: Check poetry.lock and .github/dev-requirements.txt
-        run: make check-dep-dev
-
-      - name: Install uv
-        run: pip install uv
-
-      - name: Install dependencies
-        run: uv pip install -r .github/dev-requirements.txt --system --no-deps # we already should have all dependencies exported into .github/dev-requirements.txt
-      
-      - name: Install torch (special)
-        run: uv pip install torch==2.3.1+cpu --system --extra-index-url https://download.pytorch.org/whl/cpu
-
-      - name: Install muutils (local)
-        run: uv pip install . --system
-
-      - name: Install zanj (requires muutils)
-        run: uv pip install zanj --system
-
+      - name: check dependencies
+        run: make dep-check
+  
   test:
     name: Test and Lint
     runs-on: ubuntu-latest
-    # needs: [lint, check-deps]
+    # needs: [lint, check-deps] # for conditionally running this job
     strategy:
       matrix:
         versions:
@@ -88,37 +71,31 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
         with: 
-          fetch-depth: 0
+          fetch-depth: 1
 
       - name: Set up python
         uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.versions.python }}
 
-      - name: Install uv
-        run: pip install uv
+      - name: set up uv
+        run: curl -LsSf https://astral.sh/uv/install.sh | sh
 
-      - name: Install dependencies
+      - name: install
+        run: make setup
+
+      - name: Install pytorch
         # install torch first to avoid pytorch index messing things up
         run: |
-          uv pip install -r .github/dev-requirements.txt --system --no-deps
           uv pip install torch==${{ matrix.versions.torch}}+cpu --system --extra-index-url https://download.pytorch.org/whl/cpu
       
-      - name: Install muutils
-        run: uv pip install . --system
-      
-      - name: Install zanj (>=3.10 only)
-        # TODO: not yet available for python 3.8 and 3.9
-        if: ${{ matrix.versions.python != '3.8' && matrix.versions.python != '3.9' }}
-        run: uv pip install zanj --system
-
       - name: tests
-        run: make test RUN_GLOBAL=1
+        run: make test
 
       # - name: tests in strict mode
       #   # TODO: until zanj ported to 3.8 and 3.9
       #   if: ${{ matrix.versions.python != '3.8' && matrix.versions.python != '3.9' }}
-      #   run: make test WARN_STRICT=1 RUN_GLOBAL=1
+      #   run: make test WARN_STRICT=1
 
       - name: check typing
-        run: make typing RUN_GLOBAL=1
+        run: make typing

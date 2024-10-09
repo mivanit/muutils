@@ -38,23 +38,11 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Install uv
-        run: pip install uv
+      - name: set up uv
+        run: curl -LsSf https://astral.sh/uv/install.sh | sh
   
-      - name: Install dependencies
-        # install torch first to avoid pytorch index messing things up
-        run: |
-          uv pip install -r .github/dev-requirements.txt --system --no-deps
-          uv pip install torch==2.4.0+cpu --system --extra-index-url https://download.pytorch.org/whl/cpu
-        
-      - name: Install muutils
-        run: uv pip install . --system
-      
-      - name: Install zanj (>=3.10 only)
-        run: uv pip install zanj --system
-
-      - name: tests
-        run: make test RUN_GLOBAL=1 COV=1
+      - name: Install
+        run: make setup
 
       - name: Build Docs
-        run: make docs RUN_GLOBAL=1
+        run: make docs

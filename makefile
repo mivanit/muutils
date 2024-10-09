@@ -150,6 +150,7 @@ gen-version-info:
 .PHONY: gen-commit-log
 gen-commit-log: gen-version-info
 	@if [ "$(LAST_VERSION)" = "NULL" ]; then \
+		echo "!!! ERROR !!!"; \
 		echo "LAST_VERSION is NULL, cant get commit log!"; \
 		exit 1; \
 	fi
@@ -164,7 +165,9 @@ version: gen-commit-log
 	@echo "Current version is $(VERSION), last auto-uploaded version is $(LAST_VERSION)"
 	@echo "Commit log since last version from '$(COMMIT_LOG_FILE)':"
 	@cat $(COMMIT_LOG_FILE)
+	@echo ""
 	@if [ "$(VERSION)" = "$(LAST_VERSION)" ]; then \
+		echo "!!! ERROR !!!"; \
 		echo "Python package $(VERSION) is the same as last published version $(LAST_VERSION), exiting!"; \
 		exit 1; \
 	fi
@@ -329,10 +332,12 @@ docs-clean:
 verify-git: 
 	@echo "checking git status"
 	if [ "$(shell git branch --show-current)" != $(PUBLISH_BRANCH) ]; then \
+		echo "!!! ERROR !!!"; \
 		echo "Git is not on the $(PUBLISH_BRANCH) branch, exiting!"; \
 		exit 1; \
 	fi; \
 	if [ -n "$(shell git status --porcelain)" ]; then \
+		echo "!!! ERROR !!!"; \
 		echo "Git is not clean, exiting!"; \
 		exit 1; \
 	fi; \
@@ -356,6 +361,7 @@ publish: gen-commit-log check build verify-git version gen-version-info
 	if [ "$$NEW_VERSION" = $(VERSION) ]; then \
 		echo "Version confirmed. Proceeding with publish."; \
 	else \
+		echo "!!! ERROR !!!"; \
 		echo "Version mismatch, exiting: you gave $$NEW_VERSION but expected $(VERSION)"; \
 		exit 1; \
 	fi;
@@ -395,10 +401,17 @@ clean:
 	rm -rf build
 	rm -rf $(PACKAGE_NAME).egg-info
 	rm -rf $(TESTS_TEMP_DIR)
-	$(PYTHON_BASE) -Bc "import pathlib; [p.unlink() for p in pathlib.Path('.').rglob('*.py[co]')]"
-	$(PYTHON_BASE) -Bc "import pathlib; [p.rmdir() for p in pathlib.Path('.').rglob('__pycache__')]"
+	$(PYTHON_BASE) -Bc "import pathlib; [p.unlink() for p in pathlib.Path('$(PACKAGE_NAME)').rglob('*.py[co]')]"
+	$(PYTHON_BASE) -Bc "import pathlib; [p.rmdir() for p in pathlib.Path('$(PACKAGE_NAME)').rglob('__pycache__')]"
+	$(PYTHON_BASE) -Bc "import pathlib; [p.unlink() for p in pathlib.Path('$(TESTS_DIR)').rglob('*.py[co]')]"
+	$(PYTHON_BASE) -Bc "import pathlib; [p.rmdir() for p in pathlib.Path('$(TESTS_DIR)').rglob('__pycache__')]"
+	$(PYTHON_BASE) -Bc "import pathlib; [p.unlink() for p in pathlib.Path('$(DOCS_DIR)').rglob('*.py[co]')]"
+	$(PYTHON_BASE) -Bc "import pathlib; [p.rmdir() for p in pathlib.Path('$(DOCS_DIR)').rglob('__pycache__')]"
 	rm -rf tests/unit/validate_type/test_validate_type_GENERATED.py
 
+.PHONY: clean-all
+clean-all: clean docs-clean
+	@echo "clean up all temporary files and generated docs"
 
 
 # ==================================================

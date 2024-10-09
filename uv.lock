@@ -768,7 +768,7 @@ wheels = [
 
 [[package]]
 name = "muutils"
-version = "0.6.12"
+version = "0.6.13"
 source = { editable = "." }
 
 [package.optional-dependencies]

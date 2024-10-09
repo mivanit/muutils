@@ -12,7 +12,7 @@ from muutils.nbutils.configure_notebook import (
     setup_plots,
 )
 
-JUNK_DATA_PATH: str = "tests/junk_data/test_cfg_notebook"
+JUNK_DATA_PATH: str = "tests/_temp/test_cfg_notebook"
 
 
 @pytest.mark.parametrize(

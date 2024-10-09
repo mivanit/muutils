@@ -5,14 +5,14 @@ from muutils.mlutils import get_checkpoint_paths_for_run, register_method
 
 
 def test_get_checkpoint_paths_for_run():
-    run_path = Path("tests/junk_data/test_get_checkpoint_paths")
+    run_path = Path("tests/_temp/test_get_checkpoint_paths")
     run_path.mkdir(parents=True, exist_ok=True)
     checkpoints_path = run_path / "checkpoints"
     checkpoint1_path = checkpoints_path / "model.iter_123.pt"
     checkpoint2_path = checkpoints_path / "model.iter_456.pt"
     other_path = checkpoints_path / "other_file.txt"
 
-    checkpoints_path.mkdir()
+    checkpoints_path.mkdir(exist_ok=True)
     checkpoint1_path.touch()
     checkpoint2_path.touch()
     other_path.touch()

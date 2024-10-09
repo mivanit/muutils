@@ -69,7 +69,7 @@ def isinstance_namedtuple(x: Any) -> bool:
     """
     t: type = type(x)
     b: tuple = t.__bases__
-    if len(b) != 1 or b[0] != tuple:
+    if len(b) != 1 or (b[0] is not tuple):
         return False
     f: Any = getattr(t, "_fields", None)
     if not isinstance(f, tuple):

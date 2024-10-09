@@ -429,7 +429,7 @@ class SerializableDataclass(abc.ABC):
          - `ValueError` : if the instances are `dataclasses.dataclass` but not `SerializableDataclass`
         """
         # match types
-        if type(self) != type(other):
+        if type(self) is not type(other):
             raise ValueError(
                 f"Instances must be of the same type, but got {type(self) = } and {type(other) = }"
             )

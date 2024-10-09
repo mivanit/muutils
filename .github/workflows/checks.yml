@@ -20,7 +20,7 @@ jobs:
           fetch-depth: 1
 
       - name: install format tools
-        run: pip install -r .github/requirements-dev.txt --system
+        run: pip install -r .github/requirements-dev.txt
 
       - name: Run Format Checks
         run: make format-check RUN_GLOBAL=1

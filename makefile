@@ -241,7 +241,7 @@ format-check:
 typing: clean gen-extra-tests
 	@echo "running type checks"
 	$(PYTHON) -m mypy --config-file $(PYPROJECT) $(TYPECHECK_ARGS) $(PACKAGE_NAME)/
-	$(PYTHON) -m mypy --config-file $(PYPROJECT) $(TYPECHECK_ARGS) tests/
+	$(PYTHON) -m mypy --config-file $(PYPROJECT) $(TYPECHECK_ARGS) $(TESTS_DIR)/
 
 .PHONY: test
 test: clean gen-extra-tests

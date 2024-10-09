@@ -19,16 +19,11 @@ jobs:
         with: 
           fetch-depth: 1
 
-      - name: set up uv
-        run: curl -LsSf https://astral.sh/uv/install.sh | sh
-
       - name: install format tools
-        run: |
-          uv venv
-          uv pip sync .github/requirements-dev.txt --system
+        run: pip install -r .github/requirements-dev.txt --system
 
       - name: Run Format Checks
-        run: make format-check
+        run: make format-check RUN_GLOBAL=1
   
   check-deps:
     name: Check dependencies

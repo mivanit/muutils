@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="generator" content="pdoc 14.6.1"/>
+    <meta name="generator" content="pdoc 14.7.0"/>
     <title>muutils.json_serialize.serializable_dataclass API documentation</title>
 <link rel="stylesheet" href="../../resources/bootstrap-reboot.min.css"><link rel="stylesheet" href="../../resources/syntax-highlighting.css"><link rel="stylesheet" href="../../resources/theme.css"><link rel="stylesheet" href="../../resources/layout.css"><link rel="stylesheet" href="../../resources/content.css"><link rel="stylesheet" href="../../resources/custom.css"><script>
     window.MathJax = {
@@ -46,7 +46,7 @@
 </script></head>
 <body>
 <div class="package-version">
-    docs for <a href="https://github.com/mivanit/muutils">muutils</a> v0.6.12<br>
+    docs for <a href="https://github.com/mivanit/muutils">muutils</a> v0.6.13<br>
 </div>
     <nav class="pdoc">
         <label id="navtoggle" for="togglestate" class="pdoc-button">
@@ -173,7 +173,7 @@
     </nav>
     <main class="pdoc">
             <section class="module-info">
-                        <a class="pdoc-button git-button" href="https://github.com/mivanit/muutils/blob/main/muutils/json_serialize/serializable_dataclass.py">View Source on GitHub</a>
+                        <a class="pdoc-button git-button" href="https://github.com/mivanit/muutils/blob/0.6.13/json_serialize/serializable_dataclass.py">View Source on GitHub</a>
                     <h1 class="modulename">
 <a href="./../../muutils.html">muutils</a><wbr>.<a href="./../json_serialize.html">json_serialize</a><wbr>.serializable_dataclass    </h1>
 
@@ -236,7 +236,7 @@ True
                         <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="mod-serializable_dataclass-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/main/muutils/json_serialize/serializable_dataclass.py#L0-L845" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.6.13/json_serialize/serializable_dataclass.py#L0-L845" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -674,7 +674,7 @@ True
 </span><span id="L-429"><a href="#L-429"><span class="linenos">429</span></a><span class="sd">         - `ValueError` : if the instances are `dataclasses.dataclass` but not `SerializableDataclass`</span>
 </span><span id="L-430"><a href="#L-430"><span class="linenos">430</span></a><span class="sd">        &quot;&quot;&quot;</span>
 </span><span id="L-431"><a href="#L-431"><span class="linenos">431</span></a>        <span class="c1"># match types</span>
-</span><span id="L-432"><a href="#L-432"><span class="linenos">432</span></a>        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">type</span><span class="p">(</span><span class="n">other</span><span class="p">):</span>
+</span><span id="L-432"><a href="#L-432"><span class="linenos">432</span></a>        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="nb">type</span><span class="p">(</span><span class="n">other</span><span class="p">):</span>
 </span><span id="L-433"><a href="#L-433"><span class="linenos">433</span></a>            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
 </span><span id="L-434"><a href="#L-434"><span class="linenos">434</span></a>                <span class="sa">f</span><span class="s2">&quot;Instances must be of the same type, but got </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="w"> </span><span class="si">= }</span><span class="s2"> and </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">other</span><span class="p">)</span><span class="w"> </span><span class="si">= }</span><span class="s2">&quot;</span>
 </span><span id="L-435"><a href="#L-435"><span class="linenos">435</span></a>            <span class="p">)</span>
@@ -1104,7 +1104,7 @@ True
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="dataclass_transform-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/main/muutils/json_serialize/serializable_dataclass.py#L3361-L3442" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.6.13/json_serialize/serializable_dataclass.py#L3274-L3355" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -1112,88 +1112,88 @@ True
 
     </div>
     <a class="headerlink" href="#dataclass_transform"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="dataclass_transform-3362"><a href="#dataclass_transform-3362"><span class="linenos">3362</span></a><span class="k">def</span> <span class="nf">dataclass_transform</span><span class="p">(</span>
-</span><span id="dataclass_transform-3363"><a href="#dataclass_transform-3363"><span class="linenos">3363</span></a>    <span class="o">*</span><span class="p">,</span>
-</span><span id="dataclass_transform-3364"><a href="#dataclass_transform-3364"><span class="linenos">3364</span></a>    <span class="n">eq_default</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
-</span><span id="dataclass_transform-3365"><a href="#dataclass_transform-3365"><span class="linenos">3365</span></a>    <span class="n">order_default</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
-</span><span id="dataclass_transform-3366"><a href="#dataclass_transform-3366"><span class="linenos">3366</span></a>    <span class="n">kw_only_default</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
-</span><span id="dataclass_transform-3367"><a href="#dataclass_transform-3367"><span class="linenos">3367</span></a>    <span class="n">frozen_default</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
-</span><span id="dataclass_transform-3368"><a href="#dataclass_transform-3368"><span class="linenos">3368</span></a>    <span class="n">field_specifiers</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">type</span><span class="p">[</span><span class="n">Any</span><span class="p">]</span> <span class="o">|</span> <span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="o">...</span><span class="p">]</span> <span class="o">=</span> <span class="p">(),</span>
-</span><span id="dataclass_transform-3369"><a href="#dataclass_transform-3369"><span class="linenos">3369</span></a>    <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
-</span><span id="dataclass_transform-3370"><a href="#dataclass_transform-3370"><span class="linenos">3370</span></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_IdentityCallable</span><span class="p">:</span>
-</span><span id="dataclass_transform-3371"><a href="#dataclass_transform-3371"><span class="linenos">3371</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Decorator to mark an object as providing dataclass-like behaviour.</span>
-</span><span id="dataclass_transform-3372"><a href="#dataclass_transform-3372"><span class="linenos">3372</span></a>
-</span><span id="dataclass_transform-3373"><a href="#dataclass_transform-3373"><span class="linenos">3373</span></a><span class="sd">    The decorator can be applied to a function, class, or metaclass.</span>
-</span><span id="dataclass_transform-3374"><a href="#dataclass_transform-3374"><span class="linenos">3374</span></a>
-</span><span id="dataclass_transform-3375"><a href="#dataclass_transform-3375"><span class="linenos">3375</span></a><span class="sd">    Example usage with a decorator function::</span>
-</span><span id="dataclass_transform-3376"><a href="#dataclass_transform-3376"><span class="linenos">3376</span></a>
-</span><span id="dataclass_transform-3377"><a href="#dataclass_transform-3377"><span class="linenos">3377</span></a><span class="sd">        @dataclass_transform()</span>
-</span><span id="dataclass_transform-3378"><a href="#dataclass_transform-3378"><span class="linenos">3378</span></a><span class="sd">        def create_model[T](cls: type[T]) -&gt; type[T]:</span>
-</span><span id="dataclass_transform-3379"><a href="#dataclass_transform-3379"><span class="linenos">3379</span></a><span class="sd">            ...</span>
-</span><span id="dataclass_transform-3380"><a href="#dataclass_transform-3380"><span class="linenos">3380</span></a><span class="sd">            return cls</span>
-</span><span id="dataclass_transform-3381"><a href="#dataclass_transform-3381"><span class="linenos">3381</span></a>
-</span><span id="dataclass_transform-3382"><a href="#dataclass_transform-3382"><span class="linenos">3382</span></a><span class="sd">        @create_model</span>
-</span><span id="dataclass_transform-3383"><a href="#dataclass_transform-3383"><span class="linenos">3383</span></a><span class="sd">        class CustomerModel:</span>
-</span><span id="dataclass_transform-3384"><a href="#dataclass_transform-3384"><span class="linenos">3384</span></a><span class="sd">            id: int</span>
-</span><span id="dataclass_transform-3385"><a href="#dataclass_transform-3385"><span class="linenos">3385</span></a><span class="sd">            name: str</span>
-</span><span id="dataclass_transform-3386"><a href="#dataclass_transform-3386"><span class="linenos">3386</span></a>
-</span><span id="dataclass_transform-3387"><a href="#dataclass_transform-3387"><span class="linenos">3387</span></a><span class="sd">    On a base class::</span>
-</span><span id="dataclass_transform-3388"><a href="#dataclass_transform-3388"><span class="linenos">3388</span></a>
-</span><span id="dataclass_transform-3389"><a href="#dataclass_transform-3389"><span class="linenos">3389</span></a><span class="sd">        @dataclass_transform()</span>
-</span><span id="dataclass_transform-3390"><a href="#dataclass_transform-3390"><span class="linenos">3390</span></a><span class="sd">        class ModelBase: ...</span>
-</span><span id="dataclass_transform-3391"><a href="#dataclass_transform-3391"><span class="linenos">3391</span></a>
-</span><span id="dataclass_transform-3392"><a href="#dataclass_transform-3392"><span class="linenos">3392</span></a><span class="sd">        class CustomerModel(ModelBase):</span>
-</span><span id="dataclass_transform-3393"><a href="#dataclass_transform-3393"><span class="linenos">3393</span></a><span class="sd">            id: int</span>
-</span><span id="dataclass_transform-3394"><a href="#dataclass_transform-3394"><span class="linenos">3394</span></a><span class="sd">            name: str</span>
-</span><span id="dataclass_transform-3395"><a href="#dataclass_transform-3395"><span class="linenos">3395</span></a>
-</span><span id="dataclass_transform-3396"><a href="#dataclass_transform-3396"><span class="linenos">3396</span></a><span class="sd">    On a metaclass::</span>
-</span><span id="dataclass_transform-3397"><a href="#dataclass_transform-3397"><span class="linenos">3397</span></a>
-</span><span id="dataclass_transform-3398"><a href="#dataclass_transform-3398"><span class="linenos">3398</span></a><span class="sd">        @dataclass_transform()</span>
-</span><span id="dataclass_transform-3399"><a href="#dataclass_transform-3399"><span class="linenos">3399</span></a><span class="sd">        class ModelMeta(type): ...</span>
-</span><span id="dataclass_transform-3400"><a href="#dataclass_transform-3400"><span class="linenos">3400</span></a>
-</span><span id="dataclass_transform-3401"><a href="#dataclass_transform-3401"><span class="linenos">3401</span></a><span class="sd">        class ModelBase(metaclass=ModelMeta): ...</span>
-</span><span id="dataclass_transform-3402"><a href="#dataclass_transform-3402"><span class="linenos">3402</span></a>
-</span><span id="dataclass_transform-3403"><a href="#dataclass_transform-3403"><span class="linenos">3403</span></a><span class="sd">        class CustomerModel(ModelBase):</span>
-</span><span id="dataclass_transform-3404"><a href="#dataclass_transform-3404"><span class="linenos">3404</span></a><span class="sd">            id: int</span>
-</span><span id="dataclass_transform-3405"><a href="#dataclass_transform-3405"><span class="linenos">3405</span></a><span class="sd">            name: str</span>
-</span><span id="dataclass_transform-3406"><a href="#dataclass_transform-3406"><span class="linenos">3406</span></a>
-</span><span id="dataclass_transform-3407"><a href="#dataclass_transform-3407"><span class="linenos">3407</span></a><span class="sd">    The ``CustomerModel`` classes defined above will</span>
-</span><span id="dataclass_transform-3408"><a href="#dataclass_transform-3408"><span class="linenos">3408</span></a><span class="sd">    be treated by type checkers similarly to classes created with</span>
-</span><span id="dataclass_transform-3409"><a href="#dataclass_transform-3409"><span class="linenos">3409</span></a><span class="sd">    ``@dataclasses.dataclass``.</span>
-</span><span id="dataclass_transform-3410"><a href="#dataclass_transform-3410"><span class="linenos">3410</span></a><span class="sd">    For example, type checkers will assume these classes have</span>
-</span><span id="dataclass_transform-3411"><a href="#dataclass_transform-3411"><span class="linenos">3411</span></a><span class="sd">    ``__init__`` methods that accept ``id`` and ``name``.</span>
-</span><span id="dataclass_transform-3412"><a href="#dataclass_transform-3412"><span class="linenos">3412</span></a>
-</span><span id="dataclass_transform-3413"><a href="#dataclass_transform-3413"><span class="linenos">3413</span></a><span class="sd">    The arguments to this decorator can be used to customize this behavior:</span>
-</span><span id="dataclass_transform-3414"><a href="#dataclass_transform-3414"><span class="linenos">3414</span></a><span class="sd">    - ``eq_default`` indicates whether the ``eq`` parameter is assumed to be</span>
-</span><span id="dataclass_transform-3415"><a href="#dataclass_transform-3415"><span class="linenos">3415</span></a><span class="sd">        ``True`` or ``False`` if it is omitted by the caller.</span>
-</span><span id="dataclass_transform-3416"><a href="#dataclass_transform-3416"><span class="linenos">3416</span></a><span class="sd">    - ``order_default`` indicates whether the ``order`` parameter is</span>
-</span><span id="dataclass_transform-3417"><a href="#dataclass_transform-3417"><span class="linenos">3417</span></a><span class="sd">        assumed to be True or False if it is omitted by the caller.</span>
-</span><span id="dataclass_transform-3418"><a href="#dataclass_transform-3418"><span class="linenos">3418</span></a><span class="sd">    - ``kw_only_default`` indicates whether the ``kw_only`` parameter is</span>
-</span><span id="dataclass_transform-3419"><a href="#dataclass_transform-3419"><span class="linenos">3419</span></a><span class="sd">        assumed to be True or False if it is omitted by the caller.</span>
-</span><span id="dataclass_transform-3420"><a href="#dataclass_transform-3420"><span class="linenos">3420</span></a><span class="sd">    - ``frozen_default`` indicates whether the ``frozen`` parameter is</span>
-</span><span id="dataclass_transform-3421"><a href="#dataclass_transform-3421"><span class="linenos">3421</span></a><span class="sd">        assumed to be True or False if it is omitted by the caller.</span>
-</span><span id="dataclass_transform-3422"><a href="#dataclass_transform-3422"><span class="linenos">3422</span></a><span class="sd">    - ``field_specifiers`` specifies a static list of supported classes</span>
-</span><span id="dataclass_transform-3423"><a href="#dataclass_transform-3423"><span class="linenos">3423</span></a><span class="sd">        or functions that describe fields, similar to ``dataclasses.field()``.</span>
-</span><span id="dataclass_transform-3424"><a href="#dataclass_transform-3424"><span class="linenos">3424</span></a><span class="sd">    - Arbitrary other keyword arguments are accepted in order to allow for</span>
-</span><span id="dataclass_transform-3425"><a href="#dataclass_transform-3425"><span class="linenos">3425</span></a><span class="sd">        possible future extensions.</span>
-</span><span id="dataclass_transform-3426"><a href="#dataclass_transform-3426"><span class="linenos">3426</span></a>
-</span><span id="dataclass_transform-3427"><a href="#dataclass_transform-3427"><span class="linenos">3427</span></a><span class="sd">    At runtime, this decorator records its arguments in the</span>
-</span><span id="dataclass_transform-3428"><a href="#dataclass_transform-3428"><span class="linenos">3428</span></a><span class="sd">    ``__dataclass_transform__`` attribute on the decorated object.</span>
-</span><span id="dataclass_transform-3429"><a href="#dataclass_transform-3429"><span class="linenos">3429</span></a><span class="sd">    It has no other runtime effect.</span>
-</span><span id="dataclass_transform-3430"><a href="#dataclass_transform-3430"><span class="linenos">3430</span></a>
-</span><span id="dataclass_transform-3431"><a href="#dataclass_transform-3431"><span class="linenos">3431</span></a><span class="sd">    See PEP 681 for more details.</span>
-</span><span id="dataclass_transform-3432"><a href="#dataclass_transform-3432"><span class="linenos">3432</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="dataclass_transform-3433"><a href="#dataclass_transform-3433"><span class="linenos">3433</span></a>    <span class="k">def</span> <span class="nf">decorator</span><span class="p">(</span><span class="n">cls_or_fn</span><span class="p">):</span>
-</span><span id="dataclass_transform-3434"><a href="#dataclass_transform-3434"><span class="linenos">3434</span></a>        <span class="n">cls_or_fn</span><span class="o">.</span><span class="n">__dataclass_transform__</span> <span class="o">=</span> <span class="p">{</span>
-</span><span id="dataclass_transform-3435"><a href="#dataclass_transform-3435"><span class="linenos">3435</span></a>            <span class="s2">&quot;eq_default&quot;</span><span class="p">:</span> <span class="n">eq_default</span><span class="p">,</span>
-</span><span id="dataclass_transform-3436"><a href="#dataclass_transform-3436"><span class="linenos">3436</span></a>            <span class="s2">&quot;order_default&quot;</span><span class="p">:</span> <span class="n">order_default</span><span class="p">,</span>
-</span><span id="dataclass_transform-3437"><a href="#dataclass_transform-3437"><span class="linenos">3437</span></a>            <span class="s2">&quot;kw_only_default&quot;</span><span class="p">:</span> <span class="n">kw_only_default</span><span class="p">,</span>
-</span><span id="dataclass_transform-3438"><a href="#dataclass_transform-3438"><span class="linenos">3438</span></a>            <span class="s2">&quot;frozen_default&quot;</span><span class="p">:</span> <span class="n">frozen_default</span><span class="p">,</span>
-</span><span id="dataclass_transform-3439"><a href="#dataclass_transform-3439"><span class="linenos">3439</span></a>            <span class="s2">&quot;field_specifiers&quot;</span><span class="p">:</span> <span class="n">field_specifiers</span><span class="p">,</span>
-</span><span id="dataclass_transform-3440"><a href="#dataclass_transform-3440"><span class="linenos">3440</span></a>            <span class="s2">&quot;kwargs&quot;</span><span class="p">:</span> <span class="n">kwargs</span><span class="p">,</span>
-</span><span id="dataclass_transform-3441"><a href="#dataclass_transform-3441"><span class="linenos">3441</span></a>        <span class="p">}</span>
-</span><span id="dataclass_transform-3442"><a href="#dataclass_transform-3442"><span class="linenos">3442</span></a>        <span class="k">return</span> <span class="n">cls_or_fn</span>
-</span><span id="dataclass_transform-3443"><a href="#dataclass_transform-3443"><span class="linenos">3443</span></a>    <span class="k">return</span> <span class="n">decorator</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="dataclass_transform-3275"><a href="#dataclass_transform-3275"><span class="linenos">3275</span></a><span class="k">def</span> <span class="nf">dataclass_transform</span><span class="p">(</span>
+</span><span id="dataclass_transform-3276"><a href="#dataclass_transform-3276"><span class="linenos">3276</span></a>    <span class="o">*</span><span class="p">,</span>
+</span><span id="dataclass_transform-3277"><a href="#dataclass_transform-3277"><span class="linenos">3277</span></a>    <span class="n">eq_default</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+</span><span id="dataclass_transform-3278"><a href="#dataclass_transform-3278"><span class="linenos">3278</span></a>    <span class="n">order_default</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+</span><span id="dataclass_transform-3279"><a href="#dataclass_transform-3279"><span class="linenos">3279</span></a>    <span class="n">kw_only_default</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+</span><span id="dataclass_transform-3280"><a href="#dataclass_transform-3280"><span class="linenos">3280</span></a>    <span class="n">frozen_default</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+</span><span id="dataclass_transform-3281"><a href="#dataclass_transform-3281"><span class="linenos">3281</span></a>    <span class="n">field_specifiers</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">type</span><span class="p">[</span><span class="n">Any</span><span class="p">]</span> <span class="o">|</span> <span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="o">...</span><span class="p">]</span> <span class="o">=</span> <span class="p">(),</span>
+</span><span id="dataclass_transform-3282"><a href="#dataclass_transform-3282"><span class="linenos">3282</span></a>    <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
+</span><span id="dataclass_transform-3283"><a href="#dataclass_transform-3283"><span class="linenos">3283</span></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_IdentityCallable</span><span class="p">:</span>
+</span><span id="dataclass_transform-3284"><a href="#dataclass_transform-3284"><span class="linenos">3284</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Decorator to mark an object as providing dataclass-like behaviour.</span>
+</span><span id="dataclass_transform-3285"><a href="#dataclass_transform-3285"><span class="linenos">3285</span></a>
+</span><span id="dataclass_transform-3286"><a href="#dataclass_transform-3286"><span class="linenos">3286</span></a><span class="sd">    The decorator can be applied to a function, class, or metaclass.</span>
+</span><span id="dataclass_transform-3287"><a href="#dataclass_transform-3287"><span class="linenos">3287</span></a>
+</span><span id="dataclass_transform-3288"><a href="#dataclass_transform-3288"><span class="linenos">3288</span></a><span class="sd">    Example usage with a decorator function::</span>
+</span><span id="dataclass_transform-3289"><a href="#dataclass_transform-3289"><span class="linenos">3289</span></a>
+</span><span id="dataclass_transform-3290"><a href="#dataclass_transform-3290"><span class="linenos">3290</span></a><span class="sd">        @dataclass_transform()</span>
+</span><span id="dataclass_transform-3291"><a href="#dataclass_transform-3291"><span class="linenos">3291</span></a><span class="sd">        def create_model[T](cls: type[T]) -&gt; type[T]:</span>
+</span><span id="dataclass_transform-3292"><a href="#dataclass_transform-3292"><span class="linenos">3292</span></a><span class="sd">            ...</span>
+</span><span id="dataclass_transform-3293"><a href="#dataclass_transform-3293"><span class="linenos">3293</span></a><span class="sd">            return cls</span>
+</span><span id="dataclass_transform-3294"><a href="#dataclass_transform-3294"><span class="linenos">3294</span></a>
+</span><span id="dataclass_transform-3295"><a href="#dataclass_transform-3295"><span class="linenos">3295</span></a><span class="sd">        @create_model</span>
+</span><span id="dataclass_transform-3296"><a href="#dataclass_transform-3296"><span class="linenos">3296</span></a><span class="sd">        class CustomerModel:</span>
+</span><span id="dataclass_transform-3297"><a href="#dataclass_transform-3297"><span class="linenos">3297</span></a><span class="sd">            id: int</span>
+</span><span id="dataclass_transform-3298"><a href="#dataclass_transform-3298"><span class="linenos">3298</span></a><span class="sd">            name: str</span>
+</span><span id="dataclass_transform-3299"><a href="#dataclass_transform-3299"><span class="linenos">3299</span></a>
+</span><span id="dataclass_transform-3300"><a href="#dataclass_transform-3300"><span class="linenos">3300</span></a><span class="sd">    On a base class::</span>
+</span><span id="dataclass_transform-3301"><a href="#dataclass_transform-3301"><span class="linenos">3301</span></a>
+</span><span id="dataclass_transform-3302"><a href="#dataclass_transform-3302"><span class="linenos">3302</span></a><span class="sd">        @dataclass_transform()</span>
+</span><span id="dataclass_transform-3303"><a href="#dataclass_transform-3303"><span class="linenos">3303</span></a><span class="sd">        class ModelBase: ...</span>
+</span><span id="dataclass_transform-3304"><a href="#dataclass_transform-3304"><span class="linenos">3304</span></a>
+</span><span id="dataclass_transform-3305"><a href="#dataclass_transform-3305"><span class="linenos">3305</span></a><span class="sd">        class CustomerModel(ModelBase):</span>
+</span><span id="dataclass_transform-3306"><a href="#dataclass_transform-3306"><span class="linenos">3306</span></a><span class="sd">            id: int</span>
+</span><span id="dataclass_transform-3307"><a href="#dataclass_transform-3307"><span class="linenos">3307</span></a><span class="sd">            name: str</span>
+</span><span id="dataclass_transform-3308"><a href="#dataclass_transform-3308"><span class="linenos">3308</span></a>
+</span><span id="dataclass_transform-3309"><a href="#dataclass_transform-3309"><span class="linenos">3309</span></a><span class="sd">    On a metaclass::</span>
+</span><span id="dataclass_transform-3310"><a href="#dataclass_transform-3310"><span class="linenos">3310</span></a>
+</span><span id="dataclass_transform-3311"><a href="#dataclass_transform-3311"><span class="linenos">3311</span></a><span class="sd">        @dataclass_transform()</span>
+</span><span id="dataclass_transform-3312"><a href="#dataclass_transform-3312"><span class="linenos">3312</span></a><span class="sd">        class ModelMeta(type): ...</span>
+</span><span id="dataclass_transform-3313"><a href="#dataclass_transform-3313"><span class="linenos">3313</span></a>
+</span><span id="dataclass_transform-3314"><a href="#dataclass_transform-3314"><span class="linenos">3314</span></a><span class="sd">        class ModelBase(metaclass=ModelMeta): ...</span>
+</span><span id="dataclass_transform-3315"><a href="#dataclass_transform-3315"><span class="linenos">3315</span></a>
+</span><span id="dataclass_transform-3316"><a href="#dataclass_transform-3316"><span class="linenos">3316</span></a><span class="sd">        class CustomerModel(ModelBase):</span>
+</span><span id="dataclass_transform-3317"><a href="#dataclass_transform-3317"><span class="linenos">3317</span></a><span class="sd">            id: int</span>
+</span><span id="dataclass_transform-3318"><a href="#dataclass_transform-3318"><span class="linenos">3318</span></a><span class="sd">            name: str</span>
+</span><span id="dataclass_transform-3319"><a href="#dataclass_transform-3319"><span class="linenos">3319</span></a>
+</span><span id="dataclass_transform-3320"><a href="#dataclass_transform-3320"><span class="linenos">3320</span></a><span class="sd">    The ``CustomerModel`` classes defined above will</span>
+</span><span id="dataclass_transform-3321"><a href="#dataclass_transform-3321"><span class="linenos">3321</span></a><span class="sd">    be treated by type checkers similarly to classes created with</span>
+</span><span id="dataclass_transform-3322"><a href="#dataclass_transform-3322"><span class="linenos">3322</span></a><span class="sd">    ``@dataclasses.dataclass``.</span>
+</span><span id="dataclass_transform-3323"><a href="#dataclass_transform-3323"><span class="linenos">3323</span></a><span class="sd">    For example, type checkers will assume these classes have</span>
+</span><span id="dataclass_transform-3324"><a href="#dataclass_transform-3324"><span class="linenos">3324</span></a><span class="sd">    ``__init__`` methods that accept ``id`` and ``name``.</span>
+</span><span id="dataclass_transform-3325"><a href="#dataclass_transform-3325"><span class="linenos">3325</span></a>
+</span><span id="dataclass_transform-3326"><a href="#dataclass_transform-3326"><span class="linenos">3326</span></a><span class="sd">    The arguments to this decorator can be used to customize this behavior:</span>
+</span><span id="dataclass_transform-3327"><a href="#dataclass_transform-3327"><span class="linenos">3327</span></a><span class="sd">    - ``eq_default`` indicates whether the ``eq`` parameter is assumed to be</span>
+</span><span id="dataclass_transform-3328"><a href="#dataclass_transform-3328"><span class="linenos">3328</span></a><span class="sd">        ``True`` or ``False`` if it is omitted by the caller.</span>
+</span><span id="dataclass_transform-3329"><a href="#dataclass_transform-3329"><span class="linenos">3329</span></a><span class="sd">    - ``order_default`` indicates whether the ``order`` parameter is</span>
+</span><span id="dataclass_transform-3330"><a href="#dataclass_transform-3330"><span class="linenos">3330</span></a><span class="sd">        assumed to be True or False if it is omitted by the caller.</span>
+</span><span id="dataclass_transform-3331"><a href="#dataclass_transform-3331"><span class="linenos">3331</span></a><span class="sd">    - ``kw_only_default`` indicates whether the ``kw_only`` parameter is</span>
+</span><span id="dataclass_transform-3332"><a href="#dataclass_transform-3332"><span class="linenos">3332</span></a><span class="sd">        assumed to be True or False if it is omitted by the caller.</span>
+</span><span id="dataclass_transform-3333"><a href="#dataclass_transform-3333"><span class="linenos">3333</span></a><span class="sd">    - ``frozen_default`` indicates whether the ``frozen`` parameter is</span>
+</span><span id="dataclass_transform-3334"><a href="#dataclass_transform-3334"><span class="linenos">3334</span></a><span class="sd">        assumed to be True or False if it is omitted by the caller.</span>
+</span><span id="dataclass_transform-3335"><a href="#dataclass_transform-3335"><span class="linenos">3335</span></a><span class="sd">    - ``field_specifiers`` specifies a static list of supported classes</span>
+</span><span id="dataclass_transform-3336"><a href="#dataclass_transform-3336"><span class="linenos">3336</span></a><span class="sd">        or functions that describe fields, similar to ``dataclasses.field()``.</span>
+</span><span id="dataclass_transform-3337"><a href="#dataclass_transform-3337"><span class="linenos">3337</span></a><span class="sd">    - Arbitrary other keyword arguments are accepted in order to allow for</span>
+</span><span id="dataclass_transform-3338"><a href="#dataclass_transform-3338"><span class="linenos">3338</span></a><span class="sd">        possible future extensions.</span>
+</span><span id="dataclass_transform-3339"><a href="#dataclass_transform-3339"><span class="linenos">3339</span></a>
+</span><span id="dataclass_transform-3340"><a href="#dataclass_transform-3340"><span class="linenos">3340</span></a><span class="sd">    At runtime, this decorator records its arguments in the</span>
+</span><span id="dataclass_transform-3341"><a href="#dataclass_transform-3341"><span class="linenos">3341</span></a><span class="sd">    ``__dataclass_transform__`` attribute on the decorated object.</span>
+</span><span id="dataclass_transform-3342"><a href="#dataclass_transform-3342"><span class="linenos">3342</span></a><span class="sd">    It has no other runtime effect.</span>
+</span><span id="dataclass_transform-3343"><a href="#dataclass_transform-3343"><span class="linenos">3343</span></a>
+</span><span id="dataclass_transform-3344"><a href="#dataclass_transform-3344"><span class="linenos">3344</span></a><span class="sd">    See PEP 681 for more details.</span>
+</span><span id="dataclass_transform-3345"><a href="#dataclass_transform-3345"><span class="linenos">3345</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="dataclass_transform-3346"><a href="#dataclass_transform-3346"><span class="linenos">3346</span></a>    <span class="k">def</span> <span class="nf">decorator</span><span class="p">(</span><span class="n">cls_or_fn</span><span class="p">):</span>
+</span><span id="dataclass_transform-3347"><a href="#dataclass_transform-3347"><span class="linenos">3347</span></a>        <span class="n">cls_or_fn</span><span class="o">.</span><span class="n">__dataclass_transform__</span> <span class="o">=</span> <span class="p">{</span>
+</span><span id="dataclass_transform-3348"><a href="#dataclass_transform-3348"><span class="linenos">3348</span></a>            <span class="s2">&quot;eq_default&quot;</span><span class="p">:</span> <span class="n">eq_default</span><span class="p">,</span>
+</span><span id="dataclass_transform-3349"><a href="#dataclass_transform-3349"><span class="linenos">3349</span></a>            <span class="s2">&quot;order_default&quot;</span><span class="p">:</span> <span class="n">order_default</span><span class="p">,</span>
+</span><span id="dataclass_transform-3350"><a href="#dataclass_transform-3350"><span class="linenos">3350</span></a>            <span class="s2">&quot;kw_only_default&quot;</span><span class="p">:</span> <span class="n">kw_only_default</span><span class="p">,</span>
+</span><span id="dataclass_transform-3351"><a href="#dataclass_transform-3351"><span class="linenos">3351</span></a>            <span class="s2">&quot;frozen_default&quot;</span><span class="p">:</span> <span class="n">frozen_default</span><span class="p">,</span>
+</span><span id="dataclass_transform-3352"><a href="#dataclass_transform-3352"><span class="linenos">3352</span></a>            <span class="s2">&quot;field_specifiers&quot;</span><span class="p">:</span> <span class="n">field_specifiers</span><span class="p">,</span>
+</span><span id="dataclass_transform-3353"><a href="#dataclass_transform-3353"><span class="linenos">3353</span></a>            <span class="s2">&quot;kwargs&quot;</span><span class="p">:</span> <span class="n">kwargs</span><span class="p">,</span>
+</span><span id="dataclass_transform-3354"><a href="#dataclass_transform-3354"><span class="linenos">3354</span></a>        <span class="p">}</span>
+</span><span id="dataclass_transform-3355"><a href="#dataclass_transform-3355"><span class="linenos">3355</span></a>        <span class="k">return</span> <span class="n">cls_or_fn</span>
+</span><span id="dataclass_transform-3356"><a href="#dataclass_transform-3356"><span class="linenos">3356</span></a>    <span class="k">return</span> <span class="n">decorator</span>
 </span></pre></div>
 
 
@@ -1278,7 +1278,7 @@ It has no other runtime effect.</p>
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="CantGetTypeHintsWarning-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/main/muutils/json_serialize/serializable_dataclass.py#L109-L112" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.6.13/json_serialize/serializable_dataclass.py#L109-L112" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -1323,7 +1323,7 @@ It has no other runtime effect.</p>
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="ZanjMissingWarning-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/main/muutils/json_serialize/serializable_dataclass.py#L115-L118" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.6.13/json_serialize/serializable_dataclass.py#L115-L118" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -1368,7 +1368,7 @@ It has no other runtime effect.</p>
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="zanj_register_loader_serializable_dataclass-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/main/muutils/json_serialize/serializable_dataclass.py#L125-L163" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.6.13/json_serialize/serializable_dataclass.py#L125-L163" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -1437,7 +1437,7 @@ It has no other runtime effect.</p>
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="FieldIsNotInitOrSerializeWarning-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/main/muutils/json_serialize/serializable_dataclass.py#L170-L171" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.6.13/json_serialize/serializable_dataclass.py#L170-L171" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -1480,7 +1480,7 @@ It has no other runtime effect.</p>
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="SerializableDataclass__validate_field_type-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/main/muutils/json_serialize/serializable_dataclass.py#L174-L263" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.6.13/json_serialize/serializable_dataclass.py#L174-L263" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -1617,7 +1617,7 @@ if the field type is correct. <code>False</code> if the field type is incorrect 
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="SerializableDataclass__validate_fields_types__dict-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/main/muutils/json_serialize/serializable_dataclass.py#L266-L300" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.6.13/json_serialize/serializable_dataclass.py#L266-L300" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -1680,7 +1680,7 @@ if the field type is correct. <code>False</code> if the field type is incorrect 
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="SerializableDataclass__validate_fields_types-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/main/muutils/json_serialize/serializable_dataclass.py#L303-L312" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.6.13/json_serialize/serializable_dataclass.py#L303-L312" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -1717,7 +1717,7 @@ if the field type is correct. <code>False</code> if the field type is incorrect 
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="SerializableDataclass-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/main/muutils/json_serialize/serializable_dataclass.py#L315-L508" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.6.13/json_serialize/serializable_dataclass.py#L315-L508" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -1842,7 +1842,7 @@ if the field type is correct. <code>False</code> if the field type is incorrect 
 </span><span id="SerializableDataclass-430"><a href="#SerializableDataclass-430"><span class="linenos">430</span></a><span class="sd">         - `ValueError` : if the instances are `dataclasses.dataclass` but not `SerializableDataclass`</span>
 </span><span id="SerializableDataclass-431"><a href="#SerializableDataclass-431"><span class="linenos">431</span></a><span class="sd">        &quot;&quot;&quot;</span>
 </span><span id="SerializableDataclass-432"><a href="#SerializableDataclass-432"><span class="linenos">432</span></a>        <span class="c1"># match types</span>
-</span><span id="SerializableDataclass-433"><a href="#SerializableDataclass-433"><span class="linenos">433</span></a>        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">type</span><span class="p">(</span><span class="n">other</span><span class="p">):</span>
+</span><span id="SerializableDataclass-433"><a href="#SerializableDataclass-433"><span class="linenos">433</span></a>        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="nb">type</span><span class="p">(</span><span class="n">other</span><span class="p">):</span>
 </span><span id="SerializableDataclass-434"><a href="#SerializableDataclass-434"><span class="linenos">434</span></a>            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
 </span><span id="SerializableDataclass-435"><a href="#SerializableDataclass-435"><span class="linenos">435</span></a>                <span class="sa">f</span><span class="s2">&quot;Instances must be of the same type, but got </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="w"> </span><span class="si">= }</span><span class="s2"> and </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">other</span><span class="p">)</span><span class="w"> </span><span class="si">= }</span><span class="s2">&quot;</span>
 </span><span id="SerializableDataclass-436"><a href="#SerializableDataclass-436"><span class="linenos">436</span></a>            <span class="p">)</span>
@@ -1986,7 +1986,7 @@ True
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="SerializableDataclass.serialize-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/main/muutils/json_serialize/serializable_dataclass.py#L368-L372" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.6.13/json_serialize/serializable_dataclass.py#L368-L372" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -2018,7 +2018,7 @@ True
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="SerializableDataclass.load-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/main/muutils/json_serialize/serializable_dataclass.py#L374-L377" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.6.13/json_serialize/serializable_dataclass.py#L374-L377" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -2048,7 +2048,7 @@ True
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="SerializableDataclass.validate_fields_types-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/main/muutils/json_serialize/serializable_dataclass.py#L379-L385" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.6.13/json_serialize/serializable_dataclass.py#L379-L385" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -2081,7 +2081,7 @@ True
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="SerializableDataclass.validate_field_type-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/main/muutils/json_serialize/serializable_dataclass.py#L387-L395" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.6.13/json_serialize/serializable_dataclass.py#L387-L395" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -2116,7 +2116,7 @@ True
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="SerializableDataclass.diff-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/main/muutils/json_serialize/serializable_dataclass.py#L404-L483" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.6.13/json_serialize/serializable_dataclass.py#L404-L483" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -2152,7 +2152,7 @@ True
 </span><span id="SerializableDataclass.diff-430"><a href="#SerializableDataclass.diff-430"><span class="linenos">430</span></a><span class="sd">         - `ValueError` : if the instances are `dataclasses.dataclass` but not `SerializableDataclass`</span>
 </span><span id="SerializableDataclass.diff-431"><a href="#SerializableDataclass.diff-431"><span class="linenos">431</span></a><span class="sd">        &quot;&quot;&quot;</span>
 </span><span id="SerializableDataclass.diff-432"><a href="#SerializableDataclass.diff-432"><span class="linenos">432</span></a>        <span class="c1"># match types</span>
-</span><span id="SerializableDataclass.diff-433"><a href="#SerializableDataclass.diff-433"><span class="linenos">433</span></a>        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">type</span><span class="p">(</span><span class="n">other</span><span class="p">):</span>
+</span><span id="SerializableDataclass.diff-433"><a href="#SerializableDataclass.diff-433"><span class="linenos">433</span></a>        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="nb">type</span><span class="p">(</span><span class="n">other</span><span class="p">):</span>
 </span><span id="SerializableDataclass.diff-434"><a href="#SerializableDataclass.diff-434"><span class="linenos">434</span></a>            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
 </span><span id="SerializableDataclass.diff-435"><a href="#SerializableDataclass.diff-435"><span class="linenos">435</span></a>                <span class="sa">f</span><span class="s2">&quot;Instances must be of the same type, but got </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="w"> </span><span class="si">= }</span><span class="s2"> and </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">other</span><span class="p">)</span><span class="w"> </span><span class="si">= }</span><span class="s2">&quot;</span>
 </span><span id="SerializableDataclass.diff-436"><a href="#SerializableDataclass.diff-436"><span class="linenos">436</span></a>            <span class="p">)</span>
@@ -2253,7 +2253,7 @@ if true, compare serialized data and not raw values
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="SerializableDataclass.update_from_nested_dict-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/main/muutils/json_serialize/serializable_dataclass.py#L485-L500" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.6.13/json_serialize/serializable_dataclass.py#L485-L500" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -2303,7 +2303,7 @@ if true, compare serialized data and not raw values
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="get_cls_type_hints_cached-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/main/muutils/json_serialize/serializable_dataclass.py#L513-L516" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.6.13/json_serialize/serializable_dataclass.py#L513-L516" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -2333,7 +2333,7 @@ if true, compare serialized data and not raw values
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="get_cls_type_hints-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/main/muutils/json_serialize/serializable_dataclass.py#L519-L537" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.6.13/json_serialize/serializable_dataclass.py#L519-L537" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -2378,7 +2378,7 @@ if true, compare serialized data and not raw values
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="KWOnlyError-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/main/muutils/json_serialize/serializable_dataclass.py#L540-L543" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.6.13/json_serialize/serializable_dataclass.py#L540-L543" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -2423,7 +2423,7 @@ if true, compare serialized data and not raw values
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="FieldError-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/main/muutils/json_serialize/serializable_dataclass.py#L546-L549" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.6.13/json_serialize/serializable_dataclass.py#L546-L549" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -2468,7 +2468,7 @@ if true, compare serialized data and not raw values
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="NotSerializableFieldException-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/main/muutils/json_serialize/serializable_dataclass.py#L552-L555" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.6.13/json_serialize/serializable_dataclass.py#L552-L555" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -2513,7 +2513,7 @@ if true, compare serialized data and not raw values
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="FieldSerializationError-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/main/muutils/json_serialize/serializable_dataclass.py#L558-L561" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.6.13/json_serialize/serializable_dataclass.py#L558-L561" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -2558,7 +2558,7 @@ if true, compare serialized data and not raw values
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="FieldLoadingError-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/main/muutils/json_serialize/serializable_dataclass.py#L564-L567" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.6.13/json_serialize/serializable_dataclass.py#L564-L567" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -2604,7 +2604,7 @@ if true, compare serialized data and not raw values
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="serializable_dataclass-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/main/muutils/json_serialize/serializable_dataclass.py#L570-L846" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.6.13/json_serialize/serializable_dataclass.py#L570-L846" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>

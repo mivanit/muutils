@@ -18,7 +18,7 @@ muutils\logger\exception_context.py                                             
 muutils\logger\headerfuncs.py                                                        19      1    95%   55
 muutils\logger\log_util.py                                                           32     32     0%   1-80
 muutils\logger\logger.py                                                             98     25    74%   28-36, 87, 90, 135, 155-156, 194, 227, 237, 257-261, 277-280, 295, 299, 306
-muutils\logger\loggingstream.py                                                      40     12    70%   43-76, 81, 91-92
+muutils\logger\loggingstream.py                                                      40     13    68%   43-76, 81, 90-92
 muutils\logger\simplelogger.py                                                       41     19    54%   16, 20, 24, 28, 55-65, 69-81
 muutils\logger\timing.py                                                             39     18    54%   27-30, 43-48, 52-54, 67-70, 81-87
 muutils\misc\__init__.py                                                              7      0   100%
@@ -56,7 +56,7 @@ tests\unit\misc\test_misc.py                                                    
 tests\unit\misc\test_numerical_conversions.py                                        43      0   100%
 tests\unit\misc\test_sequence.py                                                     73      0   100%
 tests\unit\nbutils\test_configure_notebook.py                                        70      0   100%
-tests\unit\nbutils\test_conversion.py                                                27      0   100%
+tests\unit\nbutils\test_conversion.py                                                28      0   100%
 tests\unit\test_chunks.py                                                            31      0   100%
 tests\unit\test_dictmagic.py                                                        130      0   100%
 tests\unit\test_group_equiv.py                                                       13      0   100%
@@ -73,4 +73,4 @@ tests\unit\validate_type\test_validate_type.py                                  
 tests\unit\validate_type\test_validate_type_GENERATED.py                            206     45    78%   50-51, 75-76, 102-103, 125-126, 147-148, 177-178, 203-204, 237-238, 255, 274-275, 336-337, 361-362, 432-433, 461-462, 466-467, 481-499
 tests\unit\validate_type\test_validate_type_special.py                               15      3    80%   34-35, 57
 ---------------------------------------------------------------------------------------------------------------
-TOTAL                                                                              5591    948    83%
+TOTAL                                                                              5592    949    83%

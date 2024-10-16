@@ -13,7 +13,13 @@ import typing
 import warnings
 from typing import Any, Iterable, Literal, Optional, Sequence
 
-import numpy as np
+try:
+    import numpy as np
+except ImportError as e:
+    warnings.warn(
+        f"numpy is not installed, array serialization will not work: \n{e}",
+        ImportWarning,
+    )
 
 from muutils.json_serialize.util import JSONitem
 

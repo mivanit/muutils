@@ -6,7 +6,7 @@ muutils\errormode.py                                                            
 muutils\group_equiv.py                                                               29      0   100%
 muutils\interval.py                                                                 278      6    98%   120, 162, 170, 227, 309, 457
 muutils\json_serialize\__init__.py                                                    6      6     0%   16-31
-muutils\json_serialize\array.py                                                      92     33    64%   9-32, 36-42, 53, 93, 127-130, 139, 143, 147, 150, 154, 158-161, 165, 172, 184, 211-216, 221, 224
+muutils\json_serialize\array.py                                                      95     36    62%   9-38, 42-48, 59, 99, 133-136, 145, 149, 153, 156, 160, 164-167, 171, 178, 190, 217-222, 227, 230
 muutils\json_serialize\json_serialize.py                                             64     46    28%   11-92, 139, 233-259, 269, 281, 296-329
 muutils\json_serialize\serializable_dataclass.py                                    242    110    55%   52-125, 141-146, 166-174, 201, 207, 225-239, 252, 256-266, 285-287, 291, 303, 315-387, 397-404, 433, 446-447, 453, 464-468, 473, 485, 502-514, 519, 525, 528-530, 540-573, 664, 672-676, 705, 729-730, 764, 806
 muutils\json_serialize\serializable_field.py                                         40     24    40%   9-45, 81, 87-90, 100, 111-187
@@ -73,4 +73,4 @@ tests\unit\validate_type\test_validate_type.py                                  
 tests\unit\validate_type\test_validate_type_GENERATED.py                            206     45    78%   50-51, 75-76, 102-103, 125-126, 147-148, 177-178, 203-204, 237-238, 255, 274-275, 336-337, 361-362, 432-433, 461-462, 466-467, 481-499
 tests\unit\validate_type\test_validate_type_special.py                               15      3    80%   34-35, 57
 ---------------------------------------------------------------------------------------------------------------
-TOTAL                                                                              5592    949    83%
+TOTAL                                                                              5595    952    83%

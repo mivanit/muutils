@@ -1,4 +1,4 @@
-  docs for muutils v0.6.14
+  docs for muutils v0.6.15
 
 Contents
 
@@ -258,7 +258,7 @@ at your own risk!
 
 View Source on GitHub
 
-  docs for muutils v0.6.14
+  docs for muutils v0.6.15
 
 Contents
 
@@ -613,7 +613,7 @@ Raises:
     ‘yaml’, or if you try to use ‘yaml’ output without having PyYAML
     installed
 
-  docs for muutils v0.6.14
+  docs for muutils v0.6.15
 
 Contents
 
@@ -828,7 +828,7 @@ Inherited Members
 
 map of string aliases to ErrorMode instances
 
-  docs for muutils v0.6.14
+  docs for muutils v0.6.15
 
 Contents
 
@@ -870,7 +870,7 @@ Arguments
 -   eq_func: Callable[[T, T], bool] a function that returns true if two
     items are equivalent. need not be transitive
 
-  docs for muutils v0.6.14
+  docs for muutils v0.6.15
 
 Contents
 
@@ -1169,7 +1169,7 @@ Inherited Members
 -   intersection
 -   union
 
-  docs for muutils v0.6.14
+  docs for muutils v0.6.15
 
 Contents
 
@@ -1412,6 +1412,11 @@ new Parameters:
 -   deserialize_fn: new alternative to loading_fn. takes only the
     field’s value, not the whole class. if both loading_fn and
     deserialize_fn are provided, an error will be raised.
+-   assert_type: whether to assert the type of the field when loading.
+    if False, will not check the type of the field.
+-   custom_typecheck_fn: function taking the type of the field and
+    returning whether the type itself is valid. if not provided, will
+    use the default type checking.
 
 Gotchas:
 
@@ -1755,7 +1760,7 @@ Parameters:
     - `nested_dict : dict[str, Any]`
         nested dict to update the instance with
 
-  docs for muutils v0.6.14
+  docs for muutils v0.6.15
 
 Contents
 
@@ -1877,7 +1882,7 @@ View Source on GitHub
 
 load a json-serialized array, infer the mode if not specified
 
-  docs for muutils v0.6.14
+  docs for muutils v0.6.15
 
 Contents
 
@@ -1922,7 +1927,7 @@ View Source on GitHub
 
 -   SERIALIZER_SPECIAL_FUNCS: dict[str, typing.Callable] = {'str': <class 'str'>, 'dir': <built-in function dir>, 'type': <function <lambda>>, 'repr': <function <lambda>>, 'code': <function <lambda>>, 'sourcefile': <function <lambda>>}
 
--   SERIALIZE_DIRECT_AS_STR: Set[str] = {"<class 'torch.device'>", "<class 'torch.dtype'>"}
+-   SERIALIZE_DIRECT_AS_STR: Set[str] = {"<class 'torch.dtype'>", "<class 'torch.device'>"}
 
 -   ObjectPath = tuple[typing.Union[str, int], ...]
 
@@ -2053,7 +2058,7 @@ View Source on GitHub
 
 serialize object to json-serializable object with default config
 
-  docs for muutils v0.6.14
+  docs for muutils v0.6.15
 
 Contents
 
@@ -2695,7 +2700,7 @@ Raises:
 -   AttributeError : if a property is not found on the class
 -   FieldLoadingError : if there is an error loading a field
 
-  docs for muutils v0.6.14
+  docs for muutils v0.6.15
 
 Contents
 
@@ -2853,6 +2858,11 @@ new Parameters:
 -   deserialize_fn: new alternative to loading_fn. takes only the
     field’s value, not the whole class. if both loading_fn and
     deserialize_fn are provided, an error will be raised.
+-   assert_type: whether to assert the type of the field when loading.
+    if False, will not check the type of the field.
+-   custom_typecheck_fn: function taking the type of the field and
+    returning whether the type itself is valid. if not provided, will
+    use the default type checking.
 
 Gotchas:
 
@@ -2880,7 +2890,7 @@ note that if not using ZANJ, and you have a class inside a container,
 you MUST provide serialization_fn and loading_fn to serialize and load
 the container. ZANJ will automatically do this for you.
 
-  docs for muutils v0.6.14
+  docs for muutils v0.6.15
 
 Contents
 
@@ -3058,7 +3068,7 @@ View Source on GitHub
 
 tuple type hint, but for a tuple of any length with all the same type
 
-  docs for muutils v0.6.14
+  docs for muutils v0.6.15
 
 Contents
 
@@ -3108,7 +3118,7 @@ def jsonl_write
 
 View Source on GitHub
 
-  docs for muutils v0.6.14
+  docs for muutils v0.6.15
 
 Contents
 
@@ -3164,7 +3174,7 @@ Inherited Members
 -   items
 -   values
 
-  docs for muutils v0.6.14
+  docs for muutils v0.6.15
 
 Contents
 
@@ -3385,7 +3395,7 @@ context manager for timing code
 
 -   elapsed_time: float
 
-  docs for muutils v0.6.14
+  docs for muutils v0.6.15
 
 API Documentation
 
@@ -3422,7 +3432,7 @@ View Source on GitHub
 
 -   stream
 
-  docs for muutils v0.6.14
+  docs for muutils v0.6.15
 
 API Documentation
 
@@ -3514,7 +3524,7 @@ standard header function. will output
 
 -   HEADER_FUNCTIONS: dict[str, muutils.logger.headerfuncs.HeaderFunction] = {'md': <function md_header_function>}
 
-  docs for muutils v0.6.14
+  docs for muutils v0.6.15
 
 API Documentation
 
@@ -3579,7 +3589,7 @@ then gather_val("log.jsonl", "s1", ("a", "b")) will return
         [4, 5]
     ]
 
-  docs for muutils v0.6.14
+  docs for muutils v0.6.15
 
 Contents
 
@@ -3721,7 +3731,7 @@ View Source on GitHub
 
 flush all streams
 
-  docs for muutils v0.6.14
+  docs for muutils v0.6.15
 
 API Documentation
 
@@ -3783,7 +3793,7 @@ def make_handler
 
 View Source on GitHub
 
-  docs for muutils v0.6.14
+  docs for muutils v0.6.15
 
 API Documentation
 
@@ -3858,7 +3868,7 @@ View Source on GitHub
 
 log a message to the log file, and optionally to the console
 
-  docs for muutils v0.6.14
+  docs for muutils v0.6.15
 
 API Documentation
 
@@ -3945,7 +3955,7 @@ View Source on GitHub
 
 returns a progress string
 
-  docs for muutils v0.6.14
+  docs for muutils v0.6.15
 
 Contents
 
@@ -4515,7 +4525,7 @@ Duplicates are ignored in the same manner as a set. Unfrozen dataclasses
 can’t be placed in sets since they’re not hashable. Collections of them
 may be compared using this function.
 
-  docs for muutils v0.6.14
+  docs for muutils v0.6.15
 
 API Documentation
 
@@ -4645,7 +4655,7 @@ Duplicates are ignored in the same manner as a set. Unfrozen dataclasses
 can’t be placed in sets since they’re not hashable. Collections of them
 may be compared using this function.
 
-  docs for muutils v0.6.14
+  docs for muutils v0.6.15
 
 API Documentation
 
@@ -4761,7 +4771,7 @@ you can’t rely on that. always use the return value.
 
 the gelidum package is a more complete implementation of this idea
 
-  docs for muutils v0.6.14
+  docs for muutils v0.6.15
 
 API Documentation
 
@@ -4792,7 +4802,7 @@ View Source on GitHub
 Returns a base64 representation of the hash of the given string. not
 cryptographically secure
 
-  docs for muutils v0.6.14
+  docs for muutils v0.6.15
 
 API Documentation
 
@@ -4849,7 +4859,7 @@ Examples:
     >>> str_to_numeric("1.2e2")
     120.0
 
-  docs for muutils v0.6.14
+  docs for muutils v0.6.15
 
 API Documentation
 
@@ -5024,7 +5034,7 @@ Raises:
     is "except"
 -   ValueError : if when_missing is invalid
 
-  docs for muutils v0.6.14
+  docs for muutils v0.6.15
 
 API Documentation
 
@@ -5109,7 +5119,7 @@ def dynamic_docstring
 
 View Source on GitHub
 
-  docs for muutils v0.6.14
+  docs for muutils v0.6.15
 
 Contents
 
@@ -5205,7 +5215,7 @@ def pprint_summary
 
 View Source on GitHub
 
-  docs for muutils v0.6.14
+  docs for muutils v0.6.15
 
 Contents
 
@@ -5249,7 +5259,7 @@ View Source on GitHub
 
 for plotting mermaid.js diagrams
 
-  docs for muutils v0.6.14
+  docs for muutils v0.6.15
 
 Contents
 
@@ -5421,7 +5431,7 @@ View Source on GitHub
 
 Show the active plot, depending on global configs
 
-  docs for muutils v0.6.14
+  docs for muutils v0.6.15
 
 Contents
 
@@ -5525,7 +5535,7 @@ Arguments
     - `filter_out_lines: str|typing.Sequence[str] = ('%', '!')`: comment out lines starting with these strings (in code blocks).
         if a string is passed, it will be split by char and each char will be treated as a separate filter.
 
-  docs for muutils v0.6.14
+  docs for muutils v0.6.15
 
 Contents
 
@@ -5553,7 +5563,7 @@ View Source on GitHub
 
 for plotting mermaid.js diagrams
 
-  docs for muutils v0.6.14
+  docs for muutils v0.6.15
 
 Contents
 
@@ -5584,7 +5594,7 @@ View Source on GitHub
 
 function for easily rendering a sympy expression in latex
 
-  docs for muutils v0.6.14
+  docs for muutils v0.6.15
 
 Contents
 
@@ -5641,7 +5651,7 @@ def run_notebook_tests
 
 View Source on GitHub
 
-  docs for muutils v0.6.14
+  docs for muutils v0.6.15
 
 Contents
 
@@ -5987,7 +5997,7 @@ As a decorator:
             spinner.update_value(f"Step {i+1}")
         return "Function completed"
 
-  docs for muutils v0.6.14
+  docs for muutils v0.6.15
 
 Contents
 
@@ -6198,7 +6208,7 @@ Inherited Members
 
 -   clear
 
-  docs for muutils v0.6.14
+  docs for muutils v0.6.15
 
 Contents
 
@@ -6268,7 +6278,7 @@ def get_all
 
 View Source on GitHub
 
-  docs for muutils v0.6.14
+  docs for muutils v0.6.15
 
 Contents
 
@@ -6563,7 +6573,7 @@ Raises:
 -   StateDictShapeError : shapes don’t match (but keys do)
 -   StateDictValueError : values don’t match (but keys and shapes do)
 
-  docs for muutils v0.6.14
+  docs for muutils v0.6.15
 
 Contents
 
@@ -6664,7 +6674,7 @@ FancyTimeitResult, which is a NamedTuple with the following fields:
 -   profile: pstats.Stats|None A pstats.Stats object if do_profiling is
     True, otherwise None.
 
-  docs for muutils v0.6.14
+  docs for muutils v0.6.15
 
 Contents
 

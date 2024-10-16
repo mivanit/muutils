@@ -8,7 +8,17 @@ import time
 import threading
 import sys
 from functools import wraps
-from typing import Callable, Any, Optional, TextIO, TypeVar, Sequence, Dict, Union
+from typing import (
+    Callable,
+    Any,
+    Optional,
+    TextIO,
+    TypeVar,
+    Sequence,
+    Dict,
+    Union,
+    ContextManager,
+)
 
 DecoratedFunction = TypeVar("DecoratedFunction", bound=Callable[..., Any])
 "Define a generic type for the decorated function"
@@ -331,7 +341,20 @@ class Spinner:
         self.output_stream.flush()
 
 
-class SpinnerContext(Spinner):
+class NoOpContextManager(ContextManager):
+    """A context manager that does nothing."""
+
+    def __init__(self, *args, **kwargs):
+        pass
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc_value, traceback):
+        pass
+
+
+class SpinnerContext(Spinner, ContextManager):
     "see `Spinner` for parameters"
 
     def __enter__(self) -> "SpinnerContext":
@@ -411,16 +434,3 @@ def spinner_decorator(
 
 
 spinner_decorator.__doc__ = Spinner.__doc__
-
-
-class NoOpContextManager:
-    """A context manager that does nothing."""
-
-    def __init__(self, *args, **kwargs):
-        pass
-
-    def __enter__(self):
-        return self
-
-    def __exit__(self, exc_type, exc_value, traceback):
-        pass

@@ -228,6 +228,8 @@ def serializable_field(
     - `serialization_fn`: function taking the instance of the field and returning a serializable object. If not provided, will iterate through the `SerializerHandler`s defined in `muutils.json_serialize.json_serialize`
     - `loading_fn`: function taking the serialized object and returning the instance of the field. If not provided, will take object as-is.
     - `deserialize_fn`: new alternative to `loading_fn`. takes only the field's value, not the whole class. if both `loading_fn` and `deserialize_fn` are provided, an error will be raised.
+    - `assert_type`: whether to assert the type of the field when loading. if `False`, will not check the type of the field.
+    - `custom_typecheck_fn`: function taking the type of the field and returning whether the type itself is valid. if not provided, will use the default type checking.
 
     # Gotchas:
     - `loading_fn` takes the dict of the **class**, not the field. if you wanted a `loading_fn` that does nothing, you'd write:

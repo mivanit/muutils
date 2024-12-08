@@ -567,6 +567,11 @@ class FieldLoadingError(FieldError):
     pass
 
 
+class FieldTypeMismatchError(FieldError, TypeError):
+    "error when a field type does not match the type hint"
+
+    pass
+
 @dataclass_transform(
     field_specifiers=(serializable_field, SerializableField),
 )
@@ -818,7 +823,24 @@ def serializable_dataclass(
 
             # validate the types of the fields if needed
             if on_typecheck_mismatch != ErrorMode.IGNORE:
-                output.validate_fields_types(on_typecheck_error=on_typecheck_error)
+                fields_valid: dict[str, bool] = SerializableDataclass__validate_fields_types__dict(
+                    output, on_typecheck_error=on_typecheck_error,
+                )
+
+                # if there are any fields that are not valid, raise an error
+                if not all(fields_valid.values()):
+                    msg: str = (
+                        f"Type mismatch in fields of {cls.__name__}:\n"
+                        + "\n".join(
+                            [
+                                f"{k}:\texpected {cls_type_hints[k] = }, but got value {getattr(output, k) = }, {type(getattr(output, k)) = }"
+                                for k, v in fields_valid.items()
+                                if not v
+                            ]
+                        )
+                    )
+
+                    on_typecheck_mismatch.process(msg, except_cls=FieldTypeMismatchError)
 
             # return the new instance
             return output
@@ -832,7 +854,8 @@ def serializable_dataclass(
         cls.validate_fields_types = SerializableDataclass__validate_fields_types  # type: ignore[attr-defined]
 
         # type is `Callable[[T, T], bool]`
-        cls.__eq__ = lambda self, other: dc_eq(self, other)  # type: ignore[assignment]
+        if not hasattr(cls, "__eq__"):
+            cls.__eq__ = lambda self, other: dc_eq(self, other)  # type: ignore[assignment]
 
         # Register the class with ZANJ
         if register_handler:

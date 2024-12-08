@@ -46,7 +46,7 @@
 </script></head>
 <body>
 <div class="package-version">
-    docs for <a href="https://github.com/mivanit/muutils">muutils</a> v0.6.15<br>
+    docs for <a href="https://github.com/mivanit/muutils">muutils</a> v0.6.16<br>
 </div>
     <nav class="pdoc">
         <label id="navtoggle" for="togglestate" class="pdoc-button">
@@ -140,7 +140,7 @@
     </nav>
     <main class="pdoc">
             <section class="module-info">
-                        <a class="pdoc-button git-button" href="https://github.com/mivanit/muutils/blob/0.6.15/json_serialize/serializable_field.py">View Source on GitHub</a>
+                        <a class="pdoc-button git-button" href="https://github.com/mivanit/muutils/blob/0.6.16/json_serialize/serializable_field.py">View Source on GitHub</a>
                     <h1 class="modulename">
 <a href="./../../muutils.html">muutils</a><wbr>.<a href="./../json_serialize.html">json_serialize</a><wbr>.serializable_field    </h1>
 
@@ -156,7 +156,7 @@ when you define the field, and the <code>SerializableDataclass</code> will autom
                         <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="mod-serializable_field-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.6.15/json_serialize/serializable_field.py#L0-L276" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.6.16/json_serialize/serializable_field.py#L0-L278" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -422,24 +422,26 @@ when you define the field, and the <code>SerializableDataclass</code> will autom
 </span><span id="L-257"><a href="#L-257"><span class="linenos">257</span></a><span class="sd">    note that if not using ZANJ, and you have a class inside a container, you MUST provide</span>
 </span><span id="L-258"><a href="#L-258"><span class="linenos">258</span></a><span class="sd">    `serialization_fn` and `loading_fn` to serialize and load the container.</span>
 </span><span id="L-259"><a href="#L-259"><span class="linenos">259</span></a><span class="sd">    ZANJ will automatically do this for you.</span>
-</span><span id="L-260"><a href="#L-260"><span class="linenos">260</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="L-261"><a href="#L-261"><span class="linenos">261</span></a>    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">_args</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;unexpected positional arguments: </span><span class="si">{</span><span class="n">_args</span><span class="si">}</span><span class="s2">&quot;</span>
-</span><span id="L-262"><a href="#L-262"><span class="linenos">262</span></a>    <span class="k">return</span> <span class="n">SerializableField</span><span class="p">(</span>
-</span><span id="L-263"><a href="#L-263"><span class="linenos">263</span></a>        <span class="n">default</span><span class="o">=</span><span class="n">default</span><span class="p">,</span>
-</span><span id="L-264"><a href="#L-264"><span class="linenos">264</span></a>        <span class="n">default_factory</span><span class="o">=</span><span class="n">default_factory</span><span class="p">,</span>
-</span><span id="L-265"><a href="#L-265"><span class="linenos">265</span></a>        <span class="n">init</span><span class="o">=</span><span class="n">init</span><span class="p">,</span>
-</span><span id="L-266"><a href="#L-266"><span class="linenos">266</span></a>        <span class="nb">repr</span><span class="o">=</span><span class="nb">repr</span><span class="p">,</span>
-</span><span id="L-267"><a href="#L-267"><span class="linenos">267</span></a>        <span class="nb">hash</span><span class="o">=</span><span class="nb">hash</span><span class="p">,</span>
-</span><span id="L-268"><a href="#L-268"><span class="linenos">268</span></a>        <span class="n">compare</span><span class="o">=</span><span class="n">compare</span><span class="p">,</span>
-</span><span id="L-269"><a href="#L-269"><span class="linenos">269</span></a>        <span class="n">metadata</span><span class="o">=</span><span class="n">metadata</span><span class="p">,</span>
-</span><span id="L-270"><a href="#L-270"><span class="linenos">270</span></a>        <span class="n">kw_only</span><span class="o">=</span><span class="n">kw_only</span><span class="p">,</span>
-</span><span id="L-271"><a href="#L-271"><span class="linenos">271</span></a>        <span class="n">serialize</span><span class="o">=</span><span class="n">serialize</span><span class="p">,</span>
-</span><span id="L-272"><a href="#L-272"><span class="linenos">272</span></a>        <span class="n">serialization_fn</span><span class="o">=</span><span class="n">serialization_fn</span><span class="p">,</span>
-</span><span id="L-273"><a href="#L-273"><span class="linenos">273</span></a>        <span class="n">deserialize_fn</span><span class="o">=</span><span class="n">deserialize_fn</span><span class="p">,</span>
-</span><span id="L-274"><a href="#L-274"><span class="linenos">274</span></a>        <span class="n">assert_type</span><span class="o">=</span><span class="n">assert_type</span><span class="p">,</span>
-</span><span id="L-275"><a href="#L-275"><span class="linenos">275</span></a>        <span class="n">custom_typecheck_fn</span><span class="o">=</span><span class="n">custom_typecheck_fn</span><span class="p">,</span>
-</span><span id="L-276"><a href="#L-276"><span class="linenos">276</span></a>        <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
-</span><span id="L-277"><a href="#L-277"><span class="linenos">277</span></a>    <span class="p">)</span>
+</span><span id="L-260"><a href="#L-260"><span class="linenos">260</span></a>
+</span><span id="L-261"><a href="#L-261"><span class="linenos">261</span></a><span class="sd">    # TODO: `custom_value_check_fn`: function taking the value of the field and returning whether the value itself is valid. if not provided, any value is valid as long as it passes the type test</span>
+</span><span id="L-262"><a href="#L-262"><span class="linenos">262</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="L-263"><a href="#L-263"><span class="linenos">263</span></a>    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">_args</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;unexpected positional arguments: </span><span class="si">{</span><span class="n">_args</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span id="L-264"><a href="#L-264"><span class="linenos">264</span></a>    <span class="k">return</span> <span class="n">SerializableField</span><span class="p">(</span>
+</span><span id="L-265"><a href="#L-265"><span class="linenos">265</span></a>        <span class="n">default</span><span class="o">=</span><span class="n">default</span><span class="p">,</span>
+</span><span id="L-266"><a href="#L-266"><span class="linenos">266</span></a>        <span class="n">default_factory</span><span class="o">=</span><span class="n">default_factory</span><span class="p">,</span>
+</span><span id="L-267"><a href="#L-267"><span class="linenos">267</span></a>        <span class="n">init</span><span class="o">=</span><span class="n">init</span><span class="p">,</span>
+</span><span id="L-268"><a href="#L-268"><span class="linenos">268</span></a>        <span class="nb">repr</span><span class="o">=</span><span class="nb">repr</span><span class="p">,</span>
+</span><span id="L-269"><a href="#L-269"><span class="linenos">269</span></a>        <span class="nb">hash</span><span class="o">=</span><span class="nb">hash</span><span class="p">,</span>
+</span><span id="L-270"><a href="#L-270"><span class="linenos">270</span></a>        <span class="n">compare</span><span class="o">=</span><span class="n">compare</span><span class="p">,</span>
+</span><span id="L-271"><a href="#L-271"><span class="linenos">271</span></a>        <span class="n">metadata</span><span class="o">=</span><span class="n">metadata</span><span class="p">,</span>
+</span><span id="L-272"><a href="#L-272"><span class="linenos">272</span></a>        <span class="n">kw_only</span><span class="o">=</span><span class="n">kw_only</span><span class="p">,</span>
+</span><span id="L-273"><a href="#L-273"><span class="linenos">273</span></a>        <span class="n">serialize</span><span class="o">=</span><span class="n">serialize</span><span class="p">,</span>
+</span><span id="L-274"><a href="#L-274"><span class="linenos">274</span></a>        <span class="n">serialization_fn</span><span class="o">=</span><span class="n">serialization_fn</span><span class="p">,</span>
+</span><span id="L-275"><a href="#L-275"><span class="linenos">275</span></a>        <span class="n">deserialize_fn</span><span class="o">=</span><span class="n">deserialize_fn</span><span class="p">,</span>
+</span><span id="L-276"><a href="#L-276"><span class="linenos">276</span></a>        <span class="n">assert_type</span><span class="o">=</span><span class="n">assert_type</span><span class="p">,</span>
+</span><span id="L-277"><a href="#L-277"><span class="linenos">277</span></a>        <span class="n">custom_typecheck_fn</span><span class="o">=</span><span class="n">custom_typecheck_fn</span><span class="p">,</span>
+</span><span id="L-278"><a href="#L-278"><span class="linenos">278</span></a>        <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+</span><span id="L-279"><a href="#L-279"><span class="linenos">279</span></a>    <span class="p">)</span>
 </span></pre></div>
 
 
@@ -455,7 +457,7 @@ when you define the field, and the <code>SerializableDataclass</code> will autom
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="SerializableField-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.6.15/json_serialize/serializable_field.py#L20-L127" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.6.16/json_serialize/serializable_field.py#L20-L127" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -587,7 +589,7 @@ when you define the field, and the <code>SerializableDataclass</code> will autom
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="SerializableField.__init__-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.6.15/json_serialize/serializable_field.py#L45-L109" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.6.16/json_serialize/serializable_field.py#L45-L109" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -743,7 +745,7 @@ when you define the field, and the <code>SerializableDataclass</code> will autom
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="SerializableField.from_Field-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.6.15/json_serialize/serializable_field.py#L111-L127" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.6.16/json_serialize/serializable_field.py#L111-L127" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -897,7 +899,7 @@ when you define the field, and the <code>SerializableDataclass</code> will autom
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="serializable_field-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.6.15/json_serialize/serializable_field.py#L187-L277" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.6.16/json_serialize/serializable_field.py#L187-L279" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -978,24 +980,26 @@ when you define the field, and the <code>SerializableDataclass</code> will autom
 </span><span id="serializable_field-258"><a href="#serializable_field-258"><span class="linenos">258</span></a><span class="sd">    note that if not using ZANJ, and you have a class inside a container, you MUST provide</span>
 </span><span id="serializable_field-259"><a href="#serializable_field-259"><span class="linenos">259</span></a><span class="sd">    `serialization_fn` and `loading_fn` to serialize and load the container.</span>
 </span><span id="serializable_field-260"><a href="#serializable_field-260"><span class="linenos">260</span></a><span class="sd">    ZANJ will automatically do this for you.</span>
-</span><span id="serializable_field-261"><a href="#serializable_field-261"><span class="linenos">261</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="serializable_field-262"><a href="#serializable_field-262"><span class="linenos">262</span></a>    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">_args</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;unexpected positional arguments: </span><span class="si">{</span><span class="n">_args</span><span class="si">}</span><span class="s2">&quot;</span>
-</span><span id="serializable_field-263"><a href="#serializable_field-263"><span class="linenos">263</span></a>    <span class="k">return</span> <span class="n">SerializableField</span><span class="p">(</span>
-</span><span id="serializable_field-264"><a href="#serializable_field-264"><span class="linenos">264</span></a>        <span class="n">default</span><span class="o">=</span><span class="n">default</span><span class="p">,</span>
-</span><span id="serializable_field-265"><a href="#serializable_field-265"><span class="linenos">265</span></a>        <span class="n">default_factory</span><span class="o">=</span><span class="n">default_factory</span><span class="p">,</span>
-</span><span id="serializable_field-266"><a href="#serializable_field-266"><span class="linenos">266</span></a>        <span class="n">init</span><span class="o">=</span><span class="n">init</span><span class="p">,</span>
-</span><span id="serializable_field-267"><a href="#serializable_field-267"><span class="linenos">267</span></a>        <span class="nb">repr</span><span class="o">=</span><span class="nb">repr</span><span class="p">,</span>
-</span><span id="serializable_field-268"><a href="#serializable_field-268"><span class="linenos">268</span></a>        <span class="nb">hash</span><span class="o">=</span><span class="nb">hash</span><span class="p">,</span>
-</span><span id="serializable_field-269"><a href="#serializable_field-269"><span class="linenos">269</span></a>        <span class="n">compare</span><span class="o">=</span><span class="n">compare</span><span class="p">,</span>
-</span><span id="serializable_field-270"><a href="#serializable_field-270"><span class="linenos">270</span></a>        <span class="n">metadata</span><span class="o">=</span><span class="n">metadata</span><span class="p">,</span>
-</span><span id="serializable_field-271"><a href="#serializable_field-271"><span class="linenos">271</span></a>        <span class="n">kw_only</span><span class="o">=</span><span class="n">kw_only</span><span class="p">,</span>
-</span><span id="serializable_field-272"><a href="#serializable_field-272"><span class="linenos">272</span></a>        <span class="n">serialize</span><span class="o">=</span><span class="n">serialize</span><span class="p">,</span>
-</span><span id="serializable_field-273"><a href="#serializable_field-273"><span class="linenos">273</span></a>        <span class="n">serialization_fn</span><span class="o">=</span><span class="n">serialization_fn</span><span class="p">,</span>
-</span><span id="serializable_field-274"><a href="#serializable_field-274"><span class="linenos">274</span></a>        <span class="n">deserialize_fn</span><span class="o">=</span><span class="n">deserialize_fn</span><span class="p">,</span>
-</span><span id="serializable_field-275"><a href="#serializable_field-275"><span class="linenos">275</span></a>        <span class="n">assert_type</span><span class="o">=</span><span class="n">assert_type</span><span class="p">,</span>
-</span><span id="serializable_field-276"><a href="#serializable_field-276"><span class="linenos">276</span></a>        <span class="n">custom_typecheck_fn</span><span class="o">=</span><span class="n">custom_typecheck_fn</span><span class="p">,</span>
-</span><span id="serializable_field-277"><a href="#serializable_field-277"><span class="linenos">277</span></a>        <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
-</span><span id="serializable_field-278"><a href="#serializable_field-278"><span class="linenos">278</span></a>    <span class="p">)</span>
+</span><span id="serializable_field-261"><a href="#serializable_field-261"><span class="linenos">261</span></a>
+</span><span id="serializable_field-262"><a href="#serializable_field-262"><span class="linenos">262</span></a><span class="sd">    # TODO: `custom_value_check_fn`: function taking the value of the field and returning whether the value itself is valid. if not provided, any value is valid as long as it passes the type test</span>
+</span><span id="serializable_field-263"><a href="#serializable_field-263"><span class="linenos">263</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="serializable_field-264"><a href="#serializable_field-264"><span class="linenos">264</span></a>    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">_args</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;unexpected positional arguments: </span><span class="si">{</span><span class="n">_args</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span id="serializable_field-265"><a href="#serializable_field-265"><span class="linenos">265</span></a>    <span class="k">return</span> <span class="n">SerializableField</span><span class="p">(</span>
+</span><span id="serializable_field-266"><a href="#serializable_field-266"><span class="linenos">266</span></a>        <span class="n">default</span><span class="o">=</span><span class="n">default</span><span class="p">,</span>
+</span><span id="serializable_field-267"><a href="#serializable_field-267"><span class="linenos">267</span></a>        <span class="n">default_factory</span><span class="o">=</span><span class="n">default_factory</span><span class="p">,</span>
+</span><span id="serializable_field-268"><a href="#serializable_field-268"><span class="linenos">268</span></a>        <span class="n">init</span><span class="o">=</span><span class="n">init</span><span class="p">,</span>
+</span><span id="serializable_field-269"><a href="#serializable_field-269"><span class="linenos">269</span></a>        <span class="nb">repr</span><span class="o">=</span><span class="nb">repr</span><span class="p">,</span>
+</span><span id="serializable_field-270"><a href="#serializable_field-270"><span class="linenos">270</span></a>        <span class="nb">hash</span><span class="o">=</span><span class="nb">hash</span><span class="p">,</span>
+</span><span id="serializable_field-271"><a href="#serializable_field-271"><span class="linenos">271</span></a>        <span class="n">compare</span><span class="o">=</span><span class="n">compare</span><span class="p">,</span>
+</span><span id="serializable_field-272"><a href="#serializable_field-272"><span class="linenos">272</span></a>        <span class="n">metadata</span><span class="o">=</span><span class="n">metadata</span><span class="p">,</span>
+</span><span id="serializable_field-273"><a href="#serializable_field-273"><span class="linenos">273</span></a>        <span class="n">kw_only</span><span class="o">=</span><span class="n">kw_only</span><span class="p">,</span>
+</span><span id="serializable_field-274"><a href="#serializable_field-274"><span class="linenos">274</span></a>        <span class="n">serialize</span><span class="o">=</span><span class="n">serialize</span><span class="p">,</span>
+</span><span id="serializable_field-275"><a href="#serializable_field-275"><span class="linenos">275</span></a>        <span class="n">serialization_fn</span><span class="o">=</span><span class="n">serialization_fn</span><span class="p">,</span>
+</span><span id="serializable_field-276"><a href="#serializable_field-276"><span class="linenos">276</span></a>        <span class="n">deserialize_fn</span><span class="o">=</span><span class="n">deserialize_fn</span><span class="p">,</span>
+</span><span id="serializable_field-277"><a href="#serializable_field-277"><span class="linenos">277</span></a>        <span class="n">assert_type</span><span class="o">=</span><span class="n">assert_type</span><span class="p">,</span>
+</span><span id="serializable_field-278"><a href="#serializable_field-278"><span class="linenos">278</span></a>        <span class="n">custom_typecheck_fn</span><span class="o">=</span><span class="n">custom_typecheck_fn</span><span class="p">,</span>
+</span><span id="serializable_field-279"><a href="#serializable_field-279"><span class="linenos">279</span></a>        <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+</span><span id="serializable_field-280"><a href="#serializable_field-280"><span class="linenos">280</span></a>    <span class="p">)</span>
 </span></pre></div>
 
 
@@ -1062,6 +1066,8 @@ custom_typecheck_fn: Optional[Callable[[type], bool]] = None,
 <p>note that if not using ZANJ, and you have a class inside a container, you MUST provide
 <code>serialization_fn</code> and <code>loading_fn</code> to serialize and load the container.
 ZANJ will automatically do this for you.</p>
+
+<h1 id="todo-custom_value_check_fn-function-taking-the-value-of-the-field-and-returning-whether-the-value-itself-is-valid-if-not-provided-any-value-is-valid-as-long-as-it-passes-the-type-test">TODO: <code>custom_value_check_fn</code>: function taking the value of the field and returning whether the value itself is valid. if not provided, any value is valid as long as it passes the type test</h1>
 </div>
 
 

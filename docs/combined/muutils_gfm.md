@@ -1,4 +1,4 @@
-> docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.15
+> docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.16
 
 ## Contents
 
@@ -166,7 +166,7 @@ production. Use at your own risk!
 - [`validate_type`](#validate_type)
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/__init__.py)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/__init__.py)
 
 # `muutils`
 
@@ -314,9 +314,9 @@ that aren’t ready for anything, but nothing in this repo is suitable for
 production. Use at your own risk!
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/__init__.py#L0-L26)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/__init__.py#L0-L26)
 
-> docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.15
+> docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.16
 
 ## Contents
 
@@ -352,7 +352,7 @@ making working with dictionaries easier
 - [`condense_tensor_dict`](#condense_tensor_dict)
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/dictmagic.py)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/dictmagic.py)
 
 # `muutils.dictmagic`
 
@@ -370,12 +370,12 @@ making working with dictionaries easier
   nested dict
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/dictmagic.py#L0-L521)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/dictmagic.py#L0-L521)
 
 ### `class DefaulterDict(typing.Dict[~_KT, ~_VT], typing.Generic[~_KT, ~_VT]):`
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/dictmagic.py#L33-L50)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/dictmagic.py#L33-L50)
 
 like a defaultdict, but default_factory is passed the key as an argument
 
@@ -404,7 +404,7 @@ like a defaultdict, but default_factory is passed the key as an argument
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/dictmagic.py#L57-L66)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/dictmagic.py#L57-L66)
 
 Convert a defaultdict or DefaulterDict to a normal dict, recursively
 
@@ -415,7 +415,7 @@ Convert a defaultdict or DefaulterDict to a normal dict, recursively
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/dictmagic.py#L69-L89)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/dictmagic.py#L69-L89)
 
 Convert a dict with dot-separated keys to a nested dict
 
@@ -435,7 +435,7 @@ Example:
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/dictmagic.py#L92-L122)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/dictmagic.py#L92-L122)
 
 ### `def update_with_nested_dict`
 
@@ -447,7 +447,7 @@ GitHub](https://github.com/mivanit/muutils/blob/0.6.15/dictmagic.py#L92-L122)
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/dictmagic.py#L125-L154)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/dictmagic.py#L125-L154)
 
 Update a dict with a nested dict
 
@@ -477,7 +477,7 @@ Example: \>\>\> update_with_nested_dict({‘a’: {‘b’: 1}, “c”: -1}, {�
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/dictmagic.py#L157-L211)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/dictmagic.py#L157-L211)
 
 given kwargs from fire, convert them to a nested dict
 
@@ -519,7 +519,7 @@ $ python test.py --a.b.c=1 --a.b.d=2 --a.e=3
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/dictmagic.py#L214-L220)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/dictmagic.py#L214-L220)
 
 Check if the list of keys is numeric and consecutive.
 
@@ -530,7 +530,7 @@ Check if the list of keys is numeric and consecutive.
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/dictmagic.py#L223-L267)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/dictmagic.py#L223-L267)
 
 condense a nested dict, by condensing numeric keys with matching values
 to ranges
@@ -554,7 +554,7 @@ to ranges
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/dictmagic.py#L270-L321)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/dictmagic.py#L270-L321)
 
 condense a nested dict, by condensing keys with matching values
 
@@ -579,7 +579,7 @@ condense a nested dict, by condensing keys with matching values
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/dictmagic.py#L324-L359)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/dictmagic.py#L324-L359)
 
 condense a nested dict, by condensing numeric or matching keys with
 matching values to ranges
@@ -612,7 +612,7 @@ it’s not reversible because types are lost to make the printing pretty
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/dictmagic.py#L362-L368)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/dictmagic.py#L362-L368)
 
 - `TensorDict = typing.Dict[str, ForwardRef('torch.Tensor|np.ndarray')]`
 
@@ -639,7 +639,7 @@ GitHub](https://github.com/mivanit/muutils/blob/0.6.15/dictmagic.py#L362-L368)
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/dictmagic.py#L380-L522)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/dictmagic.py#L380-L522)
 
 Convert a dictionary of tensors to a dictionary of shapes.
 
@@ -718,7 +718,7 @@ unembed:
   ‘yaml’, or if you try to use ‘yaml’ output without having PyYAML
   installed
 
-> docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.15
+> docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.16
 
 ## Contents
 
@@ -743,7 +743,7 @@ use, and the source of the exception/warning.
 - [`ERROR_MODE_ALIASES`](#ERROR_MODE_ALIASES)
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/errormode.py)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/errormode.py)
 
 # `muutils.errormode`
 
@@ -758,12 +758,12 @@ you can also specify the exception class to raise, the warning class to
 use, and the source of the exception/warning.
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/errormode.py#L0-L240)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/errormode.py#L0-L240)
 
 ### `class WarningFunc(typing.Protocol):`
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/errormode.py#L19-L25)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/errormode.py#L19-L25)
 
 Base class for protocol classes.
 
@@ -803,7 +803,7 @@ signatures. Protocol classes can be generic, they are defined as::
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/errormode.py#L1709-L1735)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/errormode.py#L1709-L1735)
 
 - `LoggingFunc = typing.Callable[[str], NoneType]`
 
@@ -850,12 +850,12 @@ flush the stream.
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/errormode.py#L34-L75)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/errormode.py#L34-L75)
 
 ### `class ErrorMode(enum.Enum):`
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/errormode.py#L78-L212)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/errormode.py#L78-L212)
 
 Enum for handling errors consistently
 
@@ -888,7 +888,7 @@ That function then instead of `raise`ing or `warnings.warn`ing, calls
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/errormode.py#L91-L160)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/errormode.py#L91-L160)
 
 process an exception or warning according to the error mode
 
@@ -927,7 +927,7 @@ process an exception or warning according to the error mode
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/errormode.py#L162-L195)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/errormode.py#L162-L195)
 
 initialize an `ErrorMode` from a string or an `ErrorMode` instance
 
@@ -938,7 +938,7 @@ initialize an `ErrorMode` from a string or an `ErrorMode` instance
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/errormode.py#L203-L204)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/errormode.py#L203-L204)
 
 ### `def load`
 
@@ -947,7 +947,7 @@ GitHub](https://github.com/mivanit/muutils/blob/0.6.15/errormode.py#L203-L204)
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/errormode.py#L206-L212)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/errormode.py#L206-L212)
 
 ### Inherited Members
 
@@ -959,7 +959,7 @@ GitHub](https://github.com/mivanit/muutils/blob/0.6.15/errormode.py#L206-L212)
 
 map of string aliases to `ErrorMode` instances
 
-> docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.15
+> docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.16
 
 ## Contents
 
@@ -970,14 +970,14 @@ group items by assuming that `eq_func` defines an equivalence relation
 - [`group_by_equivalence`](#group_by_equivalence)
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/group_equiv.py)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/group_equiv.py)
 
 # `muutils.group_equiv`
 
 group items by assuming that `eq_func` defines an equivalence relation
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/group_equiv.py#L0-L65)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/group_equiv.py#L0-L65)
 
 ### `def group_by_equivalence`
 
@@ -989,7 +989,7 @@ GitHub](https://github.com/mivanit/muutils/blob/0.6.15/group_equiv.py#L0-L65)
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/group_equiv.py#L11-L66)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/group_equiv.py#L11-L66)
 
 group items by assuming that `eq_func` implies an equivalence relation
 but might not be transitive
@@ -1006,7 +1006,7 @@ allow for duplicates
 - `eq_func: Callable[[T, T], bool]` a function that returns true if two
   items are equivalent. need not be transitive
 
-> docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.15
+> docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.16
 
 ## Contents
 
@@ -1020,21 +1020,21 @@ represents a mathematical `Interval` over the real numbers
 - [`OpenInterval`](#OpenInterval)
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/interval.py)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/interval.py)
 
 # `muutils.interval`
 
 represents a mathematical `Interval` over the real numbers
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/interval.py#L0-L529)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/interval.py#L0-L529)
 
 - `Number = typing.Union[float, int]`
 
 ### `class Interval:`
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/interval.py#L24-L516)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/interval.py#L24-L516)
 
 Represents a mathematical interval, open by default.
 
@@ -1070,7 +1070,7 @@ Examples:
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/interval.py#L49-L154)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/interval.py#L49-L154)
 
 - `lower: Union[float, int]`
 
@@ -1085,37 +1085,37 @@ GitHub](https://github.com/mivanit/muutils/blob/0.6.15/interval.py#L49-L154)
 - `is_closed: bool`
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/interval.py#L156-L162)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/interval.py#L156-L162)
 
 - `is_open: bool`
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/interval.py#L164-L170)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/interval.py#L164-L170)
 
 - `is_half_open: bool`
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/interval.py#L172-L176)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/interval.py#L172-L176)
 
 - `is_singleton: bool`
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/interval.py#L178-L180)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/interval.py#L178-L180)
 
 - `is_empty: bool`
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/interval.py#L182-L184)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/interval.py#L182-L184)
 
 - `is_finite: bool`
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/interval.py#L186-L188)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/interval.py#L186-L188)
 
 - `singleton: Union[float, int]`
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/interval.py#L190-L194)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/interval.py#L190-L194)
 
 ### `def get_empty`
 
@@ -1124,7 +1124,7 @@ GitHub](https://github.com/mivanit/muutils/blob/0.6.15/interval.py#L190-L194)
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/interval.py#L196-L198)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/interval.py#L196-L198)
 
 ### `def get_singleton`
 
@@ -1133,7 +1133,7 @@ GitHub](https://github.com/mivanit/muutils/blob/0.6.15/interval.py#L196-L198)
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/interval.py#L200-L204)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/interval.py#L200-L204)
 
 ### `def numerical_contained`
 
@@ -1142,7 +1142,7 @@ GitHub](https://github.com/mivanit/muutils/blob/0.6.15/interval.py#L200-L204)
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/interval.py#L206-L215)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/interval.py#L206-L215)
 
 ### `def interval_contained`
 
@@ -1151,7 +1151,7 @@ GitHub](https://github.com/mivanit/muutils/blob/0.6.15/interval.py#L206-L215)
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/interval.py#L217-L243)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/interval.py#L217-L243)
 
 ### `def from_str`
 
@@ -1160,7 +1160,7 @@ GitHub](https://github.com/mivanit/muutils/blob/0.6.15/interval.py#L217-L243)
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/interval.py#L263-L311)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/interval.py#L263-L311)
 
 ### `def copy`
 
@@ -1169,7 +1169,7 @@ GitHub](https://github.com/mivanit/muutils/blob/0.6.15/interval.py#L263-L311)
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/interval.py#L355-L362)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/interval.py#L355-L362)
 
 ### `def size`
 
@@ -1178,7 +1178,7 @@ GitHub](https://github.com/mivanit/muutils/blob/0.6.15/interval.py#L355-L362)
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/interval.py#L364-L376)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/interval.py#L364-L376)
 
 Returns the size of the interval.
 
@@ -1193,7 +1193,7 @@ Returns the size of the interval.
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/interval.py#L378-L438)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/interval.py#L378-L438)
 
 Clamp the given value to the interval bounds.
 
@@ -1223,7 +1223,7 @@ For open bounds, the clamped value will be slightly inside the interval
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/interval.py#L440-L467)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/interval.py#L440-L467)
 
 ### `def union`
 
@@ -1232,12 +1232,12 @@ GitHub](https://github.com/mivanit/muutils/blob/0.6.15/interval.py#L440-L467)
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/interval.py#L469-L516)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/interval.py#L469-L516)
 
 ### `class ClosedInterval(Interval):`
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/interval.py#L519-L523)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/interval.py#L519-L523)
 
 Represents a mathematical interval, open by default.
 
@@ -1268,7 +1268,7 @@ Examples:
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/interval.py#L520-L523)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/interval.py#L520-L523)
 
 ### Inherited Members
 
@@ -1298,7 +1298,7 @@ GitHub](https://github.com/mivanit/muutils/blob/0.6.15/interval.py#L520-L523)
 ### `class OpenInterval(Interval):`
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/interval.py#L526-L530)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/interval.py#L526-L530)
 
 Represents a mathematical interval, open by default.
 
@@ -1329,7 +1329,7 @@ Examples:
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/interval.py#L527-L530)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/interval.py#L527-L530)
 
 ### Inherited Members
 
@@ -1356,7 +1356,7 @@ GitHub](https://github.com/mivanit/muutils/blob/0.6.15/interval.py#L527-L530)
 - [`intersection`](#OpenInterval.intersection)
 - [`union`](#OpenInterval.union)
 
-> docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.15
+> docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.16
 
 ## Contents
 
@@ -1414,7 +1414,7 @@ detecting how to load saved objects into their original classes.
 - [`SerializableDataclass`](#SerializableDataclass)
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/json_serialize/__init__.py)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/json_serialize/__init__.py)
 
 # `muutils.json_serialize`
 
@@ -1451,7 +1451,7 @@ json (arrays are saved as npy files, for example), and automatically
 detecting how to load saved objects into their original classes.
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/json_serialize/__init__.py#L0-L50)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/json_serialize/__init__.py#L0-L50)
 
 ### `def json_serialize`
 
@@ -1463,7 +1463,7 @@ GitHub](https://github.com/mivanit/muutils/blob/0.6.15/json_serialize/__init__.p
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/json_serialize/__init__.py#L329-L331)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/json_serialize/__init__.py#L329-L331)
 
 serialize object to json-serializable object with default config
 
@@ -1488,7 +1488,7 @@ serialize object to json-serializable object with default config
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/json_serialize/__init__.py#L570-L846)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/json_serialize/__init__.py#L576-L875)
 
 decorator to make a dataclass serializable. must also make it inherit
 from `SerializableDataclass`
@@ -1581,7 +1581,7 @@ class Myclass(SerializableDataclass):
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/json_serialize/__init__.py#L187-L277)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/json_serialize/__init__.py#L187-L279)
 
 Create a new `SerializableField`
 
@@ -1652,6 +1652,8 @@ note that if not using ZANJ, and you have a class inside a container,
 you MUST provide `serialization_fn` and `loading_fn` to serialize and
 load the container. ZANJ will automatically do this for you.
 
+### TODO: `custom_value_check_fn`: function taking the value of the field and returning whether the value itself is valid. if not provided, any value is valid as long as it passes the type test
+
 ### `def arr_metadata`
 
 ``` python
@@ -1659,7 +1661,7 @@ load the container. ZANJ will automatically do this for you.
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/json_serialize/__init__.py#L48-L56)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/json_serialize/__init__.py#L48-L56)
 
 get metadata for a numpy array
 
@@ -1673,7 +1675,7 @@ get metadata for a numpy array
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/json_serialize/__init__.py#L167-L230)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/json_serialize/__init__.py#L167-L230)
 
 load a json-serialized array, infer the mode if not specified
 
@@ -1684,7 +1686,7 @@ load a json-serialized array, infer the mode if not specified
 ### `class JsonSerializer:`
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/json_serialize/__init__.py#L233-L323)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/json_serialize/__init__.py#L233-L323)
 
 Json serialization class (holds configs)
 
@@ -1725,7 +1727,7 @@ Json serialization class (holds configs)
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/json_serialize/__init__.py#L259-L279)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/json_serialize/__init__.py#L259-L279)
 
 - `array_mode: Literal['list', 'array_list_meta', 'array_hex_meta', 'array_b64_meta', 'external', 'zero_dim']`
 
@@ -1746,7 +1748,7 @@ GitHub](https://github.com/mivanit/muutils/blob/0.6.15/json_serialize/__init__.p
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/json_serialize/__init__.py#L281-L311)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/json_serialize/__init__.py#L281-L311)
 
 ### `def hashify`
 
@@ -1760,7 +1762,7 @@ GitHub](https://github.com/mivanit/muutils/blob/0.6.15/json_serialize/__init__.p
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/json_serialize/__init__.py#L313-L323)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/json_serialize/__init__.py#L313-L323)
 
 try to turn any object into something hashable
 
@@ -1771,7 +1773,7 @@ try to turn any object into something hashable
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/json_serialize/__init__.py#L80-L93)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/json_serialize/__init__.py#L80-L93)
 
 wraps the function to catch exceptions, returns serialized error message
 on exception
@@ -1792,7 +1794,7 @@ exception
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/json_serialize/__init__.py#L174-L262)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/json_serialize/__init__.py#L174-L263)
 
 checks if two dataclasses which (might) hold numpy arrays are equal
 
@@ -1822,7 +1824,7 @@ checks if two dataclasses which (might) hold numpy arrays are equal
 - `TypeError`: if the dataclasses are of different classes
 - `AttributeError`: if the dataclasses have different fields
 
-<!-- -->
+### TODO: after “except when class mismatch” is False, shouldn’t we then go to “field keys match”?
 
               [START]
                  ▼
@@ -1854,7 +1856,7 @@ checks if two dataclasses which (might) hold numpy arrays are equal
 ### `class SerializableDataclass(abc.ABC):`
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/json_serialize/__init__.py#L315-L508)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/json_serialize/__init__.py#L315-L508)
 
 Base class for serializable dataclasses
 
@@ -1914,7 +1916,7 @@ which gives us:
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/json_serialize/__init__.py#L368-L372)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/json_serialize/__init__.py#L368-L372)
 
 returns the class as a dict, implemented by using
 `@serializable_dataclass` decorator
@@ -1926,7 +1928,7 @@ returns the class as a dict, implemented by using
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/json_serialize/__init__.py#L374-L377)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/json_serialize/__init__.py#L374-L377)
 
 takes in an appropriately structured dict and returns an instance of the
 class, implemented by using `@serializable_dataclass` decorator
@@ -1941,7 +1943,7 @@ class, implemented by using `@serializable_dataclass` decorator
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/json_serialize/__init__.py#L379-L385)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/json_serialize/__init__.py#L379-L385)
 
 validate the types of all the fields on a `SerializableDataclass`. calls
 `SerializableDataclass__validate_field_type` for each field
@@ -1957,7 +1959,7 @@ validate the types of all the fields on a `SerializableDataclass`. calls
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/json_serialize/__init__.py#L387-L395)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/json_serialize/__init__.py#L387-L395)
 
 given a dataclass, check the field matches the type hint
 
@@ -1972,7 +1974,7 @@ given a dataclass, check the field matches the type hint
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/json_serialize/__init__.py#L404-L483)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/json_serialize/__init__.py#L404-L483)
 
 get a rich and recursive diff between two instances of a serializable
 dataclass
@@ -2007,7 +2009,7 @@ dataclass
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/json_serialize/__init__.py#L485-L500)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/json_serialize/__init__.py#L485-L500)
 
 update the instance from a nested dict, useful for configuration from
 command line args
@@ -2017,7 +2019,7 @@ command line args
     - `nested_dict : dict[str, Any]`
         nested dict to update the instance with
 
-> docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.15
+> docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.16
 
 ## Contents
 
@@ -2040,7 +2042,7 @@ torch arrays as json
 - [`load_array`](#load_array)
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/json_serialize/array.py)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/json_serialize/array.py)
 
 # `muutils.json_serialize.array`
 
@@ -2054,7 +2056,7 @@ torch arrays as json
   [`ZANJ`](https://github.com/mivanit/ZANJ)
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/json_serialize/array.py#L0-L229)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/json_serialize/array.py#L0-L229)
 
 - `ArrayMode = typing.Literal['list', 'array_list_meta', 'array_hex_meta', 'array_b64_meta', 'external', 'zero_dim']`
 
@@ -2065,7 +2067,7 @@ GitHub](https://github.com/mivanit/muutils/blob/0.6.15/json_serialize/array.py#L
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/json_serialize/array.py#L38-L45)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/json_serialize/array.py#L38-L45)
 
 get the number of elements in an array
 
@@ -2076,7 +2078,7 @@ get the number of elements in an array
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/json_serialize/array.py#L48-L56)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/json_serialize/array.py#L48-L56)
 
 get metadata for a numpy array
 
@@ -2092,7 +2094,7 @@ get metadata for a numpy array
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/json_serialize/array.py#L59-L133)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/json_serialize/array.py#L59-L133)
 
 serialize a numpy or pytorch array in one of several modes
 
@@ -2138,7 +2140,7 @@ serialized object is:
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/json_serialize/array.py#L136-L164)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/json_serialize/array.py#L136-L164)
 
 given a serialized array, infer the mode
 
@@ -2154,11 +2156,11 @@ assumes the array was serialized via `serialize_array()`
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/json_serialize/array.py#L167-L230)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/json_serialize/array.py#L167-L230)
 
 load a json-serialized array, infer the mode if not specified
 
-> docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.15
+> docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.16
 
 ## Contents
 
@@ -2185,7 +2187,7 @@ notably:
 - [`json_serialize`](#json_serialize)
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/json_serialize/json_serialize.py)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/json_serialize/json_serialize.py)
 
 # `muutils.json_serialize.json_serialize`
 
@@ -2199,20 +2201,20 @@ notably:
   – call it on any object!
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/json_serialize/json_serialize.py#L0-L330)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/json_serialize/json_serialize.py#L0-L330)
 
 - `SERIALIZER_SPECIAL_KEYS: None = ('__name__', '__doc__', '__module__', '__class__', '__dict__', '__annotations__')`
 
 - `SERIALIZER_SPECIAL_FUNCS: dict[str, typing.Callable] = {'str': <class 'str'>, 'dir': <built-in function dir>, 'type': <function <lambda>>, 'repr': <function <lambda>>, 'code': <function <lambda>>, 'sourcefile': <function <lambda>>}`
 
-- `SERIALIZE_DIRECT_AS_STR: Set[str] = {"<class 'torch.dtype'>", "<class 'torch.device'>"}`
+- `SERIALIZE_DIRECT_AS_STR: Set[str] = {"<class 'torch.device'>", "<class 'torch.dtype'>"}`
 
 - `ObjectPath = tuple[typing.Union[str, int], ...]`
 
 ### `class SerializerHandler:`
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/json_serialize/json_serialize.py#L71-L108)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/json_serialize/json_serialize.py#L71-L108)
 
 a handler for a specific type of object
 
@@ -2248,7 +2250,7 @@ a handler for a specific type of object
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/json_serialize/json_serialize.py#L90-L108)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/json_serialize/json_serialize.py#L90-L108)
 
 serialize the handler info
 
@@ -2259,7 +2261,7 @@ serialize the handler info
 ### `class JsonSerializer:`
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/json_serialize/json_serialize.py#L233-L323)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/json_serialize/json_serialize.py#L233-L323)
 
 Json serialization class (holds configs)
 
@@ -2300,7 +2302,7 @@ Json serialization class (holds configs)
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/json_serialize/json_serialize.py#L259-L279)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/json_serialize/json_serialize.py#L259-L279)
 
 - `array_mode: Literal['list', 'array_list_meta', 'array_hex_meta', 'array_b64_meta', 'external', 'zero_dim']`
 
@@ -2321,7 +2323,7 @@ GitHub](https://github.com/mivanit/muutils/blob/0.6.15/json_serialize/json_seria
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/json_serialize/json_serialize.py#L281-L311)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/json_serialize/json_serialize.py#L281-L311)
 
 ### `def hashify`
 
@@ -2335,7 +2337,7 @@ GitHub](https://github.com/mivanit/muutils/blob/0.6.15/json_serialize/json_seria
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/json_serialize/json_serialize.py#L313-L323)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/json_serialize/json_serialize.py#L313-L323)
 
 try to turn any object into something hashable
 
@@ -2351,11 +2353,11 @@ try to turn any object into something hashable
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/json_serialize/json_serialize.py#L329-L331)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/json_serialize/json_serialize.py#L329-L331)
 
 serialize object to json-serializable object with default config
 
-> docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.15
+> docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.16
 
 ## Contents
 
@@ -2430,10 +2432,11 @@ which gives us:
 - [`NotSerializableFieldException`](#NotSerializableFieldException)
 - [`FieldSerializationError`](#FieldSerializationError)
 - [`FieldLoadingError`](#FieldLoadingError)
+- [`FieldTypeMismatchError`](#FieldTypeMismatchError)
 - [`serializable_dataclass`](#serializable_dataclass)
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/json_serialize/serializable_dataclass.py)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/json_serialize/serializable_dataclass.py)
 
 # `muutils.json_serialize.serializable_dataclass`
 
@@ -2491,7 +2494,7 @@ which gives us:
     True
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/json_serialize/serializable_dataclass.py#L0-L845)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/json_serialize/serializable_dataclass.py#L0-L874)
 
 ### `def dataclass_transform`
 
@@ -2508,7 +2511,7 @@ GitHub](https://github.com/mivanit/muutils/blob/0.6.15/json_serialize/serializab
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/json_serialize/serializable_dataclass.py#L3274-L3355)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/json_serialize/serializable_dataclass.py#L3274-L3355)
 
 Decorator to mark an object as providing dataclass-like behaviour.
 
@@ -2573,7 +2576,7 @@ See PEP 681 for more details.
 ### `class CantGetTypeHintsWarning(builtins.UserWarning):`
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/json_serialize/serializable_dataclass.py#L109-L112)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/json_serialize/serializable_dataclass.py#L109-L112)
 
 special warning for when we can’t get type hints
 
@@ -2590,7 +2593,7 @@ special warning for when we can’t get type hints
 ### `class ZanjMissingWarning(builtins.UserWarning):`
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/json_serialize/serializable_dataclass.py#L115-L118)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/json_serialize/serializable_dataclass.py#L115-L118)
 
 special warning for when [`ZANJ`](https://github.com/mivanit/ZANJ) is
 missing – `register_loader_serializable_dataclass` will not work
@@ -2612,7 +2615,7 @@ missing – `register_loader_serializable_dataclass` will not work
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/json_serialize/serializable_dataclass.py#L125-L163)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/json_serialize/serializable_dataclass.py#L125-L163)
 
 Register a serializable dataclass with the ZANJ import
 
@@ -2624,7 +2627,7 @@ dicts
 ### `class FieldIsNotInitOrSerializeWarning(builtins.UserWarning):`
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/json_serialize/serializable_dataclass.py#L170-L171)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/json_serialize/serializable_dataclass.py#L170-L171)
 
 Base class for warnings generated by user code.
 
@@ -2649,7 +2652,7 @@ Base class for warnings generated by user code.
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/json_serialize/serializable_dataclass.py#L174-L263)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/json_serialize/serializable_dataclass.py#L174-L263)
 
 given a dataclass, check the field matches the type hint
 
@@ -2682,7 +2685,7 @@ this function is written to
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/json_serialize/serializable_dataclass.py#L266-L300)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/json_serialize/serializable_dataclass.py#L266-L300)
 
 validate the types of all the fields on a `SerializableDataclass`. calls
 `SerializableDataclass__validate_field_type` for each field
@@ -2700,7 +2703,7 @@ type is valid
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/json_serialize/serializable_dataclass.py#L303-L312)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/json_serialize/serializable_dataclass.py#L303-L312)
 
 validate the types of all the fields on a `SerializableDataclass`. calls
 `SerializableDataclass__validate_field_type` for each field
@@ -2708,7 +2711,7 @@ validate the types of all the fields on a `SerializableDataclass`. calls
 ### `class SerializableDataclass(abc.ABC):`
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/json_serialize/serializable_dataclass.py#L315-L508)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/json_serialize/serializable_dataclass.py#L315-L508)
 
 Base class for serializable dataclasses
 
@@ -2768,7 +2771,7 @@ which gives us:
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/json_serialize/serializable_dataclass.py#L368-L372)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/json_serialize/serializable_dataclass.py#L368-L372)
 
 returns the class as a dict, implemented by using
 `@serializable_dataclass` decorator
@@ -2780,7 +2783,7 @@ returns the class as a dict, implemented by using
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/json_serialize/serializable_dataclass.py#L374-L377)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/json_serialize/serializable_dataclass.py#L374-L377)
 
 takes in an appropriately structured dict and returns an instance of the
 class, implemented by using `@serializable_dataclass` decorator
@@ -2795,7 +2798,7 @@ class, implemented by using `@serializable_dataclass` decorator
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/json_serialize/serializable_dataclass.py#L379-L385)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/json_serialize/serializable_dataclass.py#L379-L385)
 
 validate the types of all the fields on a `SerializableDataclass`. calls
 `SerializableDataclass__validate_field_type` for each field
@@ -2811,7 +2814,7 @@ validate the types of all the fields on a `SerializableDataclass`. calls
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/json_serialize/serializable_dataclass.py#L387-L395)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/json_serialize/serializable_dataclass.py#L387-L395)
 
 given a dataclass, check the field matches the type hint
 
@@ -2826,7 +2829,7 @@ given a dataclass, check the field matches the type hint
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/json_serialize/serializable_dataclass.py#L404-L483)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/json_serialize/serializable_dataclass.py#L404-L483)
 
 get a rich and recursive diff between two instances of a serializable
 dataclass
@@ -2861,7 +2864,7 @@ dataclass
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/json_serialize/serializable_dataclass.py#L485-L500)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/json_serialize/serializable_dataclass.py#L485-L500)
 
 update the instance from a nested dict, useful for configuration from
 command line args
@@ -2878,7 +2881,7 @@ command line args
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/json_serialize/serializable_dataclass.py#L513-L516)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/json_serialize/serializable_dataclass.py#L513-L516)
 
 cached typing.get_type_hints for a class
 
@@ -2889,14 +2892,14 @@ cached typing.get_type_hints for a class
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/json_serialize/serializable_dataclass.py#L519-L537)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/json_serialize/serializable_dataclass.py#L519-L537)
 
 helper function to get type hints for a class
 
 ### `class KWOnlyError(builtins.NotImplementedError):`
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/json_serialize/serializable_dataclass.py#L540-L543)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/json_serialize/serializable_dataclass.py#L540-L543)
 
 kw-only dataclasses are not supported in python \<3.9
 
@@ -2913,7 +2916,7 @@ kw-only dataclasses are not supported in python \<3.9
 ### `class FieldError(builtins.ValueError):`
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/json_serialize/serializable_dataclass.py#L546-L549)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/json_serialize/serializable_dataclass.py#L546-L549)
 
 base class for field errors
 
@@ -2930,7 +2933,7 @@ base class for field errors
 ### `class NotSerializableFieldException(FieldError):`
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/json_serialize/serializable_dataclass.py#L552-L555)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/json_serialize/serializable_dataclass.py#L552-L555)
 
 field is not a `SerializableField`
 
@@ -2947,7 +2950,7 @@ field is not a `SerializableField`
 ### `class FieldSerializationError(FieldError):`
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/json_serialize/serializable_dataclass.py#L558-L561)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/json_serialize/serializable_dataclass.py#L558-L561)
 
 error while serializing a field
 
@@ -2964,7 +2967,7 @@ error while serializing a field
 ### `class FieldLoadingError(FieldError):`
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/json_serialize/serializable_dataclass.py#L564-L567)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/json_serialize/serializable_dataclass.py#L564-L567)
 
 error while loading a field
 
@@ -2977,6 +2980,23 @@ error while loading a field
 - [`add_note`](#FieldLoadingError.add_note)
 
 - [`args`](#FieldLoadingError.args)
+
+### `class FieldTypeMismatchError(FieldError, builtins.TypeError):`
+
+[View Source on
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/json_serialize/serializable_dataclass.py#L570-L573)
+
+error when a field type does not match the type hint
+
+### Inherited Members
+
+- [`ValueError`](#FieldTypeMismatchError.__init__)
+
+- [`with_traceback`](#FieldTypeMismatchError.with_traceback)
+
+- [`add_note`](#FieldTypeMismatchError.add_note)
+
+- [`args`](#FieldTypeMismatchError.args)
 
 ### `def serializable_dataclass`
 
@@ -2999,7 +3019,7 @@ error while loading a field
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/json_serialize/serializable_dataclass.py#L570-L846)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/json_serialize/serializable_dataclass.py#L576-L875)
 
 decorator to make a dataclass serializable. must also make it inherit
 from `SerializableDataclass`
@@ -3069,7 +3089,7 @@ class Myclass(SerializableDataclass):
 - `AttributeError` : if a property is not found on the class
 - `FieldLoadingError` : if there is an error loading a field
 
-> docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.15
+> docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.16
 
 ## Contents
 
@@ -3088,7 +3108,7 @@ functions.
 - [`serializable_field`](#serializable_field)
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/json_serialize/serializable_field.py)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/json_serialize/serializable_field.py)
 
 # `muutils.json_serialize.serializable_field`
 
@@ -3102,12 +3122,12 @@ field, and the `SerializableDataclass` will automatically use those
 functions.
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/json_serialize/serializable_field.py#L0-L276)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/json_serialize/serializable_field.py#L0-L278)
 
 ### `class SerializableField(dataclasses.Field):`
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/json_serialize/serializable_field.py#L20-L127)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/json_serialize/serializable_field.py#L20-L127)
 
 extension of `dataclasses.Field` with additional serialization
 properties
@@ -3134,7 +3154,7 @@ properties
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/json_serialize/serializable_field.py#L45-L109)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/json_serialize/serializable_field.py#L45-L109)
 
 - `serialize: bool`
 
@@ -3158,7 +3178,7 @@ GitHub](https://github.com/mivanit/muutils/blob/0.6.15/json_serialize/serializab
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/json_serialize/serializable_field.py#L111-L127)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/json_serialize/serializable_field.py#L111-L127)
 
 copy all values from a `dataclasses.Field` to new `SerializableField`
 
@@ -3205,7 +3225,7 @@ copy all values from a `dataclasses.Field` to new `SerializableField`
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/json_serialize/serializable_field.py#L187-L277)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/json_serialize/serializable_field.py#L187-L279)
 
 Create a new `SerializableField`
 
@@ -3276,7 +3296,9 @@ note that if not using ZANJ, and you have a class inside a container,
 you MUST provide `serialization_fn` and `loading_fn` to serialize and
 load the container. ZANJ will automatically do this for you.
 
-> docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.15
+### TODO: `custom_value_check_fn`: function taking the value of the field and returning whether the value itself is valid. if not provided, any value is valid as long as it passes the type test
+
+> docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.16
 
 ## Contents
 
@@ -3298,14 +3320,14 @@ utilities for json_serialize
 - [`MonoTuple`](#MonoTuple)
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/json_serialize/util.py)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/json_serialize/util.py)
 
 # `muutils.json_serialize.util`
 
 utilities for json_serialize
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/json_serialize/util.py#L0-L261)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/json_serialize/util.py#L0-L262)
 
 - `JSONitem = typing.Union[bool, int, float, str, list, typing.Dict[str, typing.Any], NoneType]`
 
@@ -3316,7 +3338,7 @@ GitHub](https://github.com/mivanit/muutils/blob/0.6.15/json_serialize/util.py#L0
 ### `class UniversalContainer:`
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/json_serialize/util.py#L58-L62)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/json_serialize/util.py#L58-L62)
 
 contains everything – `x in UniversalContainer()` is always True
 
@@ -3327,7 +3349,7 @@ contains everything – `x in UniversalContainer()` is always True
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/json_serialize/util.py#L65-L77)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/json_serialize/util.py#L65-L77)
 
 checks if `x` is a `namedtuple`
 
@@ -3341,7 +3363,7 @@ https://stackoverflow.com/questions/2166818/how-to-check-if-an-object-is-an-inst
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/json_serialize/util.py#L80-L93)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/json_serialize/util.py#L80-L93)
 
 wraps the function to catch exceptions, returns serialized error message
 on exception
@@ -3352,7 +3374,7 @@ exception
 ### `class SerializationException(builtins.Exception):`
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/json_serialize/util.py#L110-L111)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/json_serialize/util.py#L110-L111)
 
 Common base class for all non-exit exceptions.
 
@@ -3373,7 +3395,7 @@ Common base class for all non-exit exceptions.
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/json_serialize/util.py#L114-L122)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/json_serialize/util.py#L114-L122)
 
 for easier reading of long strings in json, split up by newlines
 
@@ -3386,7 +3408,7 @@ sort of like how jupyter notebooks do it
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/json_serialize/util.py#L125-L129)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/json_serialize/util.py#L125-L129)
 
 ### `def array_safe_eq`
 
@@ -3395,7 +3417,7 @@ GitHub](https://github.com/mivanit/muutils/blob/0.6.15/json_serialize/util.py#L1
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/json_serialize/util.py#L133-L171)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/json_serialize/util.py#L133-L171)
 
 check if two objects are equal, account for if numpy arrays or torch
 tensors
@@ -3413,7 +3435,7 @@ tensors
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/json_serialize/util.py#L174-L262)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/json_serialize/util.py#L174-L263)
 
 checks if two dataclasses which (might) hold numpy arrays are equal
 
@@ -3443,7 +3465,7 @@ checks if two dataclasses which (might) hold numpy arrays are equal
 - `TypeError`: if the dataclasses are of different classes
 - `AttributeError`: if the dataclasses have different fields
 
-<!-- -->
+### TODO: after “except when class mismatch” is False, shouldn’t we then go to “field keys match”?
 
               [START]
                  ▼
@@ -3475,11 +3497,11 @@ checks if two dataclasses which (might) hold numpy arrays are equal
 ### `class MonoTuple:`
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/json_serialize/util.py#L30-L55)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/json_serialize/util.py#L30-L55)
 
 tuple type hint, but for a tuple of any length with all the same type
 
-> docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.15
+> docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.16
 
 ## Contents
 
@@ -3493,7 +3515,7 @@ support
 - [`jsonl_write`](#jsonl_write)
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/jsonlines.py)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/jsonlines.py)
 
 # `muutils.jsonlines`
 
@@ -3501,7 +3523,7 @@ utilities for reading and writing jsonlines files, including gzip
 support
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/jsonlines.py#L0-L76)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/jsonlines.py#L0-L76)
 
 ### `def jsonl_load`
 
@@ -3515,7 +3537,7 @@ GitHub](https://github.com/mivanit/muutils/blob/0.6.15/jsonlines.py#L0-L76)
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/jsonlines.py#L30-L43)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/jsonlines.py#L30-L43)
 
 ### `def jsonl_load_log`
 
@@ -3524,7 +3546,7 @@ GitHub](https://github.com/mivanit/muutils/blob/0.6.15/jsonlines.py#L30-L43)
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/jsonlines.py#L46-L60)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/jsonlines.py#L46-L60)
 
 ### `def jsonl_write`
 
@@ -3538,9 +3560,9 @@ GitHub](https://github.com/mivanit/muutils/blob/0.6.15/jsonlines.py#L46-L60)
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/jsonlines.py#L63-L77)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/jsonlines.py#L63-L77)
 
-> docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.15
+> docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.16
 
 ## Contents
 
@@ -3557,7 +3579,7 @@ in the greek alphabet, hence the name of this class
 - [`Kappa`](#Kappa)
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/kappa.py)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/kappa.py)
 
 # `muutils.kappa`
 
@@ -3570,12 +3592,12 @@ a `lambda` is an anonymous function: kappa is the letter before lambda
 in the greek alphabet, hence the name of this class
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/kappa.py#L0-L45)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/kappa.py#L0-L45)
 
 ### `class Kappa(typing.Mapping[~_kappa_K, ~_kappa_V]):`
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/kappa.py#L26-L46)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/kappa.py#L26-L46)
 
 A Mapping is a generic container for associating key/value pairs.
 
@@ -3589,7 +3611,7 @@ except for **getitem**, **iter**, and **len**.
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/kappa.py#L27-L33)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/kappa.py#L27-L33)
 
 - `func_getitem`
 
@@ -3602,7 +3624,7 @@ GitHub](https://github.com/mivanit/muutils/blob/0.6.15/kappa.py#L27-L33)
 - [`items`](#Kappa.items)
 - [`values`](#Kappa.values)
 
-> docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.15
+> docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.16
 
 ## Contents
 
@@ -3626,19 +3648,19 @@ GitHub](https://github.com/mivanit/muutils/blob/0.6.15/kappa.py#L27-L33)
 - [`TimerContext`](#TimerContext)
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/logger/__init__.py)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/logger/__init__.py)
 
 # `muutils.logger`
 
 (deprecated) experimenting with logging utilities
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/logger/__init__.py#L0-L29)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/logger/__init__.py#L0-L29)
 
 ### `class Logger(muutils.logger.simplelogger.SimpleLogger):`
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/logger/__init__.py#L40-L306)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/logger/__init__.py#L40-L306)
 
 logger with more features, including log levels and streams
 
@@ -3687,7 +3709,7 @@ logger with more features, including log levels and streams
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/logger/__init__.py#L71-L147)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/logger/__init__.py#L71-L147)
 
 ### `def log`
 
@@ -3704,7 +3726,7 @@ GitHub](https://github.com/mivanit/muutils/blob/0.6.15/logger/__init__.py#L71-L1
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/logger/__init__.py#L158-L267)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/logger/__init__.py#L158-L267)
 
 logging function
 
@@ -3731,7 +3753,7 @@ logging function
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/logger/__init__.py#L269-L286)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/logger/__init__.py#L269-L286)
 
 logs the time elapsed since the last message was printed to the console
 (in any stream)
@@ -3743,14 +3765,14 @@ logs the time elapsed since the last message was printed to the console
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/logger/__init__.py#L288-L295)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/logger/__init__.py#L288-L295)
 
 flush all streams
 
 ### `class LoggingStream:`
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/logger/__init__.py#L11-L95)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/logger/__init__.py#L11-L95)
 
 properties of a logging stream
 
@@ -3801,12 +3823,12 @@ properties of a logging stream
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/logger/__init__.py#L40-L76)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/logger/__init__.py#L40-L76)
 
 ### `class SimpleLogger:`
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/logger/__init__.py#L34-L81)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/logger/__init__.py#L34-L81)
 
 logs training data to a jsonl file
 
@@ -3821,7 +3843,7 @@ logs training data to a jsonl file
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/logger/__init__.py#L37-L65)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/logger/__init__.py#L37-L65)
 
 ### `def log`
 
@@ -3835,14 +3857,14 @@ GitHub](https://github.com/mivanit/muutils/blob/0.6.15/logger/__init__.py#L37-L6
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/logger/__init__.py#L67-L81)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/logger/__init__.py#L67-L81)
 
 log a message to the log file, and optionally to the console
 
 ### `class TimerContext:`
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/logger/__init__.py#L7-L22)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/logger/__init__.py#L7-L22)
 
 context manager for timing code
 
@@ -3852,24 +3874,24 @@ context manager for timing code
 
 - `elapsed_time: float`
 
-> docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.15
+> docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.16
 
 ## API Documentation
 
 - [`ExceptionContext`](#ExceptionContext)
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/logger/exception_context.py)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/logger/exception_context.py)
 
 # `muutils.logger.exception_context`
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/logger/exception_context.py#L0-L42)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/logger/exception_context.py#L0-L42)
 
 ### `class ExceptionContext:`
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/logger/exception_context.py#L6-L43)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/logger/exception_context.py#L6-L43)
 
 context manager which catches all exceptions happening while the context
 is open, `.write()` the exception trace to the given stream, and then
@@ -3893,11 +3915,11 @@ with ExceptionContext(errorfile):
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/logger/exception_context.py#L23-L24)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/logger/exception_context.py#L23-L24)
 
 - `stream`
 
-> docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.15
+> docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.16
 
 ## API Documentation
 
@@ -3906,17 +3928,17 @@ GitHub](https://github.com/mivanit/muutils/blob/0.6.15/logger/exception_context.
 - [`HEADER_FUNCTIONS`](#HEADER_FUNCTIONS)
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/logger/headerfuncs.py)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/logger/headerfuncs.py)
 
 # `muutils.logger.headerfuncs`
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/logger/headerfuncs.py#L0-L67)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/logger/headerfuncs.py#L0-L67)
 
 ### `class HeaderFunction(typing.Protocol):`
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/logger/headerfuncs.py#L12-L13)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/logger/headerfuncs.py#L12-L13)
 
 Base class for protocol classes.
 
@@ -3956,7 +3978,7 @@ signatures. Protocol classes can be generic, they are defined as::
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/logger/headerfuncs.py#L1709-L1735)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/logger/headerfuncs.py#L1709-L1735)
 
 ### `def md_header_function`
 
@@ -3972,7 +3994,7 @@ GitHub](https://github.com/mivanit/muutils/blob/0.6.15/logger/headerfuncs.py#L17
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/logger/headerfuncs.py#L16-L63)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/logger/headerfuncs.py#L16-L63)
 
 standard header function. will output
 
@@ -3998,7 +4020,7 @@ standard header function. will output
 
 - `HEADER_FUNCTIONS: dict[str, muutils.logger.headerfuncs.HeaderFunction] = {'md': <function md_header_function>}`
 
-> docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.15
+> docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.16
 
 ## API Documentation
 
@@ -4008,12 +4030,12 @@ standard header function. will output
 - [`gather_val`](#gather_val)
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/logger/log_util.py)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/logger/log_util.py)
 
 # `muutils.logger.log_util`
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/logger/log_util.py#L0-L79)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/logger/log_util.py#L0-L79)
 
 ### `def get_any_from_stream`
 
@@ -4022,7 +4044,7 @@ GitHub](https://github.com/mivanit/muutils/blob/0.6.15/logger/log_util.py#L0-L79
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/logger/log_util.py#L4-L10)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/logger/log_util.py#L4-L10)
 
 get the first value of a key from a stream. errors if not found
 
@@ -4033,7 +4055,7 @@ get the first value of a key from a stream. errors if not found
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/logger/log_util.py#L13-L24)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/logger/log_util.py#L13-L24)
 
 gathers and sorts all streams from a log
 
@@ -4044,7 +4066,7 @@ gathers and sorts all streams from a log
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/logger/log_util.py#L27-L40)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/logger/log_util.py#L27-L40)
 
 gets all entries from a specific stream in a log file
 
@@ -4060,7 +4082,7 @@ gets all entries from a specific stream in a log file
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/logger/log_util.py#L43-L80)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/logger/log_util.py#L43-L80)
 
 gather specific keys from a specific stream in a log file
 
@@ -4081,7 +4103,7 @@ then `gather_val("log.jsonl", "s1", ("a", "b"))` will return
 ]
 ```
 
-> docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.15
+> docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.16
 
 ## Contents
 
@@ -4102,7 +4124,7 @@ logger with streams & levels, and a timer context manager
 - [`Logger`](#Logger)
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/logger/logger.py)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/logger/logger.py)
 
 # `muutils.logger.logger`
 
@@ -4118,7 +4140,7 @@ logger with streams & levels, and a timer context manager
   duration of a block of code
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/logger/logger.py#L0-L305)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/logger/logger.py#L0-L305)
 
 ### `def decode_level`
 
@@ -4127,12 +4149,12 @@ GitHub](https://github.com/mivanit/muutils/blob/0.6.15/logger/logger.py#L0-L305)
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/logger/logger.py#L27-L36)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/logger/logger.py#L27-L36)
 
 ### `class Logger(muutils.logger.simplelogger.SimpleLogger):`
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/logger/logger.py#L40-L306)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/logger/logger.py#L40-L306)
 
 logger with more features, including log levels and streams
 
@@ -4181,7 +4203,7 @@ logger with more features, including log levels and streams
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/logger/logger.py#L71-L147)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/logger/logger.py#L71-L147)
 
 ### `def log`
 
@@ -4198,7 +4220,7 @@ GitHub](https://github.com/mivanit/muutils/blob/0.6.15/logger/logger.py#L71-L147
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/logger/logger.py#L158-L267)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/logger/logger.py#L158-L267)
 
 logging function
 
@@ -4225,7 +4247,7 @@ logging function
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/logger/logger.py#L269-L286)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/logger/logger.py#L269-L286)
 
 logs the time elapsed since the last message was printed to the console
 (in any stream)
@@ -4237,28 +4259,28 @@ logs the time elapsed since the last message was printed to the console
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/logger/logger.py#L288-L295)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/logger/logger.py#L288-L295)
 
 flush all streams
 
-> docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.15
+> docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.16
 
 ## API Documentation
 
 - [`LoggingStream`](#LoggingStream)
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/logger/loggingstream.py)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/logger/loggingstream.py)
 
 # `muutils.logger.loggingstream`
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/logger/loggingstream.py#L0-L94)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/logger/loggingstream.py#L0-L94)
 
 ### `class LoggingStream:`
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/logger/loggingstream.py#L11-L95)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/logger/loggingstream.py#L11-L95)
 
 properties of a logging stream
 
@@ -4309,9 +4331,9 @@ properties of a logging stream
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/logger/loggingstream.py#L40-L76)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/logger/loggingstream.py#L40-L76)
 
-> docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.15
+> docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.16
 
 ## API Documentation
 
@@ -4320,17 +4342,17 @@ GitHub](https://github.com/mivanit/muutils/blob/0.6.15/logger/loggingstream.py#L
 - [`SimpleLogger`](#SimpleLogger)
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/logger/simplelogger.py)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/logger/simplelogger.py)
 
 # `muutils.logger.simplelogger`
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/logger/simplelogger.py#L0-L80)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/logger/simplelogger.py#L0-L80)
 
 ### `class NullIO:`
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/logger/simplelogger.py#L12-L28)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/logger/simplelogger.py#L12-L28)
 
 null IO class
 
@@ -4341,7 +4363,7 @@ null IO class
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/logger/simplelogger.py#L18-L20)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/logger/simplelogger.py#L18-L20)
 
 write to nothing! this throws away the message
 
@@ -4352,7 +4374,7 @@ write to nothing! this throws away the message
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/logger/simplelogger.py#L22-L24)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/logger/simplelogger.py#L22-L24)
 
 flush nothing! this is a no-op
 
@@ -4363,7 +4385,7 @@ flush nothing! this is a no-op
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/logger/simplelogger.py#L26-L28)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/logger/simplelogger.py#L26-L28)
 
 close nothing! this is a no-op
 
@@ -4372,7 +4394,7 @@ close nothing! this is a no-op
 ### `class SimpleLogger:`
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/logger/simplelogger.py#L34-L81)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/logger/simplelogger.py#L34-L81)
 
 logs training data to a jsonl file
 
@@ -4387,7 +4409,7 @@ logs training data to a jsonl file
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/logger/simplelogger.py#L37-L65)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/logger/simplelogger.py#L37-L65)
 
 ### `def log`
 
@@ -4401,11 +4423,11 @@ GitHub](https://github.com/mivanit/muutils/blob/0.6.15/logger/simplelogger.py#L3
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/logger/simplelogger.py#L67-L81)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/logger/simplelogger.py#L67-L81)
 
 log a message to the log file, and optionally to the console
 
-> docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.15
+> docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.16
 
 ## API Documentation
 
@@ -4414,17 +4436,17 @@ log a message to the log file, and optionally to the console
 - [`ProgressEstimator`](#ProgressEstimator)
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/logger/timing.py)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/logger/timing.py)
 
 # `muutils.logger.timing`
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/logger/timing.py#L0-L86)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/logger/timing.py#L0-L86)
 
 ### `class TimerContext:`
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/logger/timing.py#L7-L22)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/logger/timing.py#L7-L22)
 
 context manager for timing code
 
@@ -4441,14 +4463,14 @@ context manager for timing code
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/logger/timing.py#L25-L30)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/logger/timing.py#L25-L30)
 
 assuming format `h:mm:ss`, clips off the hours if its 0
 
 ### `class ProgressEstimator:`
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/logger/timing.py#L33-L87)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/logger/timing.py#L33-L87)
 
 estimates progress and can give a progress bar
 
@@ -4464,7 +4486,7 @@ estimates progress and can give a progress bar
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/logger/timing.py#L36-L48)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/logger/timing.py#L36-L48)
 
 - `n_total: int`
 
@@ -4485,7 +4507,7 @@ GitHub](https://github.com/mivanit/muutils/blob/0.6.15/logger/timing.py#L36-L48)
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/logger/timing.py#L50-L59)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/logger/timing.py#L50-L59)
 
 returns dict(elapsed, per_iter, remaining, percent)
 
@@ -4496,7 +4518,7 @@ returns dict(elapsed, per_iter, remaining, percent)
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/logger/timing.py#L61-L77)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/logger/timing.py#L61-L77)
 
 returns a progress bar
 
@@ -4507,11 +4529,11 @@ returns a progress bar
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/logger/timing.py#L79-L87)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/logger/timing.py#L79-L87)
 
 returns a progress string
 
-> docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.15
+> docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.16
 
 ## Contents
 
@@ -4565,7 +4587,7 @@ miscellaneous utilities
 - [`dataclass_set_equals`](#dataclass_set_equals)
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/misc/__init__.py)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/misc/__init__.py)
 
 # `muutils.misc`
 
@@ -4585,7 +4607,7 @@ miscellaneous utilities
   class utilities
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/misc/__init__.py#L0-L81)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/misc/__init__.py#L0-L81)
 
 ### `def stable_hash`
 
@@ -4594,7 +4616,7 @@ GitHub](https://github.com/mivanit/muutils/blob/0.6.15/misc/__init__.py#L0-L81)
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/misc/__init__.py#L7-L17)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/misc/__init__.py#L7-L17)
 
 Returns a stable hash of the given string. not cryptographically secure,
 but stable between runs
@@ -4608,7 +4630,7 @@ but stable between runs
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/misc/__init__.py#L21-L42)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/misc/__init__.py#L21-L42)
 
 Returns `itr` if `attr_owner` has the attribute `attr_name` and it
 boolean casts to `True`. Returns an empty sequence otherwise.
@@ -4636,7 +4658,7 @@ depending on an `TokenizerElement` attribute.
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/misc/__init__.py#L45-L68)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/misc/__init__.py#L45-L68)
 
 Flattens an arbitrarily nested iterable. Flattens all iterable data
 types except for `str` and `bytes`.
@@ -4658,7 +4680,7 @@ Generator over the flattened sequence.
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/misc/__init__.py#L75-L103)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/misc/__init__.py#L75-L103)
 
 split a list into sublists by `val`. similar to “a_b_c”.split(“\_“)
 
@@ -4680,7 +4702,7 @@ split a list into sublists by `val`. similar to “a_b_c”.split(“\_“)
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/misc/__init__.py#L106-L128)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/misc/__init__.py#L106-L128)
 
 add a *new* instance of `factory()` between each element of `lst`
 
@@ -4702,7 +4724,7 @@ add a *new* instance of `factory()` between each element of `lst`
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/misc/__init__.py#L138-L184)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/misc/__init__.py#L138-L184)
 
 Given an iterable and a mapping, apply the mapping to the iterable with
 certain options
@@ -4748,7 +4770,7 @@ return type is one of: - `list[_AM_V]` if `when_missing` is `"skip"` or
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/misc/__init__.py#L187-L234)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/misc/__init__.py#L187-L234)
 
 Given an iterable and a mapping, chain the mappings together
 
@@ -4795,7 +4817,7 @@ return type is one of: - `list[_AM_V]` if `when_missing` is `"skip"` or
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/misc/__init__.py#L7-L55)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/misc/__init__.py#L7-L55)
 
 sanitize a string, leaving only alphanumerics and
 `additional_allowed_chars`
@@ -4823,7 +4845,7 @@ sanitize a string, leaving only alphanumerics and
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/misc/__init__.py#L58-L63)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/misc/__init__.py#L58-L63)
 
 sanitize a filename to posix standards
 
@@ -4837,7 +4859,7 @@ sanitize a filename to posix standards
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/misc/__init__.py#L66-L74)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/misc/__init__.py#L66-L74)
 
 sanitize an identifier (variable or function name)
 
@@ -4856,7 +4878,7 @@ sanitize an identifier (variable or function name)
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/misc/__init__.py#L77-L99)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/misc/__init__.py#L77-L99)
 
 ### `def dynamic_docstring`
 
@@ -4865,7 +4887,7 @@ GitHub](https://github.com/mivanit/muutils/blob/0.6.15/misc/__init__.py#L77-L99)
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/misc/__init__.py#L102-L108)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/misc/__init__.py#L102-L108)
 
 ### `def shorten_numerical_to_str`
 
@@ -4878,7 +4900,7 @@ GitHub](https://github.com/mivanit/muutils/blob/0.6.15/misc/__init__.py#L102-L10
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/misc/__init__.py#L22-L46)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/misc/__init__.py#L22-L46)
 
 shorten a large numerical value to a string 1234 -\> 1K
 
@@ -4895,7 +4917,7 @@ precision guaranteed to 1 in 10, but can be higher. reverse of
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/misc/__init__.py#L49-L165)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/misc/__init__.py#L49-L165)
 
 Convert a string representing a quantity to a numeric value.
 
@@ -4922,7 +4944,7 @@ shortened via `shorten_numerical_to_str`.
 ### `class FrozenDict(builtins.dict):`
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/misc/__init__.py#L4-L9)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/misc/__init__.py#L4-L9)
 
 ### Inherited Members
 
@@ -4941,7 +4963,7 @@ GitHub](https://github.com/mivanit/muutils/blob/0.6.15/misc/__init__.py#L4-L9)
 ### `class FrozenList(builtins.list):`
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/misc/__init__.py#L12-L35)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/misc/__init__.py#L12-L35)
 
 Built-in mutable sequence.
 
@@ -4955,7 +4977,7 @@ argument must be an iterable if specified.
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/misc/__init__.py#L19-L20)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/misc/__init__.py#L19-L20)
 
 Append object to the end of the list.
 
@@ -4966,7 +4988,7 @@ Append object to the end of the list.
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/misc/__init__.py#L22-L23)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/misc/__init__.py#L22-L23)
 
 Extend list by appending elements from the iterable.
 
@@ -4977,7 +4999,7 @@ Extend list by appending elements from the iterable.
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/misc/__init__.py#L25-L26)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/misc/__init__.py#L25-L26)
 
 Insert object before index.
 
@@ -4988,7 +5010,7 @@ Insert object before index.
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/misc/__init__.py#L28-L29)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/misc/__init__.py#L28-L29)
 
 Remove first occurrence of value.
 
@@ -5001,7 +5023,7 @@ Raises ValueError if the value is not present.
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/misc/__init__.py#L31-L32)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/misc/__init__.py#L31-L32)
 
 Remove and return item at index (default last).
 
@@ -5014,7 +5036,7 @@ Raises IndexError if list is empty or index is out of range.
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/misc/__init__.py#L34-L35)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/misc/__init__.py#L34-L35)
 
 Remove all items from list.
 
@@ -5034,7 +5056,7 @@ Remove all items from list.
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/misc/__init__.py#L38-L107)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/misc/__init__.py#L38-L107)
 
 recursively freeze an object in-place so that its attributes and
 elements cannot be changed
@@ -5052,7 +5074,7 @@ a more complete implementation of this idea
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/misc/__init__.py#L14-L23)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/misc/__init__.py#L14-L23)
 
 Returns if a class is abstract.
 
@@ -5063,7 +5085,7 @@ Returns if a class is abstract.
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/misc/__init__.py#L26-L48)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/misc/__init__.py#L26-L48)
 
 Returns a set containing all child classes in the subclass graph of
 `class_`. I.e., includes subclasses of subclasses, etc.
@@ -5087,7 +5109,7 @@ function on a very large class hierarchy.
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/misc/__init__.py#L51-L61)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/misc/__init__.py#L51-L61)
 
 Behaves like stdlib `isinstance` except it accepts a string
 representation of the type rather than the type itself. This is a hacky
@@ -5103,7 +5125,7 @@ supported, only types that would appear in `type_.__mro__`.
 ### `class IsDataclass(typing.Protocol):`
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/misc/__init__.py#L68-L72)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/misc/__init__.py#L68-L72)
 
 Base class for protocol classes.
 
@@ -5143,7 +5165,7 @@ signatures. Protocol classes can be generic, they are defined as::
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/misc/__init__.py#L1709-L1735)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/misc/__init__.py#L1709-L1735)
 
 ### `def get_hashable_eq_attrs`
 
@@ -5152,7 +5174,7 @@ GitHub](https://github.com/mivanit/muutils/blob/0.6.15/misc/__init__.py#L1709-L1
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/misc/__init__.py#L75-L83)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/misc/__init__.py#L75-L83)
 
 Returns a tuple of all fields used for equality comparison, including
 the type of the dataclass itself. The type is included to preserve the
@@ -5170,14 +5192,14 @@ representation for equality comparison even if it’s not frozen.
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/misc/__init__.py#L86-L97)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/misc/__init__.py#L86-L97)
 
 Compares 2 collections of dataclass instances as if they were sets.
 Duplicates are ignored in the same manner as a set. Unfrozen dataclasses
 can’t be placed in sets since they’re not hashable. Collections of them
 may be compared using this function.
 
-> docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.15
+> docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.16
 
 ## API Documentation
 
@@ -5189,12 +5211,12 @@ may be compared using this function.
 - [`dataclass_set_equals`](#dataclass_set_equals)
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/misc/classes.py)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/misc/classes.py)
 
 # `muutils.misc.classes`
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/misc/classes.py#L0-L96)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/misc/classes.py#L0-L96)
 
 ### `def is_abstract`
 
@@ -5203,7 +5225,7 @@ GitHub](https://github.com/mivanit/muutils/blob/0.6.15/misc/classes.py#L0-L96)
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/misc/classes.py#L14-L23)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/misc/classes.py#L14-L23)
 
 Returns if a class is abstract.
 
@@ -5214,7 +5236,7 @@ Returns if a class is abstract.
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/misc/classes.py#L26-L48)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/misc/classes.py#L26-L48)
 
 Returns a set containing all child classes in the subclass graph of
 `class_`. I.e., includes subclasses of subclasses, etc.
@@ -5238,7 +5260,7 @@ function on a very large class hierarchy.
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/misc/classes.py#L51-L61)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/misc/classes.py#L51-L61)
 
 Behaves like stdlib `isinstance` except it accepts a string
 representation of the type rather than the type itself. This is a hacky
@@ -5254,7 +5276,7 @@ supported, only types that would appear in `type_.__mro__`.
 ### `class IsDataclass(typing.Protocol):`
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/misc/classes.py#L68-L72)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/misc/classes.py#L68-L72)
 
 Base class for protocol classes.
 
@@ -5294,7 +5316,7 @@ signatures. Protocol classes can be generic, they are defined as::
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/misc/classes.py#L1709-L1735)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/misc/classes.py#L1709-L1735)
 
 ### `def get_hashable_eq_attrs`
 
@@ -5303,7 +5325,7 @@ GitHub](https://github.com/mivanit/muutils/blob/0.6.15/misc/classes.py#L1709-L17
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/misc/classes.py#L75-L83)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/misc/classes.py#L75-L83)
 
 Returns a tuple of all fields used for equality comparison, including
 the type of the dataclass itself. The type is included to preserve the
@@ -5321,14 +5343,14 @@ representation for equality comparison even if it’s not frozen.
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/misc/classes.py#L86-L97)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/misc/classes.py#L86-L97)
 
 Compares 2 collections of dataclass instances as if they were sets.
 Duplicates are ignored in the same manner as a set. Unfrozen dataclasses
 can’t be placed in sets since they’re not hashable. Collections of them
 may be compared using this function.
 
-> docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.15
+> docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.16
 
 ## API Documentation
 
@@ -5337,17 +5359,17 @@ may be compared using this function.
 - [`freeze`](#freeze)
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/misc/freezing.py)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/misc/freezing.py)
 
 # `muutils.misc.freezing`
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/misc/freezing.py#L0-L106)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/misc/freezing.py#L0-L106)
 
 ### `class FrozenDict(builtins.dict):`
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/misc/freezing.py#L4-L9)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/misc/freezing.py#L4-L9)
 
 ### Inherited Members
 
@@ -5366,7 +5388,7 @@ GitHub](https://github.com/mivanit/muutils/blob/0.6.15/misc/freezing.py#L4-L9)
 ### `class FrozenList(builtins.list):`
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/misc/freezing.py#L12-L35)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/misc/freezing.py#L12-L35)
 
 Built-in mutable sequence.
 
@@ -5380,7 +5402,7 @@ argument must be an iterable if specified.
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/misc/freezing.py#L19-L20)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/misc/freezing.py#L19-L20)
 
 Append object to the end of the list.
 
@@ -5391,7 +5413,7 @@ Append object to the end of the list.
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/misc/freezing.py#L22-L23)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/misc/freezing.py#L22-L23)
 
 Extend list by appending elements from the iterable.
 
@@ -5402,7 +5424,7 @@ Extend list by appending elements from the iterable.
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/misc/freezing.py#L25-L26)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/misc/freezing.py#L25-L26)
 
 Insert object before index.
 
@@ -5413,7 +5435,7 @@ Insert object before index.
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/misc/freezing.py#L28-L29)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/misc/freezing.py#L28-L29)
 
 Remove first occurrence of value.
 
@@ -5426,7 +5448,7 @@ Raises ValueError if the value is not present.
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/misc/freezing.py#L31-L32)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/misc/freezing.py#L31-L32)
 
 Remove and return item at index (default last).
 
@@ -5439,7 +5461,7 @@ Raises IndexError if list is empty or index is out of range.
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/misc/freezing.py#L34-L35)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/misc/freezing.py#L34-L35)
 
 Remove all items from list.
 
@@ -5459,7 +5481,7 @@ Remove all items from list.
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/misc/freezing.py#L38-L107)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/misc/freezing.py#L38-L107)
 
 recursively freeze an object in-place so that its attributes and
 elements cannot be changed
@@ -5470,7 +5492,7 @@ you can’t rely on that. always use the return value.
 the [gelidum](https://github.com/diegojromerolopez/gelidum/) package is
 a more complete implementation of this idea
 
-> docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.15
+> docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.16
 
 ## API Documentation
 
@@ -5478,12 +5500,12 @@ a more complete implementation of this idea
 - [`base64_hash`](#base64_hash)
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/misc/hashing.py)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/misc/hashing.py)
 
 # `muutils.misc.hashing`
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/misc/hashing.py#L0-L28)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/misc/hashing.py#L0-L28)
 
 ### `def stable_hash`
 
@@ -5492,7 +5514,7 @@ GitHub](https://github.com/mivanit/muutils/blob/0.6.15/misc/hashing.py#L0-L28)
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/misc/hashing.py#L7-L17)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/misc/hashing.py#L7-L17)
 
 Returns a stable hash of the given string. not cryptographically secure,
 but stable between runs
@@ -5504,12 +5526,12 @@ but stable between runs
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/misc/hashing.py#L20-L29)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/misc/hashing.py#L20-L29)
 
 Returns a base64 representation of the hash of the given string. not
 cryptographically secure
 
-> docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.15
+> docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.16
 
 ## API Documentation
 
@@ -5517,12 +5539,12 @@ cryptographically secure
 - [`str_to_numeric`](#str_to_numeric)
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/misc/numerical.py)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/misc/numerical.py)
 
 # `muutils.misc.numerical`
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/misc/numerical.py#L0-L164)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/misc/numerical.py#L0-L164)
 
 ### `def shorten_numerical_to_str`
 
@@ -5535,7 +5557,7 @@ GitHub](https://github.com/mivanit/muutils/blob/0.6.15/misc/numerical.py#L0-L164
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/misc/numerical.py#L22-L46)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/misc/numerical.py#L22-L46)
 
 shorten a large numerical value to a string 1234 -\> 1K
 
@@ -5552,7 +5574,7 @@ precision guaranteed to 1 in 10, but can be higher. reverse of
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/misc/numerical.py#L49-L165)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/misc/numerical.py#L49-L165)
 
 Convert a string representing a quantity to a numeric value.
 
@@ -5574,7 +5596,7 @@ shortened via `shorten_numerical_to_str`.
     >>> str_to_numeric("1.2e2")
     120.0
 
-> docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.15
+> docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.16
 
 ## API Documentation
 
@@ -5587,12 +5609,12 @@ shortened via `shorten_numerical_to_str`.
 - [`apply_mapping_chain`](#apply_mapping_chain)
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/misc/sequence.py)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/misc/sequence.py)
 
 # `muutils.misc.sequence`
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/misc/sequence.py#L0-L233)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/misc/sequence.py#L0-L233)
 
 - `WhenMissing = typing.Literal['except', 'skip', 'include']`
 
@@ -5603,7 +5625,7 @@ GitHub](https://github.com/mivanit/muutils/blob/0.6.15/misc/sequence.py#L0-L233)
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/misc/sequence.py#L21-L42)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/misc/sequence.py#L21-L42)
 
 Returns `itr` if `attr_owner` has the attribute `attr_name` and it
 boolean casts to `True`. Returns an empty sequence otherwise.
@@ -5631,7 +5653,7 @@ depending on an `TokenizerElement` attribute.
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/misc/sequence.py#L45-L68)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/misc/sequence.py#L45-L68)
 
 Flattens an arbitrarily nested iterable. Flattens all iterable data
 types except for `str` and `bytes`.
@@ -5653,7 +5675,7 @@ Generator over the flattened sequence.
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/misc/sequence.py#L75-L103)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/misc/sequence.py#L75-L103)
 
 split a list into sublists by `val`. similar to “a_b_c”.split(“\_“)
 
@@ -5675,7 +5697,7 @@ split a list into sublists by `val`. similar to “a_b_c”.split(“\_“)
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/misc/sequence.py#L106-L128)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/misc/sequence.py#L106-L128)
 
 add a *new* instance of `factory()` between each element of `lst`
 
@@ -5697,7 +5719,7 @@ add a *new* instance of `factory()` between each element of `lst`
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/misc/sequence.py#L138-L184)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/misc/sequence.py#L138-L184)
 
 Given an iterable and a mapping, apply the mapping to the iterable with
 certain options
@@ -5743,7 +5765,7 @@ return type is one of: - `list[_AM_V]` if `when_missing` is `"skip"` or
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/misc/sequence.py#L187-L234)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/misc/sequence.py#L187-L234)
 
 Given an iterable and a mapping, chain the mappings together
 
@@ -5777,7 +5799,7 @@ return type is one of: - `list[_AM_V]` if `when_missing` is `"skip"` or
   `when_missing` is `"except"`
 - `ValueError` : if `when_missing` is invalid
 
-> docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.15
+> docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.16
 
 ## API Documentation
 
@@ -5788,12 +5810,12 @@ return type is one of: - `list[_AM_V]` if `when_missing` is `"skip"` or
 - [`dynamic_docstring`](#dynamic_docstring)
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/misc/string.py)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/misc/string.py)
 
 # `muutils.misc.string`
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/misc/string.py#L0-L107)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/misc/string.py#L0-L107)
 
 ### `def sanitize_name`
 
@@ -5808,7 +5830,7 @@ GitHub](https://github.com/mivanit/muutils/blob/0.6.15/misc/string.py#L0-L107)
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/misc/string.py#L7-L55)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/misc/string.py#L7-L55)
 
 sanitize a string, leaving only alphanumerics and
 `additional_allowed_chars`
@@ -5836,7 +5858,7 @@ sanitize a string, leaving only alphanumerics and
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/misc/string.py#L58-L63)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/misc/string.py#L58-L63)
 
 sanitize a filename to posix standards
 
@@ -5850,7 +5872,7 @@ sanitize a filename to posix standards
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/misc/string.py#L66-L74)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/misc/string.py#L66-L74)
 
 sanitize an identifier (variable or function name)
 
@@ -5869,7 +5891,7 @@ sanitize an identifier (variable or function name)
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/misc/string.py#L77-L99)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/misc/string.py#L77-L99)
 
 ### `def dynamic_docstring`
 
@@ -5878,9 +5900,9 @@ GitHub](https://github.com/mivanit/muutils/blob/0.6.15/misc/string.py#L77-L99)
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/misc/string.py#L102-L108)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/misc/string.py#L102-L108)
 
-> docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.15
+> docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.16
 
 ## Contents
 
@@ -5899,14 +5921,14 @@ miscellaneous utilities for ML pipelines
 - [`pprint_summary`](#pprint_summary)
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/mlutils.py)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/mlutils.py)
 
 # `muutils.mlutils`
 
 miscellaneous utilities for ML pipelines
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/mlutils.py#L0-L164)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/mlutils.py#L0-L164)
 
 - `ARRAY_IMPORTS: bool = True`
 
@@ -5921,7 +5943,7 @@ GitHub](https://github.com/mivanit/muutils/blob/0.6.15/mlutils.py#L0-L164)
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/mlutils.py#L30-L74)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/mlutils.py#L30-L74)
 
 Get the torch.device instance on which `torch.Tensor`s should be
 allocated.
@@ -5933,7 +5955,7 @@ allocated.
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/mlutils.py#L77-L97)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/mlutils.py#L77-L97)
 
 Improve model reproducibility. See
 https://github.com/NVIDIA/framework-determinism for more information.
@@ -5950,7 +5972,7 @@ performance.
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/mlutils.py#L100-L105)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/mlutils.py#L100-L105)
 
 Yield successive chunks from an iterator.
 
@@ -5965,7 +5987,7 @@ Yield successive chunks from an iterator.
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/mlutils.py#L108-L127)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/mlutils.py#L108-L127)
 
 get checkpoints of the format from the run_path
 
@@ -5983,7 +6005,7 @@ the iteration number
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/mlutils.py#L133-L161)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/mlutils.py#L133-L161)
 
 Decorator to add a method to the method_dict
 
@@ -5994,9 +6016,9 @@ Decorator to add a method to the method_dict
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/mlutils.py#L164-L165)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/mlutils.py#L164-L165)
 
-> docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.15
+> docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.16
 
 ## Contents
 
@@ -6020,7 +6042,7 @@ utilities for working with notebooks
 - [`mm`](#mm)
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/nbutils/__init__.py)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/nbutils/__init__.py)
 
 # `muutils.nbutils`
 
@@ -6032,7 +6054,7 @@ utilities for working with notebooks
 - and working with diagrams/LaTeX: `mermaid`, `print_tex`
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/nbutils/__init__.py#L0-L20)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/nbutils/__init__.py#L0-L20)
 
 ### `def mm`
 
@@ -6041,11 +6063,11 @@ GitHub](https://github.com/mivanit/muutils/blob/0.6.15/nbutils/__init__.py#L0-L2
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/nbutils/__init__.py#L15-L20)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/nbutils/__init__.py#L15-L20)
 
 for plotting mermaid.js diagrams
 
-> docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.15
+> docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.16
 
 ## Contents
 
@@ -6073,19 +6095,19 @@ shared utilities for setting up a notebook
 - [`plotshow`](#plotshow)
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/nbutils/configure_notebook.py)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/nbutils/configure_notebook.py)
 
 # `muutils.nbutils.configure_notebook`
 
 shared utilities for setting up a notebook
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/nbutils/configure_notebook.py#L0-L319)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/nbutils/configure_notebook.py#L0-L319)
 
 ### `class PlotlyNotInstalledWarning(builtins.UserWarning):`
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/nbutils/configure_notebook.py#L12-L13)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/nbutils/configure_notebook.py#L12-L13)
 
 Base class for warnings generated by user code.
 
@@ -6126,7 +6148,7 @@ Base class for warnings generated by user code.
 ### `class UnknownFigureFormatWarning(builtins.UserWarning):`
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/nbutils/configure_notebook.py#L55-L56)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/nbutils/configure_notebook.py#L55-L56)
 
 Base class for warnings generated by user code.
 
@@ -6147,7 +6169,7 @@ Base class for warnings generated by user code.
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/nbutils/configure_notebook.py#L59-L83)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/nbutils/configure_notebook.py#L59-L83)
 
 ### `def setup_plots`
 
@@ -6163,7 +6185,7 @@ GitHub](https://github.com/mivanit/muutils/blob/0.6.15/nbutils/configure_noteboo
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/nbutils/configure_notebook.py#L86-L189)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/nbutils/configure_notebook.py#L86-L189)
 
 Set up plot saving/rendering options
 
@@ -6185,7 +6207,7 @@ Set up plot saving/rendering options
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/nbutils/configure_notebook.py#L192-L284)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/nbutils/configure_notebook.py#L192-L284)
 
 Shared Jupyter notebook setup steps
 
@@ -6229,11 +6251,11 @@ Shared Jupyter notebook setup steps
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/nbutils/configure_notebook.py#L287-L320)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/nbutils/configure_notebook.py#L287-L320)
 
 Show the active plot, depending on global configs
 
-> docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.15
+> docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.16
 
 ## Contents
 
@@ -6250,7 +6272,7 @@ hacky filtering and formatting.
 - [`process_dir`](#process_dir)
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/nbutils/convert_ipynb_to_script.py)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/nbutils/convert_ipynb_to_script.py)
 
 # `muutils.nbutils.convert_ipynb_to_script`
 
@@ -6258,7 +6280,7 @@ fast conversion of Jupyter Notebooks to scripts, with some basic and
 hacky filtering and formatting.
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/nbutils/convert_ipynb_to_script.py#L0-L372)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/nbutils/convert_ipynb_to_script.py#L0-L372)
 
 - `DISABLE_PLOTS: dict[str, list[str]] = {'matplotlib': ['\n# ------------------------------------------------------------\n# Disable matplotlib plots, done during processing by`convert_ipynb_to_script.py`\nimport matplotlib.pyplot as plt\nplt.show = lambda: None\n# ------------------------------------------------------------\n'], 'circuitsvis': ['\n# ------------------------------------------------------------\n# Disable circuitsvis plots, done during processing by`convert_ipynb_to_script.py`\nfrom circuitsvis.utils.convert_props import PythonProperty, convert_props\nfrom circuitsvis.utils.render import RenderedHTML, render, render_cdn, render_local\n\ndef new_render(\n    react_element_name: str,\n    **kwargs: PythonProperty\n) -> RenderedHTML:\n    "return a visualization as raw HTML"\n    local_src = render_local(react_element_name, **kwargs)\n    cdn_src = render_cdn(react_element_name, **kwargs)\n    # return as string instead of RenderedHTML for CI\n    return str(RenderedHTML(local_src, cdn_src))\n\nrender = new_render\n# ------------------------------------------------------------\n'], 'muutils': ['import muutils.nbutils.configure_notebook as nb_conf\nnb_conf.CONVERSION_PLOTMODE_OVERRIDE = "ignore"\n']}`
 
@@ -6271,7 +6293,7 @@ GitHub](https://github.com/mivanit/muutils/blob/0.6.15/nbutils/convert_ipynb_to_
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/nbutils/convert_ipynb_to_script.py#L63-L147)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/nbutils/convert_ipynb_to_script.py#L63-L147)
 
 Disable plots in a script by adding cursed things after the import
 statements
@@ -6289,7 +6311,7 @@ statements
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/nbutils/convert_ipynb_to_script.py#L150-L207)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/nbutils/convert_ipynb_to_script.py#L150-L207)
 
 Convert Jupyter Notebook to a script, doing some basic filtering and
 formatting.
@@ -6321,7 +6343,7 @@ formatting.
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/nbutils/convert_ipynb_to_script.py#L210-L242)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/nbutils/convert_ipynb_to_script.py#L210-L242)
 
 ### `def process_dir`
 
@@ -6337,7 +6359,7 @@ GitHub](https://github.com/mivanit/muutils/blob/0.6.15/nbutils/convert_ipynb_to_
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/nbutils/convert_ipynb_to_script.py#L245-L306)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/nbutils/convert_ipynb_to_script.py#L245-L306)
 
 Convert all Jupyter Notebooks in a directory to scripts.
 
@@ -6351,7 +6373,7 @@ Convert all Jupyter Notebooks in a directory to scripts.
     - `filter_out_lines: str|typing.Sequence[str] = ('%', '!')`: comment out lines starting with these strings (in code blocks).
         if a string is passed, it will be split by char and each char will be treated as a separate filter.
 
-> docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.15
+> docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.16
 
 ## Contents
 
@@ -6363,7 +6385,7 @@ display mermaid.js diagrams in jupyter notebooks by the
 - [`mm`](#mm)
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/nbutils/mermaid.py)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/nbutils/mermaid.py)
 
 # `muutils.nbutils.mermaid`
 
@@ -6371,7 +6393,7 @@ display mermaid.js diagrams in jupyter notebooks by the
 `mermaid.ink/img` service
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/nbutils/mermaid.py#L0-L19)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/nbutils/mermaid.py#L0-L19)
 
 ### `def mm`
 
@@ -6380,11 +6402,11 @@ GitHub](https://github.com/mivanit/muutils/blob/0.6.15/nbutils/mermaid.py#L0-L19
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/nbutils/mermaid.py#L15-L20)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/nbutils/mermaid.py#L15-L20)
 
 for plotting mermaid.js diagrams
 
-> docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.15
+> docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.16
 
 ## Contents
 
@@ -6395,14 +6417,14 @@ quickly print a sympy expression in latex
 - [`print_tex`](#print_tex)
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/nbutils/print_tex.py)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/nbutils/print_tex.py)
 
 # `muutils.nbutils.print_tex`
 
 quickly print a sympy expression in latex
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/nbutils/print_tex.py#L0-L20)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/nbutils/print_tex.py#L0-L20)
 
 ### `def print_tex`
 
@@ -6416,11 +6438,11 @@ GitHub](https://github.com/mivanit/muutils/blob/0.6.15/nbutils/print_tex.py#L0-L
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/nbutils/print_tex.py#L7-L21)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/nbutils/print_tex.py#L7-L21)
 
 function for easily rendering a sympy expression in latex
 
-> docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.15
+> docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.16
 
 ## Contents
 
@@ -6439,7 +6461,7 @@ python -m muutils.nbutils.run_notebook_tests --notebooks-dir <notebooks_dir> --c
 - [`run_notebook_tests`](#run_notebook_tests)
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/nbutils/run_notebook_tests.py)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/nbutils/run_notebook_tests.py)
 
 # `muutils.nbutils.run_notebook_tests`
 
@@ -6453,12 +6475,12 @@ python -m <a href="">muutils.nbutils.run_notebook_tests</a> --notebooks-dir <not
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/nbutils/run_notebook_tests.py#L0-L159)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/nbutils/run_notebook_tests.py#L0-L159)
 
 ### `class NotebookTestError(builtins.Exception):`
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/nbutils/run_notebook_tests.py#L18-L19)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/nbutils/run_notebook_tests.py#L18-L19)
 
 Common base class for all non-exit exceptions.
 
@@ -6485,9 +6507,9 @@ Common base class for all non-exit exceptions.
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/nbutils/run_notebook_tests.py#L22-L136)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/nbutils/run_notebook_tests.py#L22-L136)
 
-> docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.15
+> docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.16
 
 ## Contents
 
@@ -6507,7 +6529,7 @@ using the base `Spinner` class while some code is running.
 - [`spinner_decorator`](#spinner_decorator)
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/spinner.py)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/spinner.py)
 
 # `muutils.spinner`
 
@@ -6517,7 +6539,7 @@ display a spinner
 using the base `Spinner` class while some code is running.
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/spinner.py#L0-L435)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/spinner.py#L0-L435)
 
 - `DecoratedFunction = ~DecoratedFunction`
 
@@ -6535,7 +6557,7 @@ string to display when the spinner is complete
 ### `class Spinner:`
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/spinner.py#L135-L341)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/spinner.py#L135-L341)
 
 displays a spinner, and optionally elapsed time and a mutable value
 while a function is running.
@@ -6610,7 +6632,7 @@ def long_running_function():
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/spinner.py#L192-L284)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/spinner.py#L192-L284)
 
 - `spinner_complete: str`
 
@@ -6661,7 +6683,7 @@ width of the terminal, for padding with spaces
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/spinner.py#L286-L314)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/spinner.py#L286-L314)
 
 Function to run in a separate thread, displaying the spinner and
 optional information
@@ -6673,7 +6695,7 @@ optional information
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/spinner.py#L316-L319)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/spinner.py#L316-L319)
 
 Update the current value displayed by the spinner
 
@@ -6684,7 +6706,7 @@ Update the current value displayed by the spinner
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/spinner.py#L321-L325)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/spinner.py#L321-L325)
 
 Start the spinner
 
@@ -6695,14 +6717,14 @@ Start the spinner
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/spinner.py#L327-L341)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/spinner.py#L327-L341)
 
 Stop the spinner
 
 ### `class NoOpContextManager(typing.ContextManager):`
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/spinner.py#L344-L354)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/spinner.py#L344-L354)
 
 A context manager that does nothing.
 
@@ -6713,12 +6735,12 @@ A context manager that does nothing.
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/spinner.py#L347-L348)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/spinner.py#L347-L348)
 
 ### `class SpinnerContext(Spinner, typing.ContextManager):`
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/spinner.py#L357-L365)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/spinner.py#L357-L365)
 
 displays a spinner, and optionally elapsed time and a mutable value
 while a function is running.
@@ -6814,7 +6836,7 @@ def long_running_function():
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/spinner.py#L371-L433)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/spinner.py#L371-L433)
 
 displays a spinner, and optionally elapsed time and a mutable value
 while a function is running.
@@ -6871,7 +6893,7 @@ def long_running_function():
     return "Function completed"
 ```
 
-> docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.15
+> docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.16
 
 ## Contents
 
@@ -6886,7 +6908,7 @@ cleaner and more efficient than just using a `Counter` or array
 - [`StatCounter`](#StatCounter)
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/statcounter.py)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/statcounter.py)
 
 # `muutils.statcounter`
 
@@ -6895,7 +6917,7 @@ GitHub](https://github.com/mivanit/muutils/blob/0.6.15/statcounter.py)
 cleaner and more efficient than just using a `Counter` or array
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/statcounter.py#L0-L230)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/statcounter.py#L0-L230)
 
 - `NumericSequence = typing.Sequence[typing.Union[float, int, ForwardRef('NumericSequence')]]`
 
@@ -6909,14 +6931,14 @@ GitHub](https://github.com/mivanit/muutils/blob/0.6.15/statcounter.py#L0-L230)
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/statcounter.py#L24-L41)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/statcounter.py#L24-L41)
 
 flattens any iterable
 
 ### `class StatCounter(collections.Counter):`
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/statcounter.py#L48-L231)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/statcounter.py#L48-L231)
 
 `Counter`, but with some stat calculation methods which assume the keys
 are numerical
@@ -6930,7 +6952,7 @@ works best when the keys are `int`s
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/statcounter.py#L54-L56)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/statcounter.py#L54-L56)
 
 validate the counter as being all floats or ints
 
@@ -6941,7 +6963,7 @@ validate the counter as being all floats or ints
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/statcounter.py#L58-L60)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/statcounter.py#L58-L60)
 
 minimum value
 
@@ -6952,7 +6974,7 @@ minimum value
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/statcounter.py#L62-L64)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/statcounter.py#L62-L64)
 
 maximum value
 
@@ -6963,14 +6985,14 @@ maximum value
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/statcounter.py#L66-L68)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/statcounter.py#L66-L68)
 
 Sum of the counts
 
 - `keys_sorted: list`
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/statcounter.py#L70-L73)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/statcounter.py#L70-L73)
 
 return the keys
 
@@ -6981,7 +7003,7 @@ return the keys
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/statcounter.py#L75-L122)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/statcounter.py#L75-L122)
 
 return the value at the given percentile
 
@@ -6995,7 +7017,7 @@ of added complexity
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/statcounter.py#L124-L125)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/statcounter.py#L124-L125)
 
 ### `def mean`
 
@@ -7004,7 +7026,7 @@ GitHub](https://github.com/mivanit/muutils/blob/0.6.15/statcounter.py#L124-L125)
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/statcounter.py#L127-L129)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/statcounter.py#L127-L129)
 
 return the mean of the values
 
@@ -7015,7 +7037,7 @@ return the mean of the values
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/statcounter.py#L131-L132)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/statcounter.py#L131-L132)
 
 ### `def std`
 
@@ -7024,7 +7046,7 @@ GitHub](https://github.com/mivanit/muutils/blob/0.6.15/statcounter.py#L131-L132)
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/statcounter.py#L134-L139)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/statcounter.py#L134-L139)
 
 return the standard deviation of the values
 
@@ -7040,7 +7062,7 @@ return the standard deviation of the values
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/statcounter.py#L141-L179)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/statcounter.py#L141-L179)
 
 return a summary of the stats, without the raw data. human readable and
 small
@@ -7057,7 +7079,7 @@ small
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/statcounter.py#L181-L205)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/statcounter.py#L181-L205)
 
 return a json-serializable version of the counter
 
@@ -7076,7 +7098,7 @@ includes both the output of `summary` and the raw data:
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/statcounter.py#L214-L222)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/statcounter.py#L214-L222)
 
 load from a the output of
 `<a href="#StatCounter.serialize">StatCounter.serialize</a>`
@@ -7092,7 +7114,7 @@ load from a the output of
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/statcounter.py#L224-L231)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/statcounter.py#L224-L231)
 
 calls `map_func` on each element of `universal_flatten(arr)`
 
@@ -7128,7 +7150,7 @@ calls `map_func` on each element of `universal_flatten(arr)`
 
 - [`clear`](#StatCounter.clear)
 
-> docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.15
+> docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.16
 
 ## Contents
 
@@ -7139,19 +7161,19 @@ utilities for getting information about the system, see `SysInfo` class
 - [`SysInfo`](#SysInfo)
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/sysinfo.py)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/sysinfo.py)
 
 # `muutils.sysinfo`
 
 utilities for getting information about the system, see `SysInfo` class
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/sysinfo.py#L0-L198)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/sysinfo.py#L0-L198)
 
 ### `class SysInfo:`
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/sysinfo.py#L34-L193)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/sysinfo.py#L34-L193)
 
 getters for various information about the system
 
@@ -7162,7 +7184,7 @@ getters for various information about the system
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/sysinfo.py#L37-L49)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/sysinfo.py#L37-L49)
 
 details about python version
 
@@ -7173,7 +7195,7 @@ details about python version
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/sysinfo.py#L51-L59)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/sysinfo.py#L51-L59)
 
 installed packages info
 
@@ -7184,7 +7206,7 @@ installed packages info
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/sysinfo.py#L61-L123)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/sysinfo.py#L61-L123)
 
 pytorch and cuda information
 
@@ -7195,7 +7217,7 @@ pytorch and cuda information
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/sysinfo.py#L125-L144)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/sysinfo.py#L125-L144)
 
 ### `def git_info`
 
@@ -7204,7 +7226,7 @@ GitHub](https://github.com/mivanit/muutils/blob/0.6.15/sysinfo.py#L125-L144)
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/sysinfo.py#L146-L167)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/sysinfo.py#L146-L167)
 
 ### `def get_all`
 
@@ -7217,9 +7239,9 @@ GitHub](https://github.com/mivanit/muutils/blob/0.6.15/sysinfo.py#L146-L167)
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/sysinfo.py#L169-L193)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/sysinfo.py#L169-L193)
 
-> docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.15
+> docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.16
 
 ## Contents
 
@@ -7262,7 +7284,7 @@ notably:
 - [`compare_state_dicts`](#compare_state_dicts)
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/tensor_utils.py)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/tensor_utils.py)
 
 # `muutils.tensor_utils`
 
@@ -7280,7 +7302,7 @@ notably:
   didn’t match
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/tensor_utils.py#L0-L490)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/tensor_utils.py#L0-L490)
 
 - `TYPE_TO_JAX_DTYPE: dict = {<class 'float'>: <class 'jaxtyping.Float'>, <class 'int'>: <class 'jaxtyping.Int'>, <class 'jaxtyping.Float'>: <class 'jaxtyping.Float'>, <class 'jaxtyping.Int'>: <class 'jaxtyping.Int'>, <class 'bool'>: <class 'jaxtyping.Bool'>, <class 'jaxtyping.Bool'>: <class 'jaxtyping.Bool'>, <class 'numpy.bool_'>: <class 'jaxtyping.Bool'>, torch.bool: <class 'jaxtyping.Bool'>, <class 'numpy.float64'>: <class 'jaxtyping.Float'>, <class 'numpy.float16'>: <class 'jaxtyping.Float'>, <class 'numpy.float32'>: <class 'jaxtyping.Float'>, <class 'numpy.int32'>: <class 'jaxtyping.Int'>, <class 'numpy.int8'>: <class 'jaxtyping.Int'>, <class 'numpy.int16'>: <class 'jaxtyping.Int'>, <class 'numpy.int64'>: <class 'jaxtyping.Int'>, <class 'numpy.uint8'>: <class 'jaxtyping.Int'>, torch.float32: <class 'jaxtyping.Float'>, torch.float16: <class 'jaxtyping.Float'>, torch.float64: <class 'jaxtyping.Float'>, torch.bfloat16: <class 'jaxtyping.Float'>, torch.int32: <class 'jaxtyping.Int'>, torch.int8: <class 'jaxtyping.Int'>, torch.int16: <class 'jaxtyping.Int'>, torch.int64: <class 'jaxtyping.Int'>}`
 
@@ -7298,7 +7320,7 @@ dict mapping python, numpy, and torch types to `jaxtyping` types
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/tensor_utils.py#L75-L169)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/tensor_utils.py#L75-L169)
 
 usage:
 
@@ -7316,7 +7338,7 @@ usage:
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/tensor_utils.py#L192-L197)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/tensor_utils.py#L192-L197)
 
 convert numpy dtype to torch dtype
 
@@ -7347,7 +7369,7 @@ mapping from string representations of types to specifically torch types
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/tensor_utils.py#L294-L317)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/tensor_utils.py#L294-L317)
 
 pad a 1-d tensor on the left with pad_value to length `padded_length`
 
@@ -7364,7 +7386,7 @@ set `rpad = True` to pad on the right instead
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/tensor_utils.py#L320-L324)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/tensor_utils.py#L320-L324)
 
 pad a 1-d tensor on the left with pad_value to length `padded_length`
 
@@ -7379,7 +7401,7 @@ pad a 1-d tensor on the left with pad_value to length `padded_length`
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/tensor_utils.py#L327-L331)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/tensor_utils.py#L327-L331)
 
 pad a 1-d tensor on the right with pad_value to length `pad_length`
 
@@ -7395,7 +7417,7 @@ pad a 1-d tensor on the right with pad_value to length `pad_length`
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/tensor_utils.py#L334-L356)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/tensor_utils.py#L334-L356)
 
 pad a 1-d array on the left with pad_value to length `padded_length`
 
@@ -7412,7 +7434,7 @@ set `rpad = True` to pad on the right instead
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/tensor_utils.py#L359-L363)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/tensor_utils.py#L359-L363)
 
 pad a 1-d array on the left with pad_value to length `padded_length`
 
@@ -7427,7 +7449,7 @@ pad a 1-d array on the left with pad_value to length `padded_length`
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/tensor_utils.py#L366-L370)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/tensor_utils.py#L366-L370)
 
 pad a 1-d array on the right with pad_value to length `pad_length`
 
@@ -7438,7 +7460,7 @@ pad a 1-d array on the right with pad_value to length `pad_length`
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/tensor_utils.py#L373-L375)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/tensor_utils.py#L373-L375)
 
 given a state dict or cache dict, compute the shapes and put them in a
 nested dict
@@ -7450,14 +7472,14 @@ nested dict
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/tensor_utils.py#L378-L390)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/tensor_utils.py#L378-L390)
 
 printable version of get_dict_shapes
 
 ### `class StateDictCompareError(builtins.AssertionError):`
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/tensor_utils.py#L393-L396)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/tensor_utils.py#L393-L396)
 
 raised when state dicts don’t match
 
@@ -7474,7 +7496,7 @@ raised when state dicts don’t match
 ### `class StateDictKeysError(StateDictCompareError):`
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/tensor_utils.py#L399-L402)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/tensor_utils.py#L399-L402)
 
 raised when state dict keys don’t match
 
@@ -7491,7 +7513,7 @@ raised when state dict keys don’t match
 ### `class StateDictShapeError(StateDictCompareError):`
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/tensor_utils.py#L405-L408)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/tensor_utils.py#L405-L408)
 
 raised when state dict shapes don’t match
 
@@ -7508,7 +7530,7 @@ raised when state dict shapes don’t match
 ### `class StateDictValueError(StateDictCompareError):`
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/tensor_utils.py#L411-L414)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/tensor_utils.py#L411-L414)
 
 raised when state dict values don’t match
 
@@ -7535,7 +7557,7 @@ raised when state dict values don’t match
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/tensor_utils.py#L417-L491)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/tensor_utils.py#L417-L491)
 
 compare two dicts of tensors
 
@@ -7553,7 +7575,7 @@ compare two dicts of tensors
 - `StateDictShapeError` : shapes don’t match (but keys do)
 - `StateDictValueError` : values don’t match (but keys and shapes do)
 
-> docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.15
+> docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.16
 
 ## Contents
 
@@ -7565,19 +7587,19 @@ compare two dicts of tensors
 - [`timeit_fancy`](#timeit_fancy)
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/timeit_fancy.py)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/timeit_fancy.py)
 
 # `muutils.timeit_fancy`
 
 `timeit_fancy` is just a fancier version of timeit with more options
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/timeit_fancy.py#L0-L100)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/timeit_fancy.py#L0-L100)
 
 ### `class FancyTimeitResult(typing.NamedTuple):`
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/timeit_fancy.py#L16-L21)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/timeit_fancy.py#L16-L21)
 
 return type of `timeit_fancy`
 
@@ -7624,7 +7646,7 @@ Alias for field number 2
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/timeit_fancy.py#L24-L101)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/timeit_fancy.py#L24-L101)
 
 Wrapper for `timeit` to get the fastest run of a callable with more
 customization options.
@@ -7662,7 +7684,7 @@ interface in a Python callable.
 - `profile: pstats.Stats|None` A `pstats.Stats` object if `do_profiling`
   is `True`, otherwise `None`.
 
-> docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.15
+> docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.16
 
 ## Contents
 
@@ -7677,21 +7699,21 @@ experimental utility for validating types in python, see `validate_type`
 - [`validate_type`](#validate_type)
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/validate_type.py)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/validate_type.py)
 
 # `muutils.validate_type`
 
 experimental utility for validating types in python, see `validate_type`
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/validate_type.py#L0-L218)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/validate_type.py#L0-L218)
 
 - `GenericAliasTypes: tuple = (<class 'types.GenericAlias'>, <class 'typing._GenericAlias'>, <class 'typing._UnionGenericAlias'>, <class 'typing._BaseGenericAlias'>)`
 
 ### `class IncorrectTypeException(builtins.TypeError):`
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/validate_type.py#L24-L25)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/validate_type.py#L24-L25)
 
 Inappropriate argument type.
 
@@ -7708,7 +7730,7 @@ Inappropriate argument type.
 ### `class TypeHintNotImplementedError(builtins.NotImplementedError):`
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/validate_type.py#L28-L29)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/validate_type.py#L28-L29)
 
 Method or function hasn’t been implemented yet.
 
@@ -7725,7 +7747,7 @@ Method or function hasn’t been implemented yet.
 ### `class InvalidGenericAliasError(builtins.TypeError):`
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/validate_type.py#L32-L33)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/validate_type.py#L32-L33)
 
 Inappropriate argument type.
 
@@ -7746,7 +7768,7 @@ Inappropriate argument type.
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.15/validate_type.py#L57-L219)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.16/validate_type.py#L57-L219)
 
 Validate that a `value` is of the `expected_type`
 

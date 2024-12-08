@@ -92,10 +92,13 @@ class TrainingProgress:
             key in records_keys for key in display_keys
         ), f"all display_keys must be in records_keys, an element in '{display_keys}' not in '{records_keys}'"
         self.display_keys: Sequence[str] = display_keys
-        assert display_progress in (
-            "epochs",
-            "batches",
-            "samples",
+        assert (
+            display_progress
+            in (
+                "epochs",
+                "batches",
+                "samples",
+            )
         ), f"display_progress must be one of 'epochs', 'batches', or 'samples', got {display_progress}"
         self.display_progress: Literal["epochs", "batches", "samples"] = (
             display_progress

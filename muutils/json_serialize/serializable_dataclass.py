@@ -572,6 +572,7 @@ class FieldTypeMismatchError(FieldError, TypeError):
 
     pass
 
+
 @dataclass_transform(
     field_specifiers=(serializable_field, SerializableField),
 )
@@ -823,8 +824,11 @@ def serializable_dataclass(
 
             # validate the types of the fields if needed
             if on_typecheck_mismatch != ErrorMode.IGNORE:
-                fields_valid: dict[str, bool] = SerializableDataclass__validate_fields_types__dict(
-                    output, on_typecheck_error=on_typecheck_error,
+                fields_valid: dict[str, bool] = (
+                    SerializableDataclass__validate_fields_types__dict(
+                        output,
+                        on_typecheck_error=on_typecheck_error,
+                    )
                 )
 
                 # if there are any fields that are not valid, raise an error
@@ -840,7 +844,9 @@ def serializable_dataclass(
                         )
                     )
 
-                    on_typecheck_mismatch.process(msg, except_cls=FieldTypeMismatchError)
+                    on_typecheck_mismatch.process(
+                        msg, except_cls=FieldTypeMismatchError
+                    )
 
             # return the new instance
             return output

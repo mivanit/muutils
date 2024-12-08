@@ -408,6 +408,7 @@ def test_deserialize_fn():
 @serializable_dataclass
 class DictContainer(SerializableDataclass):
     """Test class containing a dictionary field"""
+
     simple_dict: Dict[str, int]
     nested_dict: Dict[str, Dict[str, int]] = serializable_field(default_factory=dict)
     optional_dict: Dict[str, str] = serializable_field(default_factory=dict)
@@ -418,17 +419,17 @@ def test_dict_serialization():
     data = DictContainer(
         simple_dict={"a": 1, "b": 2},
         nested_dict={"x": {"y": 3, "z": 4}},
-        optional_dict={"hello": "world"}
+        optional_dict={"hello": "world"},
     )
-    
+
     serialized = data.serialize()
     expected = {
         "__format__": "DictContainer(SerializableDataclass)",
         "simple_dict": {"a": 1, "b": 2},
         "nested_dict": {"x": {"y": 3, "z": 4}},
-        "optional_dict": {"hello": "world"}
+        "optional_dict": {"hello": "world"},
     }
-    
+
     assert serialized == expected
 
 
@@ -438,9 +439,9 @@ def test_dict_loading():
         "__format__": "DictContainer(SerializableDataclass)",
         "simple_dict": {"a": 1, "b": 2},
         "nested_dict": {"x": {"y": 3, "z": 4}},
-        "optional_dict": {"hello": "world"}
+        "optional_dict": {"hello": "world"},
     }
-    
+
     loaded = DictContainer.load(original_data)
     assert loaded.simple_dict == {"a": 1, "b": 2}
     assert loaded.nested_dict == {"x": {"y": 3, "z": 4}}
@@ -452,21 +453,21 @@ def test_dict_equality():
     instance1 = DictContainer(
         simple_dict={"a": 1, "b": 2},
         nested_dict={"x": {"y": 3, "z": 4}},
-        optional_dict={"hello": "world"}
+        optional_dict={"hello": "world"},
     )
-    
+
     instance2 = DictContainer(
         simple_dict={"a": 1, "b": 2},
         nested_dict={"x": {"y": 3, "z": 4}},
-        optional_dict={"hello": "world"}
+        optional_dict={"hello": "world"},
     )
-    
+
     instance3 = DictContainer(
         simple_dict={"a": 1, "b": 3},  # Different value
         nested_dict={"x": {"y": 3, "z": 4}},
-        optional_dict={"hello": "world"}
+        optional_dict={"hello": "world"},
     )
-    
+
     assert instance1 == instance2
     assert instance1 != instance3
     assert instance2 != instance3
@@ -477,57 +478,51 @@ def test_dict_diff():
     instance1 = DictContainer(
         simple_dict={"a": 1, "b": 2},
         nested_dict={"x": {"y": 3, "z": 4}},
-        optional_dict={"hello": "world"}
+        optional_dict={"hello": "world"},
     )
-    
+
     # Different simple_dict value
     instance2 = DictContainer(
         simple_dict={"a": 1, "b": 3},
         nested_dict={"x": {"y": 3, "z": 4}},
-        optional_dict={"hello": "world"}
+        optional_dict={"hello": "world"},
     )
-    
+
     # Different nested_dict value
     instance3 = DictContainer(
         simple_dict={"a": 1, "b": 2},
         nested_dict={"x": {"y": 3, "z": 5}},
-        optional_dict={"hello": "world"}
+        optional_dict={"hello": "world"},
     )
-    
+
     # Different optional_dict value
     instance4 = DictContainer(
         simple_dict={"a": 1, "b": 2},
         nested_dict={"x": {"y": 3, "z": 4}},
-        optional_dict={"hello": "python"}
+        optional_dict={"hello": "python"},
     )
-    
+
     # Test diff with simple_dict changes
     diff1 = instance1.diff(instance2)
     assert diff1 == {
-        "simple_dict": {
-            "self": {"a": 1, "b": 2},
-            "other": {"a": 1, "b": 3}
-        }
+        "simple_dict": {"self": {"a": 1, "b": 2}, "other": {"a": 1, "b": 3}}
     }
-    
+
     # Test diff with nested_dict changes
     diff2 = instance1.diff(instance3)
     assert diff2 == {
         "nested_dict": {
             "self": {"x": {"y": 3, "z": 4}},
-            "other": {"x": {"y": 3, "z": 5}}
+            "other": {"x": {"y": 3, "z": 5}},
         }
     }
-    
+
     # Test diff with optional_dict changes
     diff3 = instance1.diff(instance4)
     assert diff3 == {
-        "optional_dict": {
-            "self": {"hello": "world"},
-            "other": {"hello": "python"}
-        }
+        "optional_dict": {"self": {"hello": "world"}, "other": {"hello": "python"}}
     }
-    
+
     # Test no diff when comparing identical instances
     assert instance1.diff(instance1) == {}
 
@@ -535,6 +530,7 @@ def test_dict_diff():
 @serializable_dataclass
 class ComplexDictContainer(SerializableDataclass):
     """Test class with more complex dictionary structures"""
+
     mixed_dict: Dict[str, Any]
     list_dict: Dict[str, typing.List[int]]
     multi_nested: Dict[str, Dict[str, Dict[str, int]]]
@@ -545,14 +541,9 @@ def test_complex_dict_serialization():
     data = ComplexDictContainer(
         mixed_dict={"str": "hello", "int": 42, "list": [1, 2, 3]},
         list_dict={"a": [1, 2, 3], "b": [4, 5, 6]},
-        multi_nested={
-            "x": {
-                "y": {"z": 1, "w": 2},
-                "v": {"u": 3, "t": 4}
-            }
-        }
+        multi_nested={"x": {"y": {"z": 1, "w": 2}, "v": {"u": 3, "t": 4}}},
     )
-    
+
     serialized = data.serialize()
     loaded = ComplexDictContainer.load(serialized)
     assert loaded == data
@@ -561,31 +552,23 @@ def test_complex_dict_serialization():
 
 def test_empty_dicts():
     """Test handling of empty dictionaries"""
-    data = DictContainer(
-        simple_dict={},
-        nested_dict={},
-        optional_dict={}
-    )
-    
+    data = DictContainer(simple_dict={}, nested_dict={}, optional_dict={})
+
     serialized = data.serialize()
     loaded = DictContainer.load(serialized)
     assert loaded == data
     assert loaded.diff(data) == {}
 
     # Test equality with another empty instance
-    another_empty = DictContainer(
-        simple_dict={},
-        nested_dict={},
-        optional_dict={}
-    )
+    another_empty = DictContainer(simple_dict={}, nested_dict={}, optional_dict={})
     assert data == another_empty
-
 
 
 # Test invalid dictionary type validation
 @serializable_dataclass(on_typecheck_mismatch=ErrorMode.EXCEPT)
 class StrictDictContainer(SerializableDataclass):
     """Test class with strict dictionary typing"""
+
     int_dict: Dict[str, int]
     str_dict: Dict[str, str]
     float_dict: Dict[str, float]
@@ -599,7 +582,7 @@ def test_dict_type_validation():
     valid = StrictDictContainer(
         int_dict={"a": 1, "b": 2},
         str_dict={"x": "hello", "y": "world"},
-        float_dict={"m": 1.0, "n": 2.5}
+        float_dict={"m": 1.0, "n": 2.5},
     )
     assert valid.validate_fields_types()
 
@@ -608,7 +591,7 @@ def test_dict_type_validation():
         StrictDictContainer(
             int_dict={"a": "not an int"},  # Type error
             str_dict={"x": "hello"},
-            float_dict={"m": 1.0}
+            float_dict={"m": 1.0},
         )
 
     # Invalid str_dict
@@ -616,7 +599,7 @@ def test_dict_type_validation():
         StrictDictContainer(
             int_dict={"a": 1},
             str_dict={"x": 123},  # Type error
-            float_dict={"m": 1.0}
+            float_dict={"m": 1.0},
         )
 
 
@@ -624,6 +607,7 @@ def test_dict_type_validation():
 @serializable_dataclass
 class OptionalDictContainer(SerializableDataclass):
     """Test class with optional dictionary values"""
+
     optional_values: Dict[str, Optional[int]]
     union_values: Dict[str, Union[int, str]]
     nullable_dict: Optional[Dict[str, int]] = None
@@ -634,20 +618,20 @@ def test_optional_dict_values():
     instance = OptionalDictContainer(
         optional_values={"a": 1, "b": None, "c": 3},
         union_values={"x": 1, "y": "string", "z": 42},
-        nullable_dict={"m": 1, "n": 2}
+        nullable_dict={"m": 1, "n": 2},
     )
-    
+
     serialized = instance.serialize()
     loaded = OptionalDictContainer.load(serialized)
     assert loaded == instance
-    
+
     # Test with None dict
     instance2 = OptionalDictContainer(
         optional_values={"a": None, "b": None},
         union_values={"x": "all strings", "y": "here"},
-        nullable_dict=None
+        nullable_dict=None,
     )
-    
+
     serialized2 = instance2.serialize()
     loaded2 = OptionalDictContainer.load(serialized2)
     assert loaded2 == instance2
@@ -659,21 +643,21 @@ def test_dict_mutation():
     instance1 = DictContainer(
         simple_dict={"a": 1, "b": 2},
         nested_dict={"x": {"y": 3}},
-        optional_dict={"hello": "world"}
+        optional_dict={"hello": "world"},
     )
-    
+
     instance2 = deepcopy(instance1)
-    
+
     # Mutate dictionary in instance1
     instance1.simple_dict["c"] = 3
     instance1.nested_dict["x"]["z"] = 4
     instance1.optional_dict["new"] = "value"
-    
+
     # Verify instance2 was not affected
     assert instance2.simple_dict == {"a": 1, "b": 2}
     assert instance2.nested_dict == {"x": {"y": 3}}
     assert instance2.optional_dict == {"hello": "world"}
-    
+
     # Verify diff shows the changes
     diff = instance2.diff(instance1)
     assert "simple_dict" in diff
@@ -685,24 +669,21 @@ def test_dict_mutation():
 @serializable_dataclass
 class IntKeyDictContainer(SerializableDataclass):
     """Test class with non-string dictionary keys"""
+
     int_keys: Dict[int, str] = serializable_field(
         serialization_fn=lambda x: {str(k): v for k, v in x.items()},
-        loading_fn=lambda x: {int(k): v for k, v in x["int_keys"].items()}
+        loading_fn=lambda x: {int(k): v for k, v in x["int_keys"].items()},
     )
 
 
 def test_non_string_dict_keys():
     """Test handling of dictionaries with non-string keys"""
-    instance = IntKeyDictContainer(int_keys={
-        1: "one",
-        2: "two",
-        3: "three"
-    })
-    
+    instance = IntKeyDictContainer(int_keys={1: "one", 2: "two", 3: "three"})
+
     serialized = instance.serialize()
     # Keys should be converted to strings in serialized form
     assert all(isinstance(k, str) for k in serialized["int_keys"].keys())
-    
+
     loaded = IntKeyDictContainer.load(serialized)
     # Keys should be integers again after loading
     assert all(isinstance(k, int) for k in loaded.int_keys.keys())
@@ -712,6 +693,7 @@ def test_non_string_dict_keys():
 @serializable_dataclass
 class RecursiveDictContainer(SerializableDataclass):
     """Test class with recursively defined dictionary type"""
+
     data: Dict[str, Any]
 
 
@@ -719,36 +701,33 @@ def test_recursive_dict_structure():
     """Test handling of recursively nested dictionaries"""
     deep_dict = {
         "level1": {
-            "level2": {
-                "level3": {
-                    "value": 42,
-                    "list": [1, 2, {"nested": "value"}]
-                }
-            }
+            "level2": {"level3": {"value": 42, "list": [1, 2, {"nested": "value"}]}}
         }
     }
-    
+
     instance = RecursiveDictContainer(data=deep_dict)
     serialized = instance.serialize()
     loaded = RecursiveDictContainer.load(serialized)
-    
+
     assert loaded == instance
     assert loaded.data == deep_dict
+
 
 # need to define this outside, otherwise the validator cant see it?
 class CustomSerializable:
     def __init__(self, value):
         self.value: Union[str, int] = value
-    
+
     def serialize(self):
         return {"value": self.value}
-    
+
     @classmethod
     def load(cls, data):
         return cls(data["value"])
-    
+
     def __eq__(self, other):
         return isinstance(other, CustomSerializable) and self.value == other.value
+
 
 def test_dict_with_custom_objects():
     """Test dictionaries containing custom objects that implement serialize/load"""
@@ -757,11 +736,10 @@ def test_dict_with_custom_objects():
     class CustomObjectDict(SerializableDataclass):
         objects: Dict[str, CustomSerializable]
 
-    instance = CustomObjectDict(objects={
-        "a": CustomSerializable(42),
-        "b": CustomSerializable("hello")
-    })
-    
+    instance = CustomObjectDict(
+        objects={"a": CustomSerializable(42), "b": CustomSerializable("hello")}
+    )
+
     serialized = instance.serialize()
     loaded = CustomObjectDict.load(serialized)
     assert loaded == instance
@@ -769,30 +747,25 @@ def test_dict_with_custom_objects():
 
 def test_empty_optional_dicts():
     """Test handling of None vs empty dict in optional dictionary fields"""
+
     @serializable_dataclass
     class OptionalDictFields(SerializableDataclass):
         required_dict: Dict[str, int]
         optional_dict: Optional[Dict[str, int]] = None
         default_empty: Dict[str, int] = serializable_field(default_factory=dict)
-    
+
     # Test with None
-    instance1 = OptionalDictFields(
-        required_dict={"a": 1},
-        optional_dict=None
-    )
-    
+    instance1 = OptionalDictFields(required_dict={"a": 1}, optional_dict=None)
+
     # Test with empty dict
-    instance2 = OptionalDictFields(
-        required_dict={"a": 1},
-        optional_dict={}
-    )
-    
+    instance2 = OptionalDictFields(required_dict={"a": 1}, optional_dict={})
+
     serialized1 = instance1.serialize()
     serialized2 = instance2.serialize()
-    
+
     loaded1 = OptionalDictFields.load(serialized1)
     loaded2 = OptionalDictFields.load(serialized2)
-    
+
     assert loaded1.optional_dict is None
     assert loaded2.optional_dict == {}
     assert loaded1.default_empty == {}
@@ -800,110 +773,116 @@ def test_empty_optional_dicts():
 
 
 # Test inheritance hierarchies
-@serializable_dataclass(on_typecheck_error = ErrorMode.EXCEPT, on_typecheck_mismatch = ErrorMode.EXCEPT)
+@serializable_dataclass(
+    on_typecheck_error=ErrorMode.EXCEPT, on_typecheck_mismatch=ErrorMode.EXCEPT
+)
 class BaseClass(SerializableDataclass):
     """Base class for testing inheritance"""
+
     base_field: str
     shared_field: int = 0
+
 
 @serializable_dataclass
 class ChildClass(BaseClass):
     """Child class inheriting from BaseClass"""
+
     child_field: float
     shared_field: int = 1  # Override base class field
+
 
 @serializable_dataclass
 class GrandchildClass(ChildClass):
     """Grandchild class for deep inheritance testing"""
+
     grandchild_field: bool
+
 
 def test_inheritance():
     """Test inheritance behavior of serializable dataclasses"""
     instance = GrandchildClass(
-        base_field="base",
-        shared_field=42,
-        child_field=3.14,
-        grandchild_field=True
+        base_field="base", shared_field=42, child_field=3.14, grandchild_field=True
     )
-    
+
     serialized = instance.serialize()
     assert serialized["base_field"] == "base"
     assert serialized["shared_field"] == 42
     assert serialized["child_field"] == 3.14
     assert serialized["grandchild_field"] is True
-    
+
     loaded = GrandchildClass.load(serialized)
     assert loaded == instance
-    
+
     # Test that we can load as parent class
     base_loaded = BaseClass.load({"base_field": "test", "shared_field": 1})
     assert isinstance(base_loaded, BaseClass)
     assert not isinstance(base_loaded, ChildClass)
 
-@pytest.mark.skip(reason="Not implemented yet, generic types not supported and throw a `TypeHintNotImplementedError`")
+
+@pytest.mark.skip(
+    reason="Not implemented yet, generic types not supported and throw a `TypeHintNotImplementedError`"
+)
 def test_generic_types():
     """Test handling of generic type parameters"""
 
-    T = TypeVar('T')
+    T = TypeVar("T")
 
     @serializable_dataclass(on_typecheck_mismatch=ErrorMode.EXCEPT)
     class GenericContainer(SerializableDataclass, Generic[T]):
         """Test generic type parameters"""
+
         value: T
         values: List[T]
 
     # Test with int
-    int_container = GenericContainer[int](
-        value=42,
-        values=[1, 2, 3]
-    )
+    int_container = GenericContainer[int](value=42, values=[1, 2, 3])
     serialized = int_container.serialize()
     loaded = GenericContainer[int].load(serialized)
     assert loaded == int_container
-    
+
     # Test with str
-    str_container = GenericContainer[str](
-        value="hello",
-        values=["a", "b", "c"]
-    )
+    str_container = GenericContainer[str](value="hello", values=["a", "b", "c"])
     serialized = str_container.serialize()
     loaded = GenericContainer[str].load(serialized)
     assert loaded == str_container
+
 
 # Test custom serialization/deserialization
 class CustomObject:
     def __init__(self, value):
         self.value = value
-    
+
     def __eq__(self, other):
         return isinstance(other, CustomObject) and self.value == other.value
+
 
 @serializable_dataclass
 class CustomSerializationContainer(SerializableDataclass):
     """Test custom serialization functions"""
+
     custom_obj: CustomObject = serializable_field(
         serialization_fn=lambda x: x.value,
-        loading_fn=lambda x: CustomObject(x["custom_obj"])
+        loading_fn=lambda x: CustomObject(x["custom_obj"]),
     )
     transform_field: int = serializable_field(
-        serialization_fn=lambda x: x * 2,
-        loading_fn=lambda x: x["transform_field"] // 2
+        serialization_fn=lambda x: x * 2, loading_fn=lambda x: x["transform_field"] // 2
     )
+
 
 def test_custom_serialization_2():
     """Test custom serialization and loading functions"""
     instance = CustomSerializationContainer(
-        custom_obj=CustomObject(42),
-        transform_field=10
+        custom_obj=CustomObject(42), transform_field=10
     )
-    
+
     serialized = instance.serialize()
     assert serialized["custom_obj"] == 42
     assert serialized["transform_field"] == 20
-    
+
     loaded = CustomSerializationContainer.load(serialized)
     assert loaded == instance
     assert loaded.transform_field == 10
+
 
 # @pytest.mark.skip(reason="Not implemented yet, waiting on `custom_value_check_fn`")
 # def test_value_validation():
@@ -917,7 +896,7 @@ def test_custom_serialization_2():
 #         email: str = serializable_field(
 #             custom_value_check_fn=lambda x: '@' in x
 #         )
-        
+
 #     # Valid case
 #     valid = ValidationContainer(positive_int=42, email="test@example.com")
 #     assert valid.validate_fields_types()
@@ -928,97 +907,100 @@ def test_custom_serialization_2():
 
 #     maybe_valid_2 = ValidationContainer(positive_int=42, email=["test", "@", "example", ".com"])
 #     assert maybe_valid_2.validate_fields_types()
-    
+
 #     # Invalid positive_int
 #     with pytest.raises(ValueError):
 #         ValidationContainer(positive_int=-1, email="test@example.com")
-    
+
 #     # Invalid email
 #     with pytest.raises(ValueError):
 #         ValidationContainer(positive_int=42, email="invalid")
 
 
-
 def test_init_true_serialize_false():
-
     with pytest.raises(ValueError):
+
         @serializable_dataclass
         class MetadataContainer(SerializableDataclass):
             """Test field metadata and options"""
+
             hidden: str = serializable_field(serialize=False, init=True)
             readonly: int = serializable_field(init=True, frozen=True)
             computed: float = serializable_field(init=False, serialize=True)
-            
+
             def __post_init__(self):
-                object.__setattr__(self, 'computed', self.readonly * 2.0)
+                object.__setattr__(self, "computed", self.readonly * 2.0)
+
 
 # Test property serialization
 @serializable_dataclass(properties_to_serialize=["full_name", "age_in_months"])
 class PropertyContainer(SerializableDataclass):
     """Test property serialization"""
+
     first_name: str
     last_name: str
     age_years: int
-    
+
     @property
     def full_name(self) -> str:
         return f"{self.first_name} {self.last_name}"
-    
+
     @property
     def age_in_months(self) -> int:
         return self.age_years * 12
 
+
 def test_property_serialization():
     """Test serialization of properties"""
-    instance = PropertyContainer(
-        first_name="John",
-        last_name="Doe",
-        age_years=30
-    )
-    
+    instance = PropertyContainer(first_name="John", last_name="Doe", age_years=30)
+
     serialized = instance.serialize()
     assert serialized["full_name"] == "John Doe"
     assert serialized["age_in_months"] == 360
-    
+
     loaded = PropertyContainer.load(serialized)
     assert loaded == instance
+
 
 # TODO: this would be nice to fix, but not a massive issue
 @pytest.mark.skip(reason="Not implemented yet")
 def test_edge_cases():
     """Test a sdc containing instances of itself"""
+
     @serializable_dataclass
     class EdgeCaseContainer(SerializableDataclass):
         """Test edge cases and corner cases"""
+
         empty_list: List[Any] = serializable_field(default_factory=list)
         optional_value: Optional[int] = serializable_field(default=None)
         union_field: Union[str, int, None] = serializable_field(default=None)
-        recursive_ref: Optional['EdgeCaseContainer'] = serializable_field(default=None)
-        
+        recursive_ref: Optional["EdgeCaseContainer"] = serializable_field(default=None)
+
     # Test recursive structure
     nested = EdgeCaseContainer()
     instance = EdgeCaseContainer(recursive_ref=nested)
-    
+
     serialized = instance.serialize()
     loaded = EdgeCaseContainer.load(serialized)
     assert loaded == instance
-    
+
     # Test empty/None handling
     empty = EdgeCaseContainer()
     assert empty.empty_list == []
     assert empty.optional_value is None
     assert empty.union_field is None
-    
+
     # Test union field with different types
     instance.union_field = "string"
     serialized = instance.serialize()
     loaded = EdgeCaseContainer.load(serialized)
     assert loaded.union_field == "string"
-    
+
     instance.union_field = 42
     serialized = instance.serialize()
     loaded = EdgeCaseContainer.load(serialized)
     assert loaded.union_field == 42
+
 
 # Test error handling for malformed data
 def test_error_handling():
@@ -1031,11 +1013,13 @@ def test_error_handling():
     assert not x.validate_fields_types()
 
     with pytest.raises(FieldTypeMismatchError):
-        BaseClass.load({
-            "base_field": 42,  # Should be str
-            "shared_field": "invalid"  # Should be int
-        })
-    
+        BaseClass.load(
+            {
+                "base_field": 42,  # Should be str
+                "shared_field": "invalid",  # Should be int
+            }
+        )
+
     # Invalid format string
     # with pytest.raises(ValueError):
     #     BaseClass.load({
@@ -1044,22 +1028,24 @@ def test_error_handling():
     #         "shared_field": 0
     #     })
 
+
 # Test for memory leaks and cyclic references
 # TODO: make .serialize() fail on cyclic references! see https://github.com/mivanit/muutils/issues/62
 @pytest.mark.skip(reason="Not implemented yet")
 def test_cyclic_references():
     """Test handling of cyclic references"""
+
     @serializable_dataclass
     class Node(SerializableDataclass):
         value: str
-        next: Optional['Node'] = serializable_field(default=None)
-    
+        next: Optional["Node"] = serializable_field(default=None)
+
     # Create a cycle
     node1 = Node("one")
     node2 = Node("two")
     node1.next = node2
     node2.next = node1
-    
+
     # Ensure we can serialize without infinite recursion
     serialized = node1.serialize()
     loaded = Node.load(serialized)

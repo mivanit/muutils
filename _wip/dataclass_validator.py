@@ -65,9 +65,7 @@ def dataclass_validator_factory(
     fields_types: dict[str, type] = {
         key: (
             # if complex type, list `list[int]`, get `list`
-            field.type.__origin__
-            if hasattr(field.type, "__origin__")
-            else field.type
+            field.type.__origin__ if hasattr(field.type, "__origin__") else field.type
         )
         for key, field in cls.__dataclass_fields__.items()
         if key in field_check_types  # filter by

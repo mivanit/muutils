@@ -488,7 +488,7 @@ def loader_typecheck_factory(
             return data[key]
         else:
             if error_mode == "warn":
-                warnings.warn(f"error loading, will return raw data")
+                warnings.warn("error loading, will return raw data")
                 return data[key]
             elif error_mode == "except":
                 raise TypeError(

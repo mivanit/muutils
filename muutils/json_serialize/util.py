@@ -205,6 +205,7 @@ def dc_eq(
     - `TypeError`: if the dataclasses are of different classes
     - `AttributeError`: if the dataclasses have different fields
 
+    # TODO: after "except when class mismatch" is False, shouldn't we then go to "field keys match"?
     ```
               [START]
                  ▼

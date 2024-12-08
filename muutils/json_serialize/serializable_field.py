@@ -257,6 +257,8 @@ def serializable_field(
     note that if not using ZANJ, and you have a class inside a container, you MUST provide
     `serialization_fn` and `loading_fn` to serialize and load the container.
     ZANJ will automatically do this for you.
+
+    # TODO: `custom_value_check_fn`: function taking the value of the field and returning whether the value itself is valid. if not provided, any value is valid as long as it passes the type test
     """
     assert len(_args) == 0, f"unexpected positional arguments: {_args}"
     return SerializableField(

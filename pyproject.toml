@@ -95,14 +95,14 @@ filterwarnings = [
 
 [tool.ruff]
 # Exclude the directories specified in the global excludes
-exclude = ["tests/input_data", "tests/junk_data", "muutils/_wip"]
+exclude = ["tests/input_data", "tests/junk_data", "_wip/"]
 
 [tool.pycln]
 all = true
-exclude = ["tests/input_data", "tests/junk_data", "muutils/_wip"]
+exclude = ["tests/input_data", "tests/junk_data", "_wip/"]
 
 [tool.mypy]
-exclude = ["tests/input_data", "tests/junk_data", "muutils/_wip"]
+exclude = ["tests/input_data", "tests/junk_data", "_wip/"]
 show_error_codes = true
 
 [tool.pdoc]

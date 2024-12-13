@@ -5803,7 +5803,7 @@ Source on GitHub</a></p>
 <p>using the base <code>Spinner</code> class while some code is
 running.</p>
 <p><a
-href="https://github.com/mivanit/muutils/blob/0.6.17/spinner.py#L0-L507">View
+href="https://github.com/mivanit/muutils/blob/0.6.17/spinner.py#L0-L509">View
 Source on GitHub</a></p>
 <ul>
 <li><code>DecoratedFunction = ~DecoratedFunction</code></li>
@@ -5811,13 +5811,13 @@ Source on GitHub</a></p>
 <p>Define a generic type for the decorated function</p>
 <h3 id="SpinnerConfig"><code>class SpinnerConfig:</code></h3>
 <p><a
-href="https://github.com/mivanit/muutils/blob/0.6.17/spinner.py#L29-L78">View
+href="https://github.com/mivanit/muutils/blob/0.6.17/spinner.py#L31-L80">View
 Source on GitHub</a></p>
 <h3 id="SpinnerConfig.__init__"><code>SpinnerConfig</code></h3>
 <div class="sourceCode" id="cb280"><pre
-class="sourceCode python"><code class="sourceCode python"><span id="cb280-1"><a href="#cb280-1" aria-hidden="true" tabindex="-1"></a>(working: <span class="bu">list</span>[<span class="bu">str</span>] <span class="op">=</span> <span class="op">&lt;</span>factory<span class="op">&gt;</span>, success: <span class="bu">str</span> <span class="op">=</span> <span class="st">&#39;✔️&#39;</span>, fail: <span class="bu">str</span> <span class="op">=</span> <span class="st">&#39;❌&#39;</span>)</span></code></pre></div>
+class="sourceCode python"><code class="sourceCode python"><span id="cb280-1"><a href="#cb280-1" aria-hidden="true" tabindex="-1"></a>(working: List[<span class="bu">str</span>] <span class="op">=</span> <span class="op">&lt;</span>factory<span class="op">&gt;</span>, success: <span class="bu">str</span> <span class="op">=</span> <span class="st">&#39;✔️&#39;</span>, fail: <span class="bu">str</span> <span class="op">=</span> <span class="st">&#39;❌&#39;</span>)</span></code></pre></div>
 <ul>
-<li><p><code>working: list[str]</code></p></li>
+<li><p><code>working: List[str]</code></p></li>
 <li><p><code>success: str = '✔️'</code></p></li>
 <li><p><code>fail: str = '❌'</code></p></li>
 </ul>
@@ -5825,39 +5825,39 @@ class="sourceCode python"><code class="sourceCode python"><span id="cb280-1"><a 
 <div class="sourceCode" id="cb281"><pre
 class="sourceCode python"><code class="sourceCode python"><span id="cb281-1"><a href="#cb281-1" aria-hidden="true" tabindex="-1"></a>(<span class="va">self</span>) <span class="op">-&gt;</span> <span class="bu">bool</span></span></code></pre></div>
 <p><a
-href="https://github.com/mivanit/muutils/blob/0.6.17/spinner.py#L35-L37">View
+href="https://github.com/mivanit/muutils/blob/0.6.17/spinner.py#L37-L39">View
 Source on GitHub</a></p>
 <p>whether all characters are ascii</p>
 <h3 id="SpinnerConfig.eq_lens"><code>def eq_lens</code></h3>
 <div class="sourceCode" id="cb282"><pre
 class="sourceCode python"><code class="sourceCode python"><span id="cb282-1"><a href="#cb282-1" aria-hidden="true" tabindex="-1"></a>(<span class="va">self</span>) <span class="op">-&gt;</span> <span class="bu">bool</span></span></code></pre></div>
 <p><a
-href="https://github.com/mivanit/muutils/blob/0.6.17/spinner.py#L39-L47">View
+href="https://github.com/mivanit/muutils/blob/0.6.17/spinner.py#L41-L49">View
 Source on GitHub</a></p>
 <p>whether all working characters are the same length</p>
 <h3 id="SpinnerConfig.is_valid"><code>def is_valid</code></h3>
 <div class="sourceCode" id="cb283"><pre
 class="sourceCode python"><code class="sourceCode python"><span id="cb283-1"><a href="#cb283-1" aria-hidden="true" tabindex="-1"></a>(<span class="va">self</span>) <span class="op">-&gt;</span> <span class="bu">bool</span></span></code></pre></div>
 <p><a
-href="https://github.com/mivanit/muutils/blob/0.6.17/spinner.py#L49-L59">View
+href="https://github.com/mivanit/muutils/blob/0.6.17/spinner.py#L51-L61">View
 Source on GitHub</a></p>
 <p>whether the spinner config is valid</p>
 <h3 id="SpinnerConfig.from_any"><code>def from_any</code></h3>
 <div class="sourceCode" id="cb284"><pre
 class="sourceCode python"><code class="sourceCode python"><span id="cb284-1"><a href="#cb284-1" aria-hidden="true" tabindex="-1"></a>(</span>
 <span id="cb284-2"><a href="#cb284-2" aria-hidden="true" tabindex="-1"></a>    cls,</span>
-<span id="cb284-3"><a href="#cb284-3" aria-hidden="true" tabindex="-1"></a>    arg: Union[<span class="bu">str</span>, <span class="bu">list</span>[<span class="bu">str</span>], muutils.spinner.SpinnerConfig, <span class="bu">dict</span>]</span>
+<span id="cb284-3"><a href="#cb284-3" aria-hidden="true" tabindex="-1"></a>    arg: Union[<span class="bu">str</span>, List[<span class="bu">str</span>], muutils.spinner.SpinnerConfig, <span class="bu">dict</span>]</span>
 <span id="cb284-4"><a href="#cb284-4" aria-hidden="true" tabindex="-1"></a>) <span class="op">-&gt;</span> muutils.spinner.SpinnerConfig</span></code></pre></div>
 <p><a
-href="https://github.com/mivanit/muutils/blob/0.6.17/spinner.py#L65-L78">View
+href="https://github.com/mivanit/muutils/blob/0.6.17/spinner.py#L67-L80">View
 Source on GitHub</a></p>
 <ul>
-<li><p><code>SpinnerConfigArg = typing.Union[str, list[str], muutils.spinner.SpinnerConfig, dict]</code></p></li>
-<li><p><code>SPINNERS: dict[str, muutils.spinner.SpinnerConfig] = {'default': SpinnerConfig(working=['|', '/', '-', '\\'], success='#', fail='X'), 'dots': SpinnerConfig(working=['.  ', '.. ', '...'], success='***', fail='xxx'), 'bars': SpinnerConfig(working=['|  ', '|| ', '|||'], success='|||', fail='///'), 'arrows': SpinnerConfig(working=['&lt;', '^', '&gt;', 'v'], success='►', fail='✖'), 'arrows_2': SpinnerConfig(working=['←', '↖', '↑', '↗', '→', '↘', '↓', '↙'], success='→', fail='↯'), 'bouncing_bar': SpinnerConfig(working=['[    ]', '[=   ]', '[==  ]', '[=== ]', '[ ===]', '[  ==]', '[   =]'], success='[====]', fail='[XXXX]'), 'bar': SpinnerConfig(working=['[  ]', '[- ]', '[--]', '[ -]'], success='[==]', fail='[xx]'), 'bouncing_ball': SpinnerConfig(working=['( ●    )', '(  ●   )', '(   ●  )', '(    ● )', '(     ●)', '(    ● )', '(   ●  )', '(  ●   )', '( ●    )', '(●     )'], success='(●●●●●●)', fail='(  ✖  )'), 'ooo': SpinnerConfig(working=['.', 'o', 'O', 'o'], success='O', fail='x'), 'braille': SpinnerConfig(working=['⠋', '⠙', '⠹', '⠸', '⠼', '⠴', '⠦', '⠧', '⠇', '⠏'], success='⣿', fail='X'), 'clock': SpinnerConfig(working=['🕛', '🕐', '🕑', '🕒', '🕓', '🕔', '🕕', '🕖', '🕗', '🕘', '🕙', '🕚'], success='✔️', fail='❌'), 'hourglass': SpinnerConfig(working=['⏳', '⌛'], success='✔️', fail='❌'), 'square_corners': SpinnerConfig(working=['◰', '◳', '◲', '◱'], success='◼', fail='✖'), 'triangle': SpinnerConfig(working=['◢', '◣', '◤', '◥'], success='◆', fail='✖'), 'square_dot': SpinnerConfig(working=['⣷', '⣯', '⣟', '⡿', '⢿', '⣻', '⣽', '⣾'], success='⣿', fail='❌'), 'box_bounce': SpinnerConfig(working=['▌', '▀', '▐', '▄'], success='■', fail='✖'), 'hamburger': SpinnerConfig(working=['☱', '☲', '☴'], success='☰', fail='✖'), 'earth': SpinnerConfig(working=['🌍', '🌎', '🌏'], success='✔️', fail='❌'), 'growing_dots': SpinnerConfig(working=['⣀', '⣄', '⣤', '⣦', '⣶', '⣷', '⣿'], success='⣿', fail='✖'), 'dice': SpinnerConfig(working=['⚀', '⚁', '⚂', '⚃', '⚄', '⚅'], success='🎲', fail='✖'), 'wifi': SpinnerConfig(working=['▁', '▂', '▃', '▄', '▅', '▆', '▇', '█'], success='✔️', fail='❌'), 'bounce': SpinnerConfig(working=['⠁', '⠂', '⠄', '⠂'], success='⠿', fail='⢿'), 'arc': SpinnerConfig(working=['◜', '◠', '◝', '◞', '◡', '◟'], success='○', fail='✖'), 'toggle': SpinnerConfig(working=['⊶', '⊷'], success='⊷', fail='⊗'), 'toggle2': SpinnerConfig(working=['▫', '▪'], success='▪', fail='✖'), 'toggle3': SpinnerConfig(working=['□', '■'], success='■', fail='✖'), 'toggle4': SpinnerConfig(working=['■', '□', '▪', '▫'], success='■', fail='✖'), 'toggle5': SpinnerConfig(working=['▮', '▯'], success='▮', fail='✖'), 'toggle7': SpinnerConfig(working=['⦾', '⦿'], success='⦿', fail='✖'), 'toggle8': SpinnerConfig(working=['◍', '◌'], success='◍', fail='✖'), 'toggle9': SpinnerConfig(working=['◉', '◎'], success='◉', fail='✖'), 'arrow2': SpinnerConfig(working=['⬆️ ', '↗️ ', '➡️ ', '↘️ ', '⬇️ ', '↙️ ', '⬅️ ', '↖️ '], success='➡️', fail='❌'), 'point': SpinnerConfig(working=['∙∙∙', '●∙∙', '∙●∙', '∙∙●', '∙∙∙'], success='●●●', fail='xxx'), 'layer': SpinnerConfig(working=['-', '=', '≡'], success='≡', fail='✖'), 'speaker': SpinnerConfig(working=['🔈 ', '🔉 ', '🔊 ', '🔉 '], success='🔊', fail='🔇'), 'orangePulse': SpinnerConfig(working=['🔸 ', '🔶 ', '🟠 ', '🟠 ', '🔷 '], success='🟠', fail='❌'), 'bluePulse': SpinnerConfig(working=['🔹 ', '🔷 ', '🔵 ', '🔵 ', '🔷 '], success='🔵', fail='❌'), 'satellite_signal': SpinnerConfig(working=['📡   ', '📡·  ', '📡·· ', '📡···', '📡 ··', '📡  ·'], success='📡 ✔️ ', fail='📡 ❌ '), 'rocket_orbit': SpinnerConfig(working=['🌍🚀  ', '🌏 🚀 ', '🌎  🚀'], success='🌍  ✨', fail='🌍  💥'), 'ogham': SpinnerConfig(working=['ᚁ ', 'ᚂ ', 'ᚃ ', 'ᚄ', 'ᚅ'], success='᚛᚜', fail='✖'), 'eth': SpinnerConfig(working=['᛫', '፡', '፥', '፤', '፧', '።', '፨'], success='፠', fail='✖')}</code></p></li>
+<li><p><code>SpinnerConfigArg = typing.Union[str, typing.List[str], muutils.spinner.SpinnerConfig, dict]</code></p></li>
+<li><p><code>SPINNERS: Dict[str, muutils.spinner.SpinnerConfig] = {'default': SpinnerConfig(working=['|', '/', '-', '\\'], success='#', fail='X'), 'dots': SpinnerConfig(working=['.  ', '.. ', '...'], success='***', fail='xxx'), 'bars': SpinnerConfig(working=['|  ', '|| ', '|||'], success='|||', fail='///'), 'arrows': SpinnerConfig(working=['&lt;', '^', '&gt;', 'v'], success='►', fail='✖'), 'arrows_2': SpinnerConfig(working=['←', '↖', '↑', '↗', '→', '↘', '↓', '↙'], success='→', fail='↯'), 'bouncing_bar': SpinnerConfig(working=['[    ]', '[=   ]', '[==  ]', '[=== ]', '[ ===]', '[  ==]', '[   =]'], success='[====]', fail='[XXXX]'), 'bar': SpinnerConfig(working=['[  ]', '[- ]', '[--]', '[ -]'], success='[==]', fail='[xx]'), 'bouncing_ball': SpinnerConfig(working=['( ●    )', '(  ●   )', '(   ●  )', '(    ● )', '(     ●)', '(    ● )', '(   ●  )', '(  ●   )', '( ●    )', '(●     )'], success='(●●●●●●)', fail='(  ✖  )'), 'ooo': SpinnerConfig(working=['.', 'o', 'O', 'o'], success='O', fail='x'), 'braille': SpinnerConfig(working=['⠋', '⠙', '⠹', '⠸', '⠼', '⠴', '⠦', '⠧', '⠇', '⠏'], success='⣿', fail='X'), 'clock': SpinnerConfig(working=['🕛', '🕐', '🕑', '🕒', '🕓', '🕔', '🕕', '🕖', '🕗', '🕘', '🕙', '🕚'], success='✔️', fail='❌'), 'hourglass': SpinnerConfig(working=['⏳', '⌛'], success='✔️', fail='❌'), 'square_corners': SpinnerConfig(working=['◰', '◳', '◲', '◱'], success='◼', fail='✖'), 'triangle': SpinnerConfig(working=['◢', '◣', '◤', '◥'], success='◆', fail='✖'), 'square_dot': SpinnerConfig(working=['⣷', '⣯', '⣟', '⡿', '⢿', '⣻', '⣽', '⣾'], success='⣿', fail='❌'), 'box_bounce': SpinnerConfig(working=['▌', '▀', '▐', '▄'], success='■', fail='✖'), 'hamburger': SpinnerConfig(working=['☱', '☲', '☴'], success='☰', fail='✖'), 'earth': SpinnerConfig(working=['🌍', '🌎', '🌏'], success='✔️', fail='❌'), 'growing_dots': SpinnerConfig(working=['⣀', '⣄', '⣤', '⣦', '⣶', '⣷', '⣿'], success='⣿', fail='✖'), 'dice': SpinnerConfig(working=['⚀', '⚁', '⚂', '⚃', '⚄', '⚅'], success='🎲', fail='✖'), 'wifi': SpinnerConfig(working=['▁', '▂', '▃', '▄', '▅', '▆', '▇', '█'], success='✔️', fail='❌'), 'bounce': SpinnerConfig(working=['⠁', '⠂', '⠄', '⠂'], success='⠿', fail='⢿'), 'arc': SpinnerConfig(working=['◜', '◠', '◝', '◞', '◡', '◟'], success='○', fail='✖'), 'toggle': SpinnerConfig(working=['⊶', '⊷'], success='⊷', fail='⊗'), 'toggle2': SpinnerConfig(working=['▫', '▪'], success='▪', fail='✖'), 'toggle3': SpinnerConfig(working=['□', '■'], success='■', fail='✖'), 'toggle4': SpinnerConfig(working=['■', '□', '▪', '▫'], success='■', fail='✖'), 'toggle5': SpinnerConfig(working=['▮', '▯'], success='▮', fail='✖'), 'toggle7': SpinnerConfig(working=['⦾', '⦿'], success='⦿', fail='✖'), 'toggle8': SpinnerConfig(working=['◍', '◌'], success='◍', fail='✖'), 'toggle9': SpinnerConfig(working=['◉', '◎'], success='◉', fail='✖'), 'arrow2': SpinnerConfig(working=['⬆️ ', '↗️ ', '➡️ ', '↘️ ', '⬇️ ', '↙️ ', '⬅️ ', '↖️ '], success='➡️', fail='❌'), 'point': SpinnerConfig(working=['∙∙∙', '●∙∙', '∙●∙', '∙∙●', '∙∙∙'], success='●●●', fail='xxx'), 'layer': SpinnerConfig(working=['-', '=', '≡'], success='≡', fail='✖'), 'speaker': SpinnerConfig(working=['🔈 ', '🔉 ', '🔊 ', '🔉 '], success='🔊', fail='🔇'), 'orangePulse': SpinnerConfig(working=['🔸 ', '🔶 ', '🟠 ', '🟠 ', '🔷 '], success='🟠', fail='❌'), 'bluePulse': SpinnerConfig(working=['🔹 ', '🔷 ', '🔵 ', '🔵 ', '🔷 '], success='🔵', fail='❌'), 'satellite_signal': SpinnerConfig(working=['📡   ', '📡·  ', '📡·· ', '📡···', '📡 ··', '📡  ·'], success='📡 ✔️ ', fail='📡 ❌ '), 'rocket_orbit': SpinnerConfig(working=['🌍🚀  ', '🌏 🚀 ', '🌎  🚀'], success='🌍  ✨', fail='🌍  💥'), 'ogham': SpinnerConfig(working=['ᚁ ', 'ᚂ ', 'ᚃ ', 'ᚄ', 'ᚅ'], success='᚛᚜', fail='✖'), 'eth': SpinnerConfig(working=['᛫', '፡', '፥', '፤', '፧', '።', '፨'], success='፠', fail='✖')}</code></p></li>
 </ul>
 <h3 id="Spinner"><code>class Spinner:</code></h3>
 <p><a
-href="https://github.com/mivanit/muutils/blob/0.6.17/spinner.py#L199-L408">View
+href="https://github.com/mivanit/muutils/blob/0.6.17/spinner.py#L201-L410">View
 Source on GitHub</a></p>
 <p>displays a spinner, and optionally elapsed time and a mutable value
 while a function is running.</p>
@@ -5916,7 +5916,7 @@ class="sourceCode python"><code class="sourceCode python"><span id="cb286-1"><a 
 <div class="sourceCode" id="cb287"><pre
 class="sourceCode python"><code class="sourceCode python"><span id="cb287-1"><a href="#cb287-1" aria-hidden="true" tabindex="-1"></a>(</span>
 <span id="cb287-2"><a href="#cb287-2" aria-hidden="true" tabindex="-1"></a>    <span class="op">*</span>args,</span>
-<span id="cb287-3"><a href="#cb287-3" aria-hidden="true" tabindex="-1"></a>    config: Union[<span class="bu">str</span>, <span class="bu">list</span>[<span class="bu">str</span>], muutils.spinner.SpinnerConfig, <span class="bu">dict</span>] <span class="op">=</span> <span class="st">&#39;default&#39;</span>,</span>
+<span id="cb287-3"><a href="#cb287-3" aria-hidden="true" tabindex="-1"></a>    config: Union[<span class="bu">str</span>, List[<span class="bu">str</span>], muutils.spinner.SpinnerConfig, <span class="bu">dict</span>] <span class="op">=</span> <span class="st">&#39;default&#39;</span>,</span>
 <span id="cb287-4"><a href="#cb287-4" aria-hidden="true" tabindex="-1"></a>    update_interval: <span class="bu">float</span> <span class="op">=</span> <span class="fl">0.1</span>,</span>
 <span id="cb287-5"><a href="#cb287-5" aria-hidden="true" tabindex="-1"></a>    initial_value: <span class="bu">str</span> <span class="op">=</span> <span class="st">&#39;&#39;</span>,</span>
 <span id="cb287-6"><a href="#cb287-6" aria-hidden="true" tabindex="-1"></a>    message: <span class="bu">str</span> <span class="op">=</span> <span class="st">&#39;&#39;</span>,</span>
@@ -5928,7 +5928,7 @@ class="sourceCode python"><code class="sourceCode python"><span id="cb287-1"><a 
 <span id="cb287-12"><a href="#cb287-12" aria-hidden="true" tabindex="-1"></a>    <span class="op">**</span>kwargs: Any</span>
 <span id="cb287-13"><a href="#cb287-13" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
 <p><a
-href="https://github.com/mivanit/muutils/blob/0.6.17/spinner.py#L260-L348">View
+href="https://github.com/mivanit/muutils/blob/0.6.17/spinner.py#L262-L350">View
 Source on GitHub</a></p>
 <ul>
 <li><p><code>config: muutils.spinner.SpinnerConfig</code></p></li>
@@ -5967,7 +5967,7 @@ Source on GitHub</a></p>
 <div class="sourceCode" id="cb288"><pre
 class="sourceCode python"><code class="sourceCode python"><span id="cb288-1"><a href="#cb288-1" aria-hidden="true" tabindex="-1"></a>(<span class="va">self</span>) <span class="op">-&gt;</span> <span class="va">None</span></span></code></pre></div>
 <p><a
-href="https://github.com/mivanit/muutils/blob/0.6.17/spinner.py#L350-L378">View
+href="https://github.com/mivanit/muutils/blob/0.6.17/spinner.py#L352-L380">View
 Source on GitHub</a></p>
 <p>Function to run in a separate thread, displaying the spinner and
 optional information</p>
@@ -5975,27 +5975,27 @@ optional information</p>
 <div class="sourceCode" id="cb289"><pre
 class="sourceCode python"><code class="sourceCode python"><span id="cb289-1"><a href="#cb289-1" aria-hidden="true" tabindex="-1"></a>(<span class="va">self</span>, value: Any) <span class="op">-&gt;</span> <span class="va">None</span></span></code></pre></div>
 <p><a
-href="https://github.com/mivanit/muutils/blob/0.6.17/spinner.py#L380-L383">View
+href="https://github.com/mivanit/muutils/blob/0.6.17/spinner.py#L382-L385">View
 Source on GitHub</a></p>
 <p>Update the current value displayed by the spinner</p>
 <h3 id="Spinner.start"><code>def start</code></h3>
 <div class="sourceCode" id="cb290"><pre
 class="sourceCode python"><code class="sourceCode python"><span id="cb290-1"><a href="#cb290-1" aria-hidden="true" tabindex="-1"></a>(<span class="va">self</span>) <span class="op">-&gt;</span> <span class="va">None</span></span></code></pre></div>
 <p><a
-href="https://github.com/mivanit/muutils/blob/0.6.17/spinner.py#L385-L390">View
+href="https://github.com/mivanit/muutils/blob/0.6.17/spinner.py#L387-L392">View
 Source on GitHub</a></p>
 <p>Start the spinner</p>
 <h3 id="Spinner.stop"><code>def stop</code></h3>
 <div class="sourceCode" id="cb291"><pre
 class="sourceCode python"><code class="sourceCode python"><span id="cb291-1"><a href="#cb291-1" aria-hidden="true" tabindex="-1"></a>(<span class="va">self</span>, failed: <span class="bu">bool</span> <span class="op">=</span> <span class="va">False</span>) <span class="op">-&gt;</span> <span class="va">None</span></span></code></pre></div>
 <p><a
-href="https://github.com/mivanit/muutils/blob/0.6.17/spinner.py#L392-L408">View
+href="https://github.com/mivanit/muutils/blob/0.6.17/spinner.py#L394-L410">View
 Source on GitHub</a></p>
 <p>Stop the spinner</p>
 <h3
 id="NoOpContextManager"><code>class NoOpContextManager(typing.ContextManager):</code></h3>
 <p><a
-href="https://github.com/mivanit/muutils/blob/0.6.17/spinner.py#L411-L421">View
+href="https://github.com/mivanit/muutils/blob/0.6.17/spinner.py#L413-L423">View
 Source on GitHub</a></p>
 <p>A context manager that does nothing.</p>
 <h3
@@ -6003,12 +6003,12 @@ id="NoOpContextManager.__init__"><code>NoOpContextManager</code></h3>
 <div class="sourceCode" id="cb292"><pre
 class="sourceCode python"><code class="sourceCode python"><span id="cb292-1"><a href="#cb292-1" aria-hidden="true" tabindex="-1"></a>(<span class="op">*</span>args, <span class="op">**</span>kwargs)</span></code></pre></div>
 <p><a
-href="https://github.com/mivanit/muutils/blob/0.6.17/spinner.py#L414-L415">View
+href="https://github.com/mivanit/muutils/blob/0.6.17/spinner.py#L416-L417">View
 Source on GitHub</a></p>
 <h3
 id="SpinnerContext"><code>class SpinnerContext(Spinner, typing.ContextManager):</code></h3>
 <p><a
-href="https://github.com/mivanit/muutils/blob/0.6.17/spinner.py#L424-L432">View
+href="https://github.com/mivanit/muutils/blob/0.6.17/spinner.py#L426-L434">View
 Source on GitHub</a></p>
 <p>displays a spinner, and optionally elapsed time and a mutable value
 while a function is running.</p>
@@ -6099,7 +6099,7 @@ href="#SpinnerContext.update_value"><code>update_value</code></a></li>
 <div class="sourceCode" id="cb295"><pre
 class="sourceCode python"><code class="sourceCode python"><span id="cb295-1"><a href="#cb295-1" aria-hidden="true" tabindex="-1"></a>(</span>
 <span id="cb295-2"><a href="#cb295-2" aria-hidden="true" tabindex="-1"></a>    <span class="op">*</span>args,</span>
-<span id="cb295-3"><a href="#cb295-3" aria-hidden="true" tabindex="-1"></a>    config: Union[<span class="bu">str</span>, <span class="bu">list</span>[<span class="bu">str</span>], muutils.spinner.SpinnerConfig, <span class="bu">dict</span>] <span class="op">=</span> <span class="st">&#39;default&#39;</span>,</span>
+<span id="cb295-3"><a href="#cb295-3" aria-hidden="true" tabindex="-1"></a>    config: Union[<span class="bu">str</span>, List[<span class="bu">str</span>], muutils.spinner.SpinnerConfig, <span class="bu">dict</span>] <span class="op">=</span> <span class="st">&#39;default&#39;</span>,</span>
 <span id="cb295-4"><a href="#cb295-4" aria-hidden="true" tabindex="-1"></a>    update_interval: <span class="bu">float</span> <span class="op">=</span> <span class="fl">0.1</span>,</span>
 <span id="cb295-5"><a href="#cb295-5" aria-hidden="true" tabindex="-1"></a>    initial_value: <span class="bu">str</span> <span class="op">=</span> <span class="st">&#39;&#39;</span>,</span>
 <span id="cb295-6"><a href="#cb295-6" aria-hidden="true" tabindex="-1"></a>    message: <span class="bu">str</span> <span class="op">=</span> <span class="st">&#39;&#39;</span>,</span>
@@ -6111,7 +6111,7 @@ class="sourceCode python"><code class="sourceCode python"><span id="cb295-1"><a 
 <span id="cb295-12"><a href="#cb295-12" aria-hidden="true" tabindex="-1"></a>    <span class="op">**</span>kwargs</span>
 <span id="cb295-13"><a href="#cb295-13" aria-hidden="true" tabindex="-1"></a>) <span class="op">-&gt;</span> Callable[[<span class="op">~</span>DecoratedFunction], <span class="op">~</span>DecoratedFunction]</span></code></pre></div>
 <p><a
-href="https://github.com/mivanit/muutils/blob/0.6.17/spinner.py#L438-L505">View
+href="https://github.com/mivanit/muutils/blob/0.6.17/spinner.py#L440-L507">View
 Source on GitHub</a></p>
 <p>displays a spinner, and optionally elapsed time and a mutable value
 while a function is running.</p>

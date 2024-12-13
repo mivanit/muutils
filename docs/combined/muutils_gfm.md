@@ -6540,7 +6540,7 @@ display a spinner
 using the base `Spinner` class while some code is running.
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.17/spinner.py#L0-L507)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.17/spinner.py#L0-L509)
 
 - `DecoratedFunction = ~DecoratedFunction`
 
@@ -6549,15 +6549,15 @@ Define a generic type for the decorated function
 ### `class SpinnerConfig:`
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.17/spinner.py#L29-L78)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.17/spinner.py#L31-L80)
 
 ### `SpinnerConfig`
 
 ``` python
-(working: list[str] = <factory>, success: str = '✔️', fail: str = '❌')
+(working: List[str] = <factory>, success: str = '✔️', fail: str = '❌')
 ```
 
-- `working: list[str]`
+- `working: List[str]`
 
 - `success: str = '✔️'`
 
@@ -6570,7 +6570,7 @@ GitHub](https://github.com/mivanit/muutils/blob/0.6.17/spinner.py#L29-L78)
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.17/spinner.py#L35-L37)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.17/spinner.py#L37-L39)
 
 whether all characters are ascii
 
@@ -6581,7 +6581,7 @@ whether all characters are ascii
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.17/spinner.py#L39-L47)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.17/spinner.py#L41-L49)
 
 whether all working characters are the same length
 
@@ -6592,7 +6592,7 @@ whether all working characters are the same length
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.17/spinner.py#L49-L59)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.17/spinner.py#L51-L61)
 
 whether the spinner config is valid
 
@@ -6601,21 +6601,21 @@ whether the spinner config is valid
 ``` python
 (
     cls,
-    arg: Union[str, list[str], muutils.spinner.SpinnerConfig, dict]
+    arg: Union[str, List[str], muutils.spinner.SpinnerConfig, dict]
 ) -> muutils.spinner.SpinnerConfig
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.17/spinner.py#L65-L78)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.17/spinner.py#L67-L80)
 
-- `SpinnerConfigArg = typing.Union[str, list[str], muutils.spinner.SpinnerConfig, dict]`
+- `SpinnerConfigArg = typing.Union[str, typing.List[str], muutils.spinner.SpinnerConfig, dict]`
 
-- `SPINNERS: dict[str, muutils.spinner.SpinnerConfig] = {'default': SpinnerConfig(working=['|', '/', '-', '\\'], success='#', fail='X'), 'dots': SpinnerConfig(working=['.  ', '.. ', '...'], success='***', fail='xxx'), 'bars': SpinnerConfig(working=['|  ', '|| ', '|||'], success='|||', fail='///'), 'arrows': SpinnerConfig(working=['<', '^', '>', 'v'], success='►', fail='✖'), 'arrows_2': SpinnerConfig(working=['←', '↖', '↑', '↗', '→', '↘', '↓', '↙'], success='→', fail='↯'), 'bouncing_bar': SpinnerConfig(working=['[    ]', '[=   ]', '[==  ]', '[=== ]', '[ ===]', '[  ==]', '[   =]'], success='[====]', fail='[XXXX]'), 'bar': SpinnerConfig(working=['[  ]', '[- ]', '[--]', '[ -]'], success='[==]', fail='[xx]'), 'bouncing_ball': SpinnerConfig(working=['( ●    )', '(  ●   )', '(   ●  )', '(    ● )', '(     ●)', '(    ● )', '(   ●  )', '(  ●   )', '( ●    )', '(●     )'], success='(●●●●●●)', fail='(  ✖  )'), 'ooo': SpinnerConfig(working=['.', 'o', 'O', 'o'], success='O', fail='x'), 'braille': SpinnerConfig(working=['⠋', '⠙', '⠹', '⠸', '⠼', '⠴', '⠦', '⠧', '⠇', '⠏'], success='⣿', fail='X'), 'clock': SpinnerConfig(working=['🕛', '🕐', '🕑', '🕒', '🕓', '🕔', '🕕', '🕖', '🕗', '🕘', '🕙', '🕚'], success='✔️', fail='❌'), 'hourglass': SpinnerConfig(working=['⏳', '⌛'], success='✔️', fail='❌'), 'square_corners': SpinnerConfig(working=['◰', '◳', '◲', '◱'], success='◼', fail='✖'), 'triangle': SpinnerConfig(working=['◢', '◣', '◤', '◥'], success='◆', fail='✖'), 'square_dot': SpinnerConfig(working=['⣷', '⣯', '⣟', '⡿', '⢿', '⣻', '⣽', '⣾'], success='⣿', fail='❌'), 'box_bounce': SpinnerConfig(working=['▌', '▀', '▐', '▄'], success='■', fail='✖'), 'hamburger': SpinnerConfig(working=['☱', '☲', '☴'], success='☰', fail='✖'), 'earth': SpinnerConfig(working=['🌍', '🌎', '🌏'], success='✔️', fail='❌'), 'growing_dots': SpinnerConfig(working=['⣀', '⣄', '⣤', '⣦', '⣶', '⣷', '⣿'], success='⣿', fail='✖'), 'dice': SpinnerConfig(working=['⚀', '⚁', '⚂', '⚃', '⚄', '⚅'], success='🎲', fail='✖'), 'wifi': SpinnerConfig(working=['▁', '▂', '▃', '▄', '▅', '▆', '▇', '█'], success='✔️', fail='❌'), 'bounce': SpinnerConfig(working=['⠁', '⠂', '⠄', '⠂'], success='⠿', fail='⢿'), 'arc': SpinnerConfig(working=['◜', '◠', '◝', '◞', '◡', '◟'], success='○', fail='✖'), 'toggle': SpinnerConfig(working=['⊶', '⊷'], success='⊷', fail='⊗'), 'toggle2': SpinnerConfig(working=['▫', '▪'], success='▪', fail='✖'), 'toggle3': SpinnerConfig(working=['□', '■'], success='■', fail='✖'), 'toggle4': SpinnerConfig(working=['■', '□', '▪', '▫'], success='■', fail='✖'), 'toggle5': SpinnerConfig(working=['▮', '▯'], success='▮', fail='✖'), 'toggle7': SpinnerConfig(working=['⦾', '⦿'], success='⦿', fail='✖'), 'toggle8': SpinnerConfig(working=['◍', '◌'], success='◍', fail='✖'), 'toggle9': SpinnerConfig(working=['◉', '◎'], success='◉', fail='✖'), 'arrow2': SpinnerConfig(working=['⬆️ ', '↗️ ', '➡️ ', '↘️ ', '⬇️ ', '↙️ ', '⬅️ ', '↖️ '], success='➡️', fail='❌'), 'point': SpinnerConfig(working=['∙∙∙', '●∙∙', '∙●∙', '∙∙●', '∙∙∙'], success='●●●', fail='xxx'), 'layer': SpinnerConfig(working=['-', '=', '≡'], success='≡', fail='✖'), 'speaker': SpinnerConfig(working=['🔈 ', '🔉 ', '🔊 ', '🔉 '], success='🔊', fail='🔇'), 'orangePulse': SpinnerConfig(working=['🔸 ', '🔶 ', '🟠 ', '🟠 ', '🔷 '], success='🟠', fail='❌'), 'bluePulse': SpinnerConfig(working=['🔹 ', '🔷 ', '🔵 ', '🔵 ', '🔷 '], success='🔵', fail='❌'), 'satellite_signal': SpinnerConfig(working=['📡   ', '📡·  ', '📡·· ', '📡···', '📡 ··', '📡  ·'], success='📡 ✔️ ', fail='📡 ❌ '), 'rocket_orbit': SpinnerConfig(working=['🌍🚀  ', '🌏 🚀 ', '🌎  🚀'], success='🌍  ✨', fail='🌍  💥'), 'ogham': SpinnerConfig(working=['ᚁ ', 'ᚂ ', 'ᚃ ', 'ᚄ', 'ᚅ'], success='᚛᚜', fail='✖'), 'eth': SpinnerConfig(working=['᛫', '፡', '፥', '፤', '፧', '።', '፨'], success='፠', fail='✖')}`
+- `SPINNERS: Dict[str, muutils.spinner.SpinnerConfig] = {'default': SpinnerConfig(working=['|', '/', '-', '\\'], success='#', fail='X'), 'dots': SpinnerConfig(working=['.  ', '.. ', '...'], success='***', fail='xxx'), 'bars': SpinnerConfig(working=['|  ', '|| ', '|||'], success='|||', fail='///'), 'arrows': SpinnerConfig(working=['<', '^', '>', 'v'], success='►', fail='✖'), 'arrows_2': SpinnerConfig(working=['←', '↖', '↑', '↗', '→', '↘', '↓', '↙'], success='→', fail='↯'), 'bouncing_bar': SpinnerConfig(working=['[    ]', '[=   ]', '[==  ]', '[=== ]', '[ ===]', '[  ==]', '[   =]'], success='[====]', fail='[XXXX]'), 'bar': SpinnerConfig(working=['[  ]', '[- ]', '[--]', '[ -]'], success='[==]', fail='[xx]'), 'bouncing_ball': SpinnerConfig(working=['( ●    )', '(  ●   )', '(   ●  )', '(    ● )', '(     ●)', '(    ● )', '(   ●  )', '(  ●   )', '( ●    )', '(●     )'], success='(●●●●●●)', fail='(  ✖  )'), 'ooo': SpinnerConfig(working=['.', 'o', 'O', 'o'], success='O', fail='x'), 'braille': SpinnerConfig(working=['⠋', '⠙', '⠹', '⠸', '⠼', '⠴', '⠦', '⠧', '⠇', '⠏'], success='⣿', fail='X'), 'clock': SpinnerConfig(working=['🕛', '🕐', '🕑', '🕒', '🕓', '🕔', '🕕', '🕖', '🕗', '🕘', '🕙', '🕚'], success='✔️', fail='❌'), 'hourglass': SpinnerConfig(working=['⏳', '⌛'], success='✔️', fail='❌'), 'square_corners': SpinnerConfig(working=['◰', '◳', '◲', '◱'], success='◼', fail='✖'), 'triangle': SpinnerConfig(working=['◢', '◣', '◤', '◥'], success='◆', fail='✖'), 'square_dot': SpinnerConfig(working=['⣷', '⣯', '⣟', '⡿', '⢿', '⣻', '⣽', '⣾'], success='⣿', fail='❌'), 'box_bounce': SpinnerConfig(working=['▌', '▀', '▐', '▄'], success='■', fail='✖'), 'hamburger': SpinnerConfig(working=['☱', '☲', '☴'], success='☰', fail='✖'), 'earth': SpinnerConfig(working=['🌍', '🌎', '🌏'], success='✔️', fail='❌'), 'growing_dots': SpinnerConfig(working=['⣀', '⣄', '⣤', '⣦', '⣶', '⣷', '⣿'], success='⣿', fail='✖'), 'dice': SpinnerConfig(working=['⚀', '⚁', '⚂', '⚃', '⚄', '⚅'], success='🎲', fail='✖'), 'wifi': SpinnerConfig(working=['▁', '▂', '▃', '▄', '▅', '▆', '▇', '█'], success='✔️', fail='❌'), 'bounce': SpinnerConfig(working=['⠁', '⠂', '⠄', '⠂'], success='⠿', fail='⢿'), 'arc': SpinnerConfig(working=['◜', '◠', '◝', '◞', '◡', '◟'], success='○', fail='✖'), 'toggle': SpinnerConfig(working=['⊶', '⊷'], success='⊷', fail='⊗'), 'toggle2': SpinnerConfig(working=['▫', '▪'], success='▪', fail='✖'), 'toggle3': SpinnerConfig(working=['□', '■'], success='■', fail='✖'), 'toggle4': SpinnerConfig(working=['■', '□', '▪', '▫'], success='■', fail='✖'), 'toggle5': SpinnerConfig(working=['▮', '▯'], success='▮', fail='✖'), 'toggle7': SpinnerConfig(working=['⦾', '⦿'], success='⦿', fail='✖'), 'toggle8': SpinnerConfig(working=['◍', '◌'], success='◍', fail='✖'), 'toggle9': SpinnerConfig(working=['◉', '◎'], success='◉', fail='✖'), 'arrow2': SpinnerConfig(working=['⬆️ ', '↗️ ', '➡️ ', '↘️ ', '⬇️ ', '↙️ ', '⬅️ ', '↖️ '], success='➡️', fail='❌'), 'point': SpinnerConfig(working=['∙∙∙', '●∙∙', '∙●∙', '∙∙●', '∙∙∙'], success='●●●', fail='xxx'), 'layer': SpinnerConfig(working=['-', '=', '≡'], success='≡', fail='✖'), 'speaker': SpinnerConfig(working=['🔈 ', '🔉 ', '🔊 ', '🔉 '], success='🔊', fail='🔇'), 'orangePulse': SpinnerConfig(working=['🔸 ', '🔶 ', '🟠 ', '🟠 ', '🔷 '], success='🟠', fail='❌'), 'bluePulse': SpinnerConfig(working=['🔹 ', '🔷 ', '🔵 ', '🔵 ', '🔷 '], success='🔵', fail='❌'), 'satellite_signal': SpinnerConfig(working=['📡   ', '📡·  ', '📡·· ', '📡···', '📡 ··', '📡  ·'], success='📡 ✔️ ', fail='📡 ❌ '), 'rocket_orbit': SpinnerConfig(working=['🌍🚀  ', '🌏 🚀 ', '🌎  🚀'], success='🌍  ✨', fail='🌍  💥'), 'ogham': SpinnerConfig(working=['ᚁ ', 'ᚂ ', 'ᚃ ', 'ᚄ', 'ᚅ'], success='᚛᚜', fail='✖'), 'eth': SpinnerConfig(working=['᛫', '፡', '፥', '፤', '፧', '።', '፨'], success='፠', fail='✖')}`
 
 ### `class Spinner:`
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.17/spinner.py#L199-L408)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.17/spinner.py#L201-L410)
 
 displays a spinner, and optionally elapsed time and a mutable value
 while a function is running.
@@ -6680,7 +6680,7 @@ def long_running_function():
 ``` python
 (
     *args,
-    config: Union[str, list[str], muutils.spinner.SpinnerConfig, dict] = 'default',
+    config: Union[str, List[str], muutils.spinner.SpinnerConfig, dict] = 'default',
     update_interval: float = 0.1,
     initial_value: str = '',
     message: str = '',
@@ -6694,7 +6694,7 @@ def long_running_function():
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.17/spinner.py#L260-L348)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.17/spinner.py#L262-L350)
 
 - `config: muutils.spinner.SpinnerConfig`
 
@@ -6741,7 +6741,7 @@ width of the terminal, for padding with spaces
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.17/spinner.py#L350-L378)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.17/spinner.py#L352-L380)
 
 Function to run in a separate thread, displaying the spinner and
 optional information
@@ -6753,7 +6753,7 @@ optional information
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.17/spinner.py#L380-L383)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.17/spinner.py#L382-L385)
 
 Update the current value displayed by the spinner
 
@@ -6764,7 +6764,7 @@ Update the current value displayed by the spinner
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.17/spinner.py#L385-L390)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.17/spinner.py#L387-L392)
 
 Start the spinner
 
@@ -6775,14 +6775,14 @@ Start the spinner
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.17/spinner.py#L392-L408)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.17/spinner.py#L394-L410)
 
 Stop the spinner
 
 ### `class NoOpContextManager(typing.ContextManager):`
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.17/spinner.py#L411-L421)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.17/spinner.py#L413-L423)
 
 A context manager that does nothing.
 
@@ -6793,12 +6793,12 @@ A context manager that does nothing.
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.17/spinner.py#L414-L415)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.17/spinner.py#L416-L417)
 
 ### `class SpinnerContext(Spinner, typing.ContextManager):`
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.17/spinner.py#L424-L432)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.17/spinner.py#L426-L434)
 
 displays a spinner, and optionally elapsed time and a mutable value
 while a function is running.
@@ -6884,7 +6884,7 @@ def long_running_function():
 ``` python
 (
     *args,
-    config: Union[str, list[str], muutils.spinner.SpinnerConfig, dict] = 'default',
+    config: Union[str, List[str], muutils.spinner.SpinnerConfig, dict] = 'default',
     update_interval: float = 0.1,
     initial_value: str = '',
     message: str = '',
@@ -6898,7 +6898,7 @@ def long_running_function():
 ```
 
 [View Source on
-GitHub](https://github.com/mivanit/muutils/blob/0.6.17/spinner.py#L438-L505)
+GitHub](https://github.com/mivanit/muutils/blob/0.6.17/spinner.py#L440-L507)
 
 displays a spinner, and optionally elapsed time and a mutable value
 while a function is running.

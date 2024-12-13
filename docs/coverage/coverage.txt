@@ -35,7 +35,7 @@ muutils\nbutils\convert_ipynb_to_script.py                                      
 muutils\nbutils\mermaid.py                                                           11     11     0%   3-20
 muutils\nbutils\print_tex.py                                                         10     10     0%   3-21
 muutils\nbutils\run_notebook_tests.py                                                74     26    65%   51, 53, 57, 61, 67, 75, 104, 110-115, 120-133, 140-157
-muutils\spinner.py                                                                  147     10    93%   278, 305, 368-369, 415, 418, 421, 462, 466, 505
+muutils\spinner.py                                                                  147     10    93%   280, 307, 370-371, 417, 420, 423, 464, 468, 507
 muutils\statcounter.py                                                               89     32    64%   30-41, 56, 82, 110, 122, 132, 149-179, 199, 209, 212, 217-222, 231
 muutils\sysinfo.py                                                                   78     25    68%   22-25, 66-67, 84-117, 158-167, 179, 197-199
 muutils\tensor_utils.py                                                             128     18    86%   98, 101, 120, 124, 141, 144-147, 155, 162, 176-184

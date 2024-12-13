@@ -417,7 +417,7 @@ dep-check-torch:
 .PHONY: dep
 dep: get-cuda-info
 	@echo "Exporting dependencies as per $(PYPROJECT) section 'tool.uv-exports.exports'"
-	uv sync --all-extras $(UV_EXTRA_INDEX)
+	uv sync --all-extras $(UV_EXTRA_INDEX) --all-groups
 	mkdir -p $(REQ_LOCATION)
 	$(PYTHON) -c "$$EXPORT_SCRIPT" $(PYPROJECT) $(REQ_LOCATION) | sh -x
 	

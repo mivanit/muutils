@@ -2207,7 +2207,7 @@ GitHub](https://github.com/mivanit/muutils/blob/0.6.17/json_serialize/json_seria
 
 - `SERIALIZER_SPECIAL_FUNCS: dict[str, typing.Callable] = {'str': <class 'str'>, 'dir': <built-in function dir>, 'type': <function <lambda>>, 'repr': <function <lambda>>, 'code': <function <lambda>>, 'sourcefile': <function <lambda>>}`
 
-- `SERIALIZE_DIRECT_AS_STR: Set[str] = {"<class 'torch.dtype'>", "<class 'torch.device'>"}`
+- `SERIALIZE_DIRECT_AS_STR: Set[str] = {"<class 'torch.device'>", "<class 'torch.dtype'>"}`
 
 - `ObjectPath = tuple[typing.Union[str, int], ...]`
 
@@ -6554,12 +6554,7 @@ GitHub](https://github.com/mivanit/muutils/blob/0.6.17/spinner.py#L29-L78)
 ### `SpinnerConfig`
 
 ``` python
-(
-    *,
-    working: list[str] = <factory>,
-    success: str = '✔️',
-    fail: str = '❌'
-)
+(working: list[str] = <factory>, success: str = '✔️', fail: str = '❌')
 ```
 
 - `working: list[str]`

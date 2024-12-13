@@ -2293,7 +2293,7 @@ notably:
 
 
 
-- `SERIALIZE_DIRECT_AS_STR: Set[str] = {"<class 'torch.dtype'>", "<class 'torch.device'>"}`
+- `SERIALIZE_DIRECT_AS_STR: Set[str] = {"<class 'torch.device'>", "<class 'torch.dtype'>"}`
 
 
 
@@ -7125,12 +7125,7 @@ Define a generic type for the decorated function
 
 ### `SpinnerConfig` { #SpinnerConfig.__init__ }
 ```python
-(
-    *,
-    working: list[str] = <factory>,
-    success: str = '✔️',
-    fail: str = '❌'
-)
+(working: list[str] = <factory>, success: str = '✔️', fail: str = '❌')
 ```
 
 

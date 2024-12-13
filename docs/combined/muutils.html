@@ -2027,7 +2027,7 @@ Source on GitHub</a></p>
 <ul>
 <li><p><code>SERIALIZER_SPECIAL_KEYS: None = ('__name__', '__doc__', '__module__', '__class__', '__dict__', '__annotations__')</code></p></li>
 <li><p><code>SERIALIZER_SPECIAL_FUNCS: dict[str, typing.Callable] = {'str': &lt;class 'str'&gt;, 'dir': &lt;built-in function dir&gt;, 'type': &lt;function &lt;lambda&gt;&gt;, 'repr': &lt;function &lt;lambda&gt;&gt;, 'code': &lt;function &lt;lambda&gt;&gt;, 'sourcefile': &lt;function &lt;lambda&gt;&gt;}</code></p></li>
-<li><p><code>SERIALIZE_DIRECT_AS_STR: Set[str] = {"&lt;class 'torch.dtype'&gt;", "&lt;class 'torch.device'&gt;"}</code></p></li>
+<li><p><code>SERIALIZE_DIRECT_AS_STR: Set[str] = {"&lt;class 'torch.device'&gt;", "&lt;class 'torch.dtype'&gt;"}</code></p></li>
 <li><p><code>ObjectPath = tuple[typing.Union[str, int], ...]</code></p></li>
 </ul>
 <h3 id="SerializerHandler"><code>class SerializerHandler:</code></h3>
@@ -5815,12 +5815,7 @@ href="https://github.com/mivanit/muutils/blob/0.6.17/spinner.py#L29-L78">View
 Source on GitHub</a></p>
 <h3 id="SpinnerConfig.__init__"><code>SpinnerConfig</code></h3>
 <div class="sourceCode" id="cb280"><pre
-class="sourceCode python"><code class="sourceCode python"><span id="cb280-1"><a href="#cb280-1" aria-hidden="true" tabindex="-1"></a>(</span>
-<span id="cb280-2"><a href="#cb280-2" aria-hidden="true" tabindex="-1"></a>    <span class="op">*</span>,</span>
-<span id="cb280-3"><a href="#cb280-3" aria-hidden="true" tabindex="-1"></a>    working: <span class="bu">list</span>[<span class="bu">str</span>] <span class="op">=</span> <span class="op">&lt;</span>factory<span class="op">&gt;</span>,</span>
-<span id="cb280-4"><a href="#cb280-4" aria-hidden="true" tabindex="-1"></a>    success: <span class="bu">str</span> <span class="op">=</span> <span class="st">&#39;✔️&#39;</span>,</span>
-<span id="cb280-5"><a href="#cb280-5" aria-hidden="true" tabindex="-1"></a>    fail: <span class="bu">str</span> <span class="op">=</span> <span class="st">&#39;❌&#39;</span></span>
-<span id="cb280-6"><a href="#cb280-6" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+class="sourceCode python"><code class="sourceCode python"><span id="cb280-1"><a href="#cb280-1" aria-hidden="true" tabindex="-1"></a>(working: <span class="bu">list</span>[<span class="bu">str</span>] <span class="op">=</span> <span class="op">&lt;</span>factory<span class="op">&gt;</span>, success: <span class="bu">str</span> <span class="op">=</span> <span class="st">&#39;✔️&#39;</span>, fail: <span class="bu">str</span> <span class="op">=</span> <span class="st">&#39;❌&#39;</span>)</span></code></pre></div>
 <ul>
 <li><p><code>working: list[str]</code></p></li>
 <li><p><code>success: str = '✔️'</code></p></li>

@@ -26,7 +26,7 @@ DecoratedFunction = TypeVar("DecoratedFunction", bound=Callable[..., Any])
 "Define a generic type for the decorated function"
 
 
-@dataclass(kw_only=True)
+@dataclass
 class SpinnerConfig:
     working: list[str] = field(default_factory=lambda: ["|", "/", "-", "\\"])
     success: str = "✔️"

@@ -6,7 +6,7 @@ asttokens==2.4.1
 astunparse==1.6.3 ; python_full_version < '3.9'
 backcall==0.2.0
 click==8.1.7
-colorama==0.4.6 ; sys_platform == 'win32' or platform_system == 'Windows'
+colorama==0.4.6 ; platform_system == 'Windows' or sys_platform == 'win32'
 contourpy==1.1.1
 coverage==7.6.1
 coverage-badge==1.1.2

@@ -86,7 +86,7 @@ jobs:
       - name: Install pytorch
         # install torch first to avoid pytorch index messing things up
         run: |
-          uv pip install torch==${{ matrix.versions.torch}}+cpu --system --extra-index-url https://download.pytorch.org/whl/cpu
+          uv pip install torch==${{ matrix.versions.torch }}+cpu --system --extra-index-url https://download.pytorch.org/whl/cpu
       
       - name: tests
         run: make test

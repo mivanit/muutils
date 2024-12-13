@@ -34,24 +34,26 @@ Documentation = "https://mivanit.github.io/muutils/"
 
 [project.optional-dependencies]
 array_nb_zanj = [
-    "numpy>=1.24.4; python_version == '3.8'",
+    "numpy>=1.24.4; python_version < '3.9'",
     "numpy>1.24.4; python_version >= '3.9'",
-    "torch>=1.13.1",
+    "torch>=1.13.1,<2.5.0; python_version < '3.9'",
+    "torch>=1.13.1; python_version >= '3.9'",
     "jaxtyping>=0.2.12",
     "ipython>=8.0.0",
     "zanj>=0.3.0; python_version >= '3.10'",
 ]
 
 array = [
-    "numpy>=1.24.4; python_version == '3.8'",
+    "numpy>=1.24.4; python_version < '3.9'",
     "numpy>1.24.4; python_version >= '3.9'",
-    "torch>=1.13.1",
+    "torch>=1.13.1,<2.5.0; python_version < '3.9'",
+    "torch>=1.13.1; python_version >= '3.9'",
     "jaxtyping>=0.2.12",
 ]
 
 # special group for CI, where we install cpu torch separately
 array_no_torch = [
-    "numpy>=1.24.4; python_version == '3.8'",
+    "numpy>=1.24.4; python_version < '3.9'",
     "numpy>1.24.4; python_version >= '3.9'",
     "jaxtyping>=0.2.12",
 ]

@@ -5,164 +5,232 @@ using the base `Spinner` class while some code is running.
 
 import os
 import time
+from dataclasses import dataclass, field
 import threading
 import sys
 from functools import wraps
 from typing import (
     Callable,
     Any,
+    Literal,
     Optional,
     TextIO,
     TypeVar,
     Sequence,
-    Dict,
     Union,
     ContextManager,
 )
+import warnings
 
 DecoratedFunction = TypeVar("DecoratedFunction", bound=Callable[..., Any])
 "Define a generic type for the decorated function"
 
 
-SPINNER_CHARS: Dict[str, Sequence[str]] = dict(
-    default=["|", "/", "-", "\\"],
-    dots=[".  ", ".. ", "..."],
-    bars=["|  ", "|| ", "|||"],
-    arrows=["<", "^", ">", "v"],
-    arrows_2=["←", "↖", "↑", "↗", "→", "↘", "↓", "↙"],
-    bouncing_bar=["[    ]", "[=   ]", "[==  ]", "[=== ]", "[ ===]", "[  ==]", "[   =]"],
-    bouncing_ball=[
-        "( ●    )",
-        "(  ●   )",
-        "(   ●  )",
-        "(    ● )",
-        "(     ●)",
-        "(    ● )",
-        "(   ●  )",
-        "(  ●   )",
-        "( ●    )",
-        "(●     )",
-    ],
-    ooo=[".", "o", "O", "o"],
-    braille=["⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏"],
-    clock=["🕛", "🕐", "🕑", "🕒", "🕓", "🕔", "🕕", "🕖", "🕗", "🕘", "🕙", "🕚"],
-    hourglass=["⏳", "⌛"],
-    square_corners=["◰", "◳", "◲", "◱"],
-    triangle=["◢", "◣", "◤", "◥"],
-    square_dot=[
-        "⣷",
-        "⣯",
-        "⣟",
-        "⡿",
-        "⢿",
-        "⣻",
-        "⣽",
-        "⣾",
-    ],
-    box_bounce=["▌", "▀", "▐", "▄"],
-    hamburger=["☱", "☲", "☴"],
-    earth=["🌍", "🌎", "🌏"],
-    growing_dots=["⣀", "⣄", "⣤", "⣦", "⣶", "⣷", "⣿"],
-    dice=["⚀", "⚁", "⚂", "⚃", "⚄", "⚅"],
-    wifi=["▁", "▂", "▃", "▄", "▅", "▆", "▇", "█"],
-    bounce=["⠁", "⠂", "⠄", "⠂"],
-    arc=["◜", "◠", "◝", "◞", "◡", "◟"],
-    toggle=["⊶", "⊷"],
-    toggle2=["▫", "▪"],
-    toggle3=["□", "■"],
-    toggle4=["■", "□", "▪", "▫"],
-    toggle5=["▮", "▯"],
-    toggle7=["⦾", "⦿"],
-    toggle8=["◍", "◌"],
-    toggle9=["◉", "◎"],
-    arrow2=["⬆️ ", "↗️ ", "➡️ ", "↘️ ", "⬇️ ", "↙️ ", "⬅️ ", "↖️ "],
-    point=["∙∙∙", "●∙∙", "∙●∙", "∙∙●", "∙∙∙"],
-    layer=["-", "=", "≡"],
-    speaker=["🔈 ", "🔉 ", "🔊 ", "🔉 "],
-    orangePulse=["🔸 ", "🔶 ", "🟠 ", "🟠 ", "🔷 "],
-    bluePulse=["🔹 ", "🔷 ", "🔵 ", "🔵 ", "🔷 "],
-    satellite_signal=["📡   ", "📡·  ", "📡·· ", "📡···", "📡 ··", "📡  ·"],
-    rocket_orbit=["🌍🚀  ", "🌏 🚀 ", "🌎  🚀"],
-    ogham=["ᚁ ", "ᚂ ", "ᚃ ", "ᚄ", "ᚅ"],
-    eth=["᛫", "፡", "፥", "፤", "፧", "።", "፨"],
-)
-"""dict of spinner sequences to show. some from Claude 3.5 Sonnet,
-some from [cli-spinners](https://github.com/sindresorhus/cli-spinners)
-"""
+@dataclass(kw_only=True)
+class SpinnerConfig:
+    working: list[str] = field(default_factory=lambda: ["|", "/", "-", "\\"])
+    success: str = "✔️"
+    fail: str = "❌"
 
-SPINNER_COMPLETE: Dict[str, str] = dict(
-    default="#",
-    dots="***",
-    bars="|||",
-    bouncing_bar="[====]",
-    bouncing_ball="(●●●●●●)",
-    braille="⣿",
-    clock="✔️",
-    hourglass="✔️",
-    square_corners="◼",
-    triangle="◆",
-    square_dot="⣿",
-    box_bounce="■",
-    hamburger="☰",
-    earth="✔️",
-    growing_dots="⣿",
-    dice="🎲",
-    wifi="✔️",
-    arc="○",
-    toggle="-",
-    toggle2="▪",
-    toggle3="■",
-    toggle4="■",
-    toggle5="▮",
-    toggle6="၀",
-    toggle7="⦿",
-    toggle8="◍",
-    toggle9="◉",
-    arrow2="➡️",
-    point="●●●",
-    layer="≡",
-    speaker="🔊",
-    orangePulse="🟠",
-    bluePulse="🔵",
-    satellite_signal="📡 ✔️ ",
-    rocket_orbit="🌍  ✨",
-    ogham="᚛᚜",
-    eth="፠",
+    def is_ascii(self) -> bool:
+        "whether all characters are ascii"
+        return all(s.isascii() for s in self.working + [self.success, self.fail])
+
+    def eq_lens(self) -> bool:
+        "whether all working characters are the same length"
+        expected_len: int = len(self.working[0])
+        return all(
+            [
+                len(char) == expected_len
+                for char in self.working + [self.success, self.fail]
+            ]
+        )
+
+    def is_valid(self) -> bool:
+        "whether the spinner config is valid"
+        return all(
+            [
+                len(self.working) > 0,
+                isinstance(self.working, list),
+                isinstance(self.success, str),
+                isinstance(self.fail, str),
+                all(isinstance(char, str) for char in self.working),
+            ]
+        )
+
+    def __post_init__(self):
+        if not self.is_valid():
+            raise ValueError(f"Invalid SpinnerConfig: {self}")
+
+    @classmethod
+    def from_any(cls, arg: "SpinnerConfigArg") -> "SpinnerConfig":
+        if isinstance(arg, str):
+            return SPINNERS[arg]
+        elif isinstance(arg, list):
+            return SpinnerConfig(working=arg)
+        elif isinstance(arg, dict):
+            return SpinnerConfig(**arg)
+        elif isinstance(arg, SpinnerConfig):
+            return arg
+        else:
+            raise TypeError(
+                f"to create a SpinnerConfig, you must pass a string (key), list (working seq), dict (kwargs to SpinnerConfig), or SpinnerConfig, but got {type(arg) = }, {arg = }"
+            )
+
+
+SpinnerConfigArg = Union[str, list[str], SpinnerConfig, dict]
+
+SPINNERS: dict[str, SpinnerConfig] = dict(
+    default=SpinnerConfig(working=["|", "/", "-", "\\"], success="#", fail="X"),
+    dots=SpinnerConfig(working=[".  ", ".. ", "..."], success="***", fail="xxx"),
+    bars=SpinnerConfig(working=["|  ", "|| ", "|||"], success="|||", fail="///"),
+    arrows=SpinnerConfig(working=["<", "^", ">", "v"], success="►", fail="✖"),
+    arrows_2=SpinnerConfig(
+        working=["←", "↖", "↑", "↗", "→", "↘", "↓", "↙"], success="→", fail="↯"
+    ),
+    bouncing_bar=SpinnerConfig(
+        working=["[    ]", "[=   ]", "[==  ]", "[=== ]", "[ ===]", "[  ==]", "[   =]"],
+        success="[====]",
+        fail="[XXXX]",
+    ),
+    bar=SpinnerConfig(
+        working=["[  ]", "[- ]", "[--]", "[ -]"],
+        success="[==]",
+        fail="[xx]",
+    ),
+    bouncing_ball=SpinnerConfig(
+        working=[
+            "( ●    )",
+            "(  ●   )",
+            "(   ●  )",
+            "(    ● )",
+            "(     ●)",
+            "(    ● )",
+            "(   ●  )",
+            "(  ●   )",
+            "( ●    )",
+            "(●     )",
+        ],
+        success="(●●●●●●)",
+        fail="(  ✖  )",
+    ),
+    ooo=SpinnerConfig(working=[".", "o", "O", "o"], success="O", fail="x"),
+    braille=SpinnerConfig(
+        working=["⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏"],
+        success="⣿",
+        fail="X",
+    ),
+    clock=SpinnerConfig(
+        working=[
+            "🕛",
+            "🕐",
+            "🕑",
+            "🕒",
+            "🕓",
+            "🕔",
+            "🕕",
+            "🕖",
+            "🕗",
+            "🕘",
+            "🕙",
+            "🕚",
+        ],
+        success="✔️",
+        fail="❌",
+    ),
+    hourglass=SpinnerConfig(working=["⏳", "⌛"], success="✔️", fail="❌"),
+    square_corners=SpinnerConfig(working=["◰", "◳", "◲", "◱"], success="◼", fail="✖"),
+    triangle=SpinnerConfig(working=["◢", "◣", "◤", "◥"], success="◆", fail="✖"),
+    square_dot=SpinnerConfig(
+        working=["⣷", "⣯", "⣟", "⡿", "⢿", "⣻", "⣽", "⣾"], success="⣿", fail="❌"
+    ),
+    box_bounce=SpinnerConfig(working=["▌", "▀", "▐", "▄"], success="■", fail="✖"),
+    hamburger=SpinnerConfig(working=["☱", "☲", "☴"], success="☰", fail="✖"),
+    earth=SpinnerConfig(working=["🌍", "🌎", "🌏"], success="✔️", fail="❌"),
+    growing_dots=SpinnerConfig(
+        working=["⣀", "⣄", "⣤", "⣦", "⣶", "⣷", "⣿"], success="⣿", fail="✖"
+    ),
+    dice=SpinnerConfig(working=["⚀", "⚁", "⚂", "⚃", "⚄", "⚅"], success="🎲", fail="✖"),
+    wifi=SpinnerConfig(
+        working=["▁", "▂", "▃", "▄", "▅", "▆", "▇", "█"], success="✔️", fail="❌"
+    ),
+    bounce=SpinnerConfig(working=["⠁", "⠂", "⠄", "⠂"], success="⠿", fail="⢿"),
+    arc=SpinnerConfig(working=["◜", "◠", "◝", "◞", "◡", "◟"], success="○", fail="✖"),
+    toggle=SpinnerConfig(working=["⊶", "⊷"], success="⊷", fail="⊗"),
+    toggle2=SpinnerConfig(working=["▫", "▪"], success="▪", fail="✖"),
+    toggle3=SpinnerConfig(working=["□", "■"], success="■", fail="✖"),
+    toggle4=SpinnerConfig(working=["■", "□", "▪", "▫"], success="■", fail="✖"),
+    toggle5=SpinnerConfig(working=["▮", "▯"], success="▮", fail="✖"),
+    toggle7=SpinnerConfig(working=["⦾", "⦿"], success="⦿", fail="✖"),
+    toggle8=SpinnerConfig(working=["◍", "◌"], success="◍", fail="✖"),
+    toggle9=SpinnerConfig(working=["◉", "◎"], success="◉", fail="✖"),
+    arrow2=SpinnerConfig(
+        working=["⬆️ ", "↗️ ", "➡️ ", "↘️ ", "⬇️ ", "↙️ ", "⬅️ ", "↖️ "], success="➡️", fail="❌"
+    ),
+    point=SpinnerConfig(
+        working=["∙∙∙", "●∙∙", "∙●∙", "∙∙●", "∙∙∙"], success="●●●", fail="xxx"
+    ),
+    layer=SpinnerConfig(working=["-", "=", "≡"], success="≡", fail="✖"),
+    speaker=SpinnerConfig(
+        working=["🔈 ", "🔉 ", "🔊 ", "🔉 "], success="🔊", fail="🔇"
+    ),
+    orangePulse=SpinnerConfig(
+        working=["🔸 ", "🔶 ", "🟠 ", "🟠 ", "🔷 "], success="🟠", fail="❌"
+    ),
+    bluePulse=SpinnerConfig(
+        working=["🔹 ", "🔷 ", "🔵 ", "🔵 ", "🔷 "], success="🔵", fail="❌"
+    ),
+    satellite_signal=SpinnerConfig(
+        working=["📡   ", "📡·  ", "📡·· ", "📡···", "📡 ··", "📡  ·"],
+        success="📡 ✔️ ",
+        fail="📡 ❌ ",
+    ),
+    rocket_orbit=SpinnerConfig(
+        working=["🌍🚀  ", "🌏 🚀 ", "🌎  🚀"], success="🌍  ✨", fail="🌍  💥"
+    ),
+    ogham=SpinnerConfig(working=["ᚁ ", "ᚂ ", "ᚃ ", "ᚄ", "ᚅ"], success="᚛᚜", fail="✖"),
+    eth=SpinnerConfig(
+        working=["᛫", "፡", "፥", "፤", "፧", "።", "፨"], success="፠", fail="✖"
+    ),
 )
-"string to display when the spinner is complete"
+# spinner configurations
 
 
 class Spinner:
     """displays a spinner, and optionally elapsed time and a mutable value while a function is running.
 
     # Parameters:
-    - `spinner_chars : Union[str, Sequence[str]]`
-    sequence of strings, or key to look up in `SPINNER_CHARS`, to use as the spinner characters
-    (defaults to `"default"`)
+
     - `update_interval : float`
-    how often to update the spinner display in seconds
-    (defaults to `0.1`)
-    - `spinner_complete : str`
-    string to display when the spinner is complete
-    (defaults to looking up `spinner_chars` in `SPINNER_COMPLETE` or `"#"`)
+        how often to update the spinner display in seconds
+        (defaults to `0.1`)
     - `initial_value : str`
-    initial value to display with the spinner
-    (defaults to `""`)
+        initial value to display with the spinner
+        (defaults to `""`)
     - `message : str`
-    message to display with the spinner
-    (defaults to `""`)
+        message to display with the spinner
+        (defaults to `""`)
     - `format_string : str`
-    string to format the spinner with. must have `"\\r"` prepended to clear the line.
-    allowed keys are `spinner`, `elapsed_time`, `message`, and `value`
-    (defaults to `"\\r{spinner} ({elapsed_time:.2f}s) {message}{value}"`)
+        string to format the spinner with. must have `"\\r"` prepended to clear the line.
+        allowed keys are `spinner`, `elapsed_time`, `message`, and `value`
+        (defaults to `"\\r{spinner} ({elapsed_time:.2f}s) {message}{value}"`)
     - `output_stream : TextIO`
-    stream to write the spinner to
-    (defaults to `sys.stdout`)
+        stream to write the spinner to
+        (defaults to `sys.stdout`)
     - `format_string_when_updated : Union[bool,str]`
-    whether to use a different format string when the value is updated.
-    if `True`, use the default format string with a newline appended. if a string, use that string.
-    this is useful if you want update_value to print to console and be preserved.
-    (defaults to `False`)
+        whether to use a different format string when the value is updated.
+        if `True`, use the default format string with a newline appended. if a string, use that string.
+        this is useful if you want update_value to print to console and be preserved.
+        (defaults to `False`)
+
+    # Deprecated Parameters:
+
+    - `spinner_chars : Union[str, Sequence[str]]`
+        sequence of strings, or key to look up in `SPINNER_CHARS`, to use as the spinner characters
+        (defaults to `"default"`)
+    - `spinner_complete : str`
+        string to display when the spinner is complete
+        (defaults to looking up `spinner_chars` in `SPINNER_COMPLETE` or `"#"`)
 
     # Methods:
     - `update_value(value: Any) -> None`
@@ -191,15 +259,19 @@ class Spinner:
 
     def __init__(
         self,
+        # no positional args
         *args,
-        spinner_chars: Union[str, Sequence[str]] = "default",
+        config: SpinnerConfigArg = "default",
         update_interval: float = 0.1,
-        spinner_complete: Optional[str] = None,
         initial_value: str = "",
         message: str = "",
         format_string: str = "\r{spinner} ({elapsed_time:.2f}s) {message}{value}",
         output_stream: TextIO = sys.stdout,
         format_string_when_updated: Union[str, bool] = False,
+        # deprecated
+        spinner_chars: Optional[Union[str, Sequence[str]]] = None,
+        spinner_complete: Optional[str] = None,
+        # no other kwargs accepted
         **kwargs: Any,
     ):
         if args:
@@ -209,26 +281,15 @@ class Spinner:
                 f"Spinner did not recognize these keyword arguments: {kwargs}"
             )
 
-        # spinner display
-        self.spinner_complete: str = (
-            (
-                # if None, use `spinner_chars` key as default
-                SPINNER_COMPLETE.get(spinner_chars, "#")
-                if isinstance(spinner_chars, str)
-                else "#"
+        # old spinner display
+        if (spinner_chars is not None) or (spinner_complete is not None):
+            warnings.warn(
+                "spinner_chars and spinner_complete are deprecated and will have no effect. Use `config` instead.",
+                DeprecationWarning,
             )
-            if spinner_complete is None
-            # if not None, use the value provided
-            else spinner_complete
-        )
-        "string to display when the spinner is complete"
 
-        self.spinner_chars: Sequence[str] = (
-            SPINNER_CHARS[spinner_chars]
-            if isinstance(spinner_chars, str)
-            else spinner_chars
-        )
-        "sequence of strings to use as the spinner characters"
+        # config
+        self.config: SpinnerConfig = SpinnerConfig.from_any(config)
 
         # special format string for when the value is updated
         self.format_string_when_updated: Optional[str] = None
@@ -256,7 +317,7 @@ class Spinner:
         # test out format string
         try:
             self.format_string.format(
-                spinner=self.spinner_chars[0],
+                spinner=self.config.working[0],
                 elapsed_time=0.0,
                 message=self.message,
                 value=self.current_value,
@@ -283,12 +344,15 @@ class Spinner:
         except OSError:
             self.term_width = 80
 
+        # state of the spinner
+        self.state: Literal["initialized", "running", "success", "fail"] = "initialized"
+
     def spin(self) -> None:
         "Function to run in a separate thread, displaying the spinner and optional information"
         i: int = 0
         while not self.stop_spinner.is_set():
             # get current spinner str
-            spinner: str = self.spinner_chars[i % len(self.spinner_chars)]
+            spinner: str = self.config.working[i % len(self.config.working)]
 
             # args for display string
             display_parts: dict[str, Any] = dict(
@@ -323,12 +387,13 @@ class Spinner:
         self.start_time = time.time()
         self.spinner_thread = threading.Thread(target=self.spin)
         self.spinner_thread.start()
+        self.state = "running"
 
-    def stop(self) -> None:
+    def stop(self, failed: bool = False) -> None:
         "Stop the spinner"
         self.output_stream.write(
             self.format_string.format(
-                spinner=self.spinner_complete,
+                spinner=self.config.success if not failed else self.config.fail,
                 elapsed_time=time.time() - self.start_time,  # float
                 message=self.message,  # str
                 value=self.current_value,  # Any, but will be formatted as str
@@ -339,6 +404,8 @@ class Spinner:
             self.spinner_thread.join()
         self.output_stream.write("\n")
         self.output_stream.flush()
+
+        self.state = "fail" if failed else "success"
 
 
 class NoOpContextManager(ContextManager):
@@ -362,7 +429,7 @@ class SpinnerContext(Spinner, ContextManager):
         return self
 
     def __exit__(self, exc_type: Any, exc_val: Any, exc_tb: Any) -> None:
-        self.stop()
+        self.stop(failed=exc_type is not None)
 
 
 SpinnerContext.__doc__ = Spinner.__doc__
@@ -371,15 +438,17 @@ SpinnerContext.__doc__ = Spinner.__doc__
 def spinner_decorator(
     *args,
     # passed to `Spinner.__init__`
-    spinner_chars: Union[str, Sequence[str]] = "default",
+    config: SpinnerConfigArg = "default",
     update_interval: float = 0.1,
-    spinner_complete: Optional[str] = None,
     initial_value: str = "",
     message: str = "",
     format_string: str = "{spinner} ({elapsed_time:.2f}s) {message}{value}",
     output_stream: TextIO = sys.stdout,
     # new kwarg
     mutable_kwarg_key: Optional[str] = None,
+    # deprecated
+    spinner_chars: Union[str, Sequence[str], None] = None,
+    spinner_complete: Optional[str] = None,
     **kwargs,
 ) -> Callable[[DecoratedFunction], DecoratedFunction]:
     """see `Spinner` for parameters. Also takes `mutable_kwarg_key`
@@ -402,13 +471,14 @@ def spinner_decorator(
         @wraps(func)
         def wrapper(*args: Any, **kwargs: Any) -> Any:
             spinner: Spinner = Spinner(
-                spinner_chars=spinner_chars,
+                config=config,
                 update_interval=update_interval,
-                spinner_complete=spinner_complete,
                 initial_value=initial_value,
                 message=message,
                 format_string=format_string,
                 output_stream=output_stream,
+                spinner_chars=spinner_chars,
+                spinner_complete=spinner_complete,
             )
 
             if mutable_kwarg_key:
@@ -417,8 +487,10 @@ def spinner_decorator(
             spinner.start()
             try:
                 result: Any = func(*args, **kwargs)
-            finally:
-                spinner.stop()
+                spinner.stop(failed=False)
+            except Exception as e:
+                spinner.stop(failed=True)
+                raise e
 
             return result
 

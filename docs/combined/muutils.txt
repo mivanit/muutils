@@ -1,4 +1,4 @@
-  docs for muutils v0.6.16
+  docs for muutils v0.6.17
 
 Contents
 
@@ -258,7 +258,7 @@ at your own risk!
 
 View Source on GitHub
 
-  docs for muutils v0.6.16
+  docs for muutils v0.6.17
 
 Contents
 
@@ -613,7 +613,7 @@ Raises:
     ‘yaml’, or if you try to use ‘yaml’ output without having PyYAML
     installed
 
-  docs for muutils v0.6.16
+  docs for muutils v0.6.17
 
 Contents
 
@@ -828,7 +828,7 @@ Inherited Members
 
 map of string aliases to ErrorMode instances
 
-  docs for muutils v0.6.16
+  docs for muutils v0.6.17
 
 Contents
 
@@ -870,7 +870,7 @@ Arguments
 -   eq_func: Callable[[T, T], bool] a function that returns true if two
     items are equivalent. need not be transitive
 
-  docs for muutils v0.6.16
+  docs for muutils v0.6.17
 
 Contents
 
@@ -1169,7 +1169,7 @@ Inherited Members
 -   intersection
 -   union
 
-  docs for muutils v0.6.16
+  docs for muutils v0.6.17
 
 Contents
 
@@ -1764,7 +1764,7 @@ Parameters:
     - `nested_dict : dict[str, Any]`
         nested dict to update the instance with
 
-  docs for muutils v0.6.16
+  docs for muutils v0.6.17
 
 Contents
 
@@ -1886,7 +1886,7 @@ View Source on GitHub
 
 load a json-serialized array, infer the mode if not specified
 
-  docs for muutils v0.6.16
+  docs for muutils v0.6.17
 
 Contents
 
@@ -1931,7 +1931,7 @@ View Source on GitHub
 
 -   SERIALIZER_SPECIAL_FUNCS: dict[str, typing.Callable] = {'str': <class 'str'>, 'dir': <built-in function dir>, 'type': <function <lambda>>, 'repr': <function <lambda>>, 'code': <function <lambda>>, 'sourcefile': <function <lambda>>}
 
--   SERIALIZE_DIRECT_AS_STR: Set[str] = {"<class 'torch.device'>", "<class 'torch.dtype'>"}
+-   SERIALIZE_DIRECT_AS_STR: Set[str] = {"<class 'torch.dtype'>", "<class 'torch.device'>"}
 
 -   ObjectPath = tuple[typing.Union[str, int], ...]
 
@@ -2062,7 +2062,7 @@ View Source on GitHub
 
 serialize object to json-serializable object with default config
 
-  docs for muutils v0.6.16
+  docs for muutils v0.6.17
 
 Contents
 
@@ -2721,7 +2721,7 @@ Raises:
 -   AttributeError : if a property is not found on the class
 -   FieldLoadingError : if there is an error loading a field
 
-  docs for muutils v0.6.16
+  docs for muutils v0.6.17
 
 Contents
 
@@ -2913,7 +2913,7 @@ the container. ZANJ will automatically do this for you.
 
 TODO: custom_value_check_fn: function taking the value of the field and returning whether the value itself is valid. if not provided, any value is valid as long as it passes the type test
 
-  docs for muutils v0.6.16
+  docs for muutils v0.6.17
 
 Contents
 
@@ -3093,7 +3093,7 @@ View Source on GitHub
 
 tuple type hint, but for a tuple of any length with all the same type
 
-  docs for muutils v0.6.16
+  docs for muutils v0.6.17
 
 Contents
 
@@ -3143,7 +3143,7 @@ def jsonl_write
 
 View Source on GitHub
 
-  docs for muutils v0.6.16
+  docs for muutils v0.6.17
 
 Contents
 
@@ -3199,7 +3199,7 @@ Inherited Members
 -   items
 -   values
 
-  docs for muutils v0.6.16
+  docs for muutils v0.6.17
 
 Contents
 
@@ -3420,7 +3420,7 @@ context manager for timing code
 
 -   elapsed_time: float
 
-  docs for muutils v0.6.16
+  docs for muutils v0.6.17
 
 API Documentation
 
@@ -3457,7 +3457,7 @@ View Source on GitHub
 
 -   stream
 
-  docs for muutils v0.6.16
+  docs for muutils v0.6.17
 
 API Documentation
 
@@ -3549,7 +3549,7 @@ standard header function. will output
 
 -   HEADER_FUNCTIONS: dict[str, muutils.logger.headerfuncs.HeaderFunction] = {'md': <function md_header_function>}
 
-  docs for muutils v0.6.16
+  docs for muutils v0.6.17
 
 API Documentation
 
@@ -3614,7 +3614,7 @@ then gather_val("log.jsonl", "s1", ("a", "b")) will return
         [4, 5]
     ]
 
-  docs for muutils v0.6.16
+  docs for muutils v0.6.17
 
 Contents
 
@@ -3756,7 +3756,7 @@ View Source on GitHub
 
 flush all streams
 
-  docs for muutils v0.6.16
+  docs for muutils v0.6.17
 
 API Documentation
 
@@ -3818,7 +3818,7 @@ def make_handler
 
 View Source on GitHub
 
-  docs for muutils v0.6.16
+  docs for muutils v0.6.17
 
 API Documentation
 
@@ -3893,7 +3893,7 @@ View Source on GitHub
 
 log a message to the log file, and optionally to the console
 
-  docs for muutils v0.6.16
+  docs for muutils v0.6.17
 
 API Documentation
 
@@ -3980,7 +3980,7 @@ View Source on GitHub
 
 returns a progress string
 
-  docs for muutils v0.6.16
+  docs for muutils v0.6.17
 
 Contents
 
@@ -4550,7 +4550,7 @@ Duplicates are ignored in the same manner as a set. Unfrozen dataclasses
 can’t be placed in sets since they’re not hashable. Collections of them
 may be compared using this function.
 
-  docs for muutils v0.6.16
+  docs for muutils v0.6.17
 
 API Documentation
 
@@ -4680,7 +4680,7 @@ Duplicates are ignored in the same manner as a set. Unfrozen dataclasses
 can’t be placed in sets since they’re not hashable. Collections of them
 may be compared using this function.
 
-  docs for muutils v0.6.16
+  docs for muutils v0.6.17
 
 API Documentation
 
@@ -4796,7 +4796,7 @@ you can’t rely on that. always use the return value.
 
 the gelidum package is a more complete implementation of this idea
 
-  docs for muutils v0.6.16
+  docs for muutils v0.6.17
 
 API Documentation
 
@@ -4827,7 +4827,7 @@ View Source on GitHub
 Returns a base64 representation of the hash of the given string. not
 cryptographically secure
 
-  docs for muutils v0.6.16
+  docs for muutils v0.6.17
 
 API Documentation
 
@@ -4884,7 +4884,7 @@ Examples:
     >>> str_to_numeric("1.2e2")
     120.0
 
-  docs for muutils v0.6.16
+  docs for muutils v0.6.17
 
 API Documentation
 
@@ -5059,7 +5059,7 @@ Raises:
     is "except"
 -   ValueError : if when_missing is invalid
 
-  docs for muutils v0.6.16
+  docs for muutils v0.6.17
 
 API Documentation
 
@@ -5144,7 +5144,7 @@ def dynamic_docstring
 
 View Source on GitHub
 
-  docs for muutils v0.6.16
+  docs for muutils v0.6.17
 
 Contents
 
@@ -5240,7 +5240,7 @@ def pprint_summary
 
 View Source on GitHub
 
-  docs for muutils v0.6.16
+  docs for muutils v0.6.17
 
 Contents
 
@@ -5284,7 +5284,7 @@ View Source on GitHub
 
 for plotting mermaid.js diagrams
 
-  docs for muutils v0.6.16
+  docs for muutils v0.6.17
 
 Contents
 
@@ -5456,7 +5456,7 @@ View Source on GitHub
 
 Show the active plot, depending on global configs
 
-  docs for muutils v0.6.16
+  docs for muutils v0.6.17
 
 Contents
 
@@ -5560,7 +5560,7 @@ Arguments
     - `filter_out_lines: str|typing.Sequence[str] = ('%', '!')`: comment out lines starting with these strings (in code blocks).
         if a string is passed, it will be split by char and each char will be treated as a separate filter.
 
-  docs for muutils v0.6.16
+  docs for muutils v0.6.17
 
 Contents
 
@@ -5588,7 +5588,7 @@ View Source on GitHub
 
 for plotting mermaid.js diagrams
 
-  docs for muutils v0.6.16
+  docs for muutils v0.6.17
 
 Contents
 
@@ -5619,7 +5619,7 @@ View Source on GitHub
 
 function for easily rendering a sympy expression in latex
 
-  docs for muutils v0.6.16
+  docs for muutils v0.6.17
 
 Contents
 
@@ -5676,7 +5676,7 @@ def run_notebook_tests
 
 View Source on GitHub
 
-  docs for muutils v0.6.16
+  docs for muutils v0.6.17
 
 Contents
 
@@ -5688,8 +5688,9 @@ using the base Spinner class while some code is running.
 API Documentation
 
 -   DecoratedFunction
--   SPINNER_CHARS
--   SPINNER_COMPLETE
+-   SpinnerConfig
+-   SpinnerConfigArg
+-   SPINNERS
 -   Spinner
 -   NoOpContextManager
 -   SpinnerContext
@@ -5710,14 +5711,61 @@ View Source on GitHub
 
 Define a generic type for the decorated function
 
--   SPINNER_CHARS: Dict[str, Sequence[str]] = {'default': ['|', '/', '-', '\\'], 'dots': ['.  ', '.. ', '...'], 'bars': ['|  ', '|| ', '|||'], 'arrows': ['<', '^', '>', 'v'], 'arrows_2': ['←', '↖', '↑', '↗', '→', '↘', '↓', '↙'], 'bouncing_bar': ['[    ]', '[=   ]', '[==  ]', '[=== ]', '[ ===]', '[  ==]', '[   =]'], 'bouncing_ball': ['( ●    )', '(  ●   )', '(   ●  )', '(    ● )', '(     ●)', '(    ● )', '(   ●  )', '(  ●   )', '( ●    )', '(●     )'], 'ooo': ['.', 'o', 'O', 'o'], 'braille': ['⠋', '⠙', '⠹', '⠸', '⠼', '⠴', '⠦', '⠧', '⠇', '⠏'], 'clock': ['🕛', '🕐', '🕑', '🕒', '🕓', '🕔', '🕕', '🕖', '🕗', '🕘', '🕙', '🕚'], 'hourglass': ['⏳', '⌛'], 'square_corners': ['◰', '◳', '◲', '◱'], 'triangle': ['◢', '◣', '◤', '◥'], 'square_dot': ['⣷', '⣯', '⣟', '⡿', '⢿', '⣻', '⣽', '⣾'], 'box_bounce': ['▌', '▀', '▐', '▄'], 'hamburger': ['☱', '☲', '☴'], 'earth': ['🌍', '🌎', '🌏'], 'growing_dots': ['⣀', '⣄', '⣤', '⣦', '⣶', '⣷', '⣿'], 'dice': ['⚀', '⚁', '⚂', '⚃', '⚄', '⚅'], 'wifi': ['▁', '▂', '▃', '▄', '▅', '▆', '▇', '█'], 'bounce': ['⠁', '⠂', '⠄', '⠂'], 'arc': ['◜', '◠', '◝', '◞', '◡', '◟'], 'toggle': ['⊶', '⊷'], 'toggle2': ['▫', '▪'], 'toggle3': ['□', '■'], 'toggle4': ['■', '□', '▪', '▫'], 'toggle5': ['▮', '▯'], 'toggle7': ['⦾', '⦿'], 'toggle8': ['◍', '◌'], 'toggle9': ['◉', '◎'], 'arrow2': ['⬆️ ', '↗️ ', '➡️ ', '↘️ ', '⬇️ ', '↙️ ', '⬅️ ', '↖️ '], 'point': ['∙∙∙', '●∙∙', '∙●∙', '∙∙●', '∙∙∙'], 'layer': ['-', '=', '≡'], 'speaker': ['🔈 ', '🔉 ', '🔊 ', '🔉 '], 'orangePulse': ['🔸 ', '🔶 ', '🟠 ', '🟠 ', '🔷 '], 'bluePulse': ['🔹 ', '🔷 ', '🔵 ', '🔵 ', '🔷 '], 'satellite_signal': ['📡   ', '📡·  ', '📡·· ', '📡···', '📡 ··', '📡  ·'], 'rocket_orbit': ['🌍🚀  ', '🌏 🚀 ', '🌎  🚀'], 'ogham': ['ᚁ ', 'ᚂ ', 'ᚃ ', 'ᚄ', 'ᚅ'], 'eth': ['᛫', '፡', '፥', '፤', '፧', '።', '፨']}
+class SpinnerConfig:
 
-dict of spinner sequences to show. some from Claude 3.5 Sonnet, some
-from cli-spinners
+View Source on GitHub
 
--   SPINNER_COMPLETE: Dict[str, str] = {'default': '#', 'dots': '***', 'bars': '|||', 'bouncing_bar': '[====]', 'bouncing_ball': '(●●●●●●)', 'braille': '⣿', 'clock': '✔️', 'hourglass': '✔️', 'square_corners': '◼', 'triangle': '◆', 'square_dot': '⣿', 'box_bounce': '■', 'hamburger': '☰', 'earth': '✔️', 'growing_dots': '⣿', 'dice': '🎲', 'wifi': '✔️', 'arc': '○', 'toggle': '-', 'toggle2': '▪', 'toggle3': '■', 'toggle4': '■', 'toggle5': '▮', 'toggle6': '၀', 'toggle7': '⦿', 'toggle8': '◍', 'toggle9': '◉', 'arrow2': '➡️', 'point': '●●●', 'layer': '≡', 'speaker': '🔊', 'orangePulse': '🟠', 'bluePulse': '🔵', 'satellite_signal': '📡 ✔️ ', 'rocket_orbit': '🌍  ✨', 'ogham': '᚛᚜', 'eth': '፠'}
+SpinnerConfig
 
-string to display when the spinner is complete
+    (
+        *,
+        working: list[str] = <factory>,
+        success: str = '✔️',
+        fail: str = '❌'
+    )
+
+-   working: list[str]
+
+-   success: str = '✔️'
+
+-   fail: str = '❌'
+
+def is_ascii
+
+    (self) -> bool
+
+View Source on GitHub
+
+whether all characters are ascii
+
+def eq_lens
+
+    (self) -> bool
+
+View Source on GitHub
+
+whether all working characters are the same length
+
+def is_valid
+
+    (self) -> bool
+
+View Source on GitHub
+
+whether the spinner config is valid
+
+def from_any
+
+    (
+        cls,
+        arg: Union[str, list[str], muutils.spinner.SpinnerConfig, dict]
+    ) -> muutils.spinner.SpinnerConfig
+
+View Source on GitHub
+
+-   SpinnerConfigArg = typing.Union[str, list[str], muutils.spinner.SpinnerConfig, dict]
+
+-   SPINNERS: dict[str, muutils.spinner.SpinnerConfig] = {'default': SpinnerConfig(working=['|', '/', '-', '\\'], success='#', fail='X'), 'dots': SpinnerConfig(working=['.  ', '.. ', '...'], success='***', fail='xxx'), 'bars': SpinnerConfig(working=['|  ', '|| ', '|||'], success='|||', fail='///'), 'arrows': SpinnerConfig(working=['<', '^', '>', 'v'], success='►', fail='✖'), 'arrows_2': SpinnerConfig(working=['←', '↖', '↑', '↗', '→', '↘', '↓', '↙'], success='→', fail='↯'), 'bouncing_bar': SpinnerConfig(working=['[    ]', '[=   ]', '[==  ]', '[=== ]', '[ ===]', '[  ==]', '[   =]'], success='[====]', fail='[XXXX]'), 'bar': SpinnerConfig(working=['[  ]', '[- ]', '[--]', '[ -]'], success='[==]', fail='[xx]'), 'bouncing_ball': SpinnerConfig(working=['( ●    )', '(  ●   )', '(   ●  )', '(    ● )', '(     ●)', '(    ● )', '(   ●  )', '(  ●   )', '( ●    )', '(●     )'], success='(●●●●●●)', fail='(  ✖  )'), 'ooo': SpinnerConfig(working=['.', 'o', 'O', 'o'], success='O', fail='x'), 'braille': SpinnerConfig(working=['⠋', '⠙', '⠹', '⠸', '⠼', '⠴', '⠦', '⠧', '⠇', '⠏'], success='⣿', fail='X'), 'clock': SpinnerConfig(working=['🕛', '🕐', '🕑', '🕒', '🕓', '🕔', '🕕', '🕖', '🕗', '🕘', '🕙', '🕚'], success='✔️', fail='❌'), 'hourglass': SpinnerConfig(working=['⏳', '⌛'], success='✔️', fail='❌'), 'square_corners': SpinnerConfig(working=['◰', '◳', '◲', '◱'], success='◼', fail='✖'), 'triangle': SpinnerConfig(working=['◢', '◣', '◤', '◥'], success='◆', fail='✖'), 'square_dot': SpinnerConfig(working=['⣷', '⣯', '⣟', '⡿', '⢿', '⣻', '⣽', '⣾'], success='⣿', fail='❌'), 'box_bounce': SpinnerConfig(working=['▌', '▀', '▐', '▄'], success='■', fail='✖'), 'hamburger': SpinnerConfig(working=['☱', '☲', '☴'], success='☰', fail='✖'), 'earth': SpinnerConfig(working=['🌍', '🌎', '🌏'], success='✔️', fail='❌'), 'growing_dots': SpinnerConfig(working=['⣀', '⣄', '⣤', '⣦', '⣶', '⣷', '⣿'], success='⣿', fail='✖'), 'dice': SpinnerConfig(working=['⚀', '⚁', '⚂', '⚃', '⚄', '⚅'], success='🎲', fail='✖'), 'wifi': SpinnerConfig(working=['▁', '▂', '▃', '▄', '▅', '▆', '▇', '█'], success='✔️', fail='❌'), 'bounce': SpinnerConfig(working=['⠁', '⠂', '⠄', '⠂'], success='⠿', fail='⢿'), 'arc': SpinnerConfig(working=['◜', '◠', '◝', '◞', '◡', '◟'], success='○', fail='✖'), 'toggle': SpinnerConfig(working=['⊶', '⊷'], success='⊷', fail='⊗'), 'toggle2': SpinnerConfig(working=['▫', '▪'], success='▪', fail='✖'), 'toggle3': SpinnerConfig(working=['□', '■'], success='■', fail='✖'), 'toggle4': SpinnerConfig(working=['■', '□', '▪', '▫'], success='■', fail='✖'), 'toggle5': SpinnerConfig(working=['▮', '▯'], success='▮', fail='✖'), 'toggle7': SpinnerConfig(working=['⦾', '⦿'], success='⦿', fail='✖'), 'toggle8': SpinnerConfig(working=['◍', '◌'], success='◍', fail='✖'), 'toggle9': SpinnerConfig(working=['◉', '◎'], success='◉', fail='✖'), 'arrow2': SpinnerConfig(working=['⬆️ ', '↗️ ', '➡️ ', '↘️ ', '⬇️ ', '↙️ ', '⬅️ ', '↖️ '], success='➡️', fail='❌'), 'point': SpinnerConfig(working=['∙∙∙', '●∙∙', '∙●∙', '∙∙●', '∙∙∙'], success='●●●', fail='xxx'), 'layer': SpinnerConfig(working=['-', '=', '≡'], success='≡', fail='✖'), 'speaker': SpinnerConfig(working=['🔈 ', '🔉 ', '🔊 ', '🔉 '], success='🔊', fail='🔇'), 'orangePulse': SpinnerConfig(working=['🔸 ', '🔶 ', '🟠 ', '🟠 ', '🔷 '], success='🟠', fail='❌'), 'bluePulse': SpinnerConfig(working=['🔹 ', '🔷 ', '🔵 ', '🔵 ', '🔷 '], success='🔵', fail='❌'), 'satellite_signal': SpinnerConfig(working=['📡   ', '📡·  ', '📡·· ', '📡···', '📡 ··', '📡  ·'], success='📡 ✔️ ', fail='📡 ❌ '), 'rocket_orbit': SpinnerConfig(working=['🌍🚀  ', '🌏 🚀 ', '🌎  🚀'], success='🌍  ✨', fail='🌍  💥'), 'ogham': SpinnerConfig(working=['ᚁ ', 'ᚂ ', 'ᚃ ', 'ᚄ', 'ᚅ'], success='᚛᚜', fail='✖'), 'eth': SpinnerConfig(working=['᛫', '፡', '፥', '፤', '፧', '።', '፨'], success='፠', fail='✖')}
 
 class Spinner:
 
@@ -5728,14 +5776,8 @@ while a function is running.
 
 Parameters:
 
--   spinner_chars : Union[str, Sequence[str]] sequence of strings, or
-    key to look up in SPINNER_CHARS, to use as the spinner characters
-    (defaults to "default")
 -   update_interval : float how often to update the spinner display in
     seconds (defaults to 0.1)
--   spinner_complete : str string to display when the spinner is
-    complete (defaults to looking up spinner_chars in SPINNER_COMPLETE
-    or "#")
 -   initial_value : str initial value to display with the spinner
     (defaults to "")
 -   message : str message to display with the spinner (defaults to "")
@@ -5750,6 +5792,15 @@ Parameters:
     default format string with a newline appended. if a string, use that
     string. this is useful if you want update_value to print to console
     and be preserved. (defaults to False)
+
+Deprecated Parameters:
+
+-   spinner_chars : Union[str, Sequence[str]] sequence of strings, or
+    key to look up in SPINNER_CHARS, to use as the spinner characters
+    (defaults to "default")
+-   spinner_complete : str string to display when the spinner is
+    complete (defaults to looking up spinner_chars in SPINNER_COMPLETE
+    or "#")
 
 Methods:
 
@@ -5778,26 +5829,21 @@ Spinner
 
     (
         *args,
-        spinner_chars: Union[str, Sequence[str]] = 'default',
+        config: Union[str, list[str], muutils.spinner.SpinnerConfig, dict] = 'default',
         update_interval: float = 0.1,
-        spinner_complete: Optional[str] = None,
         initial_value: str = '',
         message: str = '',
         format_string: str = '\r{spinner} ({elapsed_time:.2f}s) {message}{value}',
         output_stream: <class 'TextIO'> = <_io.StringIO object>,
         format_string_when_updated: Union[str, bool] = False,
+        spinner_chars: Union[str, Sequence[str], NoneType] = None,
+        spinner_complete: Optional[str] = None,
         **kwargs: Any
     )
 
 View Source on GitHub
 
--   spinner_complete: str
-
-string to display when the spinner is complete
-
--   spinner_chars: Sequence[str]
-
-sequence of strings to use as the spinner characters
+-   config: muutils.spinner.SpinnerConfig
 
 -   format_string_when_updated: Optional[str]
 
@@ -5833,6 +5879,8 @@ whether the value has been updated since the last display
 
 width of the terminal, for padding with spaces
 
+-   state: Literal['initialized', 'running', 'success', 'fail']
+
 def spin
 
     (self) -> None
@@ -5860,7 +5908,7 @@ Start the spinner
 
 def stop
 
-    (self) -> None
+    (self, failed: bool = False) -> None
 
 View Source on GitHub
 
@@ -5887,14 +5935,8 @@ while a function is running.
 
 Parameters:
 
--   spinner_chars : Union[str, Sequence[str]] sequence of strings, or
-    key to look up in SPINNER_CHARS, to use as the spinner characters
-    (defaults to "default")
 -   update_interval : float how often to update the spinner display in
     seconds (defaults to 0.1)
--   spinner_complete : str string to display when the spinner is
-    complete (defaults to looking up spinner_chars in SPINNER_COMPLETE
-    or "#")
 -   initial_value : str initial value to display with the spinner
     (defaults to "")
 -   message : str message to display with the spinner (defaults to "")
@@ -5909,6 +5951,15 @@ Parameters:
     default format string with a newline appended. if a string, use that
     string. this is useful if you want update_value to print to console
     and be preserved. (defaults to False)
+
+Deprecated Parameters:
+
+-   spinner_chars : Union[str, Sequence[str]] sequence of strings, or
+    key to look up in SPINNER_CHARS, to use as the spinner characters
+    (defaults to "default")
+-   spinner_complete : str string to display when the spinner is
+    complete (defaults to looking up spinner_chars in SPINNER_COMPLETE
+    or "#")
 
 Methods:
 
@@ -5936,8 +5987,7 @@ As a decorator:
 Inherited Members
 
 -   Spinner
--   spinner_complete
--   spinner_chars
+-   config
 -   format_string_when_updated
 -   update_interval
 -   message
@@ -5949,6 +5999,7 @@ Inherited Members
 -   spinner_thread
 -   value_changed
 -   term_width
+-   state
 -   spin
 -   update_value
 -   start
@@ -5958,14 +6009,15 @@ def spinner_decorator
 
     (
         *args,
-        spinner_chars: Union[str, Sequence[str]] = 'default',
+        config: Union[str, list[str], muutils.spinner.SpinnerConfig, dict] = 'default',
         update_interval: float = 0.1,
-        spinner_complete: Optional[str] = None,
         initial_value: str = '',
         message: str = '',
         format_string: str = '{spinner} ({elapsed_time:.2f}s) {message}{value}',
         output_stream: <class 'TextIO'> = <_io.StringIO object>,
         mutable_kwarg_key: Optional[str] = None,
+        spinner_chars: Union[str, Sequence[str], NoneType] = None,
+        spinner_complete: Optional[str] = None,
         **kwargs
     ) -> Callable[[~DecoratedFunction], ~DecoratedFunction]
 
@@ -5976,14 +6028,8 @@ while a function is running.
 
 Parameters:
 
--   spinner_chars : Union[str, Sequence[str]] sequence of strings, or
-    key to look up in SPINNER_CHARS, to use as the spinner characters
-    (defaults to "default")
 -   update_interval : float how often to update the spinner display in
     seconds (defaults to 0.1)
--   spinner_complete : str string to display when the spinner is
-    complete (defaults to looking up spinner_chars in SPINNER_COMPLETE
-    or "#")
 -   initial_value : str initial value to display with the spinner
     (defaults to "")
 -   message : str message to display with the spinner (defaults to "")
@@ -5998,6 +6044,15 @@ Parameters:
     default format string with a newline appended. if a string, use that
     string. this is useful if you want update_value to print to console
     and be preserved. (defaults to False)
+
+Deprecated Parameters:
+
+-   spinner_chars : Union[str, Sequence[str]] sequence of strings, or
+    key to look up in SPINNER_CHARS, to use as the spinner characters
+    (defaults to "default")
+-   spinner_complete : str string to display when the spinner is
+    complete (defaults to looking up spinner_chars in SPINNER_COMPLETE
+    or "#")
 
 Methods:
 
@@ -6022,7 +6077,7 @@ As a decorator:
             spinner.update_value(f"Step {i+1}")
         return "Function completed"
 
-  docs for muutils v0.6.16
+  docs for muutils v0.6.17
 
 Contents
 
@@ -6233,7 +6288,7 @@ Inherited Members
 
 -   clear
 
-  docs for muutils v0.6.16
+  docs for muutils v0.6.17
 
 Contents
 
@@ -6303,7 +6358,7 @@ def get_all
 
 View Source on GitHub
 
-  docs for muutils v0.6.16
+  docs for muutils v0.6.17
 
 Contents
 
@@ -6598,7 +6653,7 @@ Raises:
 -   StateDictShapeError : shapes don’t match (but keys do)
 -   StateDictValueError : values don’t match (but keys and shapes do)
 
-  docs for muutils v0.6.16
+  docs for muutils v0.6.17
 
 Contents
 
@@ -6699,7 +6754,7 @@ FancyTimeitResult, which is a NamedTuple with the following fields:
 -   profile: pstats.Stats|None A pstats.Stats object if do_profiling is
     True, otherwise None.
 
-  docs for muutils v0.6.16
+  docs for muutils v0.6.17
 
 Contents
 

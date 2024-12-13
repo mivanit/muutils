@@ -35,7 +35,7 @@ muutils\nbutils\convert_ipynb_to_script.py                                      
 muutils\nbutils\mermaid.py                                                           11     11     0%   3-20
 muutils\nbutils\print_tex.py                                                         10     10     0%   3-21
 muutils\nbutils\run_notebook_tests.py                                                74     26    65%   51, 53, 57, 61, 67, 75, 104, 110-115, 120-133, 140-157
-muutils\spinner.py                                                                  116     15    87%   206, 208, 240-244, 264-265, 304-305, 348, 351, 354, 393, 397, 433
+muutils\spinner.py                                                                  147     10    93%   278, 305, 368-369, 415, 418, 421, 462, 466, 505
 muutils\statcounter.py                                                               89     32    64%   30-41, 56, 82, 110, 122, 132, 149-179, 199, 209, 212, 217-222, 231
 muutils\sysinfo.py                                                                   78     25    68%   22-25, 66-67, 84-117, 158-167, 179, 197-199
 muutils\tensor_utils.py                                                             128     18    86%   98, 101, 120, 124, 141, 144-147, 155, 162, 176-184
@@ -64,7 +64,7 @@ tests\unit\test_import_torch.py                                                 
 tests\unit\test_interval.py                                                         899      1    99%   12
 tests\unit\test_kappa.py                                                             39      0   100%
 tests\unit\test_mlutils.py                                                           43      6    86%   35, 39, 47, 50, 57-58
-tests\unit\test_spinner.py                                                          107      0   100%
+tests\unit\test_spinner.py                                                          295      8    97%   352-362
 tests\unit\test_statcounter.py                                                       14      0   100%
 tests\unit\test_sysinfo.py                                                            6      0   100%
 tests\unit\test_tensor_utils.py                                                      51      0   100%
@@ -73,4 +73,4 @@ tests\unit\validate_type\test_validate_type.py                                  
 tests\unit\validate_type\test_validate_type_GENERATED.py                            206     45    78%   50-51, 75-76, 102-103, 125-126, 147-148, 177-178, 203-204, 237-238, 255, 274-275, 336-337, 361-362, 432-433, 461-462, 466-467, 481-499
 tests\unit\validate_type\test_validate_type_special.py                               15      3    80%   34-35, 57
 ---------------------------------------------------------------------------------------------------------------
-TOTAL                                                                              5879   1015    83%
+TOTAL                                                                              6098   1018    83%

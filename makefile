@@ -1,7 +1,6 @@
 # ==================================================
 # configuration & variables
 # ==================================================
-# it assumes that the source is in a directory named the same as the package name
 PACKAGE_NAME := muutils
 
 # for checking you are on the right branch when publishing
@@ -11,22 +10,24 @@ PUBLISH_BRANCH := main
 DOCS_DIR := docs
 
 # where to put the coverage reports
+# note that this will be published with the docs!
+# modify the `docs` targets and `.gitignore` if you don't want that
 COVERAGE_REPORTS_DIR := docs/coverage
 
-# where the tests are (assumes pytest)
-TESTS_DIR := tests/unit
+# where the tests are, for pytest
+TESTS_DIR := tests/
 
-# temp directory to clean up
-TESTS_TEMP_DIR := tests/_temp
+# tests temp directory to clean up. will remove this in `make clean`
+TESTS_TEMP_DIR := _temp/
+
+# probably don't change these:
+# --------------------------------------------------
 
 # where the pyproject.toml file is. no idea why you would change this but just in case
 PYPROJECT := pyproject.toml
 
 # requirements.txt files for base package, all extras, dev, and all
-REQ_BASE := .github/requirements.txt
-REQ_EXTRAS := .github/requirements-extras.txt
-REQ_DEV := .github/requirements-dev.txt
-REQ_ALL := .github/requirements-all.txt
+REQ_LOCATION := .github/requirements
 
 # local files (don't push this to git)
 LOCAL_DIR := .github/local
@@ -34,9 +35,15 @@ LOCAL_DIR := .github/local
 # will print this token when publishing. make sure not to commit this file!!!
 PYPI_TOKEN_FILE := $(LOCAL_DIR)/.pypi-token
 
+# version files
+VERSIONS_DIR := .github/versions
+
 # the last version that was auto-uploaded. will use this to create a commit log for version tag
 # see `gen-commit-log` target
-LAST_VERSION_FILE := .github/.lastversion
+LAST_VERSION_FILE := $(VERSIONS_DIR)/.lastversion
+
+# current version (writing to file needed due to shell escaping issues)
+VERSION_FILE := $(VERSIONS_DIR)/.version
 
 # base python to use. Will add `uv run` in front of this if `RUN_GLOBAL` is not set to 1
 PYTHON_BASE := python
@@ -57,6 +64,208 @@ LAST_VERSION := NULL
 # get the python version, now that we have picked the python command
 PYTHON_VERSION := NULL
 
+# cuda version
+# --------------------------------------------------
+# 0 or 1
+CUDA_PRESENT :=
+# a version like "12.4" or "NULL"
+CUDA_VERSION := NULL
+# a version like "124" or "NULL"
+CUDA_VERSION_SHORT := NULL
+
+
+# python scripts we want to use inside the makefile
+# --------------------------------------------------
+
+# create commands for exporting requirements as specified in `pyproject.toml:tool.uv-exports.exports`
+define EXPORT_SCRIPT
+import sys
+if sys.version_info >= (3, 11):
+    import tomllib
+else:
+    import tomli as tomllib
+from pathlib import Path
+from typing import Union, List, Optional
+
+pyproject_path: Path = Path(sys.argv[1])
+output_dir: Path = Path(sys.argv[2])
+
+with open(pyproject_path, 'rb') as f:
+	pyproject_data: dict = tomllib.load(f)
+
+# all available groups
+all_groups: List[str] = list(pyproject_data.get('dependency-groups', {}).keys())
+all_extras: List[str] = list(pyproject_data.get('project', {}).get('optional-dependencies', {}).keys())
+
+# options for exporting
+export_opts: dict = pyproject_data.get('tool', {}).get('uv-exports', {})
+
+# what are we exporting?
+exports: List[str] = export_opts.get('exports', [])
+if not exports:
+	exports = [{'name': 'all', 'groups': [], 'extras': [], 'options': []}]
+
+# export each configuration
+for export in exports:
+	# get name and validate
+	name = export.get('name')
+	if not name or not name.isalnum():
+		print(f"Export configuration missing valid 'name' field {export}", file=sys.stderr)
+		continue
+
+	# get other options with default fallbacks
+	filename: str = export.get('filename') or f"requirements-{name}.txt"
+	groups: Union[List[str], bool, None] = export.get('groups', None)
+	extras: Union[List[str], bool] = export.get('extras', [])
+	options: List[str] = export.get('options', [])
+
+	# init command
+	cmd: List[str] = ['uv', 'export'] + export_opts.get('args', [])
+
+	# handle groups
+	if groups is not None:
+		groups_list: List[str] = []
+		if isinstance(groups, bool):
+			if groups:
+				groups_list = all_groups.copy()
+		else:
+			groups_list = groups
+		
+		for group in all_groups:
+			if group in groups_list:
+				cmd.extend(['--group', group])
+			else:
+				cmd.extend(['--no-group', group])
+
+	# handle extras
+	extras_list: List[str] = []
+	if isinstance(extras, bool):
+		if extras:
+			extras_list = all_extras.copy()
+	else:
+		extras_list = extras
+
+	for extra in extras_list:
+		cmd.extend(['--extra', extra])
+
+	cmd.extend(options)
+
+	output_path = output_dir / filename
+	print(f"{' '.join(cmd)} > {output_path.as_posix()}")
+endef
+
+export EXPORT_SCRIPT
+
+# get the version from `pyproject.toml:project.version`
+define GET_VERSION_SCRIPT
+import sys
+
+try:
+	if sys.version_info >= (3, 11):
+		import tomllib
+	else:
+		import tomli as tomllib
+
+	pyproject_path = '$(PYPROJECT)'
+
+	with open(pyproject_path, 'rb') as f:
+		pyproject_data = tomllib.load(f)
+
+	print('v' + pyproject_data['project']['version'], end='')
+except Exception as e:
+	print('NULL', end='')
+	sys.exit(1)
+endef
+
+export GET_VERSION_SCRIPT
+
+
+# get the commit log since the last version from `$(LAST_VERSION_FILE)`
+define GET_COMMIT_LOG_SCRIPT
+import subprocess
+import sys
+
+last_version = sys.argv[1].strip()
+commit_log_file = '$(COMMIT_LOG_FILE)'
+
+if last_version == 'NULL':
+    print('!!! ERROR !!!', file=sys.stderr)
+    print('LAST_VERSION is NULL, can\'t get commit log!', file=sys.stderr)
+    sys.exit(1)
+
+try:
+    log_cmd = ['git', 'log', f'{last_version}..HEAD', '--pretty=format:- %s (%h)']
+    commits = subprocess.check_output(log_cmd).decode('utf-8').strip().split('\n')
+    with open(commit_log_file, 'w') as f:
+        f.write('\n'.join(reversed(commits)))
+except subprocess.CalledProcessError as e:
+    print(f'Error: {e}', file=sys.stderr)
+    sys.exit(1)
+endef
+
+export GET_COMMIT_LOG_SCRIPT
+
+# get cuda information and whether torch sees it
+define CHECK_TORCH_SCRIPT
+import os
+import sys
+print(f'python version: {sys.version}')
+print(f"\tpython executable path: {str(sys.executable)}")
+print(f"\tsys_platform: {sys.platform}")
+print(f'\tcurrent working directory: {os.getcwd()}')
+print(f'\tHost name: {os.name}')
+print(f'\tCPU count: {os.cpu_count()}')
+print()
+
+try:
+	import torch
+except Exception as e:
+	print('ERROR: error importing torch, terminating        ')
+	print('-'*50)
+	raise e
+	sys.exit(1)
+
+print(f'torch version: {torch.__version__}')
+
+print(f'\t{torch.cuda.is_available() = }')
+
+if torch.cuda.is_available():
+	# print('\tCUDA is available on torch')
+	print(f'\tCUDA version via torch: {torch.version.cuda}')
+
+	if torch.cuda.device_count() > 0:
+		print(f"\tcurrent device: {torch.cuda.current_device() = }\n")
+		n_devices: int = torch.cuda.device_count()
+		print(f"detected {n_devices = }")
+		for current_device in range(n_devices):
+			try:
+				# print(f'checking current device {current_device} of {torch.cuda.device_count()} devices')
+				print(f'\tdevice {current_device}')
+				dev_prop = torch.cuda.get_device_properties(torch.device(0))
+				print(f'\t    name:                   {dev_prop.name}')
+				print(f'\t    version:                {dev_prop.major}.{dev_prop.minor}')
+				print(f'\t    total_memory:           {dev_prop.total_memory} ({dev_prop.total_memory:.1e})')
+				print(f'\t    multi_processor_count:  {dev_prop.multi_processor_count}')
+				print(f'\t    is_integrated:          {dev_prop.is_integrated}')
+				print(f'\t    is_multi_gpu_board:     {dev_prop.is_multi_gpu_board}')
+				print(f'\t')
+			except Exception as e:
+				print(f'Exception when trying to get properties of device {current_device}')
+				raise e
+		sys.exit(0)
+	else:
+		print(f'ERROR: {torch.cuda.device_count()} devices detected, invalid')
+		print('-'*50)
+		sys.exit(1)
+
+else:
+	print('ERROR: CUDA is NOT available, terminating')
+	print('-'*50)
+	sys.exit(1)
+endef
+
+export CHECK_TORCH_SCRIPT
+
 
 # ==================================================
 # reading command line options
@@ -71,6 +280,10 @@ ifeq ($(RUN_GLOBAL),0)
 else
 	PYTHON = $(PYTHON_BASE)
 endif
+
+# if you want different behavior for different python versions
+# --------------------------------------------------
+# COMPATIBILITY_MODE := $(shell $(PYTHON) -c "import sys; print(1 if sys.version_info < (3, 10) else 0)")
 
 # options we might want to pass to pytest
 # --------------------------------------------------
@@ -89,7 +302,7 @@ ifeq ($(VERBOSE),1)
 endif
 
 ifeq ($(COV),1)
-    PYTEST_OPTIONS += --cov=.
+	PYTEST_OPTIONS += --cov=.
 endif
 
 # ==================================================
@@ -100,54 +313,34 @@ endif
 .PHONY: default
 default: help
 
-
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# compatibility mode for python <3.10
-
-# loose typing, allow warnings for python <3.10
-# --------------------------------------------------
-TYPECHECK_ARGS ?= 
-# COMPATIBILITY_MODE: whether to run in compatibility mode for python <3.10
-COMPATIBILITY_MODE := $(shell $(PYTHON) -c "import sys; print(1 if sys.version_info < (3, 10) else 0)")
-
-# compatibility mode for python <3.10
-# --------------------------------------------------
-
-# whether to run pytest with warnings as errors
-WARN_STRICT ?= 0
-
-ifneq ($(WARN_STRICT), 0)
-    PYTEST_OPTIONS += -W error
-endif
-
-# Update the PYTEST_OPTIONS to include the conditional ignore option
-ifeq ($(COMPATIBILITY_MODE), 1)
-	JUNK := $(info !!! WARNING !!!: Detected python version less than 3.10, some behavior will be different)
-    PYTEST_OPTIONS += --ignore=tests/unit/validate_type/
-	TYPECHECK_ARGS += --disable-error-code misc --disable-error-code syntax --disable-error-code import-not-found
-endif
-
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-
 # ==================================================
 # getting version info
 # we do this in a separate target because it takes a bit of time
 # ==================================================
 
+# this recipe is weird. we need it because:
+# - a one liner for getting the version with toml is unwieldy, and using regex is fragile
+# - using $$GET_VERSION_SCRIPT within $(shell ...) doesn't work because of escaping issues
+# - trying to write to the file inside the `gen-version-info` recipe doesn't work, 
+# 	shell eval happens before our `python -c ...` gets run and `cat` doesn't see the new file
+.PHONY: write-proj-version
+write-proj-version:
+	@mkdir -p $(VERSIONS_DIR)
+	@$(PYTHON) -c "$$GET_VERSION_SCRIPT" > $(VERSION_FILE)
+
 # gets version info from $(PYPROJECT), last version from $(LAST_VERSION_FILE), and python version
 # uses just `python` for everything except getting the python version. no echo here, because this is "private"
 .PHONY: gen-version-info
-gen-version-info:
+gen-version-info: write-proj-version
 	@mkdir -p $(LOCAL_DIR)
-	$(eval VERSION := $(shell python -c "import re; print('v'+re.search(r'^version\s*=\s*\"(.+?)\"', open('$(PYPROJECT)').read(), re.MULTILINE).group(1))") )
+	$(eval VERSION := $(shell cat $(VERSION_FILE)) )
 	$(eval LAST_VERSION := $(shell [ -f $(LAST_VERSION_FILE) ] && cat $(LAST_VERSION_FILE) || echo NULL) )
 	$(eval PYTHON_VERSION := $(shell $(PYTHON) -c "import sys; print(f'{sys.version_info.major}.{sys.version_info.minor}.{sys.version_info.micro}')") )
 
 # getting commit log since the tag specified in $(LAST_VERSION_FILE)
 # will write to $(COMMIT_LOG_FILE)
 # when publishing, the contents of $(COMMIT_LOG_FILE) will be used as the tag description (but can be edited during the process)
-# uses just `python`. no echo here, because this is "private"
+# no echo here, because this is "private"
 .PHONY: gen-commit-log
 gen-commit-log: gen-version-info
 	@if [ "$(LAST_VERSION)" = "NULL" ]; then \
@@ -156,7 +349,7 @@ gen-commit-log: gen-version-info
 		exit 1; \
 	fi
 	@mkdir -p $(LOCAL_DIR)
-	@python -c "import subprocess; open('$(COMMIT_LOG_FILE)', 'w').write('\n'.join(reversed(subprocess.check_output(['git', 'log', '$(LAST_VERSION)'.strip() + '..HEAD', '--pretty=format:- %s (%h)']).decode('utf-8').strip().split('\n'))))"
+	@$(PYTHON) -c "$$GET_COMMIT_LOG_SCRIPT" "$(LAST_VERSION)"
 
 
 # force the version info to be read, printing it out
@@ -185,41 +378,50 @@ setup: dep-check
 	@echo "  source .venv/bin/activate"
 	@echo "  source .venv/Scripts/activate"
 
+.PHONY: get-cuda-info
+get-cuda-info:
+	$(eval CUDA_PRESENT := $(shell if command -v nvcc > /dev/null 2>&1; then echo 1; else echo 0; fi))
+	$(eval CUDA_VERSION := $(if $(filter $(CUDA_PRESENT),1),$(shell nvcc --version 2>/dev/null | grep "release" | awk '{print $$5}' | sed 's/,//'),NULL))
+	$(eval CUDA_VERSION_SHORT := $(if $(filter $(CUDA_PRESENT),1),$(shell echo $(CUDA_VERSION) | sed 's/\.//'),NULL))
+
+.PHONY: dep-check-torch
+dep-check-torch:
+	@echo "see if torch is installed, and which CUDA version and devices it sees"
+	$(PYTHON) -c "$$CHECK_TORCH_SCRIPT"
+
 .PHONY: dep
-dep:
-	@echo "sync and export deps to $(REQ_BASE), $(REQ_EXTRAS), $(REQ_DEV), and $(REQ_ALL)"
-	uv sync --all-extras
-	uv export --no-dev --no-hashes > $(REQ_BASE)
-	uv export --all-extras --no-dev --no-hashes > $(REQ_EXTRAS)
-	uv export --no-hashes > $(REQ_DEV)
-	uv export --all-extras --no-hashes > $(REQ_ALL)
+dep: get-cuda-info
+	@echo "Exporting dependencies as per $(PYPROJECT) section 'tool.uv-exports.exports'"
+	uv sync --all-extras $(UV_EXTRA_INDEX)
+	mkdir -p $(REQ_LOCATION)
+	$(PYTHON) -c "$$EXPORT_SCRIPT" $(PYPROJECT) $(REQ_LOCATION) | sh -x
+	
+	@if [ "$(CUDA_PRESENT)" = "1" ]; then \
+		echo "CUDA is present, installing torch with CUDA $(CUDA_VERSION)"; \
+		uv pip install torch --upgrade --index https://download.pytorch.org/whl/cu$(CUDA_VERSION_SHORT); \
+	fi
+	
 
 .PHONY: dep-check
 dep-check:
-	@echo "checking uv.lock is good, exported requirements up to date"
-	uv sync --all-extras --locked
-	uv export --no-dev --no-hashes | diff - $(REQ_BASE)
-	uv export --all-extras --no-dev --no-hashes | diff - $(REQ_EXTRAS)
-	uv export --no-hashes | diff - $(REQ_DEV)
-	uv export --all-extras --no-hashes | diff - $(REQ_ALL)
+	@echo "Checking that exported requirements are up to date"
+	uv sync --all-extras $(UV_EXTRA_INDEX)
+	mkdir -p $(REQ_LOCATION)-TEMP
+	$(PYTHON) -c "$$EXPORT_SCRIPT" $(PYPROJECT) $(REQ_LOCATION)-TEMP | sh -x
+	diff -r $(REQ_LOCATION)-TEMP $(REQ_LOCATION)
+	rm -rf $(REQ_LOCATION)-TEMP
 
 
+.PHONY: dep-clean
+dep-clean:
+	@echo "clean up lock files, .venv, and requirements files"
+	rm -rf .venv
+	rm -rf uv.lock
+	rm -rf $(REQ_LOCATION)/*.txt
 
 # ==================================================
 # checks (formatting/linting, typing, tests)
 # ==================================================
-
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-# extra tests with python >=3.10 type hints
-.PHONY: gen-extra-tests
-gen-extra-tests:
-	if [ $(COMPATIBILITY_MODE) -eq 0 ]; then \
-		echo "converting certain tests to modern format"; \
-		$(PYTHON) tests/util/replace_type_hints.py tests/unit/validate_type/test_validate_type.py "# DO NOT EDIT, GENERATED FILE" > tests/unit/validate_type/test_validate_type_GENERATED.py; \
-	fi; \
-
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # runs ruff and pycln to format the code
 .PHONY: format
@@ -230,7 +432,7 @@ format:
 	$(PYTHON) -m pycln --config $(PYPROJECT) --all .
 
 # runs ruff and pycln to check if the code is formatted correctly
-.PHONY: gen-extra-tests format-check
+.PHONY: format-check
 format-check:
 	@echo "check if the source code is formatted correctly"
 	$(PYTHON) -m ruff check --config $(PYPROJECT) .
@@ -241,22 +443,19 @@ format-check:
 # but it complains when we specify arguments by keyword where positional is fine
 # not sure how to fix this
 .PHONY: typing
-typing: clean gen-extra-tests
+typing: clean
 	@echo "running type checks"
 	$(PYTHON) -m mypy --config-file $(PYPROJECT) $(TYPECHECK_ARGS) $(PACKAGE_NAME)/
 	$(PYTHON) -m mypy --config-file $(PYPROJECT) $(TYPECHECK_ARGS) $(TESTS_DIR)/
 
 .PHONY: test
-test: clean gen-extra-tests
+test: clean
 	@echo "running tests"
 	$(PYTHON) -m pytest $(PYTEST_OPTIONS) $(TESTS_DIR)
 
 .PHONY: check
-check: clean gen-extra-tests format-check test typing
+check: clean format-check test typing
 	@echo "run format checks, tests, and typing checks"
-
-
-
 
 # ==================================================
 # coverage & docs
@@ -322,6 +521,8 @@ docs-clean:
 	rm $(DOCS_DIR)/$(PACKAGE_NAME).html
 	rm $(DOCS_DIR)/index.html
 	rm $(DOCS_DIR)/search.js
+	rm $(DOCS_DIR)/package_map.dot
+	rm $(DOCS_DIR)/package_map.html
 
 
 # ==================================================
@@ -361,9 +562,9 @@ publish: gen-commit-log check build verify-git version gen-version-info
 	@echo "Now would also be the time to edit $(COMMIT_LOG_FILE), as that will be used as the tag description"
 	@read -p "Confirm: " NEW_VERSION; \
 	if [ "$$NEW_VERSION" = $(VERSION) ]; then \
+		echo "!!! ERROR !!!"; \
 		echo "Version confirmed. Proceeding with publish."; \
 	else \
-		echo "!!! ERROR !!!"; \
 		echo "Version mismatch, exiting: you gave $$NEW_VERSION but expected $(VERSION)"; \
 		exit 1; \
 	fi;
@@ -389,9 +590,6 @@ publish: gen-commit-log check build verify-git version gen-version-info
 # removes $(TESTS_TEMP_DIR) to remove temporary test files
 # recursively removes all `__pycache__` directories and `*.pyc` or `*.pyo` files
 # distinct from `make docs-clean`, which only removes generated documentation files
-# ~~~~~~~~~~
-# slight modification in last line for extra tests
-# ~~~~~~~~~~
 .PHONY: clean
 clean:
 	@echo "clean up temporary files"
@@ -403,17 +601,11 @@ clean:
 	rm -rf build
 	rm -rf $(PACKAGE_NAME).egg-info
 	rm -rf $(TESTS_TEMP_DIR)
-	$(PYTHON_BASE) -Bc "import pathlib; [p.unlink() for p in pathlib.Path('$(PACKAGE_NAME)').rglob('*.py[co]')]"
-	$(PYTHON_BASE) -Bc "import pathlib; [p.rmdir() for p in pathlib.Path('$(PACKAGE_NAME)').rglob('__pycache__')]"
-	$(PYTHON_BASE) -Bc "import pathlib; [p.unlink() for p in pathlib.Path('$(TESTS_DIR)').rglob('*.py[co]')]"
-	$(PYTHON_BASE) -Bc "import pathlib; [p.rmdir() for p in pathlib.Path('$(TESTS_DIR)').rglob('__pycache__')]"
-	$(PYTHON_BASE) -Bc "import pathlib; [p.unlink() for p in pathlib.Path('$(DOCS_DIR)').rglob('*.py[co]')]"
-	$(PYTHON_BASE) -Bc "import pathlib; [p.rmdir() for p in pathlib.Path('$(DOCS_DIR)').rglob('__pycache__')]"
-	rm -rf tests/unit/validate_type/test_validate_type_GENERATED.py
+	$(PYTHON_BASE) -Bc "import pathlib; [(p.unlink() for p in pathlib.Path(path).rglob(pattern)) for path in ['$(PACKAGE_NAME)', '$(TESTS_DIR)', '$(DOCS_DIR)'] for pattern in ['*.py[co]', '__pycache__/*']]"
 
 .PHONY: clean-all
-clean-all: clean docs-clean
-	@echo "clean up all temporary files and generated docs"
+clean-all: clean dep-clean docs-clean
+	@echo "clean up all temporary files, dep files, venv, and generated docs"
 
 
 # ==================================================
@@ -429,10 +621,9 @@ help-targets:
 	@echo ":"
 	@cat Makefile | sed -n '/^\.PHONY: / h; /\(^\t@*echo\|^\t:\)/ {H; x; /PHONY/ s/.PHONY: \(.*\)\n.*"\(.*\)"/    make \1\t\2/p; d; x}'| sort -k2,2 |expand -t 30
 
-# immediately print out the help targets, and then local variables (but those take a bit longer)
-.PHONY: help
-help: help-targets gen-version-info
-	@echo -n ""
+
+.PHONY: info
+info: gen-version-info get-cuda-info
 	@echo "# makefile variables"
 	@echo "    PYTHON = $(PYTHON)"
 	@echo "    PYTHON_VERSION = $(PYTHON_VERSION)"
@@ -440,4 +631,43 @@ help: help-targets gen-version-info
 	@echo "    VERSION = $(VERSION)"
 	@echo "    LAST_VERSION = $(LAST_VERSION)"
 	@echo "    PYTEST_OPTIONS = $(PYTEST_OPTIONS)"
-	@echo "    COMPATIBILITY_MODE = $(COMPATIBILITY_MODE)"
+	@echo "    CUDA_PRESENT = $(CUDA_PRESENT)"
+	@if [ "$(CUDA_PRESENT)" = "1" ]; then \
+		echo "    CUDA_VERSION = $(CUDA_VERSION)"; \
+		echo "    CUDA_VERSION_SHORT = $(CUDA_VERSION_SHORT)"; \
+	fi
+
+.PHONY: info-long
+info-long: info
+	@echo "# other variables"
+	@echo "    PUBLISH_BRANCH = $(PUBLISH_BRANCH)"
+	@echo "    DOCS_DIR = $(DOCS_DIR)"
+	@echo "    COVERAGE_REPORTS_DIR = $(COVERAGE_REPORTS_DIR)"
+	@echo "    TESTS_DIR = $(TESTS_DIR)"
+	@echo "    TESTS_TEMP_DIR = $(TESTS_TEMP_DIR)"
+	@echo "    PYPROJECT = $(PYPROJECT)"
+	@echo "    REQ_LOCATION = $(REQ_LOCATION)"
+	@echo "    REQ_BASE = $(REQ_BASE)"
+	@echo "    REQ_EXTRAS = $(REQ_EXTRAS)"
+	@echo "    REQ_DEV = $(REQ_DEV)"
+	@echo "    REQ_ALL = $(REQ_ALL)"
+	@echo "    LOCAL_DIR = $(LOCAL_DIR)"
+	@echo "    PYPI_TOKEN_FILE = $(PYPI_TOKEN_FILE)"
+	@echo "    LAST_VERSION_FILE = $(LAST_VERSION_FILE)"
+	@echo "    PYTHON_BASE = $(PYTHON_BASE)"
+	@echo "    COMMIT_LOG_FILE = $(COMMIT_LOG_FILE)"
+	@echo "    PANDOC = $(PANDOC)"
+	@echo "    COV = $(COV)"
+	@echo "    VERBOSE = $(VERBOSE)"
+	@echo "    RUN_GLOBAL = $(RUN_GLOBAL)"
+	@echo "    TYPECHECK_ARGS = $(TYPECHECK_ARGS)"
+
+# immediately print out the help targets, and then local variables (but those take a bit longer)
+.PHONY: help
+help: help-targets info
+	@echo -n ""
+
+# ==================================================
+# custom targets
+# ==================================================
+# (put them down here, or delimit with ~~~~~)

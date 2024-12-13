@@ -449,6 +449,8 @@ dep-clean:
 # ==================================================
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# added gen-extra-tests and it is required by some other recipes:
+# format-check, typing, test
 
 # extra tests with python >=3.10 type hints
 .PHONY: gen-extra-tests
@@ -470,7 +472,7 @@ format:
 
 # runs ruff and pycln to check if the code is formatted correctly
 .PHONY: format-check
-format-check:
+format-check: gen-extra-tests
 	@echo "check if the source code is formatted correctly"
 	$(PYTHON) -m ruff check --config $(PYPROJECT) .
 	$(PYTHON) -m pycln --check --config $(PYPROJECT) .
@@ -480,13 +482,13 @@ format-check:
 # but it complains when we specify arguments by keyword where positional is fine
 # not sure how to fix this
 .PHONY: typing
-typing: clean
+typing: clean gen-extra-tests
 	@echo "running type checks"
 	$(PYTHON) -m mypy --config-file $(PYPROJECT) $(TYPECHECK_ARGS) $(PACKAGE_NAME)/
 	$(PYTHON) -m mypy --config-file $(PYPROJECT) $(TYPECHECK_ARGS) $(TESTS_DIR)/
 
 .PHONY: test
-test: clean
+test: clean gen-extra-tests
 	@echo "running tests"
 	$(PYTHON) -m pytest $(PYTEST_OPTIONS) $(TESTS_DIR)
 

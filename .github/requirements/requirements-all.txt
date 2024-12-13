@@ -14,9 +14,9 @@ cycler==0.12.1
 decorator==5.1.1
 exceptiongroup==1.2.2 ; python_full_version < '3.11'
 executing==2.1.0
-filelock==3.16.1 ; python_full_version >= '3.9'
+filelock==3.16.1
 fonttools==4.55.3
-fsspec==2024.10.0 ; python_full_version >= '3.9'
+fsspec==2024.10.0
 importlib-metadata==8.5.0 ; python_full_version < '3.10'
 importlib-resources==6.4.5 ; python_full_version < '3.10'
 iniconfig==2.0.0
@@ -31,28 +31,24 @@ markupsafe==2.1.5
 matplotlib==3.7.5
 matplotlib-inline==0.1.7
 mdurl==0.1.2
-mpmath==1.3.0 ; python_full_version >= '3.9'
+mpmath==1.3.0
 mypy==1.13.0
 mypy-extensions==1.0.0
-networkx==3.1 ; python_full_version >= '3.9'
+networkx==3.1
 numpy==1.24.4 ; python_full_version < '3.9'
 numpy==1.26.4 ; python_full_version >= '3.9'
-nvidia-cublas-cu11==11.10.3.66 ; python_full_version < '3.9' and platform_system == 'Linux'
-nvidia-cublas-cu12==12.4.5.8 ; python_full_version >= '3.9' and platform_machine == 'x86_64' and platform_system == 'Linux'
-nvidia-cuda-cupti-cu12==12.4.127 ; python_full_version >= '3.9' and platform_machine == 'x86_64' and platform_system == 'Linux'
-nvidia-cuda-nvrtc-cu11==11.7.99 ; python_full_version < '3.9' and platform_system == 'Linux'
-nvidia-cuda-nvrtc-cu12==12.4.127 ; python_full_version >= '3.9' and platform_machine == 'x86_64' and platform_system == 'Linux'
-nvidia-cuda-runtime-cu11==11.7.99 ; python_full_version < '3.9' and platform_system == 'Linux'
-nvidia-cuda-runtime-cu12==12.4.127 ; python_full_version >= '3.9' and platform_machine == 'x86_64' and platform_system == 'Linux'
-nvidia-cudnn-cu11==8.5.0.96 ; python_full_version < '3.9' and platform_system == 'Linux'
-nvidia-cudnn-cu12==9.1.0.70 ; python_full_version >= '3.9' and platform_machine == 'x86_64' and platform_system == 'Linux'
-nvidia-cufft-cu12==11.2.1.3 ; python_full_version >= '3.9' and platform_machine == 'x86_64' and platform_system == 'Linux'
-nvidia-curand-cu12==10.3.5.147 ; python_full_version >= '3.9' and platform_machine == 'x86_64' and platform_system == 'Linux'
-nvidia-cusolver-cu12==11.6.1.9 ; python_full_version >= '3.9' and platform_machine == 'x86_64' and platform_system == 'Linux'
-nvidia-cusparse-cu12==12.3.1.170 ; python_full_version >= '3.9' and platform_machine == 'x86_64' and platform_system == 'Linux'
-nvidia-nccl-cu12==2.21.5 ; python_full_version >= '3.9' and platform_machine == 'x86_64' and platform_system == 'Linux'
-nvidia-nvjitlink-cu12==12.4.127 ; python_full_version >= '3.9' and platform_machine == 'x86_64' and platform_system == 'Linux'
-nvidia-nvtx-cu12==12.4.127 ; python_full_version >= '3.9' and platform_machine == 'x86_64' and platform_system == 'Linux'
+nvidia-cublas-cu12==12.1.3.1 ; platform_machine == 'x86_64' and platform_system == 'Linux'
+nvidia-cuda-cupti-cu12==12.1.105 ; platform_machine == 'x86_64' and platform_system == 'Linux'
+nvidia-cuda-nvrtc-cu12==12.1.105 ; platform_machine == 'x86_64' and platform_system == 'Linux'
+nvidia-cuda-runtime-cu12==12.1.105 ; platform_machine == 'x86_64' and platform_system == 'Linux'
+nvidia-cudnn-cu12==9.1.0.70 ; platform_machine == 'x86_64' and platform_system == 'Linux'
+nvidia-cufft-cu12==11.0.2.54 ; platform_machine == 'x86_64' and platform_system == 'Linux'
+nvidia-curand-cu12==10.3.2.106 ; platform_machine == 'x86_64' and platform_system == 'Linux'
+nvidia-cusolver-cu12==11.4.5.107 ; platform_machine == 'x86_64' and platform_system == 'Linux'
+nvidia-cusparse-cu12==12.1.0.106 ; platform_machine == 'x86_64' and platform_system == 'Linux'
+nvidia-nccl-cu12==2.20.5 ; platform_machine == 'x86_64' and platform_system == 'Linux'
+nvidia-nvjitlink-cu12==12.6.85 ; platform_machine == 'x86_64' and platform_system == 'Linux'
+nvidia-nvtx-cu12==12.1.105 ; platform_machine == 'x86_64' and platform_system == 'Linux'
 packaging==24.2
 parso==0.8.4
 pathspec==0.12.1
@@ -78,14 +74,13 @@ setuptools==75.3.0
 shellingham==1.5.4
 six==1.17.0
 stack-data==0.6.3
-sympy==1.13.1 ; python_full_version >= '3.9'
+sympy==1.13.3
 tenacity==9.0.0
 tomli==2.2.1 ; python_full_version <= '3.11'
 tomlkit==0.13.2
-torch==1.13.1 ; python_full_version < '3.9'
-torch==2.5.1 ; python_full_version >= '3.9'
+torch==2.4.1
 traitlets==5.14.3
-triton==3.1.0 ; python_full_version >= '3.9' and python_full_version < '3.13' and platform_machine == 'x86_64' and platform_system == 'Linux'
+triton==3.0.0 ; python_full_version < '3.13' and platform_machine == 'x86_64' and platform_system == 'Linux'
 typeguard==4.4.0
 typer==0.15.1
 typing-extensions==4.12.2

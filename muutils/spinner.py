@@ -10,6 +10,8 @@ import threading
 import sys
 from functools import wraps
 from typing import (
+    List,
+    Dict,
     Callable,
     Any,
     Literal,
@@ -28,7 +30,7 @@ DecoratedFunction = TypeVar("DecoratedFunction", bound=Callable[..., Any])
 
 @dataclass
 class SpinnerConfig:
-    working: list[str] = field(default_factory=lambda: ["|", "/", "-", "\\"])
+    working: List[str] = field(default_factory=lambda: ["|", "/", "-", "\\"])
     success: str = "✔️"
     fail: str = "❌"
 
@@ -78,9 +80,9 @@ class SpinnerConfig:
             )
 
 
-SpinnerConfigArg = Union[str, list[str], SpinnerConfig, dict]
+SpinnerConfigArg = Union[str, List[str], SpinnerConfig, dict]
 
-SPINNERS: dict[str, SpinnerConfig] = dict(
+SPINNERS: Dict[str, SpinnerConfig] = dict(
     default=SpinnerConfig(working=["|", "/", "-", "\\"], success="#", fail="X"),
     dots=SpinnerConfig(working=[".  ", ".. ", "..."], success="***", fail="xxx"),
     bars=SpinnerConfig(working=["|  ", "|| ", "|||"], success="|||", fail="///"),
@@ -355,7 +357,7 @@ class Spinner:
             spinner: str = self.config.working[i % len(self.config.working)]
 
             # args for display string
-            display_parts: dict[str, Any] = dict(
+            display_parts: Dict[str, Any] = dict(
                 spinner=spinner,  # str
                 elapsed_time=time.time() - self.start_time,  # float
                 message=self.message,  # str

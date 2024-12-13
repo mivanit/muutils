@@ -20,7 +20,7 @@ jobs:
           fetch-depth: 1
 
       - name: install format tools
-        run: pip install -r .github/requirements-dev.txt
+        run: pip install -r .github/requirements/requirements-lint.txt
 
       - name: Run Format Checks
         run: make format-check RUN_GLOBAL=1
@@ -64,6 +64,8 @@ jobs:
             torch: '2.4.0'
           - python: '3.12'
             torch: '2.4.0'
+          - python: '3.13'
+            torch: '2.5.1'
     steps:
       - name: Checkout code
         uses: actions/checkout@v4

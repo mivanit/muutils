@@ -281,9 +281,6 @@ else
 	PYTHON = $(PYTHON_BASE)
 endif
 
-# if you want different behavior for different python versions
-# --------------------------------------------------
-# COMPATIBILITY_MODE := $(shell $(PYTHON) -c "import sys; print(1 if sys.version_info < (3, 10) else 0)")
 
 # options we might want to pass to pytest
 # --------------------------------------------------
@@ -304,6 +301,34 @@ endif
 ifeq ($(COV),1)
 	PYTEST_OPTIONS += --cov=.
 endif
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# compatibility mode for python <3.10
+
+# loose typing, allow warnings for python <3.10
+# --------------------------------------------------
+TYPECHECK_ARGS ?= 
+# COMPATIBILITY_MODE: whether to run in compatibility mode for python <3.10
+COMPATIBILITY_MODE := $(shell $(PYTHON) -c "import sys; print(1 if sys.version_info < (3, 10) else 0)")
+
+# compatibility mode for python <3.10
+# --------------------------------------------------
+
+# whether to run pytest with warnings as errors
+WARN_STRICT ?= 0
+
+ifneq ($(WARN_STRICT), 0)
+    PYTEST_OPTIONS += -W error
+endif
+
+# Update the PYTEST_OPTIONS to include the conditional ignore option
+ifeq ($(COMPATIBILITY_MODE), 1)
+	JUNK := $(info !!! WARNING !!!: Detected python version less than 3.10, some behavior will be different)
+    PYTEST_OPTIONS += --ignore=tests/unit/validate_type/
+	TYPECHECK_ARGS += --disable-error-code misc --disable-error-code syntax --disable-error-code import-not-found
+endif
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # ==================================================
 # default target (help)
@@ -422,6 +447,18 @@ dep-clean:
 # ==================================================
 # checks (formatting/linting, typing, tests)
 # ==================================================
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+# extra tests with python >=3.10 type hints
+.PHONY: gen-extra-tests
+gen-extra-tests:
+	if [ $(COMPATIBILITY_MODE) -eq 0 ]; then \
+		echo "converting certain tests to modern format"; \
+		$(PYTHON) tests/util/replace_type_hints.py tests/unit/validate_type/test_validate_type.py "# DO NOT EDIT, GENERATED FILE" > tests/unit/validate_type/test_validate_type_GENERATED.py; \
+	fi; \
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # runs ruff and pycln to format the code
 .PHONY: format
@@ -590,6 +627,9 @@ publish: gen-commit-log check build verify-git version gen-version-info
 # removes $(TESTS_TEMP_DIR) to remove temporary test files
 # recursively removes all `__pycache__` directories and `*.pyc` or `*.pyo` files
 # distinct from `make docs-clean`, which only removes generated documentation files
+# ~~~~~~~~~~
+# slight modification in last line for extra tests
+# ~~~~~~~~~~
 .PHONY: clean
 clean:
 	@echo "clean up temporary files"
@@ -602,6 +642,7 @@ clean:
 	rm -rf $(PACKAGE_NAME).egg-info
 	rm -rf $(TESTS_TEMP_DIR)
 	$(PYTHON_BASE) -Bc "import pathlib; [(p.unlink() for p in pathlib.Path(path).rglob(pattern)) for path in ['$(PACKAGE_NAME)', '$(TESTS_DIR)', '$(DOCS_DIR)'] for pattern in ['*.py[co]', '__pycache__/*']]"
+	rm -rf tests/unit/validate_type/test_validate_type_GENERATED.py
 
 .PHONY: clean-all
 clean-all: clean dep-clean docs-clean

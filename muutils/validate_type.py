@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from inspect import signature, unwrap
 import types
 import typing
 import functools
@@ -217,3 +218,20 @@ def validate_type(
             f"{origin = }, {args = }",
             f"\n{GenericAliasTypes = }",
         )
+
+
+def get_fn_allowed_kwargs(fn: typing.Callable) -> typing.Set[str]:
+    """Get the allowed kwargs for a function, raising an exception if the signature cannot be determined."""
+    try:
+        fn = unwrap(fn)
+        params = signature(fn).parameters
+    except ValueError as e:
+        raise ValueError(
+            f"Cannot retrieve signature for {fn.__name__ = } {fn = }: {str(e)}"
+        ) from e
+
+    return {
+        param.name
+        for param in params.values()
+        if param.kind in (param.POSITIONAL_OR_KEYWORD, param.KEYWORD_ONLY)
+    }

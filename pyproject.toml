@@ -69,6 +69,11 @@ zanj = [
     "zanj>=0.3.0; python_version >= '3.10'",
 ]
 
+parallel = [
+    "multiprocess>=0.70.17",
+    "tqdm>=4.67.1",
+]
+
 [dependency-groups]
 dev = [
     # typing

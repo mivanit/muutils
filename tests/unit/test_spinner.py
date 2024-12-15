@@ -620,22 +620,22 @@ def test_valid_configs(config: SpinnerConfig):
     [
         # Invalid working list type
         pytest.param(
-            lambda: SpinnerConfig(working="|/-\\", success="#", fail="X"), # type: ignore[arg-type]
+            lambda: SpinnerConfig(working="|/-\\", success="#", fail="X"),  # type: ignore[arg-type]
             id="string-instead-of-list",
         ),
         # Invalid working list contents
         pytest.param(
-            lambda: SpinnerConfig(working=[1, 2, 3], success="#", fail="X"), # type: ignore[list-item]
+            lambda: SpinnerConfig(working=[1, 2, 3], success="#", fail="X"),  # type: ignore[list-item]
             id="non-string-items",
         ),
         # Invalid success type
         pytest.param(
-            lambda: SpinnerConfig(working=["|", "/"], success=123, fail="X"), # type: ignore[arg-type]
+            lambda: SpinnerConfig(working=["|", "/"], success=123, fail="X"),  # type: ignore[arg-type]
             id="non-string-success",
         ),
         # Invalid fail type
         pytest.param(
-            lambda: SpinnerConfig(working=["|", "/"], success="#", fail=None), # type: ignore[arg-type]
+            lambda: SpinnerConfig(working=["|", "/"], success="#", fail=None),  # type: ignore[arg-type]
             id="none-fail",
         ),
         # Empty working list

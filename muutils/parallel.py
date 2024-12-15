@@ -18,17 +18,20 @@ from muutils.spinner import SpinnerContext
 from muutils.validate_type import get_fn_allowed_kwargs
 
 
-# typevars for our iterable and map
 InputType = TypeVar("InputType")
 OutputType = TypeVar("OutputType")
+# typevars for our iterable and map
 
 
 class ProgressBarFunction(Protocol):
+    "a protocol for a progress bar function"
     def __call__(self, iterable: Iterable, **kwargs: Any) -> Iterable: ...
 
+ProgressBarOption = Literal["tqdm", "spinner", "none", None]
 
-# default progress bar function
+
 progress_bar_fn: Callable
+# default progress bar function
 
 
 # fallback to spinner option
@@ -38,15 +41,14 @@ def spinner_fn_wrap(x: Iterable, **kwargs) -> List:
         for k, v in kwargs.items()
         if k in get_fn_allowed_kwargs(SpinnerContext.__init__)
     }
-    if "desc" in kwargs:
+    if "desc" in kwargs and "message" not in mapped_kwargs:
         mapped_kwargs["message"] = kwargs.get("desc")
 
     with SpinnerContext(**mapped_kwargs):
         return list(x)
 
-
-# fallback to "no progress bar" option
 def no_progress_fn_wrap(x: Iterable, **kwargs) -> Iterable:
+    "fallback to no progress bar"
     return x
 
 
@@ -55,10 +57,49 @@ try:
     # use tqdm if it's available
     import tqdm
 
-    progress_bar_fn = tqdm.tqdm
+    @functools.wraps(tqdm.tqdm)
+    def tqdm_wrap(x: Iterable, **kwargs) -> Iterable:
+        mapped_kwargs: dict = {
+            k: v
+            for k, v in kwargs.items()
+            if k in get_fn_allowed_kwargs(tqdm.tqdm)
+        }
+        if "message" in kwargs and "desc" not in mapped_kwargs:
+            mapped_kwargs["desc"] = mapped_kwargs.get("desc")
+            return tqdm.tqdm(x, **mapped_kwargs)
+        
+    progress_bar_fn = tqdm_wrap
+
 except ImportError:
     # use progress bar as fallback
     progress_bar_fn = spinner_fn_wrap
+
+
+def set_up_progress_bar_fn(pbar: Union[ProgressBarFunction, ], pbar_kwargs: Dict[str, Any] = None) -> ProgressBarFunction:
+    pbar_fn: ProgressBarFunction
+
+    if pbar_kwargs is None:
+        pbar_kwargs = dict()
+
+    # dont use a progress bar if `pbar` is None or "none", or if `disable` is set to True in `pbar_kwargs`
+    if (pbar is None) or (pbar == "none") or pbar_kwargs.get("disable", False):
+        pbar_fn = no_progress_fn_wrap
+
+    # if `pbar` is a different string, figure out which progress bar to use
+    elif isinstance(pbar, str):
+        if pbar == "tqdm":
+            pbar_fn = functools.partial(tqdm.tqdm, **pbar_kwargs)
+        elif pbar == "spinner":
+            pbar_fn = functools.partial(spinner_fn_wrap, **pbar_kwargs)
+        else:
+            raise ValueError(
+                f"`pbar` must be either 'tqdm' or 'spinner' if `str`, or a valid callable, got {type(pbar) = } {pbar = }"
+            )
+    else:
+        # the default value is a callable which will resolve to tqdm if available or spinner as a fallback. we pass kwargs to this
+        pbar_fn = functools.partial(pbar, **pbar_kwargs)
+
+    return pbar_fn
 
 
 def run_maybe_parallel(
@@ -69,7 +110,7 @@ def run_maybe_parallel(
     chunksize: Optional[int] = None,
     keep_ordered: bool = True,
     use_multiprocess: bool = False,
-    pbar: Union[Callable, Literal["tqdm", "spinner", "none", None]] = progress_bar_fn,
+    pbar: Union[ProgressBarFunction, ProgressBarOption] = progress_bar_fn,
 ) -> List[OutputType]:
     """a function to make it easier to sometimes parallelize an operation
 
@@ -97,35 +138,14 @@ def run_maybe_parallel(
      - `ValueError` : _description_
     """
 
-    # which progress bar to use
-    pbar_fn: ProgressBarFunction
-
-    if pbar_kwargs is None:
-        pbar_kwargs = dict()
-
-    # dont use a progress bar if `pbar` is None or "none", or if `disable` is set to True in `pbar_kwargs`
-    if (pbar is None) or (pbar == "none") or pbar_kwargs.get("disable", False):
-        pbar_fn = no_progress_fn_wrap
-
-    # if `pbar` is a different string, figure out which progress bar to use
-    elif isinstance(pbar, str):
-        if pbar == "tqdm":
-            pbar_fn = functools.partial(tqdm.tqdm, **pbar_kwargs)
-        elif pbar == "spinner":
-            pbar_fn = functools.partial(spinner_fn_wrap, **pbar_kwargs)
-        else:
-            raise ValueError(
-                f"`pbar` must be either 'tqdm' or 'spinner' if `str`, or a valid callable, got {type(pbar) = } {pbar = }"
-            )
-    else:
-        # the default value is a callable which will resolve to tqdm if available or spinner as a fallback. we pass kwargs to this
-        pbar_fn = functools.partial(pbar, **pbar_kwargs)
-
     # number of inputs in iterable
     n_inputs: int = len(iterable)
     if n_inputs == 0:
         # Return immediately if there is no input
         return list()
+    
+    # which progress bar to use
+    pbar_fn: ProgressBarFunction = set_up_progress_bar_fn(pbar, pbar_kwargs)
 
     # number of processes
     num_processes: int
@@ -201,8 +221,10 @@ def run_maybe_parallel(
         )
     )
 
+    # close the pool if we used one
     if parallel:
         pool.close()
         pool.join()
 
+    # return the output as a list
     return output

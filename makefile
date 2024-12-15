@@ -417,20 +417,15 @@ dep-check-torch:
 .PHONY: dep
 dep: get-cuda-info
 	@echo "Exporting dependencies as per $(PYPROJECT) section 'tool.uv-exports.exports'"
-	uv sync --all-extras $(UV_EXTRA_INDEX) --all-groups
+	uv sync --all-extras --all-groups
 	mkdir -p $(REQ_LOCATION)
 	$(PYTHON) -c "$$EXPORT_SCRIPT" $(PYPROJECT) $(REQ_LOCATION) | sh -x
-	
-	@if [ "$(CUDA_PRESENT)" = "1" ]; then \
-		echo "CUDA is present, installing torch with CUDA $(CUDA_VERSION)"; \
-		uv pip install torch --upgrade --index https://download.pytorch.org/whl/cu$(CUDA_VERSION_SHORT); \
-	fi
 	
 
 .PHONY: dep-check
 dep-check:
 	@echo "Checking that exported requirements are up to date"
-	uv sync --all-extras $(UV_EXTRA_INDEX)
+	uv sync --all-extras -all-groups
 	mkdir -p $(REQ_LOCATION)-TEMP
 	$(PYTHON) -c "$$EXPORT_SCRIPT" $(PYPROJECT) $(REQ_LOCATION)-TEMP | sh -x
 	diff -r $(REQ_LOCATION)-TEMP $(REQ_LOCATION)

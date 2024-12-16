@@ -425,7 +425,7 @@ dep: get-cuda-info
 .PHONY: dep-check
 dep-check:
 	@echo "Checking that exported requirements are up to date"
-	uv sync --all-extras -all-groups
+	uv sync --all-extras --all-groups
 	mkdir -p $(REQ_LOCATION)-TEMP
 	$(PYTHON) -c "$$EXPORT_SCRIPT" $(PYPROJECT) $(REQ_LOCATION)-TEMP | sh -x
 	diff -r $(REQ_LOCATION)-TEMP $(REQ_LOCATION)

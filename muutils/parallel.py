@@ -221,7 +221,7 @@ def run_maybe_parallel(
             chunksize_int = chunksize
 
         # set the chunksize
-        do_map = functools.partial(do_map, chunksize=chunksize_int)  # type: ignore[call-arg]
+        do_map = functools.partial(do_map, chunksize=chunksize_int)  # type: ignore
 
     else:
         do_map = map

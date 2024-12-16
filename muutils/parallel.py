@@ -63,7 +63,7 @@ def no_progress_fn_wrap(x: Iterable, **kwargs) -> Iterable:
 # set the default progress bar function
 try:
     # use tqdm if it's available
-    import tqdm
+    import tqdm  # type: ignore[import-untyped]
 
     @functools.wraps(tqdm.tqdm)
     def tqdm_wrap(x: Iterable, **kwargs) -> Iterable:
@@ -95,7 +95,7 @@ def set_up_progress_bar_fn(
 
     # dont use a progress bar if `pbar` is None or "none", or if `disable` is set to True in `pbar_kwargs`
     if (pbar is None) or (pbar == "none") or pbar_kwargs.get("disable", False):
-        pbar_fn = no_progress_fn_wrap
+        pbar_fn = no_progress_fn_wrap  # type: ignore[assignment]
 
     # if `pbar` is a different string, figure out which progress bar to use
     elif isinstance(pbar, str):
@@ -151,7 +151,7 @@ def run_maybe_parallel(
     """
 
     # number of inputs in iterable
-    n_inputs: int = len(iterable)
+    n_inputs: int = len(iterable)  # type: ignore[arg-type]
     if n_inputs == 0:
         # Return immediately if there is no input
         return list()
@@ -190,7 +190,7 @@ def run_maybe_parallel(
             raise ValueError("`use_multiprocess=True` requires `parallel=True`")
 
         try:
-            import multiprocess
+            import multiprocess  # type: ignore[import-untyped]
         except ImportError as e:
             raise ImportError(
                 "`use_multiprocess=True` requires the `multiprocess` package -- this is mostly useful when you need to pickle a lambda. install muutils with `pip install muutils[multiprocess]` or just do `pip install multiprocess`"
@@ -205,7 +205,7 @@ def run_maybe_parallel(
     ]
     if parallel:
         # use `mp.Pool` since we might want to use `multiprocess` instead of `multiprocessing`
-        pool: multiprocessing.context._default_context.Pool = mp.Pool(num_processes)
+        pool = mp.Pool(num_processes)
 
         # use `imap` if we want to keep the order, otherwise use `imap_unordered`
         if keep_ordered:
@@ -221,7 +221,7 @@ def run_maybe_parallel(
             chunksize_int = chunksize
 
         # set the chunksize
-        do_map = functools.partial(do_map, chunksize=chunksize_int)
+        do_map = functools.partial(do_map, chunksize=chunksize_int)  # type: ignore[call-arg]
 
     else:
         do_map = map

@@ -638,7 +638,9 @@ clean:
 	rm -rf build
 	rm -rf $(PACKAGE_NAME).egg-info
 	rm -rf $(TESTS_TEMP_DIR)
-	$(PYTHON_BASE) -Bc "import pathlib; [(p.unlink() for p in pathlib.Path(path).rglob(pattern)) for path in ['$(PACKAGE_NAME)', '$(TESTS_DIR)', '$(DOCS_DIR)'] for pattern in ['*.py[co]', '__pycache__/*']]"
+	$(PYTHON_BASE) -Bc "import pathlib; [p.unlink() for path in ['$(PACKAGE_NAME)', '$(TESTS_DIR)', '$(DOCS_DIR)'] for pattern in ['*.py[co]', '__pycache__/*'] for p in pathlib.Path(path).rglob(pattern)]"
+
+
 	rm -rf tests/unit/validate_type/test_validate_type_GENERATED.py
 
 .PHONY: clean-all

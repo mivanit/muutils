@@ -1,6 +1,6 @@
 Name                                                                              Stmts   Miss  Cover   Missing
 ---------------------------------------------------------------------------------------------------------------
-muutils\__init__.py                                                                   2      2     0%   5-7
+muutils\__init__.py                                                                   2      0   100%
 muutils\dictmagic.py                                                                160     23    86%   37-42, 45-50, 309, 469-473, 477, 510-522
 muutils\errormode.py                                                                 75     31    59%   10-34, 43, 78-91, 144, 149, 160-163, 197, 200, 203, 206-207, 215-241
 muutils\group_equiv.py                                                               29      0   100%
@@ -28,19 +28,20 @@ muutils\misc\hashing.py                                                         
 muutils\misc\numerical.py                                                            68      3    96%   46, 77, 127
 muutils\misc\sequence.py                                                             59      1    98%   42
 muutils\misc\string.py                                                               34      5    85%   103-108
-muutils\mlutils.py                                                                   72     44    39%   3-30, 33, 39-53, 59-62, 69-77, 100, 108, 130-133, 144-149, 153-154, 164-165
+muutils\mlutils.py                                                                   72     43    40%   3-30, 33, 39-53, 58, 60, 69-77, 100, 108, 130-133, 144-149, 153-154, 164-165
 muutils\nbutils\__init__.py                                                           2      2     0%   10-12
 muutils\nbutils\configure_notebook.py                                               133     80    40%   3-59, 77-86, 108, 118-119, 124, 127-128, 148-151, 156, 162-171, 178-183, 192, 265-276, 282-287, 310-317, 320
 muutils\nbutils\convert_ipynb_to_script.py                                          124     41    67%   69, 84, 97, 111-145, 234-236, 242, 269, 301-303, 310-363
 muutils\nbutils\mermaid.py                                                           11     11     0%   3-20
 muutils\nbutils\print_tex.py                                                         10     10     0%   3-21
 muutils\nbutils\run_notebook_tests.py                                                74     26    65%   51, 53, 57, 61, 67, 75, 104, 110-115, 120-133, 140-157
+muutils\parallel.py                                                                  91      6    93%   47, 79-81, 190, 194-195
 muutils\spinner.py                                                                  147     10    93%   280, 307, 370-371, 417, 420, 423, 464, 468, 507
 muutils\statcounter.py                                                               89     32    64%   30-41, 56, 82, 110, 122, 132, 149-179, 199, 209, 212, 217-222, 231
-muutils\sysinfo.py                                                                   78     14    82%   22-25, 66-67, 116-117, 158-167, 179, 197-199
+muutils\sysinfo.py                                                                   78     25    68%   22-25, 66-67, 84-117, 158-167, 179, 197-199
 muutils\tensor_utils.py                                                             128     18    86%   98, 101, 120, 124, 141, 144-147, 155, 162, 176-184
 muutils\timeit_fancy.py                                                              31      0   100%
-muutils\validate_type.py                                                             82     19    77%   3-36, 53, 57, 192, 195, 215
+muutils\validate_type.py                                                             90      5    94%   193, 196, 216, 228-229
 tests\unit\errormode\test_errormode_functionality.py                                 62      1    98%   87
 tests\unit\errormode\test_errormode_init.py                                          68      0   100%
 tests\unit\json_serialize\serializable_dataclass\test_helpers.py                    102      0   100%
@@ -64,14 +65,16 @@ tests\unit\test_import_torch.py                                                 
 tests\unit\test_interval.py                                                         899      1    99%   12
 tests\unit\test_kappa.py                                                             39      0   100%
 tests\unit\test_mlutils.py                                                           43      6    86%   35, 39, 47, 50, 57-58
+tests\unit\test_parallel.py                                                         131      5    96%   26, 32, 43, 47-48
 tests\unit\test_spinner.py                                                          295      8    97%   352-362
 tests\unit\test_statcounter.py                                                       14      0   100%
 tests\unit\test_sysinfo.py                                                            6      0   100%
 tests\unit\test_tensor_utils.py                                                      51      0   100%
 tests\unit\test_timeit_fancy.py                                                      69      0   100%
+tests\unit\validate_type\test_get_kwargs.py                                          53     13    75%   8, 15, 22, 29, 36, 43, 51-52, 58-59, 66, 78, 87
 tests\unit\validate_type\test_validate_type.py                                      206     45    78%   49-50, 74-75, 101-102, 124-125, 146-147, 176-177, 202-203, 236-237, 254, 273-274, 335-336, 360-361, 431-432, 460-461, 465-466, 480-498
 tests\unit\validate_type\test_validate_type_GENERATED.py                            206     45    78%   50-51, 75-76, 102-103, 125-126, 147-148, 177-178, 203-204, 237-238, 255, 274-275, 336-337, 361-362, 432-433, 461-462, 466-467, 481-499
 tests\unit\validate_type\test_validate_type_special.py                               15      3    80%   34-35, 57
 tests\util\test_fire.py                                                               8      6    25%   2-5, 9-11
 ---------------------------------------------------------------------------------------------------------------
-TOTAL                                                                              6106   1014    83%
+TOTAL                                                                              6389   1032    84%

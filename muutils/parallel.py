@@ -226,12 +226,6 @@ def run_maybe_parallel(
     else:
         do_map = map
 
-    print(f"{pbar_fn = }, {do_map = }")
-    print(f"{do_map(func, iterable) = }")
-    print(f"{list(do_map(func, iterable)) = }")
-    print(f"{pbar_fn(do_map(func, iterable)) = }")
-    print(f"{list(pbar_fn(do_map(func, iterable))) = }")
-
     # run the map function with a progress bar
     output: List[OutputType] = list(
         pbar_fn(

@@ -6,14 +6,6 @@ from typing import Any, List, Iterable
 # Import the function to test
 from muutils.parallel import DEFAULT_PBAR_FN, run_maybe_parallel
 
-# Try to check if multiprocess is installed
-multiprocess_installed = True
-try:
-    import multiprocess  # noqa: F401
-except ImportError:
-    multiprocess_installed = False
-
-
 DATA: dict = dict(
     empty=[],
     single=[5],
@@ -78,18 +70,7 @@ def dataset_decorator(keys: List[str]):
 @dataset_decorator(["empty", "single", "small"])
 @pytest.mark.parametrize("parallel", [False, True, 2, 4])
 @pytest.mark.parametrize("keep_ordered", [True, False])
-@pytest.mark.parametrize(
-    "use_multiprocess",
-    [
-        False,
-        pytest.param(
-            True,
-            marks=pytest.mark.skipif(
-                not multiprocess_installed, reason="multiprocess not installed"
-            ),
-        ),
-    ],
-)
+@pytest.mark.parametrize("use_multiprocess", [True, False])
 def test_general_functionality(
     input_range, expected, parallel, keep_ordered, use_multiprocess
 ):

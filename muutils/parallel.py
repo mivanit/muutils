@@ -30,7 +30,7 @@ class ProgressBarFunction(Protocol):
 ProgressBarOption = Literal["tqdm", "spinner", "none", None]
 
 
-progress_bar_fn: Callable
+DEFAULT_PBAR_FN: Callable
 # default progress bar function
 
 
@@ -44,8 +44,13 @@ def spinner_fn_wrap(x: Iterable, **kwargs) -> List:
     if "desc" in kwargs and "message" not in mapped_kwargs:
         mapped_kwargs["message"] = kwargs.get("desc")
 
+    if "message" not in mapped_kwargs and "total" in kwargs:
+        mapped_kwargs["message"] = f"Processing {kwargs.get('total')} items"
+
     with SpinnerContext(**mapped_kwargs):
-        return list(x)
+        output = list(x)
+
+    return output
 
 def no_progress_fn_wrap(x: Iterable, **kwargs) -> Iterable:
     "fallback to no progress bar"
@@ -66,20 +71,27 @@ try:
         }
         if "message" in kwargs and "desc" not in mapped_kwargs:
             mapped_kwargs["desc"] = mapped_kwargs.get("desc")
-            return tqdm.tqdm(x, **mapped_kwargs)
+        return tqdm.tqdm(x, **mapped_kwargs)
         
-    progress_bar_fn = tqdm_wrap
+    DEFAULT_PBAR_FN = tqdm_wrap
 
 except ImportError:
     # use progress bar as fallback
-    progress_bar_fn = spinner_fn_wrap
+    DEFAULT_PBAR_FN = spinner_fn_wrap
 
 
-def set_up_progress_bar_fn(pbar: Union[ProgressBarFunction, ], pbar_kwargs: Dict[str, Any] = None) -> ProgressBarFunction:
+def set_up_progress_bar_fn(
+        pbar: Union[ProgressBarFunction, ProgressBarOption],
+        pbar_kwargs: Optional[Dict[str, Any]] = None,
+        **extra_kwargs,
+    ) -> ProgressBarFunction:
+    
     pbar_fn: ProgressBarFunction
 
     if pbar_kwargs is None:
         pbar_kwargs = dict()
+    
+    pbar_kwargs = {**extra_kwargs, **pbar_kwargs}
 
     # dont use a progress bar if `pbar` is None or "none", or if `disable` is set to True in `pbar_kwargs`
     if (pbar is None) or (pbar == "none") or pbar_kwargs.get("disable", False):
@@ -106,11 +118,11 @@ def run_maybe_parallel(
     func: Callable[[InputType], OutputType],
     iterable: Iterable[InputType],
     parallel: Union[bool, int],
-    pbar_kwargs: Union[Dict[str, Any], None] = None,
+    pbar_kwargs: Optional[Dict[str, Any]] = None,
     chunksize: Optional[int] = None,
     keep_ordered: bool = True,
     use_multiprocess: bool = False,
-    pbar: Union[ProgressBarFunction, ProgressBarOption] = progress_bar_fn,
+    pbar: Union[ProgressBarFunction, ProgressBarOption] = DEFAULT_PBAR_FN,
 ) -> List[OutputType]:
     """a function to make it easier to sometimes parallelize an operation
 
@@ -145,7 +157,12 @@ def run_maybe_parallel(
         return list()
     
     # which progress bar to use
-    pbar_fn: ProgressBarFunction = set_up_progress_bar_fn(pbar, pbar_kwargs)
+    pbar_fn: ProgressBarFunction = set_up_progress_bar_fn(
+        pbar=pbar,
+        pbar_kwargs=pbar_kwargs,
+        # extra kwargs
+        total=n_inputs,
+    )
 
     # number of processes
     num_processes: int
@@ -209,15 +226,19 @@ def run_maybe_parallel(
     else:
         do_map = map
 
+    print(f"{pbar_fn = }, {do_map = }")
+    print(f"{do_map(func, iterable) = }")
+    print(f"{list(do_map(func, iterable)) = }")
+    print(f"{pbar_fn(do_map(func, iterable)) = }")
+    print(f"{list(pbar_fn(do_map(func, iterable))) = }")
+
     # run the map function with a progress bar
     output: List[OutputType] = list(
         pbar_fn(
             do_map(
                 func,
                 iterable,
-            ),
-            total=n_inputs,
-            **pbar_kwargs,
+            )
         )
     )
 

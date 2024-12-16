@@ -98,7 +98,7 @@ def test_general_functionality(
         parallel is False or parallel == 1 or len(input_range) == 1
     ):
         return
-    
+
     # run the function
     results = run_maybe_parallel(
         func=square,
@@ -186,14 +186,18 @@ def test_error_handling(parallel):
 def _process_complex(obj):
     return ComplexObject(obj.value * 2)
 
+
 COMPLEX_DATA: List[ComplexObject] = [ComplexObject(i) for i in range(5)]
 EXPECTED_COMPLEX = [ComplexObject(i * 2) for i in range(5)]
+
 
 @pytest.mark.parametrize("parallel", [False, True])
 @pytest.mark.parametrize("pbar_type", [None, DEFAULT_PBAR_FN])
 def test_complex_objects(parallel, pbar_type):
     # override input_range with complex objects just for this test
-    result = run_maybe_parallel(_process_complex, COMPLEX_DATA, parallel, pbar=pbar_type)
+    result = run_maybe_parallel(
+        _process_complex, COMPLEX_DATA, parallel, pbar=pbar_type
+    )
     expected_complex = EXPECTED_COMPLEX
     assert all(a == b for a, b in zip(result, expected_complex))
 
@@ -214,6 +218,7 @@ def test_custom_progress_bar(input_range, expected):
 
     result = run_maybe_parallel(square, input_range, False, pbar=custom_progress_bar_fn)
     assert result == expected
+
 
 @dataset_decorator(["small"])
 @pytest.mark.parametrize(
@@ -243,12 +248,11 @@ def test_parallel_performance(input_range, expected):
     assert serial_result == parallel_result
 
 
-
-
 @dataset_decorator(["small"])
 def test_reject_pbar_str_when_not_str_or_callable(input_range, expected):
     with pytest.raises(TypeError):
         run_maybe_parallel(square, input_range, False, pbar=12345)
+
 
 def custom_pbar(iterable: Iterable, **kwargs: Any) -> List:
     return list(iterable)
@@ -258,6 +262,7 @@ def custom_pbar(iterable: Iterable, **kwargs: Any) -> List:
 def test_manual_callable_pbar(input_range, expected):
     results = run_maybe_parallel(square, input_range, False, pbar=custom_pbar)
     assert results == expected, "Manual callable pbar test failed."
+
 
 @pytest.mark.parametrize(
     "input_data, parallel",

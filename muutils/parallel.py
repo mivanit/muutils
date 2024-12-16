@@ -25,7 +25,9 @@ OutputType = TypeVar("OutputType")
 
 class ProgressBarFunction(Protocol):
     "a protocol for a progress bar function"
+
     def __call__(self, iterable: Iterable, **kwargs: Any) -> Iterable: ...
+
 
 ProgressBarOption = Literal["tqdm", "spinner", "none", None]
 
@@ -52,6 +54,7 @@ def spinner_fn_wrap(x: Iterable, **kwargs) -> List:
 
     return output
 
+
 def no_progress_fn_wrap(x: Iterable, **kwargs) -> Iterable:
     "fallback to no progress bar"
     return x
@@ -65,14 +68,12 @@ try:
     @functools.wraps(tqdm.tqdm)
     def tqdm_wrap(x: Iterable, **kwargs) -> Iterable:
         mapped_kwargs: dict = {
-            k: v
-            for k, v in kwargs.items()
-            if k in get_fn_allowed_kwargs(tqdm.tqdm)
+            k: v for k, v in kwargs.items() if k in get_fn_allowed_kwargs(tqdm.tqdm)
         }
         if "message" in kwargs and "desc" not in mapped_kwargs:
             mapped_kwargs["desc"] = mapped_kwargs.get("desc")
         return tqdm.tqdm(x, **mapped_kwargs)
-        
+
     DEFAULT_PBAR_FN = tqdm_wrap
 
 except ImportError:
@@ -81,16 +82,15 @@ except ImportError:
 
 
 def set_up_progress_bar_fn(
-        pbar: Union[ProgressBarFunction, ProgressBarOption],
-        pbar_kwargs: Optional[Dict[str, Any]] = None,
-        **extra_kwargs,
-    ) -> ProgressBarFunction:
-    
+    pbar: Union[ProgressBarFunction, ProgressBarOption],
+    pbar_kwargs: Optional[Dict[str, Any]] = None,
+    **extra_kwargs,
+) -> ProgressBarFunction:
     pbar_fn: ProgressBarFunction
 
     if pbar_kwargs is None:
         pbar_kwargs = dict()
-    
+
     pbar_kwargs = {**extra_kwargs, **pbar_kwargs}
 
     # dont use a progress bar if `pbar` is None or "none", or if `disable` is set to True in `pbar_kwargs`
@@ -155,7 +155,7 @@ def run_maybe_parallel(
     if n_inputs == 0:
         # Return immediately if there is no input
         return list()
-    
+
     # which progress bar to use
     pbar_fn: ProgressBarFunction = set_up_progress_bar_fn(
         pbar=pbar,

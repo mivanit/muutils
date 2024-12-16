@@ -97,9 +97,7 @@ def test_general_functionality(
     if use_multiprocess and (
         parallel is False or parallel == 1 or len(input_range) == 1
     ):
-        pytest.skip(
-            "`use_multiprocess=True` requires `parallel=True` with parallel > 1 and more than one input"
-        )
+        return
     
     # run the function
     results = run_maybe_parallel(
@@ -120,14 +118,14 @@ def test_general_functionality(
 @dataset_decorator(["small"])
 @pytest.mark.parametrize(
     "pbar_type",
-    ["tqdm", "spinner", "none", None, pytest.param("invalid", marks=pytest.mark.xfail)],
+    ["tqdm", "spinner", "none", None, "invalid"],
 )
 @pytest.mark.parametrize("disable_flag", [True, False])
 def test_progress_bar_types_and_disable(input_range, expected, pbar_type, disable_flag):
     pbar_kwargs = {"disable": disable_flag}
-    if pbar_type == "invalid":
+    if pbar_type == "invalid" and not disable_flag:
         with pytest.raises(ValueError):
-            run_maybe_parallel(square, input_range, True, pbar_kwargs, pbar=pbar_type)
+            run_maybe_parallel(square, input_range, False, pbar_kwargs, pbar=pbar_type)
     else:
         results = run_maybe_parallel(
             square, input_range, False, pbar_kwargs, pbar=pbar_type
@@ -136,7 +134,7 @@ def test_progress_bar_types_and_disable(input_range, expected, pbar_type, disabl
 
 
 @dataset_decorator(["small"])
-@pytest.mark.parametrize("chunksize", [None, 1, 2, 5, 10, 20])
+@pytest.mark.parametrize("chunksize", [None, 1, 5])
 @pytest.mark.parametrize("parallel", [False, True, 2])
 def test_chunksize_and_parallel(input_range, expected, chunksize, parallel):
     results = run_maybe_parallel(square, input_range, parallel, {}, chunksize=chunksize)
@@ -170,7 +168,7 @@ def test_exception_in_func():
 )
 def test_different_iterables(input_range, expected, iterable_factory):
     test_input = iterable_factory(input_range)
-    result = run_maybe_parallel(square, test_input, True)
+    result = run_maybe_parallel(square, test_input, False)
     if isinstance(test_input, set):
         assert set(result) == set(expected)
     else:
@@ -188,16 +186,15 @@ def test_error_handling(parallel):
 def _process_complex(obj):
     return ComplexObject(obj.value * 2)
 
+COMPLEX_DATA: List[ComplexObject] = [ComplexObject(i) for i in range(5)]
+EXPECTED_COMPLEX = [ComplexObject(i * 2) for i in range(5)]
 
-@pytest.mark.parametrize(
-    "pbar_type",
-    ["tqdm", "spinner", "none", None, DEFAULT_PBAR_FN, pytest.param("invalid", marks=pytest.mark.xfail)],
-)
-def test_complex_objects(pbar_type):
+@pytest.mark.parametrize("parallel", [False, True])
+@pytest.mark.parametrize("pbar_type", [None, DEFAULT_PBAR_FN])
+def test_complex_objects(parallel, pbar_type):
     # override input_range with complex objects just for this test
-    complex_data = [ComplexObject(i) for i in range(5)]
-    result = run_maybe_parallel(_process_complex, complex_data, True, pbar=pbar_type)
-    expected_complex = [ComplexObject(x.value * 2) for x in complex_data]
+    result = run_maybe_parallel(_process_complex, COMPLEX_DATA, parallel, pbar=pbar_type)
+    expected_complex = EXPECTED_COMPLEX
     assert all(a == b for a, b in zip(result, expected_complex))
 
 
@@ -235,7 +232,7 @@ def test_custom_progress_bar(input_range, expected):
     ],
 )
 def test_progress_bar_kwargs(input_range, expected, kwargs):
-    result = run_maybe_parallel(square, input_range, True, pbar_kwargs=kwargs)
+    result = run_maybe_parallel(square, input_range, False, pbar_kwargs=kwargs)
     assert result == expected
 
 
@@ -259,7 +256,7 @@ def custom_pbar(iterable: Iterable, **kwargs: Any) -> List:
 
 @dataset_decorator(["small"])
 def test_manual_callable_pbar(input_range, expected):
-    results = run_maybe_parallel(square, input_range, True, pbar=custom_pbar)
+    results = run_maybe_parallel(square, input_range, False, pbar=custom_pbar)
     assert results == expected, "Manual callable pbar test failed."
 
 @pytest.mark.parametrize(

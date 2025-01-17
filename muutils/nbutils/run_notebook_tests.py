@@ -14,11 +14,16 @@ from pathlib import Path
 from typing import Optional
 import warnings
 
+from muutils.console_unicode import get_console_safe_str
 from muutils.spinner import SpinnerContext
 
 
 class NotebookTestError(Exception):
     pass
+
+
+SUCCESS_STR: str = get_console_safe_str("✅", "[OK]")
+FAILURE_STR: str = get_console_safe_str("❌", "[!!]")
 
 
 def run_notebook_tests(
@@ -79,7 +84,7 @@ def run_notebook_tests(
     # reading converted notebooks from 'temp/converted'
     Running 1/2: temp/converted/notebook1.py
         Output in temp/converted/notebook1.CI-output.txt
-        ✅ Run completed with return code 0
+        {SUCCESS_STR} Run completed with return code 0
     ```
     """
 
@@ -173,10 +178,12 @@ def run_notebook_tests(
                 )
 
             if process.returncode == 0:
-                print(f"    ✅ Run completed with return code {process.returncode}")
+                print(
+                    f"    {SUCCESS_STR} Run completed with return code {process.returncode}"
+                )
             else:
                 print(
-                    f"    ❌ Run failed with return code {process.returncode}!!! Check {output_file.as_posix()}"
+                    f"    {FAILURE_STR} Run failed with return code {process.returncode}!!! Check {output_file.as_posix()}"
                 )
 
             # print the output of the file to the console if it failed
@@ -197,7 +204,7 @@ def run_notebook_tests(
             raise NotebookTestError(
                 exceptions_str
                 + "=" * term_width
-                + f"\n❌ {len(exceptions)}/{n_notebooks} notebooks failed:\n{list(exceptions.keys())}"
+                + f"\n{FAILURE_STR} {len(exceptions)}/{n_notebooks} notebooks failed:\n{list(exceptions.keys())}"
             )
 
     except NotebookTestError as e:

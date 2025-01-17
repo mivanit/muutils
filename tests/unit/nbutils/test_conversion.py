@@ -76,7 +76,6 @@ def test_cli():
     # Setup
     nb_test_cli_dir: Path = Path("tests/_temp/run_notebook_tests_cli")
     os.makedirs(nb_test_cli_dir, exist_ok=True)
-    sys.stdout.reconfigure(encoding="utf-8")
 
     # First convert notebooks to test with
     process_dir(

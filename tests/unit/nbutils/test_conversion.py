@@ -30,7 +30,7 @@ def test_run_notebook_tests():
     run_notebook_tests(
         notebooks_dir=notebooks_input_dir,
         converted_notebooks_temp_dir=nb_test_dir,
-        run_python_cmd="python",
+        run_python_cmd_fmt="python",
     )
 
     # assert output directory contents are identical

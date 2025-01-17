@@ -11,6 +11,7 @@ import os
 import subprocess
 import sys
 from pathlib import Path
+import warnings
 
 from muutils.spinner import SpinnerContext
 
@@ -23,9 +24,20 @@ def run_notebook_tests(
     notebooks_dir: Path,
     converted_notebooks_temp_dir: Path,
     CI_output_suffix: str = ".CI-output.txt",
-    run_python_cmd: str = "poetry run python",
+    run_python_cmd: str | None = None,
+    run_python_cmd_fmt: str = "{python_tool} run python",
+    python_tool: str = "poetry",
     exit_on_first_fail: bool = False,
 ):
+    if run_python_cmd is None:
+        run_python_cmd_fmt = run_python_cmd_fmt.format(python_tool=python_tool)
+    else:
+        run_python_cmd_fmt = run_python_cmd
+        warnings.warn(
+            "You have specified a custom run_python_cmd, this will override the `python_tool` parameter and `run_python_cmd_fmt` parameter. This will be removed in a future version.",
+            DeprecationWarning,
+        )
+
     original_cwd: Path = Path.cwd()
     # get paths
     notebooks_dir = Path(notebooks_dir)
@@ -151,10 +163,24 @@ if __name__ == "__main__":
         type=str,
         help="The directory containing the converted notebooks to test",
     )
+    parser.add_argument(
+        "--python-tool",
+        type=str,
+        default="poetry",
+        help="The python tool to use to run the notebooks (usually uv or poetry)",
+    )
+    parser.add_argument(
+        "--run-python-cmd-fmt",
+        type=str,
+        default="{python_tool} run python",
+        help="The command to run python with the python tool. if you don't want to use poetry or uv, you can just set this to 'python'",
+    )
 
     args: argparse.Namespace = parser.parse_args()
 
     run_notebook_tests(
-        Path(args.notebooks_dir),
-        Path(args.converted_notebooks_temp_dir),
+        notebooks_dir=Path(args.notebooks_dir),
+        converted_notebooks_temp_dir=Path(args.converted_notebooks_temp_dir),
+        python_tool=args.python_tool,
+        run_python_cmd_fmt=args.run_python_cmd_fmt,
     )

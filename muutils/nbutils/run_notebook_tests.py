@@ -166,7 +166,10 @@ def run_notebook_tests(
             ):
                 command: str = f"{run_python_cmd_} {root_relative_to_notebooks / file} > {root_relative_to_notebooks / output_file} 2>&1"
                 process: subprocess.CompletedProcess = subprocess.run(
-                    command, shell=True, text=True
+                    command,
+                    shell=True,
+                    text=True,
+                    env={**os.environ, "PYTHONIOENCODING": "utf-8"},
                 )
 
             if process.returncode == 0:
@@ -233,12 +236,6 @@ if __name__ == "__main__":
         type=str,
         default="{python_tool} run python",
         help="The command to run python with the python tool. if you don't want to use poetry or uv, you can just set this to 'python'",
-    )
-    parser.add_argument(
-        "--help",
-        "-h",
-        action="help",
-        help="Show this help message and exit",
     )
 
     args: argparse.Namespace = parser.parse_args()

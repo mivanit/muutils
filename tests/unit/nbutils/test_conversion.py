@@ -1,7 +1,10 @@
 from __future__ import annotations
 
 import itertools
+import subprocess
+from pathlib import Path
 import os
+import sys
 
 import pytest
 
@@ -66,3 +69,74 @@ def test_file_conversion(idx, args):
         disable_plots=args[2],
         filter_out_lines=args[3],
     )
+
+
+def test_cli():
+    """Test the CLI interface for run_notebook_tests"""
+    # Setup
+    nb_test_cli_dir: Path = Path("tests/_temp/run_notebook_tests_cli")
+    os.makedirs(nb_test_cli_dir, exist_ok=True)
+
+    # First convert notebooks to test with
+    process_dir(
+        input_dir=notebooks_input_dir,
+        output_dir=nb_test_cli_dir,
+        disable_plots=True,
+    )
+
+    # Test successful case using sys.executable to ensure we use the right Python
+    process = subprocess.run(
+        [
+            sys.executable,
+            "-m",
+            "muutils.nbutils.run_notebook_tests",
+            "--notebooks-dir",
+            notebooks_input_dir,
+            "--converted-notebooks-temp-dir",
+            nb_test_cli_dir,
+            "--run-python-cmd-fmt",
+            "python",  # Override to just use python directly
+        ],
+        capture_output=True,
+        text=True,
+    )
+
+    if process.returncode != 0:
+        print("STDOUT:", process.stdout)
+        print("STDERR:", process.stderr)
+    assert process.returncode == 0
+
+    # Test missing directory error
+    process = subprocess.run(
+        [
+            sys.executable,
+            "-m",
+            "muutils.nbutils.run_notebook_tests",
+            "--notebooks-dir",
+            "nonexistent_dir",
+            "--converted-notebooks-temp-dir",
+            nb_test_cli_dir,
+        ],
+        capture_output=True,
+        text=True,
+    )
+    assert process.returncode != 0
+    assert "does not exist" in process.stderr
+
+    # Test missing converted notebooks error
+    os.makedirs("tests/_temp/empty_dir", exist_ok=True)
+    process = subprocess.run(
+        [
+            sys.executable,
+            "-m",
+            "muutils.nbutils.run_notebook_tests",
+            "--notebooks-dir",
+            notebooks_input_dir,
+            "--converted-notebooks-temp-dir",
+            "tests/_temp/empty_dir",
+        ],
+        capture_output=True,
+        text=True,
+    )
+    assert process.returncode != 0
+    assert "Did not find converted notebook" in process.stderr

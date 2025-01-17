@@ -34,7 +34,7 @@ muutils\nbutils\configure_notebook.py                                           
 muutils\nbutils\convert_ipynb_to_script.py                                          124     41    67%   69, 84, 97, 111-145, 234-236, 242, 269, 301-303, 310-363
 muutils\nbutils\mermaid.py                                                           11     11     0%   3-20
 muutils\nbutils\print_tex.py                                                         10     10     0%   3-21
-muutils\nbutils\run_notebook_tests.py                                                85     33    61%   89-96, 122, 124, 128, 132, 138, 146, 175, 181-186, 191-204, 211-246
+muutils\nbutils\run_notebook_tests.py                                                84     35    58%   89-96, 122, 124, 128, 132, 138, 146, 175-176, 183-187, 189-206, 213-243
 muutils\parallel.py                                                                  86      6    93%   47, 79-81, 190, 194-195
 muutils\spinner.py                                                                  147     10    93%   280, 307, 370-371, 417, 420, 423, 464, 468, 507
 muutils\statcounter.py                                                               89     32    64%   30-41, 56, 82, 110, 122, 132, 149-179, 199, 209, 212, 217-222, 231
@@ -57,7 +57,7 @@ tests\unit\misc\test_misc.py                                                    
 tests\unit\misc\test_numerical_conversions.py                                        43      0   100%
 tests\unit\misc\test_sequence.py                                                     73      0   100%
 tests\unit\nbutils\test_configure_notebook.py                                        70      0   100%
-tests\unit\nbutils\test_conversion.py                                                28      0   100%
+tests\unit\nbutils\test_conversion.py                                                47     24    49%   5, 7, 15-16, 21-22, 46-47, 74-142
 tests\unit\test_chunks.py                                                            31      0   100%
 tests\unit\test_dictmagic.py                                                        130      0   100%
 tests\unit\test_group_equiv.py                                                       13      0   100%
@@ -77,4 +77,4 @@ tests\unit\validate_type\test_validate_type_GENERATED.py                        
 tests\unit\validate_type\test_validate_type_special.py                               15      3    80%   34-35, 57
 tests\util\test_fire.py                                                               8      6    25%   2-5, 9-11
 ---------------------------------------------------------------------------------------------------------------
-TOTAL                                                                              6395   1039    84%
+TOTAL                                                                              6413   1065    83%

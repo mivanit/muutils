@@ -293,6 +293,8 @@ PYTEST_OPTIONS ?=
 COV ?= 1
 # set to `1` to run pytest with `--verbose`
 VERBOSE ?= 0
+# set to `0` to run without durations
+DURATIONS ?= 1
 
 ifeq ($(VERBOSE),1)
 	PYTEST_OPTIONS += --verbose
@@ -300,6 +302,10 @@ endif
 
 ifeq ($(COV),1)
 	PYTEST_OPTIONS += --cov=.
+endif
+
+ifeq ($(DURATIONS),1)
+	PYTEST_OPTIONS += --durations 20
 endif
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

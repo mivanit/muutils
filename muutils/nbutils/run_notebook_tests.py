@@ -16,8 +16,6 @@ import warnings
 
 from muutils.spinner import SpinnerContext
 
-sys.stdout.reconfigure(encoding="utf-8")
-
 
 class NotebookTestError(Exception):
     pass

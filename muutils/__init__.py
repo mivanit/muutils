@@ -11,6 +11,7 @@ __all__ = [
     "misc",
     "nbutils",
     # submodules
+    "console_unicode",
     "dictmagic",
     "errormode",
     "group_equiv",
@@ -18,6 +19,7 @@ __all__ = [
     "jsonlines",
     "kappa",
     "mlutils",
+    "parallel",
     "spinner",
     "statcounter",
     "sysinfo",

@@ -1,6 +1,7 @@
 Name                                                                              Stmts   Miss  Cover   Missing
 ---------------------------------------------------------------------------------------------------------------
 muutils\__init__.py                                                                   2      0   100%
+muutils\console_unicode.py                                                            7      0   100%
 muutils\dictmagic.py                                                                160     23    86%   37-42, 45-50, 309, 469-473, 477, 510-522
 muutils\errormode.py                                                                 75     31    59%   10-34, 43, 78-91, 144, 149, 160-163, 197, 200, 203, 206-207, 215-241
 muutils\group_equiv.py                                                               29      0   100%
@@ -29,12 +30,12 @@ muutils\misc\numerical.py                                                       
 muutils\misc\sequence.py                                                             59      1    98%   42
 muutils\misc\string.py                                                               34      5    85%   103-108
 muutils\mlutils.py                                                                   72     43    40%   3-30, 33, 39-53, 58, 60, 69-77, 100, 108, 130-133, 144-149, 153-154, 164-165
-muutils\nbutils\__init__.py                                                           2      2     0%   10-12
+muutils\nbutils\__init__.py                                                           2      0   100%
 muutils\nbutils\configure_notebook.py                                               133     80    40%   3-59, 77-86, 108, 118-119, 124, 127-128, 148-151, 156, 162-171, 178-183, 192, 265-276, 282-287, 310-317, 320
 muutils\nbutils\convert_ipynb_to_script.py                                          124     41    67%   69, 84, 97, 111-145, 234-236, 242, 269, 301-303, 310-363
-muutils\nbutils\mermaid.py                                                           11     11     0%   3-20
+muutils\nbutils\mermaid.py                                                           11      7    36%   7-10, 17-20
 muutils\nbutils\print_tex.py                                                         10     10     0%   3-21
-muutils\nbutils\run_notebook_tests.py                                                84     35    58%   89-96, 122, 124, 128, 132, 138, 146, 175-176, 183-187, 189-206, 213-243
+muutils\nbutils\run_notebook_tests.py                                                87     17    80%   94-101, 129, 133, 137, 143, 185, 191-196, 201-204
 muutils\parallel.py                                                                  86      6    93%   47, 79-81, 190, 194-195
 muutils\spinner.py                                                                  147     10    93%   280, 307, 370-371, 417, 420, 423, 464, 468, 507
 muutils\statcounter.py                                                               89     32    64%   30-41, 56, 82, 110, 122, 132, 149-179, 199, 209, 212, 217-222, 231
@@ -57,8 +58,9 @@ tests\unit\misc\test_misc.py                                                    
 tests\unit\misc\test_numerical_conversions.py                                        43      0   100%
 tests\unit\misc\test_sequence.py                                                     73      0   100%
 tests\unit\nbutils\test_configure_notebook.py                                        70      0   100%
-tests\unit\nbutils\test_conversion.py                                                47     24    49%   5, 7, 15-16, 21-22, 46-47, 74-142
+tests\unit\nbutils\test_conversion.py                                                47      2    96%   105-106
 tests\unit\test_chunks.py                                                            31      0   100%
+tests\unit\test_console_unicode.py                                                    8      0   100%
 tests\unit\test_dictmagic.py                                                        130      0   100%
 tests\unit\test_group_equiv.py                                                       13      0   100%
 tests\unit\test_import_torch.py                                                       4      0   100%
@@ -77,4 +79,4 @@ tests\unit\validate_type\test_validate_type_GENERATED.py                        
 tests\unit\validate_type\test_validate_type_special.py                               15      3    80%   34-35, 57
 tests\util\test_fire.py                                                               8      6    25%   2-5, 9-11
 ---------------------------------------------------------------------------------------------------------------
-TOTAL                                                                              6413   1065    83%
+TOTAL                                                                              6431   1019    84%

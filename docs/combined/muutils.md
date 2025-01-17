@@ -8,7 +8,7 @@
 
 [![Checks](https://github.com/mivanit/muutils/actions/workflows/checks.yml/badge.svg)](https://github.com/mivanit/muutils/actions/workflows/checks.yml)
 [![Checks](https://github.com/mivanit/muutils/actions/workflows/make-docs.yml/badge.svg)](https://github.com/mivanit/muutils/actions/workflows/make-docs.yml)
-[![Coverage](data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4NCjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB3aWR0aD0iOTkiIGhlaWdodD0iMjAiPg0KICAgIDxsaW5lYXJHcmFkaWVudCBpZD0iYiIgeDI9IjAiIHkyPSIxMDAlIj4NCiAgICAgICAgPHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjYmJiIiBzdG9wLW9wYWNpdHk9Ii4xIi8+DQogICAgICAgIDxzdG9wIG9mZnNldD0iMSIgc3RvcC1vcGFjaXR5PSIuMSIvPg0KICAgIDwvbGluZWFyR3JhZGllbnQ+DQogICAgPG1hc2sgaWQ9ImEiPg0KICAgICAgICA8cmVjdCB3aWR0aD0iOTkiIGhlaWdodD0iMjAiIHJ4PSIzIiBmaWxsPSIjZmZmIi8+DQogICAgPC9tYXNrPg0KICAgIDxnIG1hc2s9InVybCgjYSkiPg0KICAgICAgICA8cGF0aCBmaWxsPSIjNTU1IiBkPSJNMCAwaDYzdjIwSDB6Ii8+DQogICAgICAgIDxwYXRoIGZpbGw9IiNhNGE2MWQiIGQ9Ik02MyAwaDM2djIwSDYzeiIvPg0KICAgICAgICA8cGF0aCBmaWxsPSJ1cmwoI2IpIiBkPSJNMCAwaDk5djIwSDB6Ii8+DQogICAgPC9nPg0KICAgIDxnIGZpbGw9IiNmZmYiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtZmFtaWx5PSJEZWphVnUgU2FucyxWZXJkYW5hLEdlbmV2YSxzYW5zLXNlcmlmIiBmb250LXNpemU9IjExIj4NCiAgICAgICAgPHRleHQgeD0iMzEuNSIgeT0iMTUiIGZpbGw9IiMwMTAxMDEiIGZpbGwtb3BhY2l0eT0iLjMiPmNvdmVyYWdlPC90ZXh0Pg0KICAgICAgICA8dGV4dCB4PSIzMS41IiB5PSIxNCI+Y292ZXJhZ2U8L3RleHQ+DQogICAgICAgIDx0ZXh0IHg9IjgwIiB5PSIxNSIgZmlsbD0iIzAxMDEwMSIgZmlsbC1vcGFjaXR5PSIuMyI+ODMlPC90ZXh0Pg0KICAgICAgICA8dGV4dCB4PSI4MCIgeT0iMTQiPjgzJTwvdGV4dD4NCiAgICA8L2c+DQo8L3N2Zz4NCg==)](docs/coverage/html/)
+[![Coverage](data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4NCjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB3aWR0aD0iOTkiIGhlaWdodD0iMjAiPg0KICAgIDxsaW5lYXJHcmFkaWVudCBpZD0iYiIgeDI9IjAiIHkyPSIxMDAlIj4NCiAgICAgICAgPHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjYmJiIiBzdG9wLW9wYWNpdHk9Ii4xIi8+DQogICAgICAgIDxzdG9wIG9mZnNldD0iMSIgc3RvcC1vcGFjaXR5PSIuMSIvPg0KICAgIDwvbGluZWFyR3JhZGllbnQ+DQogICAgPG1hc2sgaWQ9ImEiPg0KICAgICAgICA8cmVjdCB3aWR0aD0iOTkiIGhlaWdodD0iMjAiIHJ4PSIzIiBmaWxsPSIjZmZmIi8+DQogICAgPC9tYXNrPg0KICAgIDxnIG1hc2s9InVybCgjYSkiPg0KICAgICAgICA8cGF0aCBmaWxsPSIjNTU1IiBkPSJNMCAwaDYzdjIwSDB6Ii8+DQogICAgICAgIDxwYXRoIGZpbGw9IiNhNGE2MWQiIGQ9Ik02MyAwaDM2djIwSDYzeiIvPg0KICAgICAgICA8cGF0aCBmaWxsPSJ1cmwoI2IpIiBkPSJNMCAwaDk5djIwSDB6Ii8+DQogICAgPC9nPg0KICAgIDxnIGZpbGw9IiNmZmYiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtZmFtaWx5PSJEZWphVnUgU2FucyxWZXJkYW5hLEdlbmV2YSxzYW5zLXNlcmlmIiBmb250LXNpemU9IjExIj4NCiAgICAgICAgPHRleHQgeD0iMzEuNSIgeT0iMTUiIGZpbGw9IiMwMTAxMDEiIGZpbGwtb3BhY2l0eT0iLjMiPmNvdmVyYWdlPC90ZXh0Pg0KICAgICAgICA8dGV4dCB4PSIzMS41IiB5PSIxNCI+Y292ZXJhZ2U8L3RleHQ+DQogICAgICAgIDx0ZXh0IHg9IjgwIiB5PSIxNSIgZmlsbD0iIzAxMDEwMSIgZmlsbC1vcGFjaXR5PSIuMyI+ODQlPC90ZXh0Pg0KICAgICAgICA8dGV4dCB4PSI4MCIgeT0iMTQiPjg0JTwvdGV4dD4NCiAgICA8L2c+DQo8L3N2Zz4NCg==)](docs/coverage/html/)
 
 ![GitHub commits](https://img.shields.io/github/commit-activity/t/mivanit/muutils)
 ![GitHub commit activity](https://img.shields.io/github/commit-activity/m/mivanit/muutils)
@@ -142,6 +142,7 @@ There are a couple work-in-progress utilities in [`_wip`](https://github.com/miv
 - [`logger`](#logger)
 - [`misc`](#misc)
 - [`nbutils`](#nbutils)
+- [`console_unicode`](#console_unicode)
 - [`dictmagic`](#dictmagic)
 - [`errormode`](#errormode)
 - [`group_equiv`](#group_equiv)
@@ -149,6 +150,7 @@ There are a couple work-in-progress utilities in [`_wip`](https://github.com/miv
 - [`jsonlines`](#jsonlines)
 - [`kappa`](#kappa)
 - [`mlutils`](#mlutils)
+- [`parallel`](#parallel)
 - [`spinner`](#spinner)
 - [`statcounter`](#statcounter)
 - [`sysinfo`](#sysinfo)
@@ -169,7 +171,7 @@ There are a couple work-in-progress utilities in [`_wip`](https://github.com/miv
 
 [![Checks](https://github.com/mivanit/muutils/actions/workflows/checks.yml/badge.svg)](https://github.com/mivanit/muutils/actions/workflows/checks.yml)
 [![Checks](https://github.com/mivanit/muutils/actions/workflows/make-docs.yml/badge.svg)](https://github.com/mivanit/muutils/actions/workflows/make-docs.yml)
-[![Coverage](data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4NCjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB3aWR0aD0iOTkiIGhlaWdodD0iMjAiPg0KICAgIDxsaW5lYXJHcmFkaWVudCBpZD0iYiIgeDI9IjAiIHkyPSIxMDAlIj4NCiAgICAgICAgPHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjYmJiIiBzdG9wLW9wYWNpdHk9Ii4xIi8+DQogICAgICAgIDxzdG9wIG9mZnNldD0iMSIgc3RvcC1vcGFjaXR5PSIuMSIvPg0KICAgIDwvbGluZWFyR3JhZGllbnQ+DQogICAgPG1hc2sgaWQ9ImEiPg0KICAgICAgICA8cmVjdCB3aWR0aD0iOTkiIGhlaWdodD0iMjAiIHJ4PSIzIiBmaWxsPSIjZmZmIi8+DQogICAgPC9tYXNrPg0KICAgIDxnIG1hc2s9InVybCgjYSkiPg0KICAgICAgICA8cGF0aCBmaWxsPSIjNTU1IiBkPSJNMCAwaDYzdjIwSDB6Ii8+DQogICAgICAgIDxwYXRoIGZpbGw9IiNhNGE2MWQiIGQ9Ik02MyAwaDM2djIwSDYzeiIvPg0KICAgICAgICA8cGF0aCBmaWxsPSJ1cmwoI2IpIiBkPSJNMCAwaDk5djIwSDB6Ii8+DQogICAgPC9nPg0KICAgIDxnIGZpbGw9IiNmZmYiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtZmFtaWx5PSJEZWphVnUgU2FucyxWZXJkYW5hLEdlbmV2YSxzYW5zLXNlcmlmIiBmb250LXNpemU9IjExIj4NCiAgICAgICAgPHRleHQgeD0iMzEuNSIgeT0iMTUiIGZpbGw9IiMwMTAxMDEiIGZpbGwtb3BhY2l0eT0iLjMiPmNvdmVyYWdlPC90ZXh0Pg0KICAgICAgICA8dGV4dCB4PSIzMS41IiB5PSIxNCI+Y292ZXJhZ2U8L3RleHQ+DQogICAgICAgIDx0ZXh0IHg9IjgwIiB5PSIxNSIgZmlsbD0iIzAxMDEwMSIgZmlsbC1vcGFjaXR5PSIuMyI+ODMlPC90ZXh0Pg0KICAgICAgICA8dGV4dCB4PSI4MCIgeT0iMTQiPjgzJTwvdGV4dD4NCiAgICA8L2c+DQo8L3N2Zz4NCg==)](docs/coverage/html/)
+[![Coverage](data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4NCjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB3aWR0aD0iOTkiIGhlaWdodD0iMjAiPg0KICAgIDxsaW5lYXJHcmFkaWVudCBpZD0iYiIgeDI9IjAiIHkyPSIxMDAlIj4NCiAgICAgICAgPHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjYmJiIiBzdG9wLW9wYWNpdHk9Ii4xIi8+DQogICAgICAgIDxzdG9wIG9mZnNldD0iMSIgc3RvcC1vcGFjaXR5PSIuMSIvPg0KICAgIDwvbGluZWFyR3JhZGllbnQ+DQogICAgPG1hc2sgaWQ9ImEiPg0KICAgICAgICA8cmVjdCB3aWR0aD0iOTkiIGhlaWdodD0iMjAiIHJ4PSIzIiBmaWxsPSIjZmZmIi8+DQogICAgPC9tYXNrPg0KICAgIDxnIG1hc2s9InVybCgjYSkiPg0KICAgICAgICA8cGF0aCBmaWxsPSIjNTU1IiBkPSJNMCAwaDYzdjIwSDB6Ii8+DQogICAgICAgIDxwYXRoIGZpbGw9IiNhNGE2MWQiIGQ9Ik02MyAwaDM2djIwSDYzeiIvPg0KICAgICAgICA8cGF0aCBmaWxsPSJ1cmwoI2IpIiBkPSJNMCAwaDk5djIwSDB6Ii8+DQogICAgPC9nPg0KICAgIDxnIGZpbGw9IiNmZmYiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtZmFtaWx5PSJEZWphVnUgU2FucyxWZXJkYW5hLEdlbmV2YSxzYW5zLXNlcmlmIiBmb250LXNpemU9IjExIj4NCiAgICAgICAgPHRleHQgeD0iMzEuNSIgeT0iMTUiIGZpbGw9IiMwMTAxMDEiIGZpbGwtb3BhY2l0eT0iLjMiPmNvdmVyYWdlPC90ZXh0Pg0KICAgICAgICA8dGV4dCB4PSIzMS41IiB5PSIxNCI+Y292ZXJhZ2U8L3RleHQ+DQogICAgICAgIDx0ZXh0IHg9IjgwIiB5PSIxNSIgZmlsbD0iIzAxMDEwMSIgZmlsbC1vcGFjaXR5PSIuMyI+ODQlPC90ZXh0Pg0KICAgICAgICA8dGV4dCB4PSI4MCIgeT0iMTQiPjg0JTwvdGV4dD4NCiAgICA8L2c+DQo8L3N2Zz4NCg==)](docs/coverage/html/)
 
 ![GitHub commits](https://img.shields.io/github/commit-activity/t/mivanit/muutils)
 ![GitHub commit activity](https://img.shields.io/github/commit-activity/m/mivanit/muutils)
@@ -297,8 +299,63 @@ There are a couple work-in-progress utilities in [`_wip`](https://github.com/miv
 
 
 
-[View Source on GitHub](https://github.com/mivanit/muutils/blob/0.6.21/__init__.py#L0-L26)
+[View Source on GitHub](https://github.com/mivanit/muutils/blob/0.6.21/__init__.py#L0-L28)
 
+
+
+
+
+> docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.21
+
+
+
+
+## API Documentation
+
+ - [`get_console_safe_str`](#get_console_safe_str)
+
+
+
+
+[View Source on GitHub](https://github.com/mivanit/muutils/blob/0.6.21/console_unicode.py)
+
+# `muutils.console_unicode` { #muutils.console_unicode }
+
+
+[View Source on GitHub](https://github.com/mivanit/muutils/blob/0.6.21/console_unicode.py#L0-L33)
+
+
+
+### `def get_console_safe_str` { #get_console_safe_str }
+```python
+(default: str, fallback: str) -> str
+```
+
+
+[View Source on GitHub](https://github.com/mivanit/muutils/blob/0.6.21/console_unicode.py#L4-L34)
+
+
+Determine a console-safe string based on the preferred encoding.
+
+This function attempts to encode a given `default` string using the system's preferred encoding.
+If encoding is successful, it returns the `default` string; otherwise, it returns a `fallback` string.
+
+### Parameters:
+ - `default : str`
+    The primary string intended for use, to be tested against the system's preferred encoding.
+ - `fallback : str`
+    The alternative string to be used if `default` cannot be encoded in the system's preferred encoding.
+
+### Returns:
+ - `str`
+    Either `default` or `fallback` based on whether `default` can be encoded safely.
+
+### Usage:
+
+```python
+>>> get_console_safe_str("café", "cafe")
+"café"  # This result may vary based on the system's preferred encoding.
+```
 
 
 
@@ -7018,6 +7075,8 @@ python -m muutils.nbutils.run_notebook_tests --notebooks-dir <notebooks_dir> --c
 ## API Documentation
 
  - [`NotebookTestError`](#NotebookTestError)
+ - [`SUCCESS_STR`](#SUCCESS_STR)
+ - [`FAILURE_STR`](#FAILURE_STR)
  - [`run_notebook_tests`](#run_notebook_tests)
 
 
@@ -7035,13 +7094,13 @@ made to be called as
 python -m <a href="">muutils.nbutils.run_notebook_tests</a> --notebooks-dir <notebooks_dir> --converted-notebooks-temp-dir <converted_notebooks_temp_dir>
 ```
 
-[View Source on GitHub](https://github.com/mivanit/muutils/blob/0.6.21/nbutils/run_notebook_tests.py#L0-L247)
+[View Source on GitHub](https://github.com/mivanit/muutils/blob/0.6.21/nbutils/run_notebook_tests.py#L0-L254)
 
 
 
 ### `class NotebookTestError(builtins.Exception):` { #NotebookTestError }
 
-[View Source on GitHub](https://github.com/mivanit/muutils/blob/0.6.21/nbutils/run_notebook_tests.py#L20-L21)
+[View Source on GitHub](https://github.com/mivanit/muutils/blob/0.6.21/nbutils/run_notebook_tests.py#L21-L22)
 
 
 Common base class for all non-exit exceptions.
@@ -7054,6 +7113,16 @@ Common base class for all non-exit exceptions.
 - [`with_traceback`](#NotebookTestError.with_traceback)
 - [`add_note`](#NotebookTestError.add_note)
 - [`args`](#NotebookTestError.args)
+
+
+- `SUCCESS_STR: str = '[OK]'`
+
+
+
+
+- `FAILURE_STR: str = '[!!]'`
+
+
 
 
 ### `def run_notebook_tests` { #run_notebook_tests }
@@ -7070,7 +7139,7 @@ Common base class for all non-exit exceptions.
 ```
 
 
-[View Source on GitHub](https://github.com/mivanit/muutils/blob/0.6.21/nbutils/run_notebook_tests.py#L24-L210)
+[View Source on GitHub](https://github.com/mivanit/muutils/blob/0.6.21/nbutils/run_notebook_tests.py#L29-L217)
 
 
 Run converted Jupyter notebooks as Python scripts and verify they execute successfully.
@@ -7122,8 +7191,270 @@ with optional early exit on first failure.
 ### reading converted notebooks from 'temp/converted'
 Running 1/2: temp/converted/notebook1.py
     Output in temp/converted/notebook1.CI-output.txt
-    ✅ Run completed with return code 0
+    {SUCCESS_STR} Run completed with return code 0
 ```
+
+
+
+
+> docs for [`muutils`](https://github.com/mivanit/muutils) v0.6.21
+
+
+
+
+## API Documentation
+
+ - [`ProgressBarFunction`](#ProgressBarFunction)
+ - [`ProgressBarOption`](#ProgressBarOption)
+ - [`DEFAULT_PBAR_FN`](#DEFAULT_PBAR_FN)
+ - [`spinner_fn_wrap`](#spinner_fn_wrap)
+ - [`no_progress_fn_wrap`](#no_progress_fn_wrap)
+ - [`set_up_progress_bar_fn`](#set_up_progress_bar_fn)
+ - [`run_maybe_parallel`](#run_maybe_parallel)
+
+
+
+
+[View Source on GitHub](https://github.com/mivanit/muutils/blob/0.6.21/parallel.py)
+
+# `muutils.parallel` { #muutils.parallel }
+
+
+[View Source on GitHub](https://github.com/mivanit/muutils/blob/0.6.21/parallel.py#L0-L244)
+
+
+
+### `class ProgressBarFunction(typing.Protocol):` { #ProgressBarFunction }
+
+[View Source on GitHub](https://github.com/mivanit/muutils/blob/0.6.21/parallel.py#L26-L29)
+
+
+a protocol for a progress bar function
+
+
+### `ProgressBarFunction` { #ProgressBarFunction.__init__ }
+```python
+(*args, **kwargs)
+```
+
+[View Source on GitHub](https://github.com/mivanit/muutils/blob/0.6.21/parallel.py#L1709-L1735)
+
+
+
+
+- `ProgressBarOption = typing.Literal['tqdm', 'spinner', 'none', None]`
+
+
+
+
+### `def DEFAULT_PBAR_FN` { #DEFAULT_PBAR_FN }
+```python
+(*_, **__)
+```
+
+
+[View Source on GitHub](https://github.com/mivanit/muutils/blob/0.6.21/parallel.py#L245-L1519)
+
+
+Decorate an iterable object, returning an iterator which acts exactly
+like the original iterable, but prints a dynamically updating
+progressbar every time a value is requested.
+
+Parameters
+----------
+iterable  : iterable, optional
+    Iterable to decorate with a progressbar.
+    Leave blank to manually manage the updates.
+desc  : str, optional
+    Prefix for the progressbar.
+total  : int or float, optional
+    The number of expected iterations. If unspecified,
+    len(iterable) is used if possible. If float("inf") or as a last
+    resort, only basic progress statistics are displayed
+    (no ETA, no progressbar).
+    If `gui` is True and this parameter needs subsequent updating,
+    specify an initial arbitrary large positive number,
+    e.g. 9e9.
+leave  : bool, optional
+    If [default: True], keeps all traces of the progressbar
+    upon termination of iteration.
+    If `None`, will leave only if `position` is `0`.
+file  : `io.TextIOWrapper` or `io.StringIO`, optional
+    Specifies where to output the progress messages
+    (default: sys.stderr). Uses `file.write(str)` and `file.flush()`
+    methods.  For encoding, see `write_bytes`.
+ncols  : int, optional
+    The width of the entire output message. If specified,
+    dynamically resizes the progressbar to stay within this bound.
+    If unspecified, attempts to use environment width. The
+    fallback is a meter width of 10 and no limit for the counter and
+    statistics. If 0, will not print any meter (only stats).
+mininterval  : float, optional
+    Minimum progress display update interval [default: 0.1] seconds.
+maxinterval  : float, optional
+    Maximum progress display update interval [default: 10] seconds.
+    Automatically adjusts `miniters` to correspond to `mininterval`
+    after long display update lag. Only works if `dynamic_miniters`
+    or monitor thread is enabled.
+miniters  : int or float, optional
+    Minimum progress display update interval, in iterations.
+    If 0 and `dynamic_miniters`, will automatically adjust to equal
+    `mininterval` (more CPU efficient, good for tight loops).
+    If > 0, will skip display of specified number of iterations.
+    Tweak this and `mininterval` to get very efficient loops.
+    If your progress is erratic with both fast and slow iterations
+    (network, skipping items, etc) you should set miniters=1.
+ascii  : bool or str, optional
+    If unspecified or False, use unicode (smooth blocks) to fill
+    the meter. The fallback is to use ASCII characters " 123456789#".
+disable  : bool, optional
+    Whether to disable the entire progressbar wrapper
+    [default: False]. If set to None, disable on non-TTY.
+unit  : str, optional
+    String that will be used to define the unit of each iteration
+    [default: it].
+unit_scale  : bool or int or float, optional
+    If 1 or True, the number of iterations will be reduced/scaled
+    automatically and a metric prefix following the
+    International System of Units standard will be added
+    (kilo, mega, etc.) [default: False]. If any other non-zero
+    number, will scale `total` and `n`.
+dynamic_ncols  : bool, optional
+    If set, constantly alters `ncols` and `nrows` to the
+    environment (allowing for window resizes) [default: False].
+smoothing  : float, optional
+    Exponential moving average smoothing factor for speed estimates
+    (ignored in GUI mode). Ranges from 0 (average speed) to 1
+    (current/instantaneous speed) [default: 0.3].
+bar_format  : str, optional
+    Specify a custom bar string formatting. May impact performance.
+    [default: '{l_bar}{bar}{r_bar}'], where
+    l_bar='{desc}: {percentage:3.0f}%|' and
+    r_bar='| {n_fmt}/{total_fmt} [{elapsed}<{remaining}, '
+        '{rate_fmt}{postfix}]'
+    Possible vars: l_bar, bar, r_bar, n, n_fmt, total, total_fmt,
+        percentage, elapsed, elapsed_s, ncols, nrows, desc, unit,
+        rate, rate_fmt, rate_noinv, rate_noinv_fmt,
+        rate_inv, rate_inv_fmt, postfix, unit_divisor,
+        remaining, remaining_s, eta.
+    Note that a trailing ": " is automatically removed after {desc}
+    if the latter is empty.
+initial  : int or float, optional
+    The initial counter value. Useful when restarting a progress
+    bar [default: 0]. If using float, consider specifying `{n:.3f}`
+    or similar in `bar_format`, or specifying `unit_scale`.
+position  : int, optional
+    Specify the line offset to print this bar (starting from 0)
+    Automatic if unspecified.
+    Useful to manage multiple bars at once (eg, from threads).
+postfix  : dict or *, optional
+    Specify additional stats to display at the end of the bar.
+    Calls `set_postfix(**postfix)` if possible (dict).
+unit_divisor  : float, optional
+    [default: 1000], ignored unless `unit_scale` is True.
+write_bytes  : bool, optional
+    Whether to write bytes. If (default: False) will write unicode.
+lock_args  : tuple, optional
+    Passed to `refresh` for intermediate output
+    (initialisation, iterating, and updating).
+nrows  : int, optional
+    The screen height. If specified, hides nested bars outside this
+    bound. If unspecified, attempts to use environment height.
+    The fallback is 20.
+colour  : str, optional
+    Bar colour (e.g. 'green', '#00ff00').
+delay  : float, optional
+    Don't display until [default: 0] seconds have elapsed.
+gui  : bool, optional
+    WARNING: internal parameter - do not use.
+    Use tqdm.gui.tqdm(...) instead. If set, will attempt to use
+    matplotlib animations for a graphical output [default: False].
+
+Returns
+-------
+out  : decorated iterator.
+
+
+### `def spinner_fn_wrap` { #spinner_fn_wrap }
+```python
+(x: Iterable, **kwargs) -> List
+```
+
+
+[View Source on GitHub](https://github.com/mivanit/muutils/blob/0.6.21/parallel.py#L40-L55)
+
+
+
+
+### `def no_progress_fn_wrap` { #no_progress_fn_wrap }
+```python
+(x: Iterable, **kwargs) -> Iterable
+```
+
+
+[View Source on GitHub](https://github.com/mivanit/muutils/blob/0.6.21/parallel.py#L58-L60)
+
+
+fallback to no progress bar
+
+
+### `def set_up_progress_bar_fn` { #set_up_progress_bar_fn }
+```python
+(
+    pbar: Union[muutils.parallel.ProgressBarFunction, Literal['tqdm', 'spinner', 'none', None]],
+    pbar_kwargs: Optional[Dict[str, Any]] = None,
+    **extra_kwargs
+) -> muutils.parallel.ProgressBarFunction
+```
+
+
+[View Source on GitHub](https://github.com/mivanit/muutils/blob/0.6.21/parallel.py#L84-L114)
+
+
+
+
+### `def run_maybe_parallel` { #run_maybe_parallel }
+```python
+(
+    func: Callable[[~InputType], ~OutputType],
+    iterable: Iterable[~InputType],
+    parallel: Union[bool, int],
+    pbar_kwargs: Optional[Dict[str, Any]] = None,
+    chunksize: Optional[int] = None,
+    keep_ordered: bool = True,
+    use_multiprocess: bool = False,
+    pbar: Union[muutils.parallel.ProgressBarFunction, Literal['tqdm', 'spinner', 'none', None]] = <function tqdm>
+) -> List[~OutputType]
+```
+
+
+[View Source on GitHub](https://github.com/mivanit/muutils/blob/0.6.21/parallel.py#L117-L245)
+
+
+a function to make it easier to sometimes parallelize an operation
+
+- if `parallel` is `False`, then the function will run in serial, running `map(func, iterable)`
+- if `parallel` is `True`, then the function will run in parallel, running in parallel with the maximum number of processes
+- if `parallel` is an `int`, it must be greater than 1, and the function will run in parallel with the number of processes specified by `parallel`
+
+the maximum number of processes is given by the `min(len(iterable), multiprocessing.cpu_count())`
+
+### Parameters:
+ - `func : Callable[[InputType], OutputType]`
+   function passed to either `map` or `Pool.imap`
+ - `iterable : Iterable[InputType]`
+   iterable passed to either `map` or `Pool.imap`
+ - `parallel : bool | int`
+   _description_
+ - `pbar_kwargs : Dict[str, Any]`
+   _description_
+
+### Returns:
+ - `List[OutputType]`
+   _description_
+
+### Raises:
+ - `ValueError` : _description_
 
 
 

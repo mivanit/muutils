@@ -34,7 +34,7 @@ muutils\nbutils\configure_notebook.py                                           
 muutils\nbutils\convert_ipynb_to_script.py                                          124     41    67%   69, 84, 97, 111-145, 234-236, 242, 269, 301-303, 310-363
 muutils\nbutils\mermaid.py                                                           11     11     0%   3-20
 muutils\nbutils\print_tex.py                                                         10     10     0%   3-21
-muutils\nbutils\run_notebook_tests.py                                                84     43    49%   88-90, 102-103, 108, 121-122, 126, 130, 135-136, 144, 150, 155, 171-184, 189-245
+muutils\nbutils\run_notebook_tests.py                                                85     33    61%   89-96, 122, 124, 128, 132, 138, 146, 175, 181-186, 191-204, 211-246
 muutils\parallel.py                                                                  86      6    93%   47, 79-81, 190, 194-195
 muutils\spinner.py                                                                  147     10    93%   280, 307, 370-371, 417, 420, 423, 464, 468, 507
 muutils\statcounter.py                                                               89     32    64%   30-41, 56, 82, 110, 122, 132, 149-179, 199, 209, 212, 217-222, 231
@@ -77,4 +77,4 @@ tests\unit\validate_type\test_validate_type_GENERATED.py                        
 tests\unit\validate_type\test_validate_type_special.py                               15      3    80%   34-35, 57
 tests\util\test_fire.py                                                               8      6    25%   2-5, 9-11
 ---------------------------------------------------------------------------------------------------------------
-TOTAL                                                                              6394   1049    84%
+TOTAL                                                                              6395   1039    84%

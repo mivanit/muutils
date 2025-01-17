@@ -2027,7 +2027,7 @@ Source on GitHub</a></p>
 <ul>
 <li><p><code>SERIALIZER_SPECIAL_KEYS: None = ('__name__', '__doc__', '__module__', '__class__', '__dict__', '__annotations__')</code></p></li>
 <li><p><code>SERIALIZER_SPECIAL_FUNCS: dict[str, typing.Callable] = {'str': &lt;class 'str'&gt;, 'dir': &lt;built-in function dir&gt;, 'type': &lt;function &lt;lambda&gt;&gt;, 'repr': &lt;function &lt;lambda&gt;&gt;, 'code': &lt;function &lt;lambda&gt;&gt;, 'sourcefile': &lt;function &lt;lambda&gt;&gt;}</code></p></li>
-<li><p><code>SERIALIZE_DIRECT_AS_STR: Set[str] = {"&lt;class 'torch.dtype'&gt;", "&lt;class 'torch.device'&gt;"}</code></p></li>
+<li><p><code>SERIALIZE_DIRECT_AS_STR: Set[str] = {"&lt;class 'torch.device'&gt;", "&lt;class 'torch.dtype'&gt;"}</code></p></li>
 <li><p><code>ObjectPath = tuple[typing.Union[str, int], ...]</code></p></li>
 </ul>
 <h3 id="SerializerHandler"><code>class SerializerHandler:</code></h3>
@@ -5742,12 +5742,12 @@ work.</p>
 <div class="sourceCode" id="cb278"><pre
 class="sourceCode bash"><code class="sourceCode bash"><span id="cb278-1"><a href="#cb278-1" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> <span class="at">-m</span> <span class="op">&lt;</span>a href=<span class="st">&quot;&quot;</span><span class="op">&gt;</span>muutils.nbutils.run_notebook_tests<span class="op">&lt;</span>/a<span class="op">&gt;</span> --notebooks-dir <span class="op">&lt;</span>notebooks_dir<span class="op">&gt;</span> --converted-notebooks-temp-dir <span class="op">&lt;</span>converted_notebooks_temp_dir<span class="op">&gt;</span></span></code></pre></div>
 <p><a
-href="https://github.com/mivanit/muutils/blob/0.6.20/nbutils/run_notebook_tests.py#L0-L249">View
+href="https://github.com/mivanit/muutils/blob/0.6.20/nbutils/run_notebook_tests.py#L0-L250">View
 Source on GitHub</a></p>
 <h3
 id="NotebookTestError"><code>class NotebookTestError(builtins.Exception):</code></h3>
 <p><a
-href="https://github.com/mivanit/muutils/blob/0.6.20/nbutils/run_notebook_tests.py#L19-L20">View
+href="https://github.com/mivanit/muutils/blob/0.6.20/nbutils/run_notebook_tests.py#L20-L21">View
 Source on GitHub</a></p>
 <p>Common base class for all non-exit exceptions.</p>
 <h3 id="inherited-members-21">Inherited Members</h3>
@@ -5766,13 +5766,13 @@ class="sourceCode python"><code class="sourceCode python"><span id="cb279-1"><a 
 <span id="cb279-2"><a href="#cb279-2" aria-hidden="true" tabindex="-1"></a>    notebooks_dir: pathlib.Path,</span>
 <span id="cb279-3"><a href="#cb279-3" aria-hidden="true" tabindex="-1"></a>    converted_notebooks_temp_dir: pathlib.Path,</span>
 <span id="cb279-4"><a href="#cb279-4" aria-hidden="true" tabindex="-1"></a>    CI_output_suffix: <span class="bu">str</span> <span class="op">=</span> <span class="st">&#39;.CI-output.txt&#39;</span>,</span>
-<span id="cb279-5"><a href="#cb279-5" aria-hidden="true" tabindex="-1"></a>    run_python_cmd: <span class="bu">str</span> <span class="op">|</span> <span class="va">None</span> <span class="op">=</span> <span class="va">None</span>,</span>
+<span id="cb279-5"><a href="#cb279-5" aria-hidden="true" tabindex="-1"></a>    run_python_cmd: Optional[<span class="bu">str</span>] <span class="op">=</span> <span class="va">None</span>,</span>
 <span id="cb279-6"><a href="#cb279-6" aria-hidden="true" tabindex="-1"></a>    run_python_cmd_fmt: <span class="bu">str</span> <span class="op">=</span> <span class="st">&#39;</span><span class="sc">{python_tool}</span><span class="st"> run python&#39;</span>,</span>
 <span id="cb279-7"><a href="#cb279-7" aria-hidden="true" tabindex="-1"></a>    python_tool: <span class="bu">str</span> <span class="op">=</span> <span class="st">&#39;poetry&#39;</span>,</span>
 <span id="cb279-8"><a href="#cb279-8" aria-hidden="true" tabindex="-1"></a>    exit_on_first_fail: <span class="bu">bool</span> <span class="op">=</span> <span class="va">False</span></span>
 <span id="cb279-9"><a href="#cb279-9" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
 <p><a
-href="https://github.com/mivanit/muutils/blob/0.6.20/nbutils/run_notebook_tests.py#L23-L206">View
+href="https://github.com/mivanit/muutils/blob/0.6.20/nbutils/run_notebook_tests.py#L24-L207">View
 Source on GitHub</a></p>
 <p>Run converted Jupyter notebooks as Python scripts and verify they
 execute successfully.</p>

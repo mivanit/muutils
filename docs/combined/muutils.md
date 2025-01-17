@@ -2293,7 +2293,7 @@ notably:
 
 
 
-- `SERIALIZE_DIRECT_AS_STR: Set[str] = {"<class 'torch.dtype'>", "<class 'torch.device'>"}`
+- `SERIALIZE_DIRECT_AS_STR: Set[str] = {"<class 'torch.device'>", "<class 'torch.dtype'>"}`
 
 
 
@@ -7035,13 +7035,13 @@ made to be called as
 python -m <a href="">muutils.nbutils.run_notebook_tests</a> --notebooks-dir <notebooks_dir> --converted-notebooks-temp-dir <converted_notebooks_temp_dir>
 ```
 
-[View Source on GitHub](https://github.com/mivanit/muutils/blob/0.6.20/nbutils/run_notebook_tests.py#L0-L249)
+[View Source on GitHub](https://github.com/mivanit/muutils/blob/0.6.20/nbutils/run_notebook_tests.py#L0-L250)
 
 
 
 ### `class NotebookTestError(builtins.Exception):` { #NotebookTestError }
 
-[View Source on GitHub](https://github.com/mivanit/muutils/blob/0.6.20/nbutils/run_notebook_tests.py#L19-L20)
+[View Source on GitHub](https://github.com/mivanit/muutils/blob/0.6.20/nbutils/run_notebook_tests.py#L20-L21)
 
 
 Common base class for all non-exit exceptions.
@@ -7062,7 +7062,7 @@ Common base class for all non-exit exceptions.
     notebooks_dir: pathlib.Path,
     converted_notebooks_temp_dir: pathlib.Path,
     CI_output_suffix: str = '.CI-output.txt',
-    run_python_cmd: str | None = None,
+    run_python_cmd: Optional[str] = None,
     run_python_cmd_fmt: str = '{python_tool} run python',
     python_tool: str = 'poetry',
     exit_on_first_fail: bool = False
@@ -7070,7 +7070,7 @@ Common base class for all non-exit exceptions.
 ```
 
 
-[View Source on GitHub](https://github.com/mivanit/muutils/blob/0.6.20/nbutils/run_notebook_tests.py#L23-L206)
+[View Source on GitHub](https://github.com/mivanit/muutils/blob/0.6.20/nbutils/run_notebook_tests.py#L24-L207)
 
 
 Run converted Jupyter notebooks as Python scripts and verify they execute successfully.

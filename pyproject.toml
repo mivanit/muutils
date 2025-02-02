@@ -82,7 +82,9 @@ dev = [
     "pytest>=8.2.2",
     "pytest-cov>=4.1.0",
     "coverage-badge>=1.1.0",
-    # for testing plotting
+    # for testing plotting and notebooks
+    "ipykernel",
+    "jupyter",
     "matplotlib>=3.0.0",
     "plotly>=5.0.0",
     # generating docs

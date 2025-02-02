@@ -48,113 +48,116 @@ PATH_MODE: typing.Literal["relative", "absolute"] = "relative"
 
 # path processing
 def _process_path(path: Path) -> str:
-	path_abs: Path = path.absolute()
-	if PATH_MODE == "absolute":
-		fname = path_abs.as_posix()
-	elif PATH_MODE == "relative":
-		try:
-			fname = path_abs.relative_to(Path(os.path.commonpath([path_abs, _CWD]))).as_posix()
-		except ValueError:
-			fname = path_abs.as_posix()
-	else:
-		raise ValueError("PATH_MODE must be either 'relative' or 'absolute")
-	
-	return fname
+    path_abs: Path = path.absolute()
+    if PATH_MODE == "absolute":
+        fname = path_abs.as_posix()
+    elif PATH_MODE == "relative":
+        try:
+            fname = path_abs.relative_to(
+                Path(os.path.commonpath([path_abs, _CWD]))
+            ).as_posix()
+        except ValueError:
+            fname = path_abs.as_posix()
+    else:
+        raise ValueError("PATH_MODE must be either 'relative' or 'absolute")
+
+    return fname
 
 
 # actual dbg function
 def dbg(
-		exp: _ExpType = _NoExpPassed,
-		formatter: typing.Optional[typing.Callable[[typing.Any], str]] = None,
-	) -> _ExpType:
-	"""Call dbg with any variable or expression.
+    exp: _ExpType = _NoExpPassed,
+    formatter: typing.Optional[typing.Callable[[typing.Any], str]] = None,
+) -> _ExpType:
+    """Call dbg with any variable or expression.
 
-	Calling dbg will print to stderr the current filename and lineno,
-	as well as the passed expression and what the expression evaluates to:
+    Calling dbg will print to stderr the current filename and lineno,
+    as well as the passed expression and what the expression evaluates to:
 
-		from muutils.dbg import dbg
+            from muutils.dbg import dbg
 
-		a = 2
-		b = 5
+            a = 2
+            b = 5
 
-		dbg(a+b)
+            dbg(a+b)
 
-		def square(x: int) -> int:
-			return x * x
+            def square(x: int) -> int:
+                    return x * x
 
-		dbg(square(a))
+            dbg(square(a))
 
-	"""
-	global _COUNTER
+    """
+    global _COUNTER
 
+    # get the context
+    fname: str = "unknown"
+    line_exp: str = "unknown"
+    for frame in inspect.stack():
+        if frame.code_context is None:
+            continue
+        line: str = frame.code_context[0]
+        if "dbg" in line:
+            start: int = line.find("(") + 1
+            end: int = line.rfind(")")
+            if end == -1:
+                end = len(line)
 
-	# get the context
-	fname: str = "unknown"
-	line_exp: str = "unknown"
-	for frame in inspect.stack():
-		if frame.code_context is None:
-			continue
-		line: str = frame.code_context[0]
-		if "dbg" in line:
-			start: int = line.find("(") + 1
-			end: int = line.rfind(")")
-			if end == -1:
-				end = len(line)
+            fname = f"{_process_path(Path(frame.filename))}:{frame.lineno}"
+            line_exp = line[start:end]
 
-			fname = f"{_process_path(Path(frame.filename))}:{frame.lineno}"
-			line_exp = line[start:end]
+            break
 
-			break
-	
-	# assemble the message
-	msg: str
-	if exp is _NoExpPassed:
-		# if no expression is passed, just show location and counter value
-		msg = f"[ {fname} ] (dbg {_COUNTER})"
-		_COUNTER += 1
-	else:
-		# if expression passed, format its value and show location, expr, and value
-		exp_val: str = formatter(exp) if formatter else repr(exp)
-		msg = f"[ {fname} ] {line_exp} = {exp_val}"
+    # assemble the message
+    msg: str
+    if exp is _NoExpPassed:
+        # if no expression is passed, just show location and counter value
+        msg = f"[ {fname} ] (dbg {_COUNTER})"
+        _COUNTER += 1
+    else:
+        # if expression passed, format its value and show location, expr, and value
+        exp_val: str = formatter(exp) if formatter else repr(exp)
+        msg = f"[ {fname} ] {line_exp} = {exp_val}"
 
-	# print the message
-	print(
-		msg,
-		file=sys.stderr,
-	)
+    # print the message
+    print(
+        msg,
+        file=sys.stderr,
+    )
 
-	# return the expression itself
-	return exp
+    # return the expression itself
+    return exp
 
 
 # formatted `dbg_*` functions with their helpers
 def tensor_info_dict(tensor: typing.Any) -> dict[str, str]:
-	output: dict[str, str] = dict()
-	# shape
-	if hasattr(tensor, "shape"):
-		# output += f"shape={tuple(tensor.shape)}"
-		output["shape"] = repr(tuple(tensor.shape))
+    output: dict[str, str] = dict()
+    # shape
+    if hasattr(tensor, "shape"):
+        # output += f"shape={tuple(tensor.shape)}"
+        output["shape"] = repr(tuple(tensor.shape))
 
-	# print the sum if its a nan or inf
-	if hasattr(tensor, "sum"):
-		sum: float = tensor.sum()
-		if sum != sum:
-			output["sum"] = repr(sum)
+    # print the sum if its a nan or inf
+    if hasattr(tensor, "sum"):
+        sum: float = tensor.sum()
+        if sum != sum:
+            output["sum"] = repr(sum)
 
-	# more info
-	if hasattr(tensor, "dtype"):
-		# output += f", dtype={tensor.dtype}"
-		output["dtype"] = repr(tensor.dtype)
-	if hasattr(tensor, "device"):
-		output["device"] = repr(tensor.device)
-	if hasattr(tensor, "requires_grad"):
-		output["requires_grad"] = repr(tensor.requires_grad)
+    # more info
+    if hasattr(tensor, "dtype"):
+        # output += f", dtype={tensor.dtype}"
+        output["dtype"] = repr(tensor.dtype)
+    if hasattr(tensor, "device"):
+        output["device"] = repr(tensor.device)
+    if hasattr(tensor, "requires_grad"):
+        output["requires_grad"] = repr(tensor.requires_grad)
 
-	# return
-	return output
+    # return
+    return output
+
 
 def tensor_info(tensor: typing.Any) -> str:
-	info: dict[str, str] = tensor_info_dict(tensor)
-	return ", ".join(f"{k}={v}" for k, v in info.items())
+    info: dict[str, str] = tensor_info_dict(tensor)
+    return ", ".join(f"{k}={v}" for k, v in info.items())
+
 
 dbg_tensor = functools.partial(dbg, formatter=tensor_info)

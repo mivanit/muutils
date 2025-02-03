@@ -38,8 +38,16 @@ import functools
 
 # type defs
 _ExpType = typing.TypeVar("_ExpType")
-_NoExpPassedType = typing.TypeVar("_NoExpPassedType")
-_NoExpPassed = _NoExpPassedType()
+
+
+# Sentinel type for no expression passed
+class _NoExpPassedSentinel:
+    """Unique sentinel type used to indicate that no expression was passed."""
+
+    pass
+
+
+_NoExpPassed = _NoExpPassedSentinel()
 
 # global variables
 _CWD: Path = Path.cwd().absolute()
@@ -69,9 +77,9 @@ def _process_path(path: Path) -> str:
 
 # actual dbg function
 def dbg(
-    exp: typing.Union[_ExpType, _NoExpPassedType] = _NoExpPassed,
+    exp: typing.Union[_ExpType, _NoExpPassedSentinel] = _NoExpPassed,
     formatter: typing.Optional[typing.Callable[[typing.Any], str]] = None,
-) -> typing.Union[_ExpType, _NoExpPassedType]:
+) -> typing.Union[_ExpType, _NoExpPassedSentinel]:
     """Call dbg with any variable or expression.
 
     Calling dbg will print to stderr the current filename and lineno,

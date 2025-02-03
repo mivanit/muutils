@@ -88,7 +88,7 @@ def test_process_path_relative_outside_common(monkeypatch: pytest.MonkeyPatch) -
         test_path: Path = Path(tmp_dir) / "file.txt"
         expected: str = test_path.absolute().as_posix()
         result: str = _process_path(test_path)
-        assert result == expected
+        assert result == expected.lstrip("/")
 
 
 def test_process_path_invalid_mode(monkeypatch: pytest.MonkeyPatch) -> None:

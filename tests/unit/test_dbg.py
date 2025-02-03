@@ -61,7 +61,9 @@ class DummyTensorPartial:
 
 # --- Tests for _process_path (existing ones) ---
 def test_process_path_absolute(monkeypatch: pytest.MonkeyPatch) -> None:
-    monkeypatch.setattr(importlib.import_module(DBG_MODULE_NAME), "PATH_MODE", "absolute")
+    monkeypatch.setattr(
+        importlib.import_module(DBG_MODULE_NAME), "PATH_MODE", "absolute"
+    )
     test_path: Path = Path("somefile.txt")
     expected: str = test_path.absolute().as_posix()
     result: str = _process_path(test_path)
@@ -69,7 +71,9 @@ def test_process_path_absolute(monkeypatch: pytest.MonkeyPatch) -> None:
 
 
 def test_process_path_relative_inside_common(monkeypatch: pytest.MonkeyPatch) -> None:
-    monkeypatch.setattr(importlib.import_module(DBG_MODULE_NAME), "PATH_MODE", "relative")
+    monkeypatch.setattr(
+        importlib.import_module(DBG_MODULE_NAME), "PATH_MODE", "relative"
+    )
     test_path: Path = _CWD / "file.txt"
     expected: str = "file.txt"
     result: str = _process_path(test_path)
@@ -77,7 +81,9 @@ def test_process_path_relative_inside_common(monkeypatch: pytest.MonkeyPatch) ->
 
 
 def test_process_path_relative_outside_common(monkeypatch: pytest.MonkeyPatch) -> None:
-    monkeypatch.setattr(importlib.import_module(DBG_MODULE_NAME), "PATH_MODE", "relative")
+    monkeypatch.setattr(
+        importlib.import_module(DBG_MODULE_NAME), "PATH_MODE", "relative"
+    )
     with tempfile.TemporaryDirectory() as tmp_dir:
         test_path: Path = Path(tmp_dir) / "file.txt"
         expected: str = test_path.absolute().as_posix()
@@ -86,7 +92,9 @@ def test_process_path_relative_outside_common(monkeypatch: pytest.MonkeyPatch) -
 
 
 def test_process_path_invalid_mode(monkeypatch: pytest.MonkeyPatch) -> None:
-    monkeypatch.setattr(importlib.import_module(DBG_MODULE_NAME), "PATH_MODE", "invalid")
+    monkeypatch.setattr(
+        importlib.import_module(DBG_MODULE_NAME), "PATH_MODE", "invalid"
+    )
     with pytest.raises(
         ValueError, match="PATH_MODE must be either 'relative' or 'absolute"
     ):

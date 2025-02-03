@@ -27,6 +27,8 @@ THE SOFTWARE.
 
 """
 
+from __future__ import annotations
+
 import os
 import inspect
 import sys
@@ -35,8 +37,9 @@ from pathlib import Path
 import functools
 
 # type defs
-_NoExpPassed = object()
 _ExpType = typing.TypeVar("_ExpType")
+_NoExpPassedType = typing.TypeVar("_NoExpPassedType")
+_NoExpPassed = _NoExpPassedType()
 
 # global variables
 _CWD: Path = Path.cwd().absolute()
@@ -66,9 +69,9 @@ def _process_path(path: Path) -> str:
 
 # actual dbg function
 def dbg(
-    exp: _ExpType = _NoExpPassed,
+    exp: typing.Union[_ExpType, _NoExpPassedType] = _NoExpPassed,
     formatter: typing.Optional[typing.Callable[[typing.Any], str]] = None,
-) -> _ExpType:
+) -> typing.Union[_ExpType, _NoExpPassedType]:
     """Call dbg with any variable or expression.
 
     Calling dbg will print to stderr the current filename and lineno,
@@ -129,8 +132,8 @@ def dbg(
 
 
 # formatted `dbg_*` functions with their helpers
-def tensor_info_dict(tensor: typing.Any) -> dict[str, str]:
-    output: dict[str, str] = dict()
+def tensor_info_dict(tensor: typing.Any) -> typing.Dict[str, str]:
+    output: typing.Dict[str, str] = dict()
     # shape
     if hasattr(tensor, "shape"):
         # output += f"shape={tuple(tensor.shape)}"
@@ -156,7 +159,7 @@ def tensor_info_dict(tensor: typing.Any) -> dict[str, str]:
 
 
 def tensor_info(tensor: typing.Any) -> str:
-    info: dict[str, str] = tensor_info_dict(tensor)
+    info: typing.Dict[str, str] = tensor_info_dict(tensor)
     return ", ".join(f"{k}={v}" for k, v in info.items())
 
 

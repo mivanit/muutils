@@ -139,10 +139,11 @@ def zanj_register_loader_serializable_dataclass(cls: typing.Type[T]):
                 register_loader_handler,
             )
         except ImportError:
-            warnings.warn(
-                "ZANJ not installed, cannot register serializable dataclass loader. ZANJ can be found at https://github.com/mivanit/ZANJ or installed via `pip install zanj`",
-                ZanjMissingWarning,
-            )
+            # NOTE: if ZANJ is not installed, then failing to register the loader handler doesnt matter
+            # warnings.warn(
+            #     "ZANJ not installed, cannot register serializable dataclass loader. ZANJ can be found at https://github.com/mivanit/ZANJ or installed via `pip install zanj`",
+            #     ZanjMissingWarning,
+            # )
             return
 
     _format: str = f"{cls.__name__}(SerializableDataclass)"

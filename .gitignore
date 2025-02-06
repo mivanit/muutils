@@ -1,5 +1,5 @@
 # local stuff (pypi token, commit log)
-.github/local/**
+.meta/local/**
 .coverage.*
 
 # this one is cursed

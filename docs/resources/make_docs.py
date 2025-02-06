@@ -2,6 +2,7 @@ import argparse
 import inspect
 import re
 import tomllib
+from typing import Dict, List, Union
 import warnings
 from pathlib import Path
 
@@ -24,7 +25,7 @@ pdoc.render_helpers.markdown_extensions["alerts"] = True
 pdoc.render_helpers.markdown_extensions["admonitions"] = True
 
 
-def get_package_meta_global(config_path: str | Path = Path("pyproject.toml")):
+def get_package_meta_global(config_path: Union[str, Path] = Path("pyproject.toml")):
 	"""set global vars from pyproject.toml
 
 	sets the global vars:
@@ -44,7 +45,9 @@ def get_package_meta_global(config_path: str | Path = Path("pyproject.toml")):
 	PACKAGE_CODE_URL = f"{PACKAGE_REPO_URL}/blob/{PACKAGE_VERSION}/"
 
 
-def add_package_meta_pdoc_globals(config_path: str | Path = Path("pyproject.toml")):
+def add_package_meta_pdoc_globals(
+	config_path: Union[str, Path] = Path("pyproject.toml"),
+):
 	"adds the package meta to the pdoc globals"
 	get_package_meta_global(config_path)
 	pdoc.render.env.globals["package_version"] = PACKAGE_VERSION
@@ -111,7 +114,7 @@ def format_signature(sig: inspect.Signature, colon: bool) -> str:
 	return rendered
 
 
-HTML_TO_MD_MAP: dict[str, str] = {
+HTML_TO_MD_MAP: Dict[str, str] = {
 	"&gt;": ">",
 	"&lt;": "<",
 	"&amp;": "&",
@@ -134,7 +137,7 @@ def use_markdown_format():
 	pdoc.render.env.filters["increment_markdown_headings"] = increment_markdown_headings
 
 
-def pdoc_combined(*modules: Path | str, output_file: Path) -> None:
+def pdoc_combined(*modules, output_file: Path) -> None:
 	"""Render the documentation for a list of modules into a single HTML file.
 
 	Args:
@@ -150,12 +153,12 @@ def pdoc_combined(*modules: Path | str, output_file: Path) -> None:
 	Rendering options can be configured by calling `pdoc.render.configure` in advance.
 	"""
 	# Extract all modules and submodules
-	all_modules: dict[str, pdoc.doc.Module] = {}
+	all_modules: Dict[str, pdoc.doc.Module] = {}
 	for module_name in pdoc.extract.walk_specs(modules):
 		all_modules[module_name] = pdoc.doc.Module.from_name(module_name)
 
 	# Generate HTML content for each module
-	module_contents: list[str] = []
+	module_contents: List[str] = []
 	for module in all_modules.values():
 		module_html = pdoc.render.html_module(module, all_modules)
 		module_contents.append(module_html)
@@ -168,14 +171,14 @@ def pdoc_combined(*modules: Path | str, output_file: Path) -> None:
 		f.write(combined_content)
 
 
-def ignore_warnings(config_path: str | Path = Path("pyproject.toml")):
+def ignore_warnings(config_path: Union[str, Path] = Path("pyproject.toml")):
 	# Read the pyproject.toml file
 	config_path = Path(config_path)
 	with config_path.open("rb") as f:
 		pyproject_data = tomllib.load(f)
 
 	# Extract the warning messages from the tool.pdoc.ignore section
-	warning_messages: list[str] = (
+	warning_messages: List[str] = (
 		pyproject_data.get("tool", {}).get("pdoc", {}).get("warnings_ignore", [])
 	)
 
@@ -220,9 +223,9 @@ if __name__ == "__main__":
 			PACKAGE_NAME: PACKAGE_CODE_URL,
 		},
 		template_directory=(
-			Path("docs/.resources/templates/html/")
+			Path("docs/resources/templates/html/")
 			if not parsed_args.combined
-			else Path("docs/.resources/templates/markdown/")
+			else Path("docs/resources/templates/markdown/")
 		),
 		show_source=True,
 		math=True,

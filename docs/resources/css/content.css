@@ -53,7 +53,7 @@ This makes sure that the pdoc styling doesn't leak to the rest of the page when 
     color: #084298;
     background-color: #cfe2ff;
     border-color: #b6d4fe;
-    background-image: url("../.resources/svg/info.svg");
+    background-image: url("../resources/svg/info.svg");
 }
 
 .pdoc .alert.hint,
@@ -61,20 +61,20 @@ This makes sure that the pdoc styling doesn't leak to the rest of the page when 
     color: #208434;
     background-color: #c8f7cf;
     border-color: #c4f1cd;
-    background-image: url("../.resources/svg/tip.svg");
+    background-image: url("../resources/svg/tip.svg");
 }
 
 .pdoc .alert.important {
     color: #752084;
     background-color: #e5bef4;
     border-color: #e3a9ee;
-    background-image: url("../.resources/svg/important.svg");
+    background-image: url("../resources/svg/important.svg");
 }
 .pdoc .alert.warning {
     color: #664d03;
     background-color: #fff3cd;
     border-color: #ffecb5;
-    background-image: url("../.resources/svg/warning.svg");
+    background-image: url("../resources/svg/warning.svg");
 }
 
 .pdoc .alert.admonition,
@@ -85,7 +85,7 @@ This makes sure that the pdoc styling doesn't leak to the rest of the page when 
     color: #842029;
     background-color: #f8d7da;
     border-color: #f5c2c7;
-    background-image: url("../.resources/svg/caution.svg");
+    background-image: url("../resources/svg/caution.svg");
 }
 
 

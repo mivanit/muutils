@@ -2,7 +2,7 @@
 # ==================================================
 [project]
     name = "muutils"
-    version = "0.6.21"
+    version = "0.7.0"
     description = "miscellaneous python utilities"
     readme = "README.md"
     requires-python = ">=3.8"
@@ -36,17 +36,6 @@
 # ==================================================
 
 [project.optional-dependencies]
-    array_nb_zanj = [
-        "numpy>=1.24.4; python_version < '3.9'",
-        "numpy>1.24.4; python_version >= '3.9'",
-        "torch>=1.13.1,<2.5.0; python_version < '3.9'",
-        "torch>=1.13.1; python_version >= '3.9' and python_version < '3.13'",
-        "torch>=2.5.0; python_version >= '3.13'",
-        "jaxtyping>=0.2.12",
-        "ipython>=8.0.0",
-        "zanj>=0.3.0; python_version >= '3.10'",
-    ]
-
     array = [
         "numpy>=1.24.4; python_version < '3.9'",
         "numpy>1.24.4; python_version >= '3.9'",
@@ -65,10 +54,6 @@
 
     notebook = [
         "ipython>=8.0.0",
-    ]
-
-    zanj = [
-        "zanj>=0.3.0; python_version >= '3.10'",
     ]
 
     parallel = [

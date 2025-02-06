@@ -76,6 +76,12 @@ def _process_path(path: Path) -> str:
 
 
 # actual dbg function
+@typing.overload
+def dbg() -> _NoExpPassedSentinel:
+    ...
+@typing.overload
+def dbg(exp: _ExpType) -> _ExpType:
+    ...
 def dbg(
     exp: typing.Union[_ExpType, _NoExpPassedSentinel] = _NoExpPassed,
     formatter: typing.Optional[typing.Callable[[typing.Any], str]] = None,

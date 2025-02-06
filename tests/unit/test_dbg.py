@@ -2,7 +2,7 @@ import inspect
 import tempfile
 from pathlib import Path
 import importlib
-from typing import Any, Callable, Optional, List
+from typing import Any, Callable, Dict, Optional, List, Tuple
 
 from muutils.dbg import (
     dbg,
@@ -27,7 +27,7 @@ DBG_MODULE_NAME: str = "muutils.dbg"
 class DummyTensor:
     """A dummy tensor whose sum is NaN."""
 
-    shape: tuple[int, ...] = (2, 3)
+    shape: Tuple[int, ...] = (2, 3)
     dtype: str = "float32"
     device: str = "cpu"
     requires_grad: bool = False
@@ -39,7 +39,7 @@ class DummyTensor:
 class DummyTensorNormal:
     """A dummy tensor with a normal sum."""
 
-    shape: tuple[int, ...] = (4, 5)
+    shape: Tuple[int, ...] = (4, 5)
     dtype: str = "int32"
     device: str = "cuda"
     requires_grad: bool = True
@@ -51,7 +51,7 @@ class DummyTensorNormal:
 class DummyTensorPartial:
     """A dummy tensor with only a shape attribute."""
 
-    shape: tuple[int, ...] = (7,)
+    shape: Tuple[int, ...] = (7,)
 
 
 # ============================================================================
@@ -219,8 +219,8 @@ def test_dbg_non_callable_formatter() -> None:
 # --- Tests for tensor_info_dict and tensor_info ---
 def test_tensor_info_dict_with_nan() -> None:
     tensor: DummyTensor = DummyTensor()
-    info: dict[str, str] = tensor_info_dict(tensor)
-    expected: dict[str, str] = {
+    info: Dict[str, str] = tensor_info_dict(tensor)
+    expected: Dict[str, str] = {
         "shape": repr((2, 3)),
         "sum": repr(float("nan")),
         "dtype": repr("float32"),
@@ -232,8 +232,8 @@ def test_tensor_info_dict_with_nan() -> None:
 
 def test_tensor_info_dict_normal() -> None:
     tensor: DummyTensorNormal = DummyTensorNormal()
-    info: dict[str, str] = tensor_info_dict(tensor)
-    expected: dict[str, str] = {
+    info: Dict[str, str] = tensor_info_dict(tensor)
+    expected: Dict[str, str] = {
         "shape": repr((4, 5)),
         "dtype": repr("int32"),
         "device": repr("cuda"),
@@ -244,8 +244,8 @@ def test_tensor_info_dict_normal() -> None:
 
 def test_tensor_info_dict_partial() -> None:
     tensor: DummyTensorPartial = DummyTensorPartial()
-    info: dict[str, str] = tensor_info_dict(tensor)
-    expected: dict[str, str] = {"shape": repr((7,))}
+    info: Dict[str, str] = tensor_info_dict(tensor)
+    expected: Dict[str, str] = {"shape": repr((7,))}
     assert info == expected
 
 
@@ -268,7 +268,7 @@ def test_tensor_info_dict_no_attributes() -> None:
         pass
 
     dummy = DummyEmpty()
-    info: dict[str, str] = tensor_info_dict(dummy)
+    info: Dict[str, str] = tensor_info_dict(dummy)
     assert info == {}
 
 

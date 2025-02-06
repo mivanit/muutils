@@ -148,14 +148,22 @@
 [tool.inline-todo]
 	search_dir = "."
 	out_file = "docs/other/todo-inline.md" # changing this might mean it wont be accessible from the docs
-	context_lines = 2
+	context_lines = 5
 	extensions = ["py", "md"]
-	tags = ["CRIT", "TODO", "FIXME", "HACK", "BUG"]
+	tags = ["CRIT", "TODO", "FIXME", "HACK", "BUG", "NOTE"]
 	exclude = [
 		"docs/**",
 		".venv/**",
 		"scripts/get_todos.py",
+        "_wip/**",
 	]
+    [tool.inline-todo.tag_label_map]
+        NOTE = "documentation"
+        CRIT = "bug"
+        TODO = "enhancement"
+        FIXME = "bug"
+        BUG = "bug"
+        HACK = "enhancement"
 
 [tool.lmcat]
 	output = "docs/other/lmcat.txt" # changing this might mean it wont be accessible from the docs
@@ -163,6 +171,7 @@
 		"docs/**",
 		".venv/**",
 		".git/**",
-		".github/**",
+		".meta/**",
 		"uv.lock",
+        ".ruff_cache/**",
 	]

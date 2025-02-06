@@ -174,4 +174,11 @@
 		".meta/**",
 		"uv.lock",
         ".ruff_cache/**",
+        ".github/ISSUE_TEMPLATE/**",
+        "_wip/**",
+        "sweep.yaml",
+        # there are... a lot of tests. we usually dont need to put these in lmcat
+        "tests/**",
 	]
+    [tool.lmcat.glob_process]
+        "[mM]akefile" = "makefile_recipes"

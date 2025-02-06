@@ -2,7 +2,7 @@
 #| python project makefile template                                 |
 #| originally by Michael Ivanitskiy (mivanits@umich.edu)            |
 #| https://github.com/mivanit/python-project-makefile-template      |
-#| version: v0.1.0                                                  |
+#| version: v0.1.3                                                  |
 #| license: https://creativecommons.org/licenses/by-sa/4.0/         |
 #| modifications from the original should be denoted with `~~~~~`   |
 #| as this makes it easier to find edits when updating makefile     |
@@ -28,11 +28,6 @@ PUBLISH_BRANCH := main
 
 # where to put docs
 DOCS_DIR := docs
-
-# where to put the coverage reports
-# note that this will be published with the docs!
-# modify the `docs` targets and `.gitignore` if you don't want that
-COVERAGE_REPORTS_DIR := $(DOCS_DIR)/coverage
 
 # where the tests are, for pytest
 TESTS_DIR := tests
@@ -77,6 +72,17 @@ COMMIT_LOG_FILE := $(LOCAL_DIR)/.commit_log
 
 # pandoc commands (for docs)
 PANDOC ?= pandoc
+
+# where to put the coverage reports
+# note that this will be published with the docs!
+# modify the `docs` targets and `.gitignore` if you don't want that
+COVERAGE_REPORTS_DIR := $(DOCS_DIR)/coverage
+
+# this stuff in the docs will be kept
+DOCS_RESOURCES_DIR := $(DOCS_DIR)/resources
+
+# location of the make docs script
+MAKE_DOCS_SCRIPT_PATH := $(DOCS_RESOURCES_DIR)/make_docs.py
 
 # version vars - extracted automatically from `pyproject.toml`, `$(LAST_VERSION_FILE)`, and $(PYTHON)
 # --------------------------------------------------
@@ -162,6 +168,14 @@ endif
 default: help
 
 
+
+ ######   ######  ########  #### ########  ########  ######
+##    ## ##    ## ##     ##  ##  ##     ##    ##    ##    ##
+##       ##       ##     ##  ##  ##     ##    ##    ##
+ ######  ##       ########   ##  ########     ##     ######
+      ## ##       ##   ##    ##  ##           ##          ##
+##    ## ##    ## ##    ##   ##  ##           ##    ##    ##
+ ######   ######  ##     ## #### ##           ##     ######
 
 # ==================================================
 # python scripts we want to use inside the makefile
@@ -568,7 +582,7 @@ class Config:
 	template_issue: str = TEMPLATE_ISSUE
 	# template for the issue creation
 
-	template_html_source: Path = Path("docs/.resources/templates/todo-template.html")
+	template_html_source: Path = Path("docs/resources/templates/todo-template.html")
 	# template source for the output html file (interactive table)
 
 	@property
@@ -1061,8 +1075,6 @@ check: clean format-check test typing
 	@echo "run format checks, tests, and typing checks"
 
 
-
-
 ########   #######   ######   ######
 ##     ## ##     ## ##    ## ##    ##
 ##     ## ##     ## ##       ##
@@ -1076,20 +1088,20 @@ check: clean format-check test typing
 # ==================================================
 
 # generates a whole tree of documentation in html format.
-# see `docs/.resources/make_docs.py` and the templates in `docs/.resources/templates/html/` for more info
+# see `$(MAKE_DOCS_SCRIPT_PATH)` and the templates in `$(DOCS_RESOURCES_DIR)/templates/html/` for more info
 .PHONY: docs-html
 docs-html:
 	@echo "generate html docs"
-	$(PYTHON) $(DOCS_DIR)/.resources/make_docs.py
+	$(PYTHON) $(MAKE_DOCS_SCRIPT_PATH)
 
-# instead of a whole website, generates a single markdown file with all docs using the templates in `docs/.resources/templates/markdown/`.
+# instead of a whole website, generates a single markdown file with all docs using the templates in `$(DOCS_RESOURCES_DIR)/templates/markdown/`.
 # this is useful if you want to have a copy that you can grep/search, but those docs are much messier.
 # docs-combined will use pandoc to convert them to other formats.
 .PHONY: docs-md
 docs-md:
 	@echo "generate combined (single-file) docs in markdown"
 	mkdir $(DOCS_DIR)/combined -p
-	$(PYTHON) $(DOCS_DIR)/.resources/make_docs.py --combined
+	$(PYTHON) $(MAKE_DOCS_SCRIPT_PATH) --combined
 
 # after running docs-md, this will convert the combined markdown file to other formats:
 # gfm (github-flavored markdown), plain text, and html
@@ -1124,12 +1136,13 @@ cov:
 docs: cov docs-html docs-combined todo lmcat
 	@echo "generate all documentation and coverage reports"
 
-# removed all generated documentation files, but leaves the templates and the `docs/.resources/make_docs.py` script
+# removed all generated documentation files, but leaves everything in `$DOCS_RESOURCES_DIR`
+# (templates, svg, css, make_docs.py scropy)
 # distinct from `make clean`
 .PHONY: docs-clean
 docs-clean:
-	@echo "remove generated docs"
-	@find $(DOCS_DIR) -mindepth 1 -maxdepth 1 -not -name ".*" -exec rm -rf {} +
+	@echo "remove generated docs except resources"
+	@find $(DOCS_DIR) -mindepth 1 -maxdepth 1 -not -path "$(DOCS_RESOURCES_DIR)" -exec rm -rf {} +
 
 
 .PHONY: todo

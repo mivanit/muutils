@@ -2,6 +2,7 @@ Name                                                                            
 ---------------------------------------------------------------------------------------------------------------
 muutils\__init__.py                                                                   2      0   100%
 muutils\console_unicode.py                                                            7      0   100%
+muutils\dbg.py                                                                       75      4    95%   81, 84, 87, 117
 muutils\dictmagic.py                                                                160     23    86%   37-42, 45-50, 309, 469-473, 477, 510-522
 muutils\errormode.py                                                                 75     31    59%   10-34, 43, 78-91, 144, 149, 160-163, 197, 200, 203, 206-207, 215-241
 muutils\group_equiv.py                                                               29      0   100%
@@ -9,7 +10,7 @@ muutils\interval.py                                                             
 muutils\json_serialize\__init__.py                                                    6      6     0%   16-31
 muutils\json_serialize\array.py                                                      95     36    62%   9-38, 42-48, 59, 99, 133-136, 145, 149, 153, 156, 160, 164-167, 171, 178, 190, 217-222, 227, 230
 muutils\json_serialize\json_serialize.py                                             64     46    28%   11-92, 139, 233-259, 269, 281, 296-329
-muutils\json_serialize\serializable_dataclass.py                                    248    112    55%   52-125, 141-146, 166-174, 201, 207, 225-239, 252, 256-266, 285-287, 291, 303, 315-387, 397-404, 433, 446-447, 453, 464-468, 473, 485, 502-506, 513-514, 519, 525, 528-530, 540-579, 670, 678-682, 711, 735-736, 770, 812, 864
+muutils\json_serialize\serializable_dataclass.py                                    247    113    54%   52-125, 149-175, 202, 208, 226-240, 253, 257-267, 286-288, 292, 304, 316-388, 398-405, 434, 447-448, 454, 465-469, 474, 486, 503-507, 514-515, 520, 526, 529-531, 541-580, 671, 679-683, 712, 736-737, 771, 813, 865
 muutils\json_serialize\serializable_field.py                                         40     24    40%   9-45, 81, 87-90, 100, 111-187
 muutils\json_serialize\util.py                                                      112     63    44%   3-61, 65, 76, 80, 96, 105, 110-114, 125, 128-133, 154, 169-174, 240, 245, 249-254
 muutils\jsonlines.py                                                                 32     32     0%   3-77
@@ -61,6 +62,7 @@ tests\unit\nbutils\test_configure_notebook.py                                   
 tests\unit\nbutils\test_conversion.py                                                47      2    96%   105-106
 tests\unit\test_chunks.py                                                            31      0   100%
 tests\unit\test_console_unicode.py                                                    8      0   100%
+tests\unit\test_dbg.py                                                              154      0   100%
 tests\unit\test_dictmagic.py                                                        130      0   100%
 tests\unit\test_group_equiv.py                                                       13      0   100%
 tests\unit\test_import_torch.py                                                       4      0   100%
@@ -79,4 +81,4 @@ tests\unit\validate_type\test_validate_type_GENERATED.py                        
 tests\unit\validate_type\test_validate_type_special.py                               15      3    80%   34-35, 57
 tests\util\test_fire.py                                                               8      6    25%   2-5, 9-11
 ---------------------------------------------------------------------------------------------------------------
-TOTAL                                                                              6431   1019    84%
+TOTAL                                                                              6659   1024    85%

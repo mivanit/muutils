@@ -12,6 +12,8 @@ from muutils.dbg import (
     _NoExpPassed,
     _process_path,
     _CWD,
+    # we do use this as a global in `test_dbg_counter_increments`
+    _COUNTER, # noqa: F401
 )
 
 import pytest
@@ -213,7 +215,7 @@ def test_dbg_incomplete_expression(
 
 def test_dbg_non_callable_formatter() -> None:
     with pytest.raises(TypeError):
-        dbg(42, formatter="not callable")
+        dbg(42, formatter="not callable")  # type: ignore
 
 
 # --- Tests for tensor_info_dict and tensor_info ---
@@ -283,7 +285,7 @@ def test_tensor_info_no_attributes() -> None:
 
 def test_dbg_tensor(capsys: pytest.CaptureFixture) -> None:
     tensor: DummyTensorPartial = DummyTensorPartial()
-    result: DummyTensorPartial = dbg_tensor(tensor)
+    result: DummyTensorPartial = dbg_tensor(tensor) # type: ignore
     captured: str = capsys.readouterr().err
     assert "shape=(7,)" in captured
     assert result is tensor

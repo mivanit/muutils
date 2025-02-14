@@ -442,7 +442,7 @@ class SerializableDataclass(abc.ABC):
         try:
             if self == other:
                 return diff_result
-        except Exception as e:
+        except Exception:
             pass
 
         # if we are working with serialized data, serialize the instances
@@ -594,7 +594,7 @@ def serializable_dataclass(
     register_handler: bool = True,
     on_typecheck_error: ErrorMode = _DEFAULT_ON_TYPECHECK_ERROR,
     on_typecheck_mismatch: ErrorMode = _DEFAULT_ON_TYPECHECK_MISMATCH,
-    methods_no_override: list[str]|None = None,
+    methods_no_override: list[str] | None = None,
     **kwargs,
 ):
     """decorator to make a dataclass serializable. **must also make it inherit from `SerializableDataclass`!!**
@@ -658,7 +658,7 @@ def serializable_dataclass(
         **SerializableDataclass only**
     - `on_typecheck_mismatch : ErrorMode`
         what to do if a type mismatch is found (except, warn, ignore). If `ignore`, type validation will return `True`
-        **SerializableDataclass only** 
+        **SerializableDataclass only**
     - `methods_no_override : list[str]|None`
         list of methods that should not be overridden by the decorator
         by default, `__eq__`, `serialize`, `load`, and `validate_fields_types` are overridden by this function,
@@ -667,7 +667,7 @@ def serializable_dataclass(
         (defaults to `None`)
     - `**kwargs`
         *(passed to dataclasses.dataclass)*
-    
+
     # Returns:
 
     - `_type_`
@@ -707,7 +707,9 @@ def serializable_dataclass(
         if sys.version_info < (3, 10):
             if "kw_only" in kwargs:
                 if kwargs["kw_only"] == True:  # noqa: E712
-                    raise KWOnlyError("kw_only is not supported in python < 3.10, but if you pass a `False` value, it will be ignored")
+                    raise KWOnlyError(
+                        "kw_only is not supported in python < 3.10, but if you pass a `False` value, it will be ignored"
+                    )
                 else:
                     del kwargs["kw_only"]
 
@@ -886,9 +888,16 @@ def serializable_dataclass(
             _methods_no_override = set()
         else:
             _methods_no_override = set(methods_no_override)
-        
-        if _methods_no_override - {"__eq__", "serialize", "load", "validate_fields_types"}:
-            warnings.warn(f"Unknown methods in `methods_no_override`: {_methods_no_override = }")
+
+        if _methods_no_override - {
+            "__eq__",
+            "serialize",
+            "load",
+            "validate_fields_types",
+        }:
+            warnings.warn(
+                f"Unknown methods in `methods_no_override`: {_methods_no_override = }"
+            )
 
         # mypy says "Type cannot be declared in assignment to non-self attribute" so thats why I've left the hints in the comments
         if "serialize" not in _methods_no_override:

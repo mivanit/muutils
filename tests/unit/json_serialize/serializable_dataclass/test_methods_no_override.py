@@ -1,5 +1,3 @@
-import json
-import warnings
 from typing import Any
 
 import pytest
@@ -70,7 +68,9 @@ def test_no_override_eq_and_serialize() -> None:
     """Test that specifying both '__eq__' and 'serialize' in methods_no_override preserves the user-defined methods,
     while load and validate_fields_types are still overridden."""
 
-    @serializable_dataclass(methods_no_override=["__eq__", "serialize"], register_handler=False)
+    @serializable_dataclass(
+        methods_no_override=["__eq__", "serialize"], register_handler=False
+    )
     class NoEqSerializeClass(SerializableDataclass):
         a: int
 
@@ -178,7 +178,10 @@ def test_polymorphic_behavior() -> None:
 def test_unknown_methods_warning() -> None:
     """Test that if unknown method names are passed to methods_no_override, a warning is issued."""
     with pytest.warns(UserWarning, match="Unknown methods in `methods_no_override`"):
-        @serializable_dataclass(methods_no_override=["non_existing_method"], register_handler=False)
+
+        @serializable_dataclass(
+            methods_no_override=["non_existing_method"], register_handler=False
+        )
         class UnknownMethodClass(SerializableDataclass):
             a: int
 

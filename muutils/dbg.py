@@ -77,14 +77,16 @@ def _process_path(path: Path) -> str:
 
 # actual dbg function
 @typing.overload
-def dbg() -> _NoExpPassedSentinel:
-    ...
+def dbg() -> _NoExpPassedSentinel: ...
 @typing.overload
-def dbg(exp: _NoExpPassedSentinel, formatter: typing.Optional[typing.Callable[[typing.Any], str]] = None) -> _NoExpPassedSentinel:
-    ...
+def dbg(
+    exp: _NoExpPassedSentinel,
+    formatter: typing.Optional[typing.Callable[[typing.Any], str]] = None,
+) -> _NoExpPassedSentinel: ...
 @typing.overload
-def dbg(exp: _ExpType, formatter: typing.Optional[typing.Callable[[typing.Any], str]] = None) -> _ExpType:
-    ...
+def dbg(
+    exp: _ExpType, formatter: typing.Optional[typing.Callable[[typing.Any], str]] = None
+) -> _ExpType: ...
 def dbg(
     exp: typing.Union[_ExpType, _NoExpPassedSentinel] = _NoExpPassed,
     formatter: typing.Optional[typing.Callable[[typing.Any], str]] = None,

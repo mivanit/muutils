@@ -13,7 +13,7 @@ from muutils.dbg import (
     _process_path,
     _CWD,
     # we do use this as a global in `test_dbg_counter_increments`
-    _COUNTER, # noqa: F401
+    _COUNTER,  # noqa: F401
 )
 
 import pytest
@@ -285,7 +285,7 @@ def test_tensor_info_no_attributes() -> None:
 
 def test_dbg_tensor(capsys: pytest.CaptureFixture) -> None:
     tensor: DummyTensorPartial = DummyTensorPartial()
-    result: DummyTensorPartial = dbg_tensor(tensor) # type: ignore
+    result: DummyTensorPartial = dbg_tensor(tensor)  # type: ignore
     captured: str = capsys.readouterr().err
     assert "shape=(7,)" in captured
     assert result is tensor

@@ -4,7 +4,10 @@ import pytest
 
 # Import the decorator and base class.
 # (Adjust the import below to match your project structure.)
-from muutils.json_serialize import serializable_dataclass, SerializableDataclass, serializable_field
+from muutils.json_serialize import (
+    serializable_dataclass,
+    SerializableDataclass,
+)
 
 
 @serializable_dataclass
@@ -12,8 +15,8 @@ class SimpleClass(SerializableDataclass):
     a: int
     b: str
 
-def test_simple_class_serialization():
 
+def test_simple_class_serialization():
     simple = SimpleClass(a=42, b="hello")
     serialized = simple.serialize()
     assert serialized == {
@@ -24,6 +27,7 @@ def test_simple_class_serialization():
 
     loaded = SimpleClass.load(serialized)
     assert loaded == simple
+
 
 def test_default_overrides():
     """Test that by default the decorator overrides __eq__, serialize, load, and validate_fields_types."""

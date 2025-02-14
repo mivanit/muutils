@@ -32,11 +32,12 @@ JSONitem = Union[
     typing.List[Union[BaseType, typing.List[Any], typing.Dict[str, Any]]],
     typing.Dict[str, Union[BaseType, typing.List[Any], typing.Dict[str, Any]]],
 ]
+JSONdict = typing.Dict[str, JSONitem]
 
 Hashableitem = Union[bool, int, float, str, tuple]
 
 
-_FORMAT_KEY: str = "$format"
+_FORMAT_KEY: str = "__muutils_format__"
 _REF_KEY: str = "$ref"
 
 # or if python version <3.9

@@ -17,6 +17,7 @@ from muutils.json_serialize.serializable_dataclass import (
     FieldIsNotInitOrSerializeWarning,
     FieldTypeMismatchError,
 )
+from muutils.json_serialize.util import _FORMAT_KEY
 
 # pylint: disable=missing-class-docstring, unused-variable
 
@@ -32,7 +33,7 @@ def test_basic_auto_fields():
     data = dict(a="hello", b=42, c=[1, 2, 3])
     instance = BasicAutofields(**data)
     data_with_format = data.copy()
-    data_with_format["__format__"] = "BasicAutofields(SerializableDataclass)"
+    data_with_format[_FORMAT_KEY] = "BasicAutofields(SerializableDataclass)"
     assert instance.serialize() == data_with_format
     assert instance == instance
     assert instance.diff(instance) == {}
@@ -109,7 +110,7 @@ def test_simple_fields_serialization(simple_fields_instance):
         "d": "hello",
         "e": 42,
         "f": [1, 2, 3],
-        "__format__": "SimpleFields(SerializableDataclass)",
+        _FORMAT_KEY: "SimpleFields(SerializableDataclass)",
     }
 
 
@@ -129,7 +130,7 @@ def test_field_options_serialization(field_options_instance):
         "a": "hello",
         "b": "world",
         "d": "CASE",
-        "__format__": "FieldOptions(SerializableDataclass)",
+        _FORMAT_KEY: "FieldOptions(SerializableDataclass)",
     }
 
 
@@ -147,7 +148,7 @@ def test_with_property_serialization(with_property_instance):
         "first_name": "John",
         "last_name": "Doe",
         "full_name": "John Doe",
-        "__format__": "WithProperty(SerializableDataclass)",
+        _FORMAT_KEY: "WithProperty(SerializableDataclass)",
     }
 
 
@@ -190,9 +191,9 @@ def test_nested_serialization(person_instance):
             "street": "123 Main St",
             "city": "New York",
             "zip_code": "10001",
-            "__format__": "Address(SerializableDataclass)",
+            _FORMAT_KEY: "Address(SerializableDataclass)",
         },
-        "__format__": "Person(SerializableDataclass)",
+        _FORMAT_KEY: "Person(SerializableDataclass)",
     }
     assert serialized == expected_ser
 
@@ -237,7 +238,7 @@ def test_simple_class_serialization():
     assert serialized == {
         "a": 42,
         "b": "hello",
-        "__format__": "SimpleClass(SerializableDataclass)",
+        _FORMAT_KEY: "SimpleClass(SerializableDataclass)",
     }
 
     loaded = SimpleClass.load(serialized)
@@ -270,7 +271,7 @@ def test_person_serialization():
         "age": -1,
         "items": ["apple", "banana"],
         "full_name": "John Doe",
-        "__format__": "FullPerson(SerializableDataclass)",
+        _FORMAT_KEY: "FullPerson(SerializableDataclass)",
     }
     assert serialized == expected_ser, f"Expected {expected_ser}, got {serialized}"
 
@@ -290,7 +291,7 @@ def test_custom_serialization():
     serialized = custom.serialize()
     assert serialized == {
         "data": 10,
-        "__format__": "CustomSerialization(SerializableDataclass)",
+        _FORMAT_KEY: "CustomSerialization(SerializableDataclass)",
     }
 
     loaded = CustomSerialization.load(serialized)
@@ -327,16 +328,16 @@ def test_nested_with_container():
                 "a": "a",
                 "b": 1,
                 "c": [1, 2, 3],
-                "__format__": "BasicAutofields(SerializableDataclass)",
+                _FORMAT_KEY: "BasicAutofields(SerializableDataclass)",
             },
             {
                 "a": "b",
                 "b": 2,
                 "c": [4, 5, 6],
-                "__format__": "BasicAutofields(SerializableDataclass)",
+                _FORMAT_KEY: "BasicAutofields(SerializableDataclass)",
             },
         ],
-        "__format__": "Nested_with_Container(SerializableDataclass)",
+        _FORMAT_KEY: "Nested_with_Container(SerializableDataclass)",
     }
 
     assert serialized == expected_ser
@@ -378,7 +379,7 @@ def test_nested_custom(recwarn):  # this will send some warnings but whatever
     expected_ser = {
         "value": 42.0,
         "data1": {"a": 1, "b": "hello"},
-        "__format__": "nested_custom(SerializableDataclass)",
+        _FORMAT_KEY: "nested_custom(SerializableDataclass)",
     }
     assert serialized == expected_ser
     loaded = nested_custom.load(serialized)
@@ -397,7 +398,7 @@ def test_deserialize_fn():
     serialized = instance.serialize()
     assert serialized == {
         "data": "5",
-        "__format__": "DeserializeFn(SerializableDataclass)",
+        _FORMAT_KEY: "DeserializeFn(SerializableDataclass)",
     }
 
     loaded = DeserializeFn.load(serialized)
@@ -424,7 +425,7 @@ def test_dict_serialization():
 
     serialized = data.serialize()
     expected = {
-        "__format__": "DictContainer(SerializableDataclass)",
+        _FORMAT_KEY: "DictContainer(SerializableDataclass)",
         "simple_dict": {"a": 1, "b": 2},
         "nested_dict": {"x": {"y": 3, "z": 4}},
         "optional_dict": {"hello": "world"},
@@ -436,7 +437,7 @@ def test_dict_serialization():
 def test_dict_loading():
     """Test loading dictionaries into SerializableDataclass"""
     original_data = {
-        "__format__": "DictContainer(SerializableDataclass)",
+        _FORMAT_KEY: "DictContainer(SerializableDataclass)",
         "simple_dict": {"a": 1, "b": 2},
         "nested_dict": {"x": {"y": 3, "z": 4}},
         "optional_dict": {"hello": "world"},
@@ -1023,7 +1024,7 @@ def test_error_handling():
     # Invalid format string
     # with pytest.raises(ValueError):
     #     BaseClass.load({
-    #         "__format__": "InvalidClass(SerializableDataclass)",
+    #         _FORMAT_KEY: "InvalidClass(SerializableDataclass)",
     #         "base_field": "test",
     #         "shared_field": 0
     #     })

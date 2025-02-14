@@ -29,6 +29,7 @@ except ImportError as e:
     )
 
 from muutils.json_serialize.util import (
+    _FORMAT_KEY,
     Hashableitem,
     JSONitem,
     MonoTuple,
@@ -201,12 +202,12 @@ DEFAULT_HANDLERS: MonoTuple[SerializerHandler] = tuple(BASE_HANDLERS) + (
         check=lambda self, obj, path: (
             str(type(obj)) == "<class 'pandas.core.frame.DataFrame'>"
         ),
-        serialize_func=lambda self, obj, path: dict(
-            __format__="pandas.DataFrame",
-            columns=obj.columns.tolist(),
-            data=obj.to_dict(orient="records"),
-            path=path,  # type: ignore
-        ),
+        serialize_func=lambda self, obj, path: {
+            _FORMAT_KEY: "pandas.DataFrame",
+            "columns": obj.columns.tolist(),
+            "data": obj.to_dict(orient="records"),
+            "path": path,  # type: ignore
+        },
         uid="pandas.DataFrame",
         desc="pandas DataFrames",
     ),
@@ -248,7 +249,7 @@ class JsonSerializer:
     default handlers to use
     (defaults to `DEFAULT_HANDLERS`)
     - `write_only_format : bool`
-    changes "__format__" keys in output to "__write_format__" (when you want to serialize something in a way that zanj won't try to recover the object when loading)
+    changes _FORMAT_KEY keys in output to "__write_format__" (when you want to serialize something in a way that zanj won't try to recover the object when loading)
     (defaults to `False`)
 
     # Raises:
@@ -289,8 +290,8 @@ class JsonSerializer:
                 if handler.check(self, obj, path):
                     output: JSONitem = handler.serialize_func(self, obj, path)
                     if self.write_only_format:
-                        if isinstance(output, dict) and "__format__" in output:
-                            new_fmt: JSONitem = output.pop("__format__")
+                        if isinstance(output, dict) and _FORMAT_KEY in output:
+                            new_fmt: JSONitem = output.pop(_FORMAT_KEY)
                             output["__write_format__"] = new_fmt
                     return output
 

@@ -9,6 +9,7 @@ from muutils.json_serialize import (
     serializable_dataclass,
     SerializableDataclass,
 )
+from muutils.json_serialize.util import _FORMAT_KEY
 
 
 @serializable_dataclass
@@ -23,7 +24,7 @@ def test_simple_class_serialization():
     assert serialized == {
         "a": 42,
         "b": "hello",
-        "__format__": "SimpleClass(SerializableDataclass)",
+        _FORMAT_KEY: "SimpleClass(SerializableDataclass)",
     }
 
     loaded = SimpleClass.load(serialized)
@@ -41,8 +42,8 @@ def test_default_overrides():
     # Instantiate and serialize.
     obj: DefaultClass = DefaultClass(a=1, b="test")
     ser: typing.Dict[str, Any] = obj.serialize()
-    # Check that the __format__ key is present with the correct value.
-    assert ser.get("__format__") == "DefaultClass(SerializableDataclass)"
+    # Check that the _FORMAT_KEY is present with the correct value.
+    assert ser.get(_FORMAT_KEY) == "DefaultClass(SerializableDataclass)"
     assert ser.get("a") == 1
     assert ser.get("b") == "test"
 
@@ -69,7 +70,7 @@ def test_no_override_serialize():
         a: int
 
         def serialize(self) -> typing.Dict[str, Any]:
-            # Custom serialization (ignoring the __format__ mechanism)
+            # Custom serialization (ignoring the _FORMAT_KEY mechanism)
             return {"custom": self.a}
 
     obj: NoSerializeClass = NoSerializeClass(a=42)
@@ -156,8 +157,8 @@ def test_inheritance_override():
     sub_obj: SubClass = SubClass(a=1, b=2)
     ser_sub: typing.Dict[str, Any] = sub_obj.serialize()
     # Since SubClass does not preserve serialize, it gets the decorator version.
-    # It will include the __format__ key and the field values.
-    assert "__format__" in ser_sub
+    # It will include the _FORMAT_KEY and the field values.
+    assert _FORMAT_KEY in ser_sub
     assert ser_sub.get("a") == 1
     assert ser_sub.get("b") == 2
 
@@ -188,7 +189,7 @@ def test_polymorphic_behavior():
 
     # PolyB uses the default decorator-provided serialize.
     ser_b: typing.Dict[str, Any] = b_obj.serialize()
-    assert ser_b.get("__format__") == "PolyB(SerializableDataclass)"
+    assert ser_b.get(_FORMAT_KEY) == "PolyB(SerializableDataclass)"
     assert ser_b.get("b") == 15
 
     # Equality and load should work polymorphically.
@@ -212,5 +213,5 @@ def test_unknown_methods_warning():
     obj: UnknownMethodClass = UnknownMethodClass(a=999)
     ser: typing.Dict[str, Any] = obj.serialize()
     # Since "serialize" was not preserved, decorator provides it.
-    assert "__format__" in ser
+    assert _FORMAT_KEY in ser
     assert ser.get("a") == 999

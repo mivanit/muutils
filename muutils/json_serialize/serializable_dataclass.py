@@ -17,7 +17,7 @@ and then you can call `my_obj.serialize()` to get a dict that can be serialized 
     >>> my_obj = MyClass(a=1, b="q")
     >>> s = json.dumps(my_obj.serialize())
     >>> s
-    '{"__format__": "MyClass(SerializableDataclass)", "a": 1, "b": "q"}'
+    '{_FORMAT_KEY: "MyClass(SerializableDataclass)", "a": 1, "b": "q"}'
     >>> read_obj = MyClass.load(json.loads(s))
     >>> read_obj == my_obj
     True
@@ -42,7 +42,7 @@ which gives us:
     >>> nc = NestedClass(x="q", y=MyClass(a=1, b="q"), act_fun=torch.nn.Sigmoid())
     >>> s = json.dumps(nc.serialize())
     >>> s
-    '{"__format__": "NestedClass(SerializableDataclass)", "x": "q", "y": {"__format__": "MyClass(SerializableDataclass)", "a": 1, "b": "q"}, "act_fun": "Sigmoid"}'
+    '{_FORMAT_KEY: "NestedClass(SerializableDataclass)", "x": "q", "y": {_FORMAT_KEY: "MyClass(SerializableDataclass)", "a": 1, "b": "q"}, "act_fun": "Sigmoid"}'
     >>> read_nc = NestedClass.load(json.loads(s))
     >>> read_nc == nc
     True
@@ -66,7 +66,7 @@ from muutils.json_serialize.serializable_field import (
     SerializableField,
     serializable_field,
 )
-from muutils.json_serialize.util import array_safe_eq, dc_eq
+from muutils.json_serialize.util import _FORMAT_KEY, array_safe_eq, dc_eq
 
 # pylint: disable=bad-mcs-classmethod-argument, too-many-arguments, protected-access
 
@@ -149,8 +149,8 @@ def zanj_register_loader_serializable_dataclass(cls: typing.Type[T]):
     lh: LoaderHandler = LoaderHandler(
         check=lambda json_item, path=None, z=None: (  # type: ignore
             isinstance(json_item, dict)
-            and "__format__" in json_item
-            and json_item["__format__"].startswith(_format)
+            and _FORMAT_KEY in json_item
+            and json_item[_FORMAT_KEY].startswith(_format)
         ),
         load=lambda json_item, path=None, z=None: cls.load(json_item),  # type: ignore
         uid=_format,
@@ -334,7 +334,7 @@ class SerializableDataclass(abc.ABC):
         >>> my_obj = MyClass(a=1, b="q")
         >>> s = json.dumps(my_obj.serialize())
         >>> s
-        '{"__format__": "MyClass(SerializableDataclass)", "a": 1, "b": "q"}'
+        '{_FORMAT_KEY: "MyClass(SerializableDataclass)", "a": 1, "b": "q"}'
         >>> read_obj = MyClass.load(json.loads(s))
         >>> read_obj == my_obj
         True
@@ -359,7 +359,7 @@ class SerializableDataclass(abc.ABC):
         >>> nc = NestedClass(x="q", y=MyClass(a=1, b="q"), act_fun=torch.nn.Sigmoid())
         >>> s = json.dumps(nc.serialize())
         >>> s
-        '{"__format__": "NestedClass(SerializableDataclass)", "x": "q", "y": {"__format__": "MyClass(SerializableDataclass)", "a": 1, "b": "q"}, "act_fun": "Sigmoid"}'
+        '{_FORMAT_KEY: "NestedClass(SerializableDataclass)", "x": "q", "y": {_FORMAT_KEY: "MyClass(SerializableDataclass)", "a": 1, "b": "q"}, "act_fun": "Sigmoid"}'
         >>> read_nc = NestedClass.load(json.loads(s))
         >>> read_nc == nc
         True
@@ -616,7 +616,7 @@ def serializable_dataclass(
     ```
     ```python
     >>> Myclass(a=1, b="q").serialize()
-    {'__format__': 'Myclass(SerializableDataclass)', 'a': 1, 'b': 'q'}
+    {_FORMAT_KEY: 'Myclass(SerializableDataclass)', 'a': 1, 'b': 'q'}
     ```
 
     # Parameters:
@@ -733,7 +733,7 @@ def serializable_dataclass(
         # ======================================================================
         def serialize(self) -> dict[str, Any]:
             result: dict[str, Any] = {
-                "__format__": f"{self.__class__.__name__}(SerializableDataclass)"
+                _FORMAT_KEY: f"{self.__class__.__name__}(SerializableDataclass)"
             }
             # for each field in the class
             for field in dataclasses.fields(self):  # type: ignore[arg-type]

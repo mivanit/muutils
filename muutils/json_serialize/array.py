@@ -21,7 +21,7 @@ except ImportError as e:
         ImportWarning,
     )
 
-from muutils.json_serialize.util import JSONitem
+from muutils.json_serialize.util import _FORMAT_KEY, JSONitem
 
 # pylint: disable=unused-argument
 
@@ -75,7 +75,7 @@ def serialize_array(
     for `array_list_meta`, `array_hex_meta`, and `array_b64_meta`, the serialized object is:
     ```
     {
-        "__format__": <array_list_meta|array_hex_meta>,
+        _FORMAT_KEY: <array_list_meta|array_hex_meta>,
         "shape": arr.shape,
         "dtype": str(arr.dtype),
         "data": <arr.tolist()|arr.tobytes().hex()|base64.b64encode(arr.tobytes()).decode()>,
@@ -104,14 +104,14 @@ def serialize_array(
     # handle zero-dimensional arrays
     if len(arr.shape) == 0:
         return {
-            "__format__": f"{arr_type}:zero_dim",
+            _FORMAT_KEY: f"{arr_type}:zero_dim",
             "data": arr.item(),
             **arr_metadata(arr),
         }
 
     if array_mode == "array_list_meta":
         return {
-            "__format__": f"{arr_type}:array_list_meta",
+            _FORMAT_KEY: f"{arr_type}:array_list_meta",
             "data": arr_np.tolist(),
             **arr_metadata(arr_np),
         }
@@ -119,13 +119,13 @@ def serialize_array(
         return arr_np.tolist()
     elif array_mode == "array_hex_meta":
         return {
-            "__format__": f"{arr_type}:array_hex_meta",
+            _FORMAT_KEY: f"{arr_type}:array_hex_meta",
             "data": arr_np.tobytes().hex(),
             **arr_metadata(arr_np),
         }
     elif array_mode == "array_b64_meta":
         return {
-            "__format__": f"{arr_type}:array_b64_meta",
+            _FORMAT_KEY: f"{arr_type}:array_b64_meta",
             "data": base64.b64encode(arr_np.tobytes()).decode(),
             **arr_metadata(arr_np),
         }
@@ -139,7 +139,7 @@ def infer_array_mode(arr: JSONitem) -> ArrayMode:
     assumes the array was serialized via `serialize_array()`
     """
     if isinstance(arr, typing.Mapping):
-        fmt: str = arr.get("__format__", "")  # type: ignore
+        fmt: str = arr.get(_FORMAT_KEY, "")  # type: ignore
         if fmt.endswith(":array_list_meta"):
             if not isinstance(arr["data"], Iterable):
                 raise ValueError(f"invalid list format: {type(arr['data']) = }\t{arr}")

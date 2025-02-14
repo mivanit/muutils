@@ -35,6 +35,10 @@ JSONitem = Union[
 
 Hashableitem = Union[bool, int, float, str, tuple]
 
+
+_FORMAT_KEY: str = "$format"
+_REF_KEY: str = "$ref"
+
 # or if python version <3.9
 if typing.TYPE_CHECKING or sys.version_info < (3, 9):
     MonoTuple = typing.Sequence

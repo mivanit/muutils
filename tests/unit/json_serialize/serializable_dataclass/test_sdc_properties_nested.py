@@ -5,6 +5,7 @@ import sys
 import pytest
 
 from muutils.json_serialize import SerializableDataclass, serializable_dataclass
+from muutils.json_serialize.util import _FORMAT_KEY
 
 SUPPORTS_KW_ONLY: bool = sys.version_info >= (3, 10)
 
@@ -59,7 +60,7 @@ def test_serialize_person():
     assert serialized == {
         "first_name": "John",
         "last_name": "Doe",
-        "__format__": "Person(SerializableDataclass)",
+        _FORMAT_KEY: "Person(SerializableDataclass)",
     }
 
     recovered = Person.load(serialized)
@@ -80,7 +81,7 @@ def test_serialize_titled_person():
         "first_name": "Jane",
         "last_name": "Smith",
         "title": "Dr.",
-        "__format__": "TitledPerson(SerializableDataclass)",
+        _FORMAT_KEY: "TitledPerson(SerializableDataclass)",
         "full_name": "Jane Smith",
         "full_title": "Dr. Jane Smith",
     }

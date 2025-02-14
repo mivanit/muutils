@@ -7,6 +7,7 @@ from muutils.json_serialize import (
     serializable_dataclass,
     serializable_field,
 )
+from muutils.json_serialize.util import _FORMAT_KEY
 
 # pylint: disable=missing-class-docstring
 
@@ -25,7 +26,7 @@ def test_sdc_empty():
         "name": "default_name",
         "save_model": True,
         "batch_size": 64,
-        "__format__": "Config(SerializableDataclass)",
+        _FORMAT_KEY: "Config(SerializableDataclass)",
     }
     recovered = Config.load(serialized)
     assert recovered == instance

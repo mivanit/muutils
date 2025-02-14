@@ -594,13 +594,14 @@ def serializable_dataclass(
     register_handler: bool = True,
     on_typecheck_error: ErrorMode = _DEFAULT_ON_TYPECHECK_ERROR,
     on_typecheck_mismatch: ErrorMode = _DEFAULT_ON_TYPECHECK_MISMATCH,
+    methods_no_override: list[str]|None = None,
     **kwargs,
 ):
-    """decorator to make a dataclass serializable. must also make it inherit from `SerializableDataclass`
+    """decorator to make a dataclass serializable. **must also make it inherit from `SerializableDataclass`!!**
 
     types will be validated (like pydantic) unless `on_typecheck_mismatch` is set to `ErrorMode.IGNORE`
 
-    behavior of most kwargs matches that of `dataclasses.dataclass`, but with some additional kwargs
+    behavior of most kwargs matches that of `dataclasses.dataclass`, but with some additional kwargs. any kwargs not listed here are passed to `dataclasses.dataclass`
 
     Returns the same class as was passed in, with dunder methods added based on the fields defined in the class.
 
@@ -620,40 +621,65 @@ def serializable_dataclass(
     ```
 
     # Parameters:
-     - `_cls : _type_`
+
+    - `_cls : _type_`
        class to decorate. don't pass this arg, just use this as a decorator
        (defaults to `None`)
-     - `init : bool`
+    - `init : bool`
+       whether to add an `__init__` method
+       *(passed to dataclasses.dataclass)*
        (defaults to `True`)
-     - `repr : bool`
+    - `repr : bool`
+       whether to add a `__repr__` method
+       *(passed to dataclasses.dataclass)*
        (defaults to `True`)
-     - `order : bool`
+    - `order : bool`
+       whether to add rich comparison methods
+       *(passed to dataclasses.dataclass)*
        (defaults to `False`)
-     - `unsafe_hash : bool`
+    - `unsafe_hash : bool`
+       whether to add a `__hash__` method
+       *(passed to dataclasses.dataclass)*
        (defaults to `False`)
-     - `frozen : bool`
+    - `frozen : bool`
+       whether to make the class frozen
+       *(passed to dataclasses.dataclass)*
        (defaults to `False`)
-     - `properties_to_serialize : Optional[list[str]]`
-       **SerializableDataclass only:** which properties to add to the serialized data dict
+    - `properties_to_serialize : Optional[list[str]]`
+       which properties to add to the serialized data dict
+       **SerializableDataclass only**
        (defaults to `None`)
-     - `register_handler : bool`
-        **SerializableDataclass only:** if true, register the class with ZANJ for loading
-       (defaults to `True`)
-     - `on_typecheck_error : ErrorMode`
-        **SerializableDataclass only:** what to do if type checking throws an exception (except, warn, ignore). If `ignore` and an exception is thrown, type validation will still return false
-     - `on_typecheck_mismatch : ErrorMode`
-        **SerializableDataclass only:** what to do if a type mismatch is found (except, warn, ignore). If `ignore`, type validation will return `True`
-
+    - `register_handler : bool`
+        if true, register the class with ZANJ for loading
+        **SerializableDataclass only**
+        (defaults to `True`)
+    - `on_typecheck_error : ErrorMode`
+        what to do if type checking throws an exception (except, warn, ignore). If `ignore` and an exception is thrown, type validation will still return false
+        **SerializableDataclass only**
+    - `on_typecheck_mismatch : ErrorMode`
+        what to do if a type mismatch is found (except, warn, ignore). If `ignore`, type validation will return `True`
+        **SerializableDataclass only** 
+    - `methods_no_override : list[str]|None`
+        list of methods that should not be overridden by the decorator
+        by default, `__eq__`, `serialize`, `load`, and `validate_fields_types` are overridden by this function,
+        but you can disable this if you'd rather write your own. `dataclasses.dataclass` might still overwrite these, and those options take precedence
+        **SerializableDataclass only**
+        (defaults to `None`)
+    - `**kwargs`
+        *(passed to dataclasses.dataclass)*
+    
     # Returns:
-     - `_type_`
+
+    - `_type_`
        the decorated class
 
     # Raises:
-     - `KWOnlyError` : only raised if `kw_only` is `True` and python version is <3.9, since `dataclasses.dataclass` does not support this
-     - `NotSerializableFieldException` : if a field is not a `SerializableField`
-     - `FieldSerializationError` : if there is an error serializing a field
-     - `AttributeError` : if a property is not found on the class
-     - `FieldLoadingError` : if there is an error loading a field
+
+    - `KWOnlyError` : only raised if `kw_only` is `True` and python version is <3.9, since `dataclasses.dataclass` does not support this
+    - `NotSerializableFieldException` : if a field is not a `SerializableField`
+    - `FieldSerializationError` : if there is an error serializing a field
+    - `AttributeError` : if a property is not found on the class
+    - `FieldLoadingError` : if there is an error loading a field
     """
     # -> Union[Callable[[Type[T]], Type[T]], Type[T]]:
     on_typecheck_error = ErrorMode.from_any(on_typecheck_error)
@@ -855,16 +881,29 @@ def serializable_dataclass(
             # return the new instance
             return output
 
-        # mypy says "Type cannot be declared in assignment to non-self attribute" so thats why I've left the hints in the comments
-        # type is `Callable[[T], dict]`
-        cls.serialize = serialize  # type: ignore[attr-defined]
-        # type is `Callable[[dict], T]`
-        cls.load = load  # type: ignore[attr-defined]
-        # type is `Callable[[T, ErrorMode], bool]`
-        cls.validate_fields_types = SerializableDataclass__validate_fields_types  # type: ignore[attr-defined]
+        _methods_no_override: set[str]
+        if methods_no_override is None:
+            _methods_no_override = set()
+        else:
+            _methods_no_override = set(methods_no_override)
+        
+        if _methods_no_override - {"__eq__", "serialize", "load", "validate_fields_types"}:
+            warnings.warn(f"Unknown methods in `methods_no_override`: {_methods_no_override = }")
 
-        # type is `Callable[[T, T], bool]`
-        if not hasattr(cls, "__eq__"):
+        # mypy says "Type cannot be declared in assignment to non-self attribute" so thats why I've left the hints in the comments
+        if "serialize" not in _methods_no_override:
+            # type is `Callable[[T], dict]`
+            cls.serialize = serialize  # type: ignore[attr-defined]
+        if "load" not in _methods_no_override:
+            # type is `Callable[[dict], T]`
+            cls.load = load
+
+        if "validate_field_type" not in _methods_no_override:
+            # type is `Callable[[T, ErrorMode], bool]`
+            cls.validate_fields_types = SerializableDataclass__validate_fields_types  # type: ignore[attr-defined]
+
+        if "__eq__" not in _methods_no_override:
+            # type is `Callable[[T, T], bool]`
             cls.__eq__ = lambda self, other: dc_eq(self, other)  # type: ignore[assignment]
 
         # Register the class with ZANJ

@@ -1,4 +1,5 @@
 from typing import Any
+import typing
 
 import pytest
 
@@ -39,7 +40,7 @@ def test_default_overrides():
 
     # Instantiate and serialize.
     obj: DefaultClass = DefaultClass(a=1, b="test")
-    ser: dict[str, Any] = obj.serialize()
+    ser: typing.Dict[str, Any] = obj.serialize()
     # Check that the __format__ key is present with the correct value.
     assert ser.get("__format__") == "DefaultClass(SerializableDataclass)"
     assert ser.get("a") == 1
@@ -67,12 +68,12 @@ def test_no_override_serialize():
     class NoSerializeClass(SerializableDataclass):
         a: int
 
-        def serialize(self) -> dict[str, Any]:
+        def serialize(self) -> typing.Dict[str, Any]:
             # Custom serialization (ignoring the __format__ mechanism)
             return {"custom": self.a}
 
     obj: NoSerializeClass = NoSerializeClass(a=42)
-    ser: dict[str, Any] = obj.serialize()
+    ser: typing.Dict[str, Any] = obj.serialize()
     # The custom serialize should be preserved.
     assert ser == {"custom": 42}
 
@@ -102,7 +103,7 @@ def test_no_override_eq_and_serialize():
             # Custom equality: only compare the 'a' attribute.
             return self.a == other.a
 
-        def serialize(self) -> dict[str, Any]:
+        def serialize(self) -> typing.Dict[str, Any]:
             return {"custom_serialize": self.a}
 
     obj1: NoEqSerializeClass = NoEqSerializeClass(a=100)
@@ -135,7 +136,7 @@ def test_inheritance_override():
     class BaseClass(SerializableDataclass):
         a: int
 
-        def serialize(self) -> dict[str, Any]:
+        def serialize(self) -> typing.Dict[str, Any]:
             return {"base": self.a}
 
     # SubClass without preserving 'serialize': decorator will override.
@@ -153,7 +154,7 @@ def test_inheritance_override():
     assert base_obj.serialize() == {"base": 10}
 
     sub_obj: SubClass = SubClass(a=1, b=2)
-    ser_sub: dict[str, Any] = sub_obj.serialize()
+    ser_sub: typing.Dict[str, Any] = sub_obj.serialize()
     # Since SubClass does not preserve serialize, it gets the decorator version.
     # It will include the __format__ key and the field values.
     assert "__format__" in ser_sub
@@ -172,7 +173,7 @@ def test_polymorphic_behavior():
     class PolyA(SerializableDataclass):
         a: int
 
-        def serialize(self) -> dict[str, Any]:
+        def serialize(self) -> typing.Dict[str, Any]:
             return {"poly_a": self.a}
 
     @serializable_dataclass(register_handler=False)
@@ -186,7 +187,7 @@ def test_polymorphic_behavior():
     assert a_obj.serialize() == {"poly_a": 5}
 
     # PolyB uses the default decorator-provided serialize.
-    ser_b: dict[str, Any] = b_obj.serialize()
+    ser_b: typing.Dict[str, Any] = b_obj.serialize()
     assert ser_b.get("__format__") == "PolyB(SerializableDataclass)"
     assert ser_b.get("b") == 15
 
@@ -209,7 +210,7 @@ def test_unknown_methods_warning():
 
     # Even though the warning is raised, the class should still work normally.
     obj: UnknownMethodClass = UnknownMethodClass(a=999)
-    ser: dict[str, Any] = obj.serialize()
+    ser: typing.Dict[str, Any] = obj.serialize()
     # Since "serialize" was not preserved, decorator provides it.
     assert "__format__" in ser
     assert ser.get("a") == 999

@@ -116,7 +116,29 @@
     exclude = ["tests/input_data", "tests/junk_data", "tests/_temp/", "_wip/"]
     show_error_codes = true
 
-[tool.pdoc]
+[tool.lmcat]
+	output = "docs/other/lmcat.txt" # changing this might mean it wont be accessible from the docs
+	ignore_patterns = [
+		"docs/**",
+		".venv/**",
+		".git/**",
+		".meta/**",
+		"uv.lock",
+        ".ruff_cache/**",
+        ".github/ISSUE_TEMPLATE/**",
+        "_wip/**",
+        "sweep.yaml",
+        # there are... a lot of tests. we usually dont need to put these in lmcat
+        "tests/**",
+	]
+    [tool.lmcat.glob_process]
+        "[mM]akefile" = "makefile_recipes"
+
+
+
+# [tool.makefile]
+# =================================================================
+[tool.makefile.docs]
     warnings_ignore = [
         "Error parsing type annotation .* for muutils\\..*\\. Import of np failed:",
         "Error parsing type annotation .* for muutils\\..*\\. Import of JsonSerializer failed:",
@@ -125,7 +147,7 @@
     ]
 
 # Custom export configurations
-[tool.uv-exports]
+[tool.makefile.uv-exports]
     args = [
         "--no-hashes"
     ]
@@ -146,7 +168,7 @@
 
 
 
-[tool.inline-todo]
+[tool.makefile.inline-todo]
 	search_dir = "."
 	out_file = "docs/other/todo-inline.md" # changing this might mean it wont be accessible from the docs
 	context_lines = 5
@@ -165,21 +187,3 @@
         FIXME = "bug"
         BUG = "bug"
         HACK = "enhancement"
-
-[tool.lmcat]
-	output = "docs/other/lmcat.txt" # changing this might mean it wont be accessible from the docs
-	ignore_patterns = [
-		"docs/**",
-		".venv/**",
-		".git/**",
-		".meta/**",
-		"uv.lock",
-        ".ruff_cache/**",
-        ".github/ISSUE_TEMPLATE/**",
-        "_wip/**",
-        "sweep.yaml",
-        # there are... a lot of tests. we usually dont need to put these in lmcat
-        "tests/**",
-	]
-    [tool.lmcat.glob_process]
-        "[mM]akefile" = "makefile_recipes"

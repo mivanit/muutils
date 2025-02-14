@@ -1,8 +1,8 @@
 # Stats
-- 52 files
-- 10188 (10K) lines
-- 354221 (354K) chars
-- 38245 (38K) `whitespace-split` tokens
+- 51 files
+- 10249 (10K) lines
+- 356142 (356K) chars
+- 38398 (38K) `whitespace-split` tokens
 
 # File Tree
 
@@ -15,11 +15,11 @@ muutils
 ├── muutils                             
 │   ├── json_serialize                  
 │   │   ├── __init__.py                 [   51L  2,416C   297T]
-│   │   ├── array.py                    [  230L  7,801C   761T]
-│   │   ├── json_serialize.py           [  331L 11,827C 1,125T]
-│   │   ├── serializable_dataclass.py   [  876L 34,262C 3,391T]
+│   │   ├── array.py                    [  226L  7,948C   789T]
+│   │   ├── json_serialize.py           [  333L 11,880C 1,135T]
+│   │   ├── serializable_dataclass.py   [  926L 36,141C 3,573T]
 │   │   ├── serializable_field.py       [  279L 11,044C 1,095T]
-│   │   └── util.py                     [  263L  8,853C   947T]
+│   │   └── util.py                     [  281L  9,185C   983T]
 │   ├── logger                          
 │   │   ├── __init__.py                 [   30L    684C    55T]
 │   │   ├── exception_context.py        [   43L  1,183C   110T]
@@ -44,9 +44,9 @@ muutils
 │   │   ├── mermaid.py                  [   20L    571C    52T]
 │   │   ├── print_tex.py                [   21L    495C    70T]
 │   │   └── run_notebook_tests.py       [  255L  9,280C   822T]
-│   ├── __init__.py                     [   29L    467C    38T]
+│   ├── __init__.py                     [   30L    478C    39T]
 │   ├── console_unicode.py              [   34L  1,070C   133T]
-│   ├── dbg.py                          [  183L  5,387C   635T]
+│   ├── dbg.py                          [  185L  5,392C   639T]
 │   ├── dictmagic.py                    [  522L 18,118C 1,967T]
 │   ├── errormode.py                    [  241L  7,939C   816T]
 │   ├── group_equiv.py                  [   66L  2,060C   246T]
@@ -59,14 +59,13 @@ muutils
 │   ├── spinner.py                      [  510L 17,772C 1,670T]
 │   ├── statcounter.py                  [  231L  7,373C   768T]
 │   ├── sysinfo.py                      [  199L  6,901C   497T]
-│   ├── tensor_utils.py                 [  491L 14,600C 1,396T]
+│   ├── tensor_utils.py                 [  494L 14,730C 1,409T]
 │   ├── timeit_fancy.py                 [  101L  3,529C   440T]
 │   └── validate_type.py                [  237L  8,401C   896T]
 ├── LICENSE                             [  674L 35,149C 5,644T]
 ├── README.md                           [  131L  6,289C   551T]
-├── makefile                            [1,330L 41,221C 4,950T]
-├── pyproject.toml                      [  183L  5,900C   642T]
-├── sweep.yaml                          [   12L    769C   123T]
+├── makefile                            [1,486L 45,517C 5,458T]
+├── pyproject.toml                      [  189L  6,108C   654T]
 ```
 
 # File Contents
@@ -304,7 +303,7 @@ except ImportError as e:
         ImportWarning,
     )
 
-from muutils.json_serialize.util import JSONitem
+from muutils.json_serialize.util import _FORMAT_KEY, JSONitem
 
 # pylint: disable=unused-argument
 
@@ -358,7 +357,7 @@ def serialize_array(
     for `array_list_meta`, `array_hex_meta`, and `array_b64_meta`, the serialized object is:
     ```
     {
-        "__format__": <array_list_meta|array_hex_meta>,
+        _FORMAT_KEY: <array_list_meta|array_hex_meta>,
         "shape": arr.shape,
         "dtype": str(arr.dtype),
         "data": <arr.tolist()|arr.tobytes().hex()|base64.b64encode(arr.tobytes()).decode()>,
@@ -387,14 +386,14 @@ def serialize_array(
     # handle zero-dimensional arrays
     if len(arr.shape) == 0:
         return {
-            "__format__": f"{arr_type}:zero_dim",
+            _FORMAT_KEY: f"{arr_type}:zero_dim",
             "data": arr.item(),
             **arr_metadata(arr),
         }
 
     if array_mode == "array_list_meta":
         return {
-            "__format__": f"{arr_type}:array_list_meta",
+            _FORMAT_KEY: f"{arr_type}:array_list_meta",
             "data": arr_np.tolist(),
             **arr_metadata(arr_np),
         }
@@ -402,13 +401,13 @@ def serialize_array(
         return arr_np.tolist()
     elif array_mode == "array_hex_meta":
         return {
-            "__format__": f"{arr_type}:array_hex_meta",
+            _FORMAT_KEY: f"{arr_type}:array_hex_meta",
             "data": arr_np.tobytes().hex(),
             **arr_metadata(arr_np),
         }
     elif array_mode == "array_b64_meta":
         return {
-            "__format__": f"{arr_type}:array_b64_meta",
+            _FORMAT_KEY: f"{arr_type}:array_b64_meta",
             "data": base64.b64encode(arr_np.tobytes()).decode(),
             **arr_metadata(arr_np),
         }
@@ -422,7 +421,7 @@ def infer_array_mode(arr: JSONitem) -> ArrayMode:
     assumes the array was serialized via `serialize_array()`
     """
     if isinstance(arr, typing.Mapping):
-        fmt: str = arr.get("__format__", "")
+        fmt: str = arr.get(_FORMAT_KEY, "")  # type: ignore
         if fmt.endswith(":array_list_meta"):
             if not isinstance(arr["data"], Iterable):
                 raise ValueError(f"invalid list format: {type(arr['data']) = }\t{arr}")
@@ -467,9 +466,8 @@ def load_array(arr: JSONitem, array_mode: Optional[ArrayMode] = None) -> Any:
         assert isinstance(
             arr, typing.Mapping
         ), f"invalid list format: {type(arr) = }\n{arr = }"
-
-        data = np.array(arr["data"], dtype=arr["dtype"])
-        if tuple(arr["shape"]) != tuple(data.shape):
+        data = np.array(arr["data"], dtype=arr["dtype"])  # type: ignore
+        if tuple(arr["shape"]) != tuple(data.shape):  # type: ignore
             raise ValueError(f"invalid shape: {arr}")
         return data
 
@@ -477,24 +475,21 @@ def load_array(arr: JSONitem, array_mode: Optional[ArrayMode] = None) -> Any:
         assert isinstance(
             arr, typing.Mapping
         ), f"invalid list format: {type(arr) = }\n{arr = }"
-
-        data = np.frombuffer(bytes.fromhex(arr["data"]), dtype=arr["dtype"])
-        return data.reshape(arr["shape"])
+        data = np.frombuffer(bytes.fromhex(arr["data"]), dtype=arr["dtype"])  # type: ignore
+        return data.reshape(arr["shape"])  # type: ignore
 
     elif array_mode == "array_b64_meta":
         assert isinstance(
             arr, typing.Mapping
         ), f"invalid list format: {type(arr) = }\n{arr = }"
-
-        data = np.frombuffer(base64.b64decode(arr["data"]), dtype=arr["dtype"])
-        return data.reshape(arr["shape"])
+        data = np.frombuffer(base64.b64decode(arr["data"]), dtype=arr["dtype"])  # type: ignore
+        return data.reshape(arr["shape"])  # type: ignore
 
     elif array_mode == "list":
         assert isinstance(
             arr, typing.Sequence
         ), f"invalid list format: {type(arr) = }\n{arr = }"
-
-        return np.array(arr)
+        return np.array(arr)  # type: ignore
     elif array_mode == "external":
         # assume ZANJ has taken care of it
         assert isinstance(arr, typing.Mapping)
@@ -506,7 +501,7 @@ def load_array(arr: JSONitem, array_mode: Optional[ArrayMode] = None) -> Any:
     elif array_mode == "zero_dim":
         assert isinstance(arr, typing.Mapping)
         data = np.array(arr["data"])
-        if tuple(arr["shape"]) != tuple(data.shape):
+        if tuple(arr["shape"]) != tuple(data.shape):  # type: ignore
             raise ValueError(f"invalid shape: {arr}")
         return data
     else:
@@ -546,6 +541,7 @@ except ImportError as e:
     )
 
 from muutils.json_serialize.util import (
+    _FORMAT_KEY,
     Hashableitem,
     JSONitem,
     MonoTuple,
@@ -715,14 +711,15 @@ DEFAULT_HANDLERS: MonoTuple[SerializerHandler] = tuple(BASE_HANDLERS) + (
         desc="pytorch tensors",
     ),
     SerializerHandler(
-        check=lambda self, obj, path: str(type(obj))
-        == "<class 'pandas.core.frame.DataFrame'>",
-        serialize_func=lambda self, obj, path: dict(
-            __format__="pandas.DataFrame",
-            columns=obj.columns.tolist(),
-            data=obj.to_dict(orient="records"),
-            path=path,
+        check=lambda self, obj, path: (
+            str(type(obj)) == "<class 'pandas.core.frame.DataFrame'>"
         ),
+        serialize_func=lambda self, obj, path: {
+            _FORMAT_KEY: "pandas.DataFrame",
+            "columns": obj.columns.tolist(),
+            "data": obj.to_dict(orient="records"),
+            "path": path,  # type: ignore
+        },
         uid="pandas.DataFrame",
         desc="pandas DataFrames",
     ),
@@ -764,7 +761,7 @@ class JsonSerializer:
     default handlers to use
     (defaults to `DEFAULT_HANDLERS`)
     - `write_only_format : bool`
-    changes "__format__" keys in output to "__write_format__" (when you want to serialize something in a way that zanj won't try to recover the object when loading)
+    changes _FORMAT_KEY keys in output to "__write_format__" (when you want to serialize something in a way that zanj won't try to recover the object when loading)
     (defaults to `False`)
 
     # Raises:
@@ -805,8 +802,8 @@ class JsonSerializer:
                 if handler.check(self, obj, path):
                     output: JSONitem = handler.serialize_func(self, obj, path)
                     if self.write_only_format:
-                        if isinstance(output, dict) and "__format__" in output:
-                            new_fmt: JSONitem = output.pop("__format__")
+                        if isinstance(output, dict) and _FORMAT_KEY in output:
+                            new_fmt: JSONitem = output.pop(_FORMAT_KEY)
                             output["__write_format__"] = new_fmt
                     return output
 
@@ -869,7 +866,7 @@ and then you can call `my_obj.serialize()` to get a dict that can be serialized 
     >>> my_obj = MyClass(a=1, b="q")
     >>> s = json.dumps(my_obj.serialize())
     >>> s
-    '{"__format__": "MyClass(SerializableDataclass)", "a": 1, "b": "q"}'
+    '{_FORMAT_KEY: "MyClass(SerializableDataclass)", "a": 1, "b": "q"}'
     >>> read_obj = MyClass.load(json.loads(s))
     >>> read_obj == my_obj
     True
@@ -894,7 +891,7 @@ which gives us:
     >>> nc = NestedClass(x="q", y=MyClass(a=1, b="q"), act_fun=torch.nn.Sigmoid())
     >>> s = json.dumps(nc.serialize())
     >>> s
-    '{"__format__": "NestedClass(SerializableDataclass)", "x": "q", "y": {"__format__": "MyClass(SerializableDataclass)", "a": 1, "b": "q"}, "act_fun": "Sigmoid"}'
+    '{_FORMAT_KEY: "NestedClass(SerializableDataclass)", "x": "q", "y": {_FORMAT_KEY: "MyClass(SerializableDataclass)", "a": 1, "b": "q"}, "act_fun": "Sigmoid"}'
     >>> read_nc = NestedClass.load(json.loads(s))
     >>> read_nc == nc
     True
@@ -918,7 +915,7 @@ from muutils.json_serialize.serializable_field import (
     SerializableField,
     serializable_field,
 )
-from muutils.json_serialize.util import array_safe_eq, dc_eq
+from muutils.json_serialize.util import _FORMAT_KEY, array_safe_eq, dc_eq
 
 # pylint: disable=bad-mcs-classmethod-argument, too-many-arguments, protected-access
 
@@ -948,7 +945,6 @@ def _dataclass_transform_mock(
     return decorator
 
 
-dataclass_transform: typing.Callable
 if sys.version_info < (3, 11):
     dataclass_transform = _dataclass_transform_mock
 else:
@@ -1002,8 +998,8 @@ def zanj_register_loader_serializable_dataclass(cls: typing.Type[T]):
     lh: LoaderHandler = LoaderHandler(
         check=lambda json_item, path=None, z=None: (  # type: ignore
             isinstance(json_item, dict)
-            and "__format__" in json_item
-            and json_item["__format__"].startswith(_format)
+            and _FORMAT_KEY in json_item
+            and json_item[_FORMAT_KEY].startswith(_format)
         ),
         load=lambda json_item, path=None, z=None: cls.load(json_item),  # type: ignore
         uid=_format,
@@ -1187,7 +1183,7 @@ class SerializableDataclass(abc.ABC):
         >>> my_obj = MyClass(a=1, b="q")
         >>> s = json.dumps(my_obj.serialize())
         >>> s
-        '{"__format__": "MyClass(SerializableDataclass)", "a": 1, "b": "q"}'
+        '{_FORMAT_KEY: "MyClass(SerializableDataclass)", "a": 1, "b": "q"}'
         >>> read_obj = MyClass.load(json.loads(s))
         >>> read_obj == my_obj
         True
@@ -1212,7 +1208,7 @@ class SerializableDataclass(abc.ABC):
         >>> nc = NestedClass(x="q", y=MyClass(a=1, b="q"), act_fun=torch.nn.Sigmoid())
         >>> s = json.dumps(nc.serialize())
         >>> s
-        '{"__format__": "NestedClass(SerializableDataclass)", "x": "q", "y": {"__format__": "MyClass(SerializableDataclass)", "a": 1, "b": "q"}, "act_fun": "Sigmoid"}'
+        '{_FORMAT_KEY: "NestedClass(SerializableDataclass)", "x": "q", "y": {_FORMAT_KEY: "MyClass(SerializableDataclass)", "a": 1, "b": "q"}, "act_fun": "Sigmoid"}'
         >>> read_nc = NestedClass.load(json.loads(s))
         >>> read_nc == nc
         True
@@ -1291,8 +1287,11 @@ class SerializableDataclass(abc.ABC):
         diff_result: dict = {}
 
         # if they are the same, return the empty diff
-        if self == other:
-            return diff_result
+        try:
+            if self == other:
+                return diff_result
+        except Exception:
+            pass
 
         # if we are working with serialized data, serialize the instances
         if of_serialized:
@@ -1443,13 +1442,14 @@ def serializable_dataclass(
     register_handler: bool = True,
     on_typecheck_error: ErrorMode = _DEFAULT_ON_TYPECHECK_ERROR,
     on_typecheck_mismatch: ErrorMode = _DEFAULT_ON_TYPECHECK_MISMATCH,
+    methods_no_override: list[str] | None = None,
     **kwargs,
 ):
-    """decorator to make a dataclass serializable. must also make it inherit from `SerializableDataclass`
+    """decorator to make a dataclass serializable. **must also make it inherit from `SerializableDataclass`!!**
 
     types will be validated (like pydantic) unless `on_typecheck_mismatch` is set to `ErrorMode.IGNORE`
 
-    behavior of most kwargs matches that of `dataclasses.dataclass`, but with some additional kwargs
+    behavior of most kwargs matches that of `dataclasses.dataclass`, but with some additional kwargs. any kwargs not listed here are passed to `dataclasses.dataclass`
 
     Returns the same class as was passed in, with dunder methods added based on the fields defined in the class.
 
@@ -1465,44 +1465,69 @@ def serializable_dataclass(
     ```
     ```python
     >>> Myclass(a=1, b="q").serialize()
-    {'__format__': 'Myclass(SerializableDataclass)', 'a': 1, 'b': 'q'}
+    {_FORMAT_KEY: 'Myclass(SerializableDataclass)', 'a': 1, 'b': 'q'}
     ```
 
     # Parameters:
-     - `_cls : _type_`
+
+    - `_cls : _type_`
        class to decorate. don't pass this arg, just use this as a decorator
        (defaults to `None`)
-     - `init : bool`
+    - `init : bool`
+       whether to add an `__init__` method
+       *(passed to dataclasses.dataclass)*
        (defaults to `True`)
-     - `repr : bool`
+    - `repr : bool`
+       whether to add a `__repr__` method
+       *(passed to dataclasses.dataclass)*
        (defaults to `True`)
-     - `order : bool`
+    - `order : bool`
+       whether to add rich comparison methods
+       *(passed to dataclasses.dataclass)*
        (defaults to `False`)
-     - `unsafe_hash : bool`
+    - `unsafe_hash : bool`
+       whether to add a `__hash__` method
+       *(passed to dataclasses.dataclass)*
        (defaults to `False`)
-     - `frozen : bool`
+    - `frozen : bool`
+       whether to make the class frozen
+       *(passed to dataclasses.dataclass)*
        (defaults to `False`)
-     - `properties_to_serialize : Optional[list[str]]`
-       **SerializableDataclass only:** which properties to add to the serialized data dict
+    - `properties_to_serialize : Optional[list[str]]`
+       which properties to add to the serialized data dict
+       **SerializableDataclass only**
        (defaults to `None`)
-     - `register_handler : bool`
-        **SerializableDataclass only:** if true, register the class with ZANJ for loading
-       (defaults to `True`)
-     - `on_typecheck_error : ErrorMode`
-        **SerializableDataclass only:** what to do if type checking throws an exception (except, warn, ignore). If `ignore` and an exception is thrown, type validation will still return false
-     - `on_typecheck_mismatch : ErrorMode`
-        **SerializableDataclass only:** what to do if a type mismatch is found (except, warn, ignore). If `ignore`, type validation will return `True`
+    - `register_handler : bool`
+        if true, register the class with ZANJ for loading
+        **SerializableDataclass only**
+        (defaults to `True`)
+    - `on_typecheck_error : ErrorMode`
+        what to do if type checking throws an exception (except, warn, ignore). If `ignore` and an exception is thrown, type validation will still return false
+        **SerializableDataclass only**
+    - `on_typecheck_mismatch : ErrorMode`
+        what to do if a type mismatch is found (except, warn, ignore). If `ignore`, type validation will return `True`
+        **SerializableDataclass only**
+    - `methods_no_override : list[str]|None`
+        list of methods that should not be overridden by the decorator
+        by default, `__eq__`, `serialize`, `load`, and `validate_fields_types` are overridden by this function,
+        but you can disable this if you'd rather write your own. `dataclasses.dataclass` might still overwrite these, and those options take precedence
+        **SerializableDataclass only**
+        (defaults to `None`)
+    - `**kwargs`
+        *(passed to dataclasses.dataclass)*
 
     # Returns:
-     - `_type_`
+
+    - `_type_`
        the decorated class
 
     # Raises:
-     - `KWOnlyError` : only raised if `kw_only` is `True` and python version is <3.9, since `dataclasses.dataclass` does not support this
-     - `NotSerializableFieldException` : if a field is not a `SerializableField`
-     - `FieldSerializationError` : if there is an error serializing a field
-     - `AttributeError` : if a property is not found on the class
-     - `FieldLoadingError` : if there is an error loading a field
+
+    - `KWOnlyError` : only raised if `kw_only` is `True` and python version is <3.9, since `dataclasses.dataclass` does not support this
+    - `NotSerializableFieldException` : if a field is not a `SerializableField`
+    - `FieldSerializationError` : if there is an error serializing a field
+    - `AttributeError` : if a property is not found on the class
+    - `FieldLoadingError` : if there is an error loading a field
     """
     # -> Union[Callable[[Type[T]], Type[T]], Type[T]]:
     on_typecheck_error = ErrorMode.from_any(on_typecheck_error)
@@ -1530,7 +1555,9 @@ def serializable_dataclass(
         if sys.version_info < (3, 10):
             if "kw_only" in kwargs:
                 if kwargs["kw_only"] == True:  # noqa: E712
-                    raise KWOnlyError("kw_only is not supported in python >=3.9")
+                    raise KWOnlyError(
+                        "kw_only is not supported in python < 3.10, but if you pass a `False` value, it will be ignored"
+                    )
                 else:
                     del kwargs["kw_only"]
 
@@ -1555,7 +1582,7 @@ def serializable_dataclass(
         # ======================================================================
         def serialize(self) -> dict[str, Any]:
             result: dict[str, Any] = {
-                "__format__": f"{self.__class__.__name__}(SerializableDataclass)"
+                _FORMAT_KEY: f"{self.__class__.__name__}(SerializableDataclass)"
             }
             # for each field in the class
             for field in dataclasses.fields(self):  # type: ignore[arg-type]
@@ -1704,16 +1731,36 @@ def serializable_dataclass(
             # return the new instance
             return output
 
-        # mypy says "Type cannot be declared in assignment to non-self attribute" so thats why I've left the hints in the comments
-        # type is `Callable[[T], dict]`
-        cls.serialize = serialize  # type: ignore[attr-defined]
-        # type is `Callable[[dict], T]`
-        cls.load = load  # type: ignore[attr-defined]
-        # type is `Callable[[T, ErrorMode], bool]`
-        cls.validate_fields_types = SerializableDataclass__validate_fields_types  # type: ignore[attr-defined]
+        _methods_no_override: set[str]
+        if methods_no_override is None:
+            _methods_no_override = set()
+        else:
+            _methods_no_override = set(methods_no_override)
 
-        # type is `Callable[[T, T], bool]`
-        if not hasattr(cls, "__eq__"):
+        if _methods_no_override - {
+            "__eq__",
+            "serialize",
+            "load",
+            "validate_fields_types",
+        }:
+            warnings.warn(
+                f"Unknown methods in `methods_no_override`: {_methods_no_override = }"
+            )
+
+        # mypy says "Type cannot be declared in assignment to non-self attribute" so thats why I've left the hints in the comments
+        if "serialize" not in _methods_no_override:
+            # type is `Callable[[T], dict]`
+            cls.serialize = serialize  # type: ignore[attr-defined]
+        if "load" not in _methods_no_override:
+            # type is `Callable[[dict], T]`
+            cls.load = load  # type: ignore[attr-defined]
+
+        if "validate_field_type" not in _methods_no_override:
+            # type is `Callable[[T, ErrorMode], bool]`
+            cls.validate_fields_types = SerializableDataclass__validate_fields_types  # type: ignore[attr-defined]
+
+        if "__eq__" not in _methods_no_override:
+            # type is `Callable[[T, T], bool]`
             cls.__eq__ = lambda self, other: dc_eq(self, other)  # type: ignore[assignment]
 
         # Register the class with ZANJ
@@ -2033,9 +2080,27 @@ except ImportError:
     _NUMPY_WORKING = False
 
 
-JSONitem = Union[bool, int, float, str, list, typing.Dict[str, Any], None]
+BaseType = Union[
+    bool,
+    int,
+    float,
+    str,
+    None,
+]
+
+JSONitem = Union[
+    BaseType,
+    # mypy doesn't like recursive types, so we just go down a few levels manually
+    typing.List[Union[BaseType, typing.List[Any], typing.Dict[str, Any]]],
+    typing.Dict[str, Union[BaseType, typing.List[Any], typing.Dict[str, Any]]],
+]
 JSONdict = typing.Dict[str, JSONitem]
+
 Hashableitem = Union[bool, int, float, str, tuple]
+
+
+_FORMAT_KEY: str = "__muutils_format__"
+_REF_KEY: str = "$ref"
 
 # or if python version <3.9
 if typing.TYPE_CHECKING or sys.version_info < (3, 9):
@@ -5000,6 +5065,7 @@ __all__ = [
     "nbutils",
     # submodules
     "console_unicode",
+    "dbg",
     "dictmagic",
     "errormode",
     "group_equiv",
@@ -5136,14 +5202,16 @@ def _process_path(path: Path) -> str:
 
 # actual dbg function
 @typing.overload
-def dbg() -> _NoExpPassedSentinel:
-    ...
+def dbg() -> _NoExpPassedSentinel: ...
 @typing.overload
-def dbg(exp: _NoExpPassedSentinel, formatter: typing.Optional[typing.Callable[[typing.Any], str]] = None) -> _NoExpPassedSentinel:
-    ...
+def dbg(
+    exp: _NoExpPassedSentinel,
+    formatter: typing.Optional[typing.Callable[[typing.Any], str]] = None,
+) -> _NoExpPassedSentinel: ...
 @typing.overload
-def dbg(exp: _ExpType, formatter: typing.Optional[typing.Callable[[typing.Any], str]] = None) -> _ExpType:
-    ...
+def dbg(
+    exp: _ExpType, formatter: typing.Optional[typing.Callable[[typing.Any], str]] = None
+) -> _ExpType: ...
 def dbg(
     exp: typing.Union[_ExpType, _NoExpPassedSentinel] = _NoExpPassed,
     formatter: typing.Optional[typing.Callable[[typing.Any], str]] = None,
@@ -8161,7 +8229,6 @@ TYPE_TO_JAX_DTYPE: dict = {
     np.bool_: jaxtyping.Bool,
     torch.bool: jaxtyping.Bool,
     # numpy float
-    np.float_: jaxtyping.Float,
     np.float16: jaxtyping.Float,
     np.float32: jaxtyping.Float,
     np.float64: jaxtyping.Float,
@@ -8169,7 +8236,6 @@ TYPE_TO_JAX_DTYPE: dict = {
     np.single: jaxtyping.Float,
     np.double: jaxtyping.Float,
     # numpy int
-    np.int_: jaxtyping.Int,
     np.int8: jaxtyping.Int,
     np.int16: jaxtyping.Int,
     np.int32: jaxtyping.Int,
@@ -8195,6 +8261,10 @@ TYPE_TO_JAX_DTYPE: dict = {
     torch.short: jaxtyping.Int,
 }
 "dict mapping python, numpy, and torch types to `jaxtyping` types"
+
+if np.version.version < "2.0.0":
+    TYPE_TO_JAX_DTYPE[np.float_] = jaxtyping.Float
+    TYPE_TO_JAX_DTYPE[np.int_] = jaxtyping.Int
 
 
 # TODO: add proper type annotations to this signature
@@ -8240,7 +8310,7 @@ def jaxtype_factory(
             )
 
         @typing._tp_cache  # type: ignore
-        def __class_getitem__(cls, params: typing.Union[str, tuple]) -> type:
+        def __class_getitem__(cls, params: typing.Union[str, tuple]) -> type:  # type: ignore
             # MyTensor["dim1 dim2"]
             if isinstance(params, str):
                 return default_jax_dtype[array_type, params]
@@ -8360,7 +8430,6 @@ DTYPE_LIST: list = [
         # numpy
         # ----------
         # floats
-        np.float_,
         np.float16,
         np.float32,
         np.float64,
@@ -8375,7 +8444,6 @@ DTYPE_LIST: list = [
         np.int16,
         np.int32,
         np.int64,
-        np.int_,
         np.longlong,
         np.short,
         # simplest
@@ -8384,6 +8452,9 @@ DTYPE_LIST: list = [
     ],
 ]
 "list of all the python, numpy, and torch numerical types I could think of"
+
+if np.version.version < "2.0.0":
+    DTYPE_LIST.extend([np.float_, np.int_])
 
 DTYPE_MAP: dict = {
     **{str(x): x for x in DTYPE_LIST},
@@ -9851,7 +9922,7 @@ format:
 
 # runs ruff and pycln to check if the code is formatted correctly
 .PHONY: format-check
-format-check: gen-extra-tests
+format-check:
 	@echo "check if the source code is formatted correctly"
 	...
 
@@ -9860,12 +9931,12 @@ format-check: gen-extra-tests
 # but it complains when we specify arguments by keyword where positional is fine
 # not sure how to fix this
 .PHONY: typing
-typing: clean gen-extra-tests
+typing: clean
 	@echo "running type checks"
 	...
 
 .PHONY: test
-test: clean gen-extra-tests
+test: clean
 	@echo "running tests"
 	...
 
@@ -9913,7 +9984,8 @@ docs: cov docs-html docs-combined todo lmcat
 	...
 
 # removed all generated documentation files, but leaves everything in `$DOCS_RESOURCES_DIR`
-# (templates, svg, css, make_docs.py scropy)
+# and leaves things defined in `pyproject.toml:tool.makefile.docs.no_clean`
+# (templates, svg, css, make_docs.py script)
 # distinct from `make clean`
 .PHONY: docs-clean
 docs-clean:
@@ -9960,16 +10032,15 @@ publish: gen-commit-log check build verify-git version gen-version-info
 # removes $(TESTS_TEMP_DIR) to remove temporary test files
 # recursively removes all `__pycache__` directories and `*.pyc` or `*.pyo` files
 # distinct from `make docs-clean`, which only removes generated documentation files
-# ~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # slight modification in last line for extra tests
-# ~~~~~~~~~~
 .PHONY: clean
 clean:
 	@echo "clean up temporary files"
 	...
 
 .PHONY: clean-all
-clean-all: clean dep-clean docs-clean
+clean-all: clean docs-clean dep-clean
 	@echo "clean up all temporary files, dep files, venv, and generated docs"
 	...
 
@@ -9996,7 +10067,7 @@ help: help-targets info
 # ==================================================
 [project]
     name = "muutils"
-    version = "0.7.0"
+    version = "0.8.0"
     description = "miscellaneous python utilities"
     readme = "README.md"
     requires-python = ">=3.8"
@@ -10058,7 +10129,8 @@ help: help-targets info
 [dependency-groups]
     dev = [
         # typing
-        "mypy>=1.0.1",
+        "mypy>=1.0.1; python_version < '3.9'",
+        "mypy>=1.15; python_version >= '3.9'",
         # tests & coverage
         "pytest>=8.2.2",
         "pytest-cov>=4.1.0",
@@ -10109,7 +10181,29 @@ help: help-targets info
     exclude = ["tests/input_data", "tests/junk_data", "tests/_temp/", "_wip/"]
     show_error_codes = true
 
-[tool.pdoc]
+[tool.lmcat]
+	output = "docs/other/lmcat.txt" # changing this might mean it wont be accessible from the docs
+	ignore_patterns = [
+		"docs/**",
+		".venv/**",
+		".git/**",
+		".meta/**",
+		"uv.lock",
+        ".ruff_cache/**",
+        ".github/ISSUE_TEMPLATE/**",
+        "_wip/**",
+        "sweep.yaml",
+        # there are... a lot of tests. we usually dont need to put these in lmcat
+        "tests/**",
+	]
+    [tool.lmcat.glob_process]
+        "[mM]akefile" = "makefile_recipes"
+
+
+
+# [tool.makefile]
+# =================================================================
+[tool.makefile.docs]
     warnings_ignore = [
         "Error parsing type annotation .* for muutils\\..*\\. Import of np failed:",
         "Error parsing type annotation .* for muutils\\..*\\. Import of JsonSerializer failed:",
@@ -10118,7 +10212,7 @@ help: help-targets info
     ]
 
 # Custom export configurations
-[tool.uv-exports]
+[tool.makefile.uv-exports]
     args = [
         "--no-hashes"
     ]
@@ -10139,7 +10233,7 @@ help: help-targets info
 
 
 
-[tool.inline-todo]
+[tool.makefile.inline-todo]
 	search_dir = "."
 	out_file = "docs/other/todo-inline.md" # changing this might mean it wont be accessible from the docs
 	context_lines = 5
@@ -10158,37 +10252,4 @@ help: help-targets info
         FIXME = "bug"
         BUG = "bug"
         HACK = "enhancement"
-
-[tool.lmcat]
-	output = "docs/other/lmcat.txt" # changing this might mean it wont be accessible from the docs
-	ignore_patterns = [
-		"docs/**",
-		".venv/**",
-		".git/**",
-		".meta/**",
-		"uv.lock",
-        ".ruff_cache/**",
-        ".github/ISSUE_TEMPLATE/**",
-        "_wip/**",
-        # there are... a lot of tests. we usually dont need to put these in lmcat
-        "tests/**",
-	]
-    [tool.lmcat.glob_process]
-        "[mM]akefile" = "makefile_recipes"
 ``````{ end_of_file="pyproject.toml" }
-
-``````{ path="sweep.yaml"  }
-# Sweep AI turns bug fixes & feature requests into code changes (https://sweep.dev)
-# For details on our config file, check out our docs at https://docs.sweep.dev
-
-# If you use this be sure to frequently sync your default branch(main, master) to dev.
-branch: 'main'
-# If you want to enable GitHub Actions for Sweep, set this to true.
-gha_enabled: False
-# This is the description of your project. It will be used by sweep when creating PRs. You can tell Sweep what's unique about your project, what frameworks you use, or anything else you want.
-# Here's an example: sweepai/sweep is a python project. The main api endpoints are in sweepai/api.py. Write code that adheres to PEP8.
-description: ''
-
-# Default Values: https://github.com/sweepai/sweep/blob/main/sweep.yaml
-
-``````{ end_of_file="sweep.yaml" }

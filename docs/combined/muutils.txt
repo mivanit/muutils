@@ -1,4 +1,4 @@
-  docs for muutils v0.7.0
+  docs for muutils v0.8.0
 
 Contents
 
@@ -124,6 +124,7 @@ Submodules
 -   misc
 -   nbutils
 -   console_unicode
+-   dbg
 -   dictmagic
 -   errormode
 -   group_equiv
@@ -260,7 +261,7 @@ at your own risk!
 
 View Source on GitHub
 
-  docs for muutils v0.7.0
+  docs for muutils v0.8.0
 
 API Documentation
 
@@ -301,7 +302,119 @@ Usage:
     >>> get_console_safe_str("café", "cafe")
     "café"  # This result may vary based on the system's preferred encoding.
 
-  docs for muutils v0.7.0
+  docs for muutils v0.8.0
+
+Contents
+
+an implementation of the Rust builtin dbg! for Python,orignally from
+https://github.com/tylerwince/pydbg/blob/master/pydbg.py
+
+licensed under MIT:
+
+Copyright (c) 2019 Tyler Wince
+
+Permission is hereby granted, free of charge, to any person obtaining a
+copy of this software and associated documentation files (the
+“Software”), to deal in the Software without restriction, including
+without limitation the rights to use, copy, modify, merge, publish,
+distribute, sublicense, and/or sell copies of the Software, and to
+permit persons to whom the Software is furnished to do so, subject to
+the following conditions:
+
+The above copyright notice and this permission notice shall be included
+in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS
+OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+API Documentation
+
+-   PATH_MODE
+-   dbg
+-   tensor_info_dict
+-   tensor_info
+-   dbg_tensor
+
+View Source on GitHub
+
+muutils.dbg
+
+an implementation of the Rust builtin dbg! for Python,orignally from
+https://github.com/tylerwince/pydbg/blob/master/pydbg.py
+
+licensed under MIT:
+
+Copyright (c) 2019 Tyler Wince
+
+Permission is hereby granted, free of charge, to any person obtaining a
+copy of this software and associated documentation files (the
+“Software”), to deal in the Software without restriction, including
+without limitation the rights to use, copy, modify, merge, publish,
+distribute, sublicense, and/or sell copies of the Software, and to
+permit persons to whom the Software is furnished to do so, subject to
+the following conditions:
+
+The above copyright notice and this permission notice shall be included
+in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS
+OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+View Source on GitHub
+
+-   PATH_MODE: Literal['relative', 'absolute'] = 'relative'
+
+def dbg
+
+    (
+        exp: Union[~_ExpType, muutils.dbg._NoExpPassedSentinel] = <muutils.dbg._NoExpPassedSentinel object>,
+        formatter: Optional[Callable[[Any], str]] = None
+    ) -> Union[~_ExpType, muutils.dbg._NoExpPassedSentinel]
+
+View Source on GitHub
+
+Call dbg with any variable or expression.
+
+Calling dbg will print to stderr the current filename and lineno, as
+well as the passed expression and what the expression evaluates to:
+
+        from <a href="">muutils.dbg</a> import dbg
+
+        a = 2
+        b = 5
+
+        dbg(a+b)
+
+        def square(x: int) -> int:
+                return x * x
+
+        dbg(square(a))
+
+def tensor_info_dict
+
+    (tensor: Any) -> Dict[str, str]
+
+View Source on GitHub
+
+def tensor_info
+
+    (tensor: Any) -> str
+
+View Source on GitHub
+
+-   dbg_tensor = functools.partial(<function dbg>, formatter=<function tensor_info>)
+
+  docs for muutils v0.8.0
 
 Contents
 
@@ -656,7 +769,7 @@ Raises:
     ‘yaml’, or if you try to use ‘yaml’ output without having PyYAML
     installed
 
-  docs for muutils v0.7.0
+  docs for muutils v0.8.0
 
 Contents
 
@@ -871,7 +984,7 @@ Inherited Members
 
 map of string aliases to ErrorMode instances
 
-  docs for muutils v0.7.0
+  docs for muutils v0.8.0
 
 Contents
 
@@ -913,7 +1026,7 @@ Arguments
 -   eq_func: Callable[[T, T], bool] a function that returns true if two
     items are equivalent. need not be transitive
 
-  docs for muutils v0.7.0
+  docs for muutils v0.8.0
 
 Contents
 
@@ -1212,7 +1325,7 @@ Inherited Members
 -   intersection
 -   union
 
-  docs for muutils v0.7.0
+  docs for muutils v0.8.0
 
 Contents
 
@@ -1310,7 +1423,7 @@ def json_serialize
     (
         obj: Any,
         path: tuple[typing.Union[str, int], ...] = ()
-    ) -> Union[bool, int, float, str, list, Dict[str, Any], NoneType]
+    ) -> Union[bool, int, float, str, NoneType, List[Union[bool, int, float, str, NoneType, List[Any], Dict[str, Any]]], Dict[str, Union[bool, int, float, str, NoneType, List[Any], Dict[str, Any]]]]
 
 View Source on GitHub
 
@@ -1331,19 +1444,21 @@ def serializable_dataclass
         register_handler: bool = True,
         on_typecheck_error: muutils.errormode.ErrorMode = ErrorMode.Except,
         on_typecheck_mismatch: muutils.errormode.ErrorMode = ErrorMode.Warn,
+        methods_no_override: list[str] | None = None,
         **kwargs
     )
 
 View Source on GitHub
 
 decorator to make a dataclass serializable. must also make it inherit
-from SerializableDataclass
+from SerializableDataclass!!
 
 types will be validated (like pydantic) unless on_typecheck_mismatch is
 set to ErrorMode.IGNORE
 
 behavior of most kwargs matches that of dataclasses.dataclass, but with
-some additional kwargs
+some additional kwargs. any kwargs not listed here are passed to
+dataclasses.dataclass
 
 Returns the same class as was passed in, with dunder methods added based
 on the fields defined in the class.
@@ -1362,29 +1477,41 @@ after instance creation.
         b: str
 
     >>> Myclass(a=1, b="q").serialize()
-    {'__format__': 'Myclass(SerializableDataclass)', 'a': 1, 'b': 'q'}
+    {_FORMAT_KEY: 'Myclass(SerializableDataclass)', 'a': 1, 'b': 'q'}
 
 Parameters:
 
 -   _cls : _type_ class to decorate. don’t pass this arg, just use this
     as a decorator (defaults to None)
--   init : bool (defaults to True)
--   repr : bool (defaults to True)
--   order : bool (defaults to False)
--   unsafe_hash : bool (defaults to False)
--   frozen : bool (defaults to False)
--   properties_to_serialize : Optional[list[str]] SerializableDataclass
-    only: which properties to add to the serialized data dict (defaults
+-   init : bool whether to add an __init__ method (passed to
+    dataclasses.dataclass) (defaults to True)
+-   repr : bool whether to add a __repr__ method (passed to
+    dataclasses.dataclass) (defaults to True)
+-   order : bool whether to add rich comparison methods (passed to
+    dataclasses.dataclass) (defaults to False)
+-   unsafe_hash : bool whether to add a __hash__ method (passed to
+    dataclasses.dataclass) (defaults to False)
+-   frozen : bool whether to make the class frozen (passed to
+    dataclasses.dataclass) (defaults to False)
+-   properties_to_serialize : Optional[list[str]] which properties to
+    add to the serialized data dict SerializableDataclass only (defaults
     to None)
--   register_handler : bool SerializableDataclass only: if true,
-    register the class with ZANJ for loading (defaults to True)
--   on_typecheck_error : ErrorMode SerializableDataclass only: what to
-    do if type checking throws an exception (except, warn, ignore). If
-    ignore and an exception is thrown, type validation will still return
-    false
--   on_typecheck_mismatch : ErrorMode SerializableDataclass only: what
-    to do if a type mismatch is found (except, warn, ignore). If ignore,
-    type validation will return True
+-   register_handler : bool if true, register the class with ZANJ for
+    loading SerializableDataclass only (defaults to True)
+-   on_typecheck_error : ErrorMode what to do if type checking throws an
+    exception (except, warn, ignore). If ignore and an exception is
+    thrown, type validation will still return false
+    SerializableDataclass only
+-   on_typecheck_mismatch : ErrorMode what to do if a type mismatch is
+    found (except, warn, ignore). If ignore, type validation will return
+    True SerializableDataclass only
+-   methods_no_override : list[str]|None list of methods that should not
+    be overridden by the decorator by default, __eq__, serialize, load,
+    and validate_fields_types are overridden by this function, but you
+    can disable this if you’d rather write your own.
+    dataclasses.dataclass might still overwrite these, and those options
+    take precedence SerializableDataclass only (defaults to None)
+-   **kwargs (passed to dataclasses.dataclass)
 
 Returns:
 
@@ -1500,7 +1627,7 @@ get metadata for a numpy array
 def load_array
 
     (
-        arr: Union[bool, int, float, str, list, Dict[str, Any], NoneType],
+        arr: Union[bool, int, float, str, NoneType, List[Union[bool, int, float, str, NoneType, List[Any], Dict[str, Any]]], Dict[str, Union[bool, int, float, str, NoneType, List[Any], Dict[str, Any]]]],
         array_mode: Optional[Literal['list', 'array_list_meta', 'array_hex_meta', 'array_b64_meta', 'external', 'zero_dim']] = None
     ) -> Any
 
@@ -1510,7 +1637,7 @@ load a json-serialized array, infer the mode if not specified
 
 -   BASE_HANDLERS = (SerializerHandler(check=<function <lambda>>, serialize_func=<function <lambda>>, uid='base types', desc='base types (bool, int, float, str, None)'), SerializerHandler(check=<function <lambda>>, serialize_func=<function <lambda>>, uid='dictionaries', desc='dictionaries'), SerializerHandler(check=<function <lambda>>, serialize_func=<function <lambda>>, uid='(list, tuple) -> list', desc='lists and tuples as lists'))
 
--   JSONitem = typing.Union[bool, int, float, str, list, typing.Dict[str, typing.Any], NoneType]
+-   JSONitem = typing.Union[bool, int, float, str, NoneType, typing.List[typing.Union[bool, int, float, str, NoneType, typing.List[typing.Any], typing.Dict[str, typing.Any]]], typing.Dict[str, typing.Union[bool, int, float, str, NoneType, typing.List[typing.Any], typing.Dict[str, typing.Any]]]]
 
 class JsonSerializer:
 
@@ -1529,7 +1656,7 @@ Parameters:
     the default handlers (defaults to tuple())
 -   handlers_default : MonoTuple[SerializerHandler] default handlers to
     use (defaults to DEFAULT_HANDLERS)
--   write_only_format : bool changes “format” keys in output to
+-   write_only_format : bool changes _FORMAT_KEY keys in output to
     “write_format” (when you want to serialize something in a way that
     zanj won’t try to recover the object when loading) (defaults to
     False)
@@ -1568,7 +1695,7 @@ def json_serialize
         self,
         obj: Any,
         path: tuple[typing.Union[str, int], ...] = ()
-    ) -> Union[bool, int, float, str, list, Dict[str, Any], NoneType]
+    ) -> Union[bool, int, float, str, NoneType, List[Union[bool, int, float, str, NoneType, List[Any], Dict[str, Any]]], Dict[str, Union[bool, int, float, str, NoneType, List[Any], Dict[str, Any]]]]
 
 View Source on GitHub
 
@@ -1688,7 +1815,7 @@ serialized to json. So, you can do:
     >>> my_obj = MyClass(a=1, b="q")
     >>> s = json.dumps(my_obj.serialize())
     >>> s
-    '{"__format__": "MyClass(SerializableDataclass)", "a": 1, "b": "q"}'
+    '{_FORMAT_KEY: "MyClass(SerializableDataclass)", "a": 1, "b": "q"}'
     >>> read_obj = MyClass.load(json.loads(s))
     >>> read_obj == my_obj
     True
@@ -1712,7 +1839,7 @@ which gives us:
     >>> nc = NestedClass(x="q", y=MyClass(a=1, b="q"), act_fun=torch.nn.Sigmoid())
     >>> s = json.dumps(nc.serialize())
     >>> s
-    '{"__format__": "NestedClass(SerializableDataclass)", "x": "q", "y": {"__format__": "MyClass(SerializableDataclass)", "a": 1, "b": "q"}, "act_fun": "Sigmoid"}'
+    '{_FORMAT_KEY: "NestedClass(SerializableDataclass)", "x": "q", "y": {_FORMAT_KEY: "MyClass(SerializableDataclass)", "a": 1, "b": "q"}, "act_fun": "Sigmoid"}'
     >>> read_nc = NestedClass.load(json.loads(s))
     >>> read_nc == nc
     True
@@ -1807,7 +1934,7 @@ Parameters:
     - `nested_dict : dict[str, Any]`
         nested dict to update the instance with
 
-  docs for muutils v0.7.0
+  docs for muutils v0.8.0
 
 Contents
 
@@ -1867,7 +1994,7 @@ def serialize_array
         arr: numpy.ndarray,
         path: Union[str, Sequence[str | int]],
         array_mode: Optional[Literal['list', 'array_list_meta', 'array_hex_meta', 'array_b64_meta', 'external', 'zero_dim']] = None
-    ) -> Union[bool, int, float, str, list, Dict[str, Any], NoneType]
+    ) -> Union[bool, int, float, str, NoneType, List[Union[bool, int, float, str, NoneType, List[Any], Dict[str, Any]]], Dict[str, Union[bool, int, float, str, NoneType, List[Any], Dict[str, Any]]]]
 
 View Source on GitHub
 
@@ -1886,7 +2013,7 @@ for array_list_meta, array_hex_meta, and array_b64_meta, the serialized
 object is:
 
     {
-        "__format__": <array_list_meta|array_hex_meta>,
+        _FORMAT_KEY: <array_list_meta|array_hex_meta>,
         "shape": arr.shape,
         "dtype": str(arr.dtype),
         "data": <arr.tolist()|arr.tobytes().hex()|base64.b64encode(arr.tobytes()).decode()>,
@@ -1909,7 +2036,7 @@ Raises:
 def infer_array_mode
 
     (
-        arr: Union[bool, int, float, str, list, Dict[str, Any], NoneType]
+        arr: Union[bool, int, float, str, NoneType, List[Union[bool, int, float, str, NoneType, List[Any], Dict[str, Any]]], Dict[str, Union[bool, int, float, str, NoneType, List[Any], Dict[str, Any]]]]
     ) -> Literal['list', 'array_list_meta', 'array_hex_meta', 'array_b64_meta', 'external', 'zero_dim']
 
 View Source on GitHub
@@ -1921,7 +2048,7 @@ assumes the array was serialized via serialize_array()
 def load_array
 
     (
-        arr: Union[bool, int, float, str, list, Dict[str, Any], NoneType],
+        arr: Union[bool, int, float, str, NoneType, List[Union[bool, int, float, str, NoneType, List[Any], Dict[str, Any]]], Dict[str, Union[bool, int, float, str, NoneType, List[Any], Dict[str, Any]]]],
         array_mode: Optional[Literal['list', 'array_list_meta', 'array_hex_meta', 'array_b64_meta', 'external', 'zero_dim']] = None
     ) -> Any
 
@@ -1929,7 +2056,7 @@ View Source on GitHub
 
 load a json-serialized array, infer the mode if not specified
 
-  docs for muutils v0.7.0
+  docs for muutils v0.8.0
 
 Contents
 
@@ -1994,14 +2121,14 @@ SerializerHandler
 
     (
         check: Callable[[muutils.json_serialize.json_serialize.JsonSerializer, Any, tuple[Union[str, int], ...]], bool],
-        serialize_func: Callable[[muutils.json_serialize.json_serialize.JsonSerializer, Any, tuple[Union[str, int], ...]], Union[bool, int, float, str, list, Dict[str, Any], NoneType]],
+        serialize_func: Callable[[muutils.json_serialize.json_serialize.JsonSerializer, Any, tuple[Union[str, int], ...]], Union[bool, int, float, str, NoneType, List[Union[bool, int, float, str, NoneType, List[Any], Dict[str, Any]]], Dict[str, Union[bool, int, float, str, NoneType, List[Any], Dict[str, Any]]]]],
         uid: str,
         desc: str
     )
 
 -   check: Callable[[muutils.json_serialize.json_serialize.JsonSerializer, Any, tuple[Union[str, int], ...]], bool]
 
--   serialize_func: Callable[[muutils.json_serialize.json_serialize.JsonSerializer, Any, tuple[Union[str, int], ...]], Union[bool, int, float, str, list, Dict[str, Any], NoneType]]
+-   serialize_func: Callable[[muutils.json_serialize.json_serialize.JsonSerializer, Any, tuple[Union[str, int], ...]], Union[bool, int, float, str, NoneType, List[Union[bool, int, float, str, NoneType, List[Any], Dict[str, Any]]], Dict[str, Union[bool, int, float, str, NoneType, List[Any], Dict[str, Any]]]]]
 
 -   uid: str
 
@@ -2036,7 +2163,7 @@ Parameters:
     the default handlers (defaults to tuple())
 -   handlers_default : MonoTuple[SerializerHandler] default handlers to
     use (defaults to DEFAULT_HANDLERS)
--   write_only_format : bool changes “format” keys in output to
+-   write_only_format : bool changes _FORMAT_KEY keys in output to
     “write_format” (when you want to serialize something in a way that
     zanj won’t try to recover the object when loading) (defaults to
     False)
@@ -2075,7 +2202,7 @@ def json_serialize
         self,
         obj: Any,
         path: tuple[typing.Union[str, int], ...] = ()
-    ) -> Union[bool, int, float, str, list, Dict[str, Any], NoneType]
+    ) -> Union[bool, int, float, str, NoneType, List[Union[bool, int, float, str, NoneType, List[Any], Dict[str, Any]]], Dict[str, Union[bool, int, float, str, NoneType, List[Any], Dict[str, Any]]]]
 
 View Source on GitHub
 
@@ -2099,13 +2226,13 @@ def json_serialize
     (
         obj: Any,
         path: tuple[typing.Union[str, int], ...] = ()
-    ) -> Union[bool, int, float, str, list, Dict[str, Any], NoneType]
+    ) -> Union[bool, int, float, str, NoneType, List[Union[bool, int, float, str, NoneType, List[Any], Dict[str, Any]]], Dict[str, Union[bool, int, float, str, NoneType, List[Any], Dict[str, Any]]]]
 
 View Source on GitHub
 
 serialize object to json-serializable object with default config
 
-  docs for muutils v0.7.0
+  docs for muutils v0.8.0
 
 Contents
 
@@ -2129,7 +2256,7 @@ serialized to json. So, you can do:
     >>> my_obj = MyClass(a=1, b="q")
     >>> s = json.dumps(my_obj.serialize())
     >>> s
-    '{"__format__": "MyClass(SerializableDataclass)", "a": 1, "b": "q"}'
+    '{_FORMAT_KEY: "MyClass(SerializableDataclass)", "a": 1, "b": "q"}'
     >>> read_obj = MyClass.load(json.loads(s))
     >>> read_obj == my_obj
     True
@@ -2153,14 +2280,13 @@ which gives us:
     >>> nc = NestedClass(x="q", y=MyClass(a=1, b="q"), act_fun=torch.nn.Sigmoid())
     >>> s = json.dumps(nc.serialize())
     >>> s
-    '{"__format__": "NestedClass(SerializableDataclass)", "x": "q", "y": {"__format__": "MyClass(SerializableDataclass)", "a": 1, "b": "q"}, "act_fun": "Sigmoid"}'
+    '{_FORMAT_KEY: "NestedClass(SerializableDataclass)", "x": "q", "y": {_FORMAT_KEY: "MyClass(SerializableDataclass)", "a": 1, "b": "q"}, "act_fun": "Sigmoid"}'
     >>> read_nc = NestedClass.load(json.loads(s))
     >>> read_nc == nc
     True
 
 API Documentation
 
--   dataclass_transform
 -   CantGetTypeHintsWarning
 -   ZanjMissingWarning
 -   zanj_register_loader_serializable_dataclass
@@ -2203,7 +2329,7 @@ serialized to json. So, you can do:
     >>> my_obj = MyClass(a=1, b="q")
     >>> s = json.dumps(my_obj.serialize())
     >>> s
-    '{"__format__": "MyClass(SerializableDataclass)", "a": 1, "b": "q"}'
+    '{_FORMAT_KEY: "MyClass(SerializableDataclass)", "a": 1, "b": "q"}'
     >>> read_obj = MyClass.load(json.loads(s))
     >>> read_obj == my_obj
     True
@@ -2227,86 +2353,12 @@ which gives us:
     >>> nc = NestedClass(x="q", y=MyClass(a=1, b="q"), act_fun=torch.nn.Sigmoid())
     >>> s = json.dumps(nc.serialize())
     >>> s
-    '{"__format__": "NestedClass(SerializableDataclass)", "x": "q", "y": {"__format__": "MyClass(SerializableDataclass)", "a": 1, "b": "q"}, "act_fun": "Sigmoid"}'
+    '{_FORMAT_KEY: "NestedClass(SerializableDataclass)", "x": "q", "y": {_FORMAT_KEY: "MyClass(SerializableDataclass)", "a": 1, "b": "q"}, "act_fun": "Sigmoid"}'
     >>> read_nc = NestedClass.load(json.loads(s))
     >>> read_nc == nc
     True
 
 View Source on GitHub
-
-def dataclass_transform
-
-    (
-        *,
-        eq_default: bool = True,
-        order_default: bool = False,
-        kw_only_default: bool = False,
-        frozen_default: bool = False,
-        field_specifiers: tuple[typing.Union[type[typing.Any], typing.Callable[..., typing.Any]], ...] = (),
-        **kwargs: Any
-    ) -> <class '_IdentityCallable'>
-
-View Source on GitHub
-
-Decorator to mark an object as providing dataclass-like behaviour.
-
-The decorator can be applied to a function, class, or metaclass.
-
-Example usage with a decorator function::
-
-    @dataclass_transform()
-    def create_model[T](cls: type[T]) -> type[T]:
-        ...
-        return cls
-
-    @create_model
-    class CustomerModel:
-        id: int
-        name: str
-
-On a base class::
-
-    @dataclass_transform()
-    class ModelBase: ...
-
-    class CustomerModel(ModelBase):
-        id: int
-        name: str
-
-On a metaclass::
-
-    @dataclass_transform()
-    class ModelMeta(type): ...
-
-    class ModelBase(metaclass=ModelMeta): ...
-
-    class CustomerModel(ModelBase):
-        id: int
-        name: str
-
-The CustomerModel classes defined above will be treated by type checkers
-similarly to classes created with @dataclasses.dataclass. For example,
-type checkers will assume these classes have __init__ methods that
-accept id and name.
-
-The arguments to this decorator can be used to customize this
-behavior: - eq_default indicates whether the eq parameter is assumed to
-be True or False if it is omitted by the caller. - order_default
-indicates whether the order parameter is assumed to be True or False if
-it is omitted by the caller. - kw_only_default indicates whether the
-kw_only parameter is assumed to be True or False if it is omitted by the
-caller. - frozen_default indicates whether the frozen parameter is
-assumed to be True or False if it is omitted by the caller. -
-field_specifiers specifies a static list of supported classes or
-functions that describe fields, similar to dataclasses.field(). -
-Arbitrary other keyword arguments are accepted in order to allow for
-possible future extensions.
-
-At runtime, this decorator records its arguments in the
-__dataclass_transform__ attribute on the decorated object. It has no
-other runtime effect.
-
-See PEP 681 for more details.
 
 class CantGetTypeHintsWarning(builtins.UserWarning):
 
@@ -2449,7 +2501,7 @@ serialized to json. So, you can do:
     >>> my_obj = MyClass(a=1, b="q")
     >>> s = json.dumps(my_obj.serialize())
     >>> s
-    '{"__format__": "MyClass(SerializableDataclass)", "a": 1, "b": "q"}'
+    '{_FORMAT_KEY: "MyClass(SerializableDataclass)", "a": 1, "b": "q"}'
     >>> read_obj = MyClass.load(json.loads(s))
     >>> read_obj == my_obj
     True
@@ -2473,7 +2525,7 @@ which gives us:
     >>> nc = NestedClass(x="q", y=MyClass(a=1, b="q"), act_fun=torch.nn.Sigmoid())
     >>> s = json.dumps(nc.serialize())
     >>> s
-    '{"__format__": "NestedClass(SerializableDataclass)", "x": "q", "y": {"__format__": "MyClass(SerializableDataclass)", "a": 1, "b": "q"}, "act_fun": "Sigmoid"}'
+    '{_FORMAT_KEY: "NestedClass(SerializableDataclass)", "x": "q", "y": {_FORMAT_KEY: "MyClass(SerializableDataclass)", "a": 1, "b": "q"}, "act_fun": "Sigmoid"}'
     >>> read_nc = NestedClass.load(json.loads(s))
     >>> read_nc == nc
     True
@@ -2695,19 +2747,21 @@ def serializable_dataclass
         register_handler: bool = True,
         on_typecheck_error: muutils.errormode.ErrorMode = ErrorMode.Except,
         on_typecheck_mismatch: muutils.errormode.ErrorMode = ErrorMode.Warn,
+        methods_no_override: list[str] | None = None,
         **kwargs
     )
 
 View Source on GitHub
 
 decorator to make a dataclass serializable. must also make it inherit
-from SerializableDataclass
+from SerializableDataclass!!
 
 types will be validated (like pydantic) unless on_typecheck_mismatch is
 set to ErrorMode.IGNORE
 
 behavior of most kwargs matches that of dataclasses.dataclass, but with
-some additional kwargs
+some additional kwargs. any kwargs not listed here are passed to
+dataclasses.dataclass
 
 Returns the same class as was passed in, with dunder methods added based
 on the fields defined in the class.
@@ -2726,29 +2780,41 @@ after instance creation.
         b: str
 
     >>> Myclass(a=1, b="q").serialize()
-    {'__format__': 'Myclass(SerializableDataclass)', 'a': 1, 'b': 'q'}
+    {_FORMAT_KEY: 'Myclass(SerializableDataclass)', 'a': 1, 'b': 'q'}
 
 Parameters:
 
 -   _cls : _type_ class to decorate. don’t pass this arg, just use this
     as a decorator (defaults to None)
--   init : bool (defaults to True)
--   repr : bool (defaults to True)
--   order : bool (defaults to False)
--   unsafe_hash : bool (defaults to False)
--   frozen : bool (defaults to False)
--   properties_to_serialize : Optional[list[str]] SerializableDataclass
-    only: which properties to add to the serialized data dict (defaults
+-   init : bool whether to add an __init__ method (passed to
+    dataclasses.dataclass) (defaults to True)
+-   repr : bool whether to add a __repr__ method (passed to
+    dataclasses.dataclass) (defaults to True)
+-   order : bool whether to add rich comparison methods (passed to
+    dataclasses.dataclass) (defaults to False)
+-   unsafe_hash : bool whether to add a __hash__ method (passed to
+    dataclasses.dataclass) (defaults to False)
+-   frozen : bool whether to make the class frozen (passed to
+    dataclasses.dataclass) (defaults to False)
+-   properties_to_serialize : Optional[list[str]] which properties to
+    add to the serialized data dict SerializableDataclass only (defaults
     to None)
--   register_handler : bool SerializableDataclass only: if true,
-    register the class with ZANJ for loading (defaults to True)
--   on_typecheck_error : ErrorMode SerializableDataclass only: what to
-    do if type checking throws an exception (except, warn, ignore). If
-    ignore and an exception is thrown, type validation will still return
-    false
--   on_typecheck_mismatch : ErrorMode SerializableDataclass only: what
-    to do if a type mismatch is found (except, warn, ignore). If ignore,
-    type validation will return True
+-   register_handler : bool if true, register the class with ZANJ for
+    loading SerializableDataclass only (defaults to True)
+-   on_typecheck_error : ErrorMode what to do if type checking throws an
+    exception (except, warn, ignore). If ignore and an exception is
+    thrown, type validation will still return false
+    SerializableDataclass only
+-   on_typecheck_mismatch : ErrorMode what to do if a type mismatch is
+    found (except, warn, ignore). If ignore, type validation will return
+    True SerializableDataclass only
+-   methods_no_override : list[str]|None list of methods that should not
+    be overridden by the decorator by default, __eq__, serialize, load,
+    and validate_fields_types are overridden by this function, but you
+    can disable this if you’d rather write your own.
+    dataclasses.dataclass might still overwrite these, and those options
+    take precedence SerializableDataclass only (defaults to None)
+-   **kwargs (passed to dataclasses.dataclass)
 
 Returns:
 
@@ -2764,7 +2830,7 @@ Raises:
 -   AttributeError : if a property is not found on the class
 -   FieldLoadingError : if there is an error loading a field
 
-  docs for muutils v0.7.0
+  docs for muutils v0.8.0
 
 Contents
 
@@ -2956,7 +3022,7 @@ the container. ZANJ will automatically do this for you.
 
 TODO: custom_value_check_fn: function taking the value of the field and returning whether the value itself is valid. if not provided, any value is valid as long as it passes the type test
 
-  docs for muutils v0.7.0
+  docs for muutils v0.8.0
 
 Contents
 
@@ -2964,6 +3030,7 @@ utilities for json_serialize
 
 API Documentation
 
+-   BaseType
 -   JSONitem
 -   JSONdict
 -   Hashableitem
@@ -2985,9 +3052,11 @@ utilities for json_serialize
 
 View Source on GitHub
 
--   JSONitem = typing.Union[bool, int, float, str, list, typing.Dict[str, typing.Any], NoneType]
+-   BaseType = typing.Union[bool, int, float, str, NoneType]
 
--   JSONdict = typing.Dict[str, typing.Union[bool, int, float, str, list, typing.Dict[str, typing.Any], NoneType]]
+-   JSONitem = typing.Union[bool, int, float, str, NoneType, typing.List[typing.Union[bool, int, float, str, NoneType, typing.List[typing.Any], typing.Dict[str, typing.Any]]], typing.Dict[str, typing.Union[bool, int, float, str, NoneType, typing.List[typing.Any], typing.Dict[str, typing.Any]]]]
+
+-   JSONdict = typing.Dict[str, typing.Union[bool, int, float, str, NoneType, typing.List[typing.Union[bool, int, float, str, NoneType, typing.List[typing.Any], typing.Dict[str, typing.Any]]], typing.Dict[str, typing.Union[bool, int, float, str, NoneType, typing.List[typing.Any], typing.Dict[str, typing.Any]]]]]
 
 -   Hashableitem = typing.Union[bool, int, float, str, tuple]
 
@@ -3136,7 +3205,7 @@ View Source on GitHub
 
 tuple type hint, but for a tuple of any length with all the same type
 
-  docs for muutils v0.7.0
+  docs for muutils v0.8.0
 
 Contents
 
@@ -3165,7 +3234,7 @@ def jsonl_load
         /,
         *,
         use_gzip: bool | None = None
-    ) -> list[typing.Union[bool, int, float, str, list, typing.Dict[str, typing.Any], NoneType]]
+    ) -> list[typing.Union[bool, int, float, str, NoneType, typing.List[typing.Union[bool, int, float, str, NoneType, typing.List[typing.Any], typing.Dict[str, typing.Any]]], typing.Dict[str, typing.Union[bool, int, float, str, NoneType, typing.List[typing.Any], typing.Dict[str, typing.Any]]]]]
 
 View Source on GitHub
 
@@ -3179,14 +3248,14 @@ def jsonl_write
 
     (
         path: str,
-        items: Sequence[Union[bool, int, float, str, list, Dict[str, Any], NoneType]],
+        items: Sequence[Union[bool, int, float, str, NoneType, List[Union[bool, int, float, str, NoneType, List[Any], Dict[str, Any]]], Dict[str, Union[bool, int, float, str, NoneType, List[Any], Dict[str, Any]]]]],
         use_gzip: bool | None = None,
         gzip_compresslevel: int = 2
     ) -> None
 
 View Source on GitHub
 
-  docs for muutils v0.7.0
+  docs for muutils v0.8.0
 
 Contents
 
@@ -3242,7 +3311,7 @@ Inherited Members
 -   items
 -   values
 
-  docs for muutils v0.7.0
+  docs for muutils v0.8.0
 
 Contents
 
@@ -3327,7 +3396,7 @@ def log
 
     (
         self,
-        msg: Union[bool, int, float, str, list, Dict[str, Any], NoneType] = None,
+        msg: Union[bool, int, float, str, NoneType, List[Union[bool, int, float, str, NoneType, List[Any], Dict[str, Any]]], Dict[str, Union[bool, int, float, str, NoneType, List[Any], Dict[str, Any]]]] = None,
         lvl: int | None = None,
         stream: str | None = None,
         console_print: bool = False,
@@ -3442,7 +3511,7 @@ def log
 
     (
         self,
-        msg: Union[bool, int, float, str, list, Dict[str, Any], NoneType],
+        msg: Union[bool, int, float, str, NoneType, List[Union[bool, int, float, str, NoneType, List[Any], Dict[str, Any]]], Dict[str, Union[bool, int, float, str, NoneType, List[Any], Dict[str, Any]]]],
         console_print: bool = False,
         **kwargs
     )
@@ -3463,7 +3532,7 @@ context manager for timing code
 
 -   elapsed_time: float
 
-  docs for muutils v0.7.0
+  docs for muutils v0.8.0
 
 API Documentation
 
@@ -3500,7 +3569,7 @@ View Source on GitHub
 
 -   stream
 
-  docs for muutils v0.7.0
+  docs for muutils v0.8.0
 
 API Documentation
 
@@ -3592,7 +3661,7 @@ standard header function. will output
 
 -   HEADER_FUNCTIONS: dict[str, muutils.logger.headerfuncs.HeaderFunction] = {'md': <function md_header_function>}
 
-  docs for muutils v0.7.0
+  docs for muutils v0.8.0
 
 API Documentation
 
@@ -3657,7 +3726,7 @@ then gather_val("log.jsonl", "s1", ("a", "b")) will return
         [4, 5]
     ]
 
-  docs for muutils v0.7.0
+  docs for muutils v0.8.0
 
 Contents
 
@@ -3754,7 +3823,7 @@ def log
 
     (
         self,
-        msg: Union[bool, int, float, str, list, Dict[str, Any], NoneType] = None,
+        msg: Union[bool, int, float, str, NoneType, List[Union[bool, int, float, str, NoneType, List[Any], Dict[str, Any]]], Dict[str, Union[bool, int, float, str, NoneType, List[Any], Dict[str, Any]]]] = None,
         lvl: int | None = None,
         stream: str | None = None,
         console_print: bool = False,
@@ -3799,7 +3868,7 @@ View Source on GitHub
 
 flush all streams
 
-  docs for muutils v0.7.0
+  docs for muutils v0.8.0
 
 API Documentation
 
@@ -3861,7 +3930,7 @@ def make_handler
 
 View Source on GitHub
 
-  docs for muutils v0.7.0
+  docs for muutils v0.8.0
 
 API Documentation
 
@@ -3927,7 +3996,7 @@ def log
 
     (
         self,
-        msg: Union[bool, int, float, str, list, Dict[str, Any], NoneType],
+        msg: Union[bool, int, float, str, NoneType, List[Union[bool, int, float, str, NoneType, List[Any], Dict[str, Any]]], Dict[str, Union[bool, int, float, str, NoneType, List[Any], Dict[str, Any]]]],
         console_print: bool = False,
         **kwargs
     )
@@ -3936,7 +4005,7 @@ View Source on GitHub
 
 log a message to the log file, and optionally to the console
 
-  docs for muutils v0.7.0
+  docs for muutils v0.8.0
 
 API Documentation
 
@@ -4023,7 +4092,7 @@ View Source on GitHub
 
 returns a progress string
 
-  docs for muutils v0.7.0
+  docs for muutils v0.8.0
 
 Contents
 
@@ -4593,7 +4662,7 @@ Duplicates are ignored in the same manner as a set. Unfrozen dataclasses
 can’t be placed in sets since they’re not hashable. Collections of them
 may be compared using this function.
 
-  docs for muutils v0.7.0
+  docs for muutils v0.8.0
 
 API Documentation
 
@@ -4723,7 +4792,7 @@ Duplicates are ignored in the same manner as a set. Unfrozen dataclasses
 can’t be placed in sets since they’re not hashable. Collections of them
 may be compared using this function.
 
-  docs for muutils v0.7.0
+  docs for muutils v0.8.0
 
 API Documentation
 
@@ -4839,7 +4908,7 @@ you can’t rely on that. always use the return value.
 
 the gelidum package is a more complete implementation of this idea
 
-  docs for muutils v0.7.0
+  docs for muutils v0.8.0
 
 API Documentation
 
@@ -4870,7 +4939,7 @@ View Source on GitHub
 Returns a base64 representation of the hash of the given string. not
 cryptographically secure
 
-  docs for muutils v0.7.0
+  docs for muutils v0.8.0
 
 API Documentation
 
@@ -4927,7 +4996,7 @@ Examples:
     >>> str_to_numeric("1.2e2")
     120.0
 
-  docs for muutils v0.7.0
+  docs for muutils v0.8.0
 
 API Documentation
 
@@ -5102,7 +5171,7 @@ Raises:
     is "except"
 -   ValueError : if when_missing is invalid
 
-  docs for muutils v0.7.0
+  docs for muutils v0.8.0
 
 API Documentation
 
@@ -5187,7 +5256,7 @@ def dynamic_docstring
 
 View Source on GitHub
 
-  docs for muutils v0.7.0
+  docs for muutils v0.8.0
 
 Contents
 
@@ -5283,7 +5352,7 @@ def pprint_summary
 
 View Source on GitHub
 
-  docs for muutils v0.7.0
+  docs for muutils v0.8.0
 
 Contents
 
@@ -5327,7 +5396,7 @@ View Source on GitHub
 
 for plotting mermaid.js diagrams
 
-  docs for muutils v0.7.0
+  docs for muutils v0.8.0
 
 Contents
 
@@ -5499,7 +5568,7 @@ View Source on GitHub
 
 Show the active plot, depending on global configs
 
-  docs for muutils v0.7.0
+  docs for muutils v0.8.0
 
 Contents
 
@@ -5603,7 +5672,7 @@ Arguments
     - `filter_out_lines: str|typing.Sequence[str] = ('%', '!')`: comment out lines starting with these strings (in code blocks).
         if a string is passed, it will be split by char and each char will be treated as a separate filter.
 
-  docs for muutils v0.7.0
+  docs for muutils v0.8.0
 
 Contents
 
@@ -5631,7 +5700,7 @@ View Source on GitHub
 
 for plotting mermaid.js diagrams
 
-  docs for muutils v0.7.0
+  docs for muutils v0.8.0
 
 Contents
 
@@ -5662,7 +5731,7 @@ View Source on GitHub
 
 function for easily rendering a sympy expression in latex
 
-  docs for muutils v0.7.0
+  docs for muutils v0.8.0
 
 Contents
 
@@ -5782,7 +5851,7 @@ Usage:
         Output in temp/converted/notebook1.CI-output.txt
         {SUCCESS_STR} Run completed with return code 0
 
-  docs for muutils v0.7.0
+  docs for muutils v0.8.0
 
 API Documentation
 
@@ -5970,7 +6039,7 @@ Raises:
 
 -   ValueError : description
 
-  docs for muutils v0.7.0
+  docs for muutils v0.8.0
 
 Contents
 
@@ -6366,7 +6435,7 @@ As a decorator:
             spinner.update_value(f"Step {i+1}")
         return "Function completed"
 
-  docs for muutils v0.7.0
+  docs for muutils v0.8.0
 
 Contents
 
@@ -6577,7 +6646,7 @@ Inherited Members
 
 -   clear
 
-  docs for muutils v0.7.0
+  docs for muutils v0.8.0
 
 Contents
 
@@ -6647,7 +6716,7 @@ def get_all
 
 View Source on GitHub
 
-  docs for muutils v0.7.0
+  docs for muutils v0.8.0
 
 Contents
 
@@ -6708,7 +6777,7 @@ notably:
 
 View Source on GitHub
 
--   TYPE_TO_JAX_DTYPE: dict = {<class 'float'>: <class 'jaxtyping.Float'>, <class 'int'>: <class 'jaxtyping.Int'>, <class 'jaxtyping.Float'>: <class 'jaxtyping.Float'>, <class 'jaxtyping.Int'>: <class 'jaxtyping.Int'>, <class 'bool'>: <class 'jaxtyping.Bool'>, <class 'jaxtyping.Bool'>: <class 'jaxtyping.Bool'>, <class 'numpy.bool_'>: <class 'jaxtyping.Bool'>, torch.bool: <class 'jaxtyping.Bool'>, <class 'numpy.float64'>: <class 'jaxtyping.Float'>, <class 'numpy.float16'>: <class 'jaxtyping.Float'>, <class 'numpy.float32'>: <class 'jaxtyping.Float'>, <class 'numpy.int32'>: <class 'jaxtyping.Int'>, <class 'numpy.int8'>: <class 'jaxtyping.Int'>, <class 'numpy.int16'>: <class 'jaxtyping.Int'>, <class 'numpy.int64'>: <class 'jaxtyping.Int'>, <class 'numpy.uint8'>: <class 'jaxtyping.Int'>, torch.float32: <class 'jaxtyping.Float'>, torch.float16: <class 'jaxtyping.Float'>, torch.float64: <class 'jaxtyping.Float'>, torch.bfloat16: <class 'jaxtyping.Float'>, torch.int32: <class 'jaxtyping.Int'>, torch.int8: <class 'jaxtyping.Int'>, torch.int16: <class 'jaxtyping.Int'>, torch.int64: <class 'jaxtyping.Int'>}
+-   TYPE_TO_JAX_DTYPE: dict = {<class 'float'>: <class 'jaxtyping.Float'>, <class 'int'>: <class 'jaxtyping.Int'>, <class 'jaxtyping.Float'>: <class 'jaxtyping.Float'>, <class 'jaxtyping.Int'>: <class 'jaxtyping.Int'>, <class 'bool'>: <class 'jaxtyping.Bool'>, <class 'jaxtyping.Bool'>: <class 'jaxtyping.Bool'>, <class 'numpy.bool_'>: <class 'jaxtyping.Bool'>, torch.bool: <class 'jaxtyping.Bool'>, <class 'numpy.float16'>: <class 'jaxtyping.Float'>, <class 'numpy.float32'>: <class 'jaxtyping.Float'>, <class 'numpy.float64'>: <class 'jaxtyping.Float'>, <class 'numpy.int8'>: <class 'jaxtyping.Int'>, <class 'numpy.int16'>: <class 'jaxtyping.Int'>, <class 'numpy.int32'>: <class 'jaxtyping.Int'>, <class 'numpy.int64'>: <class 'jaxtyping.Int'>, <class 'numpy.uint8'>: <class 'jaxtyping.Int'>, torch.float32: <class 'jaxtyping.Float'>, torch.float16: <class 'jaxtyping.Float'>, torch.float64: <class 'jaxtyping.Float'>, torch.bfloat16: <class 'jaxtyping.Float'>, torch.int32: <class 'jaxtyping.Int'>, torch.int8: <class 'jaxtyping.Int'>, torch.int16: <class 'jaxtyping.Int'>, torch.int64: <class 'jaxtyping.Int'>}
 
 dict mapping python, numpy, and torch types to jaxtyping types
 
@@ -6740,16 +6809,16 @@ View Source on GitHub
 
 convert numpy dtype to torch dtype
 
--   DTYPE_LIST: list = [<class 'bool'>, <class 'int'>, <class 'float'>, torch.float32, torch.float32, torch.float64, torch.float16, torch.float64, torch.bfloat16, torch.complex64, torch.complex128, torch.int32, torch.int8, torch.int16, torch.int32, torch.int64, torch.int64, torch.int16, torch.uint8, torch.bool, <class 'numpy.float64'>, <class 'numpy.float16'>, <class 'numpy.float32'>, <class 'numpy.float64'>, <class 'numpy.float16'>, <class 'numpy.float32'>, <class 'numpy.float64'>, <class 'numpy.complex64'>, <class 'numpy.complex128'>, <class 'numpy.int8'>, <class 'numpy.int16'>, <class 'numpy.int32'>, <class 'numpy.int64'>, <class 'numpy.int32'>, <class 'numpy.int64'>, <class 'numpy.int16'>, <class 'numpy.uint8'>, <class 'numpy.bool_'>]
+-   DTYPE_LIST: list = [<class 'bool'>, <class 'int'>, <class 'float'>, torch.float32, torch.float32, torch.float64, torch.float16, torch.float64, torch.bfloat16, torch.complex64, torch.complex128, torch.int32, torch.int8, torch.int16, torch.int32, torch.int64, torch.int64, torch.int16, torch.uint8, torch.bool, <class 'numpy.float16'>, <class 'numpy.float32'>, <class 'numpy.float64'>, <class 'numpy.float16'>, <class 'numpy.float32'>, <class 'numpy.float64'>, <class 'numpy.complex64'>, <class 'numpy.complex128'>, <class 'numpy.int8'>, <class 'numpy.int16'>, <class 'numpy.int32'>, <class 'numpy.int64'>, <class 'numpy.int64'>, <class 'numpy.int16'>, <class 'numpy.uint8'>, <class 'numpy.bool_'>, <class 'numpy.float64'>, <class 'numpy.int32'>]
 
 list of all the python, numpy, and torch numerical types I could think
 of
 
--   DTYPE_MAP: dict = {"<class 'bool'>": <class 'bool'>, "<class 'int'>": <class 'int'>, "<class 'float'>": <class 'float'>, 'torch.float32': torch.float32, 'torch.float64': torch.float64, 'torch.float16': torch.float16, 'torch.bfloat16': torch.bfloat16, 'torch.complex64': torch.complex64, 'torch.complex128': torch.complex128, 'torch.int32': torch.int32, 'torch.int8': torch.int8, 'torch.int16': torch.int16, 'torch.int64': torch.int64, 'torch.uint8': torch.uint8, 'torch.bool': torch.bool, "<class 'numpy.float64'>": <class 'numpy.float64'>, "<class 'numpy.float16'>": <class 'numpy.float16'>, "<class 'numpy.float32'>": <class 'numpy.float32'>, "<class 'numpy.complex64'>": <class 'numpy.complex64'>, "<class 'numpy.complex128'>": <class 'numpy.complex128'>, "<class 'numpy.int8'>": <class 'numpy.int8'>, "<class 'numpy.int16'>": <class 'numpy.int16'>, "<class 'numpy.int32'>": <class 'numpy.int32'>, "<class 'numpy.int64'>": <class 'numpy.int64'>, "<class 'numpy.uint8'>": <class 'numpy.uint8'>, "<class 'numpy.bool_'>": <class 'numpy.bool_'>, 'float64': <class 'numpy.float64'>, 'float16': <class 'numpy.float16'>, 'float32': <class 'numpy.float32'>, 'complex64': <class 'numpy.complex64'>, 'complex128': <class 'numpy.complex128'>, 'int8': <class 'numpy.int8'>, 'int16': <class 'numpy.int16'>, 'int32': <class 'numpy.int32'>, 'int64': <class 'numpy.int64'>, 'uint8': <class 'numpy.uint8'>, 'bool_': <class 'numpy.bool_'>, 'bool': <class 'numpy.bool_'>}
+-   DTYPE_MAP: dict = {"<class 'bool'>": <class 'bool'>, "<class 'int'>": <class 'int'>, "<class 'float'>": <class 'float'>, 'torch.float32': torch.float32, 'torch.float64': torch.float64, 'torch.float16': torch.float16, 'torch.bfloat16': torch.bfloat16, 'torch.complex64': torch.complex64, 'torch.complex128': torch.complex128, 'torch.int32': torch.int32, 'torch.int8': torch.int8, 'torch.int16': torch.int16, 'torch.int64': torch.int64, 'torch.uint8': torch.uint8, 'torch.bool': torch.bool, "<class 'numpy.float16'>": <class 'numpy.float16'>, "<class 'numpy.float32'>": <class 'numpy.float32'>, "<class 'numpy.float64'>": <class 'numpy.float64'>, "<class 'numpy.complex64'>": <class 'numpy.complex64'>, "<class 'numpy.complex128'>": <class 'numpy.complex128'>, "<class 'numpy.int8'>": <class 'numpy.int8'>, "<class 'numpy.int16'>": <class 'numpy.int16'>, "<class 'numpy.int32'>": <class 'numpy.int32'>, "<class 'numpy.int64'>": <class 'numpy.int64'>, "<class 'numpy.uint8'>": <class 'numpy.uint8'>, "<class 'numpy.bool_'>": <class 'numpy.bool_'>, 'float16': <class 'numpy.float16'>, 'float32': <class 'numpy.float32'>, 'float64': <class 'numpy.float64'>, 'complex64': <class 'numpy.complex64'>, 'complex128': <class 'numpy.complex128'>, 'int8': <class 'numpy.int8'>, 'int16': <class 'numpy.int16'>, 'int32': <class 'numpy.int32'>, 'int64': <class 'numpy.int64'>, 'uint8': <class 'numpy.uint8'>, 'bool_': <class 'numpy.bool_'>, 'bool': <class 'numpy.bool_'>}
 
 mapping from string representations of types to their type
 
--   TORCH_DTYPE_MAP: dict = {"<class 'bool'>": torch.bool, "<class 'int'>": torch.int32, "<class 'float'>": torch.float64, 'torch.float32': torch.float32, 'torch.float64': torch.float64, 'torch.float16': torch.float16, 'torch.bfloat16': torch.bfloat16, 'torch.complex64': torch.complex64, 'torch.complex128': torch.complex128, 'torch.int32': torch.int32, 'torch.int8': torch.int8, 'torch.int16': torch.int16, 'torch.int64': torch.int64, 'torch.uint8': torch.uint8, 'torch.bool': torch.bool, "<class 'numpy.float64'>": torch.float64, "<class 'numpy.float16'>": torch.float16, "<class 'numpy.float32'>": torch.float32, "<class 'numpy.complex64'>": torch.complex64, "<class 'numpy.complex128'>": torch.complex128, "<class 'numpy.int8'>": torch.int8, "<class 'numpy.int16'>": torch.int16, "<class 'numpy.int32'>": torch.int32, "<class 'numpy.int64'>": torch.int64, "<class 'numpy.uint8'>": torch.uint8, "<class 'numpy.bool_'>": torch.bool, 'float64': torch.float64, 'float16': torch.float16, 'float32': torch.float32, 'complex64': torch.complex64, 'complex128': torch.complex128, 'int8': torch.int8, 'int16': torch.int16, 'int32': torch.int32, 'int64': torch.int64, 'uint8': torch.uint8, 'bool_': torch.bool, 'bool': torch.bool}
+-   TORCH_DTYPE_MAP: dict = {"<class 'bool'>": torch.bool, "<class 'int'>": torch.int32, "<class 'float'>": torch.float64, 'torch.float32': torch.float32, 'torch.float64': torch.float64, 'torch.float16': torch.float16, 'torch.bfloat16': torch.bfloat16, 'torch.complex64': torch.complex64, 'torch.complex128': torch.complex128, 'torch.int32': torch.int32, 'torch.int8': torch.int8, 'torch.int16': torch.int16, 'torch.int64': torch.int64, 'torch.uint8': torch.uint8, 'torch.bool': torch.bool, "<class 'numpy.float16'>": torch.float16, "<class 'numpy.float32'>": torch.float32, "<class 'numpy.float64'>": torch.float64, "<class 'numpy.complex64'>": torch.complex64, "<class 'numpy.complex128'>": torch.complex128, "<class 'numpy.int8'>": torch.int8, "<class 'numpy.int16'>": torch.int16, "<class 'numpy.int32'>": torch.int32, "<class 'numpy.int64'>": torch.int64, "<class 'numpy.uint8'>": torch.uint8, "<class 'numpy.bool_'>": torch.bool, 'float16': torch.float16, 'float32': torch.float32, 'float64': torch.float64, 'complex64': torch.complex64, 'complex128': torch.complex128, 'int8': torch.int8, 'int16': torch.int16, 'int32': torch.int32, 'int64': torch.int64, 'uint8': torch.uint8, 'bool_': torch.bool, 'bool': torch.bool}
 
 mapping from string representations of types to specifically torch types
 
@@ -6942,7 +7011,7 @@ Raises:
 -   StateDictShapeError : shapes don’t match (but keys do)
 -   StateDictValueError : values don’t match (but keys and shapes do)
 
-  docs for muutils v0.7.0
+  docs for muutils v0.8.0
 
 Contents
 
@@ -7043,7 +7112,7 @@ FancyTimeitResult, which is a NamedTuple with the following fields:
 -   profile: pstats.Stats|None A pstats.Stats object if do_profiling is
     True, otherwise None.
 
-  docs for muutils v0.7.0
+  docs for muutils v0.8.0
 
 Contents
 

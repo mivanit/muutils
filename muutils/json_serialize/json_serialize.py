@@ -205,7 +205,7 @@ DEFAULT_HANDLERS: MonoTuple[SerializerHandler] = tuple(BASE_HANDLERS) + (
             __format__="pandas.DataFrame",
             columns=obj.columns.tolist(),
             data=obj.to_dict(orient="records"),
-            path=path, # type: ignore
+            path=path,  # type: ignore
         ),
         uid="pandas.DataFrame",
         desc="pandas DataFrames",

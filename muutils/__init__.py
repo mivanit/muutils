@@ -12,6 +12,7 @@ __all__ = [
     "nbutils",
     # submodules
     "console_unicode",
+	"dbg",
     "dictmagic",
     "errormode",
     "group_equiv",

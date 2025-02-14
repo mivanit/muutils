@@ -18,8 +18,32 @@ except ImportError:
     _NUMPY_WORKING = False
 
 
-JSONitem = Union[bool, int, float, str, list, typing.Dict[str, Any], None]
-JSONdict = typing.Dict[str, JSONitem]
+BaseType = Union[
+    bool,
+    int,
+    float,
+    str,
+    None,
+]
+
+JSONitem = Union[
+    BaseType,
+    # mypy doesn't like recursive types, so we just go down a few levels manually
+    typing.List[Union[
+        BaseType,
+        typing.List[Any],
+        typing.Dict[str, Any]
+    ]],
+    typing.Dict[
+        str,
+        Union[
+            BaseType,
+            typing.List[Any],
+            typing.Dict[str, Any]
+        ]
+    ],
+]
+
 Hashableitem = Union[bool, int, float, str, tuple]
 
 # or if python version <3.9

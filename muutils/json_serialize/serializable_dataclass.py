@@ -905,7 +905,7 @@ def serializable_dataclass(
             cls.serialize = serialize  # type: ignore[attr-defined]
         if "load" not in _methods_no_override:
             # type is `Callable[[dict], T]`
-            cls.load = load
+            cls.load = load  # type: ignore[attr-defined]
 
         if "validate_field_type" not in _methods_no_override:
             # type is `Callable[[T, ErrorMode], bool]`

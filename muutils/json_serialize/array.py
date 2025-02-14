@@ -139,7 +139,7 @@ def infer_array_mode(arr: JSONitem) -> ArrayMode:
     assumes the array was serialized via `serialize_array()`
     """
     if isinstance(arr, typing.Mapping):
-        fmt: str = arr.get("__format__", "")
+        fmt: str = arr.get("__format__", "") # type: ignore
         if fmt.endswith(":array_list_meta"):
             if not isinstance(arr["data"], Iterable):
                 raise ValueError(f"invalid list format: {type(arr['data']) = }\t{arr}")
@@ -184,9 +184,8 @@ def load_array(arr: JSONitem, array_mode: Optional[ArrayMode] = None) -> Any:
         assert isinstance(
             arr, typing.Mapping
         ), f"invalid list format: {type(arr) = }\n{arr = }"
-
-        data = np.array(arr["data"], dtype=arr["dtype"])
-        if tuple(arr["shape"]) != tuple(data.shape):
+        data = np.array(arr["data"], dtype=arr["dtype"]) # type: ignore
+        if tuple(arr["shape"]) != tuple(data.shape): # type: ignore
             raise ValueError(f"invalid shape: {arr}")
         return data
 
@@ -194,24 +193,21 @@ def load_array(arr: JSONitem, array_mode: Optional[ArrayMode] = None) -> Any:
         assert isinstance(
             arr, typing.Mapping
         ), f"invalid list format: {type(arr) = }\n{arr = }"
-
-        data = np.frombuffer(bytes.fromhex(arr["data"]), dtype=arr["dtype"])
-        return data.reshape(arr["shape"])
+        data = np.frombuffer(bytes.fromhex(arr["data"]), dtype=arr["dtype"]) # type: ignore
+        return data.reshape(arr["shape"]) # type: ignore
 
     elif array_mode == "array_b64_meta":
         assert isinstance(
             arr, typing.Mapping
         ), f"invalid list format: {type(arr) = }\n{arr = }"
-
-        data = np.frombuffer(base64.b64decode(arr["data"]), dtype=arr["dtype"])
-        return data.reshape(arr["shape"])
+        data = np.frombuffer(base64.b64decode(arr["data"]), dtype=arr["dtype"]) # type: ignore
+        return data.reshape(arr["shape"]) # type: ignore
 
     elif array_mode == "list":
         assert isinstance(
             arr, typing.Sequence
         ), f"invalid list format: {type(arr) = }\n{arr = }"
-
-        return np.array(arr)
+        return np.array(arr) # type: ignore
     elif array_mode == "external":
         # assume ZANJ has taken care of it
         assert isinstance(arr, typing.Mapping)
@@ -223,7 +219,7 @@ def load_array(arr: JSONitem, array_mode: Optional[ArrayMode] = None) -> Any:
     elif array_mode == "zero_dim":
         assert isinstance(arr, typing.Mapping)
         data = np.array(arr["data"])
-        if tuple(arr["shape"]) != tuple(data.shape):
+        if tuple(arr["shape"]) != tuple(data.shape): # type: ignore
             raise ValueError(f"invalid shape: {arr}")
         return data
     else:

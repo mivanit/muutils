@@ -439,8 +439,11 @@ class SerializableDataclass(abc.ABC):
         diff_result: dict = {}
 
         # if they are the same, return the empty diff
-        if self == other:
-            return diff_result
+        try:
+            if self == other:
+                return diff_result
+        except Exception as e:
+            pass
 
         # if we are working with serialized data, serialize the instances
         if of_serialized:
@@ -678,7 +681,7 @@ def serializable_dataclass(
         if sys.version_info < (3, 10):
             if "kw_only" in kwargs:
                 if kwargs["kw_only"] == True:  # noqa: E712
-                    raise KWOnlyError("kw_only is not supported in python >=3.9")
+                    raise KWOnlyError("kw_only is not supported in python < 3.10, but if you pass a `False` value, it will be ignored")
                 else:
                     del kwargs["kw_only"]
 

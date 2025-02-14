@@ -23,7 +23,7 @@
 
 # it assumes that the source is in a directory named the same as the package name
 # this also gets passed to some other places
-PACKAGE_NAME := myproject
+PACKAGE_NAME := muutils
 
 # for checking you are on the right branch when publishing
 PUBLISH_BRANCH := main

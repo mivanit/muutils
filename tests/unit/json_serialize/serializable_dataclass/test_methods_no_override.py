@@ -4,13 +4,31 @@ import pytest
 
 # Import the decorator and base class.
 # (Adjust the import below to match your project structure.)
-from muutils.json_serialize import serializable_dataclass, SerializableDataclass
+from muutils.json_serialize import serializable_dataclass, SerializableDataclass, serializable_field
 
 
-def test_default_overrides() -> None:
+@serializable_dataclass
+class SimpleClass(SerializableDataclass):
+    a: int
+    b: str
+
+def test_simple_class_serialization():
+
+    simple = SimpleClass(a=42, b="hello")
+    serialized = simple.serialize()
+    assert serialized == {
+        "a": 42,
+        "b": "hello",
+        "__format__": "SimpleClass(SerializableDataclass)",
+    }
+
+    loaded = SimpleClass.load(serialized)
+    assert loaded == simple
+
+def test_default_overrides():
     """Test that by default the decorator overrides __eq__, serialize, load, and validate_fields_types."""
 
-    @serializable_dataclass(register_handler=False)
+    @serializable_dataclass
     class DefaultClass(SerializableDataclass):
         a: int
         b: str
@@ -38,7 +56,7 @@ def test_default_overrides() -> None:
     assert obj != obj3
 
 
-def test_no_override_serialize() -> None:
+def test_no_override_serialize():
     """Test that specifying 'serialize' in methods_no_override preserves the user-defined serialize method."""
 
     @serializable_dataclass(methods_no_override=["serialize"], register_handler=False)
@@ -64,7 +82,7 @@ def test_no_override_serialize() -> None:
     assert obj == obj2
 
 
-def test_no_override_eq_and_serialize() -> None:
+def test_no_override_eq_and_serialize():
     """Test that specifying both '__eq__' and 'serialize' in methods_no_override preserves the user-defined methods,
     while load and validate_fields_types are still overridden."""
 
@@ -102,7 +120,7 @@ def test_no_override_eq_and_serialize() -> None:
     assert obj1.validate_fields_types() is True
 
 
-def test_inheritance_override() -> None:
+def test_inheritance_override():
     """Test behavior when inheritance is involved:
     - A base class with a custom serialize (preserved via methods_no_override)
       and a subclass that does not preserve it gets the decorator's version.
@@ -143,7 +161,7 @@ def test_inheritance_override() -> None:
     assert sub_preserve.serialize() == {"base": 20}
 
 
-def test_polymorphic_behavior() -> None:
+def test_polymorphic_behavior():
     """Test that polymorphic classes can use different serialize implementations based on methods_no_override."""
 
     @serializable_dataclass(methods_no_override=["serialize"], register_handler=False)
@@ -175,7 +193,7 @@ def test_polymorphic_behavior() -> None:
     assert b_loaded.b == 15
 
 
-def test_unknown_methods_warning() -> None:
+def test_unknown_methods_warning():
     """Test that if unknown method names are passed to methods_no_override, a warning is issued."""
     with pytest.warns(UserWarning, match="Unknown methods in `methods_no_override`"):
 

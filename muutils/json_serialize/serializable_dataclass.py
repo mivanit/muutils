@@ -95,8 +95,6 @@ def _dataclass_transform_mock(
 
     return decorator
 
-
-dataclass_transform: typing.Callable
 if sys.version_info < (3, 11):
     dataclass_transform = _dataclass_transform_mock
 else:

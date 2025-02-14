@@ -35,7 +35,6 @@ TYPE_TO_JAX_DTYPE: dict = {
     np.bool_: jaxtyping.Bool,
     torch.bool: jaxtyping.Bool,
     # numpy float
-    np.float_: jaxtyping.Float,
     np.float16: jaxtyping.Float,
     np.float32: jaxtyping.Float,
     np.float64: jaxtyping.Float,
@@ -43,7 +42,6 @@ TYPE_TO_JAX_DTYPE: dict = {
     np.single: jaxtyping.Float,
     np.double: jaxtyping.Float,
     # numpy int
-    np.int_: jaxtyping.Int,
     np.int8: jaxtyping.Int,
     np.int16: jaxtyping.Int,
     np.int32: jaxtyping.Int,
@@ -69,6 +67,10 @@ TYPE_TO_JAX_DTYPE: dict = {
     torch.short: jaxtyping.Int,
 }
 "dict mapping python, numpy, and torch types to `jaxtyping` types"
+
+if np.version.version < "2.0.0":
+    TYPE_TO_JAX_DTYPE[np.float_] = jaxtyping.Float
+    TYPE_TO_JAX_DTYPE[np.int_] = jaxtyping.Int
 
 
 # TODO: add proper type annotations to this signature
@@ -234,7 +236,6 @@ DTYPE_LIST: list = [
         # numpy
         # ----------
         # floats
-        np.float_,
         np.float16,
         np.float32,
         np.float64,
@@ -249,7 +250,6 @@ DTYPE_LIST: list = [
         np.int16,
         np.int32,
         np.int64,
-        np.int_,
         np.longlong,
         np.short,
         # simplest
@@ -258,6 +258,9 @@ DTYPE_LIST: list = [
     ],
 ]
 "list of all the python, numpy, and torch numerical types I could think of"
+
+if np.version.version < "2.0.0":
+    DTYPE_LIST.extend([np.float_, np.int_])
 
 DTYPE_MAP: dict = {
     **{str(x): x for x in DTYPE_LIST},

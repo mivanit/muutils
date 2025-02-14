@@ -2,7 +2,7 @@
 #| python project makefile template                                 |
 #| originally by Michael Ivanitskiy (mivanits@umich.edu)            |
 #| https://github.com/mivanit/python-project-makefile-template      |
-#| version: v0.1.3                                                  |
+#| version: v0.2.1                                                  |
 #| license: https://creativecommons.org/licenses/by-sa/4.0/         |
 #| modifications from the original should be denoted with `~~~~~`   |
 #| as this makes it easier to find edits when updating makefile     |
@@ -21,12 +21,15 @@
 # configuration & variables
 # ==================================================
 
-PACKAGE_NAME := muutils
+# it assumes that the source is in a directory named the same as the package name
+# this also gets passed to some other places
+PACKAGE_NAME := myproject
 
 # for checking you are on the right branch when publishing
 PUBLISH_BRANCH := main
 
 # where to put docs
+# if you change this, you must also change pyproject.toml:tool.makefile.docs.output_dir to match
 DOCS_DIR := docs
 
 # where the tests are, for pytest
@@ -79,6 +82,7 @@ PANDOC ?= pandoc
 COVERAGE_REPORTS_DIR := $(DOCS_DIR)/coverage
 
 # this stuff in the docs will be kept
+# in addition to anything specified in `pyproject.toml:tool.makefile.docs.no_clean`
 DOCS_RESOURCES_DIR := $(DOCS_DIR)/resources
 
 # location of the make docs script
@@ -185,43 +189,41 @@ default: help
 # create commands for exporting requirements as specified in `pyproject.toml:tool.uv-exports.exports`
 define SCRIPT_EXPORT_REQUIREMENTS
 import sys
+import warnings
 
-if sys.version_info >= (3, 11):
-	import tomllib
-else:
-	import tomli as tomllib
+try:
+	import tomllib  # Python 3.11+
+except ImportError:
+	import tomli as tomllib  # type: ignore
 from pathlib import Path
-from typing import Union, List
+from typing import Any, Dict, Union, List
+from functools import reduce
 
-pyproject_path: Path = Path(sys.argv[1])
-output_dir: Path = Path(sys.argv[2])
+TOOL_PATH: str = "tool.makefile.uv-exports"
 
-with open(pyproject_path, "rb") as f:
-	pyproject_data: dict = tomllib.load(f)
 
-# all available groups
-all_groups: List[str] = list(pyproject_data.get("dependency-groups", {}).keys())
-all_extras: List[str] = list(
-	pyproject_data.get("project", {}).get("optional-dependencies", {}).keys()
-)
+def deep_get(d: dict, path: str, default: Any = None, sep: str = ".") -> Any:
+	return reduce(
+		lambda x, y: x.get(y, default) if isinstance(x, dict) else default,  # function
+		path.split(sep) if isinstance(path, str) else path,  # sequence
+		d,  # initial
+	)
 
-# options for exporting
-export_opts: dict = pyproject_data.get("tool", {}).get("uv-exports", {})
 
-# what are we exporting?
-exports: List[str] = export_opts.get("exports", [])
-if not exports:
-	exports = [{"name": "all", "groups": [], "extras": [], "options": []}]
-
-# export each configuration
-for export in exports:
+def export_configuration(
+	export: dict,
+	all_groups: List[str],
+	all_extras: List[str],
+	export_opts: dict,
+	output_dir: Path,
+):
 	# get name and validate
 	name = export.get("name")
 	if not name or not name.isalnum():
-		print(
-			f"Export configuration missing valid 'name' field {export}", file=sys.stderr
+		warnings.warn(
+			f"Export configuration missing valid 'name' field {export}",
 		)
-		continue
+		return
 
 	# get other options with default fallbacks
 	filename: str = export.get("filename") or f"requirements-{name}.txt"
@@ -258,24 +260,67 @@ for export in exports:
 	for extra in extras_list:
 		cmd.extend(["--extra", extra])
 
+	# add extra options
 	cmd.extend(options)
 
+	# assemble the command and print to console -- makefile will run it
 	output_path = output_dir / filename
 	print(f"{' '.join(cmd)} > {output_path.as_posix()}")
+
+
+def main(
+	pyproject_path: Path,
+	output_dir: Path,
+):
+	# read pyproject.toml
+	with open(pyproject_path, "rb") as f:
+		pyproject_data: dict = tomllib.load(f)
+
+	# all available groups
+	all_groups: List[str] = list(pyproject_data.get("dependency-groups", {}).keys())
+	all_extras: List[str] = list(
+		deep_get(pyproject_data, "project.optional-dependencies", {}).keys()
+	)
+
+	# options for exporting
+	export_opts: dict = deep_get(pyproject_data, TOOL_PATH, {})
+
+	# what are we exporting?
+	exports: List[Dict[str, Any]] = export_opts.get("exports", [])
+	if not exports:
+		exports = [{"name": "all", "groups": [], "extras": [], "options": []}]
+
+	# export each configuration
+	for export in exports:
+		export_configuration(
+			export=export,
+			all_groups=all_groups,
+			all_extras=all_extras,
+			export_opts=export_opts,
+			output_dir=output_dir,
+		)
+
+
+if __name__ == "__main__":
+	main(
+		pyproject_path=Path(sys.argv[1]),
+		output_dir=Path(sys.argv[2]),
+	)
 
 endef
 
 export SCRIPT_EXPORT_REQUIREMENTS
+
 
 # get the version from `pyproject.toml:project.version`
 define SCRIPT_GET_VERSION
 import sys
 
 try:
-	if sys.version_info >= (3, 11):
-		import tomllib
-	else:
-		import tomli as tomllib
+	try:
+		import tomllib  # Python 3.11+
+	except ImportError:
+		import tomli as tomllib  # type: ignore
 
 	pyproject_path: str = sys.argv[1].strip()
 
@@ -298,33 +343,43 @@ import subprocess
 import sys
 from typing import List
 
-last_version: str = sys.argv[1].strip()
-commit_log_file: str = sys.argv[2].strip()
 
-if last_version == "NULL":
-	print("!!! ERROR !!!", file=sys.stderr)
-	print("LAST_VERSION is NULL, can't get commit log!", file=sys.stderr)
-	sys.exit(1)
+def main(
+	last_version: str,
+	commit_log_file: str,
+):
+	if last_version == "NULL":
+		print("!!! ERROR !!!", file=sys.stderr)
+		print("LAST_VERSION is NULL, can't get commit log!", file=sys.stderr)
+		sys.exit(1)
 
-try:
-	log_cmd: List[str] = [
-		"git",
-		"log",
-		f"{last_version}..HEAD",
-		"--pretty=format:- %s (%h)",
-	]
-	commits: List[str] = (
-		subprocess.check_output(log_cmd).decode("utf-8").strip().split("\n")
+	try:
+		log_cmd: List[str] = [
+			"git",
+			"log",
+			f"{last_version}..HEAD",
+			"--pretty=format:- %s (%h)",
+		]
+		commits: List[str] = (
+			subprocess.check_output(log_cmd).decode("utf-8").strip().split("\n")
+		)
+		with open(commit_log_file, "w") as f:
+			f.write("\n".join(reversed(commits)))
+	except subprocess.CalledProcessError as e:
+		print(f"Error: {e}", file=sys.stderr)
+		sys.exit(1)
+
+
+if __name__ == "__main__":
+	main(
+		last_version=sys.argv[1].strip(),
+		commit_log_file=sys.argv[2].strip(),
 	)
-	with open(commit_log_file, "w") as f:
-		f.write("\n".join(reversed(commits)))
-except subprocess.CalledProcessError as e:
-	print(f"Error: {e}", file=sys.stderr)
-	sys.exit(1)
 
 endef
 
 export SCRIPT_GET_COMMIT_LOG
+
 
 # get cuda information and whether torch sees it
 define SCRIPT_CHECK_TORCH
@@ -352,13 +407,17 @@ def print_info_dict(
 
 def get_nvcc_info() -> Dict[str, str]:
 	# Run the nvcc command.
-	result: subprocess.CompletedProcess[str] = subprocess.run(
-		["nvcc", "--version"],
-		check=True,
-		stdout=subprocess.PIPE,
-		stderr=subprocess.PIPE,
-		text=True,
-	)
+	try:
+		result: subprocess.CompletedProcess[str] = subprocess.run(
+			["nvcc", "--version"],
+			check=True,
+			stdout=subprocess.PIPE,
+			stderr=subprocess.PIPE,
+			text=True,
+		)
+	except Exception as e:
+		return {"Failed to run 'nvcc --version'": str(e)}
+
 	output: str = result.stdout
 	lines: List[str] = [line.strip() for line in output.splitlines() if line.strip()]
 
@@ -400,9 +459,9 @@ def get_nvcc_info() -> Dict[str, str]:
 	return info
 
 
-def get_torch_info() -> Tuple[List[Exception], Dict[str, str]]:
+def get_torch_info() -> Tuple[List[Exception], Dict[str, Any]]:
 	exceptions: List[Exception] = []
-	info: Dict[str, str] = {}
+	info: Dict[str, Any] = {}
 
 	try:
 		import torch
@@ -420,7 +479,7 @@ def get_torch_info() -> Tuple[List[Exception], Dict[str, str]]:
 				info["n_devices"] = n_devices
 				for current_device in range(n_devices):
 					try:
-						current_device_info: Dict[str, str] = {}
+						current_device_info: Dict[str, Union[str, int]] = {}
 
 						dev_prop = torch.cuda.get_device_properties(
 							torch.device(f"cuda:{current_device}")
@@ -473,7 +532,7 @@ if __name__ == "__main__":
 		}
 	)
 
-	nvcc_info: Dict[str, str] = get_nvcc_info()
+	nvcc_info: Dict[str, Any] = get_nvcc_info()
 	print("nvcc:")
 	print_info_dict(nvcc_info)
 
@@ -490,6 +549,7 @@ endef
 
 export SCRIPT_CHECK_TORCH
 
+
 # get todo's from the code
 define SCRIPT_GET_TODOS
 from __future__ import annotations
@@ -501,13 +561,24 @@ from dataclasses import asdict, dataclass, field
 import json
 from pathlib import Path
 from typing import Any, Dict, List, Union
+from functools import reduce
 import warnings
 from jinja2 import Template
 
 try:
 	import tomllib  # Python 3.11+
 except ImportError:
-	import tomli as tomllib
+	import tomli as tomllib  # type: ignore
+
+TOOL_PATH: str = "tool.makefile.inline-todo"
+
+
+def deep_get(d: dict, path: str, default: Any = None, sep: str = ".") -> Any:
+	return reduce(
+		lambda x, y: x.get(y, default) if isinstance(x, dict) else default,  # function
+		path.split(sep) if isinstance(path, str) else path,  # sequence
+		d,  # initial
+	)
 
 
 TEMPLATE_MD: str = """\
@@ -628,8 +699,8 @@ class Config:
 				)
 
 			# load the inline-todo config if present
-			data_inline_todo: Dict[str, Any] = data.get("tool", {}).get(
-				"inline-todo", {}
+			data_inline_todo: Dict[str, Any] = deep_get(
+				d=data, path=TOOL_PATH, default={}
 			)
 
 			if "repo_url" not in data_inline_todo:
@@ -645,7 +716,7 @@ class Config:
 	@classmethod
 	def load(cls, data: dict) -> Config:
 		data = {
-			k: Path(v) if k in {"search_dir", "out_file"} else v
+			k: Path(v) if k in {"search_dir", "out_file", "template_html_source"} else v
 			for k, v in data.items()
 		}
 
@@ -714,7 +785,7 @@ class TodoItem:
 	def file_lang(self) -> str:
 		"""Returns the language for the file extension"""
 		ext: str = Path(self.file).suffix.lstrip(".")
-		return CFG.extension_lang_map.get(ext, "text")
+		return CFG.extension_lang_map.get(ext, ext)
 
 
 def scrape_file(
@@ -839,13 +910,14 @@ endef
 
 export SCRIPT_GET_TODOS
 
+
 # markdown to html using pdoc
 define SCRIPT_PDOC_MARKDOWN2_CLI
 import argparse
 from pathlib import Path
 from typing import Optional
 
-from pdoc.markdown2 import Markdown, _safe_mode
+from pdoc.markdown2 import Markdown, _safe_mode  # type: ignore
 
 
 def convert_file(
@@ -899,6 +971,87 @@ if __name__ == "__main__":
 endef
 
 export SCRIPT_PDOC_MARKDOWN2_CLI
+
+# clean up the docs (configurable in pyproject.toml)
+define SCRIPT_DOCS_CLEAN
+import sys
+import shutil
+from functools import reduce
+from pathlib import Path
+from typing import Any, List, Set
+
+try:
+	import tomllib  # Python 3.11+
+except ImportError:
+	import tomli as tomllib  # type: ignore
+
+TOOL_PATH: str = "tool.makefile.docs"
+DEFAULT_DOCS_DIR: str = "docs"
+
+
+def deep_get(d: dict, path: str, default: Any = None, sep: str = ".") -> Any:
+	"""Get nested dictionary value via separated path with default."""
+	return reduce(
+		lambda x, y: x.get(y, default) if isinstance(x, dict) else default,  # function
+		path.split(sep) if isinstance(path, str) else path,  # sequence
+		d,  # initial
+	)
+
+
+def read_config(pyproject_path: Path) -> tuple[Path, Set[Path]]:
+	if not pyproject_path.is_file():
+		return Path(DEFAULT_DOCS_DIR), set()
+
+	with pyproject_path.open("rb") as f:
+		config = tomllib.load(f)
+
+	preserved: List[str] = deep_get(config, f"{TOOL_PATH}.no_clean", [])
+	docs_dir: Path = Path(deep_get(config, f"{TOOL_PATH}.output_dir", DEFAULT_DOCS_DIR))
+
+	# Convert to absolute paths and validate
+	preserve_set: Set[Path] = set()
+	for p in preserved:
+		full_path = (docs_dir / p).resolve()
+		if not full_path.as_posix().startswith(docs_dir.resolve().as_posix()):
+			raise ValueError(f"Preserved path '{p}' must be within docs directory")
+		preserve_set.add(docs_dir / p)
+
+	return docs_dir, preserve_set
+
+
+def clean_docs(docs_dir: Path, preserved: Set[Path]) -> None:
+	for path in docs_dir.iterdir():
+		if path.is_file() and path not in preserved:
+			path.unlink()
+		elif path.is_dir() and path not in preserved:
+			shutil.rmtree(path)
+
+
+def main(
+	pyproject_path: str,
+	docs_dir_cli: str,
+	extra_preserve: list[str],
+) -> None:
+	docs_dir: Path
+	preserved: Set[Path]
+	docs_dir, preserved = read_config(Path(pyproject_path))
+
+	assert docs_dir.is_dir(), f"Docs directory '{docs_dir}' not found"
+	assert docs_dir == Path(docs_dir_cli), (
+		f"Docs directory mismatch: {docs_dir = } != {docs_dir_cli = }. this is probably because you changed one of `pyproject.toml:{TOOL_PATH}.output_dir` (the former) or `makefile:DOCS_DIR` (the latter) without updating the other."
+	)
+
+	for x in extra_preserve:
+		preserved.add(Path(x))
+	clean_docs(docs_dir, preserved)
+
+
+if __name__ == "__main__":
+	main(sys.argv[1], sys.argv[2], sys.argv[3:])
+
+endef
+
+export SCRIPT_DOCS_CLEAN
 
 
 ##     ## ######## ########   ######  ####  #######  ##    ##
@@ -1050,7 +1203,7 @@ format:
 
 # runs ruff and pycln to check if the code is formatted correctly
 .PHONY: format-check
-format-check: gen-extra-tests
+format-check:
 	@echo "check if the source code is formatted correctly"
 	$(PYTHON) -m ruff check --config $(PYPROJECT) .
 	$(PYTHON) -m pycln --check --config $(PYPROJECT) .
@@ -1060,13 +1213,13 @@ format-check: gen-extra-tests
 # but it complains when we specify arguments by keyword where positional is fine
 # not sure how to fix this
 .PHONY: typing
-typing: clean gen-extra-tests
+typing: clean
 	@echo "running type checks"
 	$(PYTHON) -m mypy --config-file $(PYPROJECT) $(TYPECHECK_ARGS) $(PACKAGE_NAME)/
 	$(PYTHON) -m mypy --config-file $(PYPROJECT) $(TYPECHECK_ARGS) $(TESTS_DIR)
 
 .PHONY: test
-test: clean gen-extra-tests
+test: clean
 	@echo "running tests"
 	$(PYTHON) -m pytest $(PYTEST_OPTIONS) $(TESTS_DIR)
 
@@ -1137,13 +1290,13 @@ docs: cov docs-html docs-combined todo lmcat
 	@echo "generate all documentation and coverage reports"
 
 # removed all generated documentation files, but leaves everything in `$DOCS_RESOURCES_DIR`
-# (templates, svg, css, make_docs.py scropy)
+# and leaves things defined in `pyproject.toml:tool.makefile.docs.no_clean`
+# (templates, svg, css, make_docs.py script)
 # distinct from `make clean`
 .PHONY: docs-clean
 docs-clean:
 	@echo "remove generated docs except resources"
-	@find $(DOCS_DIR) -mindepth 1 -maxdepth 1 -not -path "$(DOCS_RESOURCES_DIR)" -exec rm -rf {} +
-
+	$(PYTHON) -c "$$SCRIPT_DOCS_CLEAN" $(PYPROJECT) $(DOCS_DIR) $(DOCS_RESOURCES_DIR)
 
 .PHONY: todo
 todo:
@@ -1154,12 +1307,12 @@ todo:
 .PHONY: lmcat-tree
 lmcat-tree:
 	@echo "show in console the lmcat tree view"
-	$(PYTHON) -m lmcat -t --output STDOUT
+	-$(PYTHON) -m lmcat -t --output STDOUT
 
 .PHONY: lmcat
 lmcat:
 	@echo "write the lmcat full output to pyproject.toml:[tool.lmcat.output]"
-	$(PYTHON) -m lmcat
+	-$(PYTHON) -m lmcat
 
 ########  ##     ## #### ##       ########
 ##     ## ##     ##  ##  ##       ##     ##
@@ -1181,11 +1334,14 @@ verify-git:
 	if [ "$(shell git branch --show-current)" != $(PUBLISH_BRANCH) ]; then \
 		echo "!!! ERROR !!!"; \
 		echo "Git is not on the $(PUBLISH_BRANCH) branch, exiting!"; \
+		git branch; \
+		git status; \
 		exit 1; \
 	fi; \
 	if [ -n "$(shell git status --porcelain)" ]; then \
 		echo "!!! ERROR !!!"; \
 		echo "Git is not clean, exiting!"; \
+		git status; \
 		exit 1; \
 	fi; \
 
@@ -1234,9 +1390,8 @@ publish: gen-commit-log check build verify-git version gen-version-info
 # removes $(TESTS_TEMP_DIR) to remove temporary test files
 # recursively removes all `__pycache__` directories and `*.pyc` or `*.pyo` files
 # distinct from `make docs-clean`, which only removes generated documentation files
-# ~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # slight modification in last line for extra tests
-# ~~~~~~~~~~
 .PHONY: clean
 clean:
 	@echo "clean up temporary files"
@@ -1250,9 +1405,10 @@ clean:
 	rm -rf $(TESTS_TEMP_DIR)
 	$(PYTHON_BASE) -Bc "import pathlib; [p.unlink() for path in ['$(PACKAGE_NAME)', '$(TESTS_DIR)', '$(DOCS_DIR)'] for pattern in ['*.py[co]', '__pycache__/*'] for p in pathlib.Path(path).rglob(pattern)]"
 	rm -rf tests/unit/validate_type/test_validate_type_GENERATED.py
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .PHONY: clean-all
-clean-all: clean dep-clean docs-clean
+clean-all: clean docs-clean dep-clean
 	@echo "clean up all temporary files, dep files, venv, and generated docs"
 
 

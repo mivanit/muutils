@@ -64,17 +64,7 @@ def no_progress_fn_wrap(x: Iterable, **kwargs) -> Iterable:
 try:
     # use tqdm if it's available
     import tqdm  # type: ignore[import-untyped]
-
-    @functools.wraps(tqdm.tqdm)
-    def tqdm_wrap(x: Iterable, **kwargs) -> Iterable:
-        mapped_kwargs: dict = {
-            k: v for k, v in kwargs.items() if k in get_fn_allowed_kwargs(tqdm.tqdm)
-        }
-        if "message" in kwargs and "desc" not in mapped_kwargs:
-            mapped_kwargs["desc"] = mapped_kwargs.get("desc")
-        return tqdm.tqdm(x, **mapped_kwargs)
-
-    DEFAULT_PBAR_FN = tqdm_wrap
+    DEFAULT_PBAR_FN = tqdm.tqdm
 
 except ImportError:
     # use progress bar as fallback
@@ -138,16 +128,18 @@ def run_maybe_parallel(
      - `iterable : Iterable[InputType]`
        iterable passed to either `map` or `Pool.imap`
      - `parallel : bool | int`
-       _description_
+       whether to run in parallel, and how many processes to use
      - `pbar_kwargs : Dict[str, Any]`
-       _description_
+       kwargs passed to the progress bar function
 
     # Returns:
      - `List[OutputType]`
-       _description_
+       a list of the output of `func` for each element in `iterable`
 
     # Raises:
-     - `ValueError` : _description_
+     - `ValueError` : if `parallel` is not a boolean or an integer greater than 1
+     - `ValueError` : if `use_multiprocess=True` and `parallel=False`
+     - `ImportError` : if `use_multiprocess=True` and `multiprocess` is not available
     """
 
     # number of inputs in iterable

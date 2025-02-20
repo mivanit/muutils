@@ -64,6 +64,7 @@ def no_progress_fn_wrap(x: Iterable, **kwargs) -> Iterable:
 try:
     # use tqdm if it's available
     import tqdm  # type: ignore[import-untyped]
+
     DEFAULT_PBAR_FN = tqdm.tqdm
 
 except ImportError:

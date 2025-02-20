@@ -311,36 +311,36 @@ if __name__ == "__main__":
         description="Convert Jupyter Notebook to a script with cell separators."
     )
     parser.add_argument(
-        "in_path",
+        "in-path",
         type=str,
         help="Input Jupyter Notebook file (.ipynb) or directory of files.",
     )
     parser.add_argument(
-        "--out_file",
+        "--out-file",
         type=str,
         help="Output script file. If not specified, the result will be printed to stdout.",
     )
     parser.add_argument(
-        "--output_dir", type=str, help="Output directory for converted script files."
+        "--output-dir", type=str, help="Output directory for converted script files."
     )
     parser.add_argument(
-        "--strip_md_cells",
+        "--strip-md-cells",
         action="store_true",
         help="Remove markdown cells from the output script.",
     )
     parser.add_argument(
-        "--header_comment",
+        "--header-comment",
         type=str,
         default=r"#%%",
         help="Comment string to separate cells in the output script.",
     )
     parser.add_argument(
-        "--disable_plots",
+        "--disable-plots",
         action="store_true",
         help="Disable plots in the output script. Useful for testing in CI.",
     )
     parser.add_argument(
-        "--filter_out_lines",
+        "--filter-out-lines",
         type=str,
         default="%",
         help="Comment out lines starting with these characters.",
@@ -370,4 +370,4 @@ if __name__ == "__main__":
         )
 
 
-print("convert_ipynb_to_script.py loaded.")
+print("muutils.nbutils.convert_ipynb_to_script.py loaded.")

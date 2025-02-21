@@ -30,53 +30,89 @@ class ProgressBarFunction(Protocol):
 
 
 ProgressBarOption = Literal["tqdm", "spinner", "none", None]
+# type for the progress bar option
 
 
-DEFAULT_PBAR_FN: Callable
+DEFAULT_PBAR_FN: ProgressBarOption
 # default progress bar function
 
+try:
+    # use tqdm if it's available
+    import tqdm  # type: ignore[import-untyped]
 
-# fallback to spinner option
+    DEFAULT_PBAR_FN = "tqdm"
+
+except ImportError:
+    # use progress bar as fallback
+    DEFAULT_PBAR_FN = "spinner"
+
+
 def spinner_fn_wrap(x: Iterable, **kwargs) -> List:
+    "spinner wrapper"
+    spinnercontext_allowed_kwargs: set[str] = get_fn_allowed_kwargs(SpinnerContext.__init__)
     mapped_kwargs: dict = {
         k: v
         for k, v in kwargs.items()
-        if k in get_fn_allowed_kwargs(SpinnerContext.__init__)
+        if k in spinnercontext_allowed_kwargs
     }
     if "desc" in kwargs and "message" not in mapped_kwargs:
-        mapped_kwargs["message"] = kwargs.get("desc")
+        mapped_kwargs["message"] = kwargs["desc"]
 
     if "message" not in mapped_kwargs and "total" in kwargs:
-        mapped_kwargs["message"] = f"Processing {kwargs.get('total')} items"
+        mapped_kwargs["message"] = f"Processing {kwargs['total']} items"
 
     with SpinnerContext(**mapped_kwargs):
         output = list(x)
 
     return output
 
+def map_kwargs_for_tqdm(kwargs: dict) -> dict:
+    "map kwargs for tqdm, cant wrap because the pbar dissapears?"
+    tqdm_allowed_kwargs: set[str] = get_fn_allowed_kwargs(tqdm.tqdm.__init__)
+    print(f"{tqdm_allowed_kwargs = }")
+    mapped_kwargs: dict = {
+        k: v
+        for k, v in kwargs.items()
+        if k in tqdm_allowed_kwargs
+    }
+
+    if "desc" not in kwargs:
+        if "message" in kwargs:
+            mapped_kwargs["desc"] = kwargs["message"]
+
+        elif "total" in kwargs:
+            mapped_kwargs["desc"] = f"Processing {kwargs.get('total')} items"    
+    print(f"{mapped_kwargs = }")
+    return mapped_kwargs
 
 def no_progress_fn_wrap(x: Iterable, **kwargs) -> Iterable:
     "fallback to no progress bar"
     return x
 
 
-# set the default progress bar function
-try:
-    # use tqdm if it's available
-    import tqdm  # type: ignore[import-untyped]
-
-    DEFAULT_PBAR_FN = tqdm.tqdm
-
-except ImportError:
-    # use progress bar as fallback
-    DEFAULT_PBAR_FN = spinner_fn_wrap
 
 
 def set_up_progress_bar_fn(
     pbar: Union[ProgressBarFunction, ProgressBarOption],
     pbar_kwargs: Optional[Dict[str, Any]] = None,
     **extra_kwargs,
-) -> ProgressBarFunction:
+) -> tuple[ProgressBarFunction, dict]:
+    """set up the progress bar function and its kwargs
+    
+    # Parameters:
+     - `pbar : Union[ProgressBarFunction, ProgressBarOption]`   
+       progress bar function or option. if a function, we return as-is. if a string, we figure out which progress bar to use
+     - `pbar_kwargs : Optional[Dict[str, Any]]`   
+       kwargs passed to the progress bar function (default to `None`)
+       (defaults to `None`)
+    
+    # Returns:
+     - `tuple[ProgressBarFunction, dict]` 
+         a tuple of the progress bar function and its kwargs
+    
+    # Raises:
+     - `ValueError` : if `pbar` is not one of the valid options
+    """    
     pbar_fn: ProgressBarFunction
 
     if pbar_kwargs is None:
@@ -91,18 +127,20 @@ def set_up_progress_bar_fn(
     # if `pbar` is a different string, figure out which progress bar to use
     elif isinstance(pbar, str):
         if pbar == "tqdm":
-            pbar_fn = functools.partial(tqdm.tqdm, **pbar_kwargs)
+            pbar_fn = tqdm.tqdm
+            pbar_kwargs = map_kwargs_for_tqdm(pbar_kwargs)
         elif pbar == "spinner":
             pbar_fn = functools.partial(spinner_fn_wrap, **pbar_kwargs)
+            pbar_kwargs = dict()
         else:
             raise ValueError(
                 f"`pbar` must be either 'tqdm' or 'spinner' if `str`, or a valid callable, got {type(pbar) = } {pbar = }"
             )
     else:
         # the default value is a callable which will resolve to tqdm if available or spinner as a fallback. we pass kwargs to this
-        pbar_fn = functools.partial(pbar, **pbar_kwargs)
+        pbar_fn = pbar
 
-    return pbar_fn
+    return pbar_fn, pbar_kwargs
 
 
 def run_maybe_parallel(
@@ -150,7 +188,9 @@ def run_maybe_parallel(
         return list()
 
     # which progress bar to use
-    pbar_fn: ProgressBarFunction = set_up_progress_bar_fn(
+    pbar_fn: ProgressBarFunction
+    pbar_kwargs_processed: dict
+    pbar_fn, pbar_kwargs_processed = set_up_progress_bar_fn(
         pbar=pbar,
         pbar_kwargs=pbar_kwargs,
         # extra kwargs
@@ -225,7 +265,8 @@ def run_maybe_parallel(
             do_map(
                 func,
                 iterable,
-            )
+            ),
+            **pbar_kwargs_processed,
         )
     )
 

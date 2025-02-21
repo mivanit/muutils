@@ -6,6 +6,7 @@ from typing import (
     Iterable,
     Literal,
     Optional,
+    Tuple,
     TypeVar,
     Dict,
     List,
@@ -92,7 +93,7 @@ def set_up_progress_bar_fn(
     pbar: Union[ProgressBarFunction, ProgressBarOption],
     pbar_kwargs: Optional[Dict[str, Any]] = None,
     **extra_kwargs,
-) -> tuple[ProgressBarFunction, dict]:
+) -> Tuple[ProgressBarFunction, dict]:
     """set up the progress bar function and its kwargs
 
     # Parameters:
@@ -103,7 +104,7 @@ def set_up_progress_bar_fn(
        (defaults to `None`)
 
     # Returns:
-     - `tuple[ProgressBarFunction, dict]`
+     - `Tuple[ProgressBarFunction, dict]`
          a tuple of the progress bar function and its kwargs
 
     # Raises:

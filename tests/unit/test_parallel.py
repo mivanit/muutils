@@ -1,3 +1,4 @@
+import sys
 import pytest
 import multiprocessing
 import time
@@ -205,6 +206,7 @@ def test_custom_progress_bar(input_range, expected):
 @pytest.mark.parametrize(
     "kwargs",
     [
+        # basic
         None,
         dict(),
         dict(desc="Processing"),
@@ -215,6 +217,61 @@ def test_custom_progress_bar(input_range, expected):
         dict(ascii=True, config="bar"),
         dict(message="Processing"),
         dict(message="Processing", desc="Processing"),
+        # Progress bar selection
+        dict(pbar="tqdm"),
+        dict(pbar="spinner"),
+        dict(pbar="none"),
+        dict(pbar=None),
+        # Display control
+        dict(disable=True),
+        dict(disable=False),
+        # Message variations
+        dict(desc="Processing items"),
+        dict(message="Processing items"),  # for spinner
+        dict(desc="Processing items", message="Processing items"),  # tests precedence
+        # Format customization
+        dict(ascii=True),  # for tqdm
+        dict(ascii=True, config="default"),  # combined spinner+tqdm settings
+        # Spinner configs
+        dict(config="default"),
+        dict(config="dots"),
+        dict(config="bar"),
+        dict(config="braille"),
+        dict(config=["1", "2", "3", "4"]),  # custom spinner sequence
+        # Format strings
+        dict(format_string="\r{spinner} {elapsed_time:.1f}s {message}"),
+        dict(format_string="\r[{spinner}] {message} ({elapsed_time:.0f}s)"),
+        # Combined settings
+        dict(
+            desc="Processing",
+            ascii=True,
+            config="bar",
+            disable=False,
+            format_string="\r{spinner} {message}",
+        ),
+        # Update behavior
+        dict(format_string_when_updated=True),
+        dict(format_string_when_updated="\r{spinner} UPDATED: {message}\n"),
+        # Output stream control
+        dict(output_stream=sys.stdout),
+        dict(output_stream=sys.stderr),
+        # Edge cases
+        dict(update_interval=0.01),  # fast updates
+        dict(update_interval=1.0),  # slow updates
+        dict(initial_value="Starting..."),
+        # Special format markers
+        dict(leave=True),  # tqdm specific
+        dict(leave=False),  # tqdm specific
+        dict(dynamic_ncols=True),  # tqdm specific
+        # Multiple config overrides
+        dict(
+            pbar="spinner",
+            config="dots",
+            format_string="\r{spinner} {message}",
+            message="Processing",
+            update_interval=0.1,
+            format_string_when_updated=True,
+        ),
     ],
 )
 def test_progress_bar_kwargs(input_range, expected, kwargs):

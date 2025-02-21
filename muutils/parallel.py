@@ -49,11 +49,11 @@ except ImportError:
 
 def spinner_fn_wrap(x: Iterable, **kwargs) -> List:
     "spinner wrapper"
-    spinnercontext_allowed_kwargs: set[str] = get_fn_allowed_kwargs(SpinnerContext.__init__)
+    spinnercontext_allowed_kwargs: set[str] = get_fn_allowed_kwargs(
+        SpinnerContext.__init__
+    )
     mapped_kwargs: dict = {
-        k: v
-        for k, v in kwargs.items()
-        if k in spinnercontext_allowed_kwargs
+        k: v for k, v in kwargs.items() if k in spinnercontext_allowed_kwargs
     }
     if "desc" in kwargs and "message" not in mapped_kwargs:
         mapped_kwargs["message"] = kwargs["desc"]
@@ -66,30 +66,26 @@ def spinner_fn_wrap(x: Iterable, **kwargs) -> List:
 
     return output
 
+
 def map_kwargs_for_tqdm(kwargs: dict) -> dict:
     "map kwargs for tqdm, cant wrap because the pbar dissapears?"
     tqdm_allowed_kwargs: set[str] = get_fn_allowed_kwargs(tqdm.tqdm.__init__)
     print(f"{tqdm_allowed_kwargs = }")
-    mapped_kwargs: dict = {
-        k: v
-        for k, v in kwargs.items()
-        if k in tqdm_allowed_kwargs
-    }
+    mapped_kwargs: dict = {k: v for k, v in kwargs.items() if k in tqdm_allowed_kwargs}
 
     if "desc" not in kwargs:
         if "message" in kwargs:
             mapped_kwargs["desc"] = kwargs["message"]
 
         elif "total" in kwargs:
-            mapped_kwargs["desc"] = f"Processing {kwargs.get('total')} items"    
+            mapped_kwargs["desc"] = f"Processing {kwargs.get('total')} items"
     print(f"{mapped_kwargs = }")
     return mapped_kwargs
+
 
 def no_progress_fn_wrap(x: Iterable, **kwargs) -> Iterable:
     "fallback to no progress bar"
     return x
-
-
 
 
 def set_up_progress_bar_fn(
@@ -98,21 +94,21 @@ def set_up_progress_bar_fn(
     **extra_kwargs,
 ) -> tuple[ProgressBarFunction, dict]:
     """set up the progress bar function and its kwargs
-    
+
     # Parameters:
-     - `pbar : Union[ProgressBarFunction, ProgressBarOption]`   
+     - `pbar : Union[ProgressBarFunction, ProgressBarOption]`
        progress bar function or option. if a function, we return as-is. if a string, we figure out which progress bar to use
-     - `pbar_kwargs : Optional[Dict[str, Any]]`   
+     - `pbar_kwargs : Optional[Dict[str, Any]]`
        kwargs passed to the progress bar function (default to `None`)
        (defaults to `None`)
-    
+
     # Returns:
-     - `tuple[ProgressBarFunction, dict]` 
+     - `tuple[ProgressBarFunction, dict]`
          a tuple of the progress bar function and its kwargs
-    
+
     # Raises:
      - `ValueError` : if `pbar` is not one of the valid options
-    """    
+    """
     pbar_fn: ProgressBarFunction
 
     if pbar_kwargs is None:

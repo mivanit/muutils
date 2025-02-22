@@ -1,5 +1,5 @@
 from __future__ import annotations
-from types import NoneType
+import sys
 from typing import Dict, Optional, Tuple
 import pytest
 from muutils.errormode import ErrorMode
@@ -102,8 +102,13 @@ def test_process_kwarg_with_positional_argument() -> None:
     assert result == 3
 
 
+@pytest.mark.skipif(
+    sys.version_info < (3, 10), reason="need `python >= 3.10` for `types.NoneType`"
+)
 def test_process_kwarg_processor_returns_none() -> None:
     """Test that if the processor returns None, the function receives None."""
+
+    from types import NoneType
 
     @process_kwarg("x", typed_lambda(lambda x: None, (int,), NoneType))
     def func(x: Optional[int] = 5) -> Optional[int]:

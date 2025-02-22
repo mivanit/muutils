@@ -106,7 +106,7 @@
         "ignore::muutils.json_serialize.serializable_dataclass.ZanjMissingWarning", # don't show warning for missing zanj (can't have as a dep since zanj depends on muutils)
         "ignore: PEP 484 type hint*:beartype.roar._roarwarn.BeartypeDecorHintPep585DeprecationWarning",
     ]
-    addopts = "--jaxtyping-packages=muutils,beartype.beartype"
+    addopts = "--jaxtyping-packages=beartype.beartype"
 
 [tool.ruff]
     # Exclude the directories specified in the global excludes

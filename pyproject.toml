@@ -67,6 +67,7 @@
         "mypy>=1.0.1; python_version < '3.9'",
         "mypy>=1.15; python_version >= '3.9'",
         "typing-extensions; python_version < '3.11'",
+        "beartype>=0.14.1",
         # tests & coverage
         "pytest>=8.2.2",
         "pytest-cov>=4.1.0",
@@ -103,7 +104,9 @@
         "ignore::muutils.nbutils.configure_notebook.UnknownFigureFormatWarning", # don't show warning for unknown figure format
         "ignore::muutils.nbutils.configure_notebook.PlotlyNotInstalledWarning", # don't show warning for missing plotly
         "ignore::muutils.json_serialize.serializable_dataclass.ZanjMissingWarning", # don't show warning for missing zanj (can't have as a dep since zanj depends on muutils)
+        "ignore: PEP 484 type hint*:beartype.roar._roarwarn.BeartypeDecorHintPep585DeprecationWarning",
     ]
+    addopts = "--jaxtyping-packages=muutils,beartype.beartype"
 
 [tool.ruff]
     # Exclude the directories specified in the global excludes

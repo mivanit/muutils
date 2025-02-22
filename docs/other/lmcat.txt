@@ -1,8 +1,8 @@
 # Stats
 - 52 files
-- 10564 (11K) lines
-- 366724 (367K) chars
-- 39527 (40K) `whitespace-split` tokens
+- 10569 (11K) lines
+- 366836 (367K) chars
+- 39542 (40K) `whitespace-split` tokens
 
 # File Tree
 
@@ -10,7 +10,7 @@
 muutils                                 
 ├── .github                             
 │   └── workflows                       
-│    ├── checks.yml                     [  100L  2,416C   258T]
+│    ├── checks.yml                     [  105L  2,521C   272T]
 │    └── make-docs.yml                  [   48L  1,261C   140T]
 ├── muutils                             
 │   ├── json_serialize                  
@@ -33,7 +33,7 @@ muutils
 │   │   ├── __init__.py                 [   83L  1,941C   153T]
 │   │   ├── classes.py                  [   97L  3,425C   409T]
 │   │   ├── freezing.py                 [  107L  3,325C   324T]
-│   │   ├── func.py                     [  277L  8,975C   930T]
+│   │   ├── func.py                     [  277L  8,982C   931T]
 │   │   ├── hashing.py                  [   29L    923C   110T]
 │   │   ├── numerical.py                [  165L  4,601C   522T]
 │   │   ├── sequence.py                 [  234L  7,251C   877T]
@@ -125,21 +125,22 @@ jobs:
     # needs: [lint, check-deps] # for conditionally running this job
     strategy:
       matrix:
-        versions:
-          - python: '3.8'
-            torch: '1.13.1'
-          - python: '3.9'
-            torch: '1.13.1'
-          - python: '3.10'
-            torch: '1.13.1'
-          - python: '3.10'
-            torch: '2.4.0'
-          - python: '3.11'
-            torch: '2.4.0'
-          - python: '3.12'
-            torch: '2.4.0'
-          - python: '3.13'
-            torch: '2.5.1'
+        python: ["3.8", "3.9", "3.10", "3.11", "3.12", "3.13"]
+        pkg:
+          - torch: "1.13.1"
+            numpy: "1.24.4"
+            group: "legacy"
+          - torch: ""
+            numpy: ""
+            group: "latest"
+        exclude:
+          - python: "3.12"
+            pkg:
+              group: "legacy"
+          - python: "3.13"
+            pkg:
+              group: "legacy"
+    
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -149,7 +150,7 @@ jobs:
       - name: Set up python
         uses: actions/setup-python@v5
         with:
-          python-version: ${{ matrix.versions.python }}
+          python-version: ${{ matrix.python }}
 
       - name: set up uv
         run: curl -LsSf https://astral.sh/uv/install.sh | sh
@@ -157,17 +158,21 @@ jobs:
       - name: install
         run: make setup
 
-      - name: Install pytorch
-        # install torch first to avoid pytorch index messing things up
+      - name: Install different pytorch version
+        if: ${{ matrix.pkg.torch != '' }}
         run: |
-          uv pip install torch==${{ matrix.versions.torch }}+cpu --system --extra-index-url https://download.pytorch.org/whl/cpu
+          uv pip install torch==${{ matrix.pkg.torch }}+cpu --extra-index-url https://download.pytorch.org/whl/cpu
       
+      - name: Install different numpy version
+        if: ${{ matrix.pkg.numpy != '' }}
+        run: uv pip install numpy==${{ matrix.pkg.numpy }}
+    
       - name: tests
         run: make test
 
       # - name: tests in strict mode
       #   # TODO: until zanj ported to 3.8 and 3.9
-      #   if: ${{ matrix.versions.python != '3.8' && matrix.versions.python != '3.9' }}
+      #   if: ${{ matrix.python != '3.8' && matrix.python != '3.9' }}
       #   run: make test WARN_STRICT=1
 
       - name: check typing
@@ -3472,7 +3477,7 @@ import functools
 import sys
 from types import CodeType
 import warnings
-from typing import Any, Callable, cast, TypeVar
+from typing import Any, Callable, Tuple, cast, TypeVar
 
 try:
     if sys.version_info >= (3, 11):
@@ -3691,7 +3696,7 @@ def format_docstring(
 
 # TODO: no way to make the type system understand this afaik
 LambdaArgs = TypeVarTuple("LambdaArgs")
-LambdaArgsTypes = TypeVar("LambdaArgsTypes", bound=tuple[type, ...])
+LambdaArgsTypes = TypeVar("LambdaArgsTypes", bound=Tuple[type, ...])
 
 
 def typed_lambda(

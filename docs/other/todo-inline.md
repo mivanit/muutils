@@ -431,7 +431,7 @@ func: Callable[FuncParams, ReturnType],
 - no way to make the type system understand this afaik  
   local link: [`/muutils/misc/func.py#223`](/muutils/misc/func.py#223) 
   | view on GitHub: [muutils/misc/func.py#L223](https://github.com/mivanit/muutils/blob/main/muutils/misc/func.py#L223)
-  | [Make Issue](https://github.com/mivanit/muutils/issues/new?title=no%20way%20to%20make%20the%20type%20system%20understand%20this%20afaik&body=%23%20source%0A%0A%5B%60muutils%2Fmisc%2Ffunc.py%23L223%60%5D%28https%3A%2F%2Fgithub.com%2Fmivanit%2Fmuutils%2Fblob%2Fmain%2Fmuutils%2Fmisc%2Ffunc.py%23L223%29%0A%0A%23%20context%0A%60%60%60python%0A%20%20%20%20%20%20%20%20return%20func%0A%0A%20%20%20%20return%20decorator%0A%0A%0A%23%20TODO%3A%20no%20way%20to%20make%20the%20type%20system%20understand%20this%20afaik%0ALambdaArgs%20%3D%20TypeVarTuple%28%22LambdaArgs%22%29%0ALambdaArgsTypes%20%3D%20TypeVar%28%22LambdaArgsTypes%22%2C%20bound%3Dtuple%5Btype%2C%20...%5D%29%0A%0A%0Adef%20typed_lambda%28%0A%60%60%60&labels=enhancement)
+  | [Make Issue](https://github.com/mivanit/muutils/issues/new?title=no%20way%20to%20make%20the%20type%20system%20understand%20this%20afaik&body=%23%20source%0A%0A%5B%60muutils%2Fmisc%2Ffunc.py%23L223%60%5D%28https%3A%2F%2Fgithub.com%2Fmivanit%2Fmuutils%2Fblob%2Fmain%2Fmuutils%2Fmisc%2Ffunc.py%23L223%29%0A%0A%23%20context%0A%60%60%60python%0A%20%20%20%20%20%20%20%20return%20func%0A%0A%20%20%20%20return%20decorator%0A%0A%0A%23%20TODO%3A%20no%20way%20to%20make%20the%20type%20system%20understand%20this%20afaik%0ALambdaArgs%20%3D%20TypeVarTuple%28%22LambdaArgs%22%29%0ALambdaArgsTypes%20%3D%20TypeVar%28%22LambdaArgsTypes%22%2C%20bound%3DTuple%5Btype%2C%20...%5D%29%0A%0A%0Adef%20typed_lambda%28%0A%60%60%60&labels=enhancement)
 
   ```python
 return func
@@ -441,7 +441,7 @@ return func
 
 # TODO: no way to make the type system understand this afaik
 LambdaArgs = TypeVarTuple("LambdaArgs")
-LambdaArgsTypes = TypeVar("LambdaArgsTypes", bound=tuple[type, ...])
+LambdaArgsTypes = TypeVar("LambdaArgsTypes", bound=Tuple[type, ...])
 
 
 def typed_lambda(

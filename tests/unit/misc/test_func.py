@@ -1,5 +1,6 @@
 from __future__ import annotations
-from typing import Dict, Optional, Tuple
+from types import NoneType
+from typing import Dict, Optional, Tuple, overload
 import pytest
 from muutils.errormode import ErrorMode
 from muutils.misc.func import (
@@ -20,7 +21,7 @@ def test_process_kwarg_with_kwarg_passed() -> None:
 
 
 def test_process_kwarg_without_kwarg() -> None:
-    @process_kwarg("x", lambda x: x * 2)
+    @process_kwarg("x", typed_lambda(lambda x: x * 2, (int,), int))
     def func(x: int = 1) -> int:
         return x
 
@@ -29,7 +30,9 @@ def test_process_kwarg_without_kwarg() -> None:
 
 def test_validate_kwarg_valid() -> None:
     @validate_kwarg(
-        "y", lambda y: y > 0, "Value for {kwarg_name} must be positive, got {value}"
+        "y",
+        typed_lambda(lambda y: y > 0, (int,), bool),
+        "Value for {kwarg_name} must be positive, got {value}"
     )
     def func(y: int = 1) -> int:
         return y
@@ -90,7 +93,7 @@ def test_process_kwarg_processor_raises_exception() -> None:
 def test_process_kwarg_with_positional_argument() -> None:
     """Test that process_kwarg doesn't affect arguments passed positionally."""
 
-    @process_kwarg("x", lambda x: x * 2)
+    @process_kwarg("x", typed_lambda(lambda x: x+5, (int,), int))
     def func(x: int) -> int:
         return x
 
@@ -102,11 +105,11 @@ def test_process_kwarg_with_positional_argument() -> None:
 def test_process_kwarg_processor_returns_none() -> None:
     """Test that if the processor returns None, the function receives None."""
 
-    @process_kwarg("x", lambda x: None)
+    @process_kwarg("x", typed_lambda(lambda x: None, (int,), NoneType))
     def func(x: Optional[int] = 5) -> Optional[int]:
         return x
 
-    result: None = func(x=100)
+    result: Optional[int] = func(x=100)
     assert result is None
 
 
@@ -192,7 +195,11 @@ def test_validate_kwarg_action_warn_multiple_calls() -> None:
 def test_replace_kwarg_with_positional_argument() -> None:
     """Test that replace_kwarg does not act on positional arguments."""
 
-    @replace_kwarg("x", 0, 99)
+    @replace_kwarg(
+        "x",
+        typed_lambda(lambda x: x==0, int, bool),
+        99,
+    )
     def func(x: int) -> int:
         return x
 
@@ -236,7 +243,7 @@ def test_combined_decorators_with_missing_kwarg() -> None:
     Because the kwarg is not in kwargs, neither process_kwarg nor validate_kwarg acts.
     """
 
-    @process_kwarg("x", lambda x: x + 5)
+    @process_kwarg("x", typed_lambda(lambda x: x + 5, (int,), int))
     @validate_kwarg("x", lambda x: x < 50, "x too high: {value}")
     def func(x: int = 10) -> int:
         return x
@@ -252,7 +259,7 @@ def test_combined_decorators_with_positional_argument() -> None:
     """
 
     @validate_kwarg("x", lambda x: x < 50, "x too high: {value}")
-    @process_kwarg("x", lambda x: x + 5)
+    @process_kwarg("x", typed_lambda(lambda x: x + 5, (int,), int))
     def func(x: int = 10) -> int:
         return x
 
@@ -290,7 +297,7 @@ def test_validate_kwarg_preserves_metadata() -> None:
 def test_replace_kwarg_preserves_metadata() -> None:
     """Test that replace_kwarg preserves function metadata (__name__ and __doc__)."""
 
-    @replace_kwarg("x", None, 100)
+    @replace_kwarg("x", is_none, 100)
     def func(x: Optional[int] = None) -> Optional[int]:
         """Replace docstring."""
         return x

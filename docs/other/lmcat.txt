@@ -1,8 +1,8 @@
 # Stats
 - 52 files
 - 10572 (11K) lines
-- 367041 (367K) chars
-- 39554 (40K) `whitespace-split` tokens
+- 367023 (367K) chars
+- 39551 (40K) `whitespace-split` tokens
 
 # File Tree
 
@@ -60,7 +60,7 @@ muutils
 │   ├── spinner.py                      [  510L 17,772C 1,670T]
 │   ├── statcounter.py                  [  231L  7,373C   768T]
 │   ├── sysinfo.py                      [  199L  6,901C   497T]
-│   ├── tensor_utils.py                 [  494L 14,748C 1,412T]
+│   ├── tensor_utils.py                 [  494L 14,730C 1,409T]
 │   ├── timeit_fancy.py                 [  101L  3,529C   440T]
 │   └── validate_type.py                [  237L  8,401C   896T]
 ├── LICENSE                             [  674L 35,149C 5,644T]
@@ -8704,7 +8704,7 @@ ATensor = jaxtype_factory("ATensor", torch.Tensor, jaxtyping.Float)  # type: ign
 NDArray = jaxtype_factory("NDArray", np.ndarray, jaxtyping.Float)  # type: ignore[misc, assignment]
 
 
-def numpy_to_torch_dtype(dtype: typing.Union[np.dtype, torch.dtype, bool, int, float]) -> torch.dtype:
+def numpy_to_torch_dtype(dtype: typing.Union[np.dtype, torch.dtype]) -> torch.dtype:
     """convert numpy dtype to torch dtype"""
     if isinstance(dtype, torch.dtype):
         return dtype

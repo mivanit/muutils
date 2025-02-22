@@ -7987,7 +7987,7 @@ usage:
 ### `def numpy_to_torch_dtype`
 
 ``` python
-(dtype: Union[numpy.dtype, torch.dtype, bool, int, float]) -> torch.dtype
+(dtype: Union[numpy.dtype, torch.dtype]) -> torch.dtype
 ```
 
 [View Source on

@@ -29,7 +29,6 @@ ReturnType = TypeVar("ReturnType")
 T_kwarg = TypeVar("T_kwarg")
 T_process_in = TypeVar("T_process_in")
 T_process_out = TypeVar("T_process_out")
-LambdaArgs = TypeVarTuple("LambdaArgs")
 
 FuncParams = ParamSpec("FuncParams")
 FuncParamsPreWrap = ParamSpec("FuncParamsPreWrap")
@@ -221,15 +220,20 @@ def format_docstring(
     return decorator
 
 
+# TODO: no way to make the type system understand this afaik
+LambdaArgs = TypeVarTuple("LambdaArgs")
+LambdaArgsTypes = TypeVar("LambdaArgsTypes", bound=tuple[type, ...])
+
+
 def typed_lambda(
-    fn: Callable[..., Any],
-    in_types: tuple[Unpack[LambdaArgs]],
+    fn: Callable[[Unpack[LambdaArgs]], ReturnType],
+    in_types: LambdaArgsTypes,
     out_type: type[ReturnType],
 ) -> Callable[[Unpack[LambdaArgs]], ReturnType]:
     """Wraps a lambda function with type hints.
 
     # Parameters:
-     - `fn : Callable[..., Any]`
+     - `fn : Callable[[Unpack[LambdaArgs]], ReturnType]`
         The lambda function to wrap.
      - `in_types : tuple[type, ...]`
         Tuple of input types.

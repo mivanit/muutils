@@ -197,7 +197,7 @@ def test_replace_kwarg_with_positional_argument() -> None:
 
     @replace_kwarg(
         "x",
-        typed_lambda(lambda x: x == 0, int, bool),
+        typed_lambda(lambda x: x == 0, (int,), bool),
         99,
     )
     def func(x: int) -> int:
@@ -322,11 +322,15 @@ def test_typed_lambda_int_str_to_str() -> None:
 
 def test_typed_lambda_mismatched_params() -> None:
     with pytest.raises(ValueError):
-        _ = typed_lambda(lambda x, y: x + y, (int,), int)
+        _ = typed_lambda(lambda x, y: x + y, (int,), int)  # type: ignore[misc]
 
 
 def test_typed_lambda_runtime_behavior() -> None:
-    add_three = typed_lambda(lambda x, y, z: x + y + z, (int, int, int), int)
+    add_three = typed_lambda(
+        lambda x, y, z: x + y + z,
+        (int, int, int),
+        int,
+    )
     result: int = add_three(1, 2, 3)
     assert result == 6
 

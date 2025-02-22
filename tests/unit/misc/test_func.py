@@ -1,6 +1,6 @@
 from __future__ import annotations
 from types import NoneType
-from typing import Dict, Optional, Tuple, overload
+from typing import Dict, Optional, Tuple
 import pytest
 from muutils.errormode import ErrorMode
 from muutils.misc.func import (
@@ -32,7 +32,7 @@ def test_validate_kwarg_valid() -> None:
     @validate_kwarg(
         "y",
         typed_lambda(lambda y: y > 0, (int,), bool),
-        "Value for {kwarg_name} must be positive, got {value}"
+        "Value for {kwarg_name} must be positive, got {value}",
     )
     def func(y: int = 1) -> int:
         return y
@@ -93,7 +93,7 @@ def test_process_kwarg_processor_raises_exception() -> None:
 def test_process_kwarg_with_positional_argument() -> None:
     """Test that process_kwarg doesn't affect arguments passed positionally."""
 
-    @process_kwarg("x", typed_lambda(lambda x: x+5, (int,), int))
+    @process_kwarg("x", typed_lambda(lambda x: x + 5, (int,), int))
     def func(x: int) -> int:
         return x
 
@@ -197,7 +197,7 @@ def test_replace_kwarg_with_positional_argument() -> None:
 
     @replace_kwarg(
         "x",
-        typed_lambda(lambda x: x==0, int, bool),
+        typed_lambda(lambda x: x == 0, int, bool),
         99,
     )
     def func(x: int) -> int:

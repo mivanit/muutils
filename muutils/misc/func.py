@@ -2,19 +2,20 @@ from __future__ import annotations
 import functools
 from types import CodeType
 import warnings
-from typing import Any, Callable, cast, ParamSpec, TypeVar
+from typing import Any, Callable, cast, TypeVar
 
 try:
     try:
         # 3.11+
-        from typing import Unpack, TypeVarTuple
+        from typing import Unpack, TypeVarTuple, ParamSpec
     except ImportError:
         # 3.9+
-        from typing_extensions import Unpack, TypeVarTuple
+        from typing_extensions import Unpack, TypeVarTuple, ParamSpec
 except ImportError:
     warnings.warn(
         "muutils.misc.func could not import Unpack and TypeVarTuple from typing or typing_extensions, typed_lambda may not work"
     )
+    ParamSpec = TypeVar
     Unpack = Any
     TypeVarTuple = TypeVar
 

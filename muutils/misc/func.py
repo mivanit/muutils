@@ -3,7 +3,7 @@ import functools
 import sys
 from types import CodeType
 import warnings
-from typing import Any, Callable, cast, TypeVar
+from typing import Any, Callable, Tuple, cast, TypeVar
 
 try:
     if sys.version_info >= (3, 11):
@@ -222,7 +222,7 @@ def format_docstring(
 
 # TODO: no way to make the type system understand this afaik
 LambdaArgs = TypeVarTuple("LambdaArgs")
-LambdaArgsTypes = TypeVar("LambdaArgsTypes", bound=tuple[type, ...])
+LambdaArgsTypes = TypeVar("LambdaArgsTypes", bound=Tuple[type, ...])
 
 
 def typed_lambda(

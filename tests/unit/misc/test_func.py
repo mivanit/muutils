@@ -1,4 +1,5 @@
-from typing import Optional
+from __future__ import annotations
+from typing import Dict, Optional, Tuple
 import pytest
 from muutils.errormode import ErrorMode
 from muutils.misc.func import (
@@ -102,7 +103,7 @@ def test_process_kwarg_processor_returns_none() -> None:
     """Test that if the processor returns None, the function receives None."""
 
     @process_kwarg("x", lambda x: None)
-    def func(x: int | None = 5) -> int | None:
+    def func(x: Optional[int] = 5) -> Optional[int]:
         return x
 
     result: None = func(x=100)
@@ -131,7 +132,7 @@ def test_validate_kwarg_with_none_value() -> None:
     """Test validate_kwarg when None is passed and validator rejects None."""
 
     @validate_kwarg("x", lambda x: x is not None, "x should not be None")
-    def func(x: int | None = 1) -> int | None:
+    def func(x: Optional[int] = 1) -> Optional[int]:
         return x
 
     with pytest.raises(ValueError, match="x should not be None"):
@@ -153,11 +154,11 @@ def test_validate_kwarg_multiple_kwargs() -> None:
     """Test that validate_kwarg only validates the specified kwarg among multiple arguments."""
 
     @validate_kwarg("y", lambda y: y < 100, "y must be < 100, got {value}")
-    def func(x: int, y: int = 1) -> tuple[int, int]:
+    def func(x: int, y: int = 1) -> Tuple[int, int]:
         return (x, y)
 
     # Valid case:
-    result: tuple[int, int] = func(5, y=50)
+    result: Tuple[int, int] = func(5, y=50)
     assert result == (5, 50)
 
     # Invalid y value (passed via kwargs)
@@ -202,10 +203,10 @@ def test_replace_kwarg_with_positional_argument() -> None:
 
 def test_replace_kwarg_no_if_missing() -> None:
     """Test replace_kwarg with mutable types as default and replacement values."""
-    replacement_dict: dict[str, int] = {"a": 1}
+    replacement_dict: Dict[str, int] = {"a": 1}
 
     @replace_kwarg("d", is_none, replacement_dict)
-    def func(d: dict[str, int] | None = None) -> dict[str, int] | None:
+    def func(d: Optional[Dict[str, int]] = None) -> Optional[Dict[str, int]]:
         return d
 
     assert func() != replacement_dict
@@ -215,10 +216,10 @@ def test_replace_kwarg_no_if_missing() -> None:
 
 def test_replace_kwarg_if_missing() -> None:
     """Test replace_kwarg with mutable types as default and replacement values."""
-    replacement_dict: dict[str, int] = {"a": 1}
+    replacement_dict: Dict[str, int] = {"a": 1}
 
     @replace_kwarg("d", is_none, replacement_dict, replace_if_missing=True)
-    def func(d: dict[str, int] | None = None) -> dict[str, int] | None:
+    def func(d: Optional[Dict[str, int]] = None) -> Optional[Dict[str, int]]:
         return d
 
     assert func() == replacement_dict
@@ -290,7 +291,7 @@ def test_replace_kwarg_preserves_metadata() -> None:
     """Test that replace_kwarg preserves function metadata (__name__ and __doc__)."""
 
     @replace_kwarg("x", None, 100)
-    def func(x: int | None = None) -> int | None:
+    def func(x: Optional[int] = None) -> Optional[int]:
         """Replace docstring."""
         return x
 

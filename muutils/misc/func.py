@@ -10,14 +10,14 @@ try:
         from typing import Unpack, TypeVarTuple, ParamSpec
     except ImportError:
         # 3.9+
-        from typing_extensions import Unpack, TypeVarTuple, ParamSpec
+        from typing_extensions import Unpack, TypeVarTuple, ParamSpec  # type: ignore[assignment]
 except ImportError:
     warnings.warn(
         "muutils.misc.func could not import Unpack and TypeVarTuple from typing or typing_extensions, typed_lambda may not work"
     )
-    ParamSpec = TypeVar
-    Unpack = Any
-    TypeVarTuple = TypeVar
+    ParamSpec = TypeVar  # type: ignore
+    Unpack = Any  # type: ignore
+    TypeVarTuple = TypeVar  # type: ignore
 
 
 from muutils.errormode import ErrorMode
@@ -25,7 +25,7 @@ from muutils.errormode import ErrorMode
 warnings.warn("muutils.misc.func is experimental, use with caution")
 
 FuncParams = ParamSpec("FuncParams")
-FuncParamsPreWrap = ParamSpec("FuncOutputParams")
+FuncParamsPreWrap = ParamSpec("FuncParamsPreWrap")
 ReturnType = TypeVar("ReturnType")
 FunctionType = Callable[FuncParams, ReturnType]
 T_kwarg = TypeVar("T_kwarg")

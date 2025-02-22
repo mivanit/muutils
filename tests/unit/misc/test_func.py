@@ -1,6 +1,13 @@
 from typing import Optional
 import pytest
-from muutils.misc.func import process_kwarg, replace_kwarg, typed_lambda, validate_kwarg
+from muutils.errormode import ErrorMode
+from muutils.misc.func import (
+    is_none,
+    process_kwarg,
+    replace_kwarg,
+    typed_lambda,
+    validate_kwarg,
+)
 
 
 def test_process_kwarg_with_kwarg_passed() -> None:
@@ -41,7 +48,7 @@ def test_validate_kwarg_invalid_with_description() -> None:
 
 
 def test_replace_kwarg_replaces_value() -> None:
-    @replace_kwarg("z", None, "replaced")
+    @replace_kwarg("z", is_none, "replaced")
     def func(z: Optional[str] = None) -> str:
         return z  # type: ignore
 
@@ -49,19 +56,23 @@ def test_replace_kwarg_replaces_value() -> None:
 
 
 def test_replace_kwarg_preserves_non_default() -> None:
-    @replace_kwarg("z", None, "replaced")
+    @replace_kwarg("z", is_none, "replaced")
     def func(z: Optional[str] = None) -> Optional[str]:
         return z
 
     assert func(z="hello") == "hello"
+    assert func(z=None) == "replaced"
+    assert func() is None
 
 
 def test_replace_kwarg_when_kwarg_not_passed() -> None:
-    @replace_kwarg("z", None, "replaced")
+    @replace_kwarg("z", is_none, "replaced", replace_if_missing=True)
     def func(z: Optional[str] = None) -> Optional[str]:
         return z
 
-    assert func() is None
+    assert func() == "replaced"
+    assert func(z=None) == "replaced"
+    assert func(z="hello") == "hello"
 
 
 def test_process_kwarg_processor_raises_exception() -> None:
@@ -158,7 +169,10 @@ def test_validate_kwarg_action_warn_multiple_calls() -> None:
     """Test that when action is 'warn', multiple failures emit warnings without raising exceptions."""
 
     @validate_kwarg(
-        "num", lambda val: val > 0, "num must be > 0, got {value}", action="warn"
+        "num",
+        lambda val: val > 0,
+        "num must be > 0, got {value}",
+        action=ErrorMode.EXCEPT,
     )
     def only_positive(num: int) -> int:
         return num
@@ -167,7 +181,7 @@ def test_validate_kwarg_action_warn_multiple_calls() -> None:
     assert only_positive(num=10) == 10
 
     # Check that a warning is emitted for a bad value.
-    with pytest.warns(UserWarning, match="num must be > 0, got -5"):
+    with pytest.raises(ValueError, match="num must be > 0, got -5"):
         only_positive(num=-5)
 
 
@@ -186,36 +200,30 @@ def test_replace_kwarg_with_positional_argument() -> None:
     assert result == 0
 
 
-def test_replace_kwarg_equality_not_identity() -> None:
-    """Test that replace_kwarg only replaces if identity matches, not just equality."""
-    default_list: list[int] = []
-    replacement_list: list[int] = [1, 2, 3]
-
-    @replace_kwarg("lst", default_list, replacement_list)
-    def func(lst: list[int] | None = None) -> list[int] | None:
-        return lst
-
-    # Passing a different empty list (equal but not identical).
-    result: list[int] = func(lst=[])
-    # Replacement should not occur.
-    assert result == [] and result is not replacement_list
-
-    # Passing the default_list by identity.
-    result2: list[int] = func(lst=default_list)
-    assert result2 is replacement_list
-
-
-def test_replace_kwarg_mutable_default() -> None:
+def test_replace_kwarg_no_if_missing() -> None:
     """Test replace_kwarg with mutable types as default and replacement values."""
-    default_dict: dict[str, int] = {}
     replacement_dict: dict[str, int] = {"a": 1}
 
-    @replace_kwarg("d", default_dict, replacement_dict)
+    @replace_kwarg("d", is_none, replacement_dict)
     def func(d: dict[str, int] | None = None) -> dict[str, int] | None:
         return d
 
-    result: dict[str, int] = func(d=default_dict)
-    assert result is replacement_dict
+    assert func() != replacement_dict
+    assert func(d=None) == replacement_dict
+    assert func(d={"a": 2}) != replacement_dict
+
+
+def test_replace_kwarg_if_missing() -> None:
+    """Test replace_kwarg with mutable types as default and replacement values."""
+    replacement_dict: dict[str, int] = {"a": 1}
+
+    @replace_kwarg("d", is_none, replacement_dict, replace_if_missing=True)
+    def func(d: dict[str, int] | None = None) -> dict[str, int] | None:
+        return d
+
+    assert func() == replacement_dict
+    assert func(d=None) == replacement_dict
+    assert func(d={"a": 2}) != replacement_dict
 
 
 # --- Combined Decorator Tests ---

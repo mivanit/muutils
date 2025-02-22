@@ -136,6 +136,7 @@ def replace_kwarg(
     kwarg_name: str,
     check: Callable[[T_kwarg], bool],
     replacement_value: T_kwarg,
+    replace_if_missing: bool = False,
 ) -> Callable[[FunctionType], FunctionType]:
     """Decorator that replaces a specific keyword argument value by identity comparison.
 
@@ -146,6 +147,8 @@ def replace_kwarg(
         A callable that returns True if the keyword argument should be replaced.
      - `replacement_value : T_kwarg`
         The value to replace with.
+     - `replace_if_missing : bool`
+        If True, replaces the keyword argument even if it's missing.
 
     # Returns:
      - `Callable[[FunctionType], FunctionType]`
@@ -170,11 +173,25 @@ def replace_kwarg(
         def wrapper(*args: FuncParams.args, **kwargs: FuncParams.kwargs) -> ReturnType:
             if kwarg_name in kwargs and check(kwargs[kwarg_name]):
                 kwargs[kwarg_name] = replacement_value
+            elif replace_if_missing and kwarg_name not in kwargs:
+                kwargs[kwarg_name] = replacement_value
             return func(*args, **kwargs)
 
         return cast(FunctionType, wrapper)
 
     return decorator
+
+
+def is_none(value: Any) -> bool:
+    return value is None
+
+
+def always_true(value: Any) -> bool:
+    return True
+
+
+def always_false(value: Any) -> bool:
+    return False
 
 
 def format_docstring(**fmt_kwargs: Any) -> Callable[[FunctionType], FunctionType]:

@@ -49,6 +49,7 @@ __all__ = [
     # submodules
     "classes",
     "freezing",
+    "func",
     "hashing",
     "numerical",
     "sequence",

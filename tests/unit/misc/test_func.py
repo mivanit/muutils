@@ -12,7 +12,7 @@ from muutils.misc.func import (
 
 
 def test_process_kwarg_with_kwarg_passed() -> None:
-    @process_kwarg("x", lambda x: x * 2)
+    @process_kwarg("x", typed_lambda(lambda x: x * 2, (int,), int))
     def func(x: int = 1) -> int:
         return x
 

@@ -1,8 +1,8 @@
 # Stats
-- 51 files
-- 10249 (10K) lines
-- 356142 (356K) chars
-- 38398 (38K) `whitespace-split` tokens
+- 52 files
+- 10559 (11K) lines
+- 366500 (366K) chars
+- 39506 (40K) `whitespace-split` tokens
 
 # File Tree
 
@@ -30,9 +30,10 @@ muutils
 │   │   ├── simplelogger.py             [   81L  2,173C   239T]
 │   │   └── timing.py                   [   87L  2,613C   257T]
 │   ├── misc                            
-│   │   ├── __init__.py                 [   82L  1,929C   152T]
+│   │   ├── __init__.py                 [   83L  1,941C   153T]
 │   │   ├── classes.py                  [   97L  3,425C   409T]
 │   │   ├── freezing.py                 [  107L  3,325C   324T]
+│   │   ├── func.py                     [  273L  8,805C   913T]
 │   │   ├── hashing.py                  [   29L    923C   110T]
 │   │   ├── numerical.py                [  165L  4,601C   522T]
 │   │   ├── sequence.py                 [  234L  7,251C   877T]
@@ -40,7 +41,7 @@ muutils
 │   ├── nbutils                         
 │   │   ├── __init__.py                 [   21L    488C    51T]
 │   │   ├── configure_notebook.py       [  320L  9,792C 1,038T]
-│   │   ├── convert_ipynb_to_script.py  [  373L 13,317C 1,211T]
+│   │   ├── convert_ipynb_to_script.py  [  373L 13,333C 1,211T]
 │   │   ├── mermaid.py                  [   20L    571C    52T]
 │   │   ├── print_tex.py                [   21L    495C    70T]
 │   │   └── run_notebook_tests.py       [  255L  9,280C   822T]
@@ -54,7 +55,7 @@ muutils
 │   ├── jsonlines.py                    [   77L  1,991C   246T]
 │   ├── kappa.py                        [   46L  1,260C   150T]
 │   ├── mlutils.py                      [  165L  5,198C   495T]
-│   ├── parallel.py                     [  245L  7,720C   890T]
+│   ├── parallel.py                     [  276L  9,095C 1,070T]
 │   ├── py.typed                        [    0L      0C     0T]
 │   ├── spinner.py                      [  510L 17,772C 1,670T]
 │   ├── statcounter.py                  [  231L  7,373C   768T]
@@ -3218,6 +3219,7 @@ __all__ = [
     # submodules
     "classes",
     "freezing",
+    "func",
     "hashing",
     "numerical",
     "sequence",
@@ -3463,6 +3465,283 @@ def freeze(instance: object) -> object:
     return instance
 
 ``````{ end_of_file="muutils/misc/freezing.py" }
+
+``````{ path="muutils/misc/func.py"  }
+from __future__ import annotations
+import functools
+import sys
+from types import CodeType
+import warnings
+from typing import Any, Callable, cast, TypeVar
+
+try:
+    if sys.version_info >= (3, 11):
+        # 3.11+
+        from typing import Unpack, TypeVarTuple, ParamSpec
+    else:
+        # 3.9+
+        from typing_extensions import Unpack, TypeVarTuple, ParamSpec  # type: ignore[assignment]
+except ImportError:
+    warnings.warn(
+        "muutils.misc.func could not import Unpack and TypeVarTuple from typing or typing_extensions, typed_lambda may not work"
+    )
+    ParamSpec = TypeVar  # type: ignore
+    Unpack = Any  # type: ignore
+    TypeVarTuple = TypeVar  # type: ignore
+
+
+from muutils.errormode import ErrorMode
+
+warnings.warn("muutils.misc.func is experimental, use with caution")
+
+ReturnType = TypeVar("ReturnType")
+T_kwarg = TypeVar("T_kwarg")
+T_process_in = TypeVar("T_process_in")
+T_process_out = TypeVar("T_process_out")
+LambdaArgs = TypeVarTuple("LambdaArgs")
+
+FuncParams = ParamSpec("FuncParams")
+FuncParamsPreWrap = ParamSpec("FuncParamsPreWrap")
+
+
+def process_kwarg(
+    kwarg_name: str,
+    processor: Callable[[T_process_in], T_process_out],
+) -> Callable[
+    [Callable[FuncParamsPreWrap, ReturnType]], Callable[FuncParams, ReturnType]
+]:
+    """Decorator that applies a processor to a keyword argument.
+
+    The underlying function is expected to have a keyword argument
+    (with name `kwarg_name`) of type `T_out`, but the caller provides
+    a value of type `T_in` that is converted via `processor`.
+
+    # Parameters:
+     - `kwarg_name : str`
+        The name of the keyword argument to process.
+     - `processor : Callable[[T_in], T_out]`
+        A callable that converts the input value (`T_in`) into the
+        type expected by the function (`T_out`).
+
+    # Returns:
+     - A decorator that converts a function of type
+       `Callable[OutputParams, ReturnType]` (expecting `kwarg_name` of type `T_out`)
+       into one of type `Callable[InputParams, ReturnType]` (accepting `kwarg_name` of type `T_in`).
+    """
+
+    def decorator(
+        func: Callable[FuncParamsPreWrap, ReturnType],
+    ) -> Callable[FuncParams, ReturnType]:
+        @functools.wraps(func)
+        def wrapper(*args: Any, **kwargs: Any) -> ReturnType:
+            if kwarg_name in kwargs:
+                # Convert the caller’s value (of type T_in) to T_out
+                kwargs[kwarg_name] = processor(kwargs[kwarg_name])
+            return func(*args, **kwargs)  # type: ignore[arg-type]
+
+        return cast(Callable[FuncParams, ReturnType], wrapper)
+
+    return decorator
+
+
+@process_kwarg("action", ErrorMode.from_any)
+def validate_kwarg(
+    kwarg_name: str,
+    validator: Callable[[T_kwarg], bool],
+    description: str | None = None,
+    action: ErrorMode = ErrorMode.EXCEPT,
+) -> Callable[[Callable[FuncParams, ReturnType]], Callable[FuncParams, ReturnType]]:
+    """Decorator that validates a specific keyword argument.
+
+    # Parameters:
+     - `kwarg_name : str`
+        The name of the keyword argument to validate.
+     - `validator : Callable[[Any], bool]`
+        A callable that returns True if the keyword argument is valid.
+     - `description : str | None`
+        A message template if validation fails.
+     - `action : str`
+        Either `"raise"` (default) or `"warn"`.
+
+    # Returns:
+     - `Callable[[Callable[FuncParams, ReturnType]], Callable[FuncParams, ReturnType]]`
+        A decorator that validates the keyword argument.
+
+    # Modifies:
+     - If validation fails and `action=="warn"`, emits a warning.
+       Otherwise, raises a ValueError.
+
+    # Usage:
+
+    ```python
+    @validate_kwarg("x", lambda val: val > 0, "Invalid {kwarg_name}: {value}")
+    def my_func(x: int) -> int:
+        return x
+
+    assert my_func(x=1) == 1
+    ```
+
+    # Raises:
+     - `ValueError` if validation fails and `action == "raise"`.
+    """
+
+    def decorator(
+        func: Callable[FuncParams, ReturnType],
+    ) -> Callable[FuncParams, ReturnType]:
+        @functools.wraps(func)
+        def wrapper(*args: FuncParams.args, **kwargs: FuncParams.kwargs) -> ReturnType:
+            if kwarg_name in kwargs:
+                value: Any = kwargs[kwarg_name]
+                if not validator(value):
+                    msg: str = (
+                        description.format(kwarg_name=kwarg_name, value=value)
+                        if description
+                        else f"Validation failed for keyword '{kwarg_name}' with value {value}"
+                    )
+                    if action == "warn":
+                        warnings.warn(msg, UserWarning)
+                    else:
+                        raise ValueError(msg)
+            return func(*args, **kwargs)
+
+        return cast(Callable[FuncParams, ReturnType], wrapper)
+
+    return decorator
+
+
+def replace_kwarg(
+    kwarg_name: str,
+    check: Callable[[T_kwarg], bool],
+    replacement_value: T_kwarg,
+    replace_if_missing: bool = False,
+) -> Callable[[Callable[FuncParams, ReturnType]], Callable[FuncParams, ReturnType]]:
+    """Decorator that replaces a specific keyword argument value by identity comparison.
+
+    # Parameters:
+     - `kwarg_name : str`
+        The name of the keyword argument to replace.
+     - `check : Callable[[T_kwarg], bool]`
+        A callable that returns True if the keyword argument should be replaced.
+     - `replacement_value : T_kwarg`
+        The value to replace with.
+     - `replace_if_missing : bool`
+        If True, replaces the keyword argument even if it's missing.
+
+    # Returns:
+     - `Callable[[Callable[FuncParams, ReturnType]], Callable[FuncParams, ReturnType]]`
+        A decorator that replaces the keyword argument value.
+
+    # Modifies:
+     - Updates `kwargs[kwarg_name]` if its value is `default_value`.
+
+    # Usage:
+
+    ```python
+    @replace_kwarg("x", None, "default_string")
+    def my_func(*, x: str | None = None) -> str:
+        return x
+
+    assert my_func(x=None) == "default_string"
+    ```
+    """
+
+    def decorator(
+        func: Callable[FuncParams, ReturnType],
+    ) -> Callable[FuncParams, ReturnType]:
+        @functools.wraps(func)
+        def wrapper(*args: FuncParams.args, **kwargs: FuncParams.kwargs) -> ReturnType:
+            if kwarg_name in kwargs:
+                # TODO: no way to type hint this, I think
+                if check(kwargs[kwarg_name]):  # type: ignore[arg-type]
+                    kwargs[kwarg_name] = replacement_value
+            elif replace_if_missing and kwarg_name not in kwargs:
+                kwargs[kwarg_name] = replacement_value
+            return func(*args, **kwargs)
+
+        return cast(Callable[FuncParams, ReturnType], wrapper)
+
+    return decorator
+
+
+def is_none(value: Any) -> bool:
+    return value is None
+
+
+def always_true(value: Any) -> bool:
+    return True
+
+
+def always_false(value: Any) -> bool:
+    return False
+
+
+def format_docstring(
+    **fmt_kwargs: Any,
+) -> Callable[[Callable[FuncParams, ReturnType]], Callable[FuncParams, ReturnType]]:
+    """Decorator that formats a function's docstring with the provided keyword arguments."""
+
+    def decorator(
+        func: Callable[FuncParams, ReturnType],
+    ) -> Callable[FuncParams, ReturnType]:
+        if func.__doc__ is not None:
+            func.__doc__ = func.__doc__.format(**fmt_kwargs)
+        return func
+
+    return decorator
+
+
+def typed_lambda(
+    fn: Callable[..., Any],
+    in_types: tuple[Unpack[LambdaArgs]],
+    out_type: type[ReturnType],
+) -> Callable[[Unpack[LambdaArgs]], ReturnType]:
+    """Wraps a lambda function with type hints.
+
+    # Parameters:
+     - `fn : Callable[..., Any]`
+        The lambda function to wrap.
+     - `in_types : tuple[type, ...]`
+        Tuple of input types.
+     - `out_type : type[ReturnType]`
+        The output type.
+
+    # Returns:
+     - `Callable[..., ReturnType]`
+        A new function with annotations matching the given signature.
+
+    # Usage:
+
+    ```python
+    add = typed_lambda(lambda x, y: x + y, (int, int), int)
+    assert add(1, 2) == 3
+    ```
+
+    # Raises:
+     - `ValueError` if the number of input types doesn't match the lambda's parameters.
+    """
+    code: CodeType = fn.__code__
+    n_params: int = code.co_argcount
+
+    if len(in_types) != n_params:
+        raise ValueError(
+            f"Number of input types ({len(in_types)}) doesn't match number of parameters ({n_params})"
+        )
+
+    param_names: tuple[str, ...] = code.co_varnames[:n_params]
+    annotations: dict[str, type] = {  # type: ignore[var-annotated]
+        name: typ
+        for name, typ in zip(param_names, in_types)  # type: ignore[arg-type]
+    }
+    annotations["return"] = out_type
+
+    @functools.wraps(fn)
+    def wrapped(*args: Unpack[LambdaArgs]) -> ReturnType:
+        return fn(*args)
+
+    wrapped.__annotations__ = annotations
+    return wrapped
+
+``````{ end_of_file="muutils/misc/func.py" }
 
 ``````{ path="muutils/misc/hashing.py"  }
 from __future__ import annotations
@@ -4679,36 +4958,36 @@ if __name__ == "__main__":
         description="Convert Jupyter Notebook to a script with cell separators."
     )
     parser.add_argument(
-        "in_path",
+        "in-path",
         type=str,
         help="Input Jupyter Notebook file (.ipynb) or directory of files.",
     )
     parser.add_argument(
-        "--out_file",
+        "--out-file",
         type=str,
         help="Output script file. If not specified, the result will be printed to stdout.",
     )
     parser.add_argument(
-        "--output_dir", type=str, help="Output directory for converted script files."
+        "--output-dir", type=str, help="Output directory for converted script files."
     )
     parser.add_argument(
-        "--strip_md_cells",
+        "--strip-md-cells",
         action="store_true",
         help="Remove markdown cells from the output script.",
     )
     parser.add_argument(
-        "--header_comment",
+        "--header-comment",
         type=str,
         default=r"#%%",
         help="Comment string to separate cells in the output script.",
     )
     parser.add_argument(
-        "--disable_plots",
+        "--disable-plots",
         action="store_true",
         help="Disable plots in the output script. Useful for testing in CI.",
     )
     parser.add_argument(
-        "--filter_out_lines",
+        "--filter-out-lines",
         type=str,
         default="%",
         help="Comment out lines starting with these characters.",
@@ -4738,7 +5017,7 @@ if __name__ == "__main__":
         )
 
 
-print("convert_ipynb_to_script.py loaded.")
+print("muutils.nbutils.convert_ipynb_to_script.py loaded.")
 
 ``````{ end_of_file="muutils/nbutils/convert_ipynb_to_script.py" }
 
@@ -6995,6 +7274,7 @@ from typing import (
     Iterable,
     Literal,
     Optional,
+    Tuple,
     TypeVar,
     Dict,
     List,
@@ -7019,24 +7299,36 @@ class ProgressBarFunction(Protocol):
 
 
 ProgressBarOption = Literal["tqdm", "spinner", "none", None]
+# type for the progress bar option
 
 
-DEFAULT_PBAR_FN: Callable
+DEFAULT_PBAR_FN: ProgressBarOption
 # default progress bar function
 
+try:
+    # use tqdm if it's available
+    import tqdm  # type: ignore[import-untyped]
 
-# fallback to spinner option
+    DEFAULT_PBAR_FN = "tqdm"
+
+except ImportError:
+    # use progress bar as fallback
+    DEFAULT_PBAR_FN = "spinner"
+
+
 def spinner_fn_wrap(x: Iterable, **kwargs) -> List:
+    "spinner wrapper"
+    spinnercontext_allowed_kwargs: set[str] = get_fn_allowed_kwargs(
+        SpinnerContext.__init__
+    )
     mapped_kwargs: dict = {
-        k: v
-        for k, v in kwargs.items()
-        if k in get_fn_allowed_kwargs(SpinnerContext.__init__)
+        k: v for k, v in kwargs.items() if k in spinnercontext_allowed_kwargs
     }
     if "desc" in kwargs and "message" not in mapped_kwargs:
-        mapped_kwargs["message"] = kwargs.get("desc")
+        mapped_kwargs["message"] = kwargs["desc"]
 
     if "message" not in mapped_kwargs and "total" in kwargs:
-        mapped_kwargs["message"] = f"Processing {kwargs.get('total')} items"
+        mapped_kwargs["message"] = f"Processing {kwargs['total']} items"
 
     with SpinnerContext(**mapped_kwargs):
         output = list(x)
@@ -7044,37 +7336,48 @@ def spinner_fn_wrap(x: Iterable, **kwargs) -> List:
     return output
 
 
+def map_kwargs_for_tqdm(kwargs: dict) -> dict:
+    "map kwargs for tqdm, cant wrap because the pbar dissapears?"
+    tqdm_allowed_kwargs: set[str] = get_fn_allowed_kwargs(tqdm.tqdm.__init__)
+    print(f"{tqdm_allowed_kwargs = }")
+    mapped_kwargs: dict = {k: v for k, v in kwargs.items() if k in tqdm_allowed_kwargs}
+
+    if "desc" not in kwargs:
+        if "message" in kwargs:
+            mapped_kwargs["desc"] = kwargs["message"]
+
+        elif "total" in kwargs:
+            mapped_kwargs["desc"] = f"Processing {kwargs.get('total')} items"
+    print(f"{mapped_kwargs = }")
+    return mapped_kwargs
+
+
 def no_progress_fn_wrap(x: Iterable, **kwargs) -> Iterable:
     "fallback to no progress bar"
     return x
-
-
-# set the default progress bar function
-try:
-    # use tqdm if it's available
-    import tqdm  # type: ignore[import-untyped]
-
-    @functools.wraps(tqdm.tqdm)
-    def tqdm_wrap(x: Iterable, **kwargs) -> Iterable:
-        mapped_kwargs: dict = {
-            k: v for k, v in kwargs.items() if k in get_fn_allowed_kwargs(tqdm.tqdm)
-        }
-        if "message" in kwargs and "desc" not in mapped_kwargs:
-            mapped_kwargs["desc"] = mapped_kwargs.get("desc")
-        return tqdm.tqdm(x, **mapped_kwargs)
-
-    DEFAULT_PBAR_FN = tqdm_wrap
-
-except ImportError:
-    # use progress bar as fallback
-    DEFAULT_PBAR_FN = spinner_fn_wrap
 
 
 def set_up_progress_bar_fn(
     pbar: Union[ProgressBarFunction, ProgressBarOption],
     pbar_kwargs: Optional[Dict[str, Any]] = None,
     **extra_kwargs,
-) -> ProgressBarFunction:
+) -> Tuple[ProgressBarFunction, dict]:
+    """set up the progress bar function and its kwargs
+
+    # Parameters:
+     - `pbar : Union[ProgressBarFunction, ProgressBarOption]`
+       progress bar function or option. if a function, we return as-is. if a string, we figure out which progress bar to use
+     - `pbar_kwargs : Optional[Dict[str, Any]]`
+       kwargs passed to the progress bar function (default to `None`)
+       (defaults to `None`)
+
+    # Returns:
+     - `Tuple[ProgressBarFunction, dict]`
+         a tuple of the progress bar function and its kwargs
+
+    # Raises:
+     - `ValueError` : if `pbar` is not one of the valid options
+    """
     pbar_fn: ProgressBarFunction
 
     if pbar_kwargs is None:
@@ -7089,18 +7392,20 @@ def set_up_progress_bar_fn(
     # if `pbar` is a different string, figure out which progress bar to use
     elif isinstance(pbar, str):
         if pbar == "tqdm":
-            pbar_fn = functools.partial(tqdm.tqdm, **pbar_kwargs)
+            pbar_fn = tqdm.tqdm
+            pbar_kwargs = map_kwargs_for_tqdm(pbar_kwargs)
         elif pbar == "spinner":
             pbar_fn = functools.partial(spinner_fn_wrap, **pbar_kwargs)
+            pbar_kwargs = dict()
         else:
             raise ValueError(
                 f"`pbar` must be either 'tqdm' or 'spinner' if `str`, or a valid callable, got {type(pbar) = } {pbar = }"
             )
     else:
         # the default value is a callable which will resolve to tqdm if available or spinner as a fallback. we pass kwargs to this
-        pbar_fn = functools.partial(pbar, **pbar_kwargs)
+        pbar_fn = pbar
 
-    return pbar_fn
+    return pbar_fn, pbar_kwargs
 
 
 def run_maybe_parallel(
@@ -7127,16 +7432,18 @@ def run_maybe_parallel(
      - `iterable : Iterable[InputType]`
        iterable passed to either `map` or `Pool.imap`
      - `parallel : bool | int`
-       _description_
+       whether to run in parallel, and how many processes to use
      - `pbar_kwargs : Dict[str, Any]`
-       _description_
+       kwargs passed to the progress bar function
 
     # Returns:
      - `List[OutputType]`
-       _description_
+       a list of the output of `func` for each element in `iterable`
 
     # Raises:
-     - `ValueError` : _description_
+     - `ValueError` : if `parallel` is not a boolean or an integer greater than 1
+     - `ValueError` : if `use_multiprocess=True` and `parallel=False`
+     - `ImportError` : if `use_multiprocess=True` and `multiprocess` is not available
     """
 
     # number of inputs in iterable
@@ -7146,7 +7453,9 @@ def run_maybe_parallel(
         return list()
 
     # which progress bar to use
-    pbar_fn: ProgressBarFunction = set_up_progress_bar_fn(
+    pbar_fn: ProgressBarFunction
+    pbar_kwargs_processed: dict
+    pbar_fn, pbar_kwargs_processed = set_up_progress_bar_fn(
         pbar=pbar,
         pbar_kwargs=pbar_kwargs,
         # extra kwargs
@@ -7221,7 +7530,8 @@ def run_maybe_parallel(
             do_map(
                 func,
                 iterable,
-            )
+            ),
+            **pbar_kwargs_processed,
         )
     )
 
@@ -10067,7 +10377,7 @@ help: help-targets info
 # ==================================================
 [project]
     name = "muutils"
-    version = "0.8.0"
+    version = "0.8.1"
     description = "miscellaneous python utilities"
     readme = "README.md"
     requires-python = ">=3.8"

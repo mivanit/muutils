@@ -1,14 +1,15 @@
 from __future__ import annotations
 import functools
+import sys
 from types import CodeType
 import warnings
 from typing import Any, Callable, cast, TypeVar
 
 try:
-    try:
+    if sys.version_info >= (3, 11):
         # 3.11+
         from typing import Unpack, TypeVarTuple, ParamSpec
-    except ImportError:
+    else:
         # 3.9+
         from typing_extensions import Unpack, TypeVarTuple, ParamSpec  # type: ignore[assignment]
 except ImportError:

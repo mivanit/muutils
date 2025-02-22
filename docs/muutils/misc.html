@@ -46,7 +46,7 @@
 </script></head>
 <body>
 <div class="package-version">
-    docs for <a href="https://github.com/mivanit/muutils">muutils</a> v0.8.0<br>
+    docs for <a href="https://github.com/mivanit/muutils">muutils</a> v0.8.1<br>
 </div>
     <nav class="pdoc">
         <label id="navtoggle" for="togglestate" class="pdoc-button">
@@ -66,6 +66,7 @@
             <ul>
                     <li><a href="misc/classes.html">classes</a></li>
                     <li><a href="misc/freezing.html">freezing</a></li>
+                    <li><a href="misc/func.html">func</a></li>
                     <li><a href="misc/hashing.html">hashing</a></li>
                     <li><a href="misc/numerical.html">numerical</a></li>
                     <li><a href="misc/sequence.html">sequence</a></li>
@@ -205,7 +206,7 @@
     </nav>
     <main class="pdoc">
             <section class="module-info">
-                        <a class="pdoc-button git-button" href="https://github.com/mivanit/muutils/blob/0.8.0/misc/__init__.py">View Source on GitHub</a>
+                        <a class="pdoc-button git-button" href="https://github.com/mivanit/muutils/blob/0.8.1/misc/__init__.py">View Source on GitHub</a>
                     <h1 class="modulename">
 <a href="./../muutils.html">muutils</a><wbr>.misc    </h1>
 
@@ -226,7 +227,7 @@
                         <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="mod-misc-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.0/misc/__init__.py#L0-L81" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.1/misc/__init__.py#L0-L82" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -284,37 +285,38 @@
 </span><span id="L-49"><a href="#L-49"><span class="linenos">49</span></a>    <span class="c1"># submodules</span>
 </span><span id="L-50"><a href="#L-50"><span class="linenos">50</span></a>    <span class="s2">&quot;classes&quot;</span><span class="p">,</span>
 </span><span id="L-51"><a href="#L-51"><span class="linenos">51</span></a>    <span class="s2">&quot;freezing&quot;</span><span class="p">,</span>
-</span><span id="L-52"><a href="#L-52"><span class="linenos">52</span></a>    <span class="s2">&quot;hashing&quot;</span><span class="p">,</span>
-</span><span id="L-53"><a href="#L-53"><span class="linenos">53</span></a>    <span class="s2">&quot;numerical&quot;</span><span class="p">,</span>
-</span><span id="L-54"><a href="#L-54"><span class="linenos">54</span></a>    <span class="s2">&quot;sequence&quot;</span><span class="p">,</span>
-</span><span id="L-55"><a href="#L-55"><span class="linenos">55</span></a>    <span class="s2">&quot;string&quot;</span><span class="p">,</span>
-</span><span id="L-56"><a href="#L-56"><span class="linenos">56</span></a>    <span class="c1"># imports</span>
-</span><span id="L-57"><a href="#L-57"><span class="linenos">57</span></a>    <span class="s2">&quot;stable_hash&quot;</span><span class="p">,</span>
-</span><span id="L-58"><a href="#L-58"><span class="linenos">58</span></a>    <span class="s2">&quot;WhenMissing&quot;</span><span class="p">,</span>
-</span><span id="L-59"><a href="#L-59"><span class="linenos">59</span></a>    <span class="s2">&quot;empty_sequence_if_attr_false&quot;</span><span class="p">,</span>
-</span><span id="L-60"><a href="#L-60"><span class="linenos">60</span></a>    <span class="s2">&quot;flatten&quot;</span><span class="p">,</span>
-</span><span id="L-61"><a href="#L-61"><span class="linenos">61</span></a>    <span class="s2">&quot;list_split&quot;</span><span class="p">,</span>
-</span><span id="L-62"><a href="#L-62"><span class="linenos">62</span></a>    <span class="s2">&quot;list_join&quot;</span><span class="p">,</span>
-</span><span id="L-63"><a href="#L-63"><span class="linenos">63</span></a>    <span class="s2">&quot;apply_mapping&quot;</span><span class="p">,</span>
-</span><span id="L-64"><a href="#L-64"><span class="linenos">64</span></a>    <span class="s2">&quot;apply_mapping_chain&quot;</span><span class="p">,</span>
-</span><span id="L-65"><a href="#L-65"><span class="linenos">65</span></a>    <span class="s2">&quot;sanitize_name&quot;</span><span class="p">,</span>
-</span><span id="L-66"><a href="#L-66"><span class="linenos">66</span></a>    <span class="s2">&quot;sanitize_fname&quot;</span><span class="p">,</span>
-</span><span id="L-67"><a href="#L-67"><span class="linenos">67</span></a>    <span class="s2">&quot;sanitize_identifier&quot;</span><span class="p">,</span>
-</span><span id="L-68"><a href="#L-68"><span class="linenos">68</span></a>    <span class="s2">&quot;dict_to_filename&quot;</span><span class="p">,</span>
-</span><span id="L-69"><a href="#L-69"><span class="linenos">69</span></a>    <span class="s2">&quot;dynamic_docstring&quot;</span><span class="p">,</span>
-</span><span id="L-70"><a href="#L-70"><span class="linenos">70</span></a>    <span class="s2">&quot;shorten_numerical_to_str&quot;</span><span class="p">,</span>
-</span><span id="L-71"><a href="#L-71"><span class="linenos">71</span></a>    <span class="s2">&quot;str_to_numeric&quot;</span><span class="p">,</span>
-</span><span id="L-72"><a href="#L-72"><span class="linenos">72</span></a>    <span class="s2">&quot;_SHORTEN_MAP&quot;</span><span class="p">,</span>
-</span><span id="L-73"><a href="#L-73"><span class="linenos">73</span></a>    <span class="s2">&quot;FrozenDict&quot;</span><span class="p">,</span>
-</span><span id="L-74"><a href="#L-74"><span class="linenos">74</span></a>    <span class="s2">&quot;FrozenList&quot;</span><span class="p">,</span>
-</span><span id="L-75"><a href="#L-75"><span class="linenos">75</span></a>    <span class="s2">&quot;freeze&quot;</span><span class="p">,</span>
-</span><span id="L-76"><a href="#L-76"><span class="linenos">76</span></a>    <span class="s2">&quot;is_abstract&quot;</span><span class="p">,</span>
-</span><span id="L-77"><a href="#L-77"><span class="linenos">77</span></a>    <span class="s2">&quot;get_all_subclasses&quot;</span><span class="p">,</span>
-</span><span id="L-78"><a href="#L-78"><span class="linenos">78</span></a>    <span class="s2">&quot;isinstance_by_type_name&quot;</span><span class="p">,</span>
-</span><span id="L-79"><a href="#L-79"><span class="linenos">79</span></a>    <span class="s2">&quot;IsDataclass&quot;</span><span class="p">,</span>
-</span><span id="L-80"><a href="#L-80"><span class="linenos">80</span></a>    <span class="s2">&quot;get_hashable_eq_attrs&quot;</span><span class="p">,</span>
-</span><span id="L-81"><a href="#L-81"><span class="linenos">81</span></a>    <span class="s2">&quot;dataclass_set_equals&quot;</span><span class="p">,</span>
-</span><span id="L-82"><a href="#L-82"><span class="linenos">82</span></a><span class="p">]</span>
+</span><span id="L-52"><a href="#L-52"><span class="linenos">52</span></a>    <span class="s2">&quot;func&quot;</span><span class="p">,</span>
+</span><span id="L-53"><a href="#L-53"><span class="linenos">53</span></a>    <span class="s2">&quot;hashing&quot;</span><span class="p">,</span>
+</span><span id="L-54"><a href="#L-54"><span class="linenos">54</span></a>    <span class="s2">&quot;numerical&quot;</span><span class="p">,</span>
+</span><span id="L-55"><a href="#L-55"><span class="linenos">55</span></a>    <span class="s2">&quot;sequence&quot;</span><span class="p">,</span>
+</span><span id="L-56"><a href="#L-56"><span class="linenos">56</span></a>    <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+</span><span id="L-57"><a href="#L-57"><span class="linenos">57</span></a>    <span class="c1"># imports</span>
+</span><span id="L-58"><a href="#L-58"><span class="linenos">58</span></a>    <span class="s2">&quot;stable_hash&quot;</span><span class="p">,</span>
+</span><span id="L-59"><a href="#L-59"><span class="linenos">59</span></a>    <span class="s2">&quot;WhenMissing&quot;</span><span class="p">,</span>
+</span><span id="L-60"><a href="#L-60"><span class="linenos">60</span></a>    <span class="s2">&quot;empty_sequence_if_attr_false&quot;</span><span class="p">,</span>
+</span><span id="L-61"><a href="#L-61"><span class="linenos">61</span></a>    <span class="s2">&quot;flatten&quot;</span><span class="p">,</span>
+</span><span id="L-62"><a href="#L-62"><span class="linenos">62</span></a>    <span class="s2">&quot;list_split&quot;</span><span class="p">,</span>
+</span><span id="L-63"><a href="#L-63"><span class="linenos">63</span></a>    <span class="s2">&quot;list_join&quot;</span><span class="p">,</span>
+</span><span id="L-64"><a href="#L-64"><span class="linenos">64</span></a>    <span class="s2">&quot;apply_mapping&quot;</span><span class="p">,</span>
+</span><span id="L-65"><a href="#L-65"><span class="linenos">65</span></a>    <span class="s2">&quot;apply_mapping_chain&quot;</span><span class="p">,</span>
+</span><span id="L-66"><a href="#L-66"><span class="linenos">66</span></a>    <span class="s2">&quot;sanitize_name&quot;</span><span class="p">,</span>
+</span><span id="L-67"><a href="#L-67"><span class="linenos">67</span></a>    <span class="s2">&quot;sanitize_fname&quot;</span><span class="p">,</span>
+</span><span id="L-68"><a href="#L-68"><span class="linenos">68</span></a>    <span class="s2">&quot;sanitize_identifier&quot;</span><span class="p">,</span>
+</span><span id="L-69"><a href="#L-69"><span class="linenos">69</span></a>    <span class="s2">&quot;dict_to_filename&quot;</span><span class="p">,</span>
+</span><span id="L-70"><a href="#L-70"><span class="linenos">70</span></a>    <span class="s2">&quot;dynamic_docstring&quot;</span><span class="p">,</span>
+</span><span id="L-71"><a href="#L-71"><span class="linenos">71</span></a>    <span class="s2">&quot;shorten_numerical_to_str&quot;</span><span class="p">,</span>
+</span><span id="L-72"><a href="#L-72"><span class="linenos">72</span></a>    <span class="s2">&quot;str_to_numeric&quot;</span><span class="p">,</span>
+</span><span id="L-73"><a href="#L-73"><span class="linenos">73</span></a>    <span class="s2">&quot;_SHORTEN_MAP&quot;</span><span class="p">,</span>
+</span><span id="L-74"><a href="#L-74"><span class="linenos">74</span></a>    <span class="s2">&quot;FrozenDict&quot;</span><span class="p">,</span>
+</span><span id="L-75"><a href="#L-75"><span class="linenos">75</span></a>    <span class="s2">&quot;FrozenList&quot;</span><span class="p">,</span>
+</span><span id="L-76"><a href="#L-76"><span class="linenos">76</span></a>    <span class="s2">&quot;freeze&quot;</span><span class="p">,</span>
+</span><span id="L-77"><a href="#L-77"><span class="linenos">77</span></a>    <span class="s2">&quot;is_abstract&quot;</span><span class="p">,</span>
+</span><span id="L-78"><a href="#L-78"><span class="linenos">78</span></a>    <span class="s2">&quot;get_all_subclasses&quot;</span><span class="p">,</span>
+</span><span id="L-79"><a href="#L-79"><span class="linenos">79</span></a>    <span class="s2">&quot;isinstance_by_type_name&quot;</span><span class="p">,</span>
+</span><span id="L-80"><a href="#L-80"><span class="linenos">80</span></a>    <span class="s2">&quot;IsDataclass&quot;</span><span class="p">,</span>
+</span><span id="L-81"><a href="#L-81"><span class="linenos">81</span></a>    <span class="s2">&quot;get_hashable_eq_attrs&quot;</span><span class="p">,</span>
+</span><span id="L-82"><a href="#L-82"><span class="linenos">82</span></a>    <span class="s2">&quot;dataclass_set_equals&quot;</span><span class="p">,</span>
+</span><span id="L-83"><a href="#L-83"><span class="linenos">83</span></a><span class="p">]</span>
 </span></pre></div>
 
 
@@ -330,7 +332,7 @@
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="stable_hash-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.0/misc/__init__.py#L7-L17" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.1/misc/__init__.py#L7-L17" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -379,7 +381,7 @@
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="empty_sequence_if_attr_false-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.0/misc/__init__.py#L21-L42" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.1/misc/__init__.py#L21-L42" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -447,7 +449,7 @@ The name of the attribute to check.</li>
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="flatten-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.0/misc/__init__.py#L45-L68" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.1/misc/__init__.py#L45-L68" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -509,7 +511,7 @@ Flattens all iterable data types except for <code>str</code> and <code>bytes</co
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="list_split-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.0/misc/__init__.py#L75-L103" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.1/misc/__init__.py#L75-L103" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -576,7 +578,7 @@ Flattens all iterable data types except for <code>str</code> and <code>bytes</co
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="list_join-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.0/misc/__init__.py#L106-L128" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.1/misc/__init__.py#L106-L128" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -633,7 +635,7 @@ Flattens all iterable data types except for <code>str</code> and <code>bytes</co
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="apply_mapping-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.0/misc/__init__.py#L138-L184" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.1/misc/__init__.py#L138-L184" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -739,7 +741,7 @@ the iterable to apply the mapping to</li>
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="apply_mapping_chain-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.0/misc/__init__.py#L187-L234" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.1/misc/__init__.py#L187-L234" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -846,7 +848,7 @@ you can choose from <code>"skip"</code>, <code>"include"</code> (without convert
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="sanitize_name-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.0/misc/__init__.py#L7-L55" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.1/misc/__init__.py#L7-L55" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -947,7 +949,7 @@ sanitized string</li>
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="sanitize_fname-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.0/misc/__init__.py#L58-L63" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.1/misc/__init__.py#L58-L63" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -983,7 +985,7 @@ sanitized string</li>
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="sanitize_identifier-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.0/misc/__init__.py#L66-L74" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.1/misc/__init__.py#L66-L74" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -1023,7 +1025,7 @@ sanitized string</li>
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="dict_to_filename-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.0/misc/__init__.py#L77-L99" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.1/misc/__init__.py#L77-L99" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -1070,7 +1072,7 @@ sanitized string</li>
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="dynamic_docstring-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.0/misc/__init__.py#L102-L108" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.1/misc/__init__.py#L102-L108" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -1101,7 +1103,7 @@ sanitized string</li>
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="shorten_numerical_to_str-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.0/misc/__init__.py#L22-L46" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.1/misc/__init__.py#L22-L46" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -1155,7 +1157,7 @@ sanitized string</li>
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="str_to_numeric-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.0/misc/__init__.py#L49-L165" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.1/misc/__init__.py#L49-L165" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -1329,7 +1331,7 @@ sanitized string</li>
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="FrozenDict-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.0/misc/__init__.py#L4-L9" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.1/misc/__init__.py#L4-L9" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -1378,7 +1380,7 @@ sanitized string</li>
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="FrozenList-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.0/misc/__init__.py#L12-L35" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.1/misc/__init__.py#L12-L35" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -1430,7 +1432,7 @@ The argument must be an iterable if specified.</p>
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="FrozenList.append-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.0/misc/__init__.py#L19-L20" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.1/misc/__init__.py#L19-L20" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -1458,7 +1460,7 @@ The argument must be an iterable if specified.</p>
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="FrozenList.extend-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.0/misc/__init__.py#L22-L23" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.1/misc/__init__.py#L22-L23" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -1486,7 +1488,7 @@ The argument must be an iterable if specified.</p>
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="FrozenList.insert-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.0/misc/__init__.py#L25-L26" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.1/misc/__init__.py#L25-L26" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -1514,7 +1516,7 @@ The argument must be an iterable if specified.</p>
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="FrozenList.remove-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.0/misc/__init__.py#L28-L29" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.1/misc/__init__.py#L28-L29" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -1544,7 +1546,7 @@ The argument must be an iterable if specified.</p>
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="FrozenList.pop-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.0/misc/__init__.py#L31-L32" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.1/misc/__init__.py#L31-L32" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -1574,7 +1576,7 @@ The argument must be an iterable if specified.</p>
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="FrozenList.clear-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.0/misc/__init__.py#L34-L35" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.1/misc/__init__.py#L34-L35" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -1617,7 +1619,7 @@ The argument must be an iterable if specified.</p>
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="freeze-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.0/misc/__init__.py#L38-L107" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.1/misc/__init__.py#L38-L107" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -1717,7 +1719,7 @@ The argument must be an iterable if specified.</p>
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="is_abstract-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.0/misc/__init__.py#L14-L23" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.1/misc/__init__.py#L14-L23" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -1753,7 +1755,7 @@ The argument must be an iterable if specified.</p>
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="get_all_subclasses-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.0/misc/__init__.py#L26-L48" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.1/misc/__init__.py#L26-L48" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -1815,7 +1817,7 @@ It might be valuable to refactor with memoization if the need arises to use this
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="isinstance_by_type_name-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.0/misc/__init__.py#L51-L61" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.1/misc/__init__.py#L51-L61" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -1861,7 +1863,7 @@ Generic types are not supported, only types that would appear in <code>type_.__m
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="IsDataclass-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.0/misc/__init__.py#L68-L72" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.1/misc/__init__.py#L68-L72" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -1922,7 +1924,7 @@ Protocol classes can be generic, they are defined as::</p>
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="IsDataclass.__init__-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.0/misc/__init__.py#L1709-L1735" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.1/misc/__init__.py#L1709-L1735" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -1974,7 +1976,7 @@ Protocol classes can be generic, they are defined as::</p>
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="get_hashable_eq_attrs-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.0/misc/__init__.py#L75-L83" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.1/misc/__init__.py#L75-L83" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -2011,7 +2013,7 @@ Essentially used to generate a hashable dataclass representation for equality co
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="dataclass_set_equals-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.0/misc/__init__.py#L86-L97" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.1/misc/__init__.py#L86-L97" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>

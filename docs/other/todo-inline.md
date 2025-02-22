@@ -406,6 +406,50 @@ def get_progress_default(self, i: int) -> str:
 
 
 
+## [`muutils/misc/func.py`](/muutils/misc/func.py)
+
+- no way to type hint this, I think  
+  local link: [`/muutils/misc/func.py#184`](/muutils/misc/func.py#184) 
+  | view on GitHub: [muutils/misc/func.py#L184](https://github.com/mivanit/muutils/blob/main/muutils/misc/func.py#L184)
+  | [Make Issue](https://github.com/mivanit/muutils/issues/new?title=no%20way%20to%20type%20hint%20this%2C%20I%20think&body=%23%20source%0A%0A%5B%60muutils%2Fmisc%2Ffunc.py%23L184%60%5D%28https%3A%2F%2Fgithub.com%2Fmivanit%2Fmuutils%2Fblob%2Fmain%2Fmuutils%2Fmisc%2Ffunc.py%23L184%29%0A%0A%23%20context%0A%60%60%60python%0A%20%20%20%20%20%20%20%20func%3A%20Callable%5BFuncParams%2C%20ReturnType%5D%2C%0A%20%20%20%20%29%20-%3E%20Callable%5BFuncParams%2C%20ReturnType%5D%3A%0A%20%20%20%20%20%20%20%20%40functools.wraps%28func%29%0A%20%20%20%20%20%20%20%20def%20wrapper%28%2Aargs%3A%20FuncParams.args%2C%20%2A%2Akwargs%3A%20FuncParams.kwargs%29%20-%3E%20ReturnType%3A%0A%20%20%20%20%20%20%20%20%20%20%20%20if%20kwarg_name%20in%20kwargs%3A%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%23%20TODO%3A%20no%20way%20to%20type%20hint%20this%2C%20I%20think%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20if%20check%28kwargs%5Bkwarg_name%5D%29%3A%20%20%23%20type%3A%20ignore%5Barg-type%5D%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20kwargs%5Bkwarg_name%5D%20%3D%20replacement_value%0A%20%20%20%20%20%20%20%20%20%20%20%20elif%20replace_if_missing%20and%20kwarg_name%20not%20in%20kwargs%3A%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20kwargs%5Bkwarg_name%5D%20%3D%20replacement_value%0A%20%20%20%20%20%20%20%20%20%20%20%20return%20func%28%2Aargs%2C%20%2A%2Akwargs%29%0A%60%60%60&labels=enhancement)
+
+  ```python
+func: Callable[FuncParams, ReturnType],
+    ) -> Callable[FuncParams, ReturnType]:
+        @functools.wraps(func)
+        def wrapper(*args: FuncParams.args, **kwargs: FuncParams.kwargs) -> ReturnType:
+            if kwarg_name in kwargs:
+                # TODO: no way to type hint this, I think
+                if check(kwargs[kwarg_name]):  # type: ignore[arg-type]
+                    kwargs[kwarg_name] = replacement_value
+            elif replace_if_missing and kwarg_name not in kwargs:
+                kwargs[kwarg_name] = replacement_value
+            return func(*args, **kwargs)
+  ```
+
+
+- no way to make the type system understand this afaik  
+  local link: [`/muutils/misc/func.py#223`](/muutils/misc/func.py#223) 
+  | view on GitHub: [muutils/misc/func.py#L223](https://github.com/mivanit/muutils/blob/main/muutils/misc/func.py#L223)
+  | [Make Issue](https://github.com/mivanit/muutils/issues/new?title=no%20way%20to%20make%20the%20type%20system%20understand%20this%20afaik&body=%23%20source%0A%0A%5B%60muutils%2Fmisc%2Ffunc.py%23L223%60%5D%28https%3A%2F%2Fgithub.com%2Fmivanit%2Fmuutils%2Fblob%2Fmain%2Fmuutils%2Fmisc%2Ffunc.py%23L223%29%0A%0A%23%20context%0A%60%60%60python%0A%20%20%20%20%20%20%20%20return%20func%0A%0A%20%20%20%20return%20decorator%0A%0A%0A%23%20TODO%3A%20no%20way%20to%20make%20the%20type%20system%20understand%20this%20afaik%0ALambdaArgs%20%3D%20TypeVarTuple%28%22LambdaArgs%22%29%0ALambdaArgsTypes%20%3D%20TypeVar%28%22LambdaArgsTypes%22%2C%20bound%3Dtuple%5Btype%2C%20...%5D%29%0A%0A%0Adef%20typed_lambda%28%0A%60%60%60&labels=enhancement)
+
+  ```python
+return func
+
+    return decorator
+
+
+# TODO: no way to make the type system understand this afaik
+LambdaArgs = TypeVarTuple("LambdaArgs")
+LambdaArgsTypes = TypeVar("LambdaArgsTypes", bound=tuple[type, ...])
+
+
+def typed_lambda(
+  ```
+
+
+
+
 ## [`muutils/misc/sequence.py`](/muutils/misc/sequence.py)
 
 - swap type check with more general check for __iter__() or __next__() or whatever  

@@ -1,4 +1,4 @@
-  docs for muutils v0.8.0
+  docs for muutils v0.8.1
 
 Contents
 
@@ -261,7 +261,7 @@ at your own risk!
 
 View Source on GitHub
 
-  docs for muutils v0.8.0
+  docs for muutils v0.8.1
 
 API Documentation
 
@@ -302,7 +302,7 @@ Usage:
     >>> get_console_safe_str("café", "cafe")
     "café"  # This result may vary based on the system's preferred encoding.
 
-  docs for muutils v0.8.0
+  docs for muutils v0.8.1
 
 Contents
 
@@ -414,7 +414,7 @@ View Source on GitHub
 
 -   dbg_tensor = functools.partial(<function dbg>, formatter=<function tensor_info>)
 
-  docs for muutils v0.8.0
+  docs for muutils v0.8.1
 
 Contents
 
@@ -769,7 +769,7 @@ Raises:
     ‘yaml’, or if you try to use ‘yaml’ output without having PyYAML
     installed
 
-  docs for muutils v0.8.0
+  docs for muutils v0.8.1
 
 Contents
 
@@ -984,7 +984,7 @@ Inherited Members
 
 map of string aliases to ErrorMode instances
 
-  docs for muutils v0.8.0
+  docs for muutils v0.8.1
 
 Contents
 
@@ -1026,7 +1026,7 @@ Arguments
 -   eq_func: Callable[[T, T], bool] a function that returns true if two
     items are equivalent. need not be transitive
 
-  docs for muutils v0.8.0
+  docs for muutils v0.8.1
 
 Contents
 
@@ -1325,7 +1325,7 @@ Inherited Members
 -   intersection
 -   union
 
-  docs for muutils v0.8.0
+  docs for muutils v0.8.1
 
 Contents
 
@@ -1934,7 +1934,7 @@ Parameters:
     - `nested_dict : dict[str, Any]`
         nested dict to update the instance with
 
-  docs for muutils v0.8.0
+  docs for muutils v0.8.1
 
 Contents
 
@@ -2056,7 +2056,7 @@ View Source on GitHub
 
 load a json-serialized array, infer the mode if not specified
 
-  docs for muutils v0.8.0
+  docs for muutils v0.8.1
 
 Contents
 
@@ -2232,7 +2232,7 @@ View Source on GitHub
 
 serialize object to json-serializable object with default config
 
-  docs for muutils v0.8.0
+  docs for muutils v0.8.1
 
 Contents
 
@@ -2830,7 +2830,7 @@ Raises:
 -   AttributeError : if a property is not found on the class
 -   FieldLoadingError : if there is an error loading a field
 
-  docs for muutils v0.8.0
+  docs for muutils v0.8.1
 
 Contents
 
@@ -3022,7 +3022,7 @@ the container. ZANJ will automatically do this for you.
 
 TODO: custom_value_check_fn: function taking the value of the field and returning whether the value itself is valid. if not provided, any value is valid as long as it passes the type test
 
-  docs for muutils v0.8.0
+  docs for muutils v0.8.1
 
 Contents
 
@@ -3205,7 +3205,7 @@ View Source on GitHub
 
 tuple type hint, but for a tuple of any length with all the same type
 
-  docs for muutils v0.8.0
+  docs for muutils v0.8.1
 
 Contents
 
@@ -3255,7 +3255,7 @@ def jsonl_write
 
 View Source on GitHub
 
-  docs for muutils v0.8.0
+  docs for muutils v0.8.1
 
 Contents
 
@@ -3311,7 +3311,7 @@ Inherited Members
 -   items
 -   values
 
-  docs for muutils v0.8.0
+  docs for muutils v0.8.1
 
 Contents
 
@@ -3532,7 +3532,7 @@ context manager for timing code
 
 -   elapsed_time: float
 
-  docs for muutils v0.8.0
+  docs for muutils v0.8.1
 
 API Documentation
 
@@ -3569,7 +3569,7 @@ View Source on GitHub
 
 -   stream
 
-  docs for muutils v0.8.0
+  docs for muutils v0.8.1
 
 API Documentation
 
@@ -3661,7 +3661,7 @@ standard header function. will output
 
 -   HEADER_FUNCTIONS: dict[str, muutils.logger.headerfuncs.HeaderFunction] = {'md': <function md_header_function>}
 
-  docs for muutils v0.8.0
+  docs for muutils v0.8.1
 
 API Documentation
 
@@ -3726,7 +3726,7 @@ then gather_val("log.jsonl", "s1", ("a", "b")) will return
         [4, 5]
     ]
 
-  docs for muutils v0.8.0
+  docs for muutils v0.8.1
 
 Contents
 
@@ -3868,7 +3868,7 @@ View Source on GitHub
 
 flush all streams
 
-  docs for muutils v0.8.0
+  docs for muutils v0.8.1
 
 API Documentation
 
@@ -3930,7 +3930,7 @@ def make_handler
 
 View Source on GitHub
 
-  docs for muutils v0.8.0
+  docs for muutils v0.8.1
 
 API Documentation
 
@@ -4005,7 +4005,7 @@ View Source on GitHub
 
 log a message to the log file, and optionally to the console
 
-  docs for muutils v0.8.0
+  docs for muutils v0.8.1
 
 API Documentation
 
@@ -4092,7 +4092,7 @@ View Source on GitHub
 
 returns a progress string
 
-  docs for muutils v0.8.0
+  docs for muutils v0.8.1
 
 Contents
 
@@ -4112,6 +4112,7 @@ Submodules
 
 -   classes
 -   freezing
+-   func
 -   hashing
 -   numerical
 -   sequence
@@ -4662,7 +4663,7 @@ Duplicates are ignored in the same manner as a set. Unfrozen dataclasses
 can’t be placed in sets since they’re not hashable. Collections of them
 may be compared using this function.
 
-  docs for muutils v0.8.0
+  docs for muutils v0.8.1
 
 API Documentation
 
@@ -4792,7 +4793,7 @@ Duplicates are ignored in the same manner as a set. Unfrozen dataclasses
 can’t be placed in sets since they’re not hashable. Collections of them
 may be compared using this function.
 
-  docs for muutils v0.8.0
+  docs for muutils v0.8.1
 
 API Documentation
 
@@ -4908,7 +4909,209 @@ you can’t rely on that. always use the return value.
 
 the gelidum package is a more complete implementation of this idea
 
-  docs for muutils v0.8.0
+  docs for muutils v0.8.1
+
+API Documentation
+
+-   FuncParams
+-   FuncParamsPreWrap
+-   process_kwarg
+-   validate_kwarg
+-   replace_kwarg
+-   is_none
+-   always_true
+-   always_false
+-   format_docstring
+-   LambdaArgs
+-   typed_lambda
+
+View Source on GitHub
+
+muutils.misc.func
+
+View Source on GitHub
+
+-   FuncParams = ~FuncParams
+
+-   FuncParamsPreWrap = ~FuncParamsPreWrap
+
+def process_kwarg
+
+    (
+        kwarg_name: str,
+        processor: Callable[[~T_process_in], ~T_process_out]
+    ) -> Callable[[Callable[~FuncParamsPreWrap, ~ReturnType]], Callable[~FuncParams, ~ReturnType]]
+
+View Source on GitHub
+
+Decorator that applies a processor to a keyword argument.
+
+The underlying function is expected to have a keyword argument (with
+name kwarg_name) of type T_out, but the caller provides a value of type
+T_in that is converted via processor.
+
+Parameters:
+
+-   kwarg_name : str The name of the keyword argument to process.
+-   processor : Callable[[T_in], T_out] A callable that converts the
+    input value (T_in) into the type expected by the function (T_out).
+
+Returns:
+
+-   A decorator that converts a function of type
+    Callable[OutputParams, ReturnType] (expecting kwarg_name of type
+    T_out) into one of type Callable[InputParams, ReturnType] (accepting
+    kwarg_name of type T_in).
+
+def validate_kwarg
+
+    (
+        kwarg_name: str,
+        validator: Callable[[~T_kwarg], bool],
+        description: str | None = None,
+        action: muutils.errormode.ErrorMode = ErrorMode.Except
+    ) -> Callable[[Callable[~FuncParams, ~ReturnType]], Callable[~FuncParams, ~ReturnType]]
+
+View Source on GitHub
+
+Decorator that validates a specific keyword argument.
+
+Parameters:
+
+-   kwarg_name : str The name of the keyword argument to validate.
+-   validator : Callable[[Any], bool] A callable that returns True if
+    the keyword argument is valid.
+-   description : str | None A message template if validation fails.
+-   action : str Either "raise" (default) or "warn".
+
+Returns:
+
+-   Callable[[Callable[FuncParams, ReturnType]], Callable[FuncParams, ReturnType]]
+    A decorator that validates the keyword argument.
+
+Modifies:
+
+-   If validation fails and action=="warn", emits a warning. Otherwise,
+    raises a ValueError.
+
+Usage:
+
+    @validate_kwarg("x", lambda val: val > 0, "Invalid {kwarg_name}: {value}")
+    def my_func(x: int) -> int:
+        return x
+
+    assert my_func(x=1) == 1
+
+Raises:
+
+-   ValueError if validation fails and action == "raise".
+
+def replace_kwarg
+
+    (
+        kwarg_name: str,
+        check: Callable[[~T_kwarg], bool],
+        replacement_value: ~T_kwarg,
+        replace_if_missing: bool = False
+    ) -> Callable[[Callable[~FuncParams, ~ReturnType]], Callable[~FuncParams, ~ReturnType]]
+
+View Source on GitHub
+
+Decorator that replaces a specific keyword argument value by identity
+comparison.
+
+Parameters:
+
+-   kwarg_name : str The name of the keyword argument to replace.
+-   check : Callable[[T_kwarg], bool] A callable that returns True if
+    the keyword argument should be replaced.
+-   replacement_value : T_kwarg The value to replace with.
+-   replace_if_missing : bool If True, replaces the keyword argument
+    even if it’s missing.
+
+Returns:
+
+-   Callable[[Callable[FuncParams, ReturnType]], Callable[FuncParams, ReturnType]]
+    A decorator that replaces the keyword argument value.
+
+Modifies:
+
+-   Updates kwargs[kwarg_name] if its value is default_value.
+
+Usage:
+
+    @replace_kwarg("x", None, "default_string")
+    def my_func(*, x: str | None = None) -> str:
+        return x
+
+    assert my_func(x=None) == "default_string"
+
+def is_none
+
+    (value: Any) -> bool
+
+View Source on GitHub
+
+def always_true
+
+    (value: Any) -> bool
+
+View Source on GitHub
+
+def always_false
+
+    (value: Any) -> bool
+
+View Source on GitHub
+
+def format_docstring
+
+    (
+        **fmt_kwargs: Any
+    ) -> Callable[[Callable[~FuncParams, ~ReturnType]], Callable[~FuncParams, ~ReturnType]]
+
+View Source on GitHub
+
+Decorator that formats a function’s docstring with the provided keyword
+arguments.
+
+-   LambdaArgs = LambdaArgs
+
+def typed_lambda
+
+    (
+        fn: Callable[[Unpack[LambdaArgs]], ~ReturnType],
+        in_types: ~LambdaArgsTypes,
+        out_type: type[~ReturnType]
+    ) -> Callable[[Unpack[LambdaArgs]], ~ReturnType]
+
+View Source on GitHub
+
+Wraps a lambda function with type hints.
+
+Parameters:
+
+-   fn : Callable[[Unpack[LambdaArgs]], ReturnType] The lambda function
+    to wrap.
+-   in_types : tuple[type, ...] Tuple of input types.
+-   out_type : type[ReturnType] The output type.
+
+Returns:
+
+-   Callable[..., ReturnType] A new function with annotations matching
+    the given signature.
+
+Usage:
+
+    add = typed_lambda(lambda x, y: x + y, (int, int), int)
+    assert add(1, 2) == 3
+
+Raises:
+
+-   ValueError if the number of input types doesn’t match the lambda’s
+    parameters.
+
+  docs for muutils v0.8.1
 
 API Documentation
 
@@ -4939,7 +5142,7 @@ View Source on GitHub
 Returns a base64 representation of the hash of the given string. not
 cryptographically secure
 
-  docs for muutils v0.8.0
+  docs for muutils v0.8.1
 
 API Documentation
 
@@ -4996,7 +5199,7 @@ Examples:
     >>> str_to_numeric("1.2e2")
     120.0
 
-  docs for muutils v0.8.0
+  docs for muutils v0.8.1
 
 API Documentation
 
@@ -5171,7 +5374,7 @@ Raises:
     is "except"
 -   ValueError : if when_missing is invalid
 
-  docs for muutils v0.8.0
+  docs for muutils v0.8.1
 
 API Documentation
 
@@ -5256,7 +5459,7 @@ def dynamic_docstring
 
 View Source on GitHub
 
-  docs for muutils v0.8.0
+  docs for muutils v0.8.1
 
 Contents
 
@@ -5352,7 +5555,7 @@ def pprint_summary
 
 View Source on GitHub
 
-  docs for muutils v0.8.0
+  docs for muutils v0.8.1
 
 Contents
 
@@ -5396,7 +5599,7 @@ View Source on GitHub
 
 for plotting mermaid.js diagrams
 
-  docs for muutils v0.8.0
+  docs for muutils v0.8.1
 
 Contents
 
@@ -5568,7 +5771,7 @@ View Source on GitHub
 
 Show the active plot, depending on global configs
 
-  docs for muutils v0.8.0
+  docs for muutils v0.8.1
 
 Contents
 
@@ -5672,7 +5875,7 @@ Arguments
     - `filter_out_lines: str|typing.Sequence[str] = ('%', '!')`: comment out lines starting with these strings (in code blocks).
         if a string is passed, it will be split by char and each char will be treated as a separate filter.
 
-  docs for muutils v0.8.0
+  docs for muutils v0.8.1
 
 Contents
 
@@ -5700,7 +5903,7 @@ View Source on GitHub
 
 for plotting mermaid.js diagrams
 
-  docs for muutils v0.8.0
+  docs for muutils v0.8.1
 
 Contents
 
@@ -5731,7 +5934,7 @@ View Source on GitHub
 
 function for easily rendering a sympy expression in latex
 
-  docs for muutils v0.8.0
+  docs for muutils v0.8.1
 
 Contents
 
@@ -5851,7 +6054,7 @@ Usage:
         Output in temp/converted/notebook1.CI-output.txt
         {SUCCESS_STR} Run completed with return code 0
 
-  docs for muutils v0.8.0
+  docs for muutils v0.8.1
 
 API Documentation
 
@@ -5859,6 +6062,7 @@ API Documentation
 -   ProgressBarOption
 -   DEFAULT_PBAR_FN
 -   spinner_fn_wrap
+-   map_kwargs_for_tqdm
 -   no_progress_fn_wrap
 -   set_up_progress_bar_fn
 -   run_maybe_parallel
@@ -5883,98 +6087,23 @@ View Source on GitHub
 
 -   ProgressBarOption = typing.Literal['tqdm', 'spinner', 'none', None]
 
-def DEFAULT_PBAR_FN
-
-    (*_, **__)
-
-View Source on GitHub
-
-Decorate an iterable object, returning an iterator which acts exactly
-like the original iterable, but prints a dynamically updating
-progressbar every time a value is requested.
-
-Parameters
-
-iterable : iterable, optional Iterable to decorate with a progressbar.
-Leave blank to manually manage the updates. desc : str, optional Prefix
-for the progressbar. total : int or float, optional The number of
-expected iterations. If unspecified, len(iterable) is used if possible.
-If float(“inf”) or as a last resort, only basic progress statistics are
-displayed (no ETA, no progressbar). If gui is True and this parameter
-needs subsequent updating, specify an initial arbitrary large positive
-number, e.g. 9e9. leave : bool, optional If [default: True], keeps all
-traces of the progressbar upon termination of iteration. If None, will
-leave only if position is 0. file : io.TextIOWrapper or io.StringIO,
-optional Specifies where to output the progress messages (default:
-sys.stderr). Uses file.write(str) and file.flush() methods. For
-encoding, see write_bytes. ncols : int, optional The width of the entire
-output message. If specified, dynamically resizes the progressbar to
-stay within this bound. If unspecified, attempts to use environment
-width. The fallback is a meter width of 10 and no limit for the counter
-and statistics. If 0, will not print any meter (only stats). mininterval
-: float, optional Minimum progress display update interval [default:
-0.1] seconds. maxinterval : float, optional Maximum progress display
-update interval [default: 10] seconds. Automatically adjusts miniters to
-correspond to mininterval after long display update lag. Only works if
-dynamic_miniters or monitor thread is enabled. miniters : int or float,
-optional Minimum progress display update interval, in iterations. If 0
-and dynamic_miniters, will automatically adjust to equal mininterval
-(more CPU efficient, good for tight loops). If > 0, will skip display of
-specified number of iterations. Tweak this and mininterval to get very
-efficient loops. If your progress is erratic with both fast and slow
-iterations (network, skipping items, etc) you should set miniters=1.
-ascii : bool or str, optional If unspecified or False, use unicode
-(smooth blocks) to fill the meter. The fallback is to use ASCII
-characters ” 123456789#“. disable : bool, optional Whether to disable
-the entire progressbar wrapper [default: False]. If set to None, disable
-on non-TTY. unit : str, optional String that will be used to define the
-unit of each iteration [default: it]. unit_scale : bool or int or float,
-optional If 1 or True, the number of iterations will be reduced/scaled
-automatically and a metric prefix following the International System of
-Units standard will be added (kilo, mega, etc.) [default: False]. If any
-other non-zero number, will scale total and n. dynamic_ncols : bool,
-optional If set, constantly alters ncols and nrows to the environment
-(allowing for window resizes) [default: False]. smoothing : float,
-optional Exponential moving average smoothing factor for speed estimates
-(ignored in GUI mode). Ranges from 0 (average speed) to 1
-(current/instantaneous speed) [default: 0.3]. bar_format : str, optional
-Specify a custom bar string formatting. May impact performance.
-[default: ‘{l_bar}{bar}{r_bar}’], where l_bar=‘{desc}:
-{percentage:3.0f}%|’ and r_bar=‘| {n_fmt}/{total_fmt}
-[{elapsed}<{remaining}, ’ ’{rate_fmt}{postfix}]’ Possible vars: l_bar,
-bar, r_bar, n, n_fmt, total, total_fmt, percentage, elapsed, elapsed_s,
-ncols, nrows, desc, unit, rate, rate_fmt, rate_noinv, rate_noinv_fmt,
-rate_inv, rate_inv_fmt, postfix, unit_divisor, remaining, remaining_s,
-eta. Note that a trailing”: ” is automatically removed after {desc} if
-the latter is empty. initial : int or float, optional The initial
-counter value. Useful when restarting a progress bar [default: 0]. If
-using float, consider specifying {n:.3f} or similar in bar_format, or
-specifying unit_scale. position : int, optional Specify the line offset
-to print this bar (starting from 0) Automatic if unspecified. Useful to
-manage multiple bars at once (eg, from threads). postfix : dict or *,
-optional Specify additional stats to display at the end of the bar.
-Calls set_postfix(**postfix) if possible (dict). unit_divisor : float,
-optional [default: 1000], ignored unless unit_scale is True. write_bytes
-: bool, optional Whether to write bytes. If (default: False) will write
-unicode. lock_args : tuple, optional Passed to refresh for intermediate
-output (initialisation, iterating, and updating). nrows : int, optional
-The screen height. If specified, hides nested bars outside this bound.
-If unspecified, attempts to use environment height. The fallback is 20.
-colour : str, optional Bar colour (e.g. ‘green’, ‘#00ff00’). delay :
-float, optional Don’t display until [default: 0] seconds have elapsed.
-gui : bool, optional WARNING: internal parameter - do not use. Use
-tqdm.gui.tqdm(…) instead. If set, will attempt to use matplotlib
-animations for a graphical output [default: False].
-
-Returns
-
-out : decorated iterator.
+-   DEFAULT_PBAR_FN: Literal['tqdm', 'spinner', 'none', None] = 'tqdm'
 
 def spinner_fn_wrap
 
     (x: Iterable, **kwargs) -> List
 
 View Source on GitHub
+
+spinner wrapper
+
+def map_kwargs_for_tqdm
+
+    (kwargs: dict) -> dict
+
+View Source on GitHub
+
+map kwargs for tqdm, cant wrap because the pbar dissapears?
 
 def no_progress_fn_wrap
 
@@ -5990,9 +6119,28 @@ def set_up_progress_bar_fn
         pbar: Union[muutils.parallel.ProgressBarFunction, Literal['tqdm', 'spinner', 'none', None]],
         pbar_kwargs: Optional[Dict[str, Any]] = None,
         **extra_kwargs
-    ) -> muutils.parallel.ProgressBarFunction
+    ) -> Tuple[muutils.parallel.ProgressBarFunction, dict]
 
 View Source on GitHub
+
+set up the progress bar function and its kwargs
+
+Parameters:
+
+-   pbar : Union[ProgressBarFunction, ProgressBarOption] progress bar
+    function or option. if a function, we return as-is. if a string, we
+    figure out which progress bar to use
+-   pbar_kwargs : Optional[Dict[str, Any]] kwargs passed to the progress
+    bar function (default to None) (defaults to None)
+
+Returns:
+
+-   Tuple[ProgressBarFunction, dict] a tuple of the progress bar
+    function and its kwargs
+
+Raises:
+
+-   ValueError : if pbar is not one of the valid options
 
 def run_maybe_parallel
 
@@ -6004,7 +6152,7 @@ def run_maybe_parallel
         chunksize: Optional[int] = None,
         keep_ordered: bool = True,
         use_multiprocess: bool = False,
-        pbar: Union[muutils.parallel.ProgressBarFunction, Literal['tqdm', 'spinner', 'none', None]] = <function tqdm>
+        pbar: Union[muutils.parallel.ProgressBarFunction, Literal['tqdm', 'spinner', 'none', None]] = 'tqdm'
     ) -> List[~OutputType]
 
 View Source on GitHub
@@ -6028,18 +6176,25 @@ Parameters:
     map or Pool.imap
 -   iterable : Iterable[InputType] iterable passed to either map or
     Pool.imap
--   parallel : bool | int description
--   pbar_kwargs : Dict[str, Any] description
+-   parallel : bool | int whether to run in parallel, and how many
+    processes to use
+-   pbar_kwargs : Dict[str, Any] kwargs passed to the progress bar
+    function
 
 Returns:
 
--   List[OutputType] description
+-   List[OutputType] a list of the output of func for each element in
+    iterable
 
 Raises:
 
--   ValueError : description
+-   ValueError : if parallel is not a boolean or an integer greater than
+    1
+-   ValueError : if use_multiprocess=True and parallel=False
+-   ImportError : if use_multiprocess=True and multiprocess is not
+    available
 
-  docs for muutils v0.8.0
+  docs for muutils v0.8.1
 
 Contents
 
@@ -6435,7 +6590,7 @@ As a decorator:
             spinner.update_value(f"Step {i+1}")
         return "Function completed"
 
-  docs for muutils v0.8.0
+  docs for muutils v0.8.1
 
 Contents
 
@@ -6646,7 +6801,7 @@ Inherited Members
 
 -   clear
 
-  docs for muutils v0.8.0
+  docs for muutils v0.8.1
 
 Contents
 
@@ -6716,7 +6871,7 @@ def get_all
 
 View Source on GitHub
 
-  docs for muutils v0.8.0
+  docs for muutils v0.8.1
 
 Contents
 
@@ -7011,7 +7166,7 @@ Raises:
 -   StateDictShapeError : shapes don’t match (but keys do)
 -   StateDictValueError : values don’t match (but keys and shapes do)
 
-  docs for muutils v0.8.0
+  docs for muutils v0.8.1
 
 Contents
 
@@ -7112,7 +7267,7 @@ FancyTimeitResult, which is a NamedTuple with the following fields:
 -   profile: pstats.Stats|None A pstats.Stats object if do_profiling is
     True, otherwise None.
 
-  docs for muutils v0.8.0
+  docs for muutils v0.8.1
 
 Contents
 

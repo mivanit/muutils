@@ -46,7 +46,7 @@
 </script></head>
 <body>
 <div class="package-version">
-    docs for <a href="https://github.com/mivanit/muutils">muutils</a> v0.8.0<br>
+    docs for <a href="https://github.com/mivanit/muutils">muutils</a> v0.8.1<br>
 </div>
     <nav class="pdoc">
         <label id="navtoggle" for="togglestate" class="pdoc-button">
@@ -109,7 +109,7 @@
     </nav>
     <main class="pdoc">
             <section class="module-info">
-                        <a class="pdoc-button git-button" href="https://github.com/mivanit/muutils/blob/0.8.0/nbutils/convert_ipynb_to_script.py">View Source on GitHub</a>
+                        <a class="pdoc-button git-button" href="https://github.com/mivanit/muutils/blob/0.8.1/nbutils/convert_ipynb_to_script.py">View Source on GitHub</a>
                     <h1 class="modulename">
 <a href="./../../muutils.html">muutils</a><wbr>.<a href="./../nbutils.html">nbutils</a><wbr>.convert_ipynb_to_script    </h1>
 
@@ -121,7 +121,7 @@
                         <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="mod-convert_ipynb_to_script-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.0/nbutils/convert_ipynb_to_script.py#L0-L372" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.1/nbutils/convert_ipynb_to_script.py#L0-L372" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -441,36 +441,36 @@
 </span><span id="L-311"><a href="#L-311"><span class="linenos">311</span></a>        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Convert Jupyter Notebook to a script with cell separators.&quot;</span>
 </span><span id="L-312"><a href="#L-312"><span class="linenos">312</span></a>    <span class="p">)</span>
 </span><span id="L-313"><a href="#L-313"><span class="linenos">313</span></a>    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
-</span><span id="L-314"><a href="#L-314"><span class="linenos">314</span></a>        <span class="s2">&quot;in_path&quot;</span><span class="p">,</span>
+</span><span id="L-314"><a href="#L-314"><span class="linenos">314</span></a>        <span class="s2">&quot;in-path&quot;</span><span class="p">,</span>
 </span><span id="L-315"><a href="#L-315"><span class="linenos">315</span></a>        <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span>
 </span><span id="L-316"><a href="#L-316"><span class="linenos">316</span></a>        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Input Jupyter Notebook file (.ipynb) or directory of files.&quot;</span><span class="p">,</span>
 </span><span id="L-317"><a href="#L-317"><span class="linenos">317</span></a>    <span class="p">)</span>
 </span><span id="L-318"><a href="#L-318"><span class="linenos">318</span></a>    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
-</span><span id="L-319"><a href="#L-319"><span class="linenos">319</span></a>        <span class="s2">&quot;--out_file&quot;</span><span class="p">,</span>
+</span><span id="L-319"><a href="#L-319"><span class="linenos">319</span></a>        <span class="s2">&quot;--out-file&quot;</span><span class="p">,</span>
 </span><span id="L-320"><a href="#L-320"><span class="linenos">320</span></a>        <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span>
 </span><span id="L-321"><a href="#L-321"><span class="linenos">321</span></a>        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Output script file. If not specified, the result will be printed to stdout.&quot;</span><span class="p">,</span>
 </span><span id="L-322"><a href="#L-322"><span class="linenos">322</span></a>    <span class="p">)</span>
 </span><span id="L-323"><a href="#L-323"><span class="linenos">323</span></a>    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
-</span><span id="L-324"><a href="#L-324"><span class="linenos">324</span></a>        <span class="s2">&quot;--output_dir&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Output directory for converted script files.&quot;</span>
+</span><span id="L-324"><a href="#L-324"><span class="linenos">324</span></a>        <span class="s2">&quot;--output-dir&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Output directory for converted script files.&quot;</span>
 </span><span id="L-325"><a href="#L-325"><span class="linenos">325</span></a>    <span class="p">)</span>
 </span><span id="L-326"><a href="#L-326"><span class="linenos">326</span></a>    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
-</span><span id="L-327"><a href="#L-327"><span class="linenos">327</span></a>        <span class="s2">&quot;--strip_md_cells&quot;</span><span class="p">,</span>
+</span><span id="L-327"><a href="#L-327"><span class="linenos">327</span></a>        <span class="s2">&quot;--strip-md-cells&quot;</span><span class="p">,</span>
 </span><span id="L-328"><a href="#L-328"><span class="linenos">328</span></a>        <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">,</span>
 </span><span id="L-329"><a href="#L-329"><span class="linenos">329</span></a>        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Remove markdown cells from the output script.&quot;</span><span class="p">,</span>
 </span><span id="L-330"><a href="#L-330"><span class="linenos">330</span></a>    <span class="p">)</span>
 </span><span id="L-331"><a href="#L-331"><span class="linenos">331</span></a>    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
-</span><span id="L-332"><a href="#L-332"><span class="linenos">332</span></a>        <span class="s2">&quot;--header_comment&quot;</span><span class="p">,</span>
+</span><span id="L-332"><a href="#L-332"><span class="linenos">332</span></a>        <span class="s2">&quot;--header-comment&quot;</span><span class="p">,</span>
 </span><span id="L-333"><a href="#L-333"><span class="linenos">333</span></a>        <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span>
 </span><span id="L-334"><a href="#L-334"><span class="linenos">334</span></a>        <span class="n">default</span><span class="o">=</span><span class="sa">r</span><span class="s2">&quot;#</span><span class="si">%%</span><span class="s2">&quot;</span><span class="p">,</span>
 </span><span id="L-335"><a href="#L-335"><span class="linenos">335</span></a>        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Comment string to separate cells in the output script.&quot;</span><span class="p">,</span>
 </span><span id="L-336"><a href="#L-336"><span class="linenos">336</span></a>    <span class="p">)</span>
 </span><span id="L-337"><a href="#L-337"><span class="linenos">337</span></a>    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
-</span><span id="L-338"><a href="#L-338"><span class="linenos">338</span></a>        <span class="s2">&quot;--disable_plots&quot;</span><span class="p">,</span>
+</span><span id="L-338"><a href="#L-338"><span class="linenos">338</span></a>        <span class="s2">&quot;--disable-plots&quot;</span><span class="p">,</span>
 </span><span id="L-339"><a href="#L-339"><span class="linenos">339</span></a>        <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">,</span>
 </span><span id="L-340"><a href="#L-340"><span class="linenos">340</span></a>        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Disable plots in the output script. Useful for testing in CI.&quot;</span><span class="p">,</span>
 </span><span id="L-341"><a href="#L-341"><span class="linenos">341</span></a>    <span class="p">)</span>
 </span><span id="L-342"><a href="#L-342"><span class="linenos">342</span></a>    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
-</span><span id="L-343"><a href="#L-343"><span class="linenos">343</span></a>        <span class="s2">&quot;--filter_out_lines&quot;</span><span class="p">,</span>
+</span><span id="L-343"><a href="#L-343"><span class="linenos">343</span></a>        <span class="s2">&quot;--filter-out-lines&quot;</span><span class="p">,</span>
 </span><span id="L-344"><a href="#L-344"><span class="linenos">344</span></a>        <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span>
 </span><span id="L-345"><a href="#L-345"><span class="linenos">345</span></a>        <span class="n">default</span><span class="o">=</span><span class="s2">&quot;%&quot;</span><span class="p">,</span>
 </span><span id="L-346"><a href="#L-346"><span class="linenos">346</span></a>        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Comment out lines starting with these characters.&quot;</span><span class="p">,</span>
@@ -500,7 +500,7 @@
 </span><span id="L-370"><a href="#L-370"><span class="linenos">370</span></a>        <span class="p">)</span>
 </span><span id="L-371"><a href="#L-371"><span class="linenos">371</span></a>
 </span><span id="L-372"><a href="#L-372"><span class="linenos">372</span></a>
-</span><span id="L-373"><a href="#L-373"><span class="linenos">373</span></a><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;convert_ipynb_to_script.py loaded.&quot;</span><span class="p">)</span>
+</span><span id="L-373"><a href="#L-373"><span class="linenos">373</span></a><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;muutils.nbutils.convert_ipynb_to_script.py loaded.&quot;</span><span class="p">)</span>
 </span></pre></div>
 
 
@@ -542,7 +542,7 @@
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="disable_plots_in_script-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.0/nbutils/convert_ipynb_to_script.py#L63-L147" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.1/nbutils/convert_ipynb_to_script.py#L63-L147" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -653,7 +653,7 @@
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="convert_ipynb-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.0/nbutils/convert_ipynb_to_script.py#L150-L207" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.1/nbutils/convert_ipynb_to_script.py#L150-L207" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -752,7 +752,7 @@
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="process_file-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.0/nbutils/convert_ipynb_to_script.py#L210-L242" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.1/nbutils/convert_ipynb_to_script.py#L210-L242" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -809,7 +809,7 @@
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="process_dir-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.0/nbutils/convert_ipynb_to_script.py#L245-L306" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.1/nbutils/convert_ipynb_to_script.py#L245-L306" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>

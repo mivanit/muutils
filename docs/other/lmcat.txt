@@ -1,8 +1,8 @@
 # Stats
 - 52 files
-- 10559 (11K) lines
-- 366500 (366K) chars
-- 39506 (40K) `whitespace-split` tokens
+- 10564 (11K) lines
+- 366724 (367K) chars
+- 39527 (40K) `whitespace-split` tokens
 
 # File Tree
 
@@ -33,7 +33,7 @@ muutils
 │   │   ├── __init__.py                 [   83L  1,941C   153T]
 │   │   ├── classes.py                  [   97L  3,425C   409T]
 │   │   ├── freezing.py                 [  107L  3,325C   324T]
-│   │   ├── func.py                     [  273L  8,805C   913T]
+│   │   ├── func.py                     [  277L  8,975C   930T]
 │   │   ├── hashing.py                  [   29L    923C   110T]
 │   │   ├── numerical.py                [  165L  4,601C   522T]
 │   │   ├── sequence.py                 [  234L  7,251C   877T]
@@ -66,7 +66,7 @@ muutils
 ├── LICENSE                             [  674L 35,149C 5,644T]
 ├── README.md                           [  131L  6,289C   551T]
 ├── makefile                            [1,486L 45,517C 5,458T]
-├── pyproject.toml                      [  189L  6,108C   654T]
+├── pyproject.toml                      [  190L  6,162C   658T]
 ```
 
 # File Contents
@@ -3498,7 +3498,6 @@ ReturnType = TypeVar("ReturnType")
 T_kwarg = TypeVar("T_kwarg")
 T_process_in = TypeVar("T_process_in")
 T_process_out = TypeVar("T_process_out")
-LambdaArgs = TypeVarTuple("LambdaArgs")
 
 FuncParams = ParamSpec("FuncParams")
 FuncParamsPreWrap = ParamSpec("FuncParamsPreWrap")
@@ -3690,15 +3689,20 @@ def format_docstring(
     return decorator
 
 
+# TODO: no way to make the type system understand this afaik
+LambdaArgs = TypeVarTuple("LambdaArgs")
+LambdaArgsTypes = TypeVar("LambdaArgsTypes", bound=tuple[type, ...])
+
+
 def typed_lambda(
-    fn: Callable[..., Any],
-    in_types: tuple[Unpack[LambdaArgs]],
+    fn: Callable[[Unpack[LambdaArgs]], ReturnType],
+    in_types: LambdaArgsTypes,
     out_type: type[ReturnType],
 ) -> Callable[[Unpack[LambdaArgs]], ReturnType]:
     """Wraps a lambda function with type hints.
 
     # Parameters:
-     - `fn : Callable[..., Any]`
+     - `fn : Callable[[Unpack[LambdaArgs]], ReturnType]`
         The lambda function to wrap.
      - `in_types : tuple[type, ...]`
         Tuple of input types.
@@ -10441,6 +10445,7 @@ help: help-targets info
         # typing
         "mypy>=1.0.1; python_version < '3.9'",
         "mypy>=1.15; python_version >= '3.9'",
+        "typing-extensions; python_version < '3.11'",
         # tests & coverage
         "pytest>=8.2.2",
         "pytest-cov>=4.1.0",

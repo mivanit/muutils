@@ -26,6 +26,7 @@ muutils\logger\timing.py                                                        
 muutils\misc\__init__.py                                                              7      0   100%
 muutils\misc\classes.py                                                              23      5    78%   18-23
 muutils\misc\freezing.py                                                             61      8    87%   17, 26, 29, 49-50, 63, 102-103
+muutils\misc\func.py                                                                 86     14    84%   14-21, 132, 201, 205, 213-220
 muutils\misc\hashing.py                                                              16      7    56%   14, 23-29
 muutils\misc\numerical.py                                                            68      3    96%   46, 77, 127
 muutils\misc\sequence.py                                                             59      1    98%   42
@@ -37,7 +38,7 @@ muutils\nbutils\convert_ipynb_to_script.py                                      
 muutils\nbutils\mermaid.py                                                           11      7    36%   7-10, 17-20
 muutils\nbutils\print_tex.py                                                         10     10     0%   3-21
 muutils\nbutils\run_notebook_tests.py                                                87     17    80%   94-101, 129, 133, 137, 143, 185, 191-196, 201-204
-muutils\parallel.py                                                                  86      6    93%   47, 79-81, 190, 194-195
+muutils\parallel.py                                                                  94      6    94%   46-48, 60, 220, 224-225
 muutils\spinner.py                                                                  147     10    93%   280, 307, 370-371, 417, 420, 423, 464, 468, 507
 muutils\statcounter.py                                                               89     32    64%   30-41, 56, 82, 110, 122, 132, 149-179, 199, 209, 212, 217-222, 231
 muutils\sysinfo.py                                                                   78     25    68%   22-25, 66-67, 84-117, 158-167, 179, 197-199
@@ -56,6 +57,7 @@ tests\unit\json_serialize\test_util.py                                          
 tests\unit\logger\test_logger.py                                                     11      0   100%
 tests\unit\logger\test_timer_context.py                                              11      0   100%
 tests\unit\misc\test_freeze.py                                                      121      0   100%
+tests\unit\misc\test_func.py                                                        174      7    96%   48, 87, 144, 155, 284, 296, 308
 tests\unit\misc\test_misc.py                                                        148      5    97%   239, 247, 255, 354-355
 tests\unit\misc\test_numerical_conversions.py                                        43      0   100%
 tests\unit\misc\test_sequence.py                                                     73      0   100%
@@ -70,7 +72,7 @@ tests\unit\test_import_torch.py                                                 
 tests\unit\test_interval.py                                                         899      1    99%   12
 tests\unit\test_kappa.py                                                             39      0   100%
 tests\unit\test_mlutils.py                                                           43      6    86%   35, 39, 47, 50, 57-58
-tests\unit\test_parallel.py                                                         131      5    96%   26, 32, 43, 47-48
+tests\unit\test_parallel.py                                                         132      5    96%   27, 33, 44, 48-49
 tests\unit\test_spinner.py                                                          295      8    97%   352-362
 tests\unit\test_statcounter.py                                                       14      0   100%
 tests\unit\test_sysinfo.py                                                            6      0   100%
@@ -81,4 +83,4 @@ tests\unit\validate_type\test_validate_type.py                                  
 tests\unit\validate_type\test_validate_type_special.py                               15      3    80%   34-35, 57
 tests\util\test_fire.py                                                               8      6    25%   2-5, 9-11
 ---------------------------------------------------------------------------------------------------------------
-TOTAL                                                                              6584    979    85%
+TOTAL                                                                              6853   1000    85%

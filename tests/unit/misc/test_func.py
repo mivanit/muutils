@@ -108,14 +108,15 @@ def test_process_kwarg_with_positional_argument() -> None:
 def test_process_kwarg_processor_returns_none() -> None:
     """Test that if the processor returns None, the function receives None."""
 
-    from types import NoneType
+    if sys.version_info >= (3, 10):
+        from types import NoneType
 
-    @process_kwarg("x", typed_lambda(lambda x: None, (int,), NoneType))
-    def func(x: Optional[int] = 5) -> Optional[int]:
-        return x
+        @process_kwarg("x", typed_lambda(lambda x: None, (int,), NoneType))
+        def func(x: Optional[int] = 5) -> Optional[int]:
+            return x
 
-    result: Optional[int] = func(x=100)
-    assert result is None
+        result: Optional[int] = func(x=100)
+        assert result is None
 
 
 # --- Additional tests for validate_kwarg ---

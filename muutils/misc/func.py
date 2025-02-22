@@ -2,113 +2,117 @@ from __future__ import annotations
 import functools
 from types import CodeType
 import warnings
-from typing import (
-    Optional,
-    cast,
-    Callable,
-    TypeVar,
-    Any,
-    TypeVarTuple,
-    Unpack,
-)
+from typing import Any, Callable, cast, ParamSpec, TypeVar
 
-F = TypeVar("F", bound=Callable[..., Any])
+try:
+    try:
+        # 3.11+
+        from typing import Unpack, TypeVarTuple
+    except ImportError:
+        # 3.9+
+        from typing_extensions import Unpack, TypeVarTuple
+except ImportError:
+    warnings.warn(
+        "muutils.misc.func could not import Unpack and TypeVarTuple from typing or typing_extensions, typed_lambda may not work"
+    )
+    Unpack = Any
+    TypeVarTuple = TypeVar
+
+
+from muutils.errormode import ErrorMode
+
+warnings.warn("muutils.misc.func is experimental, use with caution")
+
+FuncParams = ParamSpec("FuncParams")
+FuncParamsPreWrap = ParamSpec("FuncOutputParams")
+ReturnType = TypeVar("ReturnType")
+FunctionType = Callable[FuncParams, ReturnType]
+T_kwarg = TypeVar("T_kwarg")
+T_process_in = TypeVar("T_process_in")
+T_process_out = TypeVar("T_process_out")
+LambdaArgs = TypeVarTuple("LambdaArgs")
 
 
 def process_kwarg(
     kwarg_name: str,
-    processor: Callable[[Any], Any],
-) -> Callable[[F], F]:
+    processor: Callable[[T_process_in], T_process_out],
+) -> Callable[[Callable[FuncParamsPreWrap, ReturnType]], FunctionType]:
     """Decorator that applies a processor to a keyword argument.
 
-    This decorator inspects the function call's keyword arguments for `kwarg_name`.
-    If present, that argument is transformed by `processor` before being passed on.
+    The underlying function is expected to have a keyword argument
+    (with name `kwarg_name`) of type `T_out`, but the caller provides
+    a value of type `T_in` that is converted via `processor`.
 
     # Parameters:
      - `kwarg_name : str`
-        The name of the kwarg to be processed.
-     - `processor : Callable[[Any], Any]`
-        A callable (e.g. a lambda) that will process the kwarg's value.
+        The name of the keyword argument to process.
+     - `processor : Callable[[T_in], T_out]`
+        A callable that converts the input value (`T_in`) into the
+        type expected by the function (`T_out`).
 
     # Returns:
-     - `Callable[[F], F]`
-        A decorator that transforms the decorated function's kwarg.
-
-    # Modifies:
-     - The `kwargs[kwarg_name]` is replaced with the result of `processor(kwargs[kwarg_name])`.
-
-    # Usage:
-    ```python
-    @process_kwarg("x", lambda x: x * 2)
-    def my_func(x: int = 0) -> int:
-        return x
-
-    assert my_func(x=3) == 6
-    ```
+     - A decorator that converts a function of type
+       `Callable[OutputParams, ReturnType]` (expecting `kwarg_name` of type `T_out`)
+       into one of type `Callable[InputParams, ReturnType]` (accepting `kwarg_name` of type `T_in`).
     """
 
-    def decorator(func: F) -> F:
+    def decorator(func: Callable[FuncParamsPreWrap, ReturnType]) -> FunctionType:
         @functools.wraps(func)
-        def wrapper(*args: Any, **kwargs: Any) -> Any:
+        def wrapper(*args: FuncParams.args, **kwargs: FuncParams.kwargs) -> ReturnType:
             if kwarg_name in kwargs:
+                # Convert the caller’s value (of type T_in) to T_out
                 kwargs[kwarg_name] = processor(kwargs[kwarg_name])
-            return func(*args, **kwargs)
+            return func(*args, **kwargs)  # type: ignore[arg-type]
 
-        return cast(F, wrapper)
+        return cast(FunctionType, wrapper)
 
     return decorator
 
 
+@process_kwarg("action", ErrorMode.from_any)
 def validate_kwarg(
     kwarg_name: str,
-    validator: Callable[[Any], bool],
-    description: Optional[str] = None,
-    action: str = "raise",
-) -> Callable[[F], F]:
+    validator: Callable[[T_kwarg], bool],
+    description: str | None = None,
+    action: ErrorMode = ErrorMode.EXCEPT,
+) -> Callable[[FunctionType], FunctionType]:
     """Decorator that validates a specific keyword argument.
-
-    This decorator inspects the function call's keyword arguments for `kwarg_name`.
-    If present, the argument is checked via `validator`. If validation fails,
-    either a warning is issued or a `ValueError` is raised (depending on `action`).
 
     # Parameters:
      - `kwarg_name : str`
-        The name of the kwarg to validate.
+        The name of the keyword argument to validate.
      - `validator : Callable[[Any], bool]`
-        A callable that returns True if the kwarg is valid, otherwise False.
-     - `description : Optional[str]`
-        An optional message template to use if validation fails.
-        May contain placeholders like `{kwarg_name}` and `{value}`.
+        A callable that returns True if the keyword argument is valid.
+     - `description : str | None`
+        A message template if validation fails.
      - `action : str`
-        Either `"raise"` or `"warn"`. If `"raise"`, raises a `ValueError` upon failure.
-        If `"warn"`, emits a `UserWarning`.
-        (defaults to `"raise"`)
+        Either `"raise"` (default) or `"warn"`.
 
     # Returns:
-     - `Callable[[F], F]`
-        A decorator that validates the decorated function's kwarg.
+     - `Callable[[FunctionType], FunctionType]`
+        A decorator that validates the keyword argument.
 
     # Modifies:
-     - If validation fails and `action == "warn"`, a warning is emitted. Otherwise, an exception is raised.
+     - If validation fails and `action=="warn"`, emits a warning.
+       Otherwise, raises a ValueError.
 
     # Usage:
+
     ```python
-    @validate_kwarg("x", lambda val: val > 0, "Value for {kwarg_name} must be positive, got {value}")
+    @validate_kwarg("x", lambda val: val > 0, "Invalid {kwarg_name}: {value}")
     def my_func(x: int) -> int:
         return x
 
-    # Raises ValueError if x <= 0
     assert my_func(x=1) == 1
     ```
 
     # Raises:
-     - `ValueError`
-        If validation fails and `action == "raise"`.
+     - `ValueError` if validation fails and `action == "raise"`.
     """
 
-    def decorator(func: F) -> F:
+    def decorator(func: FunctionType) -> FunctionType:
         @functools.wraps(func)
-        def wrapper(*args: Any, **kwargs: Any) -> Any:
+        def wrapper(*args: FuncParams.args, **kwargs: FuncParams.kwargs) -> ReturnType:
             if kwarg_name in kwargs:
                 value: Any = kwargs[kwarg_name]
                 if not validator(value):
@@ -123,126 +127,113 @@ def validate_kwarg(
                         raise ValueError(msg)
             return func(*args, **kwargs)
 
-        return cast(F, wrapper)
+        return cast(FunctionType, wrapper)
 
     return decorator
 
 
 def replace_kwarg(
     kwarg_name: str,
-    default_value: Any,
-    replacement_value: Any,
-) -> Callable[[F], F]:
+    check: Callable[[T_kwarg], bool],
+    replacement_value: T_kwarg,
+) -> Callable[[FunctionType], FunctionType]:
     """Decorator that replaces a specific keyword argument value by identity comparison.
-
-    This decorator checks if `kwarg_name` is present in the function call's kwargs, and
-    if its value is exactly (by identity) `default_value`. If so, it's replaced by
-    `replacement_value`.
 
     # Parameters:
      - `kwarg_name : str`
-        The name of the kwarg to replace.
-     - `default_value : Any`
-        The value (checked by `is`) that triggers replacement.
-     - `replacement_value : Any`
-        The value that will replace the kwarg if `default_value` is matched.
+        The name of the keyword argument to replace.
+     - `check : Callable[[T_kwarg], bool]`
+        A callable that returns True if the keyword argument should be replaced.
+     - `replacement_value : T_kwarg`
+        The value to replace with.
 
     # Returns:
-     - `Callable[[F], F]`
-        A decorator that replaces kwarg values.
+     - `Callable[[FunctionType], FunctionType]`
+        A decorator that replaces the keyword argument value.
 
     # Modifies:
-     - `kwargs[kwarg_name]` is updated if the original value is `default_value` (by identity).
+     - Updates `kwargs[kwarg_name]` if its value is `default_value`.
 
     # Usage:
+
     ```python
     @replace_kwarg("x", None, "default_string")
-    def my_func(x: str | None = None) -> str:
+    def my_func(*, x: str | None = None) -> str:
         return x
 
     assert my_func(x=None) == "default_string"
     ```
     """
 
-    def decorator(func: F) -> F:
+    def decorator(func: FunctionType) -> FunctionType:
         @functools.wraps(func)
-        def wrapper(*args: Any, **kwargs: Any) -> Any:
-            if kwarg_name in kwargs and kwargs[kwarg_name] is default_value:
+        def wrapper(*args: FuncParams.args, **kwargs: FuncParams.kwargs) -> ReturnType:
+            if kwarg_name in kwargs and check(kwargs[kwarg_name]):
                 kwargs[kwarg_name] = replacement_value
             return func(*args, **kwargs)
 
-        return cast(F, wrapper)
+        return cast(FunctionType, wrapper)
 
     return decorator
 
 
-T_FuncWrap = TypeVar("T_FuncWrap", bound=Callable[..., Any])
+def format_docstring(**fmt_kwargs: Any) -> Callable[[FunctionType], FunctionType]:
+    """Decorator that formats a function's docstring with the provided keyword arguments."""
 
-
-def format_docstring(**kwargs) -> Callable[[T_FuncWrap], T_FuncWrap]:
-    """Decorator that formats a function's docstring with the provided kwargs"""
-
-    def decorator(func: T_FuncWrap) -> T_FuncWrap:
-        func.__doc__ = func.__doc__.format(**kwargs)
+    def decorator(func: FunctionType) -> FunctionType:
+        if func.__doc__ is not None:
+            func.__doc__ = func.__doc__.format(**fmt_kwargs)
         return func
 
     return decorator
 
 
-T_Return = TypeVar("T_Return")
-T_args = TypeVarTuple("T_args")
-
-
 def typed_lambda(
     fn: Callable[..., Any],
-    in_types: tuple[type[Unpack[T_args]], ...],
-    out_type: type[T_Return],
-) -> Callable[[Unpack[T_args]], T_Return]:
+    in_types: LambdaArgs,
+    out_type: type[ReturnType],
+) -> Callable[LambdaArgs, ReturnType]:
     """Wraps a lambda function with type hints.
 
     # Parameters:
      - `fn : Callable[..., Any]`
-        The lambda function to wrap
-     - `in_types : tuple[type[Unpack[Ts]], ...]`
-        Tuple of input types
-     - `out_type : type[T]`
-        Output type
+        The lambda function to wrap.
+     - `in_types : tuple[type, ...]`
+        Tuple of input types.
+     - `out_type : type[ReturnType]`
+        The output type.
 
     # Returns:
-     - `Callable[[Unpack[Ts]], T]`
-        A new function with the same behavior but with type hints
+     - `Callable[..., ReturnType]`
+        A new function with annotations matching the given signature.
 
     # Usage:
+
     ```python
-    >>> add = typed_lambda(lambda x, y: x + y, (int, str), str)
-    >>> reveal_type(add)  # type: Callable[[int, str], str]
-    >>> add(1, "2")
-    "12"
+    add = typed_lambda(lambda x, y: x + y, (int, int), int)
+    assert add(1, 2) == 3
     ```
 
     # Raises:
-     - `ValueError`
-        If number of input types doesn't match lambda parameters
+     - `ValueError` if the number of input types doesn't match the lambda's parameters.
     """
     code: CodeType = fn.__code__
     n_params: int = code.co_argcount
 
     if len(in_types) != n_params:
         raise ValueError(
-            f"Number of input types ({len(in_types)}) "
-            f"doesn't match number of parameters ({n_params})"
+            f"Number of input types ({len(in_types)}) doesn't match number of parameters ({n_params})"
         )
 
     param_names: tuple[str, ...] = code.co_varnames[:n_params]
     annotations: dict[str, type] = {
-        name: type_ for name, type_ in zip(param_names, in_types)
+        name: typ for name, typ in zip(param_names, in_types)
     }
     annotations["return"] = out_type
 
     @functools.wraps(fn)
-    def wrapped(*args: Unpack[T_args], **kwargs: Any) -> T_Return:
+    def wrapped(*args: Any, **kwargs: Any) -> ReturnType:
         return fn(*args, **kwargs)
 
     wrapped.__annotations__ = annotations
-
     return wrapped

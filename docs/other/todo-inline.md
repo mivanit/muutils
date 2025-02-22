@@ -546,6 +546,23 @@ if item_type in value.__mro__:
 
 
 
+## [`tests/conftest.py`](/tests/conftest.py)
+
+- get beartype working  
+  local link: [`/tests/conftest.py#1`](/tests/conftest.py#1) 
+  | view on GitHub: [tests/conftest.py#L1](https://github.com/mivanit/muutils/blob/main/tests/conftest.py#L1)
+  | [Make Issue](https://github.com/mivanit/muutils/issues/new?title=get%20beartype%20working&body=%23%20source%0A%0A%5B%60tests%2Fconftest.py%23L1%60%5D%28https%3A%2F%2Fgithub.com%2Fmivanit%2Fmuutils%2Fblob%2Fmain%2Ftests%2Fconftest.py%23L1%29%0A%0A%23%20context%0A%60%60%60python%0A%23%20TODO%3A%20get%20beartype%20working%0A%23%20from%20beartype.claw%20import%20beartype_all%0A%0A%23%20beartype_all%28%29%0A%60%60%60&labels=enhancement)
+
+  ```python
+# TODO: get beartype working
+# from beartype.claw import beartype_all
+
+# beartype_all()
+  ```
+
+
+
+
 ## [`tests/unit/json_serialize/serializable_dataclass/test_serializable_dataclass.py`](/tests/unit/json_serialize/serializable_dataclass/test_serializable_dataclass.py)
 
 - figure this out  

@@ -2515,7 +2515,7 @@ notably:
 
 
 
-- `SERIALIZE_DIRECT_AS_STR: Set[str] = {"<class 'torch.dtype'>", "<class 'torch.device'>"}`
+- `SERIALIZE_DIRECT_AS_STR: Set[str] = {"<class 'torch.device'>", "<class 'torch.dtype'>"}`
 
 
 
@@ -8738,7 +8738,7 @@ x: ATensor["dim1 dim2", np.float32]
 
 ### `def numpy_to_torch_dtype` { #numpy_to_torch_dtype }
 ```python
-(dtype: Union[numpy.dtype, torch.dtype]) -> torch.dtype
+(dtype: Union[numpy.dtype, torch.dtype, bool, int, float]) -> torch.dtype
 ```
 
 

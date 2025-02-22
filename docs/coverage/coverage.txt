@@ -45,6 +45,7 @@ muutils\sysinfo.py                                                              
 muutils\tensor_utils.py                                                             133     18    86%   100, 103, 122, 126, 143, 146-149, 157, 164, 178-186
 muutils\timeit_fancy.py                                                              31      0   100%
 muutils\validate_type.py                                                             90      5    94%   193, 196, 216, 228-229
+tests\conftest.py                                                                     0      0   100%
 tests\unit\errormode\test_errormode_functionality.py                                 62      1    98%   87
 tests\unit\errormode\test_errormode_init.py                                          68      0   100%
 tests\unit\json_serialize\serializable_dataclass\test_helpers.py                    102      0   100%
@@ -57,7 +58,7 @@ tests\unit\json_serialize\test_util.py                                          
 tests\unit\logger\test_logger.py                                                     11      0   100%
 tests\unit\logger\test_timer_context.py                                              11      0   100%
 tests\unit\misc\test_freeze.py                                                      121      0   100%
-tests\unit\misc\test_func.py                                                        174      7    96%   48, 87, 144, 155, 284, 296, 308
+tests\unit\misc\test_func.py                                                        175      7    96%   48, 87, 145, 156, 285, 297, 309
 tests\unit\misc\test_misc.py                                                        148      5    97%   239, 247, 255, 354-355
 tests\unit\misc\test_numerical_conversions.py                                        43      0   100%
 tests\unit\misc\test_sequence.py                                                     73      0   100%
@@ -83,4 +84,4 @@ tests\unit\validate_type\test_validate_type.py                                  
 tests\unit\validate_type\test_validate_type_special.py                               15      3    80%   34-35, 57
 tests\util\test_fire.py                                                               8      6    25%   2-5, 9-11
 ---------------------------------------------------------------------------------------------------------------
-TOTAL                                                                              6853   1000    85%
+TOTAL                                                                              6854   1000    85%

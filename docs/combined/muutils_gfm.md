@@ -2395,7 +2395,7 @@ GitHub](https://github.com/mivanit/muutils/blob/0.8.1/json_serialize/json_serial
 
 - `SERIALIZER_SPECIAL_FUNCS: dict[str, typing.Callable] = {'str': <class 'str'>, 'dir': <built-in function dir>, 'type': <function <lambda>>, 'repr': <function <lambda>>, 'code': <function <lambda>>, 'sourcefile': <function <lambda>>}`
 
-- `SERIALIZE_DIRECT_AS_STR: Set[str] = {"<class 'torch.dtype'>", "<class 'torch.device'>"}`
+- `SERIALIZE_DIRECT_AS_STR: Set[str] = {"<class 'torch.device'>", "<class 'torch.dtype'>"}`
 
 - `ObjectPath = tuple[typing.Union[str, int], ...]`
 
@@ -7987,7 +7987,7 @@ usage:
 ### `def numpy_to_torch_dtype`
 
 ``` python
-(dtype: Union[numpy.dtype, torch.dtype]) -> torch.dtype
+(dtype: Union[numpy.dtype, torch.dtype, bool, int, float]) -> torch.dtype
 ```
 
 [View Source on

@@ -1,8 +1,8 @@
 # Stats
 - 52 files
-- 10569 (11K) lines
-- 366836 (367K) chars
-- 39542 (40K) `whitespace-split` tokens
+- 10572 (11K) lines
+- 367041 (367K) chars
+- 39554 (40K) `whitespace-split` tokens
 
 # File Tree
 
@@ -60,13 +60,13 @@ muutils
 │   ├── spinner.py                      [  510L 17,772C 1,670T]
 │   ├── statcounter.py                  [  231L  7,373C   768T]
 │   ├── sysinfo.py                      [  199L  6,901C   497T]
-│   ├── tensor_utils.py                 [  494L 14,730C 1,409T]
+│   ├── tensor_utils.py                 [  494L 14,748C 1,412T]
 │   ├── timeit_fancy.py                 [  101L  3,529C   440T]
 │   └── validate_type.py                [  237L  8,401C   896T]
 ├── LICENSE                             [  674L 35,149C 5,644T]
 ├── README.md                           [  131L  6,289C   551T]
 ├── makefile                            [1,486L 45,517C 5,458T]
-├── pyproject.toml                      [  190L  6,162C   658T]
+├── pyproject.toml                      [  193L  6,349C   667T]
 ```
 
 # File Contents
@@ -8704,7 +8704,7 @@ ATensor = jaxtype_factory("ATensor", torch.Tensor, jaxtyping.Float)  # type: ign
 NDArray = jaxtype_factory("NDArray", np.ndarray, jaxtyping.Float)  # type: ignore[misc, assignment]
 
 
-def numpy_to_torch_dtype(dtype: typing.Union[np.dtype, torch.dtype]) -> torch.dtype:
+def numpy_to_torch_dtype(dtype: typing.Union[np.dtype, torch.dtype, bool, int, float]) -> torch.dtype:
     """convert numpy dtype to torch dtype"""
     if isinstance(dtype, torch.dtype):
         return dtype
@@ -10451,6 +10451,7 @@ help: help-targets info
         "mypy>=1.0.1; python_version < '3.9'",
         "mypy>=1.15; python_version >= '3.9'",
         "typing-extensions; python_version < '3.11'",
+        "beartype>=0.14.1",
         # tests & coverage
         "pytest>=8.2.2",
         "pytest-cov>=4.1.0",
@@ -10487,7 +10488,9 @@ help: help-targets info
         "ignore::muutils.nbutils.configure_notebook.UnknownFigureFormatWarning", # don't show warning for unknown figure format
         "ignore::muutils.nbutils.configure_notebook.PlotlyNotInstalledWarning", # don't show warning for missing plotly
         "ignore::muutils.json_serialize.serializable_dataclass.ZanjMissingWarning", # don't show warning for missing zanj (can't have as a dep since zanj depends on muutils)
+        "ignore: PEP 484 type hint*:beartype.roar._roarwarn.BeartypeDecorHintPep585DeprecationWarning",
     ]
+    addopts = "--jaxtyping-packages=beartype.beartype"
 
 [tool.ruff]
     # Exclude the directories specified in the global excludes

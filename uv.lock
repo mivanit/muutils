@@ -1654,6 +1654,7 @@ dev = [
     { name = "pytest" },
     { name = "pytest-cov" },
     { name = "tomli", marker = "python_full_version < '3.11'" },
+    { name = "typing-extensions", marker = "python_full_version < '3.11'" },
 ]
 lint = [
     { name = "pycln" },
@@ -1691,6 +1692,7 @@ dev = [
     { name = "pytest", specifier = ">=8.2.2" },
     { name = "pytest-cov", specifier = ">=4.1.0" },
     { name = "tomli", marker = "python_full_version < '3.11'", specifier = ">=2.1.0" },
+    { name = "typing-extensions", marker = "python_full_version < '3.11'" },
 ]
 lint = [
     { name = "pycln", specifier = ">=2.1.3" },

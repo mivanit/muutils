@@ -66,6 +66,7 @@
         # typing
         "mypy>=1.0.1; python_version < '3.9'",
         "mypy>=1.15; python_version >= '3.9'",
+        "typing-extensions; python_version < '3.11'",
         # tests & coverage
         "pytest>=8.2.2",
         "pytest-cov>=4.1.0",

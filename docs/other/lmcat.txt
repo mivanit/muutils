@@ -1,72 +1,73 @@
 # Stats
-- 52 files
-- 10572 (11K) lines
-- 367023 (367K) chars
-- 39551 (40K) `whitespace-split` tokens
+- 53 files
+- 10605 (11K) lines
+- 368597 (369K) chars
+- 39736 (40K) `whitespace-split` tokens
 
 # File Tree
 
 ```
-muutils                                 
-├── .github                             
-│   └── workflows                       
-│    ├── checks.yml                     [  105L  2,521C   272T]
-│    └── make-docs.yml                  [   48L  1,261C   140T]
-├── muutils                             
-│   ├── json_serialize                  
-│   │   ├── __init__.py                 [   51L  2,416C   297T]
-│   │   ├── array.py                    [  226L  7,948C   789T]
-│   │   ├── json_serialize.py           [  333L 11,880C 1,135T]
-│   │   ├── serializable_dataclass.py   [  926L 36,141C 3,573T]
-│   │   ├── serializable_field.py       [  279L 11,044C 1,095T]
-│   │   └── util.py                     [  281L  9,185C   983T]
-│   ├── logger                          
-│   │   ├── __init__.py                 [   30L    684C    55T]
-│   │   ├── exception_context.py        [   43L  1,183C   110T]
-│   │   ├── headerfuncs.py              [   68L  1,695C   207T]
-│   │   ├── log_util.py                 [   80L  2,072C   264T]
-│   │   ├── logger.py                   [  306L 10,726C 1,091T]
-│   │   ├── loggingstream.py            [   95L  3,856C   412T]
-│   │   ├── simplelogger.py             [   81L  2,173C   239T]
-│   │   └── timing.py                   [   87L  2,613C   257T]
-│   ├── misc                            
-│   │   ├── __init__.py                 [   83L  1,941C   153T]
-│   │   ├── classes.py                  [   97L  3,425C   409T]
-│   │   ├── freezing.py                 [  107L  3,325C   324T]
-│   │   ├── func.py                     [  277L  8,982C   931T]
-│   │   ├── hashing.py                  [   29L    923C   110T]
-│   │   ├── numerical.py                [  165L  4,601C   522T]
-│   │   ├── sequence.py                 [  234L  7,251C   877T]
-│   │   └── string.py                   [  108L  3,008C   349T]
-│   ├── nbutils                         
-│   │   ├── __init__.py                 [   21L    488C    51T]
-│   │   ├── configure_notebook.py       [  320L  9,792C 1,038T]
-│   │   ├── convert_ipynb_to_script.py  [  373L 13,333C 1,211T]
-│   │   ├── mermaid.py                  [   20L    571C    52T]
-│   │   ├── print_tex.py                [   21L    495C    70T]
-│   │   └── run_notebook_tests.py       [  255L  9,280C   822T]
-│   ├── __init__.py                     [   30L    478C    39T]
-│   ├── console_unicode.py              [   34L  1,070C   133T]
-│   ├── dbg.py                          [  185L  5,392C   639T]
-│   ├── dictmagic.py                    [  522L 18,118C 1,967T]
-│   ├── errormode.py                    [  241L  7,939C   816T]
-│   ├── group_equiv.py                  [   66L  2,060C   246T]
-│   ├── interval.py                     [  530L 18,073C 1,699T]
-│   ├── jsonlines.py                    [   77L  1,991C   246T]
-│   ├── kappa.py                        [   46L  1,260C   150T]
-│   ├── mlutils.py                      [  165L  5,198C   495T]
-│   ├── parallel.py                     [  276L  9,095C 1,070T]
-│   ├── py.typed                        [    0L      0C     0T]
-│   ├── spinner.py                      [  510L 17,772C 1,670T]
-│   ├── statcounter.py                  [  231L  7,373C   768T]
-│   ├── sysinfo.py                      [  199L  6,901C   497T]
-│   ├── tensor_utils.py                 [  494L 14,730C 1,409T]
-│   ├── timeit_fancy.py                 [  101L  3,529C   440T]
-│   └── validate_type.py                [  237L  8,401C   896T]
-├── LICENSE                             [  674L 35,149C 5,644T]
-├── README.md                           [  131L  6,289C   551T]
-├── makefile                            [1,486L 45,517C 5,458T]
-├── pyproject.toml                      [  193L  6,349C   667T]
+muutils                                  
+├── .github                              
+│   └── workflows                        
+│    ├── checks.yml                      [  105L  2,533C   272T]
+│    └── make-docs.yml                   [   48L  1,261C   140T]
+├── muutils                              
+│   ├── json_serialize                   
+│   │   ├── __init__.py                  [   51L  2,416C   297T]
+│   │   ├── array.py                     [  226L  7,948C   789T]
+│   │   ├── dataclass_transform_mock.py  [   29L    817C    69T]
+│   │   ├── json_serialize.py            [  333L 11,880C 1,135T]
+│   │   ├── serializable_dataclass.py    [  905L 35,780C 3,564T]
+│   │   ├── serializable_field.py        [  279L 11,044C 1,095T]
+│   │   └── util.py                      [  281L  9,185C   983T]
+│   ├── logger                           
+│   │   ├── __init__.py                  [   30L    684C    55T]
+│   │   ├── exception_context.py         [   43L  1,183C   110T]
+│   │   ├── headerfuncs.py               [   68L  1,695C   207T]
+│   │   ├── log_util.py                  [   80L  2,072C   264T]
+│   │   ├── logger.py                    [  306L 10,726C 1,091T]
+│   │   ├── loggingstream.py             [   95L  3,856C   412T]
+│   │   ├── simplelogger.py              [   81L  2,173C   239T]
+│   │   └── timing.py                    [   87L  2,613C   257T]
+│   ├── misc                             
+│   │   ├── __init__.py                  [   83L  1,941C   153T]
+│   │   ├── classes.py                   [   97L  3,425C   409T]
+│   │   ├── freezing.py                  [  121L  3,698C   371T]
+│   │   ├── func.py                      [  277L  8,982C   931T]
+│   │   ├── hashing.py                   [   29L    923C   110T]
+│   │   ├── numerical.py                 [  165L  4,601C   522T]
+│   │   ├── sequence.py                  [  234L  7,251C   877T]
+│   │   └── string.py                    [  108L  3,008C   349T]
+│   ├── nbutils                          
+│   │   ├── __init__.py                  [   21L    488C    51T]
+│   │   ├── configure_notebook.py        [  320L  9,792C 1,038T]
+│   │   ├── convert_ipynb_to_script.py   [  374L 13,398C 1,217T]
+│   │   ├── mermaid.py                   [   20L    571C    52T]
+│   │   ├── print_tex.py                 [   21L    495C    70T]
+│   │   └── run_notebook_tests.py        [  255L  9,280C   822T]
+│   ├── __init__.py                      [   30L    478C    39T]
+│   ├── console_unicode.py               [   34L  1,070C   133T]
+│   ├── dbg.py                           [  185L  5,392C   639T]
+│   ├── dictmagic.py                     [  522L 18,132C 1,968T]
+│   ├── errormode.py                     [  241L  7,939C   816T]
+│   ├── group_equiv.py                   [   66L  2,060C   246T]
+│   ├── interval.py                      [  532L 18,186C 1,720T]
+│   ├── jsonlines.py                     [   77L  1,991C   246T]
+│   ├── kappa.py                         [   46L  1,260C   150T]
+│   ├── mlutils.py                       [  165L  5,198C   495T]
+│   ├── parallel.py                      [  276L  9,095C 1,070T]
+│   ├── py.typed                         [    0L      0C     0T]
+│   ├── spinner.py                       [  511L 17,879C 1,688T]
+│   ├── statcounter.py                   [  231L  7,373C   768T]
+│   ├── sysinfo.py                       [  199L  6,901C   497T]
+│   ├── tensor_utils.py                  [  495L 14,793C 1,418T]
+│   ├── timeit_fancy.py                  [  101L  3,567C   444T]
+│   └── validate_type.py                 [  237L  8,401C   896T]
+├── LICENSE                              [  674L 35,149C 5,644T]
+├── README.md                            [  131L  6,289C   551T]
+├── makefile                             [1,486L 45,549C 5,460T]
+├── pyproject.toml                       [  194L  6,379C   670T]
 ```
 
 # File Contents
@@ -127,12 +128,12 @@ jobs:
       matrix:
         python: ["3.8", "3.9", "3.10", "3.11", "3.12", "3.13"]
         pkg:
-          - torch: "1.13.1"
+          - group: "legacy"
+            torch: "1.13.1"
             numpy: "1.24.4"
-            group: "legacy"
-          - torch: ""
-            numpy: ""
-            group: "latest"
+          - group: "latest"
+            torch: ""
+            numpy: ""            
         exclude:
           - python: "3.12"
             pkg:
@@ -514,6 +515,39 @@ def load_array(arr: JSONitem, array_mode: Optional[ArrayMode] = None) -> Any:
         raise ValueError(f"invalid array_mode: {array_mode}")
 
 ``````{ end_of_file="muutils/json_serialize/array.py" }
+
+``````{ path="muutils/json_serialize/dataclass_transform_mock.py"  }
+from __future__ import annotations
+
+import typing
+from typing import Any, Union
+
+
+def dataclass_transform(
+    *,
+    eq_default: bool = True,
+    order_default: bool = False,
+    kw_only_default: bool = False,
+    frozen_default: bool = False,
+    field_specifiers: tuple[Union[type[Any], typing.Callable[..., Any]], ...] = (),
+    **kwargs: Any,
+) -> typing.Callable:
+    "mock `typing.dataclass_transform` for python <3.11"
+
+    def decorator(cls_or_fn):
+        cls_or_fn.__dataclass_transform__ = {
+            "eq_default": eq_default,
+            "order_default": order_default,
+            "kw_only_default": kw_only_default,
+            "frozen_default": frozen_default,
+            "field_specifiers": field_specifiers,
+            "kwargs": kwargs,
+        }
+        return cls_or_fn
+
+    return decorator
+
+``````{ end_of_file="muutils/json_serialize/dataclass_transform_mock.py" }
 
 ``````{ path="muutils/json_serialize/json_serialize.py"  }
 """provides the basic framework for json serialization of objects
@@ -925,37 +959,16 @@ from muutils.json_serialize.util import _FORMAT_KEY, array_safe_eq, dc_eq
 
 # pylint: disable=bad-mcs-classmethod-argument, too-many-arguments, protected-access
 
-
-def _dataclass_transform_mock(
-    *,
-    eq_default: bool = True,
-    order_default: bool = False,
-    kw_only_default: bool = False,
-    frozen_default: bool = False,
-    field_specifiers: tuple[type[Any] | typing.Callable[..., Any], ...] = (),
-    **kwargs: Any,
-) -> typing.Callable:
-    "mock `typing.dataclass_transform` for python <3.11"
-
-    def decorator(cls_or_fn):
-        cls_or_fn.__dataclass_transform__ = {
-            "eq_default": eq_default,
-            "order_default": order_default,
-            "kw_only_default": kw_only_default,
-            "frozen_default": frozen_default,
-            "field_specifiers": field_specifiers,
-            "kwargs": kwargs,
-        }
-        return cls_or_fn
-
-    return decorator
-
-
-if sys.version_info < (3, 11):
-    dataclass_transform = _dataclass_transform_mock
-else:
-    dataclass_transform = typing.dataclass_transform
-
+# this is quite horrible, but unfortunately mypy fails if we try to assign to `dataclass_transform` directly
+# and every time we try to init a serializable dataclass it says the argument doesnt exist
+try:
+    try:
+        # type ignore here for legacy versions
+        from typing import dataclass_transform  # type: ignore[attr-defined]
+    except Exception:
+        from typing_extensions import dataclass_transform
+except Exception:
+    from muutils.json_serialize.dataclass_transform_mock import dataclass_transform
 
 T = TypeVar("T")
 
@@ -3362,6 +3375,7 @@ def dataclass_set_equals(
 
 ``````{ path="muutils/misc/freezing.py"  }
 from __future__ import annotations
+from typing import Any, TypeVar, overload
 
 
 class FrozenDict(dict):
@@ -3398,7 +3412,20 @@ class FrozenList(list):
         raise AttributeError("list is frozen")
 
 
-def freeze(instance: object) -> object:
+FreezeMe = TypeVar("FreezeMe")
+
+
+@overload
+def freeze(instance: dict) -> FrozenDict: ...
+@overload
+def freeze(instance: list) -> FrozenList: ...
+@overload
+def freeze(instance: tuple) -> tuple: ...
+@overload
+def freeze(instance: set) -> frozenset: ...
+@overload
+def freeze(instance: FreezeMe) -> FreezeMe: ...
+def freeze(instance: Any) -> Any:
     """recursively freeze an object in-place so that its attributes and elements cannot be changed
 
     messy in the sense that sometimes the object is modified in place, but you can't rely on that. always use the return value.
@@ -3438,7 +3465,7 @@ def freeze(instance: object) -> object:
         instance = tuple(freeze(item) for item in instance)
 
     elif isinstance(instance, set):
-        instance = frozenset({freeze(item) for item in instance})
+        instance = frozenset({freeze(item) for item in instance})  # type: ignore[assignment]
 
     elif isinstance(instance, dict):
         for key, value in instance.items():
@@ -4661,6 +4688,7 @@ from __future__ import annotations
 import argparse
 import json
 import os
+from pathlib import Path
 import sys
 import typing
 import warnings
@@ -4899,8 +4927,8 @@ def process_file(
 
 
 def process_dir(
-    input_dir: str,
-    output_dir: str,
+    input_dir: typing.Union[str, Path],
+    output_dir: typing.Union[str, Path],
     strip_md_cells: bool = False,
     header_comment: str = r"#%%",
     disable_plots: bool = False,
@@ -5760,7 +5788,7 @@ def kwargs_to_nested_dict(
     kwargs_dict: dict[str, Any],
     sep: str = ".",
     strip_prefix: Optional[str] = None,
-    when_unknown_prefix: ErrorMode = ErrorMode.WARN,
+    when_unknown_prefix: Union[ErrorMode, str] = ErrorMode.WARN,
     transform_key: Optional[Callable[[str], str]] = None,
 ) -> dict[str, Any]:
     """given kwargs from fire, convert them to a nested dict
@@ -5793,12 +5821,12 @@ def kwargs_to_nested_dict(
     - `transform_key: Callable[[str], str] | None = None`
         a function to apply to each key before adding it to the dict (applied after stripping the prefix)
     """
-    when_unknown_prefix = ErrorMode.from_any(when_unknown_prefix)
+    when_unknown_prefix_ = ErrorMode.from_any(when_unknown_prefix)
     filtered_kwargs: dict[str, Any] = dict()
     for key, value in kwargs_dict.items():
         if strip_prefix is not None:
             if not key.startswith(strip_prefix):
-                when_unknown_prefix.process(
+                when_unknown_prefix_.process(
                     f"key '{key}' does not start with '{strip_prefix}'",
                     except_cls=ValueError,
                 )
@@ -6454,6 +6482,8 @@ from muutils.misc import str_to_numeric
 _EPSILON: float = 1e-10
 
 Number = Union[float, int]
+# TODO: make this also work with decimals, fractions, numpy types, etc.
+# except we must somehow avoid importing them? idk
 
 _EMPTY_INTERVAL_ARGS: tuple[Number, Number, bool, bool, set[Number]] = (
     math.nan,
@@ -6880,7 +6910,7 @@ class Interval:
 
         return max(clamped_min, min(value, clamped_max))
 
-    def intersection(self, other: Interval) -> Optional[Interval]:
+    def intersection(self, other: Interval) -> Interval:
         if not isinstance(other, Interval):
             raise TypeError("Can only intersect with another Interval")
 
@@ -7998,6 +8028,7 @@ class SpinnerContext(Spinner, ContextManager):
 SpinnerContext.__doc__ = Spinner.__doc__
 
 
+# TODO: type hint that the `update_status` kwarg is not needed when calling the function we just decorated
 def spinner_decorator(
     *args,
     # passed to `Spinner.__init__`
@@ -8587,11 +8618,12 @@ if np.version.version < "2.0.0":
 
 
 # TODO: add proper type annotations to this signature
+# TODO: maybe get rid of this altogether?
 def jaxtype_factory(
     name: str,
     array_type: type,
     default_jax_dtype=jaxtyping.Float,
-    legacy_mode: ErrorMode = ErrorMode.WARN,
+    legacy_mode: typing.Union[ErrorMode, str] = ErrorMode.WARN,
 ) -> type:
     """usage:
     ```
@@ -8599,7 +8631,7 @@ def jaxtype_factory(
     x: ATensor["dim1 dim2", np.float32]
     ```
     """
-    legacy_mode = ErrorMode.from_any(legacy_mode)
+    legacy_mode_ = ErrorMode.from_any(legacy_mode)
 
     class _BaseArray:
         """jaxtyping shorthand
@@ -8645,7 +8677,7 @@ def jaxtype_factory(
                     return TYPE_TO_JAX_DTYPE[params[1]][array_type, params[0]]
 
                 elif isinstance(params[0], tuple):
-                    legacy_mode.process(
+                    legacy_mode_.process(
                         f"legacy type annotation was used:\n{cls.param_info(params) = }",
                         except_cls=Exception,
                     )
@@ -9033,7 +9065,7 @@ class FancyTimeitResult(NamedTuple):
 
 
 def timeit_fancy(
-    cmd: Callable[[], T],
+    cmd: Union[Callable[[], T], str],
     setup: Union[str, Callable[[], Any]] = lambda: None,
     repeats: int = 5,
     namespace: Union[dict[str, Any], None] = None,
@@ -9091,7 +9123,7 @@ def timeit_fancy(
             profiler.enable()
 
         try:
-            return_value = cmd()
+            return_value = cmd()  # type: ignore[operator]
         except TypeError as e:
             warnings.warn(
                 f"Failed to get return value from `cmd` due to error (probably passing a string). will return `return_value=None`\n{e}",
@@ -10250,12 +10282,12 @@ format-check:
 # but it complains when we specify arguments by keyword where positional is fine
 # not sure how to fix this
 .PHONY: typing
-typing: clean
+typing: clean gen-extra-tests
 	@echo "running type checks"
 	...
 
 .PHONY: test
-test: clean
+test: clean gen-extra-tests
 	@echo "running tests"
 	...
 
@@ -10386,7 +10418,7 @@ help: help-targets info
 # ==================================================
 [project]
     name = "muutils"
-    version = "0.8.1"
+    version = "0.8.2"
     description = "miscellaneous python utilities"
     readme = "README.md"
     requires-python = ">=3.8"
@@ -10503,6 +10535,7 @@ help: help-targets info
 [tool.mypy]
     exclude = ["tests/input_data", "tests/junk_data", "tests/_temp/", "_wip/"]
     show_error_codes = true
+    check_untyped_defs = true
 
 [tool.lmcat]
 	output = "docs/other/lmcat.txt" # changing this might mean it wont be accessible from the docs

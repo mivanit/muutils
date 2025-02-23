@@ -46,7 +46,7 @@
 </script></head>
 <body>
 <div class="package-version">
-    docs for <a href="https://github.com/mivanit/muutils">muutils</a> v0.8.1<br>
+    docs for <a href="https://github.com/mivanit/muutils">muutils</a> v0.8.2<br>
 </div>
     <nav class="pdoc">
         <label id="navtoggle" for="togglestate" class="pdoc-button">
@@ -112,7 +112,7 @@
     </nav>
     <main class="pdoc">
             <section class="module-info">
-                        <a class="pdoc-button git-button" href="https://github.com/mivanit/muutils/blob/0.8.1/timeit_fancy.py">View Source on GitHub</a>
+                        <a class="pdoc-button git-button" href="https://github.com/mivanit/muutils/blob/0.8.2/timeit_fancy.py">View Source on GitHub</a>
                     <h1 class="modulename">
 <a href="./../muutils.html">muutils</a><wbr>.timeit_fancy    </h1>
 
@@ -124,7 +124,7 @@
                         <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="mod-timeit_fancy-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.1/timeit_fancy.py#L0-L100" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.2/timeit_fancy.py#L0-L100" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -155,7 +155,7 @@
 </span><span id="L-22"><a href="#L-22"><span class="linenos"> 22</span></a>
 </span><span id="L-23"><a href="#L-23"><span class="linenos"> 23</span></a>
 </span><span id="L-24"><a href="#L-24"><span class="linenos"> 24</span></a><span class="k">def</span> <span class="nf">timeit_fancy</span><span class="p">(</span>
-</span><span id="L-25"><a href="#L-25"><span class="linenos"> 25</span></a>    <span class="n">cmd</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[],</span> <span class="n">T</span><span class="p">],</span>
+</span><span id="L-25"><a href="#L-25"><span class="linenos"> 25</span></a>    <span class="n">cmd</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Callable</span><span class="p">[[],</span> <span class="n">T</span><span class="p">],</span> <span class="nb">str</span><span class="p">],</span>
 </span><span id="L-26"><a href="#L-26"><span class="linenos"> 26</span></a>    <span class="n">setup</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Callable</span><span class="p">[[],</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="k">lambda</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
 </span><span id="L-27"><a href="#L-27"><span class="linenos"> 27</span></a>    <span class="n">repeats</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span>
 </span><span id="L-28"><a href="#L-28"><span class="linenos"> 28</span></a>    <span class="n">namespace</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -213,7 +213,7 @@
 </span><span id="L-80"><a href="#L-80"><span class="linenos"> 80</span></a>            <span class="n">profiler</span><span class="o">.</span><span class="n">enable</span><span class="p">()</span>
 </span><span id="L-81"><a href="#L-81"><span class="linenos"> 81</span></a>
 </span><span id="L-82"><a href="#L-82"><span class="linenos"> 82</span></a>        <span class="k">try</span><span class="p">:</span>
-</span><span id="L-83"><a href="#L-83"><span class="linenos"> 83</span></a>            <span class="n">return_value</span> <span class="o">=</span> <span class="n">cmd</span><span class="p">()</span>
+</span><span id="L-83"><a href="#L-83"><span class="linenos"> 83</span></a>            <span class="n">return_value</span> <span class="o">=</span> <span class="n">cmd</span><span class="p">()</span>  <span class="c1"># type: ignore[operator]</span>
 </span><span id="L-84"><a href="#L-84"><span class="linenos"> 84</span></a>        <span class="k">except</span> <span class="ne">TypeError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
 </span><span id="L-85"><a href="#L-85"><span class="linenos"> 85</span></a>            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
 </span><span id="L-86"><a href="#L-86"><span class="linenos"> 86</span></a>                <span class="sa">f</span><span class="s2">&quot;Failed to get return value from `cmd` due to error (probably passing a string). will return `return_value=None`</span><span class="se">\n</span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
@@ -247,7 +247,7 @@
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="FancyTimeitResult-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.1/timeit_fancy.py#L16-L21" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.2/timeit_fancy.py#L16-L21" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -337,12 +337,12 @@
 <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">timeit_fancy</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">cmd</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[],</span> <span class="o">~</span><span class="n">T</span><span class="p">]</span>,</span><span class="param">	<span class="n">setup</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Callable</span><span class="p">[[],</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">function</span> <span class="o">&lt;</span><span class="k">lambda</span><span class="o">&gt;&gt;</span>,</span><span class="param">	<span class="n">repeats</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">5</span>,</span><span class="param">	<span class="n">namespace</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">get_return</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>,</span><span class="param">	<span class="n">do_profiling</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span></span><span class="return-annotation">) -> <span class="n"><a href="#FancyTimeitResult">FancyTimeitResult</a></span>:</span></span>
+        <span class="name">timeit_fancy</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">cmd</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Callable</span><span class="p">[[],</span> <span class="o">~</span><span class="n">T</span><span class="p">],</span> <span class="nb">str</span><span class="p">]</span>,</span><span class="param">	<span class="n">setup</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Callable</span><span class="p">[[],</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">function</span> <span class="o">&lt;</span><span class="k">lambda</span><span class="o">&gt;&gt;</span>,</span><span class="param">	<span class="n">repeats</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">5</span>,</span><span class="param">	<span class="n">namespace</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">get_return</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>,</span><span class="param">	<span class="n">do_profiling</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span></span><span class="return-annotation">) -> <span class="n"><a href="#FancyTimeitResult">FancyTimeitResult</a></span>:</span></span>
 
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="timeit_fancy-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.1/timeit_fancy.py#L24-L101" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.2/timeit_fancy.py#L24-L101" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -351,7 +351,7 @@
     </div>
     <a class="headerlink" href="#timeit_fancy"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="timeit_fancy-25"><a href="#timeit_fancy-25"><span class="linenos"> 25</span></a><span class="k">def</span> <span class="nf">timeit_fancy</span><span class="p">(</span>
-</span><span id="timeit_fancy-26"><a href="#timeit_fancy-26"><span class="linenos"> 26</span></a>    <span class="n">cmd</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[],</span> <span class="n">T</span><span class="p">],</span>
+</span><span id="timeit_fancy-26"><a href="#timeit_fancy-26"><span class="linenos"> 26</span></a>    <span class="n">cmd</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Callable</span><span class="p">[[],</span> <span class="n">T</span><span class="p">],</span> <span class="nb">str</span><span class="p">],</span>
 </span><span id="timeit_fancy-27"><a href="#timeit_fancy-27"><span class="linenos"> 27</span></a>    <span class="n">setup</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Callable</span><span class="p">[[],</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="k">lambda</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
 </span><span id="timeit_fancy-28"><a href="#timeit_fancy-28"><span class="linenos"> 28</span></a>    <span class="n">repeats</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span>
 </span><span id="timeit_fancy-29"><a href="#timeit_fancy-29"><span class="linenos"> 29</span></a>    <span class="n">namespace</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -409,7 +409,7 @@
 </span><span id="timeit_fancy-81"><a href="#timeit_fancy-81"><span class="linenos"> 81</span></a>            <span class="n">profiler</span><span class="o">.</span><span class="n">enable</span><span class="p">()</span>
 </span><span id="timeit_fancy-82"><a href="#timeit_fancy-82"><span class="linenos"> 82</span></a>
 </span><span id="timeit_fancy-83"><a href="#timeit_fancy-83"><span class="linenos"> 83</span></a>        <span class="k">try</span><span class="p">:</span>
-</span><span id="timeit_fancy-84"><a href="#timeit_fancy-84"><span class="linenos"> 84</span></a>            <span class="n">return_value</span> <span class="o">=</span> <span class="n">cmd</span><span class="p">()</span>
+</span><span id="timeit_fancy-84"><a href="#timeit_fancy-84"><span class="linenos"> 84</span></a>            <span class="n">return_value</span> <span class="o">=</span> <span class="n">cmd</span><span class="p">()</span>  <span class="c1"># type: ignore[operator]</span>
 </span><span id="timeit_fancy-85"><a href="#timeit_fancy-85"><span class="linenos"> 85</span></a>        <span class="k">except</span> <span class="ne">TypeError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
 </span><span id="timeit_fancy-86"><a href="#timeit_fancy-86"><span class="linenos"> 86</span></a>            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
 </span><span id="timeit_fancy-87"><a href="#timeit_fancy-87"><span class="linenos"> 87</span></a>                <span class="sa">f</span><span class="s2">&quot;Failed to get return value from `cmd` due to error (probably passing a string). will return `return_value=None`</span><span class="se">\n</span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>

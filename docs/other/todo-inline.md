@@ -6,9 +6,9 @@
 ## [`muutils/json_serialize/serializable_dataclass.py`](/muutils/json_serialize/serializable_dataclass.py)
 
 - ExceptionGroup not supported in py < 3.11, so get a random exception from the dict  
-  local link: [`/muutils/json_serialize/serializable_dataclass.py#296`](/muutils/json_serialize/serializable_dataclass.py#296) 
-  | view on GitHub: [muutils/json_serialize/serializable_dataclass.py#L296](https://github.com/mivanit/muutils/blob/main/muutils/json_serialize/serializable_dataclass.py#L296)
-  | [Make Issue](https://github.com/mivanit/muutils/issues/new?title=ExceptionGroup%20not%20supported%20in%20py%20%3C%203.11%2C%20so%20get%20a%20random%20exception%20from%20the%20dict&body=%23%20source%0A%0A%5B%60muutils%2Fjson_serialize%2Fserializable_dataclass.py%23L296%60%5D%28https%3A%2F%2Fgithub.com%2Fmivanit%2Fmuutils%2Fblob%2Fmain%2Fmuutils%2Fjson_serialize%2Fserializable_dataclass.py%23L296%29%0A%0A%23%20context%0A%60%60%60python%0A%20%20%20%20%20%20%20%20on_typecheck_error.process%28%0A%20%20%20%20%20%20%20%20%20%20%20%20f%22Exceptions%20while%20validating%20types%20of%20fields%20on%20%7Bself.__class__.__name__%7D%3A%20%7B%5Bx.name%20for%20x%20in%20cls_fields%5D%7D%22%0A%20%20%20%20%20%20%20%20%20%20%20%20%2B%20%22%5Cn%5Ct%22%0A%20%20%20%20%20%20%20%20%20%20%20%20%2B%20%22%5Cn%5Ct%22.join%28%5Bf%22%7Bk%7D%3A%5Ct%7Bv%7D%22%20for%20k%2C%20v%20in%20exceptions.items%28%29%5D%29%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20except_cls%3DValueError%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20%23%20HACK%3A%20ExceptionGroup%20not%20supported%20in%20py%20%3C%203.11%2C%20so%20get%20a%20random%20exception%20from%20the%20dict%0A%20%20%20%20%20%20%20%20%20%20%20%20except_from%3Dlist%28exceptions.values%28%29%29%5B0%5D%2C%0A%20%20%20%20%20%20%20%20%29%0A%0A%20%20%20%20return%20results%0A%60%60%60&labels=enhancement)
+  local link: [`/muutils/json_serialize/serializable_dataclass.py#275`](/muutils/json_serialize/serializable_dataclass.py#275) 
+  | view on GitHub: [muutils/json_serialize/serializable_dataclass.py#L275](https://github.com/mivanit/muutils/blob/main/muutils/json_serialize/serializable_dataclass.py#L275)
+  | [Make Issue](https://github.com/mivanit/muutils/issues/new?title=ExceptionGroup%20not%20supported%20in%20py%20%3C%203.11%2C%20so%20get%20a%20random%20exception%20from%20the%20dict&body=%23%20source%0A%0A%5B%60muutils%2Fjson_serialize%2Fserializable_dataclass.py%23L275%60%5D%28https%3A%2F%2Fgithub.com%2Fmivanit%2Fmuutils%2Fblob%2Fmain%2Fmuutils%2Fjson_serialize%2Fserializable_dataclass.py%23L275%29%0A%0A%23%20context%0A%60%60%60python%0A%20%20%20%20%20%20%20%20on_typecheck_error.process%28%0A%20%20%20%20%20%20%20%20%20%20%20%20f%22Exceptions%20while%20validating%20types%20of%20fields%20on%20%7Bself.__class__.__name__%7D%3A%20%7B%5Bx.name%20for%20x%20in%20cls_fields%5D%7D%22%0A%20%20%20%20%20%20%20%20%20%20%20%20%2B%20%22%5Cn%5Ct%22%0A%20%20%20%20%20%20%20%20%20%20%20%20%2B%20%22%5Cn%5Ct%22.join%28%5Bf%22%7Bk%7D%3A%5Ct%7Bv%7D%22%20for%20k%2C%20v%20in%20exceptions.items%28%29%5D%29%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20except_cls%3DValueError%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20%23%20HACK%3A%20ExceptionGroup%20not%20supported%20in%20py%20%3C%203.11%2C%20so%20get%20a%20random%20exception%20from%20the%20dict%0A%20%20%20%20%20%20%20%20%20%20%20%20except_from%3Dlist%28exceptions.values%28%29%29%5B0%5D%2C%0A%20%20%20%20%20%20%20%20%29%0A%0A%20%20%20%20return%20results%0A%60%60%60&labels=enhancement)
 
   ```python
 on_typecheck_error.process(
@@ -25,9 +25,9 @@ on_typecheck_error.process(
 
 
 - this is kind of ugly, but it fixes a lot of issues for when we do recursive loading with ZANJ  
-  local link: [`/muutils/json_serialize/serializable_dataclass.py#799`](/muutils/json_serialize/serializable_dataclass.py#799) 
-  | view on GitHub: [muutils/json_serialize/serializable_dataclass.py#L799](https://github.com/mivanit/muutils/blob/main/muutils/json_serialize/serializable_dataclass.py#L799)
-  | [Make Issue](https://github.com/mivanit/muutils/issues/new?title=this%20is%20kind%20of%20ugly%2C%20but%20it%20fixes%20a%20lot%20of%20issues%20for%20when%20we%20do%20recursive%20loading%20with%20ZANJ&body=%23%20source%0A%0A%5B%60muutils%2Fjson_serialize%2Fserializable_dataclass.py%23L799%60%5D%28https%3A%2F%2Fgithub.com%2Fmivanit%2Fmuutils%2Fblob%2Fmain%2Fmuutils%2Fjson_serialize%2Fserializable_dataclass.py%23L799%29%0A%0A%23%20context%0A%60%60%60python%0A%20%20%20%20%20%20%20%20%23%20done%20locally%20since%20it%20depends%20on%20args%20to%20the%20decorator%0A%20%20%20%20%20%20%20%20%23%20%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%0A%20%20%20%20%20%20%20%20%23%20mypy%20thinks%20this%20isnt%20a%20classmethod%0A%20%20%20%20%20%20%20%20%40classmethod%20%20%23%20type%3A%20ignore%5Bmisc%5D%0A%20%20%20%20%20%20%20%20def%20load%28cls%2C%20data%3A%20dict%5Bstr%2C%20Any%5D%20%7C%20T%29%20-%3E%20Type%5BT%5D%3A%0A%20%20%20%20%20%20%20%20%20%20%20%20%23%20HACK%3A%20this%20is%20kind%20of%20ugly%2C%20but%20it%20fixes%20a%20lot%20of%20issues%20for%20when%20we%20do%20recursive%20loading%20with%20ZANJ%0A%20%20%20%20%20%20%20%20%20%20%20%20if%20isinstance%28data%2C%20cls%29%3A%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20return%20data%0A%0A%20%20%20%20%20%20%20%20%20%20%20%20assert%20isinstance%28%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20data%2C%20typing.Mapping%0A%60%60%60&labels=enhancement)
+  local link: [`/muutils/json_serialize/serializable_dataclass.py#778`](/muutils/json_serialize/serializable_dataclass.py#778) 
+  | view on GitHub: [muutils/json_serialize/serializable_dataclass.py#L778](https://github.com/mivanit/muutils/blob/main/muutils/json_serialize/serializable_dataclass.py#L778)
+  | [Make Issue](https://github.com/mivanit/muutils/issues/new?title=this%20is%20kind%20of%20ugly%2C%20but%20it%20fixes%20a%20lot%20of%20issues%20for%20when%20we%20do%20recursive%20loading%20with%20ZANJ&body=%23%20source%0A%0A%5B%60muutils%2Fjson_serialize%2Fserializable_dataclass.py%23L778%60%5D%28https%3A%2F%2Fgithub.com%2Fmivanit%2Fmuutils%2Fblob%2Fmain%2Fmuutils%2Fjson_serialize%2Fserializable_dataclass.py%23L778%29%0A%0A%23%20context%0A%60%60%60python%0A%20%20%20%20%20%20%20%20%23%20done%20locally%20since%20it%20depends%20on%20args%20to%20the%20decorator%0A%20%20%20%20%20%20%20%20%23%20%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%0A%20%20%20%20%20%20%20%20%23%20mypy%20thinks%20this%20isnt%20a%20classmethod%0A%20%20%20%20%20%20%20%20%40classmethod%20%20%23%20type%3A%20ignore%5Bmisc%5D%0A%20%20%20%20%20%20%20%20def%20load%28cls%2C%20data%3A%20dict%5Bstr%2C%20Any%5D%20%7C%20T%29%20-%3E%20Type%5BT%5D%3A%0A%20%20%20%20%20%20%20%20%20%20%20%20%23%20HACK%3A%20this%20is%20kind%20of%20ugly%2C%20but%20it%20fixes%20a%20lot%20of%20issues%20for%20when%20we%20do%20recursive%20loading%20with%20ZANJ%0A%20%20%20%20%20%20%20%20%20%20%20%20if%20isinstance%28data%2C%20cls%29%3A%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20return%20data%0A%0A%20%20%20%20%20%20%20%20%20%20%20%20assert%20isinstance%28%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20data%2C%20typing.Mapping%0A%60%60%60&labels=enhancement)
 
   ```python
 # done locally since it depends on args to the decorator
@@ -76,9 +76,9 @@ on_typecheck_error.process(
 ## [`muutils/json_serialize/serializable_dataclass.py`](/muutils/json_serialize/serializable_dataclass.py)
 
 - if ZANJ is not installed, then failing to register the loader handler doesnt matter  
-  local link: [`/muutils/json_serialize/serializable_dataclass.py#141`](/muutils/json_serialize/serializable_dataclass.py#141) 
-  | view on GitHub: [muutils/json_serialize/serializable_dataclass.py#L141](https://github.com/mivanit/muutils/blob/main/muutils/json_serialize/serializable_dataclass.py#L141)
-  | [Make Issue](https://github.com/mivanit/muutils/issues/new?title=if%20ZANJ%20is%20not%20installed%2C%20then%20failing%20to%20register%20the%20loader%20handler%20doesnt%20matter&body=%23%20source%0A%0A%5B%60muutils%2Fjson_serialize%2Fserializable_dataclass.py%23L141%60%5D%28https%3A%2F%2Fgithub.com%2Fmivanit%2Fmuutils%2Fblob%2Fmain%2Fmuutils%2Fjson_serialize%2Fserializable_dataclass.py%23L141%29%0A%0A%23%20context%0A%60%60%60python%0A%20%20%20%20%20%20%20%20%20%20%20%20from%20zanj.loading%20import%20%28%20%20%23%20type%3A%20ignore%5Bimport%5D%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20LoaderHandler%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20register_loader_handler%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20%29%0A%20%20%20%20%20%20%20%20except%20ImportError%3A%0A%20%20%20%20%20%20%20%20%20%20%20%20%23%20NOTE%3A%20if%20ZANJ%20is%20not%20installed%2C%20then%20failing%20to%20register%20the%20loader%20handler%20doesnt%20matter%0A%20%20%20%20%20%20%20%20%20%20%20%20%23%20warnings.warn%28%0A%20%20%20%20%20%20%20%20%20%20%20%20%23%20%20%20%20%20%22ZANJ%20not%20installed%2C%20cannot%20register%20serializable%20dataclass%20loader.%20ZANJ%20can%20be%20found%20at%20https%3A%2F%2Fgithub.com%2Fmivanit%2FZANJ%20or%20installed%20via%20%60pip%20install%20zanj%60%22%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20%23%20%20%20%20%20ZanjMissingWarning%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20%23%20%29%0A%20%20%20%20%20%20%20%20%20%20%20%20return%0A%60%60%60&labels=NOTE)
+  local link: [`/muutils/json_serialize/serializable_dataclass.py#120`](/muutils/json_serialize/serializable_dataclass.py#120) 
+  | view on GitHub: [muutils/json_serialize/serializable_dataclass.py#L120](https://github.com/mivanit/muutils/blob/main/muutils/json_serialize/serializable_dataclass.py#L120)
+  | [Make Issue](https://github.com/mivanit/muutils/issues/new?title=if%20ZANJ%20is%20not%20installed%2C%20then%20failing%20to%20register%20the%20loader%20handler%20doesnt%20matter&body=%23%20source%0A%0A%5B%60muutils%2Fjson_serialize%2Fserializable_dataclass.py%23L120%60%5D%28https%3A%2F%2Fgithub.com%2Fmivanit%2Fmuutils%2Fblob%2Fmain%2Fmuutils%2Fjson_serialize%2Fserializable_dataclass.py%23L120%29%0A%0A%23%20context%0A%60%60%60python%0A%20%20%20%20%20%20%20%20%20%20%20%20from%20zanj.loading%20import%20%28%20%20%23%20type%3A%20ignore%5Bimport%5D%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20LoaderHandler%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20register_loader_handler%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20%29%0A%20%20%20%20%20%20%20%20except%20ImportError%3A%0A%20%20%20%20%20%20%20%20%20%20%20%20%23%20NOTE%3A%20if%20ZANJ%20is%20not%20installed%2C%20then%20failing%20to%20register%20the%20loader%20handler%20doesnt%20matter%0A%20%20%20%20%20%20%20%20%20%20%20%20%23%20warnings.warn%28%0A%20%20%20%20%20%20%20%20%20%20%20%20%23%20%20%20%20%20%22ZANJ%20not%20installed%2C%20cannot%20register%20serializable%20dataclass%20loader.%20ZANJ%20can%20be%20found%20at%20https%3A%2F%2Fgithub.com%2Fmivanit%2FZANJ%20or%20installed%20via%20%60pip%20install%20zanj%60%22%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20%23%20%20%20%20%20ZanjMissingWarning%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20%23%20%29%0A%20%20%20%20%20%20%20%20%20%20%20%20return%0A%60%60%60&labels=NOTE)
 
   ```python
 from zanj.loading import (  # type: ignore[import]
@@ -124,6 +124,30 @@ data: dict[str, Any],
 
 
 
+## [`muutils/interval.py`](/muutils/interval.py)
+
+- make this also work with decimals, fractions, numpy types, etc.  
+  local link: [`/muutils/interval.py#14`](/muutils/interval.py#14) 
+  | view on GitHub: [muutils/interval.py#L14](https://github.com/mivanit/muutils/blob/main/muutils/interval.py#L14)
+  | [Make Issue](https://github.com/mivanit/muutils/issues/new?title=make%20this%20also%20work%20with%20decimals%2C%20fractions%2C%20numpy%20types%2C%20etc.&body=%23%20source%0A%0A%5B%60muutils%2Finterval.py%23L14%60%5D%28https%3A%2F%2Fgithub.com%2Fmivanit%2Fmuutils%2Fblob%2Fmain%2Fmuutils%2Finterval.py%23L14%29%0A%0A%23%20context%0A%60%60%60python%0Afrom%20muutils.misc%20import%20str_to_numeric%0A%0A_EPSILON%3A%20float%20%3D%201e-10%0A%0ANumber%20%3D%20Union%5Bfloat%2C%20int%5D%0A%23%20TODO%3A%20make%20this%20also%20work%20with%20decimals%2C%20fractions%2C%20numpy%20types%2C%20etc.%0A%23%20except%20we%20must%20somehow%20avoid%20importing%20them%3F%20idk%0A%0A_EMPTY_INTERVAL_ARGS%3A%20tuple%5BNumber%2C%20Number%2C%20bool%2C%20bool%2C%20set%5BNumber%5D%5D%20%3D%20%28%0A%20%20%20%20math.nan%2C%0A%20%20%20%20math.nan%2C%0A%60%60%60&labels=enhancement)
+
+  ```python
+from muutils.misc import str_to_numeric
+
+_EPSILON: float = 1e-10
+
+Number = Union[float, int]
+# TODO: make this also work with decimals, fractions, numpy types, etc.
+# except we must somehow avoid importing them? idk
+
+_EMPTY_INTERVAL_ARGS: tuple[Number, Number, bool, bool, set[Number]] = (
+    math.nan,
+    math.nan,
+  ```
+
+
+
+
 ## [`muutils/json_serialize/json_serialize.py`](/muutils/json_serialize/json_serialize.py)
 
 - allow for custom serialization handler name  
@@ -151,9 +175,9 @@ DEFAULT_HANDLERS: MonoTuple[SerializerHandler] = tuple(BASE_HANDLERS) + (
 ## [`muutils/json_serialize/serializable_dataclass.py`](/muutils/json_serialize/serializable_dataclass.py)
 
 - there is some duplication here with register_loader_handler  
-  local link: [`/muutils/json_serialize/serializable_dataclass.py#130`](/muutils/json_serialize/serializable_dataclass.py#130) 
-  | view on GitHub: [muutils/json_serialize/serializable_dataclass.py#L130](https://github.com/mivanit/muutils/blob/main/muutils/json_serialize/serializable_dataclass.py#L130)
-  | [Make Issue](https://github.com/mivanit/muutils/issues/new?title=there%20is%20some%20duplication%20here%20with%20register_loader_handler&body=%23%20source%0A%0A%5B%60muutils%2Fjson_serialize%2Fserializable_dataclass.py%23L130%60%5D%28https%3A%2F%2Fgithub.com%2Fmivanit%2Fmuutils%2Fblob%2Fmain%2Fmuutils%2Fjson_serialize%2Fserializable_dataclass.py%23L130%29%0A%0A%23%20context%0A%60%60%60python%0A%20%20%20%20%22%22%22Register%20a%20serializable%20dataclass%20with%20the%20ZANJ%20import%0A%0A%20%20%20%20this%20allows%20%60ZANJ%28%29.read%28%29%60%20to%20load%20the%20class%20and%20not%20just%20return%20plain%20dicts%0A%0A%0A%20%20%20%20%23%20TODO%3A%20there%20is%20some%20duplication%20here%20with%20register_loader_handler%0A%20%20%20%20%22%22%22%0A%20%20%20%20global%20_zanj_loading_needs_import%0A%0A%20%20%20%20if%20_zanj_loading_needs_import%3A%0A%20%20%20%20%20%20%20%20try%3A%0A%60%60%60&labels=enhancement)
+  local link: [`/muutils/json_serialize/serializable_dataclass.py#109`](/muutils/json_serialize/serializable_dataclass.py#109) 
+  | view on GitHub: [muutils/json_serialize/serializable_dataclass.py#L109](https://github.com/mivanit/muutils/blob/main/muutils/json_serialize/serializable_dataclass.py#L109)
+  | [Make Issue](https://github.com/mivanit/muutils/issues/new?title=there%20is%20some%20duplication%20here%20with%20register_loader_handler&body=%23%20source%0A%0A%5B%60muutils%2Fjson_serialize%2Fserializable_dataclass.py%23L109%60%5D%28https%3A%2F%2Fgithub.com%2Fmivanit%2Fmuutils%2Fblob%2Fmain%2Fmuutils%2Fjson_serialize%2Fserializable_dataclass.py%23L109%29%0A%0A%23%20context%0A%60%60%60python%0A%20%20%20%20%22%22%22Register%20a%20serializable%20dataclass%20with%20the%20ZANJ%20import%0A%0A%20%20%20%20this%20allows%20%60ZANJ%28%29.read%28%29%60%20to%20load%20the%20class%20and%20not%20just%20return%20plain%20dicts%0A%0A%0A%20%20%20%20%23%20TODO%3A%20there%20is%20some%20duplication%20here%20with%20register_loader_handler%0A%20%20%20%20%22%22%22%0A%20%20%20%20global%20_zanj_loading_needs_import%0A%0A%20%20%20%20if%20_zanj_loading_needs_import%3A%0A%20%20%20%20%20%20%20%20try%3A%0A%60%60%60&labels=enhancement)
 
   ```python
 """Register a serializable dataclass with the ZANJ import
@@ -171,9 +195,9 @@ DEFAULT_HANDLERS: MonoTuple[SerializerHandler] = tuple(BASE_HANDLERS) + (
 
 
 - how to handle fields which are not `init` or `serialize`?  
-  local link: [`/muutils/json_serialize/serializable_dataclass.py#210`](/muutils/json_serialize/serializable_dataclass.py#210) 
-  | view on GitHub: [muutils/json_serialize/serializable_dataclass.py#L210](https://github.com/mivanit/muutils/blob/main/muutils/json_serialize/serializable_dataclass.py#L210)
-  | [Make Issue](https://github.com/mivanit/muutils/issues/new?title=how%20to%20handle%20fields%20which%20are%20not%20%60init%60%20or%20%60serialize%60%3F&body=%23%20source%0A%0A%5B%60muutils%2Fjson_serialize%2Fserializable_dataclass.py%23L210%60%5D%28https%3A%2F%2Fgithub.com%2Fmivanit%2Fmuutils%2Fblob%2Fmain%2Fmuutils%2Fjson_serialize%2Fserializable_dataclass.py%23L210%29%0A%0A%23%20context%0A%60%60%60python%0A%20%20%20%20%23%20do%20nothing%20case%0A%20%20%20%20if%20not%20_field.assert_type%3A%0A%20%20%20%20%20%20%20%20return%20True%0A%0A%20%20%20%20%23%20if%20field%20is%20not%20%60init%60%20or%20not%20%60serialize%60%2C%20skip%20but%20warn%0A%20%20%20%20%23%20TODO%3A%20how%20to%20handle%20fields%20which%20are%20not%20%60init%60%20or%20%60serialize%60%3F%0A%20%20%20%20if%20not%20_field.init%20or%20not%20_field.serialize%3A%0A%20%20%20%20%20%20%20%20warnings.warn%28%0A%20%20%20%20%20%20%20%20%20%20%20%20f%22Field%20%27%7B_field.name%7D%27%20on%20class%20%7Bself.__class__%7D%20is%20not%20%60init%60%20or%20%60serialize%60%2C%20so%20will%20not%20be%20type%20checked%22%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20FieldIsNotInitOrSerializeWarning%2C%0A%20%20%20%20%20%20%20%20%29%0A%60%60%60&labels=enhancement)
+  local link: [`/muutils/json_serialize/serializable_dataclass.py#189`](/muutils/json_serialize/serializable_dataclass.py#189) 
+  | view on GitHub: [muutils/json_serialize/serializable_dataclass.py#L189](https://github.com/mivanit/muutils/blob/main/muutils/json_serialize/serializable_dataclass.py#L189)
+  | [Make Issue](https://github.com/mivanit/muutils/issues/new?title=how%20to%20handle%20fields%20which%20are%20not%20%60init%60%20or%20%60serialize%60%3F&body=%23%20source%0A%0A%5B%60muutils%2Fjson_serialize%2Fserializable_dataclass.py%23L189%60%5D%28https%3A%2F%2Fgithub.com%2Fmivanit%2Fmuutils%2Fblob%2Fmain%2Fmuutils%2Fjson_serialize%2Fserializable_dataclass.py%23L189%29%0A%0A%23%20context%0A%60%60%60python%0A%20%20%20%20%23%20do%20nothing%20case%0A%20%20%20%20if%20not%20_field.assert_type%3A%0A%20%20%20%20%20%20%20%20return%20True%0A%0A%20%20%20%20%23%20if%20field%20is%20not%20%60init%60%20or%20not%20%60serialize%60%2C%20skip%20but%20warn%0A%20%20%20%20%23%20TODO%3A%20how%20to%20handle%20fields%20which%20are%20not%20%60init%60%20or%20%60serialize%60%3F%0A%20%20%20%20if%20not%20_field.init%20or%20not%20_field.serialize%3A%0A%20%20%20%20%20%20%20%20warnings.warn%28%0A%20%20%20%20%20%20%20%20%20%20%20%20f%22Field%20%27%7B_field.name%7D%27%20on%20class%20%7Bself.__class__%7D%20is%20not%20%60init%60%20or%20%60serialize%60%2C%20so%20will%20not%20be%20type%20checked%22%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20FieldIsNotInitOrSerializeWarning%2C%0A%20%20%20%20%20%20%20%20%29%0A%60%60%60&labels=enhancement)
 
   ```python
 # do nothing case
@@ -191,9 +215,9 @@ DEFAULT_HANDLERS: MonoTuple[SerializerHandler] = tuple(BASE_HANDLERS) + (
 
 
 - are the types hashable? does this even make sense?  
-  local link: [`/muutils/json_serialize/serializable_dataclass.py#515`](/muutils/json_serialize/serializable_dataclass.py#515) 
-  | view on GitHub: [muutils/json_serialize/serializable_dataclass.py#L515](https://github.com/mivanit/muutils/blob/main/muutils/json_serialize/serializable_dataclass.py#L515)
-  | [Make Issue](https://github.com/mivanit/muutils/issues/new?title=are%20the%20types%20hashable%3F%20does%20this%20even%20make%20sense%3F&body=%23%20source%0A%0A%5B%60muutils%2Fjson_serialize%2Fserializable_dataclass.py%23L515%60%5D%28https%3A%2F%2Fgithub.com%2Fmivanit%2Fmuutils%2Fblob%2Fmain%2Fmuutils%2Fjson_serialize%2Fserializable_dataclass.py%23L515%29%0A%0A%23%20context%0A%60%60%60python%0A%20%20%20%20%20%20%20%20%22deep%20copy%20by%20serializing%20and%20loading%20the%20instance%20to%20json%22%0A%20%20%20%20%20%20%20%20return%20self.__class__.load%28json.loads%28json.dumps%28self.serialize%28%29%29%29%29%0A%0A%0A%23%20cache%20this%20so%20we%20don%27t%20have%20to%20keep%20getting%20it%0A%23%20TODO%3A%20are%20the%20types%20hashable%3F%20does%20this%20even%20make%20sense%3F%0A%40functools.lru_cache%28typed%3DTrue%29%0Adef%20get_cls_type_hints_cached%28cls%3A%20Type%5BT%5D%29%20-%3E%20dict%5Bstr%2C%20Any%5D%3A%0A%20%20%20%20%22cached%20typing.get_type_hints%20for%20a%20class%22%0A%20%20%20%20return%20typing.get_type_hints%28cls%29%0A%60%60%60&labels=enhancement)
+  local link: [`/muutils/json_serialize/serializable_dataclass.py#494`](/muutils/json_serialize/serializable_dataclass.py#494) 
+  | view on GitHub: [muutils/json_serialize/serializable_dataclass.py#L494](https://github.com/mivanit/muutils/blob/main/muutils/json_serialize/serializable_dataclass.py#L494)
+  | [Make Issue](https://github.com/mivanit/muutils/issues/new?title=are%20the%20types%20hashable%3F%20does%20this%20even%20make%20sense%3F&body=%23%20source%0A%0A%5B%60muutils%2Fjson_serialize%2Fserializable_dataclass.py%23L494%60%5D%28https%3A%2F%2Fgithub.com%2Fmivanit%2Fmuutils%2Fblob%2Fmain%2Fmuutils%2Fjson_serialize%2Fserializable_dataclass.py%23L494%29%0A%0A%23%20context%0A%60%60%60python%0A%20%20%20%20%20%20%20%20%22deep%20copy%20by%20serializing%20and%20loading%20the%20instance%20to%20json%22%0A%20%20%20%20%20%20%20%20return%20self.__class__.load%28json.loads%28json.dumps%28self.serialize%28%29%29%29%29%0A%0A%0A%23%20cache%20this%20so%20we%20don%27t%20have%20to%20keep%20getting%20it%0A%23%20TODO%3A%20are%20the%20types%20hashable%3F%20does%20this%20even%20make%20sense%3F%0A%40functools.lru_cache%28typed%3DTrue%29%0Adef%20get_cls_type_hints_cached%28cls%3A%20Type%5BT%5D%29%20-%3E%20dict%5Bstr%2C%20Any%5D%3A%0A%20%20%20%20%22cached%20typing.get_type_hints%20for%20a%20class%22%0A%20%20%20%20return%20typing.get_type_hints%28cls%29%0A%60%60%60&labels=enhancement)
 
   ```python
 "deep copy by serializing and loading the instance to json"
@@ -476,10 +500,28 @@ def typed_lambda(
 
 ## [`muutils/spinner.py`](/muutils/spinner.py)
 
+- type hint that the `update_status` kwarg is not needed when calling the function we just decorated  
+  local link: [`/muutils/spinner.py#440`](/muutils/spinner.py#440) 
+  | view on GitHub: [muutils/spinner.py#L440](https://github.com/mivanit/muutils/blob/main/muutils/spinner.py#L440)
+  | [Make Issue](https://github.com/mivanit/muutils/issues/new?title=type%20hint%20that%20the%20%60update_status%60%20kwarg%20is%20not%20needed%20when%20calling%20the%20function%20we%20just%20decorated&body=%23%20source%0A%0A%5B%60muutils%2Fspinner.py%23L440%60%5D%28https%3A%2F%2Fgithub.com%2Fmivanit%2Fmuutils%2Fblob%2Fmain%2Fmuutils%2Fspinner.py%23L440%29%0A%0A%23%20context%0A%60%60%60python%0ASpinnerContext.__doc__%20%3D%20Spinner.__doc__%0A%0A%0A%23%20TODO%3A%20type%20hint%20that%20the%20%60update_status%60%20kwarg%20is%20not%20needed%20when%20calling%20the%20function%20we%20just%20decorated%0Adef%20spinner_decorator%28%0A%20%20%20%20%2Aargs%2C%0A%20%20%20%20%23%20passed%20to%20%60Spinner.__init__%60%0A%20%20%20%20config%3A%20SpinnerConfigArg%20%3D%20%22default%22%2C%0A%20%20%20%20update_interval%3A%20float%20%3D%200.1%2C%0A%60%60%60&labels=enhancement)
+
+  ```python
+SpinnerContext.__doc__ = Spinner.__doc__
+
+
+# TODO: type hint that the `update_status` kwarg is not needed when calling the function we just decorated
+def spinner_decorator(
+    *args,
+    # passed to `Spinner.__init__`
+    config: SpinnerConfigArg = "default",
+    update_interval: float = 0.1,
+  ```
+
+
 - fix this type ignore  
-  local link: [`/muutils/spinner.py#499`](/muutils/spinner.py#499) 
-  | view on GitHub: [muutils/spinner.py#L499](https://github.com/mivanit/muutils/blob/main/muutils/spinner.py#L499)
-  | [Make Issue](https://github.com/mivanit/muutils/issues/new?title=fix%20this%20type%20ignore&body=%23%20source%0A%0A%5B%60muutils%2Fspinner.py%23L499%60%5D%28https%3A%2F%2Fgithub.com%2Fmivanit%2Fmuutils%2Fblob%2Fmain%2Fmuutils%2Fspinner.py%23L499%29%0A%0A%23%20context%0A%60%60%60python%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20spinner.stop%28failed%3DTrue%29%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20raise%20e%0A%0A%20%20%20%20%20%20%20%20%20%20%20%20return%20result%0A%0A%20%20%20%20%20%20%20%20%23%20TODO%3A%20fix%20this%20type%20ignore%0A%20%20%20%20%20%20%20%20return%20wrapper%20%20%23%20type%3A%20ignore%5Breturn-value%5D%0A%0A%20%20%20%20if%20not%20args%3A%0A%20%20%20%20%20%20%20%20%23%20called%20as%20%60%40spinner_decorator%28stuff%29%60%0A%20%20%20%20%20%20%20%20return%20decorator%0A%60%60%60&labels=enhancement)
+  local link: [`/muutils/spinner.py#500`](/muutils/spinner.py#500) 
+  | view on GitHub: [muutils/spinner.py#L500](https://github.com/mivanit/muutils/blob/main/muutils/spinner.py#L500)
+  | [Make Issue](https://github.com/mivanit/muutils/issues/new?title=fix%20this%20type%20ignore&body=%23%20source%0A%0A%5B%60muutils%2Fspinner.py%23L500%60%5D%28https%3A%2F%2Fgithub.com%2Fmivanit%2Fmuutils%2Fblob%2Fmain%2Fmuutils%2Fspinner.py%23L500%29%0A%0A%23%20context%0A%60%60%60python%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20spinner.stop%28failed%3DTrue%29%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20raise%20e%0A%0A%20%20%20%20%20%20%20%20%20%20%20%20return%20result%0A%0A%20%20%20%20%20%20%20%20%23%20TODO%3A%20fix%20this%20type%20ignore%0A%20%20%20%20%20%20%20%20return%20wrapper%20%20%23%20type%3A%20ignore%5Breturn-value%5D%0A%0A%20%20%20%20if%20not%20args%3A%0A%20%20%20%20%20%20%20%20%23%20called%20as%20%60%40spinner_decorator%28stuff%29%60%0A%20%20%20%20%20%20%20%20return%20decorator%0A%60%60%60&labels=enhancement)
 
   ```python
 spinner.stop(failed=True)
@@ -503,7 +545,7 @@ spinner.stop(failed=True)
 - add proper type annotations to this signature  
   local link: [`/muutils/tensor_utils.py#76`](/muutils/tensor_utils.py#76) 
   | view on GitHub: [muutils/tensor_utils.py#L76](https://github.com/mivanit/muutils/blob/main/muutils/tensor_utils.py#L76)
-  | [Make Issue](https://github.com/mivanit/muutils/issues/new?title=add%20proper%20type%20annotations%20to%20this%20signature&body=%23%20source%0A%0A%5B%60muutils%2Ftensor_utils.py%23L76%60%5D%28https%3A%2F%2Fgithub.com%2Fmivanit%2Fmuutils%2Fblob%2Fmain%2Fmuutils%2Ftensor_utils.py%23L76%29%0A%0A%23%20context%0A%60%60%60python%0Aif%20np.version.version%20%3C%20%222.0.0%22%3A%0A%20%20%20%20TYPE_TO_JAX_DTYPE%5Bnp.float_%5D%20%3D%20jaxtyping.Float%0A%20%20%20%20TYPE_TO_JAX_DTYPE%5Bnp.int_%5D%20%3D%20jaxtyping.Int%0A%0A%0A%23%20TODO%3A%20add%20proper%20type%20annotations%20to%20this%20signature%0Adef%20jaxtype_factory%28%0A%20%20%20%20name%3A%20str%2C%0A%20%20%20%20array_type%3A%20type%2C%0A%20%20%20%20default_jax_dtype%3Djaxtyping.Float%2C%0A%20%20%20%20legacy_mode%3A%20ErrorMode%20%3D%20ErrorMode.WARN%2C%0A%60%60%60&labels=enhancement)
+  | [Make Issue](https://github.com/mivanit/muutils/issues/new?title=add%20proper%20type%20annotations%20to%20this%20signature&body=%23%20source%0A%0A%5B%60muutils%2Ftensor_utils.py%23L76%60%5D%28https%3A%2F%2Fgithub.com%2Fmivanit%2Fmuutils%2Fblob%2Fmain%2Fmuutils%2Ftensor_utils.py%23L76%29%0A%0A%23%20context%0A%60%60%60python%0Aif%20np.version.version%20%3C%20%222.0.0%22%3A%0A%20%20%20%20TYPE_TO_JAX_DTYPE%5Bnp.float_%5D%20%3D%20jaxtyping.Float%0A%20%20%20%20TYPE_TO_JAX_DTYPE%5Bnp.int_%5D%20%3D%20jaxtyping.Int%0A%0A%0A%23%20TODO%3A%20add%20proper%20type%20annotations%20to%20this%20signature%0A%23%20TODO%3A%20maybe%20get%20rid%20of%20this%20altogether%3F%0Adef%20jaxtype_factory%28%0A%20%20%20%20name%3A%20str%2C%0A%20%20%20%20array_type%3A%20type%2C%0A%20%20%20%20default_jax_dtype%3Djaxtyping.Float%2C%0A%60%60%60&labels=enhancement)
 
   ```python
 if np.version.version < "2.0.0":
@@ -512,11 +554,31 @@ if np.version.version < "2.0.0":
 
 
 # TODO: add proper type annotations to this signature
+# TODO: maybe get rid of this altogether?
 def jaxtype_factory(
     name: str,
     array_type: type,
     default_jax_dtype=jaxtyping.Float,
-    legacy_mode: ErrorMode = ErrorMode.WARN,
+  ```
+
+
+- maybe get rid of this altogether?  
+  local link: [`/muutils/tensor_utils.py#77`](/muutils/tensor_utils.py#77) 
+  | view on GitHub: [muutils/tensor_utils.py#L77](https://github.com/mivanit/muutils/blob/main/muutils/tensor_utils.py#L77)
+  | [Make Issue](https://github.com/mivanit/muutils/issues/new?title=maybe%20get%20rid%20of%20this%20altogether%3F&body=%23%20source%0A%0A%5B%60muutils%2Ftensor_utils.py%23L77%60%5D%28https%3A%2F%2Fgithub.com%2Fmivanit%2Fmuutils%2Fblob%2Fmain%2Fmuutils%2Ftensor_utils.py%23L77%29%0A%0A%23%20context%0A%60%60%60python%0A%20%20%20%20TYPE_TO_JAX_DTYPE%5Bnp.float_%5D%20%3D%20jaxtyping.Float%0A%20%20%20%20TYPE_TO_JAX_DTYPE%5Bnp.int_%5D%20%3D%20jaxtyping.Int%0A%0A%0A%23%20TODO%3A%20add%20proper%20type%20annotations%20to%20this%20signature%0A%23%20TODO%3A%20maybe%20get%20rid%20of%20this%20altogether%3F%0Adef%20jaxtype_factory%28%0A%20%20%20%20name%3A%20str%2C%0A%20%20%20%20array_type%3A%20type%2C%0A%20%20%20%20default_jax_dtype%3Djaxtyping.Float%2C%0A%20%20%20%20legacy_mode%3A%20typing.Union%5BErrorMode%2C%20str%5D%20%3D%20ErrorMode.WARN%2C%0A%60%60%60&labels=enhancement)
+
+  ```python
+TYPE_TO_JAX_DTYPE[np.float_] = jaxtyping.Float
+    TYPE_TO_JAX_DTYPE[np.int_] = jaxtyping.Int
+
+
+# TODO: add proper type annotations to this signature
+# TODO: maybe get rid of this altogether?
+def jaxtype_factory(
+    name: str,
+    array_type: type,
+    default_jax_dtype=jaxtyping.Float,
+    legacy_mode: typing.Union[ErrorMode, str] = ErrorMode.WARN,
   ```
 
 
@@ -563,6 +625,30 @@ if item_type in value.__mro__:
 
 
 
+## [`tests/unit/json_serialize/serializable_dataclass/test_sdc_properties_nested.py`](/tests/unit/json_serialize/serializable_dataclass/test_sdc_properties_nested.py)
+
+- idk why it thinks `SUPPORTS_KW_ONLY` is not a True or False Literal:  
+  local link: [`/tests/unit/json_serialize/serializable_dataclass/test_sdc_properties_nested.py#25`](/tests/unit/json_serialize/serializable_dataclass/test_sdc_properties_nested.py#25) 
+  | view on GitHub: [tests/unit/json_serialize/serializable_dataclass/test_sdc_properties_nested.py#L25](https://github.com/mivanit/muutils/blob/main/tests/unit/json_serialize/serializable_dataclass/test_sdc_properties_nested.py#L25)
+  | [Make Issue](https://github.com/mivanit/muutils/issues/new?title=idk%20why%20it%20thinks%20%60SUPPORTS_KW_ONLY%60%20is%20not%20a%20True%20or%20False%20Literal%3A&body=%23%20source%0A%0A%5B%60tests%2Funit%2Fjson_serialize%2Fserializable_dataclass%2Ftest_sdc_properties_nested.py%23L25%60%5D%28https%3A%2F%2Fgithub.com%2Fmivanit%2Fmuutils%2Fblob%2Fmain%2Ftests%2Funit%2Fjson_serialize%2Fserializable_dataclass%2Ftest_sdc_properties_nested.py%23L25%29%0A%0A%23%20context%0A%60%60%60python%0A%20%20%20%20%40property%0A%20%20%20%20def%20full_name%28self%29%20-%3E%20str%3A%0A%20%20%20%20%20%20%20%20return%20f%22%7Bself.first_name%7D%20%7Bself.last_name%7D%22%0A%0A%0A%23%20TODO%3A%20idk%20why%20it%20thinks%20%60SUPPORTS_KW_ONLY%60%20is%20not%20a%20True%20or%20False%20Literal%3A%0A%23%20error%3A%20%22kw_only%22%20argument%20must%20be%20a%20True%20or%20False%20literal%20%20%5Bliteral-required%5D%0A%40serializable_dataclass%28%0A%20%20%20%20kw_only%3DSUPPORTS_KW_ONLY%2C%20%20%23%20type%3A%20ignore%5Bliteral-required%5D%0A%20%20%20%20properties_to_serialize%3D%5B%22full_name%22%2C%20%22full_title%22%5D%2C%0A%29%0A%60%60%60&labels=enhancement)
+
+  ```python
+@property
+    def full_name(self) -> str:
+        return f"{self.first_name} {self.last_name}"
+
+
+# TODO: idk why it thinks `SUPPORTS_KW_ONLY` is not a True or False Literal:
+# error: "kw_only" argument must be a True or False literal  [literal-required]
+@serializable_dataclass(
+    kw_only=SUPPORTS_KW_ONLY,  # type: ignore[literal-required]
+    properties_to_serialize=["full_name", "full_title"],
+)
+  ```
+
+
+
+
 ## [`tests/unit/json_serialize/serializable_dataclass/test_serializable_dataclass.py`](/tests/unit/json_serialize/serializable_dataclass/test_serializable_dataclass.py)
 
 - figure this out  
@@ -586,9 +672,9 @@ def test_dict_type_validation():
 
 
 - this would be nice to fix, but not a massive issue  
-  local link: [`/tests/unit/json_serialize/serializable_dataclass/test_serializable_dataclass.py#966`](/tests/unit/json_serialize/serializable_dataclass/test_serializable_dataclass.py#966) 
-  | view on GitHub: [tests/unit/json_serialize/serializable_dataclass/test_serializable_dataclass.py#L966](https://github.com/mivanit/muutils/blob/main/tests/unit/json_serialize/serializable_dataclass/test_serializable_dataclass.py#L966)
-  | [Make Issue](https://github.com/mivanit/muutils/issues/new?title=this%20would%20be%20nice%20to%20fix%2C%20but%20not%20a%20massive%20issue&body=%23%20source%0A%0A%5B%60tests%2Funit%2Fjson_serialize%2Fserializable_dataclass%2Ftest_serializable_dataclass.py%23L966%60%5D%28https%3A%2F%2Fgithub.com%2Fmivanit%2Fmuutils%2Fblob%2Fmain%2Ftests%2Funit%2Fjson_serialize%2Fserializable_dataclass%2Ftest_serializable_dataclass.py%23L966%29%0A%0A%23%20context%0A%60%60%60python%0A%20%20%20%20loaded%20%3D%20PropertyContainer.load%28serialized%29%0A%20%20%20%20assert%20loaded%20%3D%3D%20instance%0A%0A%0A%23%20TODO%3A%20this%20would%20be%20nice%20to%20fix%2C%20but%20not%20a%20massive%20issue%0A%40pytest.mark.skip%28reason%3D%22Not%20implemented%20yet%22%29%0Adef%20test_edge_cases%28%29%3A%0A%20%20%20%20%22%22%22Test%20a%20sdc%20containing%20instances%20of%20itself%22%22%22%0A%0A%20%20%20%20%40serializable_dataclass%0A%60%60%60&labels=enhancement)
+  local link: [`/tests/unit/json_serialize/serializable_dataclass/test_serializable_dataclass.py#973`](/tests/unit/json_serialize/serializable_dataclass/test_serializable_dataclass.py#973) 
+  | view on GitHub: [tests/unit/json_serialize/serializable_dataclass/test_serializable_dataclass.py#L973](https://github.com/mivanit/muutils/blob/main/tests/unit/json_serialize/serializable_dataclass/test_serializable_dataclass.py#L973)
+  | [Make Issue](https://github.com/mivanit/muutils/issues/new?title=this%20would%20be%20nice%20to%20fix%2C%20but%20not%20a%20massive%20issue&body=%23%20source%0A%0A%5B%60tests%2Funit%2Fjson_serialize%2Fserializable_dataclass%2Ftest_serializable_dataclass.py%23L973%60%5D%28https%3A%2F%2Fgithub.com%2Fmivanit%2Fmuutils%2Fblob%2Fmain%2Ftests%2Funit%2Fjson_serialize%2Fserializable_dataclass%2Ftest_serializable_dataclass.py%23L973%29%0A%0A%23%20context%0A%60%60%60python%0A%20%20%20%20loaded%20%3D%20PropertyContainer.load%28serialized%29%0A%20%20%20%20assert%20loaded%20%3D%3D%20instance%0A%0A%0A%23%20TODO%3A%20this%20would%20be%20nice%20to%20fix%2C%20but%20not%20a%20massive%20issue%0A%40pytest.mark.skip%28reason%3D%22Not%20implemented%20yet%22%29%0Adef%20test_edge_cases%28%29%3A%0A%20%20%20%20%22%22%22Test%20a%20sdc%20containing%20instances%20of%20itself%22%22%22%0A%0A%20%20%20%20%40serializable_dataclass%0A%60%60%60&labels=enhancement)
 
   ```python
 loaded = PropertyContainer.load(serialized)
@@ -605,9 +691,9 @@ def test_edge_cases():
 
 
 - make .serialize() fail on cyclic references! see https://github.com/mivanit/muutils/issues/62  
-  local link: [`/tests/unit/json_serialize/serializable_dataclass/test_serializable_dataclass.py#1034`](/tests/unit/json_serialize/serializable_dataclass/test_serializable_dataclass.py#1034) 
-  | view on GitHub: [tests/unit/json_serialize/serializable_dataclass/test_serializable_dataclass.py#L1034](https://github.com/mivanit/muutils/blob/main/tests/unit/json_serialize/serializable_dataclass/test_serializable_dataclass.py#L1034)
-  | [Make Issue](https://github.com/mivanit/muutils/issues/new?title=make%20.serialize%28%29%20fail%20on%20cyclic%20references%21%20see%20https%3A%2F%2Fgithub.com%2Fmivanit%2Fmuutils%2Fissues%2F62&body=%23%20source%0A%0A%5B%60tests%2Funit%2Fjson_serialize%2Fserializable_dataclass%2Ftest_serializable_dataclass.py%23L1034%60%5D%28https%3A%2F%2Fgithub.com%2Fmivanit%2Fmuutils%2Fblob%2Fmain%2Ftests%2Funit%2Fjson_serialize%2Fserializable_dataclass%2Ftest_serializable_dataclass.py%23L1034%29%0A%0A%23%20context%0A%60%60%60python%0A%20%20%20%20%23%20%20%20%20%20%20%20%20%20%22shared_field%22%3A%200%0A%20%20%20%20%23%20%20%20%20%20%7D%29%0A%0A%0A%23%20Test%20for%20memory%20leaks%20and%20cyclic%20references%0A%23%20TODO%3A%20make%20.serialize%28%29%20fail%20on%20cyclic%20references%21%20see%20https%3A%2F%2Fgithub.com%2Fmivanit%2Fmuutils%2Fissues%2F62%0A%40pytest.mark.skip%28reason%3D%22Not%20implemented%20yet%22%29%0Adef%20test_cyclic_references%28%29%3A%0A%20%20%20%20%22%22%22Test%20handling%20of%20cyclic%20references%22%22%22%0A%0A%20%20%20%20%40serializable_dataclass%0A%60%60%60&labels=enhancement)
+  local link: [`/tests/unit/json_serialize/serializable_dataclass/test_serializable_dataclass.py#1041`](/tests/unit/json_serialize/serializable_dataclass/test_serializable_dataclass.py#1041) 
+  | view on GitHub: [tests/unit/json_serialize/serializable_dataclass/test_serializable_dataclass.py#L1041](https://github.com/mivanit/muutils/blob/main/tests/unit/json_serialize/serializable_dataclass/test_serializable_dataclass.py#L1041)
+  | [Make Issue](https://github.com/mivanit/muutils/issues/new?title=make%20.serialize%28%29%20fail%20on%20cyclic%20references%21%20see%20https%3A%2F%2Fgithub.com%2Fmivanit%2Fmuutils%2Fissues%2F62&body=%23%20source%0A%0A%5B%60tests%2Funit%2Fjson_serialize%2Fserializable_dataclass%2Ftest_serializable_dataclass.py%23L1041%60%5D%28https%3A%2F%2Fgithub.com%2Fmivanit%2Fmuutils%2Fblob%2Fmain%2Ftests%2Funit%2Fjson_serialize%2Fserializable_dataclass%2Ftest_serializable_dataclass.py%23L1041%29%0A%0A%23%20context%0A%60%60%60python%0A%20%20%20%20%23%20%20%20%20%20%20%20%20%20%22shared_field%22%3A%200%0A%20%20%20%20%23%20%20%20%20%20%7D%29%0A%0A%0A%23%20Test%20for%20memory%20leaks%20and%20cyclic%20references%0A%23%20TODO%3A%20make%20.serialize%28%29%20fail%20on%20cyclic%20references%21%20see%20https%3A%2F%2Fgithub.com%2Fmivanit%2Fmuutils%2Fissues%2F62%0A%40pytest.mark.skip%28reason%3D%22Not%20implemented%20yet%22%29%0Adef%20test_cyclic_references%28%29%3A%0A%20%20%20%20%22%22%22Test%20handling%20of%20cyclic%20references%22%22%22%0A%0A%20%20%20%20%40serializable_dataclass%0A%60%60%60&labels=enhancement)
 
   ```python
 #         "shared_field": 0
@@ -621,6 +707,66 @@ def test_cyclic_references():
     """Test handling of cyclic references"""
 
     @serializable_dataclass
+  ```
+
+
+- idk why we type ignore here  
+  local link: [`/tests/unit/json_serialize/serializable_dataclass/test_serializable_dataclass.py#1061`](/tests/unit/json_serialize/serializable_dataclass/test_serializable_dataclass.py#1061) 
+  | view on GitHub: [tests/unit/json_serialize/serializable_dataclass/test_serializable_dataclass.py#L1061](https://github.com/mivanit/muutils/blob/main/tests/unit/json_serialize/serializable_dataclass/test_serializable_dataclass.py#L1061)
+  | [Make Issue](https://github.com/mivanit/muutils/issues/new?title=idk%20why%20we%20type%20ignore%20here&body=%23%20source%0A%0A%5B%60tests%2Funit%2Fjson_serialize%2Fserializable_dataclass%2Ftest_serializable_dataclass.py%23L1061%60%5D%28https%3A%2F%2Fgithub.com%2Fmivanit%2Fmuutils%2Fblob%2Fmain%2Ftests%2Funit%2Fjson_serialize%2Fserializable_dataclass%2Ftest_serializable_dataclass.py%23L1061%29%0A%0A%23%20context%0A%60%60%60python%0A%20%20%20%20%23%20Ensure%20we%20can%20serialize%20without%20infinite%20recursion%0A%20%20%20%20serialized%20%3D%20node1.serialize%28%29%0A%20%20%20%20loaded%20%3D%20Node.load%28serialized%29%0A%20%20%20%20assert%20loaded.value%20%3D%3D%20%22one%22%0A%20%20%20%20%23%20TODO%3A%20idk%20why%20we%20type%20ignore%20here%0A%20%20%20%20assert%20loaded.next.value%20%3D%3D%20%22two%22%20%20%23%20type%3A%20ignore%5Bunion-attr%5D%0A%60%60%60&labels=enhancement)
+
+  ```python
+# Ensure we can serialize without infinite recursion
+    serialized = node1.serialize()
+    loaded = Node.load(serialized)
+    assert loaded.value == "one"
+    # TODO: idk why we type ignore here
+    assert loaded.next.value == "two"  # type: ignore[union-attr]
+  ```
+
+
+
+
+## [`tests/unit/misc/test_freeze.py`](/tests/unit/misc/test_freeze.py)
+
+- there are a bunch of 'type: ignore' comments here which it would be nice to get rid of  
+  local link: [`/tests/unit/misc/test_freeze.py#7`](/tests/unit/misc/test_freeze.py#7) 
+  | view on GitHub: [tests/unit/misc/test_freeze.py#L7](https://github.com/mivanit/muutils/blob/main/tests/unit/misc/test_freeze.py#L7)
+  | [Make Issue](https://github.com/mivanit/muutils/issues/new?title=there%20are%20a%20bunch%20of%20%27type%3A%20ignore%27%20comments%20here%20which%20it%20would%20be%20nice%20to%20get%20rid%20of&body=%23%20source%0A%0A%5B%60tests%2Funit%2Fmisc%2Ftest_freeze.py%23L7%60%5D%28https%3A%2F%2Fgithub.com%2Fmivanit%2Fmuutils%2Fblob%2Fmain%2Ftests%2Funit%2Fmisc%2Ftest_freeze.py%23L7%29%0A%0A%23%20context%0A%60%60%60python%0Aimport%20pytest%0A%0Afrom%20muutils.misc%20import%20freeze%0A%0A%23%20TODO%3A%20there%20are%20a%20bunch%20of%20%27type%3A%20ignore%27%20comments%20here%20which%20it%20would%20be%20nice%20to%20get%20rid%20of%0A%0A%0Adef%20test_freeze_basic_types%28%29%3A%0A%20%20%20%20freeze%28True%29%0A%20%20%20%20freeze%28123%29%0A%60%60%60&labels=enhancement)
+
+  ```python
+import pytest
+
+from muutils.misc import freeze
+
+# TODO: there are a bunch of 'type: ignore' comments here which it would be nice to get rid of
+
+
+def test_freeze_basic_types():
+    freeze(True)
+    freeze(123)
+  ```
+
+
+
+
+## [`tests/unit/test_tensor_utils.py`](/tests/unit/test_tensor_utils.py)
+
+- type ignores here should not be necessary?  
+  local link: [`/tests/unit/test_tensor_utils.py#41`](/tests/unit/test_tensor_utils.py#41) 
+  | view on GitHub: [tests/unit/test_tensor_utils.py#L41](https://github.com/mivanit/muutils/blob/main/tests/unit/test_tensor_utils.py#L41)
+  | [Make Issue](https://github.com/mivanit/muutils/issues/new?title=type%20ignores%20here%20should%20not%20be%20necessary%3F&body=%23%20source%0A%0A%5B%60tests%2Funit%2Ftest_tensor_utils.py%23L41%60%5D%28https%3A%2F%2Fgithub.com%2Fmivanit%2Fmuutils%2Fblob%2Fmain%2Ftests%2Funit%2Ftest_tensor_utils.py%23L41%29%0A%0A%23%20context%0A%60%60%60python%0A%20%20%20%20y%20%3D%20ATensor%5B%22dim1%20dim2%22%2C%20np.float32%5D%20%20%23%20type%3A%20ignore%5Bindex%5D%0A%20%20%20%20print%28y%29%0A%0A%0Adef%20test_numpy_to_torch_dtype%28%29%3A%0A%20%20%20%20%23%20TODO%3A%20type%20ignores%20here%20should%20not%20be%20necessary%3F%0A%20%20%20%20assert%20numpy_to_torch_dtype%28np.float32%29%20%3D%3D%20torch.float32%20%20%23%20type%3A%20ignore%5Barg-type%5D%0A%20%20%20%20assert%20numpy_to_torch_dtype%28np.int32%29%20%3D%3D%20torch.int32%20%20%23%20type%3A%20ignore%5Barg-type%5D%0A%20%20%20%20assert%20numpy_to_torch_dtype%28torch.float32%29%20%3D%3D%20torch.float32%0A%60%60%60&labels=enhancement)
+
+  ```python
+y = ATensor["dim1 dim2", np.float32]  # type: ignore[index]
+    print(y)
+
+
+def test_numpy_to_torch_dtype():
+    # TODO: type ignores here should not be necessary?
+    assert numpy_to_torch_dtype(np.float32) == torch.float32  # type: ignore[arg-type]
+    assert numpy_to_torch_dtype(np.int32) == torch.int32  # type: ignore[arg-type]
+    assert numpy_to_torch_dtype(torch.float32) == torch.float32
   ```
 
 

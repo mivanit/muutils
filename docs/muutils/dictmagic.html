@@ -46,7 +46,7 @@
 </script></head>
 <body>
 <div class="package-version">
-    docs for <a href="https://github.com/mivanit/muutils">muutils</a> v0.8.1<br>
+    docs for <a href="https://github.com/mivanit/muutils">muutils</a> v0.8.2<br>
 </div>
     <nav class="pdoc">
         <label id="navtoggle" for="togglestate" class="pdoc-button">
@@ -142,7 +142,7 @@
     </nav>
     <main class="pdoc">
             <section class="module-info">
-                        <a class="pdoc-button git-button" href="https://github.com/mivanit/muutils/blob/0.8.1/dictmagic.py">View Source on GitHub</a>
+                        <a class="pdoc-button git-button" href="https://github.com/mivanit/muutils/blob/0.8.2/dictmagic.py">View Source on GitHub</a>
                     <h1 class="modulename">
 <a href="./../muutils.html">muutils</a><wbr>.dictmagic    </h1>
 
@@ -162,7 +162,7 @@
                         <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="mod-dictmagic-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.1/dictmagic.py#L0-L521" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.2/dictmagic.py#L0-L521" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -329,7 +329,7 @@
 </span><span id="L-158"><a href="#L-158"><span class="linenos">158</span></a>    <span class="n">kwargs_dict</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span>
 </span><span id="L-159"><a href="#L-159"><span class="linenos">159</span></a>    <span class="n">sep</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;.&quot;</span><span class="p">,</span>
 </span><span id="L-160"><a href="#L-160"><span class="linenos">160</span></a>    <span class="n">strip_prefix</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-</span><span id="L-161"><a href="#L-161"><span class="linenos">161</span></a>    <span class="n">when_unknown_prefix</span><span class="p">:</span> <span class="n">ErrorMode</span> <span class="o">=</span> <span class="n">ErrorMode</span><span class="o">.</span><span class="n">WARN</span><span class="p">,</span>
+</span><span id="L-161"><a href="#L-161"><span class="linenos">161</span></a>    <span class="n">when_unknown_prefix</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">ErrorMode</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">ErrorMode</span><span class="o">.</span><span class="n">WARN</span><span class="p">,</span>
 </span><span id="L-162"><a href="#L-162"><span class="linenos">162</span></a>    <span class="n">transform_key</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">[[</span><span class="nb">str</span><span class="p">],</span> <span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 </span><span id="L-163"><a href="#L-163"><span class="linenos">163</span></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
 </span><span id="L-164"><a href="#L-164"><span class="linenos">164</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;given kwargs from fire, convert them to a nested dict</span>
@@ -362,12 +362,12 @@
 </span><span id="L-191"><a href="#L-191"><span class="linenos">191</span></a><span class="sd">    - `transform_key: Callable[[str], str] | None = None`</span>
 </span><span id="L-192"><a href="#L-192"><span class="linenos">192</span></a><span class="sd">        a function to apply to each key before adding it to the dict (applied after stripping the prefix)</span>
 </span><span id="L-193"><a href="#L-193"><span class="linenos">193</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="L-194"><a href="#L-194"><span class="linenos">194</span></a>    <span class="n">when_unknown_prefix</span> <span class="o">=</span> <span class="n">ErrorMode</span><span class="o">.</span><span class="n">from_any</span><span class="p">(</span><span class="n">when_unknown_prefix</span><span class="p">)</span>
+</span><span id="L-194"><a href="#L-194"><span class="linenos">194</span></a>    <span class="n">when_unknown_prefix_</span> <span class="o">=</span> <span class="n">ErrorMode</span><span class="o">.</span><span class="n">from_any</span><span class="p">(</span><span class="n">when_unknown_prefix</span><span class="p">)</span>
 </span><span id="L-195"><a href="#L-195"><span class="linenos">195</span></a>    <span class="n">filtered_kwargs</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
 </span><span id="L-196"><a href="#L-196"><span class="linenos">196</span></a>    <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">kwargs_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
 </span><span id="L-197"><a href="#L-197"><span class="linenos">197</span></a>        <span class="k">if</span> <span class="n">strip_prefix</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
 </span><span id="L-198"><a href="#L-198"><span class="linenos">198</span></a>            <span class="k">if</span> <span class="ow">not</span> <span class="n">key</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">strip_prefix</span><span class="p">):</span>
-</span><span id="L-199"><a href="#L-199"><span class="linenos">199</span></a>                <span class="n">when_unknown_prefix</span><span class="o">.</span><span class="n">process</span><span class="p">(</span>
+</span><span id="L-199"><a href="#L-199"><span class="linenos">199</span></a>                <span class="n">when_unknown_prefix_</span><span class="o">.</span><span class="n">process</span><span class="p">(</span>
 </span><span id="L-200"><a href="#L-200"><span class="linenos">200</span></a>                    <span class="sa">f</span><span class="s2">&quot;key &#39;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">&#39; does not start with &#39;</span><span class="si">{</span><span class="n">strip_prefix</span><span class="si">}</span><span class="s2">&#39;&quot;</span><span class="p">,</span>
 </span><span id="L-201"><a href="#L-201"><span class="linenos">201</span></a>                    <span class="n">except_cls</span><span class="o">=</span><span class="ne">ValueError</span><span class="p">,</span>
 </span><span id="L-202"><a href="#L-202"><span class="linenos">202</span></a>                <span class="p">)</span>
@@ -706,7 +706,7 @@
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="DefaulterDict-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.1/dictmagic.py#L33-L50" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.2/dictmagic.py#L33-L50" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -780,7 +780,7 @@
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="defaultdict_to_dict_recursive-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.1/dictmagic.py#L57-L66" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.2/dictmagic.py#L57-L66" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -816,7 +816,7 @@
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="dotlist_to_nested_dict-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.1/dictmagic.py#L69-L89" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.2/dictmagic.py#L69-L89" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -869,7 +869,7 @@
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="nested_dict_to_dotlist-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.1/dictmagic.py#L92-L122" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.2/dictmagic.py#L92-L122" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -924,7 +924,7 @@
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="update_with_nested_dict-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.1/dictmagic.py#L125-L154" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.2/dictmagic.py#L125-L154" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -999,12 +999,12 @@ the updated dict</li>
 <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">kwargs_to_nested_dict</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">kwargs_dict</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">typing</span><span class="o">.</span><span class="n">Any</span><span class="p">]</span>,</span><span class="param">	<span class="n">sep</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;.&#39;</span>,</span><span class="param">	<span class="n">strip_prefix</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">when_unknown_prefix</span><span class="p">:</span> <span class="n"><a href="errormode.html#ErrorMode">muutils.errormode.ErrorMode</a></span> <span class="o">=</span> <span class="n">ErrorMode</span><span class="o">.</span><span class="n">Warn</span>,</span><span class="param">	<span class="n">transform_key</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">[[</span><span class="nb">str</span><span class="p">],</span> <span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span></span><span class="return-annotation">) -> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">typing</span><span class="o">.</span><span class="n">Any</span><span class="p">]</span>:</span></span>
+        <span class="name">kwargs_to_nested_dict</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">kwargs_dict</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">typing</span><span class="o">.</span><span class="n">Any</span><span class="p">]</span>,</span><span class="param">	<span class="n">sep</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;.&#39;</span>,</span><span class="param">	<span class="n">strip_prefix</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">when_unknown_prefix</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n"><a href="errormode.html#ErrorMode">muutils.errormode.ErrorMode</a></span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">ErrorMode</span><span class="o">.</span><span class="n">Warn</span>,</span><span class="param">	<span class="n">transform_key</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">[[</span><span class="nb">str</span><span class="p">],</span> <span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span></span><span class="return-annotation">) -> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">typing</span><span class="o">.</span><span class="n">Any</span><span class="p">]</span>:</span></span>
 
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="kwargs_to_nested_dict-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.1/dictmagic.py#L157-L211" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.2/dictmagic.py#L157-L211" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -1016,7 +1016,7 @@ the updated dict</li>
 </span><span id="kwargs_to_nested_dict-159"><a href="#kwargs_to_nested_dict-159"><span class="linenos">159</span></a>    <span class="n">kwargs_dict</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span>
 </span><span id="kwargs_to_nested_dict-160"><a href="#kwargs_to_nested_dict-160"><span class="linenos">160</span></a>    <span class="n">sep</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;.&quot;</span><span class="p">,</span>
 </span><span id="kwargs_to_nested_dict-161"><a href="#kwargs_to_nested_dict-161"><span class="linenos">161</span></a>    <span class="n">strip_prefix</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-</span><span id="kwargs_to_nested_dict-162"><a href="#kwargs_to_nested_dict-162"><span class="linenos">162</span></a>    <span class="n">when_unknown_prefix</span><span class="p">:</span> <span class="n">ErrorMode</span> <span class="o">=</span> <span class="n">ErrorMode</span><span class="o">.</span><span class="n">WARN</span><span class="p">,</span>
+</span><span id="kwargs_to_nested_dict-162"><a href="#kwargs_to_nested_dict-162"><span class="linenos">162</span></a>    <span class="n">when_unknown_prefix</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">ErrorMode</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">ErrorMode</span><span class="o">.</span><span class="n">WARN</span><span class="p">,</span>
 </span><span id="kwargs_to_nested_dict-163"><a href="#kwargs_to_nested_dict-163"><span class="linenos">163</span></a>    <span class="n">transform_key</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">[[</span><span class="nb">str</span><span class="p">],</span> <span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 </span><span id="kwargs_to_nested_dict-164"><a href="#kwargs_to_nested_dict-164"><span class="linenos">164</span></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
 </span><span id="kwargs_to_nested_dict-165"><a href="#kwargs_to_nested_dict-165"><span class="linenos">165</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;given kwargs from fire, convert them to a nested dict</span>
@@ -1049,12 +1049,12 @@ the updated dict</li>
 </span><span id="kwargs_to_nested_dict-192"><a href="#kwargs_to_nested_dict-192"><span class="linenos">192</span></a><span class="sd">    - `transform_key: Callable[[str], str] | None = None`</span>
 </span><span id="kwargs_to_nested_dict-193"><a href="#kwargs_to_nested_dict-193"><span class="linenos">193</span></a><span class="sd">        a function to apply to each key before adding it to the dict (applied after stripping the prefix)</span>
 </span><span id="kwargs_to_nested_dict-194"><a href="#kwargs_to_nested_dict-194"><span class="linenos">194</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="kwargs_to_nested_dict-195"><a href="#kwargs_to_nested_dict-195"><span class="linenos">195</span></a>    <span class="n">when_unknown_prefix</span> <span class="o">=</span> <span class="n">ErrorMode</span><span class="o">.</span><span class="n">from_any</span><span class="p">(</span><span class="n">when_unknown_prefix</span><span class="p">)</span>
+</span><span id="kwargs_to_nested_dict-195"><a href="#kwargs_to_nested_dict-195"><span class="linenos">195</span></a>    <span class="n">when_unknown_prefix_</span> <span class="o">=</span> <span class="n">ErrorMode</span><span class="o">.</span><span class="n">from_any</span><span class="p">(</span><span class="n">when_unknown_prefix</span><span class="p">)</span>
 </span><span id="kwargs_to_nested_dict-196"><a href="#kwargs_to_nested_dict-196"><span class="linenos">196</span></a>    <span class="n">filtered_kwargs</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
 </span><span id="kwargs_to_nested_dict-197"><a href="#kwargs_to_nested_dict-197"><span class="linenos">197</span></a>    <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">kwargs_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
 </span><span id="kwargs_to_nested_dict-198"><a href="#kwargs_to_nested_dict-198"><span class="linenos">198</span></a>        <span class="k">if</span> <span class="n">strip_prefix</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
 </span><span id="kwargs_to_nested_dict-199"><a href="#kwargs_to_nested_dict-199"><span class="linenos">199</span></a>            <span class="k">if</span> <span class="ow">not</span> <span class="n">key</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">strip_prefix</span><span class="p">):</span>
-</span><span id="kwargs_to_nested_dict-200"><a href="#kwargs_to_nested_dict-200"><span class="linenos">200</span></a>                <span class="n">when_unknown_prefix</span><span class="o">.</span><span class="n">process</span><span class="p">(</span>
+</span><span id="kwargs_to_nested_dict-200"><a href="#kwargs_to_nested_dict-200"><span class="linenos">200</span></a>                <span class="n">when_unknown_prefix_</span><span class="o">.</span><span class="n">process</span><span class="p">(</span>
 </span><span id="kwargs_to_nested_dict-201"><a href="#kwargs_to_nested_dict-201"><span class="linenos">201</span></a>                    <span class="sa">f</span><span class="s2">&quot;key &#39;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">&#39; does not start with &#39;</span><span class="si">{</span><span class="n">strip_prefix</span><span class="si">}</span><span class="s2">&#39;&quot;</span><span class="p">,</span>
 </span><span id="kwargs_to_nested_dict-202"><a href="#kwargs_to_nested_dict-202"><span class="linenos">202</span></a>                    <span class="n">except_cls</span><span class="o">=</span><span class="ne">ValueError</span><span class="p">,</span>
 </span><span id="kwargs_to_nested_dict-203"><a href="#kwargs_to_nested_dict-203"><span class="linenos">203</span></a>                <span class="p">)</span>
@@ -1121,7 +1121,7 @@ a function to apply to each key before adding it to the dict (applied after stri
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="is_numeric_consecutive-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.1/dictmagic.py#L214-L220" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.2/dictmagic.py#L214-L220" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -1154,7 +1154,7 @@ a function to apply to each key before adding it to the dict (applied after stri
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="condense_nested_dicts_numeric_keys-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.1/dictmagic.py#L223-L267" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.2/dictmagic.py#L223-L267" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -1235,7 +1235,7 @@ a function to apply to each key before adding it to the dict (applied after stri
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="condense_nested_dicts_matching_values-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.1/dictmagic.py#L270-L321" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.2/dictmagic.py#L270-L321" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -1325,7 +1325,7 @@ a function to apply to each value before adding it to the dict (if it's not hash
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="condense_nested_dicts-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.1/dictmagic.py#L324-L359" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.2/dictmagic.py#L324-L359" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -1409,7 +1409,7 @@ data to process</li>
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="tuple_dims_replace-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.1/dictmagic.py#L362-L368" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.2/dictmagic.py#L362-L368" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -1476,7 +1476,7 @@ data to process</li>
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="condense_tensor_dict-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.1/dictmagic.py#L380-L522" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.2/dictmagic.py#L380-L522" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>

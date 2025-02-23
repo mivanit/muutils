@@ -46,7 +46,7 @@
 </script></head>
 <body>
 <div class="package-version">
-    docs for <a href="https://github.com/mivanit/muutils">muutils</a> v0.8.1<br>
+    docs for <a href="https://github.com/mivanit/muutils">muutils</a> v0.8.2<br>
 </div>
     <nav class="pdoc">
         <label id="navtoggle" for="togglestate" class="pdoc-button">
@@ -208,7 +208,7 @@
     </nav>
     <main class="pdoc">
             <section class="module-info">
-                        <a class="pdoc-button git-button" href="https://github.com/mivanit/muutils/blob/0.8.1/spinner.py">View Source on GitHub</a>
+                        <a class="pdoc-button git-button" href="https://github.com/mivanit/muutils/blob/0.8.2/spinner.py">View Source on GitHub</a>
                     <h1 class="modulename">
 <a href="./../muutils.html">muutils</a><wbr>.spinner    </h1>
 
@@ -222,7 +222,7 @@
                         <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="mod-spinner-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.1/spinner.py#L0-L509" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.2/spinner.py#L0-L510" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -668,77 +668,78 @@
 </span><span id="L-437"><a href="#L-437"><span class="linenos">437</span></a><span class="n">SpinnerContext</span><span class="o">.</span><span class="vm">__doc__</span> <span class="o">=</span> <span class="n">Spinner</span><span class="o">.</span><span class="vm">__doc__</span>
 </span><span id="L-438"><a href="#L-438"><span class="linenos">438</span></a>
 </span><span id="L-439"><a href="#L-439"><span class="linenos">439</span></a>
-</span><span id="L-440"><a href="#L-440"><span class="linenos">440</span></a><span class="k">def</span> <span class="nf">spinner_decorator</span><span class="p">(</span>
-</span><span id="L-441"><a href="#L-441"><span class="linenos">441</span></a>    <span class="o">*</span><span class="n">args</span><span class="p">,</span>
-</span><span id="L-442"><a href="#L-442"><span class="linenos">442</span></a>    <span class="c1"># passed to `Spinner.__init__`</span>
-</span><span id="L-443"><a href="#L-443"><span class="linenos">443</span></a>    <span class="n">config</span><span class="p">:</span> <span class="n">SpinnerConfigArg</span> <span class="o">=</span> <span class="s2">&quot;default&quot;</span><span class="p">,</span>
-</span><span id="L-444"><a href="#L-444"><span class="linenos">444</span></a>    <span class="n">update_interval</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.1</span><span class="p">,</span>
-</span><span id="L-445"><a href="#L-445"><span class="linenos">445</span></a>    <span class="n">initial_value</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
-</span><span id="L-446"><a href="#L-446"><span class="linenos">446</span></a>    <span class="n">message</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
-</span><span id="L-447"><a href="#L-447"><span class="linenos">447</span></a>    <span class="n">format_string</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{spinner}</span><span class="s2"> (</span><span class="si">{elapsed_time:.2f}</span><span class="s2">s) </span><span class="si">{message}{value}</span><span class="s2">&quot;</span><span class="p">,</span>
-</span><span id="L-448"><a href="#L-448"><span class="linenos">448</span></a>    <span class="n">output_stream</span><span class="p">:</span> <span class="n">TextIO</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="p">,</span>
-</span><span id="L-449"><a href="#L-449"><span class="linenos">449</span></a>    <span class="c1"># new kwarg</span>
-</span><span id="L-450"><a href="#L-450"><span class="linenos">450</span></a>    <span class="n">mutable_kwarg_key</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-</span><span id="L-451"><a href="#L-451"><span class="linenos">451</span></a>    <span class="c1"># deprecated</span>
-</span><span id="L-452"><a href="#L-452"><span class="linenos">452</span></a>    <span class="n">spinner_chars</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-</span><span id="L-453"><a href="#L-453"><span class="linenos">453</span></a>    <span class="n">spinner_complete</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-</span><span id="L-454"><a href="#L-454"><span class="linenos">454</span></a>    <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
-</span><span id="L-455"><a href="#L-455"><span class="linenos">455</span></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">DecoratedFunction</span><span class="p">],</span> <span class="n">DecoratedFunction</span><span class="p">]:</span>
-</span><span id="L-456"><a href="#L-456"><span class="linenos">456</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;see `Spinner` for parameters. Also takes `mutable_kwarg_key`</span>
-</span><span id="L-457"><a href="#L-457"><span class="linenos">457</span></a>
-</span><span id="L-458"><a href="#L-458"><span class="linenos">458</span></a><span class="sd">    `mutable_kwarg_key` is the key with which `Spinner().update_value`</span>
-</span><span id="L-459"><a href="#L-459"><span class="linenos">459</span></a><span class="sd">    will be passed to the decorated function. if `None`, won&#39;t pass it.</span>
-</span><span id="L-460"><a href="#L-460"><span class="linenos">460</span></a>
-</span><span id="L-461"><a href="#L-461"><span class="linenos">461</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="L-462"><a href="#L-462"><span class="linenos">462</span></a>
-</span><span id="L-463"><a href="#L-463"><span class="linenos">463</span></a>    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
-</span><span id="L-464"><a href="#L-464"><span class="linenos">464</span></a>        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-</span><span id="L-465"><a href="#L-465"><span class="linenos">465</span></a>            <span class="sa">f</span><span class="s2">&quot;spinner_decorator does not accept positional arguments: </span><span class="si">{</span><span class="n">args</span><span class="si">}</span><span class="s2">&quot;</span>
-</span><span id="L-466"><a href="#L-466"><span class="linenos">466</span></a>        <span class="p">)</span>
-</span><span id="L-467"><a href="#L-467"><span class="linenos">467</span></a>    <span class="k">if</span> <span class="n">kwargs</span><span class="p">:</span>
-</span><span id="L-468"><a href="#L-468"><span class="linenos">468</span></a>        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-</span><span id="L-469"><a href="#L-469"><span class="linenos">469</span></a>            <span class="sa">f</span><span class="s2">&quot;spinner_decorator did not recognize these keyword arguments: </span><span class="si">{</span><span class="n">kwargs</span><span class="si">}</span><span class="s2">&quot;</span>
-</span><span id="L-470"><a href="#L-470"><span class="linenos">470</span></a>        <span class="p">)</span>
-</span><span id="L-471"><a href="#L-471"><span class="linenos">471</span></a>
-</span><span id="L-472"><a href="#L-472"><span class="linenos">472</span></a>    <span class="k">def</span> <span class="nf">decorator</span><span class="p">(</span><span class="n">func</span><span class="p">:</span> <span class="n">DecoratedFunction</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DecoratedFunction</span><span class="p">:</span>
-</span><span id="L-473"><a href="#L-473"><span class="linenos">473</span></a>        <span class="nd">@wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
-</span><span id="L-474"><a href="#L-474"><span class="linenos">474</span></a>        <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
-</span><span id="L-475"><a href="#L-475"><span class="linenos">475</span></a>            <span class="n">spinner</span><span class="p">:</span> <span class="n">Spinner</span> <span class="o">=</span> <span class="n">Spinner</span><span class="p">(</span>
-</span><span id="L-476"><a href="#L-476"><span class="linenos">476</span></a>                <span class="n">config</span><span class="o">=</span><span class="n">config</span><span class="p">,</span>
-</span><span id="L-477"><a href="#L-477"><span class="linenos">477</span></a>                <span class="n">update_interval</span><span class="o">=</span><span class="n">update_interval</span><span class="p">,</span>
-</span><span id="L-478"><a href="#L-478"><span class="linenos">478</span></a>                <span class="n">initial_value</span><span class="o">=</span><span class="n">initial_value</span><span class="p">,</span>
-</span><span id="L-479"><a href="#L-479"><span class="linenos">479</span></a>                <span class="n">message</span><span class="o">=</span><span class="n">message</span><span class="p">,</span>
-</span><span id="L-480"><a href="#L-480"><span class="linenos">480</span></a>                <span class="n">format_string</span><span class="o">=</span><span class="n">format_string</span><span class="p">,</span>
-</span><span id="L-481"><a href="#L-481"><span class="linenos">481</span></a>                <span class="n">output_stream</span><span class="o">=</span><span class="n">output_stream</span><span class="p">,</span>
-</span><span id="L-482"><a href="#L-482"><span class="linenos">482</span></a>                <span class="n">spinner_chars</span><span class="o">=</span><span class="n">spinner_chars</span><span class="p">,</span>
-</span><span id="L-483"><a href="#L-483"><span class="linenos">483</span></a>                <span class="n">spinner_complete</span><span class="o">=</span><span class="n">spinner_complete</span><span class="p">,</span>
-</span><span id="L-484"><a href="#L-484"><span class="linenos">484</span></a>            <span class="p">)</span>
-</span><span id="L-485"><a href="#L-485"><span class="linenos">485</span></a>
-</span><span id="L-486"><a href="#L-486"><span class="linenos">486</span></a>            <span class="k">if</span> <span class="n">mutable_kwarg_key</span><span class="p">:</span>
-</span><span id="L-487"><a href="#L-487"><span class="linenos">487</span></a>                <span class="n">kwargs</span><span class="p">[</span><span class="n">mutable_kwarg_key</span><span class="p">]</span> <span class="o">=</span> <span class="n">spinner</span><span class="o">.</span><span class="n">update_value</span>
-</span><span id="L-488"><a href="#L-488"><span class="linenos">488</span></a>
-</span><span id="L-489"><a href="#L-489"><span class="linenos">489</span></a>            <span class="n">spinner</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
-</span><span id="L-490"><a href="#L-490"><span class="linenos">490</span></a>            <span class="k">try</span><span class="p">:</span>
-</span><span id="L-491"><a href="#L-491"><span class="linenos">491</span></a>                <span class="n">result</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-</span><span id="L-492"><a href="#L-492"><span class="linenos">492</span></a>                <span class="n">spinner</span><span class="o">.</span><span class="n">stop</span><span class="p">(</span><span class="n">failed</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-</span><span id="L-493"><a href="#L-493"><span class="linenos">493</span></a>            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-</span><span id="L-494"><a href="#L-494"><span class="linenos">494</span></a>                <span class="n">spinner</span><span class="o">.</span><span class="n">stop</span><span class="p">(</span><span class="n">failed</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</span><span id="L-495"><a href="#L-495"><span class="linenos">495</span></a>                <span class="k">raise</span> <span class="n">e</span>
-</span><span id="L-496"><a href="#L-496"><span class="linenos">496</span></a>
-</span><span id="L-497"><a href="#L-497"><span class="linenos">497</span></a>            <span class="k">return</span> <span class="n">result</span>
-</span><span id="L-498"><a href="#L-498"><span class="linenos">498</span></a>
-</span><span id="L-499"><a href="#L-499"><span class="linenos">499</span></a>        <span class="c1"># TODO: fix this type ignore</span>
-</span><span id="L-500"><a href="#L-500"><span class="linenos">500</span></a>        <span class="k">return</span> <span class="n">wrapper</span>  <span class="c1"># type: ignore[return-value]</span>
-</span><span id="L-501"><a href="#L-501"><span class="linenos">501</span></a>
-</span><span id="L-502"><a href="#L-502"><span class="linenos">502</span></a>    <span class="k">if</span> <span class="ow">not</span> <span class="n">args</span><span class="p">:</span>
-</span><span id="L-503"><a href="#L-503"><span class="linenos">503</span></a>        <span class="c1"># called as `@spinner_decorator(stuff)`</span>
-</span><span id="L-504"><a href="#L-504"><span class="linenos">504</span></a>        <span class="k">return</span> <span class="n">decorator</span>
-</span><span id="L-505"><a href="#L-505"><span class="linenos">505</span></a>    <span class="k">else</span><span class="p">:</span>
-</span><span id="L-506"><a href="#L-506"><span class="linenos">506</span></a>        <span class="c1"># called as `@spinner_decorator` without parens</span>
-</span><span id="L-507"><a href="#L-507"><span class="linenos">507</span></a>        <span class="k">return</span> <span class="n">decorator</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-</span><span id="L-508"><a href="#L-508"><span class="linenos">508</span></a>
+</span><span id="L-440"><a href="#L-440"><span class="linenos">440</span></a><span class="c1"># TODO: type hint that the `update_status` kwarg is not needed when calling the function we just decorated</span>
+</span><span id="L-441"><a href="#L-441"><span class="linenos">441</span></a><span class="k">def</span> <span class="nf">spinner_decorator</span><span class="p">(</span>
+</span><span id="L-442"><a href="#L-442"><span class="linenos">442</span></a>    <span class="o">*</span><span class="n">args</span><span class="p">,</span>
+</span><span id="L-443"><a href="#L-443"><span class="linenos">443</span></a>    <span class="c1"># passed to `Spinner.__init__`</span>
+</span><span id="L-444"><a href="#L-444"><span class="linenos">444</span></a>    <span class="n">config</span><span class="p">:</span> <span class="n">SpinnerConfigArg</span> <span class="o">=</span> <span class="s2">&quot;default&quot;</span><span class="p">,</span>
+</span><span id="L-445"><a href="#L-445"><span class="linenos">445</span></a>    <span class="n">update_interval</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.1</span><span class="p">,</span>
+</span><span id="L-446"><a href="#L-446"><span class="linenos">446</span></a>    <span class="n">initial_value</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+</span><span id="L-447"><a href="#L-447"><span class="linenos">447</span></a>    <span class="n">message</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+</span><span id="L-448"><a href="#L-448"><span class="linenos">448</span></a>    <span class="n">format_string</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{spinner}</span><span class="s2"> (</span><span class="si">{elapsed_time:.2f}</span><span class="s2">s) </span><span class="si">{message}{value}</span><span class="s2">&quot;</span><span class="p">,</span>
+</span><span id="L-449"><a href="#L-449"><span class="linenos">449</span></a>    <span class="n">output_stream</span><span class="p">:</span> <span class="n">TextIO</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="p">,</span>
+</span><span id="L-450"><a href="#L-450"><span class="linenos">450</span></a>    <span class="c1"># new kwarg</span>
+</span><span id="L-451"><a href="#L-451"><span class="linenos">451</span></a>    <span class="n">mutable_kwarg_key</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+</span><span id="L-452"><a href="#L-452"><span class="linenos">452</span></a>    <span class="c1"># deprecated</span>
+</span><span id="L-453"><a href="#L-453"><span class="linenos">453</span></a>    <span class="n">spinner_chars</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+</span><span id="L-454"><a href="#L-454"><span class="linenos">454</span></a>    <span class="n">spinner_complete</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+</span><span id="L-455"><a href="#L-455"><span class="linenos">455</span></a>    <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+</span><span id="L-456"><a href="#L-456"><span class="linenos">456</span></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">DecoratedFunction</span><span class="p">],</span> <span class="n">DecoratedFunction</span><span class="p">]:</span>
+</span><span id="L-457"><a href="#L-457"><span class="linenos">457</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;see `Spinner` for parameters. Also takes `mutable_kwarg_key`</span>
+</span><span id="L-458"><a href="#L-458"><span class="linenos">458</span></a>
+</span><span id="L-459"><a href="#L-459"><span class="linenos">459</span></a><span class="sd">    `mutable_kwarg_key` is the key with which `Spinner().update_value`</span>
+</span><span id="L-460"><a href="#L-460"><span class="linenos">460</span></a><span class="sd">    will be passed to the decorated function. if `None`, won&#39;t pass it.</span>
+</span><span id="L-461"><a href="#L-461"><span class="linenos">461</span></a>
+</span><span id="L-462"><a href="#L-462"><span class="linenos">462</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="L-463"><a href="#L-463"><span class="linenos">463</span></a>
+</span><span id="L-464"><a href="#L-464"><span class="linenos">464</span></a>    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+</span><span id="L-465"><a href="#L-465"><span class="linenos">465</span></a>        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+</span><span id="L-466"><a href="#L-466"><span class="linenos">466</span></a>            <span class="sa">f</span><span class="s2">&quot;spinner_decorator does not accept positional arguments: </span><span class="si">{</span><span class="n">args</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span id="L-467"><a href="#L-467"><span class="linenos">467</span></a>        <span class="p">)</span>
+</span><span id="L-468"><a href="#L-468"><span class="linenos">468</span></a>    <span class="k">if</span> <span class="n">kwargs</span><span class="p">:</span>
+</span><span id="L-469"><a href="#L-469"><span class="linenos">469</span></a>        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+</span><span id="L-470"><a href="#L-470"><span class="linenos">470</span></a>            <span class="sa">f</span><span class="s2">&quot;spinner_decorator did not recognize these keyword arguments: </span><span class="si">{</span><span class="n">kwargs</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span id="L-471"><a href="#L-471"><span class="linenos">471</span></a>        <span class="p">)</span>
+</span><span id="L-472"><a href="#L-472"><span class="linenos">472</span></a>
+</span><span id="L-473"><a href="#L-473"><span class="linenos">473</span></a>    <span class="k">def</span> <span class="nf">decorator</span><span class="p">(</span><span class="n">func</span><span class="p">:</span> <span class="n">DecoratedFunction</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DecoratedFunction</span><span class="p">:</span>
+</span><span id="L-474"><a href="#L-474"><span class="linenos">474</span></a>        <span class="nd">@wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+</span><span id="L-475"><a href="#L-475"><span class="linenos">475</span></a>        <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+</span><span id="L-476"><a href="#L-476"><span class="linenos">476</span></a>            <span class="n">spinner</span><span class="p">:</span> <span class="n">Spinner</span> <span class="o">=</span> <span class="n">Spinner</span><span class="p">(</span>
+</span><span id="L-477"><a href="#L-477"><span class="linenos">477</span></a>                <span class="n">config</span><span class="o">=</span><span class="n">config</span><span class="p">,</span>
+</span><span id="L-478"><a href="#L-478"><span class="linenos">478</span></a>                <span class="n">update_interval</span><span class="o">=</span><span class="n">update_interval</span><span class="p">,</span>
+</span><span id="L-479"><a href="#L-479"><span class="linenos">479</span></a>                <span class="n">initial_value</span><span class="o">=</span><span class="n">initial_value</span><span class="p">,</span>
+</span><span id="L-480"><a href="#L-480"><span class="linenos">480</span></a>                <span class="n">message</span><span class="o">=</span><span class="n">message</span><span class="p">,</span>
+</span><span id="L-481"><a href="#L-481"><span class="linenos">481</span></a>                <span class="n">format_string</span><span class="o">=</span><span class="n">format_string</span><span class="p">,</span>
+</span><span id="L-482"><a href="#L-482"><span class="linenos">482</span></a>                <span class="n">output_stream</span><span class="o">=</span><span class="n">output_stream</span><span class="p">,</span>
+</span><span id="L-483"><a href="#L-483"><span class="linenos">483</span></a>                <span class="n">spinner_chars</span><span class="o">=</span><span class="n">spinner_chars</span><span class="p">,</span>
+</span><span id="L-484"><a href="#L-484"><span class="linenos">484</span></a>                <span class="n">spinner_complete</span><span class="o">=</span><span class="n">spinner_complete</span><span class="p">,</span>
+</span><span id="L-485"><a href="#L-485"><span class="linenos">485</span></a>            <span class="p">)</span>
+</span><span id="L-486"><a href="#L-486"><span class="linenos">486</span></a>
+</span><span id="L-487"><a href="#L-487"><span class="linenos">487</span></a>            <span class="k">if</span> <span class="n">mutable_kwarg_key</span><span class="p">:</span>
+</span><span id="L-488"><a href="#L-488"><span class="linenos">488</span></a>                <span class="n">kwargs</span><span class="p">[</span><span class="n">mutable_kwarg_key</span><span class="p">]</span> <span class="o">=</span> <span class="n">spinner</span><span class="o">.</span><span class="n">update_value</span>
+</span><span id="L-489"><a href="#L-489"><span class="linenos">489</span></a>
+</span><span id="L-490"><a href="#L-490"><span class="linenos">490</span></a>            <span class="n">spinner</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+</span><span id="L-491"><a href="#L-491"><span class="linenos">491</span></a>            <span class="k">try</span><span class="p">:</span>
+</span><span id="L-492"><a href="#L-492"><span class="linenos">492</span></a>                <span class="n">result</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</span><span id="L-493"><a href="#L-493"><span class="linenos">493</span></a>                <span class="n">spinner</span><span class="o">.</span><span class="n">stop</span><span class="p">(</span><span class="n">failed</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</span><span id="L-494"><a href="#L-494"><span class="linenos">494</span></a>            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+</span><span id="L-495"><a href="#L-495"><span class="linenos">495</span></a>                <span class="n">spinner</span><span class="o">.</span><span class="n">stop</span><span class="p">(</span><span class="n">failed</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span id="L-496"><a href="#L-496"><span class="linenos">496</span></a>                <span class="k">raise</span> <span class="n">e</span>
+</span><span id="L-497"><a href="#L-497"><span class="linenos">497</span></a>
+</span><span id="L-498"><a href="#L-498"><span class="linenos">498</span></a>            <span class="k">return</span> <span class="n">result</span>
+</span><span id="L-499"><a href="#L-499"><span class="linenos">499</span></a>
+</span><span id="L-500"><a href="#L-500"><span class="linenos">500</span></a>        <span class="c1"># TODO: fix this type ignore</span>
+</span><span id="L-501"><a href="#L-501"><span class="linenos">501</span></a>        <span class="k">return</span> <span class="n">wrapper</span>  <span class="c1"># type: ignore[return-value]</span>
+</span><span id="L-502"><a href="#L-502"><span class="linenos">502</span></a>
+</span><span id="L-503"><a href="#L-503"><span class="linenos">503</span></a>    <span class="k">if</span> <span class="ow">not</span> <span class="n">args</span><span class="p">:</span>
+</span><span id="L-504"><a href="#L-504"><span class="linenos">504</span></a>        <span class="c1"># called as `@spinner_decorator(stuff)`</span>
+</span><span id="L-505"><a href="#L-505"><span class="linenos">505</span></a>        <span class="k">return</span> <span class="n">decorator</span>
+</span><span id="L-506"><a href="#L-506"><span class="linenos">506</span></a>    <span class="k">else</span><span class="p">:</span>
+</span><span id="L-507"><a href="#L-507"><span class="linenos">507</span></a>        <span class="c1"># called as `@spinner_decorator` without parens</span>
+</span><span id="L-508"><a href="#L-508"><span class="linenos">508</span></a>        <span class="k">return</span> <span class="n">decorator</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
 </span><span id="L-509"><a href="#L-509"><span class="linenos">509</span></a>
-</span><span id="L-510"><a href="#L-510"><span class="linenos">510</span></a><span class="n">spinner_decorator</span><span class="o">.</span><span class="vm">__doc__</span> <span class="o">=</span> <span class="n">Spinner</span><span class="o">.</span><span class="vm">__doc__</span>
+</span><span id="L-510"><a href="#L-510"><span class="linenos">510</span></a>
+</span><span id="L-511"><a href="#L-511"><span class="linenos">511</span></a><span class="n">spinner_decorator</span><span class="o">.</span><span class="vm">__doc__</span> <span class="o">=</span> <span class="n">Spinner</span><span class="o">.</span><span class="vm">__doc__</span>
 </span></pre></div>
 
 
@@ -769,7 +770,7 @@
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="SpinnerConfig-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.1/spinner.py#L31-L80" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.2/spinner.py#L31-L80" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -889,7 +890,7 @@
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="SpinnerConfig.is_ascii-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.1/spinner.py#L37-L39" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.2/spinner.py#L37-L39" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -918,7 +919,7 @@
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="SpinnerConfig.eq_lens-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.1/spinner.py#L41-L49" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.2/spinner.py#L41-L49" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -953,7 +954,7 @@
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="SpinnerConfig.is_valid-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.1/spinner.py#L51-L61" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.2/spinner.py#L51-L61" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -991,7 +992,7 @@
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="SpinnerConfig.from_any-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.1/spinner.py#L67-L80" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.2/spinner.py#L67-L80" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -1055,7 +1056,7 @@
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="Spinner-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.1/spinner.py#L201-L410" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.2/spinner.py#L201-L410" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -1357,7 +1358,7 @@ update the current value displayed by the spinner</li>
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="Spinner.__init__-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.1/spinner.py#L262-L350" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.2/spinner.py#L262-L350" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -1625,7 +1626,7 @@ update the current value displayed by the spinner</li>
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="Spinner.spin-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.1/spinner.py#L352-L380" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.2/spinner.py#L352-L380" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -1680,7 +1681,7 @@ update the current value displayed by the spinner</li>
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="Spinner.update_value-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.1/spinner.py#L382-L385" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.2/spinner.py#L382-L385" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -1710,7 +1711,7 @@ update the current value displayed by the spinner</li>
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="Spinner.start-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.1/spinner.py#L387-L392" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.2/spinner.py#L387-L392" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -1742,7 +1743,7 @@ update the current value displayed by the spinner</li>
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="Spinner.stop-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.1/spinner.py#L394-L410" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.2/spinner.py#L394-L410" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -1786,7 +1787,7 @@ update the current value displayed by the spinner</li>
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="NoOpContextManager-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.1/spinner.py#L413-L423" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.2/spinner.py#L413-L423" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -1821,7 +1822,7 @@ update the current value displayed by the spinner</li>
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="NoOpContextManager.__init__-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.1/spinner.py#L416-L417" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.2/spinner.py#L416-L417" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -1848,7 +1849,7 @@ update the current value displayed by the spinner</li>
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="SpinnerContext-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.1/spinner.py#L426-L434" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.2/spinner.py#L426-L434" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -1977,7 +1978,7 @@ update the current value displayed by the spinner</li>
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="spinner_decorator-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.1/spinner.py#L440-L507" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.2/spinner.py#L441-L508" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -1985,74 +1986,74 @@ update the current value displayed by the spinner</li>
 
     </div>
     <a class="headerlink" href="#spinner_decorator"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="spinner_decorator-441"><a href="#spinner_decorator-441"><span class="linenos">441</span></a><span class="k">def</span> <span class="nf">spinner_decorator</span><span class="p">(</span>
-</span><span id="spinner_decorator-442"><a href="#spinner_decorator-442"><span class="linenos">442</span></a>    <span class="o">*</span><span class="n">args</span><span class="p">,</span>
-</span><span id="spinner_decorator-443"><a href="#spinner_decorator-443"><span class="linenos">443</span></a>    <span class="c1"># passed to `Spinner.__init__`</span>
-</span><span id="spinner_decorator-444"><a href="#spinner_decorator-444"><span class="linenos">444</span></a>    <span class="n">config</span><span class="p">:</span> <span class="n">SpinnerConfigArg</span> <span class="o">=</span> <span class="s2">&quot;default&quot;</span><span class="p">,</span>
-</span><span id="spinner_decorator-445"><a href="#spinner_decorator-445"><span class="linenos">445</span></a>    <span class="n">update_interval</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.1</span><span class="p">,</span>
-</span><span id="spinner_decorator-446"><a href="#spinner_decorator-446"><span class="linenos">446</span></a>    <span class="n">initial_value</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
-</span><span id="spinner_decorator-447"><a href="#spinner_decorator-447"><span class="linenos">447</span></a>    <span class="n">message</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
-</span><span id="spinner_decorator-448"><a href="#spinner_decorator-448"><span class="linenos">448</span></a>    <span class="n">format_string</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{spinner}</span><span class="s2"> (</span><span class="si">{elapsed_time:.2f}</span><span class="s2">s) </span><span class="si">{message}{value}</span><span class="s2">&quot;</span><span class="p">,</span>
-</span><span id="spinner_decorator-449"><a href="#spinner_decorator-449"><span class="linenos">449</span></a>    <span class="n">output_stream</span><span class="p">:</span> <span class="n">TextIO</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="p">,</span>
-</span><span id="spinner_decorator-450"><a href="#spinner_decorator-450"><span class="linenos">450</span></a>    <span class="c1"># new kwarg</span>
-</span><span id="spinner_decorator-451"><a href="#spinner_decorator-451"><span class="linenos">451</span></a>    <span class="n">mutable_kwarg_key</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-</span><span id="spinner_decorator-452"><a href="#spinner_decorator-452"><span class="linenos">452</span></a>    <span class="c1"># deprecated</span>
-</span><span id="spinner_decorator-453"><a href="#spinner_decorator-453"><span class="linenos">453</span></a>    <span class="n">spinner_chars</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-</span><span id="spinner_decorator-454"><a href="#spinner_decorator-454"><span class="linenos">454</span></a>    <span class="n">spinner_complete</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-</span><span id="spinner_decorator-455"><a href="#spinner_decorator-455"><span class="linenos">455</span></a>    <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
-</span><span id="spinner_decorator-456"><a href="#spinner_decorator-456"><span class="linenos">456</span></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">DecoratedFunction</span><span class="p">],</span> <span class="n">DecoratedFunction</span><span class="p">]:</span>
-</span><span id="spinner_decorator-457"><a href="#spinner_decorator-457"><span class="linenos">457</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;see `Spinner` for parameters. Also takes `mutable_kwarg_key`</span>
-</span><span id="spinner_decorator-458"><a href="#spinner_decorator-458"><span class="linenos">458</span></a>
-</span><span id="spinner_decorator-459"><a href="#spinner_decorator-459"><span class="linenos">459</span></a><span class="sd">    `mutable_kwarg_key` is the key with which `Spinner().update_value`</span>
-</span><span id="spinner_decorator-460"><a href="#spinner_decorator-460"><span class="linenos">460</span></a><span class="sd">    will be passed to the decorated function. if `None`, won&#39;t pass it.</span>
-</span><span id="spinner_decorator-461"><a href="#spinner_decorator-461"><span class="linenos">461</span></a>
-</span><span id="spinner_decorator-462"><a href="#spinner_decorator-462"><span class="linenos">462</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="spinner_decorator-463"><a href="#spinner_decorator-463"><span class="linenos">463</span></a>
-</span><span id="spinner_decorator-464"><a href="#spinner_decorator-464"><span class="linenos">464</span></a>    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
-</span><span id="spinner_decorator-465"><a href="#spinner_decorator-465"><span class="linenos">465</span></a>        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-</span><span id="spinner_decorator-466"><a href="#spinner_decorator-466"><span class="linenos">466</span></a>            <span class="sa">f</span><span class="s2">&quot;spinner_decorator does not accept positional arguments: </span><span class="si">{</span><span class="n">args</span><span class="si">}</span><span class="s2">&quot;</span>
-</span><span id="spinner_decorator-467"><a href="#spinner_decorator-467"><span class="linenos">467</span></a>        <span class="p">)</span>
-</span><span id="spinner_decorator-468"><a href="#spinner_decorator-468"><span class="linenos">468</span></a>    <span class="k">if</span> <span class="n">kwargs</span><span class="p">:</span>
-</span><span id="spinner_decorator-469"><a href="#spinner_decorator-469"><span class="linenos">469</span></a>        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-</span><span id="spinner_decorator-470"><a href="#spinner_decorator-470"><span class="linenos">470</span></a>            <span class="sa">f</span><span class="s2">&quot;spinner_decorator did not recognize these keyword arguments: </span><span class="si">{</span><span class="n">kwargs</span><span class="si">}</span><span class="s2">&quot;</span>
-</span><span id="spinner_decorator-471"><a href="#spinner_decorator-471"><span class="linenos">471</span></a>        <span class="p">)</span>
-</span><span id="spinner_decorator-472"><a href="#spinner_decorator-472"><span class="linenos">472</span></a>
-</span><span id="spinner_decorator-473"><a href="#spinner_decorator-473"><span class="linenos">473</span></a>    <span class="k">def</span> <span class="nf">decorator</span><span class="p">(</span><span class="n">func</span><span class="p">:</span> <span class="n">DecoratedFunction</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DecoratedFunction</span><span class="p">:</span>
-</span><span id="spinner_decorator-474"><a href="#spinner_decorator-474"><span class="linenos">474</span></a>        <span class="nd">@wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
-</span><span id="spinner_decorator-475"><a href="#spinner_decorator-475"><span class="linenos">475</span></a>        <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
-</span><span id="spinner_decorator-476"><a href="#spinner_decorator-476"><span class="linenos">476</span></a>            <span class="n">spinner</span><span class="p">:</span> <span class="n">Spinner</span> <span class="o">=</span> <span class="n">Spinner</span><span class="p">(</span>
-</span><span id="spinner_decorator-477"><a href="#spinner_decorator-477"><span class="linenos">477</span></a>                <span class="n">config</span><span class="o">=</span><span class="n">config</span><span class="p">,</span>
-</span><span id="spinner_decorator-478"><a href="#spinner_decorator-478"><span class="linenos">478</span></a>                <span class="n">update_interval</span><span class="o">=</span><span class="n">update_interval</span><span class="p">,</span>
-</span><span id="spinner_decorator-479"><a href="#spinner_decorator-479"><span class="linenos">479</span></a>                <span class="n">initial_value</span><span class="o">=</span><span class="n">initial_value</span><span class="p">,</span>
-</span><span id="spinner_decorator-480"><a href="#spinner_decorator-480"><span class="linenos">480</span></a>                <span class="n">message</span><span class="o">=</span><span class="n">message</span><span class="p">,</span>
-</span><span id="spinner_decorator-481"><a href="#spinner_decorator-481"><span class="linenos">481</span></a>                <span class="n">format_string</span><span class="o">=</span><span class="n">format_string</span><span class="p">,</span>
-</span><span id="spinner_decorator-482"><a href="#spinner_decorator-482"><span class="linenos">482</span></a>                <span class="n">output_stream</span><span class="o">=</span><span class="n">output_stream</span><span class="p">,</span>
-</span><span id="spinner_decorator-483"><a href="#spinner_decorator-483"><span class="linenos">483</span></a>                <span class="n">spinner_chars</span><span class="o">=</span><span class="n">spinner_chars</span><span class="p">,</span>
-</span><span id="spinner_decorator-484"><a href="#spinner_decorator-484"><span class="linenos">484</span></a>                <span class="n">spinner_complete</span><span class="o">=</span><span class="n">spinner_complete</span><span class="p">,</span>
-</span><span id="spinner_decorator-485"><a href="#spinner_decorator-485"><span class="linenos">485</span></a>            <span class="p">)</span>
-</span><span id="spinner_decorator-486"><a href="#spinner_decorator-486"><span class="linenos">486</span></a>
-</span><span id="spinner_decorator-487"><a href="#spinner_decorator-487"><span class="linenos">487</span></a>            <span class="k">if</span> <span class="n">mutable_kwarg_key</span><span class="p">:</span>
-</span><span id="spinner_decorator-488"><a href="#spinner_decorator-488"><span class="linenos">488</span></a>                <span class="n">kwargs</span><span class="p">[</span><span class="n">mutable_kwarg_key</span><span class="p">]</span> <span class="o">=</span> <span class="n">spinner</span><span class="o">.</span><span class="n">update_value</span>
-</span><span id="spinner_decorator-489"><a href="#spinner_decorator-489"><span class="linenos">489</span></a>
-</span><span id="spinner_decorator-490"><a href="#spinner_decorator-490"><span class="linenos">490</span></a>            <span class="n">spinner</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
-</span><span id="spinner_decorator-491"><a href="#spinner_decorator-491"><span class="linenos">491</span></a>            <span class="k">try</span><span class="p">:</span>
-</span><span id="spinner_decorator-492"><a href="#spinner_decorator-492"><span class="linenos">492</span></a>                <span class="n">result</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-</span><span id="spinner_decorator-493"><a href="#spinner_decorator-493"><span class="linenos">493</span></a>                <span class="n">spinner</span><span class="o">.</span><span class="n">stop</span><span class="p">(</span><span class="n">failed</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-</span><span id="spinner_decorator-494"><a href="#spinner_decorator-494"><span class="linenos">494</span></a>            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-</span><span id="spinner_decorator-495"><a href="#spinner_decorator-495"><span class="linenos">495</span></a>                <span class="n">spinner</span><span class="o">.</span><span class="n">stop</span><span class="p">(</span><span class="n">failed</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</span><span id="spinner_decorator-496"><a href="#spinner_decorator-496"><span class="linenos">496</span></a>                <span class="k">raise</span> <span class="n">e</span>
-</span><span id="spinner_decorator-497"><a href="#spinner_decorator-497"><span class="linenos">497</span></a>
-</span><span id="spinner_decorator-498"><a href="#spinner_decorator-498"><span class="linenos">498</span></a>            <span class="k">return</span> <span class="n">result</span>
-</span><span id="spinner_decorator-499"><a href="#spinner_decorator-499"><span class="linenos">499</span></a>
-</span><span id="spinner_decorator-500"><a href="#spinner_decorator-500"><span class="linenos">500</span></a>        <span class="c1"># TODO: fix this type ignore</span>
-</span><span id="spinner_decorator-501"><a href="#spinner_decorator-501"><span class="linenos">501</span></a>        <span class="k">return</span> <span class="n">wrapper</span>  <span class="c1"># type: ignore[return-value]</span>
-</span><span id="spinner_decorator-502"><a href="#spinner_decorator-502"><span class="linenos">502</span></a>
-</span><span id="spinner_decorator-503"><a href="#spinner_decorator-503"><span class="linenos">503</span></a>    <span class="k">if</span> <span class="ow">not</span> <span class="n">args</span><span class="p">:</span>
-</span><span id="spinner_decorator-504"><a href="#spinner_decorator-504"><span class="linenos">504</span></a>        <span class="c1"># called as `@spinner_decorator(stuff)`</span>
-</span><span id="spinner_decorator-505"><a href="#spinner_decorator-505"><span class="linenos">505</span></a>        <span class="k">return</span> <span class="n">decorator</span>
-</span><span id="spinner_decorator-506"><a href="#spinner_decorator-506"><span class="linenos">506</span></a>    <span class="k">else</span><span class="p">:</span>
-</span><span id="spinner_decorator-507"><a href="#spinner_decorator-507"><span class="linenos">507</span></a>        <span class="c1"># called as `@spinner_decorator` without parens</span>
-</span><span id="spinner_decorator-508"><a href="#spinner_decorator-508"><span class="linenos">508</span></a>        <span class="k">return</span> <span class="n">decorator</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="spinner_decorator-442"><a href="#spinner_decorator-442"><span class="linenos">442</span></a><span class="k">def</span> <span class="nf">spinner_decorator</span><span class="p">(</span>
+</span><span id="spinner_decorator-443"><a href="#spinner_decorator-443"><span class="linenos">443</span></a>    <span class="o">*</span><span class="n">args</span><span class="p">,</span>
+</span><span id="spinner_decorator-444"><a href="#spinner_decorator-444"><span class="linenos">444</span></a>    <span class="c1"># passed to `Spinner.__init__`</span>
+</span><span id="spinner_decorator-445"><a href="#spinner_decorator-445"><span class="linenos">445</span></a>    <span class="n">config</span><span class="p">:</span> <span class="n">SpinnerConfigArg</span> <span class="o">=</span> <span class="s2">&quot;default&quot;</span><span class="p">,</span>
+</span><span id="spinner_decorator-446"><a href="#spinner_decorator-446"><span class="linenos">446</span></a>    <span class="n">update_interval</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.1</span><span class="p">,</span>
+</span><span id="spinner_decorator-447"><a href="#spinner_decorator-447"><span class="linenos">447</span></a>    <span class="n">initial_value</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+</span><span id="spinner_decorator-448"><a href="#spinner_decorator-448"><span class="linenos">448</span></a>    <span class="n">message</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+</span><span id="spinner_decorator-449"><a href="#spinner_decorator-449"><span class="linenos">449</span></a>    <span class="n">format_string</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{spinner}</span><span class="s2"> (</span><span class="si">{elapsed_time:.2f}</span><span class="s2">s) </span><span class="si">{message}{value}</span><span class="s2">&quot;</span><span class="p">,</span>
+</span><span id="spinner_decorator-450"><a href="#spinner_decorator-450"><span class="linenos">450</span></a>    <span class="n">output_stream</span><span class="p">:</span> <span class="n">TextIO</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="p">,</span>
+</span><span id="spinner_decorator-451"><a href="#spinner_decorator-451"><span class="linenos">451</span></a>    <span class="c1"># new kwarg</span>
+</span><span id="spinner_decorator-452"><a href="#spinner_decorator-452"><span class="linenos">452</span></a>    <span class="n">mutable_kwarg_key</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+</span><span id="spinner_decorator-453"><a href="#spinner_decorator-453"><span class="linenos">453</span></a>    <span class="c1"># deprecated</span>
+</span><span id="spinner_decorator-454"><a href="#spinner_decorator-454"><span class="linenos">454</span></a>    <span class="n">spinner_chars</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+</span><span id="spinner_decorator-455"><a href="#spinner_decorator-455"><span class="linenos">455</span></a>    <span class="n">spinner_complete</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+</span><span id="spinner_decorator-456"><a href="#spinner_decorator-456"><span class="linenos">456</span></a>    <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+</span><span id="spinner_decorator-457"><a href="#spinner_decorator-457"><span class="linenos">457</span></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">DecoratedFunction</span><span class="p">],</span> <span class="n">DecoratedFunction</span><span class="p">]:</span>
+</span><span id="spinner_decorator-458"><a href="#spinner_decorator-458"><span class="linenos">458</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;see `Spinner` for parameters. Also takes `mutable_kwarg_key`</span>
+</span><span id="spinner_decorator-459"><a href="#spinner_decorator-459"><span class="linenos">459</span></a>
+</span><span id="spinner_decorator-460"><a href="#spinner_decorator-460"><span class="linenos">460</span></a><span class="sd">    `mutable_kwarg_key` is the key with which `Spinner().update_value`</span>
+</span><span id="spinner_decorator-461"><a href="#spinner_decorator-461"><span class="linenos">461</span></a><span class="sd">    will be passed to the decorated function. if `None`, won&#39;t pass it.</span>
+</span><span id="spinner_decorator-462"><a href="#spinner_decorator-462"><span class="linenos">462</span></a>
+</span><span id="spinner_decorator-463"><a href="#spinner_decorator-463"><span class="linenos">463</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="spinner_decorator-464"><a href="#spinner_decorator-464"><span class="linenos">464</span></a>
+</span><span id="spinner_decorator-465"><a href="#spinner_decorator-465"><span class="linenos">465</span></a>    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+</span><span id="spinner_decorator-466"><a href="#spinner_decorator-466"><span class="linenos">466</span></a>        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+</span><span id="spinner_decorator-467"><a href="#spinner_decorator-467"><span class="linenos">467</span></a>            <span class="sa">f</span><span class="s2">&quot;spinner_decorator does not accept positional arguments: </span><span class="si">{</span><span class="n">args</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span id="spinner_decorator-468"><a href="#spinner_decorator-468"><span class="linenos">468</span></a>        <span class="p">)</span>
+</span><span id="spinner_decorator-469"><a href="#spinner_decorator-469"><span class="linenos">469</span></a>    <span class="k">if</span> <span class="n">kwargs</span><span class="p">:</span>
+</span><span id="spinner_decorator-470"><a href="#spinner_decorator-470"><span class="linenos">470</span></a>        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+</span><span id="spinner_decorator-471"><a href="#spinner_decorator-471"><span class="linenos">471</span></a>            <span class="sa">f</span><span class="s2">&quot;spinner_decorator did not recognize these keyword arguments: </span><span class="si">{</span><span class="n">kwargs</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span id="spinner_decorator-472"><a href="#spinner_decorator-472"><span class="linenos">472</span></a>        <span class="p">)</span>
+</span><span id="spinner_decorator-473"><a href="#spinner_decorator-473"><span class="linenos">473</span></a>
+</span><span id="spinner_decorator-474"><a href="#spinner_decorator-474"><span class="linenos">474</span></a>    <span class="k">def</span> <span class="nf">decorator</span><span class="p">(</span><span class="n">func</span><span class="p">:</span> <span class="n">DecoratedFunction</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DecoratedFunction</span><span class="p">:</span>
+</span><span id="spinner_decorator-475"><a href="#spinner_decorator-475"><span class="linenos">475</span></a>        <span class="nd">@wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+</span><span id="spinner_decorator-476"><a href="#spinner_decorator-476"><span class="linenos">476</span></a>        <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+</span><span id="spinner_decorator-477"><a href="#spinner_decorator-477"><span class="linenos">477</span></a>            <span class="n">spinner</span><span class="p">:</span> <span class="n">Spinner</span> <span class="o">=</span> <span class="n">Spinner</span><span class="p">(</span>
+</span><span id="spinner_decorator-478"><a href="#spinner_decorator-478"><span class="linenos">478</span></a>                <span class="n">config</span><span class="o">=</span><span class="n">config</span><span class="p">,</span>
+</span><span id="spinner_decorator-479"><a href="#spinner_decorator-479"><span class="linenos">479</span></a>                <span class="n">update_interval</span><span class="o">=</span><span class="n">update_interval</span><span class="p">,</span>
+</span><span id="spinner_decorator-480"><a href="#spinner_decorator-480"><span class="linenos">480</span></a>                <span class="n">initial_value</span><span class="o">=</span><span class="n">initial_value</span><span class="p">,</span>
+</span><span id="spinner_decorator-481"><a href="#spinner_decorator-481"><span class="linenos">481</span></a>                <span class="n">message</span><span class="o">=</span><span class="n">message</span><span class="p">,</span>
+</span><span id="spinner_decorator-482"><a href="#spinner_decorator-482"><span class="linenos">482</span></a>                <span class="n">format_string</span><span class="o">=</span><span class="n">format_string</span><span class="p">,</span>
+</span><span id="spinner_decorator-483"><a href="#spinner_decorator-483"><span class="linenos">483</span></a>                <span class="n">output_stream</span><span class="o">=</span><span class="n">output_stream</span><span class="p">,</span>
+</span><span id="spinner_decorator-484"><a href="#spinner_decorator-484"><span class="linenos">484</span></a>                <span class="n">spinner_chars</span><span class="o">=</span><span class="n">spinner_chars</span><span class="p">,</span>
+</span><span id="spinner_decorator-485"><a href="#spinner_decorator-485"><span class="linenos">485</span></a>                <span class="n">spinner_complete</span><span class="o">=</span><span class="n">spinner_complete</span><span class="p">,</span>
+</span><span id="spinner_decorator-486"><a href="#spinner_decorator-486"><span class="linenos">486</span></a>            <span class="p">)</span>
+</span><span id="spinner_decorator-487"><a href="#spinner_decorator-487"><span class="linenos">487</span></a>
+</span><span id="spinner_decorator-488"><a href="#spinner_decorator-488"><span class="linenos">488</span></a>            <span class="k">if</span> <span class="n">mutable_kwarg_key</span><span class="p">:</span>
+</span><span id="spinner_decorator-489"><a href="#spinner_decorator-489"><span class="linenos">489</span></a>                <span class="n">kwargs</span><span class="p">[</span><span class="n">mutable_kwarg_key</span><span class="p">]</span> <span class="o">=</span> <span class="n">spinner</span><span class="o">.</span><span class="n">update_value</span>
+</span><span id="spinner_decorator-490"><a href="#spinner_decorator-490"><span class="linenos">490</span></a>
+</span><span id="spinner_decorator-491"><a href="#spinner_decorator-491"><span class="linenos">491</span></a>            <span class="n">spinner</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+</span><span id="spinner_decorator-492"><a href="#spinner_decorator-492"><span class="linenos">492</span></a>            <span class="k">try</span><span class="p">:</span>
+</span><span id="spinner_decorator-493"><a href="#spinner_decorator-493"><span class="linenos">493</span></a>                <span class="n">result</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</span><span id="spinner_decorator-494"><a href="#spinner_decorator-494"><span class="linenos">494</span></a>                <span class="n">spinner</span><span class="o">.</span><span class="n">stop</span><span class="p">(</span><span class="n">failed</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</span><span id="spinner_decorator-495"><a href="#spinner_decorator-495"><span class="linenos">495</span></a>            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+</span><span id="spinner_decorator-496"><a href="#spinner_decorator-496"><span class="linenos">496</span></a>                <span class="n">spinner</span><span class="o">.</span><span class="n">stop</span><span class="p">(</span><span class="n">failed</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span id="spinner_decorator-497"><a href="#spinner_decorator-497"><span class="linenos">497</span></a>                <span class="k">raise</span> <span class="n">e</span>
+</span><span id="spinner_decorator-498"><a href="#spinner_decorator-498"><span class="linenos">498</span></a>
+</span><span id="spinner_decorator-499"><a href="#spinner_decorator-499"><span class="linenos">499</span></a>            <span class="k">return</span> <span class="n">result</span>
+</span><span id="spinner_decorator-500"><a href="#spinner_decorator-500"><span class="linenos">500</span></a>
+</span><span id="spinner_decorator-501"><a href="#spinner_decorator-501"><span class="linenos">501</span></a>        <span class="c1"># TODO: fix this type ignore</span>
+</span><span id="spinner_decorator-502"><a href="#spinner_decorator-502"><span class="linenos">502</span></a>        <span class="k">return</span> <span class="n">wrapper</span>  <span class="c1"># type: ignore[return-value]</span>
+</span><span id="spinner_decorator-503"><a href="#spinner_decorator-503"><span class="linenos">503</span></a>
+</span><span id="spinner_decorator-504"><a href="#spinner_decorator-504"><span class="linenos">504</span></a>    <span class="k">if</span> <span class="ow">not</span> <span class="n">args</span><span class="p">:</span>
+</span><span id="spinner_decorator-505"><a href="#spinner_decorator-505"><span class="linenos">505</span></a>        <span class="c1"># called as `@spinner_decorator(stuff)`</span>
+</span><span id="spinner_decorator-506"><a href="#spinner_decorator-506"><span class="linenos">506</span></a>        <span class="k">return</span> <span class="n">decorator</span>
+</span><span id="spinner_decorator-507"><a href="#spinner_decorator-507"><span class="linenos">507</span></a>    <span class="k">else</span><span class="p">:</span>
+</span><span id="spinner_decorator-508"><a href="#spinner_decorator-508"><span class="linenos">508</span></a>        <span class="c1"># called as `@spinner_decorator` without parens</span>
+</span><span id="spinner_decorator-509"><a href="#spinner_decorator-509"><span class="linenos">509</span></a>        <span class="k">return</span> <span class="n">decorator</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
 </span></pre></div>
 
 

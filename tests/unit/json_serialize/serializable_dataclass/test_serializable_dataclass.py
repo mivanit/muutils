@@ -730,16 +730,23 @@ class CustomSerializable:
         return isinstance(other, CustomSerializable) and self.value == other.value
 
 
-def test_dict_with_custom_objects():
+def test_dict_with_custom_objects() -> None:
     """Test dictionaries containing custom objects that implement serialize/load"""
 
     @serializable_dataclass
     class CustomObjectDict(SerializableDataclass):
-        objects: Dict[str, CustomSerializable]
+        data: Dict[str, CustomSerializable] = serializable_field()
 
-    instance = CustomObjectDict(
-        objects={"a": CustomSerializable(42), "b": CustomSerializable("hello")}
+    instance: CustomObjectDict = CustomObjectDict(
+        data={"a": CustomSerializable(42), "b": CustomSerializable("hello")}
     )
+
+    assert isinstance(instance, CustomObjectDict)
+    assert isinstance(instance.data, dict)
+    assert isinstance(instance.data["a"], CustomSerializable)
+    assert isinstance(instance.data["a"].value, int)
+    assert isinstance(instance.data["b"], CustomSerializable)
+    assert isinstance(instance.data["b"].value, str)
 
     serialized = instance.serialize()
     loaded = CustomObjectDict.load(serialized)
@@ -781,22 +788,22 @@ class BaseClass(SerializableDataclass):
     """Base class for testing inheritance"""
 
     base_field: str
-    shared_field: int = 0
+    shared_field: int = serializable_field(default=0)
 
 
 @serializable_dataclass
 class ChildClass(BaseClass):
     """Child class inheriting from BaseClass"""
 
-    child_field: float
-    shared_field: int = 1  # Override base class field
+    child_field: float = serializable_field(default=0.1)
+    shared_field: int = serializable_field(default=1)  # Override base class field
 
 
 @serializable_dataclass
 class GrandchildClass(ChildClass):
     """Grandchild class for deep inheritance testing"""
 
-    grandchild_field: bool
+    grandchild_field: bool = serializable_field(default=True)
 
 
 def test_inheritance():

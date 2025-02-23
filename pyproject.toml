@@ -119,6 +119,7 @@
 [tool.mypy]
     exclude = ["tests/input_data", "tests/junk_data", "tests/_temp/", "_wip/"]
     show_error_codes = true
+    # we disable this in the makefile for old versions
     check_untyped_defs = true
 
 [tool.lmcat]

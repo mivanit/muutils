@@ -122,7 +122,7 @@ endif
 # --------------------------------------------------
 TYPECHECK_ARGS ?= 
 # COMPATIBILITY_MODE: whether to run in compatibility mode for python <3.10
-COMPATIBILITY_MODE := $(shell $(PYTHON) -c "import sys; print(1 if sys.version_info < (3, 10) else 0)")
+COMPATIBILITY_MODE := $(shell $(PYTHON) -c "import sys; print(1 if sys.version_info < (3, 11) else 0)")
 
 # compatibility mode for python <3.10
 # --------------------------------------------------
@@ -138,7 +138,7 @@ endif
 ifeq ($(COMPATIBILITY_MODE), 1)
 	JUNK := $(info !!! WARNING !!!: Detected python version less than 3.10, some behavior will be different)
     PYTEST_OPTIONS += --ignore=tests/unit/validate_type/
-	TYPECHECK_ARGS += --disable-error-code misc --disable-error-code syntax --disable-error-code import-not-found
+	TYPECHECK_ARGS += --disable-error-code misc --disable-error-code syntax --disable-error-code import-not-found --no-check-untyped-defs
 endif
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

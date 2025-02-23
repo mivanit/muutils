@@ -71,7 +71,6 @@ def spinner_fn_wrap(x: Iterable, **kwargs) -> List:
 def map_kwargs_for_tqdm(kwargs: dict) -> dict:
     "map kwargs for tqdm, cant wrap because the pbar dissapears?"
     tqdm_allowed_kwargs: set[str] = get_fn_allowed_kwargs(tqdm.tqdm.__init__)
-    print(f"{tqdm_allowed_kwargs = }")
     mapped_kwargs: dict = {k: v for k, v in kwargs.items() if k in tqdm_allowed_kwargs}
 
     if "desc" not in kwargs:
@@ -80,7 +79,6 @@ def map_kwargs_for_tqdm(kwargs: dict) -> dict:
 
         elif "total" in kwargs:
             mapped_kwargs["desc"] = f"Processing {kwargs.get('total')} items"
-    print(f"{mapped_kwargs = }")
     return mapped_kwargs
 
 

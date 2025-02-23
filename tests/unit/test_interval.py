@@ -292,7 +292,7 @@ def test_interval_intersection():
 def test_interval_with_non_numeric_types():
     # Test behavior with non-numeric types
     with pytest.raises(TypeError):
-        Interval("a", "b")
+        Interval("a", "b") # type: ignore[arg-type]
     with pytest.raises(TypeError):
         "a" in Interval(1, 2)
 
@@ -721,10 +721,12 @@ def test_interval_arithmetic_edge_cases():
 # Test for invalid operations
 def test_interval_arithmetic_invalid():
     with pytest.raises(TypeError):
-        Interval(1, 2).intersection(5)  # Invalid type for intersection
+        # Invalid type for intersection
+        Interval(1, 2).intersection(5) # type: ignore[arg-type]
 
     with pytest.raises(TypeError):
-        Interval(1, 2).union("invalid")  # Invalid type for union
+        # Invalid type for union
+        Interval(1, 2).union("invalid") # type: ignore[arg-type]
 
 
 @pytest.mark.parametrize(

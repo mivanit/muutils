@@ -436,7 +436,7 @@ class SpinnerContext(Spinner, ContextManager):
 
 SpinnerContext.__doc__ = Spinner.__doc__
 
-
+# TODO: type hint that the `update_status` kwarg is not needed when calling the function we just decorated
 def spinner_decorator(
     *args,
     # passed to `Spinner.__init__`

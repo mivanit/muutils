@@ -27,7 +27,7 @@ BELOW_PY_3_10: bool = sys.version_info < (3, 10)
 
 def test_register_method(recwarn):
     class TestEvalsA:
-        evals = {}
+        evals: dict = {}
 
         @register_method(evals)
         @staticmethod
@@ -39,7 +39,7 @@ def test_register_method(recwarn):
             pass
 
     class TestEvalsB:
-        evals = {}
+        evals: dict = {}
 
         @register_method(evals)
         @staticmethod

@@ -1,4 +1,5 @@
 from __future__ import annotations
+from typing import Dict
 
 import pytest
 
@@ -71,14 +72,14 @@ def test_kwargs_to_nested_dict():
         kwargs_to_nested_dict(
             {"a.b.c": 1, "a.b.d": 2, "a.e": 3},
             strip_prefix="prefix.",
-            when_unknown_prefix="raise",
+            when_unknown_prefix_="raise",
         )
 
     # Case where -- and - prefix
     assert kwargs_to_nested_dict(
         {"--a.b.c": 1, "--a.b.d": 2, "a.e": 3},
         strip_prefix="--",
-        when_unknown_prefix="ignore",
+        when_unknown_prefix_="ignore",
     ) == {"a": {"b": {"c": 1, "d": 2}, "e": 3}}
 
     # Case where -- and - prefix with warning
@@ -86,7 +87,7 @@ def test_kwargs_to_nested_dict():
         kwargs_to_nested_dict(
             {"--a.b.c": 1, "-a.b.d": 2, "a.e": 3},
             strip_prefix="-",
-            when_unknown_prefix="warn",
+            when_unknown_prefix_="warn",
         )
 
 
@@ -109,7 +110,7 @@ def test_kwargs_to_nested_dict_transform_key():
             {"a-b-c": 1, "prefix.a-b-d": 2, "prefix.a-e": 3},
             strip_prefix="prefix.",
             transform_key=lambda x: x.replace("-", "_"),
-            when_unknown_prefix="raise",
+            when_unknown_prefix_="raise",
         )
 
     # Case where strip_prefix, transform_key and when_unknown_prefix='warn' are all used
@@ -118,7 +119,7 @@ def test_kwargs_to_nested_dict_transform_key():
             {"a-b-c": 1, "prefix.a-b-d": 2, "prefix.a-e": 3},
             strip_prefix="prefix.",
             transform_key=lambda x: x.replace("-", "_"),
-            when_unknown_prefix="warn",
+            when_unknown_prefix_="warn",
         ) == {"a_b_c": 1, "a_b_d": 2, "a_e": 3}
 
 
@@ -345,32 +346,32 @@ def test_nested_dict_to_dotlist_basic():
 
 
 def test_nested_dict_to_dotlist_empty():
-    nested_dict = {}
-    expected_dotlist = {}
+    nested_dict: dict = {}
+    expected_dotlist: dict = {}
     result = nested_dict_to_dotlist(nested_dict)
     assert result == expected_dotlist
 
 
 def test_nested_dict_to_dotlist_single_level():
-    nested_dict = {"a": 1, "b": 2, "c": 3}
-    expected_dotlist = {"a": 1, "b": 2, "c": 3}
+    nested_dict: Dict[str, int] = {"a": 1, "b": 2, "c": 3}
+    expected_dotlist: Dict[str, int] = {"a": 1, "b": 2, "c": 3}
     assert nested_dict_to_dotlist(nested_dict) == expected_dotlist
 
 
 def test_nested_dict_to_dotlist_with_list():
-    nested_dict = {"a": [1, 2, {"b": 3}], "c": 4}
-    expected_dotlist = {"a.0": 1, "a.1": 2, "a.2.b": 3, "c": 4}
+    nested_dict: dict = {"a": [1, 2, {"b": 3}], "c": 4}
+    expected_dotlist: Dict[str, int] = {"a.0": 1, "a.1": 2, "a.2.b": 3, "c": 4}
     assert nested_dict_to_dotlist(nested_dict, allow_lists=True) == expected_dotlist
 
 
 def test_nested_dict_to_dotlist_nested_empty():
-    nested_dict = {"a": {"b": {}}}
-    expected_dotlist = {"a.b": {}}
+    nested_dict: dict = {"a": {"b": {}}}
+    expected_dotlist: dict = {"a.b": {}}
     assert nested_dict_to_dotlist(nested_dict) == expected_dotlist
 
 
 def test_round_trip_conversion():
-    original = {"a": {"b": {"c": 1, "d": 2}, "e": 3}}
+    original: dict = {"a": {"b": {"c": 1, "d": 2}, "e": 3}}
     dotlist = nested_dict_to_dotlist(original)
     result = dotlist_to_nested_dict(dotlist)
     assert result == original

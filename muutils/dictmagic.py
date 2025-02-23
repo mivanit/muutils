@@ -158,7 +158,7 @@ def kwargs_to_nested_dict(
     kwargs_dict: dict[str, Any],
     sep: str = ".",
     strip_prefix: Optional[str] = None,
-    when_unknown_prefix: ErrorMode = ErrorMode.WARN,
+    when_unknown_prefix: Union[ErrorMode, str] = ErrorMode.WARN,
     transform_key: Optional[Callable[[str], str]] = None,
 ) -> dict[str, Any]:
     """given kwargs from fire, convert them to a nested dict
@@ -191,12 +191,12 @@ def kwargs_to_nested_dict(
     - `transform_key: Callable[[str], str] | None = None`
         a function to apply to each key before adding it to the dict (applied after stripping the prefix)
     """
-    when_unknown_prefix = ErrorMode.from_any(when_unknown_prefix)
+    when_unknown_prefix_ = ErrorMode.from_any(when_unknown_prefix)
     filtered_kwargs: dict[str, Any] = dict()
     for key, value in kwargs_dict.items():
         if strip_prefix is not None:
             if not key.startswith(strip_prefix):
-                when_unknown_prefix.process(
+                when_unknown_prefix_.process(
                     f"key '{key}' does not start with '{strip_prefix}'",
                     except_cls=ValueError,
                 )

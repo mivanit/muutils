@@ -22,7 +22,7 @@ class FancyTimeitResult(NamedTuple):
 
 
 def timeit_fancy(
-    cmd: Callable[[], T],
+    cmd: Union[Callable[[], T], str],
     setup: Union[str, Callable[[], Any]] = lambda: None,
     repeats: int = 5,
     namespace: Union[dict[str, Any], None] = None,
@@ -80,7 +80,7 @@ def timeit_fancy(
             profiler.enable()
 
         try:
-            return_value = cmd()
+            return_value = cmd() # type: ignore[operator]
         except TypeError as e:
             warnings.warn(
                 f"Failed to get return value from `cmd` due to error (probably passing a string). will return `return_value=None`\n{e}",

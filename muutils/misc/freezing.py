@@ -1,4 +1,5 @@
 from __future__ import annotations
+from typing import TypeVar, overload
 
 
 class FrozenDict(dict):
@@ -35,7 +36,24 @@ class FrozenList(list):
         raise AttributeError("list is frozen")
 
 
+FreezeMe = TypeVar("FreezeMe", dict, list, tuple, set, object)
+
+@overload
+def freeze(instance: dict) -> FrozenDict:
+    ...
+@overload
+def freeze(instance: list) -> FrozenList:
+    ...
+@overload
+def freeze(instance: tuple) -> tuple:
+    ...
+@overload
+def freeze(instance: set) -> frozenset:
+    ...
+@overload
 def freeze(instance: object) -> object:
+    ...
+def freeze(instance: FreezeMe) -> FreezeMe:
     """recursively freeze an object in-place so that its attributes and elements cannot be changed
 
     messy in the sense that sometimes the object is modified in place, but you can't rely on that. always use the return value.
@@ -75,7 +93,7 @@ def freeze(instance: object) -> object:
         instance = tuple(freeze(item) for item in instance)
 
     elif isinstance(instance, set):
-        instance = frozenset({freeze(item) for item in instance})
+        instance = frozenset({freeze(item) for item in instance}) # type: ignore[assignment]
 
     elif isinstance(instance, dict):
         for key, value in instance.items():

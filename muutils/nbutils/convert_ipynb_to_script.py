@@ -312,7 +312,7 @@ if __name__ == "__main__":
         description="Convert Jupyter Notebook to a script with cell separators."
     )
     parser.add_argument(
-        "in-path",
+        "in_path",
         type=str,
         help="Input Jupyter Notebook file (.ipynb) or directory of files.",
     )

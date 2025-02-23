@@ -1,8 +1,8 @@
 # Stats
 - 53 files
-- 10605 (11K) lines
-- 368597 (369K) chars
-- 39736 (40K) `whitespace-split` tokens
+- 10606 (11K) lines
+- 368652 (369K) chars
+- 39746 (40K) `whitespace-split` tokens
 
 # File Tree
 
@@ -66,8 +66,8 @@ muutils
 │   └── validate_type.py                 [  237L  8,401C   896T]
 ├── LICENSE                              [  674L 35,149C 5,644T]
 ├── README.md                            [  131L  6,289C   551T]
-├── makefile                             [1,486L 45,549C 5,460T]
-├── pyproject.toml                       [  194L  6,379C   670T]
+├── makefile                             [1,486L 45,573C 5,461T]
+├── pyproject.toml                       [  195L  6,434C   680T]
 ```
 
 # File Contents
@@ -10535,6 +10535,7 @@ help: help-targets info
 [tool.mypy]
     exclude = ["tests/input_data", "tests/junk_data", "tests/_temp/", "_wip/"]
     show_error_codes = true
+    # we disable this in the makefile for old versions
     check_untyped_defs = true
 
 [tool.lmcat]

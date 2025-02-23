@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>Coverage for muutils\spinner.py: 95%</title>
+    <title>Coverage for muutils\spinner.py: 93%</title>
     <link rel="icon" sizes="32x32" href="favicon_32_cb_58284776.png">
     <link rel="stylesheet" href="style_cb_718ce007.css" type="text/css">
     <script src="coverage_html_cb_497bf287.js" defer></script>
@@ -12,7 +12,7 @@
     <div class="content">
         <h1>
             <span class="text">Coverage for </span><b>muutils\spinner.py</b>:
-            <span class="pc_cov">95%</span>
+            <span class="pc_cov">93%</span>
         </h1>
         <aside id="help_panel_wrapper">
             <input id="help_panel_state" type="checkbox">
@@ -55,8 +55,8 @@
         </aside>
         <h2>
             <span class="text">147 statements &nbsp;</span>
-            <button type="button" class="run button_toggle_run" value="run" data-shortcut="r" title="Toggle lines run">139<span class="text"> run</span></button>
-            <button type="button" class="mis show_mis button_toggle_mis" value="mis" data-shortcut="m" title="Toggle lines missing">8<span class="text"> missing</span></button>
+            <button type="button" class="run button_toggle_run" value="run" data-shortcut="r" title="Toggle lines run">137<span class="text"> run</span></button>
+            <button type="button" class="mis show_mis button_toggle_mis" value="mis" data-shortcut="m" title="Toggle lines missing">10<span class="text"> missing</span></button>
             <button type="button" class="exc show_exc button_toggle_exc" value="exc" data-shortcut="x" title="Toggle lines excluded">0<span class="text"> excluded</span></button>
         </h2>
         <p class="text">
@@ -65,7 +65,7 @@
             <a id="nextFileLink" class="nav" href="z_6c5f9b70fbd6dea2_statcounter_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.6.1">coverage.py v7.6.1</a>,
-            created at 2025-02-23 03:08 -0700
+            created at 2025-02-23 03:21 -0700
         </p>
         <aside class="hidden">
             <button type="button" class="button_next_chunk" data-shortcut="j"></button>
@@ -449,8 +449,8 @@
     <p class="pln"><span class="n"><a id="t367" href="#t367">367</a></span><span class="t">            <span class="com"># use the special one if needed</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t368" href="#t368">368</a></span><span class="t">            <span class="nam">format_str</span><span class="op">:</span> <span class="nam">str</span> <span class="op">=</span> <span class="nam">self</span><span class="op">.</span><span class="nam">format_string</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t369" href="#t369">369</a></span><span class="t">            <span class="key">if</span> <span class="nam">self</span><span class="op">.</span><span class="nam">value_changed</span> <span class="key">and</span> <span class="op">(</span><span class="nam">self</span><span class="op">.</span><span class="nam">format_string_when_updated</span> <span class="key">is</span> <span class="key">not</span> <span class="key">None</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t370" href="#t370">370</a></span><span class="t">                <span class="nam">self</span><span class="op">.</span><span class="nam">value_changed</span> <span class="op">=</span> <span class="key">False</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t371" href="#t371">371</a></span><span class="t">                <span class="nam">format_str</span> <span class="op">=</span> <span class="nam">self</span><span class="op">.</span><span class="nam">format_string_when_updated</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t370" href="#t370">370</a></span><span class="t">                <span class="nam">self</span><span class="op">.</span><span class="nam">value_changed</span> <span class="op">=</span> <span class="key">False</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t371" href="#t371">371</a></span><span class="t">                <span class="nam">format_str</span> <span class="op">=</span> <span class="nam">self</span><span class="op">.</span><span class="nam">format_string_when_updated</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t372" href="#t372">372</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t373" href="#t373">373</a></span><span class="t">            <span class="com"># write and flush the display string</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t374" href="#t374">374</a></span><span class="t">            <span class="nam">output</span><span class="op">:</span> <span class="nam">str</span> <span class="op">=</span> <span class="nam">format_str</span><span class="op">.</span><span class="nam">format</span><span class="op">(</span><span class="op">**</span><span class="nam">display_parts</span><span class="op">)</span><span class="op">.</span><span class="nam">ljust</span><span class="op">(</span><span class="nam">self</span><span class="op">.</span><span class="nam">term_width</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
@@ -600,7 +600,7 @@
             <a class="nav" href="z_6c5f9b70fbd6dea2_statcounter_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.6.1">coverage.py v7.6.1</a>,
-            created at 2025-02-23 03:08 -0700
+            created at 2025-02-23 03:21 -0700
         </p>
     </div>
 </footer>

@@ -11,7 +11,7 @@ muutils\json_serialize\__init__.py                                              
 muutils\json_serialize\array.py                                                      95     36    62%   9-38, 42-48, 59, 99, 133-136, 145, 149, 153, 156, 160, 164-167, 171, 178, 189, 213-218, 223, 226
 muutils\json_serialize\dataclass_transform_mock.py                                    8      8     0%   1-29
 muutils\json_serialize\json_serialize.py                                             64     46    28%   11-93, 140, 235-261, 271, 283, 298-331
-muutils\json_serialize\serializable_dataclass.py                                    256    196    23%   52-103, 119-186, 195, 203-224, 228-253, 257, 263-282, 294-366, 376-417, 422-435, 440-455, 459, 462-467, 476, 480-501, 506-561, 664, 667-671, 676-678, 682-692, 707, 718-721, 729-731, 734, 737, 741-746, 761, 769, 777-780, 786-792, 799-807, 810-812, 820-833, 862, 866-868, 881, 884-894, 898-900, 903-905
+muutils\json_serialize\serializable_dataclass.py                                    256    112    56%   52-103, 127-153, 180, 186, 204-218, 231, 235-245, 264-266, 270, 282, 294-366, 376-383, 412, 423-424, 428-429, 435, 446-450, 455, 467, 484-488, 495-496, 501, 507, 510-512, 522-561, 678, 686-692, 721, 745-746, 780, 822
 muutils\json_serialize\serializable_field.py                                         40     24    40%   9-45, 81, 87-90, 100, 111-187
 muutils\json_serialize\util.py                                                      115     65    43%   3-79, 83, 94, 98, 114, 123, 128-132, 143, 146-151, 172, 187-192, 263, 267-272
 muutils\jsonlines.py                                                                 32     32     0%   3-77
@@ -40,7 +40,7 @@ muutils\nbutils\mermaid.py                                                      
 muutils\nbutils\print_tex.py                                                         10     10     0%   3-21
 muutils\nbutils\run_notebook_tests.py                                                87     17    80%   94-101, 129, 133, 137, 143, 185, 191-196, 201-204
 muutils\parallel.py                                                                  94      6    94%   46-48, 60, 220, 224-225
-muutils\spinner.py                                                                  147      8    95%   280, 307, 417, 420, 423, 465, 469, 508
+muutils\spinner.py                                                                  147     10    93%   280, 307, 370-371, 417, 420, 423, 465, 469, 508
 muutils\statcounter.py                                                               89     32    64%   30-41, 56, 82, 110, 122, 132, 149-179, 199, 209, 212, 217-222, 231
 muutils\sysinfo.py                                                                   78     25    68%   22-25, 66-67, 84-117, 158-167, 179, 197-199
 muutils\tensor_utils.py                                                             133     18    86%   101, 104, 123, 127, 144, 147-150, 158, 165, 179-187
@@ -82,7 +82,8 @@ tests\unit\test_tensor_utils.py                                                 
 tests\unit\test_timeit_fancy.py                                                      69      0   100%
 tests\unit\validate_type\test_get_kwargs.py                                          53     13    75%   8, 15, 22, 29, 36, 43, 51-52, 58-59, 66, 78, 87
 tests\unit\validate_type\test_validate_type.py                                      206     45    78%   49-50, 74-75, 101-102, 124-125, 146-147, 176-177, 202-203, 236-237, 254, 273-274, 335-336, 360-361, 431-432, 460-461, 465-466, 480-498
+tests\unit\validate_type\test_validate_type_GENERATED.py                            206     45    78%   50-51, 75-76, 102-103, 125-126, 147-148, 177-178, 203-204, 237-238, 255, 274-275, 336-337, 361-362, 432-433, 461-462, 466-467, 481-499
 tests\unit\validate_type\test_validate_type_special.py                               15      3    80%   34-35, 57
 tests\util\test_fire.py                                                               8      6    25%   2-5, 9-11
 ---------------------------------------------------------------------------------------------------------------
-TOTAL                                                                              6881   1089    84%
+TOTAL                                                                              7087   1052    85%

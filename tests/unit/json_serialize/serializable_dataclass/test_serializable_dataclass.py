@@ -730,7 +730,7 @@ class CustomSerializable:
         return isinstance(other, CustomSerializable) and self.value == other.value
 
 
-def test_dict_with_custom_objects() -> None:
+def test_dict_with_custom_objects():
     """Test dictionaries containing custom objects that implement serialize/load"""
 
     @serializable_dataclass

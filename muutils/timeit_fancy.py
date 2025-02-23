@@ -80,7 +80,7 @@ def timeit_fancy(
             profiler.enable()
 
         try:
-            return_value = cmd() # type: ignore[operator]
+            return_value = cmd()  # type: ignore[operator]
         except TypeError as e:
             warnings.warn(
                 f"Failed to get return value from `cmd` due to error (probably passing a string). will return `return_value=None`\n{e}",

@@ -31,7 +31,7 @@ class BasicAutofields(SerializableDataclass):
 
 def test_basic_auto_fields():
     data = dict(a="hello", b=42, c=[1, 2, 3])
-    instance = BasicAutofields(**data) # type: ignore[arg-type]
+    instance = BasicAutofields(**data)  # type: ignore[arg-type]
     data_with_format = data.copy()
     data_with_format[_FORMAT_KEY] = "BasicAutofields(SerializableDataclass)"
     assert instance.serialize() == data_with_format

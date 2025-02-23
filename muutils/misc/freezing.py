@@ -38,21 +38,17 @@ class FrozenList(list):
 
 FreezeMe = TypeVar("FreezeMe", dict, list, tuple, set, object)
 
+
 @overload
-def freeze(instance: dict) -> FrozenDict:
-    ...
+def freeze(instance: dict) -> FrozenDict: ...
 @overload
-def freeze(instance: list) -> FrozenList:
-    ...
+def freeze(instance: list) -> FrozenList: ...
 @overload
-def freeze(instance: tuple) -> tuple:
-    ...
+def freeze(instance: tuple) -> tuple: ...
 @overload
-def freeze(instance: set) -> frozenset:
-    ...
+def freeze(instance: set) -> frozenset: ...
 @overload
-def freeze(instance: object) -> object:
-    ...
+def freeze(instance: object) -> object: ...
 def freeze(instance: FreezeMe) -> FreezeMe:
     """recursively freeze an object in-place so that its attributes and elements cannot be changed
 
@@ -93,7 +89,7 @@ def freeze(instance: FreezeMe) -> FreezeMe:
         instance = tuple(freeze(item) for item in instance)
 
     elif isinstance(instance, set):
-        instance = frozenset({freeze(item) for item in instance}) # type: ignore[assignment]
+        instance = frozenset({freeze(item) for item in instance})  # type: ignore[assignment]
 
     elif isinstance(instance, dict):
         for key, value in instance.items():

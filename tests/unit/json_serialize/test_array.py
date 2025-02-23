@@ -64,9 +64,12 @@ class TestYourModule:
         ]:
             for array in [self.array_1d, self.array_2d, self.array_3d]:
                 serialized_array = serialize_array(
-                    self.jser, array, "test_path", array_mode=array_mode
+                    self.jser,
+                    array,
+                    "test_path",
+                    array_mode=array_mode,  # type: ignore[arg-type]
                 )
-                loaded_array = load_array(serialized_array, array_mode=array_mode)
+                loaded_array = load_array(serialized_array, array_mode=array_mode)  # type: ignore[arg-type]
                 assert np.array_equal(loaded_array, array)
 
     def test_serialize_load_zero_dim(self):
@@ -77,7 +80,10 @@ class TestYourModule:
             "array_b64_meta",
         ]:
             serialized_array = serialize_array(
-                self.jser, self.array_zero_dim, "test_path", array_mode=array_mode
+                self.jser,
+                self.array_zero_dim,
+                "test_path",
+                array_mode=array_mode,  # type: ignore[arg-type]
             )
             loaded_array = load_array(serialized_array)
             assert np.array_equal(loaded_array, self.array_zero_dim)

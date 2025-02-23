@@ -22,8 +22,11 @@ class Person(SerializableDataclass):
         return f"{self.first_name} {self.last_name}"
 
 
+# TODO: idk why it thinks `SUPPORTS_KW_ONLY` is not a True or False Literal:
+# error: "kw_only" argument must be a True or False literal  [literal-required]
 @serializable_dataclass(
-    kw_only=SUPPORTS_KW_ONLY, properties_to_serialize=["full_name", "full_title"]
+    kw_only=SUPPORTS_KW_ONLY,  # type: ignore[literal-required]
+    properties_to_serialize=["full_name", "full_title"],
 )
 class TitledPerson(Person):
     title: str
@@ -34,7 +37,7 @@ class TitledPerson(Person):
 
 
 @serializable_dataclass(
-    kw_only=SUPPORTS_KW_ONLY,
+    kw_only=SUPPORTS_KW_ONLY,  # type: ignore[literal-required]
     properties_to_serialize=["full_name", "not_a_real_property"],
 )
 class AgedPerson_not_valid(Person):

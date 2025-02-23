@@ -42,7 +42,7 @@ def test_sdc_strip_format_jser():
         "batch_size": 64,
         "__write_format__": "Config(SerializableDataclass)",
     }
-    recovered = Config.load(serialized)
+    recovered = Config.load(serialized)  # type: ignore[arg-type]
     assert recovered == instance
 
 

@@ -590,7 +590,7 @@ def test_dict_type_validation():
     # Invalid int_dict
     with pytest.raises(FieldTypeMismatchError):
         StrictDictContainer(
-            int_dict={"a": "not an int"},  # Type error
+            int_dict={"a": "not an int"},  # type: ignore[dict-item]
             str_dict={"x": "hello"},
             float_dict={"m": 1.0},
         )
@@ -599,7 +599,7 @@ def test_dict_type_validation():
     with pytest.raises(FieldTypeMismatchError):
         StrictDictContainer(
             int_dict={"a": 1},
-            str_dict={"x": 123},  # Type error
+            str_dict={"x": 123},  # type: ignore[dict-item]
             float_dict={"m": 1.0},
         )
 
@@ -850,9 +850,9 @@ def test_generic_types():
 
     # Test with str
     str_container = GenericContainer[str](value="hello", values=["a", "b", "c"])
-    serialized = str_container.serialize()
-    loaded = GenericContainer[str].load(serialized)
-    assert loaded == str_container
+    serialized2 = str_container.serialize()
+    loaded2 = GenericContainer[str].load(serialized2)
+    assert loaded2 == str_container
 
 
 # Test custom serialization/deserialization
@@ -1017,7 +1017,7 @@ def test_error_handling():
     with pytest.raises(TypeError):
         BaseClass.load({})
 
-    x = BaseClass(base_field=42, shared_field="invalid")
+    x = BaseClass(base_field=42, shared_field="invalid")  # type: ignore[arg-type]
     assert not x.validate_fields_types()
 
     with pytest.raises(FieldTypeMismatchError):
@@ -1058,4 +1058,5 @@ def test_cyclic_references():
     serialized = node1.serialize()
     loaded = Node.load(serialized)
     assert loaded.value == "one"
-    assert loaded.next.value == "two"
+    # TODO: idk why we type ignore here
+    assert loaded.next.value == "two"  # type: ignore[union-attr]

@@ -74,7 +74,8 @@ from muutils.json_serialize.util import _FORMAT_KEY, array_safe_eq, dc_eq
 # and every time we try to init a serializable dataclass it says the argument doesnt exist
 try:
     try:
-        from typing import dataclass_transform
+        # type ignore here for legacy versions
+        from typing import dataclass_transform  # type: ignore[attr-defined]
     except Exception:
         from typing_extensions import dataclass_transform
 except Exception:

@@ -53,12 +53,12 @@ jobs:
       matrix:
         python: ["3.8", "3.9", "3.10", "3.11", "3.12", "3.13"]
         pkg:
-          - torch: "1.13.1"
+          - group: "legacy"
+            torch: "1.13.1"
             numpy: "1.24.4"
-            group: "legacy"
-          - torch: ""
-            numpy: ""
-            group: "latest"
+          - group: "latest"
+            torch: ""
+            numpy: ""            
         exclude:
           - python: "3.12"
             pkg:

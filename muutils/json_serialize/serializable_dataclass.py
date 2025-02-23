@@ -75,9 +75,9 @@ from muutils.json_serialize.util import _FORMAT_KEY, array_safe_eq, dc_eq
 try:
     try:
         from typing import dataclass_transform
-    except ImportError:
+    except Exception:
         from typing_extensions import dataclass_transform
-except ImportError:
+except Exception:
     from muutils.json_serialize.dataclass_transform_mock import dataclass_transform
 
 T = TypeVar("T")

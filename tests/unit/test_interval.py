@@ -1021,7 +1021,7 @@ def test_edge_case_conversions():
 
 def test_nan_handling_is_empty():
     assert Interval(math.nan, math.nan).is_empty
-    assert Interval(None, None).is_empty
+    assert Interval(None, None).is_empty  # type: ignore[arg-type]
     assert Interval().is_empty
     assert Interval.get_empty().is_empty
     with pytest.raises(ValueError):
@@ -1387,7 +1387,7 @@ def test_interval_comparison():
     assert i1 != i2
     assert i1 == i3
     with pytest.raises(TypeError):
-        i1 < i2
+        i1 < i2  # type: ignore[operator]
 
 
 def test_interval_copy():
@@ -1409,27 +1409,27 @@ def test_interval_pickling():
 def test_interval_with_numpy_types():
     import numpy as np
 
-    i = Interval(np.float64(1), np.float64(2))
+    i = Interval(np.float64(1), np.float64(2))  # type: ignore[arg-type]
     assert np.float64(1.5) in i
-    assert isinstance(i.clamp(np.float64(0)), np.float64)
+    assert isinstance(i.clamp(np.float64(0)), np.float64)  # type: ignore[arg-type]
 
 
 def test_interval_with_decimal_types():
     from decimal import Decimal
 
-    i = Interval(Decimal("1"), Decimal("2"))
+    i = Interval(Decimal("1"), Decimal("2"))  # type: ignore[arg-type]
     assert Decimal("1.5") in i
     assert min(i) == Decimal("1")
     assert max(i) == Decimal("2")
-    assert isinstance(i.clamp(Decimal("0")), Decimal)
+    assert isinstance(i.clamp(Decimal("0")), Decimal)  # type: ignore[arg-type]
 
 
 def test_interval_with_fractions():
     from fractions import Fraction
 
-    i = Interval(Fraction(1, 3), Fraction(2, 3))
+    i = Interval(Fraction(1, 3), Fraction(2, 3))  # type: ignore[arg-type]
     assert Fraction(1, 2) in i
-    assert isinstance(i.clamp(Fraction(0, 1)), Fraction)
+    assert isinstance(i.clamp(Fraction(0, 1)), Fraction)  # type: ignore[arg-type]
 
 
 # Potential bug: Infinity comparisons
@@ -1634,7 +1634,7 @@ def test_potential_bug_zero_only_interval():
 def test_potential_bug_custom_numeric_types():
     from decimal import Decimal
 
-    i = Interval(Decimal("0.1"), Decimal("0.3"))
+    i = Interval(Decimal("0.1"), Decimal("0.3"))  # type: ignore[arg-type]
     assert (
         Decimal("0.2") in i
     )  # This might fail if custom numeric types are not handled correctly

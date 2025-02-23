@@ -11,6 +11,8 @@ from muutils.misc import str_to_numeric
 _EPSILON: float = 1e-10
 
 Number = Union[float, int]
+# TODO: make this also work with decimals, fractions, numpy types, etc.
+# except we must somehow avoid importing them? idk
 
 _EMPTY_INTERVAL_ARGS: tuple[Number, Number, bool, bool, set[Number]] = (
     math.nan,
@@ -437,7 +439,7 @@ class Interval:
 
         return max(clamped_min, min(value, clamped_max))
 
-    def intersection(self, other: Interval) -> Optional[Interval]:
+    def intersection(self, other: Interval) -> Interval:
         if not isinstance(other, Interval):
             raise TypeError("Can only intersect with another Interval")
 

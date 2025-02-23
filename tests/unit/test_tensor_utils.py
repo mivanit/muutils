@@ -31,9 +31,9 @@ def test_jaxtype_factory():
     assert "default_jax_dtype = <class 'jaxtyping.Float'" in ATensor.__doc__
     assert "array_type = <class 'torch.Tensor'>" in ATensor.__doc__
 
-    x = ATensor[(1, 2, 3), np.float32]
+    x = ATensor[(1, 2, 3), np.float32]  # type: ignore[index]
     print(x)
-    y = ATensor["dim1 dim2", np.float32]
+    y = ATensor["dim1 dim2", np.float32]  # type: ignore[index]
     print(y)
 
 

@@ -74,11 +74,12 @@ if np.version.version < "2.0.0":
 
 
 # TODO: add proper type annotations to this signature
+# TODO: maybe get rid of this altogether?
 def jaxtype_factory(
     name: str,
     array_type: type,
     default_jax_dtype=jaxtyping.Float,
-    legacy_mode: ErrorMode = ErrorMode.WARN,
+    legacy_mode: typing.Union[ErrorMode, str] = ErrorMode.WARN,
 ) -> type:
     """usage:
     ```
@@ -86,7 +87,7 @@ def jaxtype_factory(
     x: ATensor["dim1 dim2", np.float32]
     ```
     """
-    legacy_mode = ErrorMode.from_any(legacy_mode)
+    legacy_mode_ = ErrorMode.from_any(legacy_mode)
 
     class _BaseArray:
         """jaxtyping shorthand
@@ -132,7 +133,7 @@ def jaxtype_factory(
                     return TYPE_TO_JAX_DTYPE[params[1]][array_type, params[0]]
 
                 elif isinstance(params[0], tuple):
-                    legacy_mode.process(
+                    legacy_mode_.process(
                         f"legacy type annotation was used:\n{cls.param_info(params) = }",
                         except_cls=Exception,
                     )

@@ -155,7 +155,7 @@ def test_apply_mapping_missing_except():
 
 def test_apply_mapping_invalid_when_missing():
     with pytest.raises(ValueError):
-        apply_mapping(simple_mapping, [1, 2, 3, 4], when_missing="invalid")
+        apply_mapping(simple_mapping, [1, 2, 3, 4], when_missing="invalid")  # type: ignore[arg-type]
 
 
 def test_apply_mapping_empty_input():
@@ -203,7 +203,7 @@ def test_apply_mapping_chain_missing_except():
 
 def test_apply_mapping_chain_invalid_when_missing():
     with pytest.raises(ValueError):
-        apply_mapping_chain(chain_mapping, [1, 2, 3, 4], when_missing="invalid")
+        apply_mapping_chain(chain_mapping, [1, 2, 3, 4], when_missing="invalid")  # type: ignore[arg-type]
 
 
 def test_apply_mapping_chain_empty_input():

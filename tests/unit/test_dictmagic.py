@@ -25,7 +25,7 @@ def test_dotlist_to_nested_dict():
 
     # Negative case
     with pytest.raises(TypeError):
-        dotlist_to_nested_dict({1: 1})
+        dotlist_to_nested_dict({1: 1})  # type: ignore[dict-item]
 
     # Test with different separator
     assert dotlist_to_nested_dict({"a/b/c": 1, "a/b/d": 2, "a/e": 3}, sep="/") == {

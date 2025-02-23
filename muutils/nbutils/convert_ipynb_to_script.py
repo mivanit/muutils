@@ -5,6 +5,7 @@ from __future__ import annotations
 import argparse
 import json
 import os
+from pathlib import Path
 import sys
 import typing
 import warnings
@@ -243,8 +244,8 @@ def process_file(
 
 
 def process_dir(
-    input_dir: str,
-    output_dir: str,
+    input_dir: typing.Union[str, Path],
+    output_dir: typing.Union[str, Path],
     strip_md_cells: bool = False,
     header_comment: str = r"#%%",
     disable_plots: bool = False,

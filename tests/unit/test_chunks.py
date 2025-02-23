@@ -2,9 +2,9 @@ from muutils.mlutils import chunks
 
 
 def test_chunks_empty():
-    input_list = []
-    chunk_size = 3
-    expected_output = []
+    input_list: list = []
+    chunk_size: int = 3
+    expected_output: list = []
     assert list(chunks(input_list, chunk_size)) == expected_output
 
 

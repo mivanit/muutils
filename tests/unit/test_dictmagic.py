@@ -72,14 +72,14 @@ def test_kwargs_to_nested_dict():
         kwargs_to_nested_dict(
             {"a.b.c": 1, "a.b.d": 2, "a.e": 3},
             strip_prefix="prefix.",
-            when_unknown_prefix_="raise",
+            when_unknown_prefix="raise",
         )
 
     # Case where -- and - prefix
     assert kwargs_to_nested_dict(
         {"--a.b.c": 1, "--a.b.d": 2, "a.e": 3},
         strip_prefix="--",
-        when_unknown_prefix_="ignore",
+        when_unknown_prefix="ignore",
     ) == {"a": {"b": {"c": 1, "d": 2}, "e": 3}}
 
     # Case where -- and - prefix with warning
@@ -87,7 +87,7 @@ def test_kwargs_to_nested_dict():
         kwargs_to_nested_dict(
             {"--a.b.c": 1, "-a.b.d": 2, "a.e": 3},
             strip_prefix="-",
-            when_unknown_prefix_="warn",
+            when_unknown_prefix="warn",
         )
 
 
@@ -110,7 +110,7 @@ def test_kwargs_to_nested_dict_transform_key():
             {"a-b-c": 1, "prefix.a-b-d": 2, "prefix.a-e": 3},
             strip_prefix="prefix.",
             transform_key=lambda x: x.replace("-", "_"),
-            when_unknown_prefix_="raise",
+            when_unknown_prefix="raise",
         )
 
     # Case where strip_prefix, transform_key and when_unknown_prefix='warn' are all used
@@ -119,7 +119,7 @@ def test_kwargs_to_nested_dict_transform_key():
             {"a-b-c": 1, "prefix.a-b-d": 2, "prefix.a-e": 3},
             strip_prefix="prefix.",
             transform_key=lambda x: x.replace("-", "_"),
-            when_unknown_prefix_="warn",
+            when_unknown_prefix="warn",
         ) == {"a_b_c": 1, "a_b_d": 2, "a_e": 3}
 
 

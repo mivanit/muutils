@@ -289,7 +289,7 @@ def test_parallel_performance(input_range, expected):
 @dataset_decorator(["small"])
 def test_reject_pbar_str_when_not_str_or_callable(input_range, expected):
     with pytest.raises(TypeError):
-        run_maybe_parallel(square, input_range, False, pbar=12345)
+        run_maybe_parallel(square, input_range, False, pbar=12345)  # type: ignore[arg-type]
 
 
 def custom_pbar(iterable: Iterable, **kwargs: Any) -> List:

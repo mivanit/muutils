@@ -58,7 +58,7 @@ def test_spinner_complex():
 
     # Run the example functions
     print("Running function with status updates:")
-    result1: str = long_running_function_with_status(1)
+    result1: str = long_running_function_with_status(1)  # type: ignore[call-arg]
     print(result1)
 
 

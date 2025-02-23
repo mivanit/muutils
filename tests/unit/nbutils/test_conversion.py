@@ -11,10 +11,10 @@ import pytest
 from muutils.nbutils.convert_ipynb_to_script import process_dir, process_file
 from muutils.nbutils.run_notebook_tests import run_notebook_tests
 
-notebooks_input_dir: str = "tests/input_data/notebooks"
-notebooks_converted_input_dir: str = "tests/input_data/notebooks_converted/"
-nb_test_dir: str = "tests/_temp/run_notebook_tests"
-nb_conversion_dir: str = "tests/_temp/test_file_conversion"
+notebooks_input_dir: Path = Path("tests/input_data/notebooks")
+notebooks_converted_input_dir: Path = Path("tests/input_data/notebooks_converted/")
+nb_test_dir: Path = Path("tests/_temp/run_notebook_tests")
+nb_conversion_dir: Path = Path("tests/_temp/test_file_conversion")
 
 
 def test_run_notebook_tests():

@@ -28,8 +28,8 @@ def test_jaxtype_factory():
         "ATensor", torch.Tensor, jaxtyping.Float, legacy_mode="ignore"
     )
     assert ATensor.__name__ == "ATensor"
-    assert "default_jax_dtype = <class 'jaxtyping.Float'" in ATensor.__doc__
-    assert "array_type = <class 'torch.Tensor'>" in ATensor.__doc__
+    assert "default_jax_dtype = <class 'jaxtyping.Float'" in ATensor.__doc__  # type: ignore[operator]
+    assert "array_type = <class 'torch.Tensor'>" in ATensor.__doc__  # type: ignore[operator]
 
     x = ATensor[(1, 2, 3), np.float32]  # type: ignore[index]
     print(x)
@@ -38,8 +38,9 @@ def test_jaxtype_factory():
 
 
 def test_numpy_to_torch_dtype():
-    assert numpy_to_torch_dtype(np.float32) == torch.float32
-    assert numpy_to_torch_dtype(np.int32) == torch.int32
+    # TODO: type ignores here should not be necessary?
+    assert numpy_to_torch_dtype(np.float32) == torch.float32  # type: ignore[arg-type]
+    assert numpy_to_torch_dtype(np.int32) == torch.int32  # type: ignore[arg-type]
     assert numpy_to_torch_dtype(torch.float32) == torch.float32
 
 

@@ -42,7 +42,7 @@ def test_ignore():
         ErrorMode.IGNORE.process("test-ignore")
 
         ErrorMode.IGNORE.process("test-ignore", except_cls=ValueError)
-        ErrorMode.IGNORE.process("test-ignore", except_from=TypeError)
+        ErrorMode.IGNORE.process("test-ignore", except_from=TypeError("base exception"))
 
         ErrorMode.IGNORE.process("test-ignore", warn_cls=UserWarning)
 

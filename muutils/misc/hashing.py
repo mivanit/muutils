@@ -17,12 +17,14 @@ def stable_hash(s: str | bytes) -> int:
     # get digest and convert to int
     return int.from_bytes(hash_obj.digest(), "big")
 
+
 def stable_json_dumps(d) -> str:
     return json.dumps(
         d,
         sort_keys=True,
         indent=None,
     )
+
 
 def base64_hash(s: str | bytes) -> str:
     """Returns a base64 representation of the hash of the given string. not cryptographically secure"""

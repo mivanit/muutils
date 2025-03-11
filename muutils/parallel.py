@@ -137,7 +137,7 @@ def set_up_progress_bar_fn(
 
     return pbar_fn, pbar_kwargs
 
-
+# TODO: if `parallel` is a negative int, use `multiprocessing.cpu_count() + parallel` to determine the number of processes
 def run_maybe_parallel(
     func: Callable[[InputType], OutputType],
     iterable: Iterable[InputType],

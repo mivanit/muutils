@@ -175,7 +175,7 @@ def test_array_summary_comprehensive(
     arr: Any = generate_input(input_type, tensor_requires_grad)
 
     # Call array_summary with the options.
-    summary: Any = array_summary(
+    summary: Any = array_summary(  # type: ignore[call-overload]
         arr,
         fmt=options["fmt"],
         sparkline=options["sparkline"],

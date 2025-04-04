@@ -1,5 +1,5 @@
 import numpy as np
-from typing import Union, Any, Literal, List, Dict
+from typing import Union, Any, Literal, List, Dict, overload
 
 # Global color definitions
 COLORS: Dict[str, Dict[str, str]] = {
@@ -317,21 +317,31 @@ class _UseDefaultType:
 _USE_DEFAULT = _UseDefaultType()
 
 
+@overload
 def array_summary(
+    as_list: Literal[True],
+    **kwargs,
+) -> List[str]: ...
+@overload
+def array_summary(
+    as_list: Literal[False],
+    **kwargs,
+) -> str: ...
+def array_summary(  # type: ignore[misc]
     array,
-    fmt: OutputFormat = _USE_DEFAULT,
-    precision: int = _USE_DEFAULT,
-    stats: bool = _USE_DEFAULT,
-    shape: bool = _USE_DEFAULT,
-    dtype: bool = _USE_DEFAULT,
-    device: bool = _USE_DEFAULT,
-    requires_grad: bool = _USE_DEFAULT,
-    sparkline: bool = _USE_DEFAULT,
-    sparkline_bins: int = _USE_DEFAULT,
-    sparkline_logy: bool = _USE_DEFAULT,
-    colored: bool = _USE_DEFAULT,
-    as_list: bool = _USE_DEFAULT,
-    eq_char: str = _USE_DEFAULT,
+    fmt: OutputFormat = _USE_DEFAULT,  # type: ignore[assignment]
+    precision: int = _USE_DEFAULT,  # type: ignore[assignment]
+    stats: bool = _USE_DEFAULT,  # type: ignore[assignment]
+    shape: bool = _USE_DEFAULT,  # type: ignore[assignment]
+    dtype: bool = _USE_DEFAULT,  # type: ignore[assignment]
+    device: bool = _USE_DEFAULT,  # type: ignore[assignment]
+    requires_grad: bool = _USE_DEFAULT,  # type: ignore[assignment]
+    sparkline: bool = _USE_DEFAULT,  # type: ignore[assignment]
+    sparkline_bins: int = _USE_DEFAULT,  # type: ignore[assignment]
+    sparkline_logy: bool = _USE_DEFAULT,  # type: ignore[assignment]
+    colored: bool = _USE_DEFAULT,  # type: ignore[assignment]
+    eq_char: str = _USE_DEFAULT,  # type: ignore[assignment]
+    as_list: bool = _USE_DEFAULT,  # type: ignore[assignment]
 ) -> Union[str, List[str]]:
     """Format array information into a readable summary.
 

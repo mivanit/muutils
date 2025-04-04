@@ -342,6 +342,8 @@ def array_summary(
 		Whether to include dtype info (defaults to `True`)
 	 - `device : bool`
 		Whether to include device info for torch tensors (defaults to `True`)
+	 - `requires_grad : bool`
+		Whether to include requires_grad info for torch tensors (defaults to `True`)
 	 - `sparkline : bool`
 		Whether to include a sparkline visualization (defaults to `False`)
 	 - `sparkline_width : int`
@@ -363,7 +365,8 @@ def array_summary(
 	if shape is _USE_DEFAULT: shape = DEFAULT_SETTINGS["shape"]
 	if dtype is _USE_DEFAULT: dtype = DEFAULT_SETTINGS["dtype"]
 	if device is _USE_DEFAULT: device = DEFAULT_SETTINGS["device"]
-	if sparkline is _USE_DEFAULT: 	 = DEFAULT_SETTINGS["sparkline"]
+	if requires_grad is _USE_DEFAULT: requires_grad = DEFAULT_SETTINGS["requires_grad"]
+	if sparkline is _USE_DEFAULT: sparkline = DEFAULT_SETTINGS["sparkline"]
 	if sparkline_bins is _USE_DEFAULT: sparkline_bins = DEFAULT_SETTINGS["sparkline_bins"]
 	if sparkline_logy is _USE_DEFAULT: sparkline_logy = DEFAULT_SETTINGS["sparkline_logy"]
 	if colored is _USE_DEFAULT: colored = DEFAULT_SETTINGS["colored"]

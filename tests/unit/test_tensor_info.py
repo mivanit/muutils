@@ -1,5 +1,7 @@
+from __future__ import annotations
+
 from pathlib import Path
-from typing import Any
+from typing import Any, List, Tuple
 
 import numpy as np
 import pytest
@@ -62,7 +64,7 @@ def generate_input(input_type: str, tensor_requires_grad: bool) -> Any:
 
 
 # Define option dictionaries covering a variety of settings.
-option_dicts: list[dict] = [
+option_dicts: List[dict] = [
     # All defaults (most verbose, no sparkline)
     {
         "fmt": "unicode",
@@ -127,7 +129,7 @@ option_dicts: list[dict] = [
 
 # Build a list of (input_type, tensor_requires_grad) tuples.
 # For numpy inputs, the tensor_requires_grad flag is irrelevant.
-input_params: list[tuple[str, bool]] = [
+input_params: List[Tuple[str, bool]] = [
     ("numpy_normal", False),
     ("numpy_with_nan", False),
     ("numpy_empty", False),

@@ -1,4 +1,4 @@
-  docs for muutils v0.8.5
+  docs for muutils v0.8.6
 
 Contents
 
@@ -262,7 +262,7 @@ at your own risk!
 
 View Source on GitHub
 
-  docs for muutils v0.8.5
+  docs for muutils v0.8.6
 
 API Documentation
 
@@ -303,7 +303,7 @@ Usage:
     >>> get_console_safe_str("café", "cafe")
     "café"  # This result may vary based on the system's preferred encoding.
 
-  docs for muutils v0.8.5
+  docs for muutils v0.8.6
 
 Contents
 
@@ -338,8 +338,10 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 API Documentation
 
 -   PATH_MODE
+-   DEFAULT_VAL_JOINER
 -   dbg
 -   DBG_TENSOR_ARRAY_SUMMARY_DEFAULTS
+-   DBG_TENSOR_VAL_JOINER
 -   tensor_info
 -   dbg_tensor
 
@@ -379,6 +381,8 @@ View Source on GitHub
 
 -   PATH_MODE: Literal['relative', 'absolute'] = 'relative'
 
+-   DEFAULT_VAL_JOINER: str = ' = '
+
 def dbg
 
     (
@@ -408,6 +412,8 @@ well as the passed expression and what the expression evaluates to:
 
 -   DBG_TENSOR_ARRAY_SUMMARY_DEFAULTS: Dict[str, Union[str, int, bool]] = {'fmt': 'unicode', 'precision': 2, 'stats': True, 'shape': True, 'dtype': True, 'device': True, 'requires_grad': True, 'sparkline': True, 'sparkline_bins': 7, 'sparkline_logy': False, 'colored': True, 'eq_char': '='}
 
+-   DBG_TENSOR_VAL_JOINER: str = ': '
+
 def tensor_info
 
     (tensor: Any) -> str
@@ -416,7 +422,7 @@ View Source on GitHub
 
 -   dbg_tensor = functools.partial(<function dbg>, formatter=<function tensor_info>, val_joiner=': ')
 
-  docs for muutils v0.8.5
+  docs for muutils v0.8.6
 
 Contents
 
@@ -771,7 +777,7 @@ Raises:
     ‘yaml’, or if you try to use ‘yaml’ output without having PyYAML
     installed
 
-  docs for muutils v0.8.5
+  docs for muutils v0.8.6
 
 Contents
 
@@ -986,7 +992,7 @@ Inherited Members
 
 map of string aliases to ErrorMode instances
 
-  docs for muutils v0.8.5
+  docs for muutils v0.8.6
 
 Contents
 
@@ -1028,7 +1034,7 @@ Arguments
 -   eq_func: Callable[[T, T], bool] a function that returns true if two
     items are equivalent. need not be transitive
 
-  docs for muutils v0.8.5
+  docs for muutils v0.8.6
 
 Contents
 
@@ -1324,7 +1330,7 @@ Inherited Members
 -   intersection
 -   union
 
-  docs for muutils v0.8.5
+  docs for muutils v0.8.6
 
 Contents
 
@@ -1933,7 +1939,7 @@ Parameters:
     - `nested_dict : dict[str, Any]`
         nested dict to update the instance with
 
-  docs for muutils v0.8.5
+  docs for muutils v0.8.6
 
 Contents
 
@@ -2055,7 +2061,7 @@ View Source on GitHub
 
 load a json-serialized array, infer the mode if not specified
 
-  docs for muutils v0.8.5
+  docs for muutils v0.8.6
 
 Contents
 
@@ -2231,7 +2237,7 @@ View Source on GitHub
 
 serialize object to json-serializable object with default config
 
-  docs for muutils v0.8.5
+  docs for muutils v0.8.6
 
 Contents
 
@@ -2829,7 +2835,7 @@ Raises:
 -   AttributeError : if a property is not found on the class
 -   FieldLoadingError : if there is an error loading a field
 
-  docs for muutils v0.8.5
+  docs for muutils v0.8.6
 
 Contents
 
@@ -3021,7 +3027,7 @@ the container. ZANJ will automatically do this for you.
 
 TODO: custom_value_check_fn: function taking the value of the field and returning whether the value itself is valid. if not provided, any value is valid as long as it passes the type test
 
-  docs for muutils v0.8.5
+  docs for muutils v0.8.6
 
 Contents
 
@@ -3204,7 +3210,7 @@ View Source on GitHub
 
 tuple type hint, but for a tuple of any length with all the same type
 
-  docs for muutils v0.8.5
+  docs for muutils v0.8.6
 
 Contents
 
@@ -3254,7 +3260,7 @@ def jsonl_write
 
 View Source on GitHub
 
-  docs for muutils v0.8.5
+  docs for muutils v0.8.6
 
 Contents
 
@@ -3310,7 +3316,7 @@ Inherited Members
 -   items
 -   values
 
-  docs for muutils v0.8.5
+  docs for muutils v0.8.6
 
 Contents
 
@@ -3531,7 +3537,7 @@ context manager for timing code
 
 -   elapsed_time: float
 
-  docs for muutils v0.8.5
+  docs for muutils v0.8.6
 
 API Documentation
 
@@ -3568,7 +3574,7 @@ View Source on GitHub
 
 -   stream
 
-  docs for muutils v0.8.5
+  docs for muutils v0.8.6
 
 API Documentation
 
@@ -3660,7 +3666,7 @@ standard header function. will output
 
 -   HEADER_FUNCTIONS: dict[str, muutils.logger.headerfuncs.HeaderFunction] = {'md': <function md_header_function>}
 
-  docs for muutils v0.8.5
+  docs for muutils v0.8.6
 
 API Documentation
 
@@ -3725,7 +3731,7 @@ then gather_val("log.jsonl", "s1", ("a", "b")) will return
         [4, 5]
     ]
 
-  docs for muutils v0.8.5
+  docs for muutils v0.8.6
 
 Contents
 
@@ -3867,7 +3873,7 @@ View Source on GitHub
 
 flush all streams
 
-  docs for muutils v0.8.5
+  docs for muutils v0.8.6
 
 API Documentation
 
@@ -3929,7 +3935,7 @@ def make_handler
 
 View Source on GitHub
 
-  docs for muutils v0.8.5
+  docs for muutils v0.8.6
 
 API Documentation
 
@@ -4004,7 +4010,7 @@ View Source on GitHub
 
 log a message to the log file, and optionally to the console
 
-  docs for muutils v0.8.5
+  docs for muutils v0.8.6
 
 API Documentation
 
@@ -4091,7 +4097,7 @@ View Source on GitHub
 
 returns a progress string
 
-  docs for muutils v0.8.5
+  docs for muutils v0.8.6
 
 Contents
 
@@ -4662,7 +4668,7 @@ Duplicates are ignored in the same manner as a set. Unfrozen dataclasses
 can’t be placed in sets since they’re not hashable. Collections of them
 may be compared using this function.
 
-  docs for muutils v0.8.5
+  docs for muutils v0.8.6
 
 API Documentation
 
@@ -4792,7 +4798,7 @@ Duplicates are ignored in the same manner as a set. Unfrozen dataclasses
 can’t be placed in sets since they’re not hashable. Collections of them
 may be compared using this function.
 
-  docs for muutils v0.8.5
+  docs for muutils v0.8.6
 
 API Documentation
 
@@ -4908,7 +4914,7 @@ you can’t rely on that. always use the return value.
 
 the gelidum package is a more complete implementation of this idea
 
-  docs for muutils v0.8.5
+  docs for muutils v0.8.6
 
 API Documentation
 
@@ -5110,7 +5116,7 @@ Raises:
 -   ValueError if the number of input types doesn’t match the lambda’s
     parameters.
 
-  docs for muutils v0.8.5
+  docs for muutils v0.8.6
 
 API Documentation
 
@@ -5148,7 +5154,7 @@ View Source on GitHub
 Returns a base64 representation of the hash of the given string. not
 cryptographically secure
 
-  docs for muutils v0.8.5
+  docs for muutils v0.8.6
 
 API Documentation
 
@@ -5205,7 +5211,7 @@ Examples:
     >>> str_to_numeric("1.2e2")
     120.0
 
-  docs for muutils v0.8.5
+  docs for muutils v0.8.6
 
 API Documentation
 
@@ -5380,7 +5386,7 @@ Raises:
     is "except"
 -   ValueError : if when_missing is invalid
 
-  docs for muutils v0.8.5
+  docs for muutils v0.8.6
 
 API Documentation
 
@@ -5465,7 +5471,7 @@ def dynamic_docstring
 
 View Source on GitHub
 
-  docs for muutils v0.8.5
+  docs for muutils v0.8.6
 
 Contents
 
@@ -5561,7 +5567,7 @@ def pprint_summary
 
 View Source on GitHub
 
-  docs for muutils v0.8.5
+  docs for muutils v0.8.6
 
 Contents
 
@@ -5605,7 +5611,7 @@ View Source on GitHub
 
 for plotting mermaid.js diagrams
 
-  docs for muutils v0.8.5
+  docs for muutils v0.8.6
 
 Contents
 
@@ -5777,7 +5783,7 @@ View Source on GitHub
 
 Show the active plot, depending on global configs
 
-  docs for muutils v0.8.5
+  docs for muutils v0.8.6
 
 Contents
 
@@ -5881,7 +5887,7 @@ Arguments
     - `filter_out_lines: str|typing.Sequence[str] = ('%', '!')`: comment out lines starting with these strings (in code blocks).
         if a string is passed, it will be split by char and each char will be treated as a separate filter.
 
-  docs for muutils v0.8.5
+  docs for muutils v0.8.6
 
 Contents
 
@@ -5909,7 +5915,7 @@ View Source on GitHub
 
 for plotting mermaid.js diagrams
 
-  docs for muutils v0.8.5
+  docs for muutils v0.8.6
 
 Contents
 
@@ -5940,7 +5946,7 @@ View Source on GitHub
 
 function for easily rendering a sympy expression in latex
 
-  docs for muutils v0.8.5
+  docs for muutils v0.8.6
 
 Contents
 
@@ -6060,7 +6066,7 @@ Usage:
         Output in temp/converted/notebook1.CI-output.txt
         {SUCCESS_STR} Run completed with return code 0
 
-  docs for muutils v0.8.5
+  docs for muutils v0.8.6
 
 API Documentation
 
@@ -6200,7 +6206,7 @@ Raises:
 -   ImportError : if use_multiprocess=True and multiprocess is not
     available
 
-  docs for muutils v0.8.5
+  docs for muutils v0.8.6
 
 Contents
 
@@ -6596,7 +6602,7 @@ As a decorator:
             spinner.update_value(f"Step {i+1}")
         return "Function completed"
 
-  docs for muutils v0.8.5
+  docs for muutils v0.8.6
 
 Contents
 
@@ -6807,7 +6813,7 @@ Inherited Members
 
 -   clear
 
-  docs for muutils v0.8.5
+  docs for muutils v0.8.6
 
 Contents
 
@@ -6877,7 +6883,7 @@ def get_all
 
 View Source on GitHub
 
-  docs for muutils v0.8.5
+  docs for muutils v0.8.6
 
 API Documentation
 
@@ -6900,7 +6906,7 @@ View Source on GitHub
 
 -   OutputFormat = typing.Literal['unicode', 'latex', 'ascii']
 
--   SYMBOLS: Dict[Literal['unicode', 'latex', 'ascii'], Dict[str, str]] = {'latex': {'range': '\\mathcal{R}', 'mean': '\\mu', 'std': '\\sigma', 'median': '\\tilde{x}', 'distribution': '\\mathbb{P}', 'nan_values': '\\texttt{NANvals}', 'warning': '!!!', 'requires_grad': '\\nabla'}, 'unicode': {'range': 'R', 'mean': 'μ', 'std': 'σ', 'median': 'x̃', 'distribution': 'ℙ', 'nan_values': 'NANvals', 'warning': '🚨', 'requires_grad': '∇'}, 'ascii': {'range': 'range', 'mean': 'mean', 'std': 'std', 'median': 'med', 'distribution': 'dist', 'nan_values': 'NANvals', 'warning': '!!!', 'requires_grad': 'requires_grad'}}
+-   SYMBOLS: Dict[Literal['unicode', 'latex', 'ascii'], Dict[str, str]] = {'latex': {'range': '\\mathcal{R}', 'mean': '\\mu', 'std': '\\sigma', 'median': '\\tilde{x}', 'distribution': '\\mathbb{P}', 'nan_values': '\\text{NANvals}', 'warning': '!!!', 'requires_grad': '\\nabla', 'true': '\\checkmark', 'false': '\\times'}, 'unicode': {'range': 'R', 'mean': 'μ', 'std': 'σ', 'median': 'x̃', 'distribution': 'ℙ', 'nan_values': 'NANvals', 'warning': '🚨', 'requires_grad': '∇', 'true': '✓', 'false': '✗'}, 'ascii': {'range': 'range', 'mean': 'mean', 'std': 'std', 'median': 'med', 'distribution': 'dist', 'nan_values': 'NANvals', 'warning': '!!!', 'requires_grad': 'requires_grad', 'true': '1', 'false': '0'}}
 
 Symbols for different formats
 
@@ -7001,7 +7007,7 @@ Returns:
 -   Union[str, List[str]] Formatted statistical summary, either as
     string or list of strings
 
-  docs for muutils v0.8.5
+  docs for muutils v0.8.6
 
 Contents
 
@@ -7296,7 +7302,7 @@ Raises:
 -   StateDictShapeError : shapes don’t match (but keys do)
 -   StateDictValueError : values don’t match (but keys and shapes do)
 
-  docs for muutils v0.8.5
+  docs for muutils v0.8.6
 
 Contents
 
@@ -7397,7 +7403,7 @@ FancyTimeitResult, which is a NamedTuple with the following fields:
 -   profile: pstats.Stats|None A pstats.Stats object if do_profiling is
     True, otherwise None.
 
-  docs for muutils v0.8.5
+  docs for muutils v0.8.6
 
 Contents
 

@@ -1,8 +1,8 @@
 # Stats
 - 55 files
-- 11161 (11K) lines
-- 386281 (386K) chars
-- 41473 (41K) `whitespace-split` tokens
+- 11183 (11K) lines
+- 386090 (386K) chars
+- 41528 (42K) `whitespace-split` tokens
 
 # File Tree
 
@@ -49,7 +49,7 @@ muutils
 │   │   └── run_notebook_tests.py        [  255L  9,280C   822T]
 │   ├── __init__.py                      [   31L    497C    40T]
 │   ├── console_unicode.py               [   34L  1,070C   133T]
-│   ├── dbg.py                           [  184L  5,182C   608T]
+│   ├── dbg.py                           [  194L  5,505C   643T]
 │   ├── dictmagic.py                     [  522L 18,132C 1,968T]
 │   ├── errormode.py                     [  241L  7,939C   816T]
 │   ├── group_equiv.py                   [   66L  2,060C   246T]
@@ -62,14 +62,14 @@ muutils
 │   ├── spinner.py                       [  511L 17,879C 1,688T]
 │   ├── statcounter.py                   [  231L  7,373C   768T]
 │   ├── sysinfo.py                       [  199L  6,901C   497T]
-│   ├── tensor_info.py                   [  508L 16,528C 1,623T]
+│   ├── tensor_info.py                   [  518L 16,700C 1,639T]
 │   ├── tensor_utils.py                  [  495L 14,793C 1,418T]
 │   ├── timeit_fancy.py                  [  101L  3,567C   444T]
 │   └── validate_type.py                 [  237L  8,401C   896T]
 ├── LICENSE                              [  674L 35,149C 5,644T]
 ├── README.md                            [  131L  6,289C   551T]
 ├── makefile                             [1,694L 52,531C 6,258T]
-├── pyproject.toml                       [  208L  6,726C   705T]
+├── pyproject.toml                       [  210L  6,040C   709T]
 ```
 
 # File Contents
@@ -5496,7 +5496,6 @@ THE SOFTWARE.
 
 from __future__ import annotations
 
-import os
 import inspect
 import sys
 import typing
@@ -5522,24 +5521,26 @@ _COUNTER: int = 0
 
 # configuration
 PATH_MODE: typing.Literal["relative", "absolute"] = "relative"
+DEFAULT_VAL_JOINER: str = " = "
 
 
 # path processing
 def _process_path(path: Path) -> str:
     path_abs: Path = path.absolute()
+    fname: Path
     if PATH_MODE == "absolute":
-        fname = path_abs.as_posix()
+        fname = path_abs
     elif PATH_MODE == "relative":
         try:
-            fname = path_abs.relative_to(
-                Path(os.path.commonpath([path_abs, _CWD]))
-            ).as_posix()
+            # if it's inside the cwd, print the relative path
+            fname = path.relative_to(_CWD)
         except ValueError:
-            fname = path_abs.as_posix()
+            # if its not in the subpath, use the absolute path
+            fname = path_abs
     else:
         raise ValueError("PATH_MODE must be either 'relative' or 'absolute")
 
-    return fname
+    return fname.as_posix()
 
 
 # actual dbg function
@@ -5549,18 +5550,18 @@ def dbg() -> _NoExpPassedSentinel: ...
 def dbg(
     exp: _NoExpPassedSentinel,
     formatter: typing.Optional[typing.Callable[[typing.Any], str]] = None,
-    val_joiner: str = " = ",
+    val_joiner: str = DEFAULT_VAL_JOINER,
 ) -> _NoExpPassedSentinel: ...
 @typing.overload
 def dbg(
     exp: _ExpType,
     formatter: typing.Optional[typing.Callable[[typing.Any], str]] = None,
-    val_joiner: str = " = ",
+    val_joiner: str = DEFAULT_VAL_JOINER,
 ) -> _ExpType: ...
 def dbg(
     exp: typing.Union[_ExpType, _NoExpPassedSentinel] = _NoExpPassed,
     formatter: typing.Optional[typing.Callable[[typing.Any], str]] = None,
-    val_joiner: str = " = ",
+    val_joiner: str = DEFAULT_VAL_JOINER,
 ) -> typing.Union[_ExpType, _NoExpPassedSentinel]:
     """Call dbg with any variable or expression.
 
@@ -5596,6 +5597,10 @@ def dbg(
                 end = len(line)
 
             fname = f"{_process_path(Path(frame.filename))}:{frame.lineno}"
+            # special case for jupyter notebooks
+            if fname.startswith("/tmp/ipykernel_"):
+                fname = f"<ipykernel>:{frame.lineno}"
+
             line_exp = line[start:end]
 
             break
@@ -5604,7 +5609,7 @@ def dbg(
     msg: str
     if exp is _NoExpPassed:
         # if no expression is passed, just show location and counter value
-        msg = f"[ {fname} ] (dbg {_COUNTER})"
+        msg = f"[ {fname} ] <dbg {_COUNTER}>"
         _COUNTER += 1
     else:
         # if expression passed, format its value and show location, expr, and value
@@ -5641,13 +5646,18 @@ DBG_TENSOR_ARRAY_SUMMARY_DEFAULTS: typing.Dict[str, typing.Union[bool, int, str]
 )
 
 
+DBG_TENSOR_VAL_JOINER: str = ": "
+
+
 def tensor_info(tensor: typing.Any) -> str:
     from muutils.tensor_info import array_summary
 
     return array_summary(tensor, **DBG_TENSOR_ARRAY_SUMMARY_DEFAULTS)
 
 
-dbg_tensor = functools.partial(dbg, formatter=tensor_info, val_joiner=": ")
+dbg_tensor = functools.partial(
+    dbg, formatter=tensor_info, val_joiner=DBG_TENSOR_VAL_JOINER
+)
 
 ``````{ end_of_file="muutils/dbg.py" }
 
@@ -8620,9 +8630,11 @@ SYMBOLS: Dict[OutputFormat, Dict[str, str]] = {
         "std": r"\sigma",
         "median": r"\tilde{x}",
         "distribution": r"\mathbb{P}",
-        "nan_values": r"\texttt{NANvals}",
+        "nan_values": r"\text{NANvals}",
         "warning": "!!!",
         "requires_grad": r"\nabla",
+        "true": r"\checkmark",
+        "false": r"\times",
     },
     "unicode": {
         "range": "R",
@@ -8633,6 +8645,8 @@ SYMBOLS: Dict[OutputFormat, Dict[str, str]] = {
         "nan_values": "NANvals",
         "warning": "🚨",
         "requires_grad": "∇",
+        "true": "✓",
+        "false": "✗",
     },
     "ascii": {
         "range": "range",
@@ -8643,6 +8657,8 @@ SYMBOLS: Dict[OutputFormat, Dict[str, str]] = {
         "nan_values": "NANvals",
         "warning": "!!!",
         "requires_grad": "requires_grad",
+        "true": "1",
+        "false": "0",
     },
 }
 "Symbols for different formats"
@@ -8651,7 +8667,6 @@ SPARK_CHARS: Dict[OutputFormat, List[str]] = {
     "unicode": list(" ▁▂▃▄▅▆▇█"),
     "ascii": list(" _.-~=#"),
     "latex": list(" ▁▂▃▄▅▆▇█"),
-    # "latex": [r"\textbf{.}", r"\textbf{-}", r"\textbf{=}", r"\textbf{+}", r"\textbf{*}", r"\textbf{\\#}"],
 }
 "characters for sparklines in different formats"
 
@@ -9064,8 +9079,13 @@ def array_summary(  # type: ignore[misc]
         )
 
     # Add gradient info
-    if requires_grad and array_data["is_tensor"] and array_data["requires_grad"]:
-        result_parts.append(colorize(symbols["requires_grad"], "requires_grad"))
+    if requires_grad and array_data["is_tensor"]:
+        bool_req_grad_symb: str = (
+            symbols["true"] if array_data["requires_grad"] else symbols["false"]
+        )
+        result_parts.append(
+            colorize(symbols["requires_grad"] + bool_req_grad_symb, "requires_grad")
+        )
 
     # Return as list if requested, otherwise join with spaces
     if as_list:
@@ -10959,139 +10979,141 @@ help: help-targets info
 # metadata
 # ==================================================
 [project]
-    name = "muutils"
-    version = "0.8.5"
-    description = "miscellaneous python utilities"
-    readme = "README.md"
-    requires-python = ">=3.8"
-    license = { text = "GPL-3.0-only" }
-    authors = [
-        { name = "mivanit", email = "mivanits@umich.edu" }
-    ]
-    classifiers = [
-        "Programming Language :: Python :: 3.8",
-        "Programming Language :: Python :: 3.9",
-        "Programming Language :: Python :: 3.10",
-        "Programming Language :: Python :: 3.11",
-        "Programming Language :: Python :: 3.12",
-        "Programming Language :: Python :: 3.13",
-        "Development Status :: 4 - Beta",
-        "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
-        "Operating System :: OS Independent",
-        "Topic :: Utilities",
-        "Typing :: Typed",
-    ]
+	name = "muutils"
+	version = "0.8.6"
+	description = "miscellaneous python utilities"
+	readme = "README.md"
+	requires-python = ">=3.8"
+	license = { text = "GPL-3.0-only" }
+	authors = [
+		{ name = "mivanit", email = "mivanits@umich.edu" }
+	]
+	classifiers = [
+		"Programming Language :: Python :: 3.8",
+		"Programming Language :: Python :: 3.9",
+		"Programming Language :: Python :: 3.10",
+		"Programming Language :: Python :: 3.11",
+		"Programming Language :: Python :: 3.12",
+		"Programming Language :: Python :: 3.13",
+		"Development Status :: 4 - Beta",
+		"License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
+		"Operating System :: OS Independent",
+		"Topic :: Utilities",
+		"Typing :: Typed",
+	]
 
-    dependencies = [] # no required deps!
+	dependencies = [] # no required deps!
 
 [project.urls]
-    Homepage = "https://miv.name/muutils"
-    Repository = "https://github.com/mivanit/muutils"
-    Documentation = "https://miv.name/muutils/"
+	Homepage = "https://miv.name/muutils"
+	Repository = "https://github.com/mivanit/muutils"
+	Documentation = "https://miv.name/muutils/"
 	Issues = "https://github.com/mivanit/muutils/issues"
 
 # dependencies
 # ==================================================
 
 [project.optional-dependencies]
-    array = [
-        "numpy>=1.24.4; python_version < '3.9'",
-        "numpy>1.24.4; python_version >= '3.9'",
-        "torch>=1.13.1,<2.5.0; python_version < '3.9'",
-        "torch>=1.13.1; python_version >= '3.9' and python_version < '3.13'",
-        "torch>=2.5.0; python_version >= '3.13'",
-        "jaxtyping>=0.2.12",
-    ]
+	array = [
+		"numpy>=1.24.4; python_version < '3.9'",
+		"numpy>1.24.4; python_version >= '3.9'",
+		"torch>=1.13.1,<2.5.0; python_version < '3.9'",
+		"torch>=1.13.1; python_version >= '3.9' and python_version < '3.13'",
+		"torch>=2.5.0; python_version >= '3.13'",
+		"jaxtyping>=0.2.12",
+	]
 
-    # special group for CI, where we install cpu torch separately
-    array_no_torch = [
-        "numpy>=1.24.4; python_version < '3.9'",
-        "numpy>1.24.4; python_version >= '3.9'",
-        "jaxtyping>=0.2.12",
-    ]
+	# special group for CI, where we install cpu torch separately
+	array_no_torch = [
+		"numpy>=1.24.4; python_version < '3.9'",
+		"numpy>1.24.4; python_version >= '3.9'",
+		"jaxtyping>=0.2.12",
+	]
 
-    notebook = [
-        "ipython>=8.0.0",
-    ]
+	notebook = [
+		"ipython>=8.0.0",
+	]
 
-    parallel = [
-        "multiprocess>=0.70.17",
-        "tqdm>=4.67.1",
-    ]
+	parallel = [
+		"multiprocess>=0.70.17",
+		"tqdm>=4.67.1",
+	]
 
 [dependency-groups]
-    dev = [
-        # typing
-        "mypy>=1.0.1; python_version < '3.9'",
-        "mypy>=1.15; python_version >= '3.9'",
-        "typing-extensions; python_version < '3.11'",
-        "beartype>=0.14.1",
-        # tests & coverage
-        "pytest>=8.2.2",
-        "pytest-cov>=4.1.0",
-        "coverage-badge>=1.1.0",
-        # for testing plotting and notebooks
-        "ipykernel",
-        "jupyter",
-        "matplotlib>=3.0.0",
-        "plotly>=5.0.0",
-        # generating docs
-        "pdoc>=14.6.0",
-        # https://github.com/mivanit/muutils/security/dependabot/7
-        "jinja2>=3.1.6",
-        # lmcat -- a custom library. not exactly docs, but lets an LLM see all the code
-        "lmcat>=0.2.0; python_version >= '3.11'",
-        # tomli since no tomlib in python < 3.11
-        "tomli>=2.1.0; python_version < '3.11'",
-    ]
-    lint = [
-        # lint
-        "pycln>=2.1.3",
-        "ruff>=0.4.8",
-    ]
+	dev = [
+		# typing
+		"mypy>=1.0.1; python_version < '3.9'",
+		"mypy>=1.15; python_version >= '3.9'",
+		"typing-extensions; python_version < '3.11'",
+		"beartype>=0.14.1",
+		# tests & coverage
+		"pytest>=8.2.2",
+		"pytest-cov>=4.1.0",
+		"coverage-badge>=1.1.0",
+		# for testing plotting and notebooks
+		"ipykernel",
+		"jupyter",
+		"matplotlib>=3.0.0",
+		"plotly>=5.0.0",
+		# generating docs
+		"pdoc>=14.6.0",
+		# https://github.com/mivanit/muutils/security/dependabot/7
+		"jinja2>=3.1.6",
+		# lmcat -- a custom library. not exactly docs, but lets an LLM see all the code
+		"lmcat>=0.2.0; python_version >= '3.11'",
+		# tomli since no tomlib in python < 3.11
+		"tomli>=2.1.0; python_version < '3.11'",
+        # twine dep
+        "twine",
+	]
+	lint = [
+		# lint
+		"pycln>=2.1.3",
+		"ruff>=0.4.8",
+	]
 
 # build system and tooling configuration
 # ==================================================
 
 [build-system]
-    requires = ["hatchling"]
-    build-backend = "hatchling.build"
+	requires = ["hatchling"]
+	build-backend = "hatchling.build"
 
 [tool.pytest.ini_options]
-    filterwarnings = [
-        "ignore::muutils.nbutils.configure_notebook.UnknownFigureFormatWarning", # don't show warning for unknown figure format
-        "ignore::muutils.nbutils.configure_notebook.PlotlyNotInstalledWarning", # don't show warning for missing plotly
-        "ignore::muutils.json_serialize.serializable_dataclass.ZanjMissingWarning", # don't show warning for missing zanj (can't have as a dep since zanj depends on muutils)
-        "ignore: PEP 484 type hint*:beartype.roar._roarwarn.BeartypeDecorHintPep585DeprecationWarning",
-    ]
-    addopts = "--jaxtyping-packages=beartype.beartype"
+	filterwarnings = [
+		"ignore::muutils.nbutils.configure_notebook.UnknownFigureFormatWarning", # don't show warning for unknown figure format
+		"ignore::muutils.nbutils.configure_notebook.PlotlyNotInstalledWarning", # don't show warning for missing plotly
+		"ignore::muutils.json_serialize.serializable_dataclass.ZanjMissingWarning", # don't show warning for missing zanj (can't have as a dep since zanj depends on muutils)
+		"ignore: PEP 484 type hint*:beartype.roar._roarwarn.BeartypeDecorHintPep585DeprecationWarning",
+	]
+	addopts = "--jaxtyping-packages=beartype.beartype"
 
 [tool.ruff]
-    # Exclude the directories specified in the global excludes
-    exclude = ["tests/input_data", "tests/junk_data", "_wip/"]
-    [tool.ruff.lint.per-file-ignores]
-        "muutils/tensor_info.py" = [
-            "E701", # multiple statements on one line (colon)
-        ]
+	# Exclude the directories specified in the global excludes
+	exclude = ["tests/input_data", "tests/junk_data", "_wip/"]
+	[tool.ruff.lint.per-file-ignores]
+		"muutils/tensor_info.py" = [
+			"E701", # multiple statements on one line (colon)
+		]
 
 [tool.pycln]
-    all = true
-    exclude = ["tests/input_data", "tests/junk_data", "_wip/"]
+	all = true
+	exclude = ["tests/input_data", "tests/junk_data", "_wip/"]
 
 [tool.mypy]
-    exclude = [
-        # tests
-        "tests/input_data",
-        "tests/junk_data",
-        "tests/_temp/",
-        # wip stuff
-        "_wip/",
-        # not our problem
-        "docs/resources/make_docs.py",
-    ]
-    show_error_codes = true
-    # we disable this in the makefile for old versions
-    check_untyped_defs = true
+	exclude = [
+		# tests
+		"tests/input_data",
+		"tests/junk_data",
+		"tests/_temp/",
+		# wip stuff
+		"_wip/",
+		# not our problem
+		"docs/resources/make_docs.py",
+	]
+	show_error_codes = true
+	# we disable this in the makefile for old versions
+	check_untyped_defs = true
 
 [tool.lmcat]
 	output = "docs/other/lmcat.txt" # changing this might mean it wont be accessible from the docs
@@ -11101,47 +11123,47 @@ help: help-targets info
 		".git/**",
 		".meta/**",
 		"uv.lock",
-        ".ruff_cache/**",
-        ".github/ISSUE_TEMPLATE/**",
-        "_wip/**",
-        "sweep.yaml",
-        # there are... a lot of tests. we usually dont need to put these in lmcat
-        "tests/**",
+		".ruff_cache/**",
+		".github/ISSUE_TEMPLATE/**",
+		"_wip/**",
+		"sweep.yaml",
+		# there are... a lot of tests. we usually dont need to put these in lmcat
+		"tests/**",
 	]
-    [tool.lmcat.glob_process]
-        "[mM]akefile" = "makefile_recipes"
+	[tool.lmcat.glob_process]
+		"[mM]akefile" = "makefile_recipes"
 
 
 
 # [tool.makefile]
 # =================================================================
 [tool.makefile.docs]
-    warnings_ignore = [
-        "Error parsing type annotation .* for muutils\\..*\\. Import of np failed:",
-        "Error parsing type annotation .* for muutils\\..*\\. Import of JsonSerializer failed:",
-        "Error parsing type annotation .* for muutils\\..*\\. Import of StatCounter failed:",
-        "Error parsing type annotation .* for muutils\\..*\\. Import of Union failed:"
-    ]
+	warnings_ignore = [
+		"Error parsing type annotation .* for muutils\\..*\\. Import of np failed:",
+		"Error parsing type annotation .* for muutils\\..*\\. Import of JsonSerializer failed:",
+		"Error parsing type annotation .* for muutils\\..*\\. Import of StatCounter failed:",
+		"Error parsing type annotation .* for muutils\\..*\\. Import of Union failed:"
+	]
 
 # Custom export configurations
 [tool.makefile.uv-exports]
-    args = [
-        "--no-hashes"
-    ]
-    exports = [
-        # no groups, no extras, just the base dependencies
-        { name = "base", groups = false, extras = false },
-        # all extras but no groups
-        { name = "extras", groups = false, extras = true },
-        # include the dev group (this is the default behavior)
-        { name = "dev", groups = true },
-        # only the lint group -- custom options for this
-        { name = "lint", options = ["--only-group", "lint"] },
-        # all groups and extras
-        { name = "all", filename="requirements.txt", groups = true, extras=true },
-        # all groups and extras, a different way
-        { name = "all", groups = true, options = ["--all-extras"] },
-    ]
+	args = [
+		"--no-hashes"
+	]
+	exports = [
+		# no groups, no extras, just the base dependencies
+		{ name = "base", groups = false, extras = false },
+		# all extras but no groups
+		{ name = "extras", groups = false, extras = true },
+		# include the dev group (this is the default behavior)
+		{ name = "dev", groups = true },
+		# only the lint group -- custom options for this
+		{ name = "lint", options = ["--only-group", "lint"] },
+		# all groups and extras
+		{ name = "all", filename="requirements.txt", groups = true, extras=true },
+		# all groups and extras, a different way
+		{ name = "all", groups = true, options = ["--all-extras"] },
+	]
 
 
 
@@ -11155,13 +11177,13 @@ help: help-targets info
 		"docs/**",
 		".venv/**",
 		"scripts/get_todos.py",
-        "_wip/**",
+		"_wip/**",
 	]
-    [tool.inline-todo.tag_label_map]
-        NOTE = "documentation"
-        CRIT = "bug"
-        TODO = "enhancement"
-        FIXME = "bug"
-        BUG = "bug"
-        HACK = "enhancement"
+	[tool.inline-todo.tag_label_map]
+		NOTE = "documentation"
+		CRIT = "bug"
+		TODO = "enhancement"
+		FIXME = "bug"
+		BUG = "bug"
+		HACK = "enhancement"
 ``````{ end_of_file="pyproject.toml" }

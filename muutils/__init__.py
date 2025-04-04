@@ -24,6 +24,7 @@ __all__ = [
     "spinner",
     "statcounter",
     "sysinfo",
+    "tensor_info",
     "tensor_utils",
     "timeit_fancy",
     "validate_type",

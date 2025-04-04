@@ -442,7 +442,8 @@ def array_summary(  # type: ignore[misc]
     else:
         # Add NaN warning at the beginning if there are NaNs
         if array_data["has_nans"]:
-            nan_str: str = f"{symbols['warning']} {symbols['nan_values']}{eq_char}{array_data['nan_count']} ({array_data['nan_percent']:.1f}{'\\' if using_tex else ""}%)"
+            _percent: str = "\\%" if using_tex else "%"
+            nan_str: str = f"{symbols['warning']} {symbols['nan_values']}{eq_char}{array_data['nan_count']} ({array_data['nan_percent']:.1f}{_percent})"
             result_parts.append(colorize(nan_str, "warning"))
 
         # Statistics

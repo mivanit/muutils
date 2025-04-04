@@ -93,6 +93,7 @@ def array_info(
 	result: Dict[str, Any] = {
 		"is_tensor": None,
 		"device": None,
+		"requires_grad": None,
 		"shape": None,
 		"dtype": None,
 		"size": None,
@@ -158,6 +159,7 @@ def array_info(
 		result["shape"] = A_np.shape
 		result["dtype"] = str(A.dtype if result["is_tensor"] else A_np.dtype)
 		result["size"] = A_np.size
+		result["requires_grad"] = getattr(A, "requires_grad", None)
 	except:
 		pass
 	

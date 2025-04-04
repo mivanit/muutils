@@ -180,7 +180,7 @@
 
 [tool.makefile.inline-todo]
 	search_dir = "."
-	out_file = "docs/other/todo-inline.md" # changing this might mean it wont be accessible from the docs
+	out_file_base = "docs/other/todo-inline.md" # changing this might mean it wont be accessible from the docs
 	context_lines = 5
 	extensions = ["py", "md"]
 	tags = ["CRIT", "TODO", "FIXME", "HACK", "BUG", "NOTE"]

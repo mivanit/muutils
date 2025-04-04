@@ -87,7 +87,7 @@ def test_process_path_relative_outside_common(monkeypatch: pytest.MonkeyPatch) -
         test_path: Path = Path(tmp_dir) / "file.txt"
         expected: str = test_path.absolute().as_posix()
         result: str = _process_path(test_path)
-        assert result == expected.lstrip("/")
+        assert result == expected
 
 
 def test_process_path_invalid_mode(monkeypatch: pytest.MonkeyPatch) -> None:
@@ -116,7 +116,7 @@ def test_dbg_without_expression(
     monkeypatch.setattr(importlib.import_module(DBG_MODULE_NAME), "_COUNTER", 0)
     result: Any = dbg()
     captured: str = capsys.readouterr().err.strip()
-    assert "(dbg 0)" in captured
+    assert "<dbg 0>" in captured
     no_exp_passed: Any = _NoExpPassed
     assert result is no_exp_passed
 
@@ -175,8 +175,8 @@ def test_dbg_counter_increments(capsys: pytest.CaptureFixture) -> None:
     out1: str = capsys.readouterr().err
     dbg()
     out2: str = capsys.readouterr().err
-    assert "(dbg 0)" in out1
-    assert "(dbg 1)" in out2
+    assert "<dbg 0>" in out1
+    assert "<dbg 1>" in out2
 
 
 def test_dbg_formatter_exception() -> None:

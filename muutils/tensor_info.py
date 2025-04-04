@@ -52,6 +52,7 @@ SYMBOLS: Dict[OutputFormat, Dict[str, str]] = {
 		"mean": r"\mu",
 		"std": r"\sigma",
 		"median": r"\tilde{x}",
+		"distribution": r"\mathbb{P}",
 		"nan_values": r"\texttt{NANvals}",
 		"warning": "!!!",
 		"requires_grad": r"\nabla",
@@ -61,6 +62,7 @@ SYMBOLS: Dict[OutputFormat, Dict[str, str]] = {
 		"mean": "μ",
 		"std": "σ",
 		"median": "x̃",
+		"distribution": "ℙ",
 		"nan_values": "NANvals",
 		"warning": "🚨",
 		"requires_grad": "∇",
@@ -70,6 +72,7 @@ SYMBOLS: Dict[OutputFormat, Dict[str, str]] = {
 		"mean": "mean",
 		"std": "std",
 		"median": "med",
+		"distribution": "dist",
 		"nan_values": "NANvals",
 		"warning": "!!!",
 		"requires_grad": "requires_grad",
@@ -400,7 +403,7 @@ def array_summary(
 	# Handle error status or empty array
 	if array_data["status"] in ["empty array", "all NaN", "unknown"] or array_data["size"] == 0:
 		status = array_data["status"]
-		result_parts.append(colorize(status, "warning"))
+		result_parts.append(colorize(symbols["warning"] + " " + status, "warning"))
 	else:
 		# Add NaN warning at the beginning if there are NaNs
 		if array_data["has_nans"]:
@@ -436,28 +439,28 @@ def array_summary(
 		)
 		if spark:
 			spark_colored = colorize(spark, "sparkline")
-			result_parts.append(f"|{spark_colored}|")
+			result_parts.append(f"{symbols['distribution']}{eq_char}|{spark_colored}|")
 
 	# Add shape if requested
-	if shape and array_data["shape"] is not None:
+	if shape and array_data["shape"]:
 		shape_val = array_data["shape"]
 		if len(shape_val) == 1:
 			shape_str = str(shape_val[0])
 		else:
 			shape_str = "(" + ",".join(colorize(str(dim), "shape") for dim in shape_val) + ")"
-		result_parts.append(f"shape={shape_str}")
+		result_parts.append(f"shape{eq_char}{shape_str}")
 	
 	# Add dtype if requested
-	if dtype and array_data["dtype"] is not None:
+	if dtype and array_data["dtype"]:
 		result_parts.append(colorize(f"dtype={array_data['dtype']}", "dtype"))
 	
 	# Add device if requested and it's a tensor with device info
-	if device and array_data["is_tensor"] and array_data["device"] is not None:
-		result_parts.append(colorize(f"device={array_data['device']}", "device"))
+	if device and array_data["is_tensor"] and array_data["device"]:
+		result_parts.append(colorize(f"device{eq_char}{array_data['device']}", "device"))
 	
 	# Add gradient info
 	if requires_grad and array_data["is_tensor"] and array_data["requires_grad"]:
-		result_parts.append(colorize(symbols["requires_grad"], requires_grad))
+		result_parts.append(colorize(symbols["requires_grad"], "requires_grad"))
 	
 	# Return as list if requested, otherwise join with spaces
 	if as_list:

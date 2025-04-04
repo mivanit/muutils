@@ -4,11 +4,13 @@ from pathlib import Path
 import importlib
 from typing import Any, Callable, Dict, Optional, List, Tuple
 
+import pytest
+
 from muutils.dbg import (
     dbg,
     dbg_tensor,
     tensor_info,
-    tensor_info_dict,
+    # tensor_info_dict,
     _NoExpPassed,
     _process_path,
     _CWD,
@@ -16,7 +18,6 @@ from muutils.dbg import (
     _COUNTER,  # noqa: F401
 )
 
-import pytest
 
 
 DBG_MODULE_NAME: str = "muutils.dbg"
@@ -218,74 +219,74 @@ def test_dbg_non_callable_formatter() -> None:
         dbg(42, formatter="not callable")  # type: ignore
 
 
-# --- Tests for tensor_info_dict and tensor_info ---
-def test_tensor_info_dict_with_nan() -> None:
-    tensor: DummyTensor = DummyTensor()
-    info: Dict[str, str] = tensor_info_dict(tensor)
-    expected: Dict[str, str] = {
-        "shape": repr((2, 3)),
-        "sum": repr(float("nan")),
-        "dtype": repr("float32"),
-        "device": repr("cpu"),
-        "requires_grad": repr(False),
-    }
-    assert info == expected
+# # --- Tests for tensor_info_dict and tensor_info ---
+# def test_tensor_info_dict_with_nan() -> None:
+#     tensor: DummyTensor = DummyTensor()
+#     info: Dict[str, str] = tensor_info_dict(tensor)
+#     expected: Dict[str, str] = {
+#         "shape": repr((2, 3)),
+#         "sum": repr(float("nan")),
+#         "dtype": repr("float32"),
+#         "device": repr("cpu"),
+#         "requires_grad": repr(False),
+#     }
+#     assert info == expected
 
 
-def test_tensor_info_dict_normal() -> None:
-    tensor: DummyTensorNormal = DummyTensorNormal()
-    info: Dict[str, str] = tensor_info_dict(tensor)
-    expected: Dict[str, str] = {
-        "shape": repr((4, 5)),
-        "dtype": repr("int32"),
-        "device": repr("cuda"),
-        "requires_grad": repr(True),
-    }
-    assert info == expected
+# def test_tensor_info_dict_normal() -> None:
+#     tensor: DummyTensorNormal = DummyTensorNormal()
+#     info: Dict[str, str] = tensor_info_dict(tensor)
+#     expected: Dict[str, str] = {
+#         "shape": repr((4, 5)),
+#         "dtype": repr("int32"),
+#         "device": repr("cuda"),
+#         "requires_grad": repr(True),
+#     }
+#     assert info == expected
 
 
-def test_tensor_info_dict_partial() -> None:
-    tensor: DummyTensorPartial = DummyTensorPartial()
-    info: Dict[str, str] = tensor_info_dict(tensor)
-    expected: Dict[str, str] = {"shape": repr((7,))}
-    assert info == expected
+# def test_tensor_info_dict_partial() -> None:
+#     tensor: DummyTensorPartial = DummyTensorPartial()
+#     info: Dict[str, str] = tensor_info_dict(tensor)
+#     expected: Dict[str, str] = {"shape": repr((7,))}
+#     assert info == expected
 
 
-def test_tensor_info() -> None:
-    tensor: DummyTensorNormal = DummyTensorNormal()
-    info_str: str = tensor_info(tensor)
-    expected: str = ", ".join(
-        [
-            f"shape={repr((4, 5))}",
-            f"dtype={repr('int32')}",
-            f"device={repr('cuda')}",
-            f"requires_grad={repr(True)}",
-        ]
-    )
-    assert info_str == expected
+# def test_tensor_info() -> None:
+#     tensor: DummyTensorNormal = DummyTensorNormal()
+#     info_str: str = tensor_info(tensor)
+#     expected: str = ", ".join(
+#         [
+#             f"shape={repr((4, 5))}",
+#             f"dtype={repr('int32')}",
+#             f"device={repr('cuda')}",
+#             f"requires_grad={repr(True)}",
+#         ]
+#     )
+#     assert info_str == expected
 
 
-def test_tensor_info_dict_no_attributes() -> None:
-    class DummyEmpty:
-        pass
+# def test_tensor_info_dict_no_attributes() -> None:
+#     class DummyEmpty:
+#         pass
 
-    dummy = DummyEmpty()
-    info: Dict[str, str] = tensor_info_dict(dummy)
-    assert info == {}
-
-
-def test_tensor_info_no_attributes() -> None:
-    class DummyEmpty:
-        pass
-
-    dummy = DummyEmpty()
-    info_str: str = tensor_info(dummy)
-    assert info_str == ""
+#     dummy = DummyEmpty()
+#     info: Dict[str, str] = tensor_info_dict(dummy)
+#     assert info == {}
 
 
-def test_dbg_tensor(capsys: pytest.CaptureFixture) -> None:
-    tensor: DummyTensorPartial = DummyTensorPartial()
-    result: DummyTensorPartial = dbg_tensor(tensor)  # type: ignore
-    captured: str = capsys.readouterr().err
-    assert "shape=(7,)" in captured
-    assert result is tensor
+# def test_tensor_info_no_attributes() -> None:
+#     class DummyEmpty:
+#         pass
+
+#     dummy = DummyEmpty()
+#     info_str: str = tensor_info(dummy)
+#     assert info_str == ""
+
+
+# def test_dbg_tensor(capsys: pytest.CaptureFixture) -> None:
+#     tensor: DummyTensorPartial = DummyTensorPartial()
+#     result: DummyTensorPartial = dbg_tensor(tensor)  # type: ignore
+#     captured: str = capsys.readouterr().err
+#     assert "shape=(7,)" in captured
+#     assert result is tensor

@@ -83,14 +83,18 @@ def dbg() -> _NoExpPassedSentinel: ...
 def dbg(
     exp: _NoExpPassedSentinel,
     formatter: typing.Optional[typing.Callable[[typing.Any], str]] = None,
+    val_joiner: str = " = ",
 ) -> _NoExpPassedSentinel: ...
 @typing.overload
 def dbg(
-    exp: _ExpType, formatter: typing.Optional[typing.Callable[[typing.Any], str]] = None
+    exp: _ExpType,
+    formatter: typing.Optional[typing.Callable[[typing.Any], str]] = None,
+    val_joiner: str = " = ",
 ) -> _ExpType: ...
 def dbg(
     exp: typing.Union[_ExpType, _NoExpPassedSentinel] = _NoExpPassed,
     formatter: typing.Optional[typing.Callable[[typing.Any], str]] = None,
+    val_joiner: str = " = ",
 ) -> typing.Union[_ExpType, _NoExpPassedSentinel]:
     """Call dbg with any variable or expression.
 
@@ -139,7 +143,7 @@ def dbg(
     else:
         # if expression passed, format its value and show location, expr, and value
         exp_val: str = formatter(exp) if formatter else repr(exp)
-        msg = f"[ {fname} ] {line_exp} = {exp_val}"
+        msg = f"[ {fname} ] {line_exp}{val_joiner}{exp_val}"
 
     # print the message
     print(
@@ -153,12 +157,26 @@ def dbg(
 
 # formatted `dbg_*` functions with their helpers
 
-DBG_TENSOR_USE_UNICODE: bool = True
-DBG_TENSOR_USE_COLOR: bool = True
+DBG_TENSOR_ARRAY_SUMMARY_DEFAULTS: typing.Dict[str, ] = dict(
+	fmt="unicode",
+	precision=2,
+	stats=True,
+	shape=True,
+	dtype=True,
+	device=True,
+	requires_grad=True,
+	sparkline=True,
+	sparkline_bins=7,
+	sparkline_logy=False,
+	colored=True,
+	eq_char="=",
+)
+
+
 
 def tensor_info(tensor: typing.Any) -> str:
     from muutils.tensor_info import array_summary
-    return array_summary(tensor)
+    return array_summary(tensor, **DBG_TENSOR_ARRAY_SUMMARY_DEFAULTS)
 
 
-dbg_tensor = functools.partial(dbg, formatter=tensor_info)
+dbg_tensor = functools.partial(dbg, formatter=tensor_info, val_joiner=": ")

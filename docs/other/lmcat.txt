@@ -1,8 +1,8 @@
 # Stats
-- 53 files
-- 10606 (11K) lines
-- 368652 (369K) chars
-- 39746 (40K) `whitespace-split` tokens
+- 55 files
+- 11152 (11K) lines
+- 386141 (386K) chars
+- 41461 (41K) `whitespace-split` tokens
 
 # File Tree
 
@@ -32,10 +32,11 @@ muutils
 │   │   └── timing.py                    [   87L  2,613C   257T]
 │   ├── misc                             
 │   │   ├── __init__.py                  [   83L  1,941C   153T]
+│   │   ├── b64_decode.py                [    9L    276C    30T]
 │   │   ├── classes.py                   [   97L  3,425C   409T]
 │   │   ├── freezing.py                  [  121L  3,698C   371T]
 │   │   ├── func.py                      [  277L  8,982C   931T]
-│   │   ├── hashing.py                   [   29L    923C   110T]
+│   │   ├── hashing.py                   [   38L  1,049C   121T]
 │   │   ├── numerical.py                 [  165L  4,601C   522T]
 │   │   ├── sequence.py                  [  234L  7,251C   877T]
 │   │   └── string.py                    [  108L  3,008C   349T]
@@ -46,9 +47,9 @@ muutils
 │   │   ├── mermaid.py                   [   20L    571C    52T]
 │   │   ├── print_tex.py                 [   21L    495C    70T]
 │   │   └── run_notebook_tests.py        [  255L  9,280C   822T]
-│   ├── __init__.py                      [   30L    478C    39T]
+│   ├── __init__.py                      [   31L    497C    40T]
 │   ├── console_unicode.py               [   34L  1,070C   133T]
-│   ├── dbg.py                           [  185L  5,392C   639T]
+│   ├── dbg.py                           [  184L  5,182C   608T]
 │   ├── dictmagic.py                     [  522L 18,132C 1,968T]
 │   ├── errormode.py                     [  241L  7,939C   816T]
 │   ├── group_equiv.py                   [   66L  2,060C   246T]
@@ -56,18 +57,19 @@ muutils
 │   ├── jsonlines.py                     [   77L  1,991C   246T]
 │   ├── kappa.py                         [   46L  1,260C   150T]
 │   ├── mlutils.py                       [  165L  5,198C   495T]
-│   ├── parallel.py                      [  276L  9,095C 1,070T]
+│   ├── parallel.py                      [  275L  9,146C 1,082T]
 │   ├── py.typed                         [    0L      0C     0T]
 │   ├── spinner.py                       [  511L 17,879C 1,688T]
 │   ├── statcounter.py                   [  231L  7,373C   768T]
 │   ├── sysinfo.py                       [  199L  6,901C   497T]
+│   ├── tensor_info.py                   [  508L 16,528C 1,623T]
 │   ├── tensor_utils.py                  [  495L 14,793C 1,418T]
 │   ├── timeit_fancy.py                  [  101L  3,567C   444T]
 │   └── validate_type.py                 [  237L  8,401C   896T]
 ├── LICENSE                              [  674L 35,149C 5,644T]
 ├── README.md                            [  131L  6,289C   551T]
-├── makefile                             [1,486L 45,573C 5,461T]
-├── pyproject.toml                       [  195L  6,434C   680T]
+├── makefile                             [1,694L 52,531C 6,258T]
+├── pyproject.toml                       [  199L  6,586C   693T]
 ```
 
 # File Contents
@@ -3272,6 +3274,19 @@ __all__ = [
 
 ``````{ end_of_file="muutils/misc/__init__.py" }
 
+``````{ path="muutils/misc/b64_decode.py"  }
+from sys import argv
+from pathlib import Path
+from base64 import b64decode
+
+if __name__ == "__main__":
+    input_file: Path = Path(argv[1])
+    out: Path = Path(argv[2])
+    input_text: str = input_file.read_text().replace("\n", "")
+    out.write_bytes(b64decode(input_text))
+
+``````{ end_of_file="muutils/misc/b64_decode.py" }
+
 ``````{ path="muutils/misc/classes.py"  }
 from __future__ import annotations
 
@@ -3784,6 +3799,7 @@ from __future__ import annotations
 
 import base64
 import hashlib
+import json
 
 
 def stable_hash(s: str | bytes) -> int:
@@ -3791,12 +3807,20 @@ def stable_hash(s: str | bytes) -> int:
     # init hash object and update with string
     s_bytes: bytes
     if isinstance(s, str):
-        s_bytes = bytes(s, "UTF-8")
+        s_bytes = s.encode("utf-8")
     else:
         s_bytes = s
-    hash_obj: hashlib._Hash = hashlib.sha256(s_bytes)
+    hash_obj: hashlib._Hash = hashlib.md5(s_bytes)
     # get digest and convert to int
     return int.from_bytes(hash_obj.digest(), "big")
+
+
+def stable_json_dumps(d) -> str:
+    return json.dumps(
+        d,
+        sort_keys=True,
+        indent=None,
+    )
 
 
 def base64_hash(s: str | bytes) -> str:
@@ -3806,7 +3830,7 @@ def base64_hash(s: str | bytes) -> str:
         s_bytes = bytes(s, "UTF-8")
     else:
         s_bytes = s
-    hash_bytes: bytes = hashlib.sha256(s_bytes).digest()
+    hash_bytes: bytes = hashlib.md5(s_bytes).digest()
     hash_b64: str = base64.b64encode(hash_bytes, altchars=b"-_").decode()
     return hash_b64
 
@@ -5393,6 +5417,7 @@ __all__ = [
     "spinner",
     "statcounter",
     "sysinfo",
+    "tensor_info",
     "tensor_utils",
     "timeit_fancy",
     "validate_type",
@@ -5441,8 +5466,9 @@ def get_console_safe_str(
 ``````{ path="muutils/dbg.py"  }
 """
 
-an implementation of the Rust builtin `dbg!` for Python,orignally from
+this code is based on an implementation of the Rust builtin `dbg!` for Python, originally from
 https://github.com/tylerwince/pydbg/blob/master/pydbg.py
+although it has been significantly modified
 
 licensed under MIT:
 
@@ -5523,14 +5549,18 @@ def dbg() -> _NoExpPassedSentinel: ...
 def dbg(
     exp: _NoExpPassedSentinel,
     formatter: typing.Optional[typing.Callable[[typing.Any], str]] = None,
+    val_joiner: str = " = ",
 ) -> _NoExpPassedSentinel: ...
 @typing.overload
 def dbg(
-    exp: _ExpType, formatter: typing.Optional[typing.Callable[[typing.Any], str]] = None
+    exp: _ExpType,
+    formatter: typing.Optional[typing.Callable[[typing.Any], str]] = None,
+    val_joiner: str = " = ",
 ) -> _ExpType: ...
 def dbg(
     exp: typing.Union[_ExpType, _NoExpPassedSentinel] = _NoExpPassed,
     formatter: typing.Optional[typing.Callable[[typing.Any], str]] = None,
+    val_joiner: str = " = ",
 ) -> typing.Union[_ExpType, _NoExpPassedSentinel]:
     """Call dbg with any variable or expression.
 
@@ -5579,7 +5609,7 @@ def dbg(
     else:
         # if expression passed, format its value and show location, expr, and value
         exp_val: str = formatter(exp) if formatter else repr(exp)
-        msg = f"[ {fname} ] {line_exp} = {exp_val}"
+        msg = f"[ {fname} ] {line_exp}{val_joiner}{exp_val}"
 
     # print the message
     print(
@@ -5592,38 +5622,32 @@ def dbg(
 
 
 # formatted `dbg_*` functions with their helpers
-def tensor_info_dict(tensor: typing.Any) -> typing.Dict[str, str]:
-    output: typing.Dict[str, str] = dict()
-    # shape
-    if hasattr(tensor, "shape"):
-        # output += f"shape={tuple(tensor.shape)}"
-        output["shape"] = repr(tuple(tensor.shape))
 
-    # print the sum if its a nan or inf
-    if hasattr(tensor, "sum"):
-        sum: float = tensor.sum()
-        if sum != sum:
-            output["sum"] = repr(sum)
-
-    # more info
-    if hasattr(tensor, "dtype"):
-        # output += f", dtype={tensor.dtype}"
-        output["dtype"] = repr(tensor.dtype)
-    if hasattr(tensor, "device"):
-        output["device"] = repr(tensor.device)
-    if hasattr(tensor, "requires_grad"):
-        output["requires_grad"] = repr(tensor.requires_grad)
-
-    # return
-    return output
+DBG_TENSOR_ARRAY_SUMMARY_DEFAULTS: typing.Dict[str, typing.Union[bool, int, str]] = (
+    dict(
+        fmt="unicode",
+        precision=2,
+        stats=True,
+        shape=True,
+        dtype=True,
+        device=True,
+        requires_grad=True,
+        sparkline=True,
+        sparkline_bins=7,
+        sparkline_logy=False,
+        colored=True,
+        eq_char="=",
+    )
+)
 
 
 def tensor_info(tensor: typing.Any) -> str:
-    info: typing.Dict[str, str] = tensor_info_dict(tensor)
-    return ", ".join(f"{k}={v}" for k, v in info.items())
+    from muutils.tensor_info import array_summary
+
+    return array_summary(tensor, **DBG_TENSOR_ARRAY_SUMMARY_DEFAULTS)
 
 
-dbg_tensor = functools.partial(dbg, formatter=tensor_info)
+dbg_tensor = functools.partial(dbg, formatter=tensor_info, val_joiner=": ")
 
 ``````{ end_of_file="muutils/dbg.py" }
 
@@ -7378,7 +7402,6 @@ def spinner_fn_wrap(x: Iterable, **kwargs) -> List:
 def map_kwargs_for_tqdm(kwargs: dict) -> dict:
     "map kwargs for tqdm, cant wrap because the pbar dissapears?"
     tqdm_allowed_kwargs: set[str] = get_fn_allowed_kwargs(tqdm.tqdm.__init__)
-    print(f"{tqdm_allowed_kwargs = }")
     mapped_kwargs: dict = {k: v for k, v in kwargs.items() if k in tqdm_allowed_kwargs}
 
     if "desc" not in kwargs:
@@ -7387,7 +7410,6 @@ def map_kwargs_for_tqdm(kwargs: dict) -> dict:
 
         elif "total" in kwargs:
             mapped_kwargs["desc"] = f"Processing {kwargs.get('total')} items"
-    print(f"{mapped_kwargs = }")
     return mapped_kwargs
 
 
@@ -7447,6 +7469,7 @@ def set_up_progress_bar_fn(
     return pbar_fn, pbar_kwargs
 
 
+# TODO: if `parallel` is a negative int, use `multiprocessing.cpu_count() + parallel` to determine the number of processes
 def run_maybe_parallel(
     func: Callable[[InputType], OutputType],
     iterable: Iterable[InputType],
@@ -8540,6 +8563,518 @@ if __name__ == "__main__":
     pprint.pprint(SysInfo.get_all())
 
 ``````{ end_of_file="muutils/sysinfo.py" }
+
+``````{ path="muutils/tensor_info.py"  }
+import numpy as np
+from typing import Union, Any, Literal, List, Dict, overload
+
+# Global color definitions
+COLORS: Dict[str, Dict[str, str]] = {
+    "latex": {
+        "range": r"\textcolor{purple}",
+        "mean": r"\textcolor{teal}",
+        "std": r"\textcolor{orange}",
+        "median": r"\textcolor{green}",
+        "warning": r"\textcolor{red}",
+        "shape": r"\textcolor{magenta}",
+        "dtype": r"\textcolor{gray}",
+        "device": r"\textcolor{gray}",
+        "requires_grad": r"\textcolor{gray}",
+        "sparkline": r"\textcolor{blue}",
+        "reset": "",
+    },
+    "terminal": {
+        "range": "\033[35m",  # purple
+        "mean": "\033[36m",  # cyan/teal
+        "std": "\033[33m",  # yellow/orange
+        "median": "\033[32m",  # green
+        "warning": "\033[31m",  # red
+        "shape": "\033[95m",  # bright magenta
+        "dtype": "\033[90m",  # gray
+        "device": "\033[90m",  # gray
+        "requires_grad": "\033[90m",  # gray
+        "sparkline": "\033[34m",  # blue
+        "reset": "\033[0m",
+    },
+    "none": {
+        "range": "",
+        "mean": "",
+        "std": "",
+        "median": "",
+        "warning": "",
+        "shape": "",
+        "dtype": "",
+        "device": "",
+        "requires_grad": "",
+        "sparkline": "",
+        "reset": "",
+    },
+}
+
+OutputFormat = Literal["unicode", "latex", "ascii"]
+
+SYMBOLS: Dict[OutputFormat, Dict[str, str]] = {
+    "latex": {
+        "range": r"\mathcal{R}",
+        "mean": r"\mu",
+        "std": r"\sigma",
+        "median": r"\tilde{x}",
+        "distribution": r"\mathbb{P}",
+        "nan_values": r"\texttt{NANvals}",
+        "warning": "!!!",
+        "requires_grad": r"\nabla",
+    },
+    "unicode": {
+        "range": "R",
+        "mean": "μ",
+        "std": "σ",
+        "median": "x̃",
+        "distribution": "ℙ",
+        "nan_values": "NANvals",
+        "warning": "🚨",
+        "requires_grad": "∇",
+    },
+    "ascii": {
+        "range": "range",
+        "mean": "mean",
+        "std": "std",
+        "median": "med",
+        "distribution": "dist",
+        "nan_values": "NANvals",
+        "warning": "!!!",
+        "requires_grad": "requires_grad",
+    },
+}
+"Symbols for different formats"
+
+SPARK_CHARS: Dict[OutputFormat, List[str]] = {
+    "unicode": list(" ▁▂▃▄▅▆▇█"),
+    "ascii": list(" _.-~=#"),
+    "latex": list(" ▁▂▃▄▅▆▇█"),
+    # "latex": [r"\textbf{.}", r"\textbf{-}", r"\textbf{=}", r"\textbf{+}", r"\textbf{*}", r"\textbf{\\#}"],
+}
+"characters for sparklines in different formats"
+
+
+def array_info(
+    A: Any,
+    hist_bins: int = 5,
+) -> Dict[str, Any]:
+    """Extract statistical information from an array-like object.
+
+    # Parameters:
+     - `A : array-like`
+            Array to analyze (numpy array or torch tensor)
+
+    # Returns:
+     - `Dict[str, Any]`
+            Dictionary containing raw statistical information with numeric values
+    """
+    result: Dict[str, Any] = {
+        "is_tensor": None,
+        "device": None,
+        "requires_grad": None,
+        "shape": None,
+        "dtype": None,
+        "size": None,
+        "has_nans": None,
+        "nan_count": None,
+        "nan_percent": None,
+        "min": None,
+        "max": None,
+        "range": None,
+        "mean": None,
+        "std": None,
+        "median": None,
+        "histogram": None,
+        "bins": None,
+        "status": None,
+    }
+
+    # Check if it's a tensor by looking at its class name
+    # This avoids importing torch directly
+    A_type: str = type(A).__name__
+    result["is_tensor"] = A_type == "Tensor"
+
+    # Try to get device information if it's a tensor
+    if result["is_tensor"]:
+        try:
+            result["device"] = str(getattr(A, "device", None))
+        except:  # noqa: E722
+            pass
+
+    # Convert to numpy array for calculations
+    try:
+        # For PyTorch tensors
+        if result["is_tensor"]:
+            # Check if tensor is on GPU
+            is_cuda: bool = False
+            try:
+                is_cuda = bool(getattr(A, "is_cuda", False))
+            except:  # noqa: E722
+                pass
+
+            if is_cuda:
+                try:
+                    # Try to get CPU tensor first
+                    cpu_tensor = getattr(A, "cpu", lambda: A)()
+                except:  # noqa: E722
+                    A_np = np.array([])
+            else:
+                cpu_tensor = A
+            try:
+                # For CPU tensor, just detach and convert
+                detached = getattr(cpu_tensor, "detach", lambda: cpu_tensor)()
+                A_np = getattr(detached, "numpy", lambda: np.array([]))()
+            except:  # noqa: E722
+                A_np = np.array([])
+        else:
+            # For numpy arrays and other array-like objects
+            A_np = np.asarray(A)
+    except:  # noqa: E722
+        A_np = np.array([])
+
+    # Get basic information
+    try:
+        result["shape"] = A_np.shape
+        result["dtype"] = str(A.dtype if result["is_tensor"] else A_np.dtype)
+        result["size"] = A_np.size
+        result["requires_grad"] = getattr(A, "requires_grad", None)
+    except:  # noqa: E722
+        pass
+
+    # If array is empty, return early
+    if result["size"] == 0:
+        result["status"] = "empty array"
+        return result
+
+    # Flatten array for statistics if it's multi-dimensional
+    try:
+        if len(A_np.shape) > 1:
+            A_flat = A_np.flatten()
+        else:
+            A_flat = A_np
+    except:  # noqa: E722
+        A_flat = A_np
+
+    # Check for NaN values
+    try:
+        nan_mask = np.isnan(A_flat)
+        result["nan_count"] = np.sum(nan_mask)
+        result["has_nans"] = result["nan_count"] > 0
+        if result["size"] > 0:
+            result["nan_percent"] = (result["nan_count"] / result["size"]) * 100
+    except:  # noqa: E722
+        pass
+
+    # If all values are NaN, return early
+    if result["has_nans"] and result["nan_count"] == result["size"]:
+        result["status"] = "all NaN"
+        return result
+
+    # Calculate statistics
+    try:
+        if result["has_nans"]:
+            result["min"] = float(np.nanmin(A_flat))
+            result["max"] = float(np.nanmax(A_flat))
+            result["mean"] = float(np.nanmean(A_flat))
+            result["std"] = float(np.nanstd(A_flat))
+            result["median"] = float(np.nanmedian(A_flat))
+            result["range"] = (result["min"], result["max"])
+
+            # Remove NaNs for histogram
+            A_hist = A_flat[~nan_mask]
+        else:
+            result["min"] = float(np.min(A_flat))
+            result["max"] = float(np.max(A_flat))
+            result["mean"] = float(np.mean(A_flat))
+            result["std"] = float(np.std(A_flat))
+            result["median"] = float(np.median(A_flat))
+            result["range"] = (result["min"], result["max"])
+
+            A_hist = A_flat
+
+        # Calculate histogram data for sparklines
+        if A_hist.size > 0:
+            try:
+                hist, bins = np.histogram(A_hist, bins=hist_bins)
+                result["histogram"] = hist
+                result["bins"] = bins
+            except:  # noqa: E722
+                pass
+
+        result["status"] = "ok"
+    except Exception as e:
+        result["status"] = f"error: {str(e)}"
+
+    return result
+
+
+def generate_sparkline(
+    histogram: np.ndarray,
+    format: Literal["unicode", "latex", "ascii"] = "unicode",
+    log_y: bool = False,
+) -> str:
+    """Generate a sparkline visualization of the histogram.
+
+    # Parameters:
+     - `histogram : np.ndarray`
+            Histogram data
+     - `format : Literal["unicode", "latex", "ascii"]`
+            Output format (defaults to `"unicode"`)
+     - `log_y : bool`
+            Whether to use logarithmic y-scale (defaults to `False`)
+
+    # Returns:
+     - `str`
+            Sparkline visualization
+    """
+    if histogram is None or len(histogram) == 0:
+        return ""
+
+    # Get the appropriate character set
+    if format in SPARK_CHARS:
+        chars = SPARK_CHARS[format]
+    else:
+        chars = SPARK_CHARS["ascii"]
+
+    # Handle log scale
+    if log_y:
+        # Add small value to avoid log(0)
+        hist_data = np.log1p(histogram)
+    else:
+        hist_data = histogram
+
+    # Normalize to character set range
+    if hist_data.max() > 0:
+        normalized = hist_data / hist_data.max() * (len(chars) - 1)
+    else:
+        normalized = np.zeros_like(hist_data)
+
+    # Convert to characters
+    spark = ""
+    for val in normalized:
+        idx = int(val)
+        spark += chars[idx]
+
+    return spark
+
+
+DEFAULT_SETTINGS: Dict[str, Any] = dict(
+    fmt="unicode",
+    precision=2,
+    stats=True,
+    shape=True,
+    dtype=True,
+    device=True,
+    requires_grad=True,
+    sparkline=False,
+    sparkline_bins=5,
+    sparkline_logy=False,
+    colored=False,
+    as_list=False,
+    eq_char="=",
+)
+
+
+class _UseDefaultType:
+    pass
+
+
+_USE_DEFAULT = _UseDefaultType()
+
+
+@overload
+def array_summary(
+    as_list: Literal[True],
+    **kwargs,
+) -> List[str]: ...
+@overload
+def array_summary(
+    as_list: Literal[False],
+    **kwargs,
+) -> str: ...
+def array_summary(  # type: ignore[misc]
+    array,
+    fmt: OutputFormat = _USE_DEFAULT,  # type: ignore[assignment]
+    precision: int = _USE_DEFAULT,  # type: ignore[assignment]
+    stats: bool = _USE_DEFAULT,  # type: ignore[assignment]
+    shape: bool = _USE_DEFAULT,  # type: ignore[assignment]
+    dtype: bool = _USE_DEFAULT,  # type: ignore[assignment]
+    device: bool = _USE_DEFAULT,  # type: ignore[assignment]
+    requires_grad: bool = _USE_DEFAULT,  # type: ignore[assignment]
+    sparkline: bool = _USE_DEFAULT,  # type: ignore[assignment]
+    sparkline_bins: int = _USE_DEFAULT,  # type: ignore[assignment]
+    sparkline_logy: bool = _USE_DEFAULT,  # type: ignore[assignment]
+    colored: bool = _USE_DEFAULT,  # type: ignore[assignment]
+    eq_char: str = _USE_DEFAULT,  # type: ignore[assignment]
+    as_list: bool = _USE_DEFAULT,  # type: ignore[assignment]
+) -> Union[str, List[str]]:
+    """Format array information into a readable summary.
+
+    # Parameters:
+     - `array`
+            array-like object (numpy array or torch tensor)
+     - `precision : int`
+            Decimal places (defaults to `2`)
+     - `format : Literal["unicode", "latex", "ascii"]`
+            Output format (defaults to `{default_fmt}`)
+     - `stats : bool`
+            Whether to include statistical info (μ, σ, x̃) (defaults to `True`)
+     - `shape : bool`
+            Whether to include shape info (defaults to `True`)
+     - `dtype : bool`
+            Whether to include dtype info (defaults to `True`)
+     - `device : bool`
+            Whether to include device info for torch tensors (defaults to `True`)
+     - `requires_grad : bool`
+            Whether to include requires_grad info for torch tensors (defaults to `True`)
+     - `sparkline : bool`
+            Whether to include a sparkline visualization (defaults to `False`)
+     - `sparkline_width : int`
+            Width of the sparkline (defaults to `20`)
+     - `sparkline_logy : bool`
+            Whether to use logarithmic y-scale for sparkline (defaults to `False`)
+     - `colored : bool`
+            Whether to add color to output (defaults to `False`)
+     - `as_list : bool`
+            Whether to return as list of strings instead of joined string (defaults to `False`)
+
+    # Returns:
+     - `Union[str, List[str]]`
+            Formatted statistical summary, either as string or list of strings
+    """
+    if fmt is _USE_DEFAULT:
+        fmt = DEFAULT_SETTINGS["fmt"]
+    if precision is _USE_DEFAULT:
+        precision = DEFAULT_SETTINGS["precision"]
+    if stats is _USE_DEFAULT:
+        stats = DEFAULT_SETTINGS["stats"]
+    if shape is _USE_DEFAULT:
+        shape = DEFAULT_SETTINGS["shape"]
+    if dtype is _USE_DEFAULT:
+        dtype = DEFAULT_SETTINGS["dtype"]
+    if device is _USE_DEFAULT:
+        device = DEFAULT_SETTINGS["device"]
+    if requires_grad is _USE_DEFAULT:
+        requires_grad = DEFAULT_SETTINGS["requires_grad"]
+    if sparkline is _USE_DEFAULT:
+        sparkline = DEFAULT_SETTINGS["sparkline"]
+    if sparkline_bins is _USE_DEFAULT:
+        sparkline_bins = DEFAULT_SETTINGS["sparkline_bins"]
+    if sparkline_logy is _USE_DEFAULT:
+        sparkline_logy = DEFAULT_SETTINGS["sparkline_logy"]
+    if colored is _USE_DEFAULT:
+        colored = DEFAULT_SETTINGS["colored"]
+    if as_list is _USE_DEFAULT:
+        as_list = DEFAULT_SETTINGS["as_list"]
+    if eq_char is _USE_DEFAULT:
+        eq_char = DEFAULT_SETTINGS["eq_char"]
+
+    array_data: Dict[str, Any] = array_info(array, hist_bins=sparkline_bins)
+    result_parts: List[str] = []
+    using_tex: bool = fmt == "latex"
+
+    # Set color scheme based on format and colored flag
+    colors: Dict[str, str]
+    if colored:
+        colors = COLORS["latex"] if using_tex else COLORS["terminal"]
+    else:
+        colors = COLORS["none"]
+
+    # Get symbols for the current format
+    symbols: Dict[str, str] = SYMBOLS[fmt]
+
+    # Helper function to colorize text
+    def colorize(text: str, color_key: str) -> str:
+        if using_tex:
+            return f"{colors[color_key]}{{{text}}}" if colors[color_key] else text
+        else:
+            return (
+                f"{colors[color_key]}{text}{colors['reset']}"
+                if colors[color_key]
+                else text
+            )
+
+    # Format string for numbers
+    float_fmt: str = f".{precision}f"
+
+    # Handle error status or empty array
+    if (
+        array_data["status"] in ["empty array", "all NaN", "unknown"]
+        or array_data["size"] == 0
+    ):
+        status = array_data["status"]
+        result_parts.append(colorize(symbols["warning"] + " " + status, "warning"))
+    else:
+        # Add NaN warning at the beginning if there are NaNs
+        if array_data["has_nans"]:
+            _percent: str = "\\%" if using_tex else "%"
+            nan_str: str = f"{symbols['warning']} {symbols['nan_values']}{eq_char}{array_data['nan_count']} ({array_data['nan_percent']:.1f}{_percent})"
+            result_parts.append(colorize(nan_str, "warning"))
+
+        # Statistics
+        if stats:
+            for stat_key in ["mean", "std", "median"]:
+                if array_data[stat_key] is not None:
+                    stat_str: str = f"{array_data[stat_key]:{float_fmt}}"
+                    stat_colored: str = colorize(stat_str, stat_key)
+                    result_parts.append(f"{symbols[stat_key]}={stat_colored}")
+
+            # Range (min, max)
+            if array_data["range"] is not None:
+                min_val, max_val = array_data["range"]
+                min_str: str = f"{min_val:{float_fmt}}"
+                max_str: str = f"{max_val:{float_fmt}}"
+                min_colored: str = colorize(min_str, "range")
+                max_colored: str = colorize(max_str, "range")
+                range_str: str = f"{symbols['range']}=[{min_colored},{max_colored}]"
+                result_parts.append(range_str)
+
+    # Add sparkline if requested
+    if sparkline and array_data["histogram"] is not None:
+        print(array_data["histogram"])
+        print(array_data["bins"])
+        spark = generate_sparkline(
+            array_data["histogram"], format=fmt, log_y=sparkline_logy
+        )
+        if spark:
+            spark_colored = colorize(spark, "sparkline")
+            result_parts.append(f"{symbols['distribution']}{eq_char}|{spark_colored}|")
+
+    # Add shape if requested
+    if shape and array_data["shape"]:
+        shape_val = array_data["shape"]
+        if len(shape_val) == 1:
+            shape_str = str(shape_val[0])
+        else:
+            shape_str = (
+                "(" + ",".join(colorize(str(dim), "shape") for dim in shape_val) + ")"
+            )
+        result_parts.append(f"shape{eq_char}{shape_str}")
+
+    # Add dtype if requested
+    if dtype and array_data["dtype"]:
+        result_parts.append(colorize(f"dtype={array_data['dtype']}", "dtype"))
+
+    # Add device if requested and it's a tensor with device info
+    if device and array_data["is_tensor"] and array_data["device"]:
+        result_parts.append(
+            colorize(f"device{eq_char}{array_data['device']}", "device")
+        )
+
+    # Add gradient info
+    if requires_grad and array_data["is_tensor"] and array_data["requires_grad"]:
+        result_parts.append(colorize(symbols["requires_grad"], "requires_grad"))
+
+    # Return as list if requested, otherwise join with spaces
+    if as_list:
+        return result_parts
+    else:
+        joinchar: str = r" \quad " if using_tex else " "
+        return joinchar.join(result_parts)
+
+``````{ end_of_file="muutils/tensor_info.py" }
 
 ``````{ path="muutils/tensor_utils.py"  }
 """utilities for working with tensors and arrays.
@@ -10277,6 +10812,7 @@ format-check:
 	@echo "check if the source code is formatted correctly"
 	...
 
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # runs type checks with mypy
 # at some point, need to add back --check-untyped-defs to mypy call
 # but it complains when we specify arguments by keyword where positional is fine
@@ -10284,6 +10820,12 @@ format-check:
 .PHONY: typing
 typing: clean gen-extra-tests
 	@echo "running type checks"
+	...
+
+# generates a report of the mypy output
+.PHONY: typing-report
+typing-report: clean gen-extra-tests
+	@echo "generate a report of the type check output -- errors per file"
 	...
 
 .PHONY: test
@@ -10418,7 +10960,7 @@ help: help-targets info
 # ==================================================
 [project]
     name = "muutils"
-    version = "0.8.3"
+    version = "0.8.4"
     description = "miscellaneous python utilities"
     readme = "README.md"
     requires-python = ">=3.8"
@@ -10527,6 +11069,10 @@ help: help-targets info
 [tool.ruff]
     # Exclude the directories specified in the global excludes
     exclude = ["tests/input_data", "tests/junk_data", "_wip/"]
+    [tool.ruff.lint.per-file-ignores]
+        "muutils/tensor_info.py" = [
+            "E701", # multiple statements on one line (colon)
+        ]
 
 [tool.pycln]
     all = true
@@ -10592,7 +11138,7 @@ help: help-targets info
 
 [tool.makefile.inline-todo]
 	search_dir = "."
-	out_file = "docs/other/todo-inline.md" # changing this might mean it wont be accessible from the docs
+	out_file_base = "docs/other/todo-inline.md" # changing this might mean it wont be accessible from the docs
 	context_lines = 5
 	extensions = ["py", "md"]
 	tags = ["CRIT", "TODO", "FIXME", "HACK", "BUG", "NOTE"]

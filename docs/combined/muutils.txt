@@ -1,4 +1,4 @@
-  docs for muutils v0.8.3
+  docs for muutils v0.8.4
 
 Contents
 
@@ -136,6 +136,7 @@ Submodules
 -   spinner
 -   statcounter
 -   sysinfo
+-   tensor_info
 -   tensor_utils
 -   timeit_fancy
 -   validate_type
@@ -261,7 +262,7 @@ at your own risk!
 
 View Source on GitHub
 
-  docs for muutils v0.8.3
+  docs for muutils v0.8.4
 
 API Documentation
 
@@ -302,12 +303,14 @@ Usage:
     >>> get_console_safe_str("café", "cafe")
     "café"  # This result may vary based on the system's preferred encoding.
 
-  docs for muutils v0.8.3
+  docs for muutils v0.8.4
 
 Contents
 
-an implementation of the Rust builtin dbg! for Python,orignally from
-https://github.com/tylerwince/pydbg/blob/master/pydbg.py
+this code is based on an implementation of the Rust builtin dbg! for
+Python, originally from
+https://github.com/tylerwince/pydbg/blob/master/pydbg.py although it has
+been significantly modified
 
 licensed under MIT:
 
@@ -336,7 +339,7 @@ API Documentation
 
 -   PATH_MODE
 -   dbg
--   tensor_info_dict
+-   DBG_TENSOR_ARRAY_SUMMARY_DEFAULTS
 -   tensor_info
 -   dbg_tensor
 
@@ -344,8 +347,10 @@ View Source on GitHub
 
 muutils.dbg
 
-an implementation of the Rust builtin dbg! for Python,orignally from
-https://github.com/tylerwince/pydbg/blob/master/pydbg.py
+this code is based on an implementation of the Rust builtin dbg! for
+Python, originally from
+https://github.com/tylerwince/pydbg/blob/master/pydbg.py although it has
+been significantly modified
 
 licensed under MIT:
 
@@ -378,7 +383,8 @@ def dbg
 
     (
         exp: Union[~_ExpType, muutils.dbg._NoExpPassedSentinel] = <muutils.dbg._NoExpPassedSentinel object>,
-        formatter: Optional[Callable[[Any], str]] = None
+        formatter: Optional[Callable[[Any], str]] = None,
+        val_joiner: str = ' = '
     ) -> Union[~_ExpType, muutils.dbg._NoExpPassedSentinel]
 
 View Source on GitHub
@@ -400,11 +406,7 @@ well as the passed expression and what the expression evaluates to:
 
         dbg(square(a))
 
-def tensor_info_dict
-
-    (tensor: Any) -> Dict[str, str]
-
-View Source on GitHub
+-   DBG_TENSOR_ARRAY_SUMMARY_DEFAULTS: Dict[str, Union[str, int, bool]] = {'fmt': 'unicode', 'precision': 2, 'stats': True, 'shape': True, 'dtype': True, 'device': True, 'requires_grad': True, 'sparkline': True, 'sparkline_bins': 7, 'sparkline_logy': False, 'colored': True, 'eq_char': '='}
 
 def tensor_info
 
@@ -412,9 +414,9 @@ def tensor_info
 
 View Source on GitHub
 
--   dbg_tensor = functools.partial(<function dbg>, formatter=<function tensor_info>)
+-   dbg_tensor = functools.partial(<function dbg>, formatter=<function tensor_info>, val_joiner=': ')
 
-  docs for muutils v0.8.3
+  docs for muutils v0.8.4
 
 Contents
 
@@ -769,7 +771,7 @@ Raises:
     ‘yaml’, or if you try to use ‘yaml’ output without having PyYAML
     installed
 
-  docs for muutils v0.8.3
+  docs for muutils v0.8.4
 
 Contents
 
@@ -984,7 +986,7 @@ Inherited Members
 
 map of string aliases to ErrorMode instances
 
-  docs for muutils v0.8.3
+  docs for muutils v0.8.4
 
 Contents
 
@@ -1026,7 +1028,7 @@ Arguments
 -   eq_func: Callable[[T, T], bool] a function that returns true if two
     items are equivalent. need not be transitive
 
-  docs for muutils v0.8.3
+  docs for muutils v0.8.4
 
 Contents
 
@@ -1322,7 +1324,7 @@ Inherited Members
 -   intersection
 -   union
 
-  docs for muutils v0.8.3
+  docs for muutils v0.8.4
 
 Contents
 
@@ -1931,7 +1933,7 @@ Parameters:
     - `nested_dict : dict[str, Any]`
         nested dict to update the instance with
 
-  docs for muutils v0.8.3
+  docs for muutils v0.8.4
 
 Contents
 
@@ -2053,7 +2055,7 @@ View Source on GitHub
 
 load a json-serialized array, infer the mode if not specified
 
-  docs for muutils v0.8.3
+  docs for muutils v0.8.4
 
 Contents
 
@@ -2229,7 +2231,7 @@ View Source on GitHub
 
 serialize object to json-serializable object with default config
 
-  docs for muutils v0.8.3
+  docs for muutils v0.8.4
 
 Contents
 
@@ -2827,7 +2829,7 @@ Raises:
 -   AttributeError : if a property is not found on the class
 -   FieldLoadingError : if there is an error loading a field
 
-  docs for muutils v0.8.3
+  docs for muutils v0.8.4
 
 Contents
 
@@ -3019,7 +3021,7 @@ the container. ZANJ will automatically do this for you.
 
 TODO: custom_value_check_fn: function taking the value of the field and returning whether the value itself is valid. if not provided, any value is valid as long as it passes the type test
 
-  docs for muutils v0.8.3
+  docs for muutils v0.8.4
 
 Contents
 
@@ -3202,7 +3204,7 @@ View Source on GitHub
 
 tuple type hint, but for a tuple of any length with all the same type
 
-  docs for muutils v0.8.3
+  docs for muutils v0.8.4
 
 Contents
 
@@ -3252,7 +3254,7 @@ def jsonl_write
 
 View Source on GitHub
 
-  docs for muutils v0.8.3
+  docs for muutils v0.8.4
 
 Contents
 
@@ -3308,7 +3310,7 @@ Inherited Members
 -   items
 -   values
 
-  docs for muutils v0.8.3
+  docs for muutils v0.8.4
 
 Contents
 
@@ -3529,7 +3531,7 @@ context manager for timing code
 
 -   elapsed_time: float
 
-  docs for muutils v0.8.3
+  docs for muutils v0.8.4
 
 API Documentation
 
@@ -3566,7 +3568,7 @@ View Source on GitHub
 
 -   stream
 
-  docs for muutils v0.8.3
+  docs for muutils v0.8.4
 
 API Documentation
 
@@ -3658,7 +3660,7 @@ standard header function. will output
 
 -   HEADER_FUNCTIONS: dict[str, muutils.logger.headerfuncs.HeaderFunction] = {'md': <function md_header_function>}
 
-  docs for muutils v0.8.3
+  docs for muutils v0.8.4
 
 API Documentation
 
@@ -3723,7 +3725,7 @@ then gather_val("log.jsonl", "s1", ("a", "b")) will return
         [4, 5]
     ]
 
-  docs for muutils v0.8.3
+  docs for muutils v0.8.4
 
 Contents
 
@@ -3865,7 +3867,7 @@ View Source on GitHub
 
 flush all streams
 
-  docs for muutils v0.8.3
+  docs for muutils v0.8.4
 
 API Documentation
 
@@ -3927,7 +3929,7 @@ def make_handler
 
 View Source on GitHub
 
-  docs for muutils v0.8.3
+  docs for muutils v0.8.4
 
 API Documentation
 
@@ -4002,7 +4004,7 @@ View Source on GitHub
 
 log a message to the log file, and optionally to the console
 
-  docs for muutils v0.8.3
+  docs for muutils v0.8.4
 
 API Documentation
 
@@ -4089,7 +4091,7 @@ View Source on GitHub
 
 returns a progress string
 
-  docs for muutils v0.8.3
+  docs for muutils v0.8.4
 
 Contents
 
@@ -4660,7 +4662,7 @@ Duplicates are ignored in the same manner as a set. Unfrozen dataclasses
 can’t be placed in sets since they’re not hashable. Collections of them
 may be compared using this function.
 
-  docs for muutils v0.8.3
+  docs for muutils v0.8.4
 
 API Documentation
 
@@ -4790,7 +4792,7 @@ Duplicates are ignored in the same manner as a set. Unfrozen dataclasses
 can’t be placed in sets since they’re not hashable. Collections of them
 may be compared using this function.
 
-  docs for muutils v0.8.3
+  docs for muutils v0.8.4
 
 API Documentation
 
@@ -4906,7 +4908,7 @@ you can’t rely on that. always use the return value.
 
 the gelidum package is a more complete implementation of this idea
 
-  docs for muutils v0.8.3
+  docs for muutils v0.8.4
 
 API Documentation
 
@@ -5108,11 +5110,12 @@ Raises:
 -   ValueError if the number of input types doesn’t match the lambda’s
     parameters.
 
-  docs for muutils v0.8.3
+  docs for muutils v0.8.4
 
 API Documentation
 
 -   stable_hash
+-   stable_json_dumps
 -   base64_hash
 
 View Source on GitHub
@@ -5130,6 +5133,12 @@ View Source on GitHub
 Returns a stable hash of the given string. not cryptographically secure,
 but stable between runs
 
+def stable_json_dumps
+
+    (d) -> str
+
+View Source on GitHub
+
 def base64_hash
 
     (s: str | bytes) -> str
@@ -5139,7 +5148,7 @@ View Source on GitHub
 Returns a base64 representation of the hash of the given string. not
 cryptographically secure
 
-  docs for muutils v0.8.3
+  docs for muutils v0.8.4
 
 API Documentation
 
@@ -5196,7 +5205,7 @@ Examples:
     >>> str_to_numeric("1.2e2")
     120.0
 
-  docs for muutils v0.8.3
+  docs for muutils v0.8.4
 
 API Documentation
 
@@ -5371,7 +5380,7 @@ Raises:
     is "except"
 -   ValueError : if when_missing is invalid
 
-  docs for muutils v0.8.3
+  docs for muutils v0.8.4
 
 API Documentation
 
@@ -5456,7 +5465,7 @@ def dynamic_docstring
 
 View Source on GitHub
 
-  docs for muutils v0.8.3
+  docs for muutils v0.8.4
 
 Contents
 
@@ -5552,7 +5561,7 @@ def pprint_summary
 
 View Source on GitHub
 
-  docs for muutils v0.8.3
+  docs for muutils v0.8.4
 
 Contents
 
@@ -5596,7 +5605,7 @@ View Source on GitHub
 
 for plotting mermaid.js diagrams
 
-  docs for muutils v0.8.3
+  docs for muutils v0.8.4
 
 Contents
 
@@ -5768,7 +5777,7 @@ View Source on GitHub
 
 Show the active plot, depending on global configs
 
-  docs for muutils v0.8.3
+  docs for muutils v0.8.4
 
 Contents
 
@@ -5872,7 +5881,7 @@ Arguments
     - `filter_out_lines: str|typing.Sequence[str] = ('%', '!')`: comment out lines starting with these strings (in code blocks).
         if a string is passed, it will be split by char and each char will be treated as a separate filter.
 
-  docs for muutils v0.8.3
+  docs for muutils v0.8.4
 
 Contents
 
@@ -5900,7 +5909,7 @@ View Source on GitHub
 
 for plotting mermaid.js diagrams
 
-  docs for muutils v0.8.3
+  docs for muutils v0.8.4
 
 Contents
 
@@ -5931,7 +5940,7 @@ View Source on GitHub
 
 function for easily rendering a sympy expression in latex
 
-  docs for muutils v0.8.3
+  docs for muutils v0.8.4
 
 Contents
 
@@ -5978,9 +5987,9 @@ Inherited Members
 
 -   args
 
--   SUCCESS_STR: str = '[OK]'
+-   SUCCESS_STR: str = '✅'
 
--   FAILURE_STR: str = '[!!]'
+-   FAILURE_STR: str = '❌'
 
 def run_notebook_tests
 
@@ -6051,7 +6060,7 @@ Usage:
         Output in temp/converted/notebook1.CI-output.txt
         {SUCCESS_STR} Run completed with return code 0
 
-  docs for muutils v0.8.3
+  docs for muutils v0.8.4
 
 API Documentation
 
@@ -6191,7 +6200,7 @@ Raises:
 -   ImportError : if use_multiprocess=True and multiprocess is not
     available
 
-  docs for muutils v0.8.3
+  docs for muutils v0.8.4
 
 Contents
 
@@ -6587,7 +6596,7 @@ As a decorator:
             spinner.update_value(f"Step {i+1}")
         return "Function completed"
 
-  docs for muutils v0.8.3
+  docs for muutils v0.8.4
 
 Contents
 
@@ -6798,7 +6807,7 @@ Inherited Members
 
 -   clear
 
-  docs for muutils v0.8.3
+  docs for muutils v0.8.4
 
 Contents
 
@@ -6868,7 +6877,131 @@ def get_all
 
 View Source on GitHub
 
-  docs for muutils v0.8.3
+  docs for muutils v0.8.4
+
+API Documentation
+
+-   COLORS
+-   OutputFormat
+-   SYMBOLS
+-   SPARK_CHARS
+-   array_info
+-   generate_sparkline
+-   DEFAULT_SETTINGS
+-   array_summary
+
+View Source on GitHub
+
+muutils.tensor_info
+
+View Source on GitHub
+
+-   COLORS: Dict[str, Dict[str, str]] = {'latex': {'range': '\\textcolor{purple}', 'mean': '\\textcolor{teal}', 'std': '\\textcolor{orange}', 'median': '\\textcolor{green}', 'warning': '\\textcolor{red}', 'shape': '\\textcolor{magenta}', 'dtype': '\\textcolor{gray}', 'device': '\\textcolor{gray}', 'requires_grad': '\\textcolor{gray}', 'sparkline': '\\textcolor{blue}', 'reset': ''}, 'terminal': {'range': '\x1b[35m', 'mean': '\x1b[36m', 'std': '\x1b[33m', 'median': '\x1b[32m', 'warning': '\x1b[31m', 'shape': '\x1b[95m', 'dtype': '\x1b[90m', 'device': '\x1b[90m', 'requires_grad': '\x1b[90m', 'sparkline': '\x1b[34m', 'reset': '\x1b[0m'}, 'none': {'range': '', 'mean': '', 'std': '', 'median': '', 'warning': '', 'shape': '', 'dtype': '', 'device': '', 'requires_grad': '', 'sparkline': '', 'reset': ''}}
+
+-   OutputFormat = typing.Literal['unicode', 'latex', 'ascii']
+
+-   SYMBOLS: Dict[Literal['unicode', 'latex', 'ascii'], Dict[str, str]] = {'latex': {'range': '\\mathcal{R}', 'mean': '\\mu', 'std': '\\sigma', 'median': '\\tilde{x}', 'distribution': '\\mathbb{P}', 'nan_values': '\\texttt{NANvals}', 'warning': '!!!', 'requires_grad': '\\nabla'}, 'unicode': {'range': 'R', 'mean': 'μ', 'std': 'σ', 'median': 'x̃', 'distribution': 'ℙ', 'nan_values': 'NANvals', 'warning': '🚨', 'requires_grad': '∇'}, 'ascii': {'range': 'range', 'mean': 'mean', 'std': 'std', 'median': 'med', 'distribution': 'dist', 'nan_values': 'NANvals', 'warning': '!!!', 'requires_grad': 'requires_grad'}}
+
+Symbols for different formats
+
+-   SPARK_CHARS: Dict[Literal['unicode', 'latex', 'ascii'], List[str]] = {'unicode': [' ', '▁', '▂', '▃', '▄', '▅', '▆', '▇', '█'], 'ascii': [' ', '_', '.', '-', '~', '=', '#'], 'latex': [' ', '▁', '▂', '▃', '▄', '▅', '▆', '▇', '█']}
+
+characters for sparklines in different formats
+
+def array_info
+
+    (A: Any, hist_bins: int = 5) -> Dict[str, Any]
+
+View Source on GitHub
+
+Extract statistical information from an array-like object.
+
+Parameters:
+
+-   A : array-like Array to analyze (numpy array or torch tensor)
+
+Returns:
+
+-   Dict[str, Any] Dictionary containing raw statistical information
+    with numeric values
+
+def generate_sparkline
+
+    (
+        histogram: numpy.ndarray,
+        format: Literal['unicode', 'latex', 'ascii'] = 'unicode',
+        log_y: bool = False
+    ) -> str
+
+View Source on GitHub
+
+Generate a sparkline visualization of the histogram.
+
+Parameters:
+
+-   histogram : np.ndarray Histogram data
+-   format : Literal["unicode", "latex", "ascii"] Output format
+    (defaults to "unicode")
+-   log_y : bool Whether to use logarithmic y-scale (defaults to False)
+
+Returns:
+
+-   str Sparkline visualization
+
+-   DEFAULT_SETTINGS: Dict[str, Any] = {'fmt': 'unicode', 'precision': 2, 'stats': True, 'shape': True, 'dtype': True, 'device': True, 'requires_grad': True, 'sparkline': False, 'sparkline_bins': 5, 'sparkline_logy': False, 'colored': False, 'as_list': False, 'eq_char': '='}
+
+def array_summary
+
+    (
+        array,
+        fmt: Literal['unicode', 'latex', 'ascii'] = <muutils.tensor_info._UseDefaultType object>,
+        precision: int = <muutils.tensor_info._UseDefaultType object>,
+        stats: bool = <muutils.tensor_info._UseDefaultType object>,
+        shape: bool = <muutils.tensor_info._UseDefaultType object>,
+        dtype: bool = <muutils.tensor_info._UseDefaultType object>,
+        device: bool = <muutils.tensor_info._UseDefaultType object>,
+        requires_grad: bool = <muutils.tensor_info._UseDefaultType object>,
+        sparkline: bool = <muutils.tensor_info._UseDefaultType object>,
+        sparkline_bins: int = <muutils.tensor_info._UseDefaultType object>,
+        sparkline_logy: bool = <muutils.tensor_info._UseDefaultType object>,
+        colored: bool = <muutils.tensor_info._UseDefaultType object>,
+        eq_char: str = <muutils.tensor_info._UseDefaultType object>,
+        as_list: bool = <muutils.tensor_info._UseDefaultType object>
+    ) -> Union[str, List[str]]
+
+View Source on GitHub
+
+Format array information into a readable summary.
+
+Parameters:
+
+-   array array-like object (numpy array or torch tensor)
+-   precision : int Decimal places (defaults to 2)
+-   format : Literal["unicode", "latex", "ascii"] Output format
+    (defaults to {default_fmt})
+-   stats : bool Whether to include statistical info (μ, σ, x̃) (defaults
+    to True)
+-   shape : bool Whether to include shape info (defaults to True)
+-   dtype : bool Whether to include dtype info (defaults to True)
+-   device : bool Whether to include device info for torch tensors
+    (defaults to True)
+-   requires_grad : bool Whether to include requires_grad info for torch
+    tensors (defaults to True)
+-   sparkline : bool Whether to include a sparkline visualization
+    (defaults to False)
+-   sparkline_width : int Width of the sparkline (defaults to 20)
+-   sparkline_logy : bool Whether to use logarithmic y-scale for
+    sparkline (defaults to False)
+-   colored : bool Whether to add color to output (defaults to False)
+-   as_list : bool Whether to return as list of strings instead of
+    joined string (defaults to False)
+
+Returns:
+
+-   Union[str, List[str]] Formatted statistical summary, either as
+    string or list of strings
+
+  docs for muutils v0.8.4
 
 Contents
 
@@ -6929,7 +7062,7 @@ notably:
 
 View Source on GitHub
 
--   TYPE_TO_JAX_DTYPE: dict = {<class 'float'>: <class 'jaxtyping.Float'>, <class 'int'>: <class 'jaxtyping.Int'>, <class 'jaxtyping.Float'>: <class 'jaxtyping.Float'>, <class 'jaxtyping.Int'>: <class 'jaxtyping.Int'>, <class 'bool'>: <class 'jaxtyping.Bool'>, <class 'jaxtyping.Bool'>: <class 'jaxtyping.Bool'>, <class 'numpy.bool_'>: <class 'jaxtyping.Bool'>, torch.bool: <class 'jaxtyping.Bool'>, <class 'numpy.float16'>: <class 'jaxtyping.Float'>, <class 'numpy.float32'>: <class 'jaxtyping.Float'>, <class 'numpy.float64'>: <class 'jaxtyping.Float'>, <class 'numpy.int8'>: <class 'jaxtyping.Int'>, <class 'numpy.int16'>: <class 'jaxtyping.Int'>, <class 'numpy.int32'>: <class 'jaxtyping.Int'>, <class 'numpy.int64'>: <class 'jaxtyping.Int'>, <class 'numpy.uint8'>: <class 'jaxtyping.Int'>, torch.float32: <class 'jaxtyping.Float'>, torch.float16: <class 'jaxtyping.Float'>, torch.float64: <class 'jaxtyping.Float'>, torch.bfloat16: <class 'jaxtyping.Float'>, torch.int32: <class 'jaxtyping.Int'>, torch.int8: <class 'jaxtyping.Int'>, torch.int16: <class 'jaxtyping.Int'>, torch.int64: <class 'jaxtyping.Int'>}
+-   TYPE_TO_JAX_DTYPE: dict = {<class 'float'>: <class 'jaxtyping.Float'>, <class 'int'>: <class 'jaxtyping.Int'>, <class 'jaxtyping.Float'>: <class 'jaxtyping.Float'>, <class 'jaxtyping.Int'>: <class 'jaxtyping.Int'>, <class 'bool'>: <class 'jaxtyping.Bool'>, <class 'jaxtyping.Bool'>: <class 'jaxtyping.Bool'>, <class 'numpy.bool_'>: <class 'jaxtyping.Bool'>, torch.bool: <class 'jaxtyping.Bool'>, <class 'numpy.float16'>: <class 'jaxtyping.Float'>, <class 'numpy.float32'>: <class 'jaxtyping.Float'>, <class 'numpy.float64'>: <class 'jaxtyping.Float'>, <class 'numpy.int8'>: <class 'jaxtyping.Int'>, <class 'numpy.int16'>: <class 'jaxtyping.Int'>, <class 'numpy.int32'>: <class 'jaxtyping.Int'>, <class 'numpy.int64'>: <class 'jaxtyping.Int'>, <class 'numpy.longlong'>: <class 'jaxtyping.Int'>, <class 'numpy.uint8'>: <class 'jaxtyping.Int'>, torch.float32: <class 'jaxtyping.Float'>, torch.float16: <class 'jaxtyping.Float'>, torch.float64: <class 'jaxtyping.Float'>, torch.bfloat16: <class 'jaxtyping.Float'>, torch.int32: <class 'jaxtyping.Int'>, torch.int8: <class 'jaxtyping.Int'>, torch.int16: <class 'jaxtyping.Int'>, torch.int64: <class 'jaxtyping.Int'>}
 
 dict mapping python, numpy, and torch types to jaxtyping types
 
@@ -6961,16 +7094,16 @@ View Source on GitHub
 
 convert numpy dtype to torch dtype
 
--   DTYPE_LIST: list = [<class 'bool'>, <class 'int'>, <class 'float'>, torch.float32, torch.float32, torch.float64, torch.float16, torch.float64, torch.bfloat16, torch.complex64, torch.complex128, torch.int32, torch.int8, torch.int16, torch.int32, torch.int64, torch.int64, torch.int16, torch.uint8, torch.bool, <class 'numpy.float16'>, <class 'numpy.float32'>, <class 'numpy.float64'>, <class 'numpy.float16'>, <class 'numpy.float32'>, <class 'numpy.float64'>, <class 'numpy.complex64'>, <class 'numpy.complex128'>, <class 'numpy.int8'>, <class 'numpy.int16'>, <class 'numpy.int32'>, <class 'numpy.int64'>, <class 'numpy.int64'>, <class 'numpy.int16'>, <class 'numpy.uint8'>, <class 'numpy.bool_'>, <class 'numpy.float64'>, <class 'numpy.int32'>]
+-   DTYPE_LIST: list = [<class 'bool'>, <class 'int'>, <class 'float'>, torch.float32, torch.float32, torch.float64, torch.float16, torch.float64, torch.bfloat16, torch.complex64, torch.complex128, torch.int32, torch.int8, torch.int16, torch.int32, torch.int64, torch.int64, torch.int16, torch.uint8, torch.bool, <class 'numpy.float16'>, <class 'numpy.float32'>, <class 'numpy.float64'>, <class 'numpy.float16'>, <class 'numpy.float32'>, <class 'numpy.float64'>, <class 'numpy.complex64'>, <class 'numpy.complex128'>, <class 'numpy.int8'>, <class 'numpy.int16'>, <class 'numpy.int32'>, <class 'numpy.int64'>, <class 'numpy.longlong'>, <class 'numpy.int16'>, <class 'numpy.uint8'>, <class 'numpy.bool_'>, <class 'numpy.float64'>, <class 'numpy.int64'>]
 
 list of all the python, numpy, and torch numerical types I could think
 of
 
--   DTYPE_MAP: dict = {"<class 'bool'>": <class 'bool'>, "<class 'int'>": <class 'int'>, "<class 'float'>": <class 'float'>, 'torch.float32': torch.float32, 'torch.float64': torch.float64, 'torch.float16': torch.float16, 'torch.bfloat16': torch.bfloat16, 'torch.complex64': torch.complex64, 'torch.complex128': torch.complex128, 'torch.int32': torch.int32, 'torch.int8': torch.int8, 'torch.int16': torch.int16, 'torch.int64': torch.int64, 'torch.uint8': torch.uint8, 'torch.bool': torch.bool, "<class 'numpy.float16'>": <class 'numpy.float16'>, "<class 'numpy.float32'>": <class 'numpy.float32'>, "<class 'numpy.float64'>": <class 'numpy.float64'>, "<class 'numpy.complex64'>": <class 'numpy.complex64'>, "<class 'numpy.complex128'>": <class 'numpy.complex128'>, "<class 'numpy.int8'>": <class 'numpy.int8'>, "<class 'numpy.int16'>": <class 'numpy.int16'>, "<class 'numpy.int32'>": <class 'numpy.int32'>, "<class 'numpy.int64'>": <class 'numpy.int64'>, "<class 'numpy.uint8'>": <class 'numpy.uint8'>, "<class 'numpy.bool_'>": <class 'numpy.bool_'>, 'float16': <class 'numpy.float16'>, 'float32': <class 'numpy.float32'>, 'float64': <class 'numpy.float64'>, 'complex64': <class 'numpy.complex64'>, 'complex128': <class 'numpy.complex128'>, 'int8': <class 'numpy.int8'>, 'int16': <class 'numpy.int16'>, 'int32': <class 'numpy.int32'>, 'int64': <class 'numpy.int64'>, 'uint8': <class 'numpy.uint8'>, 'bool_': <class 'numpy.bool_'>, 'bool': <class 'numpy.bool_'>}
+-   DTYPE_MAP: dict = {"<class 'bool'>": <class 'bool'>, "<class 'int'>": <class 'int'>, "<class 'float'>": <class 'float'>, 'torch.float32': torch.float32, 'torch.float64': torch.float64, 'torch.float16': torch.float16, 'torch.bfloat16': torch.bfloat16, 'torch.complex64': torch.complex64, 'torch.complex128': torch.complex128, 'torch.int32': torch.int32, 'torch.int8': torch.int8, 'torch.int16': torch.int16, 'torch.int64': torch.int64, 'torch.uint8': torch.uint8, 'torch.bool': torch.bool, "<class 'numpy.float16'>": <class 'numpy.float16'>, "<class 'numpy.float32'>": <class 'numpy.float32'>, "<class 'numpy.float64'>": <class 'numpy.float64'>, "<class 'numpy.complex64'>": <class 'numpy.complex64'>, "<class 'numpy.complex128'>": <class 'numpy.complex128'>, "<class 'numpy.int8'>": <class 'numpy.int8'>, "<class 'numpy.int16'>": <class 'numpy.int16'>, "<class 'numpy.int32'>": <class 'numpy.int32'>, "<class 'numpy.int64'>": <class 'numpy.int64'>, "<class 'numpy.longlong'>": <class 'numpy.longlong'>, "<class 'numpy.uint8'>": <class 'numpy.uint8'>, "<class 'numpy.bool_'>": <class 'numpy.bool_'>, 'float16': <class 'numpy.float16'>, 'float32': <class 'numpy.float32'>, 'float64': <class 'numpy.float64'>, 'complex64': <class 'numpy.complex64'>, 'complex128': <class 'numpy.complex128'>, 'int8': <class 'numpy.int8'>, 'int16': <class 'numpy.int16'>, 'int32': <class 'numpy.int32'>, 'int64': <class 'numpy.int64'>, 'longlong': <class 'numpy.longlong'>, 'uint8': <class 'numpy.uint8'>, 'bool_': <class 'numpy.bool_'>, 'bool': <class 'numpy.bool_'>}
 
 mapping from string representations of types to their type
 
--   TORCH_DTYPE_MAP: dict = {"<class 'bool'>": torch.bool, "<class 'int'>": torch.int32, "<class 'float'>": torch.float64, 'torch.float32': torch.float32, 'torch.float64': torch.float64, 'torch.float16': torch.float16, 'torch.bfloat16': torch.bfloat16, 'torch.complex64': torch.complex64, 'torch.complex128': torch.complex128, 'torch.int32': torch.int32, 'torch.int8': torch.int8, 'torch.int16': torch.int16, 'torch.int64': torch.int64, 'torch.uint8': torch.uint8, 'torch.bool': torch.bool, "<class 'numpy.float16'>": torch.float16, "<class 'numpy.float32'>": torch.float32, "<class 'numpy.float64'>": torch.float64, "<class 'numpy.complex64'>": torch.complex64, "<class 'numpy.complex128'>": torch.complex128, "<class 'numpy.int8'>": torch.int8, "<class 'numpy.int16'>": torch.int16, "<class 'numpy.int32'>": torch.int32, "<class 'numpy.int64'>": torch.int64, "<class 'numpy.uint8'>": torch.uint8, "<class 'numpy.bool_'>": torch.bool, 'float16': torch.float16, 'float32': torch.float32, 'float64': torch.float64, 'complex64': torch.complex64, 'complex128': torch.complex128, 'int8': torch.int8, 'int16': torch.int16, 'int32': torch.int32, 'int64': torch.int64, 'uint8': torch.uint8, 'bool_': torch.bool, 'bool': torch.bool}
+-   TORCH_DTYPE_MAP: dict = {"<class 'bool'>": torch.bool, "<class 'int'>": torch.int64, "<class 'float'>": torch.float64, 'torch.float32': torch.float32, 'torch.float64': torch.float64, 'torch.float16': torch.float16, 'torch.bfloat16': torch.bfloat16, 'torch.complex64': torch.complex64, 'torch.complex128': torch.complex128, 'torch.int32': torch.int32, 'torch.int8': torch.int8, 'torch.int16': torch.int16, 'torch.int64': torch.int64, 'torch.uint8': torch.uint8, 'torch.bool': torch.bool, "<class 'numpy.float16'>": torch.float16, "<class 'numpy.float32'>": torch.float32, "<class 'numpy.float64'>": torch.float64, "<class 'numpy.complex64'>": torch.complex64, "<class 'numpy.complex128'>": torch.complex128, "<class 'numpy.int8'>": torch.int8, "<class 'numpy.int16'>": torch.int16, "<class 'numpy.int32'>": torch.int32, "<class 'numpy.int64'>": torch.int64, "<class 'numpy.longlong'>": torch.int64, "<class 'numpy.uint8'>": torch.uint8, "<class 'numpy.bool_'>": torch.bool, 'float16': torch.float16, 'float32': torch.float32, 'float64': torch.float64, 'complex64': torch.complex64, 'complex128': torch.complex128, 'int8': torch.int8, 'int16': torch.int16, 'int32': torch.int32, 'int64': torch.int64, 'longlong': torch.int64, 'uint8': torch.uint8, 'bool_': torch.bool, 'bool': torch.bool}
 
 mapping from string representations of types to specifically torch types
 
@@ -7163,7 +7296,7 @@ Raises:
 -   StateDictShapeError : shapes don’t match (but keys do)
 -   StateDictValueError : values don’t match (but keys and shapes do)
 
-  docs for muutils v0.8.3
+  docs for muutils v0.8.4
 
 Contents
 
@@ -7264,7 +7397,7 @@ FancyTimeitResult, which is a NamedTuple with the following fields:
 -   profile: pstats.Stats|None A pstats.Stats object if do_profiling is
     True, otherwise None.
 
-  docs for muutils v0.8.3
+  docs for muutils v0.8.4
 
 Contents
 

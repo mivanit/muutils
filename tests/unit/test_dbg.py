@@ -2,22 +2,18 @@ import inspect
 import tempfile
 from pathlib import Path
 import importlib
-from typing import Any, Callable, Dict, Optional, List, Tuple
+from typing import Any, Callable, Optional, List, Tuple
 
 import pytest
 
 from muutils.dbg import (
     dbg,
-    dbg_tensor,
-    tensor_info,
-    # tensor_info_dict,
     _NoExpPassed,
     _process_path,
     _CWD,
     # we do use this as a global in `test_dbg_counter_increments`
     _COUNTER,  # noqa: F401
 )
-
 
 
 DBG_MODULE_NAME: str = "muutils.dbg"

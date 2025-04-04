@@ -157,25 +157,25 @@ def dbg(
 
 # formatted `dbg_*` functions with their helpers
 
-DBG_TENSOR_ARRAY_SUMMARY_DEFAULTS: typing.Dict[str, ] = dict(
-	fmt="unicode",
-	precision=2,
-	stats=True,
-	shape=True,
-	dtype=True,
-	device=True,
-	requires_grad=True,
-	sparkline=True,
-	sparkline_bins=7,
-	sparkline_logy=False,
-	colored=True,
-	eq_char="=",
+DBG_TENSOR_ARRAY_SUMMARY_DEFAULTS: typing.Dict[str,] = dict(
+    fmt="unicode",
+    precision=2,
+    stats=True,
+    shape=True,
+    dtype=True,
+    device=True,
+    requires_grad=True,
+    sparkline=True,
+    sparkline_bins=7,
+    sparkline_logy=False,
+    colored=True,
+    eq_char="=",
 )
-
 
 
 def tensor_info(tensor: typing.Any) -> str:
     from muutils.tensor_info import array_summary
+
     return array_summary(tensor, **DBG_TENSOR_ARRAY_SUMMARY_DEFAULTS)
 
 

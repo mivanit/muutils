@@ -1,7 +1,8 @@
 """
 
-an implementation of the Rust builtin `dbg!` for Python,orignally from
+this code is based on an implementation of the Rust builtin `dbg!` for Python, originally from
 https://github.com/tylerwince/pydbg/blob/master/pydbg.py
+although it has been significantly modified
 
 licensed under MIT:
 

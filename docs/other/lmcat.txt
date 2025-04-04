@@ -1,8 +1,8 @@
 # Stats
 - 55 files
-- 11152 (11K) lines
-- 386141 (386K) chars
-- 41461 (41K) `whitespace-split` tokens
+- 11161 (11K) lines
+- 386281 (386K) chars
+- 41473 (41K) `whitespace-split` tokens
 
 # File Tree
 
@@ -69,7 +69,7 @@ muutils
 ├── LICENSE                              [  674L 35,149C 5,644T]
 ├── README.md                            [  131L  6,289C   551T]
 ├── makefile                             [1,694L 52,531C 6,258T]
-├── pyproject.toml                       [  199L  6,586C   693T]
+├── pyproject.toml                       [  208L  6,726C   705T]
 ```
 
 # File Contents
@@ -10960,7 +10960,7 @@ help: help-targets info
 # ==================================================
 [project]
     name = "muutils"
-    version = "0.8.4"
+    version = "0.8.5"
     description = "miscellaneous python utilities"
     readme = "README.md"
     requires-python = ">=3.8"
@@ -11038,7 +11038,7 @@ help: help-targets info
         # generating docs
         "pdoc>=14.6.0",
         # https://github.com/mivanit/muutils/security/dependabot/7
-        "jinja2>=3.1.5",
+        "jinja2>=3.1.6",
         # lmcat -- a custom library. not exactly docs, but lets an LLM see all the code
         "lmcat>=0.2.0; python_version >= '3.11'",
         # tomli since no tomlib in python < 3.11
@@ -11079,7 +11079,16 @@ help: help-targets info
     exclude = ["tests/input_data", "tests/junk_data", "_wip/"]
 
 [tool.mypy]
-    exclude = ["tests/input_data", "tests/junk_data", "tests/_temp/", "_wip/"]
+    exclude = [
+        # tests
+        "tests/input_data",
+        "tests/junk_data",
+        "tests/_temp/",
+        # wip stuff
+        "_wip/",
+        # not our problem
+        "docs/resources/make_docs.py",
+    ]
     show_error_codes = true
     # we disable this in the makefile for old versions
     check_untyped_defs = true

@@ -1,4 +1,5 @@
 version = 1
+revision = 1
 requires-python = ">=3.8"
 resolution-markers = [
     "python_full_version < '3.9'",
@@ -1624,7 +1625,7 @@ wheels = [
 
 [[package]]
 name = "muutils"
-version = "0.8.3"
+version = "0.8.4"
 source = { editable = "." }
 
 [package.optional-dependencies]
@@ -1686,6 +1687,7 @@ requires-dist = [
     { name = "torch", marker = "python_full_version >= '3.13' and extra == 'array'", specifier = ">=2.5.0" },
     { name = "tqdm", marker = "extra == 'parallel'", specifier = ">=4.67.1" },
 ]
+provides-extras = ["array", "array-no-torch", "notebook", "parallel"]
 
 [package.metadata.requires-dev]
 dev = [

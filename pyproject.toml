@@ -111,7 +111,7 @@
 [tool.ruff]
     # Exclude the directories specified in the global excludes
     exclude = ["tests/input_data", "tests/junk_data", "_wip/"]
-    [tool.ruff.per-file-ignores]
+    [tool.ruff.lint.per-file-ignores]
         "muutils/tensor_info.py" = [
             "E701", # multiple statements on one line (colon)
         ]
@@ -121,7 +121,16 @@
     exclude = ["tests/input_data", "tests/junk_data", "_wip/"]
 
 [tool.mypy]
-    exclude = ["tests/input_data", "tests/junk_data", "tests/_temp/", "_wip/"]
+    exclude = [
+        # tests
+        "tests/input_data",
+        "tests/junk_data",
+        "tests/_temp/",
+        # wip stuff
+        "_wip/",
+        # not our problem
+        "docs/resources/make_docs.py",
+    ]
     show_error_codes = true
     # we disable this in the makefile for old versions
     check_untyped_defs = true

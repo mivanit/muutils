@@ -30,7 +30,6 @@ THE SOFTWARE.
 
 from __future__ import annotations
 
-import os
 import inspect
 import sys
 import typing
@@ -56,24 +55,26 @@ _COUNTER: int = 0
 
 # configuration
 PATH_MODE: typing.Literal["relative", "absolute"] = "relative"
+DEFAULT_VAL_JOINER: str = " = "
 
 
 # path processing
 def _process_path(path: Path) -> str:
     path_abs: Path = path.absolute()
+    fname: Path
     if PATH_MODE == "absolute":
-        fname = path_abs.as_posix()
+        fname = path_abs
     elif PATH_MODE == "relative":
         try:
-            fname = path_abs.relative_to(
-                Path(os.path.commonpath([path_abs, _CWD]))
-            ).as_posix()
+            # if it's inside the cwd, print the relative path
+            fname = path.relative_to(_CWD)
         except ValueError:
-            fname = path_abs.as_posix()
+            # if its not in the subpath, use the absolute path
+            fname = path_abs
     else:
         raise ValueError("PATH_MODE must be either 'relative' or 'absolute")
 
-    return fname
+    return fname.as_posix()
 
 
 # actual dbg function
@@ -83,18 +84,18 @@ def dbg() -> _NoExpPassedSentinel: ...
 def dbg(
     exp: _NoExpPassedSentinel,
     formatter: typing.Optional[typing.Callable[[typing.Any], str]] = None,
-    val_joiner: str = " = ",
+    val_joiner: str = DEFAULT_VAL_JOINER,
 ) -> _NoExpPassedSentinel: ...
 @typing.overload
 def dbg(
     exp: _ExpType,
     formatter: typing.Optional[typing.Callable[[typing.Any], str]] = None,
-    val_joiner: str = " = ",
+    val_joiner: str = DEFAULT_VAL_JOINER,
 ) -> _ExpType: ...
 def dbg(
     exp: typing.Union[_ExpType, _NoExpPassedSentinel] = _NoExpPassed,
     formatter: typing.Optional[typing.Callable[[typing.Any], str]] = None,
-    val_joiner: str = " = ",
+    val_joiner: str = DEFAULT_VAL_JOINER,
 ) -> typing.Union[_ExpType, _NoExpPassedSentinel]:
     """Call dbg with any variable or expression.
 
@@ -130,6 +131,10 @@ def dbg(
                 end = len(line)
 
             fname = f"{_process_path(Path(frame.filename))}:{frame.lineno}"
+            # special case for jupyter notebooks
+            if fname.startswith("/tmp/ipykernel_"):
+                fname = f"<ipykernel>:{frame.lineno}"
+
             line_exp = line[start:end]
 
             break
@@ -138,7 +143,7 @@ def dbg(
     msg: str
     if exp is _NoExpPassed:
         # if no expression is passed, just show location and counter value
-        msg = f"[ {fname} ] (dbg {_COUNTER})"
+        msg = f"[ {fname} ] <dbg {_COUNTER}>"
         _COUNTER += 1
     else:
         # if expression passed, format its value and show location, expr, and value
@@ -175,10 +180,15 @@ DBG_TENSOR_ARRAY_SUMMARY_DEFAULTS: typing.Dict[str, typing.Union[bool, int, str]
 )
 
 
+DBG_TENSOR_VAL_JOINER: str = ": "
+
+
 def tensor_info(tensor: typing.Any) -> str:
     from muutils.tensor_info import array_summary
 
     return array_summary(tensor, **DBG_TENSOR_ARRAY_SUMMARY_DEFAULTS)
 
 
-dbg_tensor = functools.partial(dbg, formatter=tensor_info, val_joiner=": ")
+dbg_tensor = functools.partial(
+    dbg, formatter=tensor_info, val_joiner=DBG_TENSOR_VAL_JOINER
+)

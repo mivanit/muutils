@@ -53,9 +53,11 @@ SYMBOLS: Dict[OutputFormat, Dict[str, str]] = {
         "std": r"\sigma",
         "median": r"\tilde{x}",
         "distribution": r"\mathbb{P}",
-        "nan_values": r"\texttt{NANvals}",
+        "nan_values": r"\text{NANvals}",
         "warning": "!!!",
         "requires_grad": r"\nabla",
+        "true": r"\checkmark",
+        "false": r"\times",
     },
     "unicode": {
         "range": "R",
@@ -66,6 +68,8 @@ SYMBOLS: Dict[OutputFormat, Dict[str, str]] = {
         "nan_values": "NANvals",
         "warning": "🚨",
         "requires_grad": "∇",
+        "true": "✓",
+        "false": "✗",
     },
     "ascii": {
         "range": "range",
@@ -76,6 +80,8 @@ SYMBOLS: Dict[OutputFormat, Dict[str, str]] = {
         "nan_values": "NANvals",
         "warning": "!!!",
         "requires_grad": "requires_grad",
+        "true": "1",
+        "false": "0",
     },
 }
 "Symbols for different formats"
@@ -84,7 +90,6 @@ SPARK_CHARS: Dict[OutputFormat, List[str]] = {
     "unicode": list(" ▁▂▃▄▅▆▇█"),
     "ascii": list(" _.-~=#"),
     "latex": list(" ▁▂▃▄▅▆▇█"),
-    # "latex": [r"\textbf{.}", r"\textbf{-}", r"\textbf{=}", r"\textbf{+}", r"\textbf{*}", r"\textbf{\\#}"],
 }
 "characters for sparklines in different formats"
 
@@ -497,8 +502,13 @@ def array_summary(  # type: ignore[misc]
         )
 
     # Add gradient info
-    if requires_grad and array_data["is_tensor"] and array_data["requires_grad"]:
-        result_parts.append(colorize(symbols["requires_grad"], "requires_grad"))
+    if requires_grad and array_data["is_tensor"]:
+        bool_req_grad_symb: str = (
+            symbols["true"] if array_data["requires_grad"] else symbols["false"]
+        )
+        result_parts.append(
+            colorize(symbols["requires_grad"] + bool_req_grad_symb, "requires_grad")
+        )
 
     # Return as list if requested, otherwise join with spaces
     if as_list:

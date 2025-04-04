@@ -1418,8 +1418,7 @@ format-check:
 .PHONY: typing
 typing: clean gen-extra-tests
 	@echo "running type checks"
-	$(PYTHON) -m mypy --config-file $(PYPROJECT) $(TYPECHECK_ARGS) $(PACKAGE_NAME)/
-	$(PYTHON) -m mypy --config-file $(PYPROJECT) $(TYPECHECK_ARGS) $(TESTS_DIR)
+	$(PYTHON) -m mypy --config-file $(PYPROJECT) $(TYPECHECK_ARGS) .
 
 # generates a report of the mypy output
 .PHONY: typing-report

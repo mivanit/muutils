@@ -152,35 +152,13 @@ def dbg(
 
 
 # formatted `dbg_*` functions with their helpers
-def tensor_info_dict(tensor: typing.Any) -> typing.Dict[str, str]:
-    output: typing.Dict[str, str] = dict()
-    # shape
-    if hasattr(tensor, "shape"):
-        # output += f"shape={tuple(tensor.shape)}"
-        output["shape"] = repr(tuple(tensor.shape))
 
-    # print the sum if its a nan or inf
-    if hasattr(tensor, "sum"):
-        sum: float = tensor.sum()
-        if sum != sum:
-            output["sum"] = repr(sum)
-
-    # more info
-    if hasattr(tensor, "dtype"):
-        # output += f", dtype={tensor.dtype}"
-        output["dtype"] = repr(tensor.dtype)
-    if hasattr(tensor, "device"):
-        output["device"] = repr(tensor.device)
-    if hasattr(tensor, "requires_grad"):
-        output["requires_grad"] = repr(tensor.requires_grad)
-
-    # return
-    return output
-
+DBG_TENSOR_USE_UNICODE: bool = True
+DBG_TENSOR_USE_COLOR: bool = True
 
 def tensor_info(tensor: typing.Any) -> str:
-    info: typing.Dict[str, str] = tensor_info_dict(tensor)
-    return ", ".join(f"{k}={v}" for k, v in info.items())
+    from muutils.tensor_info import array_summary
+    return array_summary(tensor)
 
 
 dbg_tensor = functools.partial(dbg, formatter=tensor_info)

@@ -10,7 +10,9 @@ COLORS: Dict[str, Dict[str, str]] = {
 		"median": r"\textcolor{green}",
 		"warning": r"\textcolor{red}",
 		"shape": r"\textcolor{magenta}",
-		"meta": r"\textcolor{gray}",
+		"dtype": r"\textcolor{gray}",
+		"device": r"\textcolor{gray}",
+		"requires_grad": r"\textcolor{gray}",
 		"sparkline": r"\textcolor{blue}",
 		"reset": "",
 	},
@@ -21,7 +23,9 @@ COLORS: Dict[str, Dict[str, str]] = {
 		"median": "\033[32m",	# green
 		"warning": "\033[31m",   # red
 		"shape": "\033[95m",  # bright magenta
-		"meta": "\033[90m",	  # gray
+		"dtype": "\033[90m",	  # gray
+		"device": "\033[90m",	 # gray
+		"requires_grad": "\033[90m", # gray
 		"sparkline": "\033[34m", # blue
 		"reset": "\033[0m",
 	},
@@ -32,7 +36,9 @@ COLORS: Dict[str, Dict[str, str]] = {
 		"median": "",
 		"warning": "",
 		"shape": "",
-		"meta": "",
+		"dtype": "",
+		"device": "",
+		"requires_grad": "",
 		"sparkline": "",
 		"reset": "",
 	}
@@ -46,24 +52,27 @@ SYMBOLS: Dict[OutputFormat, Dict[str, str]] = {
 		"mean": r"\mu",
 		"std": r"\sigma",
 		"median": r"\tilde{x}",
-		"nan_values": "NANvals=",
+		"nan_values": r"\texttt{NANvals}",
 		"warning": "!!!",
+		"requires_grad": r"\nabla",
 	},
 	"unicode": {
 		"range": "R",
 		"mean": "μ",
 		"std": "σ",
 		"median": "x̃",
-		"nan_values": "NANvals=",
+		"nan_values": "NANvals",
 		"warning": "🚨",
+		"requires_grad": "∇",
 	},
 	"ascii": {
 		"range": "range",
 		"mean": "mean",
 		"std": "std",
 		"median": "med",
-		"nan_values": r"\texttt{NANvals}=",
+		"nan_values": "NANvals",
 		"warning": "!!!",
+		"requires_grad": "requires_grad",
 	}
 }
 "Symbols for different formats"
@@ -286,6 +295,7 @@ DEFAULT_SETTINGS: Dict[str, Any] = dict(
 	shape=True,
 	dtype=True,
 	device=True,
+	requires_grad=True,
 	sparkline=False,
 	sparkline_bins=5,
 	sparkline_logy=False,
@@ -307,6 +317,7 @@ def array_summary(
 	shape: bool = _USE_DEFAULT,
 	dtype: bool = _USE_DEFAULT,
 	device: bool = _USE_DEFAULT,
+	requires_grad: bool = _USE_DEFAULT,
 	sparkline: bool = _USE_DEFAULT,
 	sparkline_bins: int = _USE_DEFAULT,
 	sparkline_logy: bool = _USE_DEFAULT,
@@ -352,7 +363,7 @@ def array_summary(
 	if shape is _USE_DEFAULT: shape = DEFAULT_SETTINGS["shape"]
 	if dtype is _USE_DEFAULT: dtype = DEFAULT_SETTINGS["dtype"]
 	if device is _USE_DEFAULT: device = DEFAULT_SETTINGS["device"]
-	if sparkline is _USE_DEFAULT: sparkline = DEFAULT_SETTINGS["sparkline"]
+	if sparkline is _USE_DEFAULT: 	 = DEFAULT_SETTINGS["sparkline"]
 	if sparkline_bins is _USE_DEFAULT: sparkline_bins = DEFAULT_SETTINGS["sparkline_bins"]
 	if sparkline_logy is _USE_DEFAULT: sparkline_logy = DEFAULT_SETTINGS["sparkline_logy"]
 	if colored is _USE_DEFAULT: colored = DEFAULT_SETTINGS["colored"]
@@ -364,13 +375,14 @@ def array_summary(
 	using_tex: bool = (fmt == "latex")
 	
 	# Set color scheme based on format and colored flag
+	colors: Dict[str, str]
 	if colored:
 		colors = COLORS["latex"] if using_tex else COLORS["terminal"]
 	else:
 		colors = COLORS["none"]
 	
 	# Get symbols for the current format
-	symbols = SYMBOLS[fmt]
+	symbols: Dict[str, str] = SYMBOLS[fmt]
 	
 	# Helper function to colorize text
 	def colorize(text: str, color_key: str) -> str:
@@ -389,7 +401,7 @@ def array_summary(
 	else:
 		# Add NaN warning at the beginning if there are NaNs
 		if array_data["has_nans"]:
-			nan_str: str = f"{symbols['warning']} {symbols['nan_values']}{array_data['nan_count']} ({array_data['nan_percent']:.1f}{'\\' if using_tex else ""}%)"
+			nan_str: str = f"{symbols['warning']} {symbols['nan_values']}{eq_char}{array_data['nan_count']} ({array_data['nan_percent']:.1f}{'\\' if using_tex else ""}%)"
 			result_parts.append(colorize(nan_str, "warning"))
 		
 		# Statistics
@@ -434,11 +446,15 @@ def array_summary(
 	
 	# Add dtype if requested
 	if dtype and array_data["dtype"] is not None:
-		result_parts.append(colorize(f"dtype={array_data['dtype']}", "meta"))
+		result_parts.append(colorize(f"dtype={array_data['dtype']}", "dtype"))
 	
 	# Add device if requested and it's a tensor with device info
 	if device and array_data["is_tensor"] and array_data["device"] is not None:
-		result_parts.append(colorize(f"device={array_data['device']}", "meta"))
+		result_parts.append(colorize(f"device={array_data['device']}", "device"))
+	
+	# Add gradient info
+	if requires_grad and array_data["is_tensor"] and array_data["requires_grad"]:
+		result_parts.append(colorize(symbols["requires_grad"], requires_grad))
 	
 	# Return as list if requested, otherwise join with spaces
 	if as_list:

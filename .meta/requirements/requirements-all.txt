@@ -31,6 +31,8 @@ babel==2.17.0
     # via jupyterlab-server
 backcall==0.2.0
     # via ipython
+backports-tarfile==1.2.0 ; python_full_version < '3.12' and platform_machine != 'ppc64le' and platform_machine != 's390x'
+    # via jaraco-context
 beartype==0.19.0
 beautifulsoup4==4.13.0
     # via nbconvert
@@ -46,6 +48,7 @@ certifi==2025.1.31
 cffi==1.17.1
     # via
     #   argon2-cffi-bindings
+    #   cryptography
     #   pyzmq
 charset-normalizer==3.4.1
     # via requests
@@ -73,6 +76,8 @@ coverage==7.6.1
     #   coverage-badge
     #   pytest-cov
 coverage-badge==1.1.2
+cryptography==44.0.2 ; platform_machine != 'ppc64le' and platform_machine != 's390x' and sys_platform == 'linux'
+    # via secretstorage
 cycler==0.12.1
     # via matplotlib
 debugpy==1.8.12
@@ -83,6 +88,8 @@ defusedxml==0.7.1
     # via nbconvert
 dill==0.3.9
     # via multiprocess
+docutils==0.20.1
+    # via readme-renderer
 exceptiongroup==1.2.2 ; python_full_version < '3.11'
     # via
     #   anyio
@@ -107,6 +114,8 @@ httpcore==1.0.7
     # via httpx
 httpx==0.28.1
     # via jupyterlab
+id==1.5.0
+    # via twine
 idna==3.10
     # via
     #   anyio
@@ -115,19 +124,22 @@ idna==3.10
     #   requests
 igittigitt==2.1.5 ; python_full_version >= '3.11'
     # via lmcat
-importlib-metadata==8.5.0 ; python_full_version < '3.10'
+importlib-metadata==8.5.0 ; (python_full_version < '3.10' and platform_machine == 'ppc64le') or (python_full_version < '3.10' and platform_machine == 's390x') or (python_full_version < '3.12' and platform_machine != 'ppc64le' and platform_machine != 's390x')
     # via
     #   jupyter-client
     #   jupyter-lsp
     #   jupyterlab
     #   jupyterlab-server
+    #   keyring
     #   nbconvert
+    #   twine
     #   typeguard
 importlib-resources==6.4.5 ; python_full_version < '3.10'
     # via
     #   jsonschema
     #   jsonschema-specifications
     #   jupyterlab
+    #   keyring
     #   matplotlib
 iniconfig==2.0.0
     # via pytest
@@ -146,10 +158,20 @@ ipywidgets==8.1.5
     # via jupyter
 isoduration==20.11.0
     # via jsonschema
+jaraco-classes==3.4.0 ; platform_machine != 'ppc64le' and platform_machine != 's390x'
+    # via keyring
+jaraco-context==6.0.1 ; platform_machine != 'ppc64le' and platform_machine != 's390x'
+    # via keyring
+jaraco-functools==4.1.0 ; platform_machine != 'ppc64le' and platform_machine != 's390x'
+    # via keyring
 jaxtyping==0.2.19
     # via muutils
 jedi==0.19.2
     # via ipython
+jeepney==0.9.0 ; platform_machine != 'ppc64le' and platform_machine != 's390x' and sys_platform == 'linux'
+    # via
+    #   keyring
+    #   secretstorage
 jinja2==3.1.6
     # via
     #   jupyter-server
@@ -213,6 +235,8 @@ jupyterlab-server==2.27.3
     #   notebook
 jupyterlab-widgets==3.0.13
     # via ipywidgets
+keyring==25.5.0 ; platform_machine != 'ppc64le' and platform_machine != 's390x'
+    # via twine
 kiwisolver==1.4.7
     # via matplotlib
 lib-detect-testenv==2.0.8 ; python_full_version >= '3.11'
@@ -238,6 +262,10 @@ mdurl==0.1.2
     # via markdown-it-py
 mistune==3.1.1
     # via nbconvert
+more-itertools==10.5.0 ; platform_machine != 'ppc64le' and platform_machine != 's390x'
+    # via
+    #   jaraco-classes
+    #   jaraco-functools
 mpmath==1.3.0
     # via sympy
 multiprocess==0.70.17
@@ -263,6 +291,8 @@ nest-asyncio==1.6.0
     # via ipykernel
 networkx==3.1
     # via torch
+nh3==0.2.21
+    # via readme-renderer
 notebook==7.3.2
     # via jupyter
 notebook-shim==0.2.4
@@ -355,6 +385,7 @@ packaging==24.2
     #   nbconvert
     #   plotly
     #   pytest
+    #   twine
 pandocfilters==1.5.1
     # via nbconvert
 parso==0.8.4
@@ -398,6 +429,7 @@ pygments==2.18.0
     #   jupyter-console
     #   nbconvert
     #   pdoc
+    #   readme-renderer
     #   rich
 pyparsing==3.1.4
     # via matplotlib
@@ -415,6 +447,8 @@ pytz==2025.1 ; python_full_version < '3.9'
     # via babel
 pywin32==308 ; platform_python_implementation != 'PyPy' and sys_platform == 'win32'
     # via jupyter-core
+pywin32-ctypes==0.2.3 ; platform_machine != 'ppc64le' and platform_machine != 's390x' and sys_platform == 'win32'
+    # via keyring
 pywinpty==2.0.14 ; os_name == 'nt'
     # via
     #   jupyter-server
@@ -431,28 +465,42 @@ pyzmq==26.2.1
     #   jupyter-client
     #   jupyter-console
     #   jupyter-server
+readme-renderer==43.0
+    # via twine
 referencing==0.35.1
     # via
     #   jsonschema
     #   jsonschema-specifications
     #   jupyter-events
 requests==2.32.3
-    # via jupyterlab-server
+    # via
+    #   id
+    #   jupyterlab-server
+    #   requests-toolbelt
+    #   twine
+requests-toolbelt==1.0.0
+    # via twine
 rfc3339-validator==0.1.4
     # via
     #   jsonschema
     #   jupyter-events
+rfc3986==2.0.0
+    # via twine
 rfc3986-validator==0.1.1
     # via
     #   jsonschema
     #   jupyter-events
 rich==13.9.4
-    # via typer
+    # via
+    #   twine
+    #   typer
 rpds-py==0.20.1
     # via
     #   jsonschema
     #   referencing
 ruff==0.8.3
+secretstorage==3.3.3 ; platform_machine != 'ppc64le' and platform_machine != 's390x' and sys_platform == 'linux'
+    # via keyring
 send2trash==1.8.3
     # via jupyter-server
 setuptools==75.3.0
@@ -526,6 +574,7 @@ traitlets==5.14.3
     #   nbformat
 triton==3.0.0 ; python_full_version < '3.13' and platform_machine == 'x86_64' and sys_platform == 'linux'
     # via torch
+twine==6.1.0
 typeguard==4.4.0
     # via jaxtyping
 typer==0.15.1
@@ -553,7 +602,9 @@ typing-inspect==0.9.0
 uri-template==1.3.0
     # via jsonschema
 urllib3==2.2.3
-    # via requests
+    # via
+    #   requests
+    #   twine
 wcmatch==10.0 ; python_full_version >= '3.11'
     # via igittigitt
 wcwidth==0.2.13
@@ -570,7 +621,7 @@ wheel==0.45.1 ; python_full_version < '3.9'
     # via astunparse
 widgetsnbextension==4.0.13
     # via ipywidgets
-zipp==3.20.2 ; python_full_version < '3.10'
+zipp==3.20.2 ; (python_full_version < '3.10' and platform_machine == 'ppc64le') or (python_full_version < '3.10' and platform_machine == 's390x') or (python_full_version < '3.12' and platform_machine != 'ppc64le' and platform_machine != 's390x')
     # via
     #   importlib-metadata
     #   importlib-resources

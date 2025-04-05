@@ -471,8 +471,6 @@ def array_summary(  # type: ignore[misc]
 
     # Add sparkline if requested
     if sparkline and array_data["histogram"] is not None:
-        print(array_data["histogram"])
-        print(array_data["bins"])
         spark = generate_sparkline(
             array_data["histogram"], format=fmt, log_y=sparkline_logy
         )

@@ -44,7 +44,7 @@ muutils/parallel.py                                                             
 muutils/spinner.py                                                                  147     10    93%   280, 307, 370-371, 417, 420, 423, 465, 469, 508
 muutils/statcounter.py                                                               89     32    64%   30-41, 56, 82, 110, 122, 132, 149-179, 199, 209, 212, 217-222, 231
 muutils/sysinfo.py                                                                   78     14    82%   22-25, 66-67, 116-117, 158-167, 179, 197-199
-muutils/tensor_info.py                                                              201     23    89%   141-142, 152-153, 156-160, 172-173, 181-182, 192, 195-196, 210-211, 241-242, 271, 277, 290, 489
+muutils/tensor_info.py                                                              199     23    88%   141-142, 152-153, 156-160, 172-173, 181-182, 192, 195-196, 210-211, 241-242, 271, 277, 290, 487
 muutils/tensor_utils.py                                                             133     18    86%   101, 104, 123, 127, 144, 147-150, 158, 165, 179-187
 muutils/timeit_fancy.py                                                              31      0   100%
 muutils/validate_type.py                                                             90     23    74%   3-37, 54, 58, 193, 196, 216-223, 228-229
@@ -89,4 +89,4 @@ tests/unit/validate_type/test_validate_type_GENERATED.py                        
 tests/unit/validate_type/test_validate_type_special.py                               15      3    80%   34-35, 57
 tests/util/test_fire.py                                                               8      6    25%   2-5, 9-11
 ---------------------------------------------------------------------------------------------------------------
-TOTAL                                                                              7343   1106    85%
+TOTAL                                                                              7341   1106    85%

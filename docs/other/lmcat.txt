@@ -1,8 +1,8 @@
 # Stats
 - 55 files
-- 11183 (11K) lines
-- 386090 (386K) chars
-- 41528 (42K) `whitespace-split` tokens
+- 11181 (11K) lines
+- 386017 (386K) chars
+- 41526 (42K) `whitespace-split` tokens
 
 # File Tree
 
@@ -62,7 +62,7 @@ muutils
 │   ├── spinner.py                       [  511L 17,879C 1,688T]
 │   ├── statcounter.py                   [  231L  7,373C   768T]
 │   ├── sysinfo.py                       [  199L  6,901C   497T]
-│   ├── tensor_info.py                   [  518L 16,700C 1,639T]
+│   ├── tensor_info.py                   [  516L 16,627C 1,637T]
 │   ├── tensor_utils.py                  [  495L 14,793C 1,418T]
 │   ├── timeit_fancy.py                  [  101L  3,567C   444T]
 │   └── validate_type.py                 [  237L  8,401C   896T]
@@ -9048,8 +9048,6 @@ def array_summary(  # type: ignore[misc]
 
     # Add sparkline if requested
     if sparkline and array_data["histogram"] is not None:
-        print(array_data["histogram"])
-        print(array_data["bins"])
         spark = generate_sparkline(
             array_data["histogram"], format=fmt, log_y=sparkline_logy
         )
@@ -10980,7 +10978,7 @@ help: help-targets info
 # ==================================================
 [project]
 	name = "muutils"
-	version = "0.8.6"
+	version = "0.8.7"
 	description = "miscellaneous python utilities"
 	readme = "README.md"
 	requires-python = ">=3.8"

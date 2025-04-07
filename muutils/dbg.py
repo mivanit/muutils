@@ -118,26 +118,45 @@ def dbg(
     global _COUNTER
 
     # get the context
-    fname: str = "unknown"
     line_exp: str = "unknown"
+    current_file: str = "unknown"
+    dbg_frame: typing.Optional[inspect.FrameInfo] = None
     for frame in inspect.stack():
         if frame.code_context is None:
             continue
         line: str = frame.code_context[0]
         if "dbg" in line:
+            current_file = _process_path(Path(frame.filename))
+            dbg_frame = frame
             start: int = line.find("(") + 1
             end: int = line.rfind(")")
             if end == -1:
                 end = len(line)
-
-            fname = f"{_process_path(Path(frame.filename))}:{frame.lineno}"
-            # special case for jupyter notebooks
-            if fname.startswith("/tmp/ipykernel_"):
-                fname = f"<ipykernel>:{frame.lineno}"
-
             line_exp = line[start:end]
-
             break
+
+    fname: str = "unknown"
+    if current_file.startswith("/tmp/ipykernel_"):
+        stack: list[inspect.FrameInfo] = inspect.stack()
+        filtered_functions: list[str] = []
+        # this loop will find, in this order:
+        # - the dbg function call
+        # - the functions we care about displaying
+        # - `<module>`
+        # - a bunch of jupyter internals we don't care about
+        for frame_info in stack:
+            if _process_path(Path(frame_info.filename)) != current_file:
+                continue
+            if frame_info.function == "<module>":
+                break
+            if frame_info.function.startswith("dbg"):
+                continue
+            filtered_functions.append(frame_info.function)
+        filtered_functions.append(f"<ipykernel>:{dbg_frame.lineno}")
+        filtered_functions.reverse()
+        fname = " -> ".join(filtered_functions)
+    elif dbg_frame is not None:
+        fname = f"{current_file}:{dbg_frame.lineno}"
 
     # assemble the message
     msg: str

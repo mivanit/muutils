@@ -195,6 +195,7 @@ def test_tag_not_alone_on_line(project: dict[str, Any]) -> None:
     with pytest.raises(AssertionError, match="alone in its line"):
         ia.inline_html_assets(html_src, [("style", Path("style.css"))], project["dir"])
 
+
 @pytest.mark.skip("can't figure out how to prevent bs4 import")
 def test_prettify_without_bs4_emits_warning(
     project: dict[str, Any], monkeypatch: pytest.MonkeyPatch

@@ -87,9 +87,9 @@ def inline_html_file(
     # read the assets
     assets: list[tuple[AssetType, str]] = []
     for asset in base_path.glob("*.js"):
-        assets.append(("script", asset.name))
+        assets.append(("script", Path(asset.name)))
     for asset in base_path.glob("*.css"):
-        assets.append(("style", asset.name))
+        assets.append(("style", Path(asset.name)))
     # inline the assets
     html_new: str = inline_html_assets(
         html,

@@ -66,6 +66,7 @@ def inline_html_assets(
 
             soup: BeautifulSoup = BeautifulSoup(html, "html.parser")
             html = soup.prettify()
+            print(BeautifulSoup)
         except ImportError:
             warnings.warn(
                 "BeautifulSoup is not installed, skipping prettification of HTML."

@@ -1418,7 +1418,9 @@ format-check:
 .PHONY: typing
 typing: clean gen-extra-tests
 	@echo "running type checks"
+	$(PYTHON) -m ty check muutils/
 	$(PYTHON) -m mypy --config-file $(PYPROJECT) $(TYPECHECK_ARGS) .
+	
 
 # generates a report of the mypy output
 .PHONY: typing-report

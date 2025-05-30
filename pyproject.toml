@@ -68,6 +68,7 @@
 		"mypy>=1.15; python_version >= '3.9'",
 		"typing-extensions; python_version < '3.11'",
 		"beartype>=0.14.1",
+		"ty",
 		# tests & coverage
 		"pytest>=8.2.2",
 		"pytest-cov>=4.1.0",

@@ -476,6 +476,7 @@ traitlets==5.14.3
     #   nbconvert
     #   nbformat
 twine==6.1.0
+ty==0.0.1a7
 typer==0.15.1
     # via pycln
 types-python-dateutil==2.9.0.20241206

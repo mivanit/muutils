@@ -575,6 +575,7 @@ traitlets==5.14.3
 triton==3.0.0 ; python_full_version < '3.13' and platform_machine == 'x86_64' and sys_platform == 'linux'
     # via torch
 twine==6.1.0
+ty==0.0.1a7
 typeguard==4.4.0
     # via jaxtyping
 typer==0.15.1

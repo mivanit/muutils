@@ -88,7 +88,7 @@ class TestMatrixPowers:
         """Test handling of empty powers list."""
         A = np.eye(3)
         with pytest.raises(ValueError):
-            result = matrix_powers(A, [])
+            matrix_powers(A, [])
 
     def test_duplicate_powers(self) -> None:
         """Test handling of duplicate powers in the input list."""

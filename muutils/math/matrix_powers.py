@@ -25,7 +25,6 @@ def matrix_powers(
      - `dict[int, Float[np.ndarray, "n n"]]`
             Dictionary mapping each requested power to the corresponding matrix power
     """
-    n_powers: int = len(powers)
     dim_n: int = A.shape[0]
     assert A.shape[0] == A.shape[1], f"Matrix must be square, but got {A.shape = }"
     powers_np: Int[np.ndarray, "n_powers_unique"] = np.array(
@@ -101,7 +100,7 @@ def matrix_powers_torch(
     # Raises:
      - `ValueError` : If no powers are requested or if A is not a square matrix
     """
-    n_powers: int = len(powers)
+
     if len(A.shape) != 2 or A.shape[0] != A.shape[1]:
         raise ValueError(f"Matrix must be square, but got {A.shape = }")
 

@@ -152,7 +152,10 @@ def dbg(
             if frame_info.function.startswith("dbg"):
                 continue
             filtered_functions.append(frame_info.function)
-        filtered_functions.append(f"<ipykernel>:{dbg_frame.lineno}")
+        if dbg_frame is not None:
+            filtered_functions.append(f"<ipykernel>:{dbg_frame.lineno}")
+        else:
+            filtered_functions.append(current_file)
         filtered_functions.reverse()
         fname = " -> ".join(filtered_functions)
     elif dbg_frame is not None:

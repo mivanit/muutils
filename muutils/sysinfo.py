@@ -63,6 +63,7 @@ class SysInfo:
         """pytorch and cuda information"""
         try:
             import torch
+            import torch.version
         except Exception as e:
             return {
                 "importable": False,

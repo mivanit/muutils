@@ -10,19 +10,19 @@ import warnings
 
 from muutils.statcounter import StatCounter
 
-T = TypeVar("T")
+T_return = TypeVar("T_return")
 
 
 class FancyTimeitResult(NamedTuple):
     """return type of `timeit_fancy`"""
 
     timings: StatCounter
-    return_value: T  # type: ignore[valid-type]
+    return_value: T_return  # type: ignore[valid-type]
     profile: Union[pstats.Stats, None]
 
 
 def timeit_fancy(
-    cmd: Union[Callable[[], T], str],
+    cmd: Union[Callable[[], T_return], str],
     setup: Union[str, Callable[[], Any]] = lambda: None,
     repeats: int = 5,
     namespace: Union[dict[str, Any], None] = None,
@@ -36,7 +36,7 @@ def timeit_fancy(
 
     # Parameters
 
-    - `cmd: Callable[[], T] | str`
+    - `cmd: Callable[[], T_return] | str`
         The callable to time. If a string, it will be passed to `timeit.Timer` as the `stmt` argument.
     - `setup: str`
         The setup code to run before `cmd`. If a string, it will be passed to `timeit.Timer` as the `setup` argument.
@@ -72,15 +72,15 @@ def timeit_fancy(
     # Optionally capture the return value
     profile: pstats.Stats | None = None
 
-    return_value: T | None = None
-    if get_return or do_profiling:
+    return_value: T_return | None = None
+    if (get_return or do_profiling) and not isinstance(cmd, str):
         # Optionally perform profiling
         if do_profiling:
             profiler = cProfile.Profile()
             profiler.enable()
 
         try:
-            return_value = cmd()  # type: ignore[operator]
+            return_value = cmd()
         except TypeError as e:
             warnings.warn(
                 f"Failed to get return value from `cmd` due to error (probably passing a string). will return `return_value=None`\n{e}",

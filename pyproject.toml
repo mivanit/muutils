@@ -78,6 +78,7 @@
 		"jupyter",
 		"matplotlib>=3.0.0",
 		"plotly>=5.0.0",
+		"beautifulsoup4",
 		# generating docs
 		"pdoc>=14.6.0",
 		# https://github.com/mivanit/muutils/security/dependabot/7

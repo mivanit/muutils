@@ -1792,6 +1792,7 @@ parallel = [
 [package.dev-dependencies]
 dev = [
     { name = "beartype" },
+    { name = "beautifulsoup4" },
     { name = "coverage-badge" },
     { name = "ipykernel" },
     { name = "jinja2" },
@@ -1834,6 +1835,7 @@ provides-extras = ["array", "array-no-torch", "notebook", "parallel"]
 [package.metadata.requires-dev]
 dev = [
     { name = "beartype", specifier = ">=0.14.1" },
+    { name = "beautifulsoup4" },
     { name = "coverage-badge", specifier = ">=1.1.0" },
     { name = "ipykernel" },
     { name = "jinja2", specifier = ">=3.1.6" },

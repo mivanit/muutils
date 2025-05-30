@@ -73,6 +73,12 @@ def timeit_fancy(
     profile: pstats.Stats | None = None
 
     return_value: T_return | None = None
+    if (get_return or do_profiling) and isinstance(cmd, str):
+        warnings.warn(
+            "Can't do profiling or get return value from `cmd` because it is a string."
+            " If you want to get the return value, pass a callable instead.",
+            UserWarning,
+        )
     if (get_return or do_profiling) and not isinstance(cmd, str):
         # Optionally perform profiling
         if do_profiling:

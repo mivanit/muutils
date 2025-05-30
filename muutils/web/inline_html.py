@@ -1,38 +1,43 @@
+"Inline local CSS/JS files into an HTML document"
+
 from typing import Literal
 from pathlib import Path
+import warnings
 
+AssetType = Literal["script", "style"]
 
 def inline_html_assets(
 	html: str,
-	assets: list[tuple[Literal["script", "style"], str]],
+	assets: list[tuple[AssetType, Path]],
 	base_path: Path,
 	include_filename_comments: bool = True,
 	prettify: bool = False,
 ) -> str:
-	"""Inline specified local CSS/JS files into an HTML document.
+	"""Inline specified local CSS/JS files into the text of an HTML document.
 
 	Each entry in `assets` should be a tuple like `("script", "app.js")` or `("style", "style.css")`.
 
 	# Parameters:
 	- `html : str`
 		input HTML content.
-	- `assets : list[tuple[Literal["script", "style"], str]]`
+	- `assets : list[tuple[AssetType, Path]]`
 		List of (tag_type, filename) tuples to inline.
 
 	# Returns:
 	`str` : Modified HTML content with inlined assets.
 	"""
 	for tag_type, filename in assets:
-		if tag_type not in ("style", "script"):
+		fname_str: str = filename.as_posix()
+		if tag_type not in AssetType.__args__:
 			err_msg: str = f"Unsupported tag type: {tag_type}"
 			raise ValueError(err_msg)
 
 		# Dynamically create the pattern for the given tag and filename
 		pattern: str
 		if tag_type == "script":
-			pattern = rf'<script src="{filename}"></script>'
+			pattern = rf'<script src="{fname_str}"></script>'
 		elif tag_type == "style":
-			pattern = rf'<link rel="stylesheet" href="{filename}">'
+			pattern = rf'<link rel="stylesheet" href="{fname_str}">'
 		# assert it's in the text exactly once
 		assert html.count(pattern) == 1, (
 			f"Pattern {pattern} should be in the html exactly once, found {html.count(pattern) = }"
@@ -44,11 +49,10 @@ def inline_html_assets(
 		)
 		# read the content and create the replacement
 		content: str = (base_path / filename).read_text()
-		# replacement: str = f"<!-- begin '{filename}' -->\n<{tag_type}>\n{content}\n</{tag_type}>\n<!-- end '{filename}' -->"
 		replacement: str = f"<{tag_type}>\n{content}\n</{tag_type}>"
 		if include_filename_comments:
 			replacement = (
-				f"<!-- begin '{filename}' -->\n{replacement}\n<!-- end '{filename}' -->"
+				f"<!-- begin '{fname_str}' -->\n{replacement}\n<!-- end '{fname_str}' -->"
 			)
 		# indent the replacement
 		replacement = "\n".join(
@@ -58,10 +62,15 @@ def inline_html_assets(
 		html = html.replace(pattern, replacement)
 
 	if prettify:
-		from bs4 import BeautifulSoup
+		try:
+			from bs4 import BeautifulSoup
 
-		soup: BeautifulSoup = BeautifulSoup(html, "html.parser")
-		html = soup.prettify()
+			soup: BeautifulSoup = BeautifulSoup(html, "html.parser")
+			html = soup.prettify()
+		except ImportError:
+			warnings.warn(
+				"BeautifulSoup is not installed, skipping prettification of HTML."
+			)
 
 	return html
 
@@ -72,11 +81,12 @@ def inline_html_file(
 	include_filename_comments: bool = True,
 	prettify: bool = False,
 ) -> None:
+	"given a path to an HTML file, inline the local CSS/JS files into it and save it to output_path"
 	base_path: Path = html_path.parent
 	# read the HTML file
 	html: str = html_path.read_text()
 	# read the assets
-	assets: list[tuple[Literal["script", "style"], str]] = []
+	assets: list[tuple[AssetType, str]] = []
 	for asset in base_path.glob("*.js"):
 		assets.append(("script", asset.name))
 	for asset in base_path.glob("*.css"):

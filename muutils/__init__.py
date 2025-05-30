@@ -8,8 +8,10 @@ __all__ = [
     # submodules (with sub-submodules)
     "json_serialize",
     "logger",
+    "math",
     "misc",
     "nbutils",
+    "web",
     # submodules
     "console_unicode",
     "dbg",

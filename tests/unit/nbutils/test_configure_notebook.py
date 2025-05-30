@@ -110,7 +110,7 @@ def test_no_warn_pdf_format():
         warnings.simplefilter("error")
         setup_plots(
             plot_mode="save",
-            fig_basepath="JUNK_DATA_PATH",
+            fig_basepath=JUNK_DATA_PATH,
             fig_numbered_fname="fig-{num}.pdf",
         )
         plt.plot([1, 2, 3], [1, 2, 3])

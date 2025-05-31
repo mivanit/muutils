@@ -108,9 +108,9 @@ fqdn==1.5.1
     # via jsonschema
 fsspec==2024.10.0
     # via torch
-h11==0.14.0
+h11==0.16.0
     # via httpcore
-httpcore==1.0.7
+httpcore==1.0.9
     # via httpx
 httpx==0.28.1
     # via jupyterlab
@@ -503,7 +503,11 @@ secretstorage==3.3.3 ; platform_machine != 'ppc64le' and platform_machine != 's3
     # via keyring
 send2trash==1.8.3
     # via jupyter-server
-setuptools==75.3.0
+setuptools==75.3.0 ; python_full_version < '3.9'
+    # via
+    #   coverage-badge
+    #   jupyterlab
+setuptools==80.9.0 ; python_full_version >= '3.9'
     # via
     #   coverage-badge
     #   jupyterlab
@@ -546,7 +550,15 @@ torch==2.4.1 ; python_full_version < '3.13'
     # via muutils
 torch==2.5.1 ; python_full_version >= '3.13'
     # via muutils
-tornado==6.4.2
+tornado==6.4.2 ; python_full_version < '3.9'
+    # via
+    #   ipykernel
+    #   jupyter-client
+    #   jupyter-server
+    #   jupyterlab
+    #   notebook
+    #   terminado
+tornado==6.5.1 ; python_full_version >= '3.9'
     # via
     #   ipykernel
     #   jupyter-client

@@ -73,9 +73,14 @@
 		"pytest>=8.2.2",
 		"pytest-cov>=4.1.0",
 		"coverage-badge>=1.1.0",
+		"setuptools>=78.1.1; python_version >= '3.9'", # https://github.com/mivanit/muutils/security/dependabot/31
 		# for testing plotting and notebooks
 		"ipykernel",
 		"jupyter",
+		# for jupyter
+		"h11>=0.16.0", # https://github.com/mivanit/muutils/security/dependabot/23
+		"tornado>=6.5; python_version >= '3.9'", # https://github.com/mivanit/muutils/security/dependabot/33
+		# plotting
 		"matplotlib>=3.0.0",
 		"plotly>=5.0.0",
 		"beautifulsoup4",

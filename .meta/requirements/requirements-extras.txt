@@ -127,7 +127,7 @@ pure-eval==0.2.3
     # via stack-data
 pygments==2.18.0
     # via ipython
-setuptools==75.3.0 ; python_full_version >= '3.13'
+setuptools==80.9.0 ; python_full_version >= '3.13'
     # via torch
 stack-data==0.6.3
     # via ipython

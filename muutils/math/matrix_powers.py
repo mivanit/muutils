@@ -1,7 +1,6 @@
 from typing import Sequence
 
 import numpy as np
-import torch
 from jaxtyping import Float, Int
 
 
@@ -78,9 +77,9 @@ def matrix_powers(
 
 # BUG: breaks with integer matrices???
 def matrix_powers_torch(
-    A: Float[torch.Tensor, "n n"],
+    A: Float["torch.Tensor", "n n"],  # noqa: F821
     powers: Sequence[int],
-) -> Float[torch.Tensor, "n_powers n n"]:
+) -> Float["torch.Tensor", "n_powers n n"]:  # noqa: F821
     """Compute multiple powers of a matrix efficiently.
 
     Uses binary exponentiation to compute powers in O(log max(powers))
@@ -100,6 +99,8 @@ def matrix_powers_torch(
     # Raises:
      - `ValueError` : If no powers are requested or if A is not a square matrix
     """
+
+    import torch
 
     if len(A.shape) != 2 or A.shape[0] != A.shape[1]:
         raise ValueError(f"Matrix must be square, but got {A.shape = }")

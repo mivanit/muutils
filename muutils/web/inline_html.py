@@ -1,5 +1,7 @@
 "Inline local CSS/JS files into an HTML document"
 
+from __future__ import annotations
+
 from typing import Literal
 from pathlib import Path
 import warnings

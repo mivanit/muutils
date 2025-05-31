@@ -2,7 +2,7 @@ Name                                                                            
 ---------------------------------------------------------------------------------------------------------------
 muutils/__init__.py                                                                   2      0   100%
 muutils/console_unicode.py                                                            7      0   100%
-muutils/dbg.py                                                                       61      4    93%   125, 136, 187-189
+muutils/dbg.py                                                                       80     16    80%   126, 140-160
 muutils/dictmagic.py                                                                160     23    86%   37-42, 45-50, 309, 469-473, 477, 510-522
 muutils/errormode.py                                                                 75     31    59%   10-34, 43, 78-91, 144, 149, 160-163, 197, 200, 203, 206-207, 215-241
 muutils/group_equiv.py                                                               29      0   100%
@@ -24,6 +24,9 @@ muutils/logger/logger.py                                                        
 muutils/logger/loggingstream.py                                                      40     12    70%   43-76, 81, 91-92
 muutils/logger/simplelogger.py                                                       41     19    54%   16, 20, 24, 28, 55-65, 69-81
 muutils/logger/timing.py                                                             39     18    54%   27-30, 43-48, 52-54, 67-70, 81-87
+muutils/math/__init__.py                                                              1      0   100%
+muutils/math/bins.py                                                                 32      0   100%
+muutils/math/matrix_powers.py                                                        67      3    96%   9, 112, 123
 muutils/misc/__init__.py                                                              7      0   100%
 muutils/misc/b64_decode.py                                                            8      8     0%   1-9
 muutils/misc/classes.py                                                              23      5    78%   18-23
@@ -43,11 +46,13 @@ muutils/nbutils/run_notebook_tests.py                                           
 muutils/parallel.py                                                                  92      6    93%   46-48, 60, 219, 223-224
 muutils/spinner.py                                                                  147     10    93%   280, 307, 370-371, 417, 420, 423, 465, 469, 508
 muutils/statcounter.py                                                               89     32    64%   30-41, 56, 82, 110, 122, 132, 149-179, 199, 209, 212, 217-222, 231
-muutils/sysinfo.py                                                                   78     14    82%   22-25, 66-67, 116-117, 158-167, 179, 197-199
-muutils/tensor_info.py                                                              199     23    88%   141-142, 152-153, 156-160, 172-173, 181-182, 192, 195-196, 210-211, 241-242, 271, 277, 290, 487
+muutils/sysinfo.py                                                                   79     14    82%   22-25, 67-68, 117-118, 159-168, 180, 198-200
+muutils/tensor_info.py                                                              199     21    89%   141-142, 152-153, 156-160, 172-173, 181-182, 195-196, 210-211, 241-242, 271, 277, 290
 muutils/tensor_utils.py                                                             133     18    86%   101, 104, 123, 127, 144, 147-150, 158, 165, 179-187
-muutils/timeit_fancy.py                                                              31      0   100%
+muutils/timeit_fancy.py                                                              33      2    94%   90-91
 muutils/validate_type.py                                                             90     23    74%   3-37, 54, 58, 193, 196, 216-223, 228-229
+muutils/web/__init__.py                                                               1      0   100%
+muutils/web/inline_html.py                                                           52     10    81%   73-74, 110-144
 tests/conftest.py                                                                     0      0   100%
 tests/unit/errormode/test_errormode_functionality.py                                 62      1    98%   87
 tests/unit/errormode/test_errormode_init.py                                          68      0   100%
@@ -60,6 +65,8 @@ tests/unit/json_serialize/test_array.py                                         
 tests/unit/json_serialize/test_util.py                                               49      2    96%   66, 73
 tests/unit/logger/test_logger.py                                                     11      0   100%
 tests/unit/logger/test_timer_context.py                                              11      0   100%
+tests/unit/math/test_bins.py                                                         63      0   100%
+tests/unit/math/test_matrix_powers.py                                                88      0   100%
 tests/unit/misc/test_freeze.py                                                      121      0   100%
 tests/unit/misc/test_func.py                                                        175      7    96%   48, 87, 145, 156, 285, 297, 309
 tests/unit/misc/test_misc.py                                                        148      5    97%   239, 247, 255, 354-355
@@ -87,6 +94,7 @@ tests/unit/validate_type/test_get_kwargs.py                                     
 tests/unit/validate_type/test_validate_type.py                                      206     45    78%   49-50, 74-75, 101-102, 124-125, 146-147, 176-177, 202-203, 236-237, 254, 273-274, 335-336, 360-361, 431-432, 460-461, 465-466, 480-498
 tests/unit/validate_type/test_validate_type_GENERATED.py                            206     45    78%   50-51, 75-76, 102-103, 125-126, 147-148, 177-178, 203-204, 237-238, 255, 274-275, 336-337, 361-362, 432-433, 461-462, 466-467, 481-499
 tests/unit/validate_type/test_validate_type_special.py                               15      3    80%   34-35, 57
+tests/unit/web/test_inline_html.py                                                  100      6    94%   205-215
 tests/util/test_fire.py                                                               8      6    25%   2-5, 9-11
 ---------------------------------------------------------------------------------------------------------------
-TOTAL                                                                              7341   1106    85%
+TOTAL                                                                              7767   1137    85%

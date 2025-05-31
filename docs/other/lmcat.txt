@@ -1,8 +1,8 @@
 # Stats
-- 55 files
-- 11181 (11K) lines
-- 386017 (386K) chars
-- 41526 (42K) `whitespace-split` tokens
+- 60 files
+- 11639 (12K) lines
+- 401155 (401K) chars
+- 43078 (43K) `whitespace-split` tokens
 
 # File Tree
 
@@ -30,6 +30,10 @@ muutils
 │   │   ├── loggingstream.py             [   95L  3,856C   412T]
 │   │   ├── simplelogger.py              [   81L  2,173C   239T]
 │   │   └── timing.py                    [   87L  2,613C   257T]
+│   ├── math                             
+│   │   ├── __init__.py                  [    4L     47C     6T]
+│   │   ├── bins.py                      [   67L  2,143C   165T]
+│   │   └── matrix_powers.py             [  164L  5,323C   649T]
 │   ├── misc                             
 │   │   ├── __init__.py                  [   83L  1,941C   153T]
 │   │   ├── b64_decode.py                [    9L    276C    30T]
@@ -47,9 +51,12 @@ muutils
 │   │   ├── mermaid.py                   [   20L    571C    52T]
 │   │   ├── print_tex.py                 [   21L    495C    70T]
 │   │   └── run_notebook_tests.py        [  255L  9,280C   822T]
-│   ├── __init__.py                      [   31L    497C    40T]
+│   ├── web                              
+│   │   ├── __init__.py                  [    3L     33C     5T]
+│   │   └── inline_html.py               [  149L  4,823C   485T]
+│   ├── __init__.py                      [   33L    520C    42T]
 │   ├── console_unicode.py               [   34L  1,070C   133T]
-│   ├── dbg.py                           [  194L  5,505C   643T]
+│   ├── dbg.py                           [  216L  6,506C   729T]
 │   ├── dictmagic.py                     [  522L 18,132C 1,968T]
 │   ├── errormode.py                     [  241L  7,939C   816T]
 │   ├── group_equiv.py                   [   66L  2,060C   246T]
@@ -61,15 +68,15 @@ muutils
 │   ├── py.typed                         [    0L      0C     0T]
 │   ├── spinner.py                       [  511L 17,879C 1,688T]
 │   ├── statcounter.py                   [  231L  7,373C   768T]
-│   ├── sysinfo.py                       [  199L  6,901C   497T]
+│   ├── sysinfo.py                       [  200L  6,934C   499T]
 │   ├── tensor_info.py                   [  516L 16,627C 1,637T]
 │   ├── tensor_utils.py                  [  495L 14,793C 1,418T]
-│   ├── timeit_fancy.py                  [  101L  3,567C   444T]
+│   ├── timeit_fancy.py                  [  107L  3,900C   482T]
 │   └── validate_type.py                 [  237L  8,401C   896T]
 ├── LICENSE                              [  674L 35,149C 5,644T]
 ├── README.md                            [  131L  6,289C   551T]
-├── makefile                             [1,694L 52,531C 6,258T]
-├── pyproject.toml                       [  210L  6,040C   709T]
+├── makefile                             [1,696L 52,566C 6,264T]
+├── pyproject.toml                       [  223L  6,536C   747T]
 ```
 
 # File Contents
@@ -3187,6 +3194,253 @@ class ProgressEstimator:
 
 ``````{ end_of_file="muutils/logger/timing.py" }
 
+``````{ path="muutils/math/__init__.py"  }
+__all__ = [
+    "bins",
+    "matrix_powers",
+]
+
+``````{ end_of_file="muutils/math/__init__.py" }
+
+``````{ path="muutils/math/bins.py"  }
+from __future__ import annotations
+
+from dataclasses import dataclass
+from functools import cached_property
+from typing import Literal
+
+import numpy as np
+from jaxtyping import Float
+
+
+@dataclass(frozen=True)
+class Bins:
+    n_bins: int = 32
+    start: float = 0
+    stop: float = 1.0
+    scale: Literal["lin", "log"] = "log"
+
+    _log_min: float = 1e-3
+    _zero_in_small_start_log: bool = True
+
+    @cached_property
+    def edges(self) -> Float[np.ndarray, "n_bins+1"]:
+        if self.scale == "lin":
+            return np.linspace(self.start, self.stop, self.n_bins + 1)
+        elif self.scale == "log":
+            if self.start < 0:
+                raise ValueError(
+                    f"start must be positive for log scale, got {self.start}"
+                )
+            if self.start == 0:
+                return np.concatenate(
+                    [
+                        np.array([0]),
+                        np.logspace(
+                            np.log10(self._log_min), np.log10(self.stop), self.n_bins
+                        ),
+                    ]
+                )
+            elif self.start < self._log_min and self._zero_in_small_start_log:
+                return np.concatenate(
+                    [
+                        np.array([0]),
+                        np.logspace(
+                            np.log10(self.start), np.log10(self.stop), self.n_bins
+                        ),
+                    ]
+                )
+            else:
+                return np.logspace(
+                    np.log10(self.start), np.log10(self.stop), self.n_bins + 1
+                )
+        else:
+            raise ValueError(f"Invalid scale {self.scale}, expected lin or log")
+
+    @cached_property
+    def centers(self) -> Float[np.ndarray, "n_bins"]:
+        return (self.edges[:-1] + self.edges[1:]) / 2
+
+    def changed_n_bins_copy(self, n_bins: int) -> "Bins":
+        return Bins(
+            n_bins=n_bins,
+            start=self.start,
+            stop=self.stop,
+            scale=self.scale,
+            _log_min=self._log_min,
+            _zero_in_small_start_log=self._zero_in_small_start_log,
+        )
+
+``````{ end_of_file="muutils/math/bins.py" }
+
+``````{ path="muutils/math/matrix_powers.py"  }
+from __future__ import annotations
+
+from typing import List, Sequence, TYPE_CHECKING
+
+import numpy as np
+from jaxtyping import Float, Int
+
+if TYPE_CHECKING:
+    pass
+
+
+def matrix_powers(
+    A: Float[np.ndarray, "n n"],
+    powers: Sequence[int],
+) -> Float[np.ndarray, "n_powers n n"]:
+    """Compute multiple powers of a matrix efficiently.
+
+    Uses binary exponentiation to compute powers in O(log max(powers))
+    matrix multiplications, avoiding redundant calculations when
+    computing multiple powers.
+
+    # Parameters:
+     - `A : Float[np.ndarray, "n n"]`
+            Square matrix to exponentiate
+     - `powers : Sequence[int]`
+            List of powers to compute (non-negative integers)
+
+    # Returns:
+     - `dict[int, Float[np.ndarray, "n n"]]`
+            Dictionary mapping each requested power to the corresponding matrix power
+    """
+    dim_n: int = A.shape[0]
+    assert A.shape[0] == A.shape[1], f"Matrix must be square, but got {A.shape = }"
+    powers_np: Int[np.ndarray, "n_powers_unique"] = np.array(
+        sorted(set(powers)), dtype=int
+    )
+    n_powers_unique: int = len(powers_np)
+
+    if n_powers_unique < 1:
+        raise ValueError(f"No powers requested: {powers = }")
+
+    output: Float[np.ndarray, "n_powers_unique n n"] = np.full(
+        (n_powers_unique, dim_n, dim_n),
+        fill_value=np.nan,
+        dtype=A.dtype,
+    )
+
+    # Find the maximum power to compute
+    max_power: int = max(powers_np)
+
+    # Precompute all powers of 2 up to the largest power needed
+    # This forms our basis for binary decomposition
+    powers_of_two: dict[int, Float[np.ndarray, "n n"]] = {}
+    powers_of_two[0] = np.eye(dim_n, dtype=A.dtype)
+    powers_of_two[1] = A.copy()
+
+    # Compute powers of 2: A^2, A^4, A^8, ...
+    p: int = 1
+    while p < max_power:
+        if p <= max_power:
+            A_power_p = powers_of_two[p]
+            powers_of_two[p * 2] = A_power_p @ A_power_p
+        p = p * 2
+
+    # For each requested power, compute it using the powers of 2
+    for p_idx, power in enumerate(powers_np):
+        # Decompose power into sum of powers of 2
+        temp_result: Float[np.ndarray, "n n"] = powers_of_two[0].copy()
+        temp_power: int = power
+        p_temp: int = 1
+
+        while temp_power > 0:
+            if temp_power % 2 == 1:
+                temp_result = temp_result @ powers_of_two[p_temp]
+            temp_power = temp_power // 2
+            p_temp *= 2
+
+        output[p_idx] = temp_result
+
+    return output
+
+
+# BUG: breaks with integer matrices???
+# TYPING: jaxtyping hints not working here, separate file for torch implementation?
+def matrix_powers_torch(
+    A,  # : Float["torch.Tensor", "n n"],
+    powers: Sequence[int],
+):  # Float["torch.Tensor", "n_powers n n"]:
+    """Compute multiple powers of a matrix efficiently.
+
+    Uses binary exponentiation to compute powers in O(log max(powers))
+    matrix multiplications, avoiding redundant calculations when
+    computing multiple powers.
+
+    # Parameters:
+     - `A : Float[torch.Tensor, "n n"]`
+        Square matrix to exponentiate
+     - `powers : Sequence[int]`
+        List of powers to compute (non-negative integers)
+
+    # Returns:
+     - `Float[torch.Tensor, "n_powers n n"]`
+        Tensor containing the requested matrix powers stacked along the first dimension
+
+    # Raises:
+     - `ValueError` : If no powers are requested or if A is not a square matrix
+    """
+
+    import torch
+
+    if len(A.shape) != 2 or A.shape[0] != A.shape[1]:
+        raise ValueError(f"Matrix must be square, but got {A.shape = }")
+
+    dim_n: int = A.shape[0]
+    # Get unique powers and sort them
+    unique_powers: List[int] = sorted(set(powers))
+    n_powers_unique: int = len(unique_powers)
+    powers_tensor: Int[torch.Tensor, "n_powers_unique"] = torch.tensor(
+        unique_powers, dtype=torch.int64, device=A.device
+    )
+
+    if n_powers_unique < 1:
+        raise ValueError(f"No powers requested: {powers = }")
+
+    output: Float[torch.Tensor, "n_powers_unique n n"] = torch.full(
+        (n_powers_unique, dim_n, dim_n),
+        float("nan"),
+        dtype=A.dtype,
+        device=A.device,
+    )
+
+    # Find the maximum power to compute
+    max_power: int = int(powers_tensor.max().item())
+
+    # Precompute all powers of 2 up to the largest power needed
+    # This forms our basis for binary decomposition
+    powers_of_two: dict[int, Float[torch.Tensor, "n n"]] = {}
+    powers_of_two[0] = torch.eye(dim_n, dtype=A.dtype, device=A.device)
+    powers_of_two[1] = A.clone()
+
+    # Compute powers of 2: A^2, A^4, A^8, ...
+    p: int = 1
+    while p < max_power:
+        if p <= max_power:
+            A_power_p: Float[torch.Tensor, "n n"] = powers_of_two[p]
+            powers_of_two[p * 2] = A_power_p @ A_power_p
+        p = p * 2
+
+    # For each requested power, compute it using the powers of 2
+    for p_idx, power in enumerate(unique_powers):
+        # Decompose power into sum of powers of 2
+        temp_result: Float[torch.Tensor, "n n"] = powers_of_two[0].clone()
+        temp_power: int = power
+        p_temp: int = 1
+
+        while temp_power > 0:
+            if temp_power % 2 == 1:
+                temp_result = temp_result @ powers_of_two[p_temp]
+            temp_power = temp_power // 2
+            p_temp *= 2
+
+        output[p_idx] = temp_result
+
+    return output
+
+``````{ end_of_file="muutils/math/matrix_powers.py" }
+
 ``````{ path="muutils/misc/__init__.py"  }
 """miscellaneous utilities
 
@@ -5390,6 +5644,166 @@ if __name__ == "__main__":
 
 ``````{ end_of_file="muutils/nbutils/run_notebook_tests.py" }
 
+``````{ path="muutils/web/__init__.py"  }
+__all__ = [
+    "inline_html",
+]
+
+``````{ end_of_file="muutils/web/__init__.py" }
+
+``````{ path="muutils/web/inline_html.py"  }
+"Inline local CSS/JS files into an HTML document"
+
+from __future__ import annotations
+
+from typing import Literal
+from pathlib import Path
+import warnings
+
+AssetType = Literal["script", "style"]
+
+
+def inline_html_assets(
+    html: str,
+    assets: list[tuple[AssetType, Path]],
+    base_path: Path,
+    include_filename_comments: bool = True,
+    prettify: bool = False,
+) -> str:
+    """Inline specified local CSS/JS files into the text of an HTML document.
+
+    Each entry in `assets` should be a tuple like `("script", "app.js")` or `("style", "style.css")`.
+
+    # Parameters:
+    - `html : str`
+            input HTML content.
+    - `assets : list[tuple[AssetType, Path]]`
+            List of (tag_type, filename) tuples to inline.
+
+    # Returns:
+    `str` : Modified HTML content with inlined assets.
+    """
+    for tag_type, filename in assets:
+        fname_str: str = filename.as_posix()
+        if tag_type not in AssetType.__args__:  # type: ignore[attr-defined]
+            err_msg: str = f"Unsupported tag type: {tag_type}"
+            raise ValueError(err_msg)
+
+        # Dynamically create the pattern for the given tag and filename
+        pattern: str
+        if tag_type == "script":
+            pattern = rf'<script src="{fname_str}"></script>'
+        elif tag_type == "style":
+            pattern = rf'<link rel="stylesheet" href="{fname_str}">'
+        # assert it's in the text exactly once
+        assert (
+            html.count(pattern) == 1
+        ), f"Pattern {pattern} should be in the html exactly once, found {html.count(pattern) = }"
+        # figure out the indentation level of the pattern  in the html
+        indentation: str = html.split(pattern)[0].splitlines()[-1]
+        assert (
+            indentation.strip() == ""
+        ), f"Pattern '{pattern}' should be alone in its line, found {indentation = }"
+        # read the content and create the replacement
+        content: str = (base_path / filename).read_text()
+        replacement: str = f"<{tag_type}>\n{content}\n</{tag_type}>"
+        if include_filename_comments:
+            replacement = f"<!-- begin '{fname_str}' -->\n{replacement}\n<!-- end '{fname_str}' -->"
+        # indent the replacement
+        replacement = "\n".join(
+            [f"{indentation}\t{line}" for line in replacement.splitlines()]
+        )
+        # perform the replacement
+        html = html.replace(pattern, replacement)
+
+    if prettify:
+        try:
+            from bs4 import BeautifulSoup
+
+            soup: BeautifulSoup = BeautifulSoup(html, "html.parser")
+            # TYPING: .prettify() might return a str or bytes, but we want str?
+            html = str(soup.prettify())
+            print(BeautifulSoup)
+        except ImportError:
+            warnings.warn(
+                "BeautifulSoup is not installed, skipping prettification of HTML."
+            )
+
+    return html
+
+
+def inline_html_file(
+    html_path: Path,
+    output_path: Path,
+    include_filename_comments: bool = True,
+    prettify: bool = False,
+) -> None:
+    "given a path to an HTML file, inline the local CSS/JS files into it and save it to output_path"
+    base_path: Path = html_path.parent
+    # read the HTML file
+    html: str = html_path.read_text()
+    # read the assets
+    assets: list[tuple[AssetType, Path]] = []
+    for asset in base_path.glob("*.js"):
+        assets.append(("script", Path(asset.name)))
+    for asset in base_path.glob("*.css"):
+        assets.append(("style", Path(asset.name)))
+    # inline the assets
+    html_new: str = inline_html_assets(
+        html,
+        assets,
+        base_path,
+        include_filename_comments=include_filename_comments,
+        prettify=prettify,
+    )
+    # write the new HTML file
+    output_path.write_text(html_new)
+
+
+if __name__ == "__main__":
+    import argparse
+
+    parser: argparse.ArgumentParser = argparse.ArgumentParser(
+        description="Inline local CSS/JS files into an HTML document."
+    )
+    parser.add_argument(
+        "-i",
+        "--input-path",
+        type=Path,
+        help="Path to the HTML file to process.",
+    )
+    parser.add_argument(
+        "-o",
+        "--output-path",
+        type=str,
+        help="Path to save the modified HTML file.",
+    )
+
+    parser.add_argument(
+        "-c",
+        "--no-filename-comments",
+        action="store_true",
+        help="don't include comments with the filename in the inlined assets",
+    )
+
+    parser.add_argument(
+        "-p",
+        "--no-prettify",
+        action="store_true",
+        help="don't prettify the HTML file",
+    )
+
+    args: argparse.Namespace = parser.parse_args()
+
+    inline_html_file(
+        html_path=Path(args.input_path),
+        output_path=Path(args.output_path),
+        include_filename_comments=not args.no_filename_comments,
+        prettify=not args.no_prettify,
+    )
+
+``````{ end_of_file="muutils/web/inline_html.py" }
+
 ``````{ path="muutils/__init__.py"  }
 """
 .. include:: ../README.md
@@ -5401,8 +5815,10 @@ __all__ = [
     # submodules (with sub-submodules)
     "json_serialize",
     "logger",
+    "math",
     "misc",
     "nbutils",
+    "web",
     # submodules
     "console_unicode",
     "dbg",
@@ -5584,26 +6000,48 @@ def dbg(
     global _COUNTER
 
     # get the context
-    fname: str = "unknown"
     line_exp: str = "unknown"
+    current_file: str = "unknown"
+    dbg_frame: typing.Optional[inspect.FrameInfo] = None
     for frame in inspect.stack():
         if frame.code_context is None:
             continue
         line: str = frame.code_context[0]
         if "dbg" in line:
+            current_file = _process_path(Path(frame.filename))
+            dbg_frame = frame
             start: int = line.find("(") + 1
             end: int = line.rfind(")")
             if end == -1:
                 end = len(line)
-
-            fname = f"{_process_path(Path(frame.filename))}:{frame.lineno}"
-            # special case for jupyter notebooks
-            if fname.startswith("/tmp/ipykernel_"):
-                fname = f"<ipykernel>:{frame.lineno}"
-
             line_exp = line[start:end]
-
             break
+
+    fname: str = "unknown"
+    if current_file.startswith("/tmp/ipykernel_"):
+        stack: list[inspect.FrameInfo] = inspect.stack()
+        filtered_functions: list[str] = []
+        # this loop will find, in this order:
+        # - the dbg function call
+        # - the functions we care about displaying
+        # - `<module>`
+        # - a bunch of jupyter internals we don't care about
+        for frame_info in stack:
+            if _process_path(Path(frame_info.filename)) != current_file:
+                continue
+            if frame_info.function == "<module>":
+                break
+            if frame_info.function.startswith("dbg"):
+                continue
+            filtered_functions.append(frame_info.function)
+        if dbg_frame is not None:
+            filtered_functions.append(f"<ipykernel>:{dbg_frame.lineno}")
+        else:
+            filtered_functions.append(current_file)
+        filtered_functions.reverse()
+        fname = " -> ".join(filtered_functions)
+    elif dbg_frame is not None:
+        fname = f"{current_file}:{dbg_frame.lineno}"
 
     # assemble the message
     msg: str
@@ -8437,6 +8875,7 @@ class SysInfo:
         """pytorch and cuda information"""
         try:
             import torch
+            import torch.version
         except Exception as e:
             return {
                 "importable": False,
@@ -9606,19 +10045,19 @@ import warnings
 
 from muutils.statcounter import StatCounter
 
-T = TypeVar("T")
+T_return = TypeVar("T_return")
 
 
 class FancyTimeitResult(NamedTuple):
     """return type of `timeit_fancy`"""
 
     timings: StatCounter
-    return_value: T  # type: ignore[valid-type]
+    return_value: T_return  # type: ignore[valid-type]
     profile: Union[pstats.Stats, None]
 
 
 def timeit_fancy(
-    cmd: Union[Callable[[], T], str],
+    cmd: Union[Callable[[], T_return], str],
     setup: Union[str, Callable[[], Any]] = lambda: None,
     repeats: int = 5,
     namespace: Union[dict[str, Any], None] = None,
@@ -9632,7 +10071,7 @@ def timeit_fancy(
 
     # Parameters
 
-    - `cmd: Callable[[], T] | str`
+    - `cmd: Callable[[], T_return] | str`
         The callable to time. If a string, it will be passed to `timeit.Timer` as the `stmt` argument.
     - `setup: str`
         The setup code to run before `cmd`. If a string, it will be passed to `timeit.Timer` as the `setup` argument.
@@ -9668,15 +10107,21 @@ def timeit_fancy(
     # Optionally capture the return value
     profile: pstats.Stats | None = None
 
-    return_value: T | None = None
-    if get_return or do_profiling:
+    return_value: T_return | None = None
+    if (get_return or do_profiling) and isinstance(cmd, str):
+        warnings.warn(
+            "Can't do profiling or get return value from `cmd` because it is a string."
+            " If you want to get the return value, pass a callable instead.",
+            UserWarning,
+        )
+    if (get_return or do_profiling) and not isinstance(cmd, str):
         # Optionally perform profiling
         if do_profiling:
             profiler = cProfile.Profile()
             profiler.enable()
 
         try:
-            return_value = cmd()  # type: ignore[operator]
+            return_value = cmd()
         except TypeError as e:
             warnings.warn(
                 f"Failed to get return value from `cmd` due to error (probably passing a string). will return `return_value=None`\n{e}",
@@ -10978,7 +11423,7 @@ help: help-targets info
 # ==================================================
 [project]
 	name = "muutils"
-	version = "0.8.7"
+	version = "0.8.8"
 	description = "miscellaneous python utilities"
 	readme = "README.md"
 	requires-python = ">=3.8"
@@ -11044,15 +11489,22 @@ help: help-targets info
 		"mypy>=1.15; python_version >= '3.9'",
 		"typing-extensions; python_version < '3.11'",
 		"beartype>=0.14.1",
+		"ty",
 		# tests & coverage
 		"pytest>=8.2.2",
 		"pytest-cov>=4.1.0",
 		"coverage-badge>=1.1.0",
+		"setuptools>=78.1.1; python_version >= '3.9'", # https://github.com/mivanit/muutils/security/dependabot/31
 		# for testing plotting and notebooks
 		"ipykernel",
 		"jupyter",
+		# for jupyter
+		"h11>=0.16.0", # https://github.com/mivanit/muutils/security/dependabot/23
+		"tornado>=6.5; python_version >= '3.9'", # https://github.com/mivanit/muutils/security/dependabot/33
+		# plotting
 		"matplotlib>=3.0.0",
 		"plotly>=5.0.0",
+		"beautifulsoup4",
 		# generating docs
 		"pdoc>=14.6.0",
 		# https://github.com/mivanit/muutils/security/dependabot/7
@@ -11092,6 +11544,12 @@ help: help-targets info
 	[tool.ruff.lint.per-file-ignores]
 		"muutils/tensor_info.py" = [
 			"E701", # multiple statements on one line (colon)
+		]
+		"tests/unit/math/test_matrix_powers.py" = [
+			"F722", # jaxtyping stuff
+		]
+		"muutils/math/matrix_powers.py" = [
+			"F722", # jaxtyping stuff
 		]
 
 [tool.pycln]

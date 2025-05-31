@@ -1,6 +1,33 @@
  # Inline TODOs
 
 
+# BUG
+
+## [`muutils/math/matrix_powers.py`](/muutils/math/matrix_powers.py)
+
+- breaks with integer matrices???  
+  local link: [`/muutils/math/matrix_powers.py:83`](/muutils/math/matrix_powers.py#L83) 
+  | view on GitHub: [muutils/math/matrix_powers.py#L83](https://github.com/mivanit/muutils/blob/main/muutils/math/matrix_powers.py#L83)
+  | [Make Issue](https://github.com/mivanit/muutils/issues/new?title=breaks%20with%20integer%20matrices%3F%3F%3F&body=%23%20source%0A%0A%5B%60muutils%2Fmath%2Fmatrix_powers.py%23L83%60%5D%28https%3A%2F%2Fgithub.com%2Fmivanit%2Fmuutils%2Fblob%2Fmain%2Fmuutils%2Fmath%2Fmatrix_powers.py%23L83%29%0A%0A%23%20context%0A%60%60%60python%0A%20%20%20%20%20%20%20%20output%5Bp_idx%5D%20%3D%20temp_result%0A%0A%20%20%20%20return%20output%0A%0A%0A%23%20BUG%3A%20breaks%20with%20integer%20matrices%3F%3F%3F%0A%23%20TYPING%3A%20jaxtyping%20hints%20not%20working%20here%2C%20separate%20file%20for%20torch%20implementation%3F%0Adef%20matrix_powers_torch%28%0A%20%20%20%20A%2C%20%20%23%20%3A%20Float%5B%22torch.Tensor%22%2C%20%22n%20n%22%5D%2C%0A%20%20%20%20powers%3A%20Sequence%5Bint%5D%2C%0A%29%3A%20%20%23%20Float%5B%22torch.Tensor%22%2C%20%22n_powers%20n%20n%22%5D%3A%0A%60%60%60&labels=bug)
+
+  ```python
+          output[p_idx] = temp_result
+
+      return output
+
+
+  # BUG: breaks with integer matrices???
+  # TYPING: jaxtyping hints not working here, separate file for torch implementation?
+  def matrix_powers_torch(
+      A,  # : Float["torch.Tensor", "n n"],
+      powers: Sequence[int],
+  ):  # Float["torch.Tensor", "n_powers n n"]:
+  ```
+
+
+
+
+
 # HACK
 
 ## [`muutils/json_serialize/serializable_dataclass.py`](/muutils/json_serialize/serializable_dataclass.py)

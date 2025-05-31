@@ -1,4 +1,4 @@
-  docs for muutils v0.8.7
+  docs for muutils v0.8.8
 
 Contents
 
@@ -121,8 +121,10 @@ Submodules
 
 -   json_serialize
 -   logger
+-   math
 -   misc
 -   nbutils
+-   web
 -   console_unicode
 -   dbg
 -   dictmagic
@@ -262,7 +264,7 @@ at your own risk!
 
 View Source on GitHub
 
-  docs for muutils v0.8.7
+  docs for muutils v0.8.8
 
 API Documentation
 
@@ -303,7 +305,7 @@ Usage:
     >>> get_console_safe_str("café", "cafe")
     "café"  # This result may vary based on the system's preferred encoding.
 
-  docs for muutils v0.8.7
+  docs for muutils v0.8.8
 
 Contents
 
@@ -422,7 +424,7 @@ View Source on GitHub
 
 -   dbg_tensor = functools.partial(<function dbg>, formatter=<function tensor_info>, val_joiner=': ')
 
-  docs for muutils v0.8.7
+  docs for muutils v0.8.8
 
 Contents
 
@@ -777,7 +779,7 @@ Raises:
     ‘yaml’, or if you try to use ‘yaml’ output without having PyYAML
     installed
 
-  docs for muutils v0.8.7
+  docs for muutils v0.8.8
 
 Contents
 
@@ -992,7 +994,7 @@ Inherited Members
 
 map of string aliases to ErrorMode instances
 
-  docs for muutils v0.8.7
+  docs for muutils v0.8.8
 
 Contents
 
@@ -1034,7 +1036,7 @@ Arguments
 -   eq_func: Callable[[T, T], bool] a function that returns true if two
     items are equivalent. need not be transitive
 
-  docs for muutils v0.8.7
+  docs for muutils v0.8.8
 
 Contents
 
@@ -1330,7 +1332,7 @@ Inherited Members
 -   intersection
 -   union
 
-  docs for muutils v0.8.7
+  docs for muutils v0.8.8
 
 Contents
 
@@ -1939,7 +1941,7 @@ Parameters:
     - `nested_dict : dict[str, Any]`
         nested dict to update the instance with
 
-  docs for muutils v0.8.7
+  docs for muutils v0.8.8
 
 Contents
 
@@ -2061,7 +2063,7 @@ View Source on GitHub
 
 load a json-serialized array, infer the mode if not specified
 
-  docs for muutils v0.8.7
+  docs for muutils v0.8.8
 
 Contents
 
@@ -2237,7 +2239,7 @@ View Source on GitHub
 
 serialize object to json-serializable object with default config
 
-  docs for muutils v0.8.7
+  docs for muutils v0.8.8
 
 Contents
 
@@ -2835,7 +2837,7 @@ Raises:
 -   AttributeError : if a property is not found on the class
 -   FieldLoadingError : if there is an error loading a field
 
-  docs for muutils v0.8.7
+  docs for muutils v0.8.8
 
 Contents
 
@@ -3027,7 +3029,7 @@ the container. ZANJ will automatically do this for you.
 
 TODO: custom_value_check_fn: function taking the value of the field and returning whether the value itself is valid. if not provided, any value is valid as long as it passes the type test
 
-  docs for muutils v0.8.7
+  docs for muutils v0.8.8
 
 Contents
 
@@ -3210,7 +3212,7 @@ View Source on GitHub
 
 tuple type hint, but for a tuple of any length with all the same type
 
-  docs for muutils v0.8.7
+  docs for muutils v0.8.8
 
 Contents
 
@@ -3260,7 +3262,7 @@ def jsonl_write
 
 View Source on GitHub
 
-  docs for muutils v0.8.7
+  docs for muutils v0.8.8
 
 Contents
 
@@ -3316,7 +3318,7 @@ Inherited Members
 -   items
 -   values
 
-  docs for muutils v0.8.7
+  docs for muutils v0.8.8
 
 Contents
 
@@ -3537,7 +3539,7 @@ context manager for timing code
 
 -   elapsed_time: float
 
-  docs for muutils v0.8.7
+  docs for muutils v0.8.8
 
 API Documentation
 
@@ -3574,7 +3576,7 @@ View Source on GitHub
 
 -   stream
 
-  docs for muutils v0.8.7
+  docs for muutils v0.8.8
 
 API Documentation
 
@@ -3666,7 +3668,7 @@ standard header function. will output
 
 -   HEADER_FUNCTIONS: dict[str, muutils.logger.headerfuncs.HeaderFunction] = {'md': <function md_header_function>}
 
-  docs for muutils v0.8.7
+  docs for muutils v0.8.8
 
 API Documentation
 
@@ -3731,7 +3733,7 @@ then gather_val("log.jsonl", "s1", ("a", "b")) will return
         [4, 5]
     ]
 
-  docs for muutils v0.8.7
+  docs for muutils v0.8.8
 
 Contents
 
@@ -3873,7 +3875,7 @@ View Source on GitHub
 
 flush all streams
 
-  docs for muutils v0.8.7
+  docs for muutils v0.8.8
 
 API Documentation
 
@@ -3935,7 +3937,7 @@ def make_handler
 
 View Source on GitHub
 
-  docs for muutils v0.8.7
+  docs for muutils v0.8.8
 
 API Documentation
 
@@ -4010,7 +4012,7 @@ View Source on GitHub
 
 log a message to the log file, and optionally to the console
 
-  docs for muutils v0.8.7
+  docs for muutils v0.8.8
 
 API Documentation
 
@@ -4097,7 +4099,136 @@ View Source on GitHub
 
 returns a progress string
 
-  docs for muutils v0.8.7
+  docs for muutils v0.8.8
+
+Submodules
+
+-   bins
+-   matrix_powers
+
+View Source on GitHub
+
+muutils.math
+
+View Source on GitHub
+
+  docs for muutils v0.8.8
+
+API Documentation
+
+-   Bins
+
+View Source on GitHub
+
+muutils.math.bins
+
+View Source on GitHub
+
+class Bins:
+
+View Source on GitHub
+
+Bins
+
+    (
+        n_bins: int = 32,
+        start: float = 0,
+        stop: float = 1.0,
+        scale: Literal['lin', 'log'] = 'log',
+        _log_min: float = 0.001,
+        _zero_in_small_start_log: bool = True
+    )
+
+-   n_bins: int = 32
+
+-   start: float = 0
+
+-   stop: float = 1.0
+
+-   scale: Literal['lin', 'log'] = 'log'
+
+-   edges: jaxtyping.Float[ndarray, 'n_bins+1']
+
+View Source on GitHub
+
+-   centers: jaxtyping.Float[ndarray, 'n_bins']
+
+View Source on GitHub
+
+def changed_n_bins_copy
+
+    (self, n_bins: int) -> muutils.math.bins.Bins
+
+View Source on GitHub
+
+  docs for muutils v0.8.8
+
+API Documentation
+
+-   matrix_powers
+-   matrix_powers_torch
+
+View Source on GitHub
+
+muutils.math.matrix_powers
+
+View Source on GitHub
+
+def matrix_powers
+
+    (
+        A: jaxtyping.Float[ndarray, 'n n'],
+        powers: Sequence[int]
+    ) -> jaxtyping.Float[ndarray, 'n_powers n n']
+
+View Source on GitHub
+
+Compute multiple powers of a matrix efficiently.
+
+Uses binary exponentiation to compute powers in O(log max(powers))
+matrix multiplications, avoiding redundant calculations when computing
+multiple powers.
+
+Parameters:
+
+-   A : Float[np.ndarray, "n n"] Square matrix to exponentiate
+-   powers : Sequence[int] List of powers to compute (non-negative
+    integers)
+
+Returns:
+
+-   dict[int, Float[np.ndarray, "n n"]] Dictionary mapping each
+    requested power to the corresponding matrix power
+
+def matrix_powers_torch
+
+    (A, powers: Sequence[int])
+
+View Source on GitHub
+
+Compute multiple powers of a matrix efficiently.
+
+Uses binary exponentiation to compute powers in O(log max(powers))
+matrix multiplications, avoiding redundant calculations when computing
+multiple powers.
+
+Parameters:
+
+-   A : Float[torch.Tensor, "n n"] Square matrix to exponentiate
+-   powers : Sequence[int] List of powers to compute (non-negative
+    integers)
+
+Returns:
+
+-   Float[torch.Tensor, "n_powers n n"] Tensor containing the requested
+    matrix powers stacked along the first dimension
+
+Raises:
+
+-   ValueError : If no powers are requested or if A is not a square
+    matrix
+
+  docs for muutils v0.8.8
 
 Contents
 
@@ -4668,7 +4799,7 @@ Duplicates are ignored in the same manner as a set. Unfrozen dataclasses
 can’t be placed in sets since they’re not hashable. Collections of them
 may be compared using this function.
 
-  docs for muutils v0.8.7
+  docs for muutils v0.8.8
 
 API Documentation
 
@@ -4798,7 +4929,7 @@ Duplicates are ignored in the same manner as a set. Unfrozen dataclasses
 can’t be placed in sets since they’re not hashable. Collections of them
 may be compared using this function.
 
-  docs for muutils v0.8.7
+  docs for muutils v0.8.8
 
 API Documentation
 
@@ -4914,7 +5045,7 @@ you can’t rely on that. always use the return value.
 
 the gelidum package is a more complete implementation of this idea
 
-  docs for muutils v0.8.7
+  docs for muutils v0.8.8
 
 API Documentation
 
@@ -5116,7 +5247,7 @@ Raises:
 -   ValueError if the number of input types doesn’t match the lambda’s
     parameters.
 
-  docs for muutils v0.8.7
+  docs for muutils v0.8.8
 
 API Documentation
 
@@ -5154,7 +5285,7 @@ View Source on GitHub
 Returns a base64 representation of the hash of the given string. not
 cryptographically secure
 
-  docs for muutils v0.8.7
+  docs for muutils v0.8.8
 
 API Documentation
 
@@ -5211,7 +5342,7 @@ Examples:
     >>> str_to_numeric("1.2e2")
     120.0
 
-  docs for muutils v0.8.7
+  docs for muutils v0.8.8
 
 API Documentation
 
@@ -5386,7 +5517,7 @@ Raises:
     is "except"
 -   ValueError : if when_missing is invalid
 
-  docs for muutils v0.8.7
+  docs for muutils v0.8.8
 
 API Documentation
 
@@ -5471,7 +5602,7 @@ def dynamic_docstring
 
 View Source on GitHub
 
-  docs for muutils v0.8.7
+  docs for muutils v0.8.8
 
 Contents
 
@@ -5567,7 +5698,7 @@ def pprint_summary
 
 View Source on GitHub
 
-  docs for muutils v0.8.7
+  docs for muutils v0.8.8
 
 Contents
 
@@ -5611,7 +5742,7 @@ View Source on GitHub
 
 for plotting mermaid.js diagrams
 
-  docs for muutils v0.8.7
+  docs for muutils v0.8.8
 
 Contents
 
@@ -5783,7 +5914,7 @@ View Source on GitHub
 
 Show the active plot, depending on global configs
 
-  docs for muutils v0.8.7
+  docs for muutils v0.8.8
 
 Contents
 
@@ -5887,7 +6018,7 @@ Arguments
     - `filter_out_lines: str|typing.Sequence[str] = ('%', '!')`: comment out lines starting with these strings (in code blocks).
         if a string is passed, it will be split by char and each char will be treated as a separate filter.
 
-  docs for muutils v0.8.7
+  docs for muutils v0.8.8
 
 Contents
 
@@ -5915,7 +6046,7 @@ View Source on GitHub
 
 for plotting mermaid.js diagrams
 
-  docs for muutils v0.8.7
+  docs for muutils v0.8.8
 
 Contents
 
@@ -5946,7 +6077,7 @@ View Source on GitHub
 
 function for easily rendering a sympy expression in latex
 
-  docs for muutils v0.8.7
+  docs for muutils v0.8.8
 
 Contents
 
@@ -6066,7 +6197,7 @@ Usage:
         Output in temp/converted/notebook1.CI-output.txt
         {SUCCESS_STR} Run completed with return code 0
 
-  docs for muutils v0.8.7
+  docs for muutils v0.8.8
 
 API Documentation
 
@@ -6206,7 +6337,7 @@ Raises:
 -   ImportError : if use_multiprocess=True and multiprocess is not
     available
 
-  docs for muutils v0.8.7
+  docs for muutils v0.8.8
 
 Contents
 
@@ -6602,7 +6733,7 @@ As a decorator:
             spinner.update_value(f"Step {i+1}")
         return "Function completed"
 
-  docs for muutils v0.8.7
+  docs for muutils v0.8.8
 
 Contents
 
@@ -6813,7 +6944,7 @@ Inherited Members
 
 -   clear
 
-  docs for muutils v0.8.7
+  docs for muutils v0.8.8
 
 Contents
 
@@ -6883,7 +7014,7 @@ def get_all
 
 View Source on GitHub
 
-  docs for muutils v0.8.7
+  docs for muutils v0.8.8
 
 API Documentation
 
@@ -7007,7 +7138,7 @@ Returns:
 -   Union[str, List[str]] Formatted statistical summary, either as
     string or list of strings
 
-  docs for muutils v0.8.7
+  docs for muutils v0.8.8
 
 Contents
 
@@ -7302,7 +7433,7 @@ Raises:
 -   StateDictShapeError : shapes don’t match (but keys do)
 -   StateDictValueError : values don’t match (but keys and shapes do)
 
-  docs for muutils v0.8.7
+  docs for muutils v0.8.8
 
 Contents
 
@@ -7331,7 +7462,7 @@ FancyTimeitResult
 
     (
         timings: ForwardRef('StatCounter'),
-        return_value: ForwardRef('T'),
+        return_value: ForwardRef('T_return'),
         profile: ForwardRef('Union[pstats.Stats, None]')
     )
 
@@ -7341,7 +7472,7 @@ Create new instance of FancyTimeitResult(timings, return_value, profile)
 
 Alias for field number 0
 
--   return_value: ~T
+-   return_value: ~T_return
 
 Alias for field number 1
 
@@ -7357,7 +7488,7 @@ Inherited Members
 def timeit_fancy
 
     (
-        cmd: Union[Callable[[], ~T], str],
+        cmd: Union[Callable[[], ~T_return], str],
         setup: Union[str, Callable[[], Any]] = <function <lambda>>,
         repeats: int = 5,
         namespace: Optional[dict[str, Any]] = None,
@@ -7375,8 +7506,8 @@ interface in a Python callable.
 
 Parameters
 
--   cmd: Callable[[], T] | str The callable to time. If a string, it
-    will be passed to timeit.Timer as the stmt argument.
+-   cmd: Callable[[], T_return] | str The callable to time. If a string,
+    it will be passed to timeit.Timer as the stmt argument.
 -   setup: str The setup code to run before cmd. If a string, it will be
     passed to timeit.Timer as the setup argument.
 -   repeats: int The number of times to run cmd to get a reliable
@@ -7403,7 +7534,7 @@ FancyTimeitResult, which is a NamedTuple with the following fields:
 -   profile: pstats.Stats|None A pstats.Stats object if do_profiling is
     True, otherwise None.
 
-  docs for muutils v0.8.7
+  docs for muutils v0.8.8
 
 Contents
 
@@ -7515,3 +7646,78 @@ View Source on GitHub
 
 Get the allowed kwargs for a function, raising an exception if the
 signature cannot be determined.
+
+  docs for muutils v0.8.8
+
+Submodules
+
+-   inline_html
+
+View Source on GitHub
+
+muutils.web
+
+View Source on GitHub
+
+  docs for muutils v0.8.8
+
+Contents
+
+Inline local CSS/JS files into an HTML document
+
+API Documentation
+
+-   AssetType
+-   inline_html_assets
+-   inline_html_file
+
+View Source on GitHub
+
+muutils.web.inline_html
+
+Inline local CSS/JS files into an HTML document
+
+View Source on GitHub
+
+-   AssetType = typing.Literal['script', 'style']
+
+def inline_html_assets
+
+    (
+        html: str,
+        assets: list[tuple[typing.Literal['script', 'style'], pathlib.Path]],
+        base_path: pathlib.Path,
+        include_filename_comments: bool = True,
+        prettify: bool = False
+    ) -> str
+
+View Source on GitHub
+
+Inline specified local CSS/JS files into the text of an HTML document.
+
+Each entry in assets should be a tuple like ("script", "app.js") or
+("style", "style.css").
+
+Parameters:
+
+-   html : str input HTML content.
+-   assets : list[tuple[AssetType, Path]] List of (tag_type, filename)
+    tuples to inline.
+
+Returns:
+
+str : Modified HTML content with inlined assets.
+
+def inline_html_file
+
+    (
+        html_path: pathlib.Path,
+        output_path: pathlib.Path,
+        include_filename_comments: bool = True,
+        prettify: bool = False
+    ) -> None
+
+View Source on GitHub
+
+given a path to an HTML file, inline the local CSS/JS files into it and
+save it to output_path

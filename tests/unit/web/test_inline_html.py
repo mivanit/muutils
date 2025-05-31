@@ -13,7 +13,7 @@ import sys
 import warnings
 from pathlib import Path
 from types import ModuleType
-from typing import Any, cast
+from typing import Any, cast, Dict
 
 import pytest
 
@@ -39,7 +39,7 @@ JS_CONTENT: str = "console.log('hello');"
 # Fixtures                                                                    #
 # --------------------------------------------------------------------------- #
 @pytest.fixture()
-def project(tmp_path: Path) -> dict[str, Any]:
+def project(tmp_path: Path) -> Dict[str, Any]:
     """Set up a temporary project directory with HTML, CSS, JS (all referenced)."""
     html_path: Path = tmp_path / "index.html"
     css_path: Path = tmp_path / "style.css"
@@ -81,7 +81,7 @@ def _install_bs4_stub(monkeypatch: pytest.MonkeyPatch) -> None:
 @pytest.mark.parametrize("bs4_present", [True, False], ids=lambda b: f"bs4={b}")
 @pytest.mark.parametrize("prettify", [True, False], ids=lambda b: f"prettify={b}")
 def test_inline_html_assets_matrix(
-    project: dict[str, Any],
+    project: Dict[str, Any],
     include_comments: bool,
     prettify: bool,
     bs4_present: bool,
@@ -124,7 +124,7 @@ def test_inline_html_assets_matrix(
 # --------------------------------------------------------------------------- #
 @pytest.mark.parametrize("include_comments", [True, False])
 def test_inline_html_file_roundtrip(
-    project: dict[str, Any],
+    project: Dict[str, Any],
     include_comments: bool,
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
@@ -155,13 +155,13 @@ def test_inline_html_file_roundtrip(
 # --------------------------------------------------------------------------- #
 # Error & edge-case tests                                                     #
 # --------------------------------------------------------------------------- #
-def test_unsupported_asset_type(project: dict[str, Any]) -> None:
+def test_unsupported_asset_type(project: Dict[str, Any]) -> None:
     html_src: str = project["html"].read_text()
     with pytest.raises(ValueError, match="Unsupported tag type"):
         ia.inline_html_assets(html_src, [("video", Path("demo.mp4"))], project["dir"])  # type: ignore
 
 
-def test_asset_file_missing(project: dict[str, Any]) -> None:
+def test_asset_file_missing(project: Dict[str, Any]) -> None:
     html_src: str = project["html"].read_text()
     # Delete the physical JS file
     project["js"].unlink()
@@ -170,7 +170,7 @@ def test_asset_file_missing(project: dict[str, Any]) -> None:
 
 
 @pytest.mark.parametrize("occurrences", [0, 2], ids=lambda n: f"occurs={n}")
-def test_pattern_not_exactly_once(project: dict[str, Any], occurrences: int) -> None:
+def test_pattern_not_exactly_once(project: Dict[str, Any], occurrences: int) -> None:
     html_src: str = project["html"].read_text()
     if occurrences == 0:
         html_src = html_src.replace('<script src="app.js"></script>', "")
@@ -183,7 +183,7 @@ def test_pattern_not_exactly_once(project: dict[str, Any], occurrences: int) -> 
         ia.inline_html_assets(html_src, [("script", Path("app.js"))], project["dir"])
 
 
-def test_tag_not_alone_on_line(project: dict[str, Any]) -> None:
+def test_tag_not_alone_on_line(project: Dict[str, Any]) -> None:
     html_src: str = (
         project["html"]
         .read_text()
@@ -198,7 +198,7 @@ def test_tag_not_alone_on_line(project: dict[str, Any]) -> None:
 
 @pytest.mark.skip("can't figure out how to prevent bs4 import")
 def test_prettify_without_bs4_emits_warning(
-    project: dict[str, Any], monkeypatch: pytest.MonkeyPatch
+    project: Dict[str, Any], monkeypatch: pytest.MonkeyPatch
 ) -> None:
     """Not having BeautifulSoup installed is *warning*, not fatal."""
     # Ensure bs4 absent
@@ -215,7 +215,7 @@ def test_prettify_without_bs4_emits_warning(
     assert any(["BeautifulSoup is not installed" in str(w.message) for w in rec])
 
 
-def test_mixed_asset_order(project: dict[str, Any]) -> None:
+def test_mixed_asset_order(project: Dict[str, Any]) -> None:
     """Order of asset tuples can be arbitrary."""
     html_src: str = project["html"].read_text()
     result: str = ia.inline_html_assets(
@@ -227,7 +227,7 @@ def test_mixed_asset_order(project: dict[str, Any]) -> None:
     assert CSS_CONTENT in result and JS_CONTENT in result
 
 
-def test_multiple_assets_same_type(project: dict[str, Any]) -> None:
+def test_multiple_assets_same_type(project: Dict[str, Any]) -> None:
     """Supports >1 asset of given type provided patterns are unique."""
     # Add second css file
     css2: Path = project["dir"] / "extra.css"

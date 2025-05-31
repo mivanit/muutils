@@ -1,3 +1,6 @@
+from __future__ import annotations
+
+from typing import List, Tuple
 import numpy as np
 import pytest
 from jaxtyping import Float
@@ -9,7 +12,7 @@ from muutils.math.matrix_powers import matrix_powers, matrix_powers_torch
 
 class TestMatrixPowers:
     @pytest.fixture
-    def sample_matrices(self) -> list[tuple[str, Float[np.ndarray, "n n"]]]:
+    def sample_matrices(self) -> List[Tuple[str, Float[np.ndarray, "n n"]]]:
         """Return a list of test matrices with diverse properties."""
         return [
             ("identity", np.eye(3)),
@@ -21,7 +24,7 @@ class TestMatrixPowers:
         ]
 
     @pytest.fixture
-    def power_test_cases(self) -> list[list[int]]:
+    def power_test_cases(self) -> List[List[int]]:
         """Return test cases for powers to compute."""
         return [
             [0],
@@ -36,8 +39,8 @@ class TestMatrixPowers:
 
     def test_against_numpy_implementation(
         self,
-        sample_matrices: list[tuple[str, Float[np.ndarray, "n n"]]],
-        power_test_cases: list[list[int]],
+        sample_matrices: List[Tuple[str, Float[np.ndarray, "n n"]]],
+        power_test_cases: List[List[int]],
     ) -> None:
         """Test that matrix_powers gives same results as numpy.linalg.matrix_power."""
         for name, matrix in sample_matrices:

@@ -1,4 +1,6 @@
-from typing import Sequence, TYPE_CHECKING
+from __future__ import annotations
+
+from typing import List, Sequence, TYPE_CHECKING
 
 import numpy as np
 from jaxtyping import Float, Int
@@ -111,7 +113,7 @@ def matrix_powers_torch(
 
     dim_n: int = A.shape[0]
     # Get unique powers and sort them
-    unique_powers: list[int] = sorted(set(powers))
+    unique_powers: List[int] = sorted(set(powers))
     n_powers_unique: int = len(unique_powers)
     powers_tensor: Int[torch.Tensor, "n_powers_unique"] = torch.tensor(
         unique_powers, dtype=torch.int64, device=A.device

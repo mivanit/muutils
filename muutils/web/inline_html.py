@@ -29,7 +29,7 @@ def inline_html_assets(
     """
     for tag_type, filename in assets:
         fname_str: str = filename.as_posix()
-        if tag_type not in AssetType.__args__:
+        if tag_type not in AssetType.__args__: # type: ignore[attr-defined]
             err_msg: str = f"Unsupported tag type: {tag_type}"
             raise ValueError(err_msg)
 
@@ -65,7 +65,8 @@ def inline_html_assets(
             from bs4 import BeautifulSoup
 
             soup: BeautifulSoup = BeautifulSoup(html, "html.parser")
-            html = soup.prettify()
+            # TYPING: .prettify() might return a str or bytes, but we want str?
+            html = str(soup.prettify())
             print(BeautifulSoup)
         except ImportError:
             warnings.warn(
@@ -86,7 +87,7 @@ def inline_html_file(
     # read the HTML file
     html: str = html_path.read_text()
     # read the assets
-    assets: list[tuple[AssetType, str]] = []
+    assets: list[tuple[AssetType, Path]] = []
     for asset in base_path.glob("*.js"):
         assets.append(("script", Path(asset.name)))
     for asset in base_path.glob("*.css"):

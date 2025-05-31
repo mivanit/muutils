@@ -158,7 +158,7 @@ def test_inline_html_file_roundtrip(
 def test_unsupported_asset_type(project: dict[str, Any]) -> None:
     html_src: str = project["html"].read_text()
     with pytest.raises(ValueError, match="Unsupported tag type"):
-        ia.inline_html_assets(html_src, [("video", Path("demo.mp4"))], project["dir"])
+        ia.inline_html_assets(html_src, [("video", Path("demo.mp4"))], project["dir"])  # type: ignore
 
 
 def test_asset_file_missing(project: dict[str, Any]) -> None:

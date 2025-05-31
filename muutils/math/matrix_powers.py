@@ -1,7 +1,10 @@
-from typing import Sequence
+from typing import Sequence, TYPE_CHECKING
 
 import numpy as np
 from jaxtyping import Float, Int
+
+if TYPE_CHECKING:
+    import torch
 
 
 def matrix_powers(
@@ -76,10 +79,11 @@ def matrix_powers(
 
 
 # BUG: breaks with integer matrices???
+# TYPING: jaxtyping hints not working here, separate file for torch implementation?
 def matrix_powers_torch(
-    A: Float["torch.Tensor", "n n"],  # noqa: F821
+    A, # : Float["torch.Tensor", "n n"],
     powers: Sequence[int],
-) -> Float["torch.Tensor", "n_powers n n"]:  # noqa: F821
+): # Float["torch.Tensor", "n_powers n n"]:
     """Compute multiple powers of a matrix efficiently.
 
     Uses binary exponentiation to compute powers in O(log max(powers))

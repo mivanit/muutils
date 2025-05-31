@@ -8,7 +8,7 @@ import numpy as np
 from jaxtyping import Float
 
 
-@dataclass(frozen=True, kw_only=True)
+@dataclass(frozen=True)
 class Bins:
     n_bins: int = 32
     start: float = 0

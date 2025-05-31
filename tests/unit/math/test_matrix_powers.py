@@ -150,7 +150,7 @@ class TestMatrixPowers:
         import time
 
         A = np.random.rand(50, 50)
-        powers = [10, 100, 1000, 1001, 1002, 1003, 1004, 1005]
+        powers = [10, 100] + list(range(1000, 1024)) + list(range(10_000, 10_024))
 
         # Time our implementation
         start = time.time()

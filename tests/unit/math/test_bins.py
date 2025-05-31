@@ -104,6 +104,9 @@ def test_changed_n_bins_copy() -> None:
 @pytest.mark.parametrize("n_bins,scale", [(1, "lin"), (3, "lin"), (7, "log")])
 def test_edges_shape(n_bins: int, scale: str) -> None:
     bins = Bins(
-        n_bins=n_bins, start=0.1 if scale == "log" else 0.0, stop=2.0, scale=scale # type: ignore
+        n_bins=n_bins,
+        start=0.1 if scale == "log" else 0.0,
+        stop=2.0,
+        scale=scale,  # type: ignore
     )
     assert bins.edges.shape == (n_bins + 1,)

@@ -29,7 +29,7 @@ def inline_html_assets(
     """
     for tag_type, filename in assets:
         fname_str: str = filename.as_posix()
-        if tag_type not in AssetType.__args__: # type: ignore[attr-defined]
+        if tag_type not in AssetType.__args__:  # type: ignore[attr-defined]
             err_msg: str = f"Unsupported tag type: {tag_type}"
             raise ValueError(err_msg)
 

@@ -152,24 +152,28 @@ class TestMatrixPowers:
         """Test that binary exponentiation is more efficient than naive approach."""
         import time
 
-        A = np.random.rand(50, 50)
-        powers = [10, 100] + list(range(1000, 1024)) + list(range(10_000, 10_024))
+        A = np.random.randn(64, 64)
+        powers = [10, 100] + list(range(1000, 1024)) + list(range(9_000, 9_200))
 
         # Time our implementation
         start = time.time()
-        _ = matrix_powers(A, powers)
+        p_np = matrix_powers(A, powers)
         our_time = time.time() - start
 
         # Time torch implementation
         start = time.time()
-        _ = matrix_powers_torch(torch.tensor(A), powers)
+        p_torch = matrix_powers_torch(torch.tensor(A), powers)
         torch_time = time.time() - start
 
         # Time naive approach
         start = time.time()
+        p_naive = []
         for power in powers:
-            _ = np.linalg.matrix_power(A, power)
+            p_naive.append(np.linalg.matrix_power(A, power))
         naive_time = time.time() - start
+
+        assert len(p_np) == len(p_naive), "Output lengths do not match"
+        assert len(p_torch) == len(p_naive), "Torch output lengths do not match"
 
         # Our implementation should be faster for these powers
         assert (

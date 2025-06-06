@@ -131,7 +131,7 @@ def _inline_with_regex(html: str, base: Path, cfg: InlineConfig) -> str:
         m: re.Match[str]
         for m in reversed(matches):
             raw_src: str = m.group(1)  # may contain #fragment
-            clean_src: str = re.split(r"[?#]", raw_src, 1)[0]  # file path only
+            clean_src: str = re.split(r"[?#]", raw_src, maxsplit=1)[0]  # file path only
             ext: str = Path(clean_src).suffix.lower()
 
             if ext not in cfg.allowed_extensions:

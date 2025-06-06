@@ -2,7 +2,7 @@
 # ==================================================
 [project]
 	name = "muutils"
-	version = "0.8.9"
+	version = "0.8.10"
 	description = "miscellaneous python utilities"
 	readme = "README.md"
 	requires-python = ">=3.8"

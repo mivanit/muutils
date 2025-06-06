@@ -1416,7 +1416,7 @@ format-check:
 # but it complains when we specify arguments by keyword where positional is fine
 # not sure how to fix this
 .PHONY: typing
-typing: clean gen-extra-tests
+typing: gen-extra-tests
 	@echo "running type checks"
 	$(PYTHON) -m mypy --config-file $(PYPROJECT) $(TYPECHECK_ARGS) .
 # $(PYTHON) -m ty check muutils/

@@ -233,7 +233,9 @@ def test_cli_smoke(tmp_path: Path, site: dict[str, Path]) -> None:
     html_copy = tmp_path / "page.html"
     html_copy.write_text(site["html"].read_text())
     exe = Path(bundle_html.__file__).resolve()
-    subprocess.check_call([sys.executable, str(exe), str(html_copy)])
+    subprocess.check_call(
+        [sys.executable, str(exe), str(html_copy), "--output", str(html_copy)]
+    )
 
     text = html_copy.read_text()
     assert "<style>" in text and "data:image/png;base64," in text
@@ -469,7 +471,7 @@ def test_cli_overwrite(tmp_path: Path, tiny_site: dict[str, Path]) -> None:
     copy = tmp_path / "page.html"
     copy.write_text(tiny_site["html"].read_text())
     exe = Path(bundle_html.__file__).resolve()
-    subprocess.check_call([sys.executable, str(exe), str(copy)])
+    subprocess.check_call([sys.executable, str(exe), str(copy), "--output", str(copy)])
     res = copy.read_text()
     assert "<style>" in res
     assert _b64_in(res, "image/png")

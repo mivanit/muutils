@@ -114,7 +114,10 @@ def _apply_indent(html: str, start: int, replacement: str) -> str:
 
 def _inline_with_regex(html: str, base: Path, cfg: InlineConfig) -> str:
     """Inline assets using pure-regex parsing (no third-party libs)."""
+    tag: str
+    attr: str
     for tag, attr in cfg.tag_attr.items():
+        pattern: str
         if tag == "script":
             pattern = (
                 rf"<script\b[^>]*\s{attr}\s*=\s*['\"]([^'\"]+)['\"][^>]*>\s*</script>"
@@ -125,7 +128,7 @@ def _inline_with_regex(html: str, base: Path, cfg: InlineConfig) -> str:
             pattern = rf"<{tag}\b[^>]*\s{attr}\s*=\s*['\"]([^'\"]+)['\"][^>]*>"
 
         matches: list[re.Match[str]] = list(re.finditer(pattern, html, re.IGNORECASE))
-
+        m: re.Match[str]
         for m in reversed(matches):
             raw_src: str = m.group(1)  # may contain #fragment
             clean_src: str = re.split(r"[?#]", raw_src, 1)[0]  # file path only
@@ -148,11 +151,12 @@ def _inline_with_regex(html: str, base: Path, cfg: InlineConfig) -> str:
                 continue
 
             # build replacement
+            replacement: str
             if ext in {".css", ".js"}:
-                tag_name = "style" if ext == ".css" else "script"
+                tag_name: str = "style" if ext == ".css" else "script"
                 replacement = f"<{tag_name}>\n{_decode_text(data)}\n</{tag_name}>"
             else:  # .svg or .png
-                b64 = base64.b64encode(data).decode()
+                b64: str = base64.b64encode(data).decode()
                 # TYPING: we check earlier, ext if for sure in MIME_BY_EXT
                 data_uri: str = f"data:{MIME_BY_EXT[ext]};base64,{b64}"  # type: ignore[index]
                 replacement = m.group(0).replace(raw_src, data_uri, 1)
@@ -214,7 +218,7 @@ def _inline_with_bs4(html: str, base: Path, cfg: InlineConfig) -> str:
                 tag.insert_after(Comment(f" end '{src_full}' "))
             tag.replace_with(new_tag)
         else:  # .svg or .png
-            b64 = base64.b64encode(data).decode()
+            b64: str = base64.b64encode(data).decode()
             # we are sure ext is in MIME_BY_EXT, so ignore type error
             tag[attr] = f"data:{MIME_BY_EXT[ext]};base64,{b64}"  # type: ignore[index]
             if cfg.include_filename_comments:
@@ -267,8 +271,8 @@ def inline_html_assets(
 
 def inline_html_file(
     html_path: Path,
-    *,
-    output_path: Path | None = None,
+    output_path: Path,
+    base_path: Path | None = None,
     config: InlineConfig | None = None,
     prettify: bool = False,
 ) -> Path:
@@ -277,21 +281,30 @@ def inline_html_file(
     # Parameters
     - `html_path : Path`
         Source HTML file.
-    - `output_path : Path | None`
-        Destination (defaults to in-place).
+    - `output_path : Path`
+        Destination path to write the modified HTML.
+    - `base_path : Path | None`
+        Directory used to resolve relative asset paths (defaults to the HTML file's directory).
+        If `None`, uses the directory of *html_path*.
+        (default: `None` -> use `html_path.parent`)
     - `config : InlineConfig | None`
         Inlining options.
+        If `None`, uses default configuration.
+        (default: `None` -> use `InlineConfig()`)
     - `prettify : bool`
         Pretty-print when `use_bs4=True`.
+        (default: `False`)
 
     # Returns
     - `Path`
         Path actually written.
     """
+    if base_path is None:
+        base_path = html_path.parent
     html_raw: str = html_path.read_text()
     html_new: str = inline_html_assets(
         html_raw,
-        base_path=html_path.parent,
+        base_path=base_path,
         config=config,
         prettify=prettify,
     )
@@ -305,19 +318,30 @@ def inline_html_file(
 
 if __name__ == "__main__":
     import argparse
-    import json
 
-    parser = argparse.ArgumentParser(
+    parser: argparse.ArgumentParser = argparse.ArgumentParser(
         description="Inline / bundle CSS, JS, SVG, PNG assets. "
         "Uses regex parsing by default; pass --bs4 to require BeautifulSoup."
     )
     parser.add_argument("html", type=Path, help="input HTML file")
     parser.add_argument(
-        "-o", "--output", type=Path, help="output file (default: overwrite input)"
+        "-o",
+        "--output",
+        type=Path,
+        help="output file",
+        required=True,
+    )
+    parser.add_argument(
+        "--source-dir",
+        type=Path,
+        default=None,
+        help="base directory for relative asset paths (defaults to the HTML file's directory)",
     )
     parser.add_argument("--remote", action="store_true", help="allow remote URLs")
     parser.add_argument("--bs4", action="store_true", help="use BeautifulSoup parser")
-    parser.add_argument("--prettify", action="store_true", help="pretty-print (BS4)")
+    parser.add_argument(
+        "--prettify", action="store_true", help="pretty-print with BeautifulSoup)"
+    )
     parser.add_argument(
         "--max-bytes", type=int, default=128 * 1024, help="size limit per asset"
     )
@@ -329,16 +353,26 @@ if __name__ == "__main__":
     )
     parser.add_argument(
         "--tag-attr",
-        type=json.loads,
+        type=str,
         default=None,
-        help='override tag->attr map (JSON, e.g. \'{"link":"href"}\')',
+        help='override tag->attr map. format: "tag1=attr1,tag2=attr2"',
     )
     parser.add_argument("--no-comments", dest="comments", action="store_false")
-    args = parser.parse_args()
+    args: argparse.Namespace = parser.parse_args()
 
-    cfg = InlineConfig(
+    tag_attr: dict[str, str]
+    if args.tag_attr:
+        tag_attr = {
+            tag: attr
+            for tag, attr in (item.split("=") for item in args.tag_attr.split(","))
+        }
+
+    else:
+        tag_attr = dict(DEFAULT_TAG_ATTR)
+
+    cfg: InlineConfig = InlineConfig(
         allowed_extensions=set(args.ext),  # type: ignore[arg-type]
-        tag_attr=args.tag_attr or dict(DEFAULT_TAG_ATTR),
+        tag_attr=tag_attr,
         max_bytes=args.max_bytes,
         remote=args.remote,
         include_filename_comments=args.comments,
@@ -348,6 +382,7 @@ if __name__ == "__main__":
     inline_html_file(
         args.html,
         output_path=args.output,
+        base_path=args.source_dir,
         config=cfg,
         prettify=args.prettify,
     )

@@ -52,7 +52,7 @@ muutils/tensor_utils.py                                                         
 muutils/timeit_fancy.py                                                              33      2    94%   90-91
 muutils/validate_type.py                                                             90     23    74%   3-37, 54, 58, 193, 196, 216-223, 228-229
 muutils/web/__init__.py                                                               1      0   100%
-muutils/web/bundle_html.py                                                          141     13    91%   100-101, 143-145, 188, 194, 196, 198, 202-204, 207
+muutils/web/bundle_html.py                                                          147     14    90%   100-101, 146-148, 192, 198, 200, 202, 206-208, 211, 365
 tests/conftest.py                                                                     0      0   100%
 tests/unit/errormode/test_errormode_functionality.py                                 62      1    98%   87
 tests/unit/errormode/test_errormode_init.py                                          68      0   100%
@@ -97,4 +97,4 @@ tests/unit/validate_type/test_validate_type_special.py                          
 tests/unit/web/test_bundle_html.py                                                  202      0   100%
 tests/util/test_fire.py                                                               8      6    25%   2-5, 9-11
 ---------------------------------------------------------------------------------------------------------------
-TOTAL                                                                              7958   1134    86%
+TOTAL                                                                              7964   1135    86%

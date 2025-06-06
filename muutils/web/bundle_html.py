@@ -43,7 +43,7 @@ MIME_BY_EXT: Final[dict[AssetExt, str]] = {
 # ---------------------------------------------------------------------
 
 
-@dataclass(slots=True)
+@dataclass
 class InlineConfig:
     """High-level configuration for the inliner.
 

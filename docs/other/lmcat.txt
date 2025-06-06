@@ -1,8 +1,8 @@
 # Stats
 - 60 files
-- 11639 (12K) lines
-- 401155 (401K) chars
-- 43078 (43K) `whitespace-split` tokens
+- 11843 (12K) lines
+- 408339 (408K) chars
+- 43757 (44K) `whitespace-split` tokens
 
 # File Tree
 
@@ -53,7 +53,7 @@ muutils
 │   │   └── run_notebook_tests.py        [  255L  9,280C   822T]
 │   ├── web                              
 │   │   ├── __init__.py                  [    3L     33C     5T]
-│   │   └── inline_html.py               [  149L  4,823C   485T]
+│   │   └── bundle_html.py               [  353L 12,013C 1,165T]
 │   ├── __init__.py                      [   33L    520C    42T]
 │   ├── console_unicode.py               [   34L  1,070C   133T]
 │   ├── dbg.py                           [  216L  6,506C   729T]
@@ -75,7 +75,7 @@ muutils
 │   └── validate_type.py                 [  237L  8,401C   896T]
 ├── LICENSE                              [  674L 35,149C 5,644T]
 ├── README.md                            [  131L  6,289C   551T]
-├── makefile                             [1,696L 52,566C 6,264T]
+├── makefile                             [1,696L 52,560C 6,263T]
 ├── pyproject.toml                       [  223L  6,536C   747T]
 ```
 
@@ -5651,158 +5651,362 @@ __all__ = [
 
 ``````{ end_of_file="muutils/web/__init__.py" }
 
-``````{ path="muutils/web/inline_html.py"  }
-"Inline local CSS/JS files into an HTML document"
+``````{ path="muutils/web/bundle_html.py"  }
+"""
+Inline / bundle external assets (CSS, JS, SVG, PNG) into an HTML document.
+
+Default mode uses **zero external dependencies** and a few well-targeted
+regular expressions.  If you install *beautifulsoup4* you can enable the
+far more robust BS4 mode by passing `InlineConfig(use_bs4=True)`.
+"""
 
 from __future__ import annotations
 
-from typing import Literal
-from pathlib import Path
+import base64
+import re
+import urllib.request
 import warnings
+from dataclasses import dataclass, field
+from pathlib import Path
+from typing import Final, Literal
 
-AssetType = Literal["script", "style"]
+# bs4 import deferred to avoid an unconditional dependency.
+
+# constants
+# ---------------------------------------------------------------------
+
+AssetExt = Literal[".css", ".js", ".svg", ".png"]
+
+DEFAULT_ALLOWED_EXTENSIONS: Final[set[AssetExt]] = {".css", ".js", ".svg", ".png"}
+
+DEFAULT_TAG_ATTR: Final[dict[str, str]] = {
+    "link": "href",  # <link rel="stylesheet" href="...">
+    "script": "src",  # <script src="..."></script>
+    "img": "src",  # <img src="...">
+    "use": "xlink:href",  # <use xlink:href="sprite.svg#id">
+}
+
+MIME_BY_EXT: Final[dict[AssetExt, str]] = {
+    ".css": "text/css",
+    ".js": "application/javascript",
+    ".svg": "image/svg+xml",
+    ".png": "image/png",
+}
+
+# Configuration
+# ---------------------------------------------------------------------
 
 
-def inline_html_assets(
-    html: str,
-    assets: list[tuple[AssetType, Path]],
-    base_path: Path,
-    include_filename_comments: bool = True,
-    prettify: bool = False,
-) -> str:
-    """Inline specified local CSS/JS files into the text of an HTML document.
+@dataclass(slots=True)
+class InlineConfig:
+    """High-level configuration for the inliner.
 
-    Each entry in `assets` should be a tuple like `("script", "app.js")` or `("style", "style.css")`.
-
-    # Parameters:
-    - `html : str`
-            input HTML content.
-    - `assets : list[tuple[AssetType, Path]]`
-            List of (tag_type, filename) tuples to inline.
-
-    # Returns:
-    `str` : Modified HTML content with inlined assets.
+    # Parameters
+    - `allowed_extensions : set[AssetExt]`
+        Extensions that may be inlined.
+    - `tag_attr : dict[str, str]`
+        Mapping *tag -> attribute* that holds the asset reference.
+    - `max_bytes : int`
+        Assets larger than this are ignored.
+    - `local : bool`
+        Allow local filesystem assets.
+    - `remote : bool`
+        Allow remote http/https assets.
+    - `include_filename_comments : bool`
+        Surround every replacement with `<!-- begin '...' -->`
+        and `<!-- end '...' -->`.
+    - `use_bs4 : bool`
+        Parse the document with BeautifulSoup if available.
     """
-    for tag_type, filename in assets:
-        fname_str: str = filename.as_posix()
-        if tag_type not in AssetType.__args__:  # type: ignore[attr-defined]
-            err_msg: str = f"Unsupported tag type: {tag_type}"
-            raise ValueError(err_msg)
 
-        # Dynamically create the pattern for the given tag and filename
-        pattern: str
-        if tag_type == "script":
-            pattern = rf'<script src="{fname_str}"></script>'
-        elif tag_type == "style":
-            pattern = rf'<link rel="stylesheet" href="{fname_str}">'
-        # assert it's in the text exactly once
-        assert (
-            html.count(pattern) == 1
-        ), f"Pattern {pattern} should be in the html exactly once, found {html.count(pattern) = }"
-        # figure out the indentation level of the pattern  in the html
-        indentation: str = html.split(pattern)[0].splitlines()[-1]
-        assert (
-            indentation.strip() == ""
-        ), f"Pattern '{pattern}' should be alone in its line, found {indentation = }"
-        # read the content and create the replacement
-        content: str = (base_path / filename).read_text()
-        replacement: str = f"<{tag_type}>\n{content}\n</{tag_type}>"
-        if include_filename_comments:
-            replacement = f"<!-- begin '{fname_str}' -->\n{replacement}\n<!-- end '{fname_str}' -->"
-        # indent the replacement
-        replacement = "\n".join(
-            [f"{indentation}\t{line}" for line in replacement.splitlines()]
-        )
-        # perform the replacement
-        html = html.replace(pattern, replacement)
+    allowed_extensions: set[AssetExt] = field(
+        default_factory=lambda: set(DEFAULT_ALLOWED_EXTENSIONS)
+    )
+    tag_attr: dict[str, str] = field(default_factory=lambda: dict(DEFAULT_TAG_ATTR))
+    max_bytes: int = 128 * 1024
+    local: bool = True
+    remote: bool = False
+    include_filename_comments: bool = True
+    use_bs4: bool = False
 
-    if prettify:
-        try:
-            from bs4 import BeautifulSoup
 
-            soup: BeautifulSoup = BeautifulSoup(html, "html.parser")
-            # TYPING: .prettify() might return a str or bytes, but we want str?
-            html = str(soup.prettify())
-            print(BeautifulSoup)
-        except ImportError:
-            warnings.warn(
-                "BeautifulSoup is not installed, skipping prettification of HTML."
+# Low-level helpers
+# ---------------------------------------------------------------------
+
+
+def _is_remote(url: str) -> bool:
+    """Return *True* if *url* starts with http:// or https://."""
+    return url.lower().startswith(("http://", "https://"))
+
+
+def _fetch_bytes(src: str, base: Path) -> bytes:
+    """Fetch *src* (local or remote) and return its raw bytes."""
+    if _is_remote(src):
+        with urllib.request.urlopen(src) as resp:
+            return resp.read()
+    return (base / src).read_bytes()
+
+
+def _decode_text(buf: bytes) -> str:
+    """Decode *buf* as UTF-8, falling back to replacement."""
+    try:
+        return buf.decode()
+    except UnicodeDecodeError:
+        return buf.decode("utf-8", "replace")
+
+
+# Regex-based implementation (no deps)
+# ---------------------------------------------------------------------
+
+
+def _apply_indent(html: str, start: int, replacement: str) -> str:
+    """Indent *replacement* to match the line that starts at *start*."""
+    line_start: int = html.rfind("\n", 0, start) + 1
+    indent: str = html[line_start:start]
+    return "\n".join(indent + line for line in replacement.splitlines())
+
+
+def _inline_with_regex(html: str, base: Path, cfg: InlineConfig) -> str:
+    """Inline assets using pure-regex parsing (no third-party libs)."""
+    for tag, attr in cfg.tag_attr.items():
+        if tag == "script":
+            pattern = (
+                rf"<script\b[^>]*\s{attr}\s*=\s*['\"]([^'\"]+)['\"][^>]*>\s*</script>"
             )
+        elif tag == "link":
+            pattern = rf"<link\b[^>]*\s{attr}\s*=\s*['\"]([^'\"]+)['\"][^>]*>"
+        else:  # img, use, etc.
+            pattern = rf"<{tag}\b[^>]*\s{attr}\s*=\s*['\"]([^'\"]+)['\"][^>]*>"
+
+        matches: list[re.Match[str]] = list(re.finditer(pattern, html, re.IGNORECASE))
+
+        for m in reversed(matches):
+            raw_src: str = m.group(1)  # may contain #fragment
+            clean_src: str = re.split(r"[?#]", raw_src, 1)[0]  # file path only
+            ext: str = Path(clean_src).suffix.lower()
+
+            if ext not in cfg.allowed_extensions:
+                continue
+            if _is_remote(clean_src) and not cfg.remote:
+                continue
+            if not _is_remote(clean_src) and not cfg.local:
+                continue
+
+            try:
+                data: bytes = _fetch_bytes(clean_src, base)
+            except Exception as err:
+                warnings.warn(f"skip '{raw_src}': {err}")
+                continue
+
+            if len(data) > cfg.max_bytes:
+                continue
+
+            # build replacement
+            if ext in {".css", ".js"}:
+                tag_name = "style" if ext == ".css" else "script"
+                replacement = f"<{tag_name}>\n{_decode_text(data)}\n</{tag_name}>"
+            else:  # .svg or .png
+                b64 = base64.b64encode(data).decode()
+                # TYPING: we check earlier, ext if for sure in MIME_BY_EXT
+                data_uri: str = f"data:{MIME_BY_EXT[ext]};base64,{b64}"  # type: ignore[index]
+                replacement = m.group(0).replace(raw_src, data_uri, 1)
+
+            if cfg.include_filename_comments:
+                replacement = f"<!-- begin '{clean_src}' -->\n{replacement}\n<!-- end '{clean_src}' -->"
+
+            replacement = _apply_indent(html, m.start(), replacement)
+            html = html[: m.start()] + replacement + html[m.end() :]
 
     return html
 
 
+# BeautifulSoup-based implementation (optional)
+# ---------------------------------------------------------------------
+
+
+def _inline_with_bs4(html: str, base: Path, cfg: InlineConfig) -> str:
+    """Inline assets using BeautifulSoup when available."""
+    try:
+        from bs4 import BeautifulSoup, Comment, Tag
+    except ModuleNotFoundError as exc:  # pragma: no cover
+        raise RuntimeError("BeautifulSoup requested but not installed") from exc
+
+    soup: BeautifulSoup = BeautifulSoup(html, "html.parser")
+
+    tag: Tag  # TYPING: i think soup.find_all() returns a list of Tag objects? mypy thinks it should be PageElement (of which Tag is a subclass)
+    for tag in list(soup.find_all(cfg.tag_attr.keys())):  # type: ignore[assignment]
+        attr: str = cfg.tag_attr[tag.name]
+        # TYPING: error: Incompatible types in assignment (expression has type "str | AttributeValueList | None", variable has type "str | None")  [assignment]
+        src_full: str | None = tag.get(attr)  # type: ignore[assignment]
+        if not src_full:
+            continue
+
+        clean_src: str = re.split(r"[?#]", src_full, 1)[0]
+        ext: str = Path(clean_src).suffix.lower()
+
+        if ext not in cfg.allowed_extensions:
+            continue
+        if _is_remote(clean_src) and not cfg.remote:
+            continue
+        if not _is_remote(clean_src) and not cfg.local:
+            continue
+
+        try:
+            data: bytes = _fetch_bytes(clean_src, base)
+        except Exception as err:
+            warnings.warn(f"skip '{src_full}': {err}")
+            continue
+
+        if len(data) > cfg.max_bytes:
+            continue
+
+        if ext in {".css", ".js"}:
+            new_tag: Tag = soup.new_tag("style" if ext == ".css" else "script")
+            new_tag.string = _decode_text(data)
+            if cfg.include_filename_comments:
+                tag.insert_before(Comment(f" begin '{src_full}' "))
+                tag.insert_after(Comment(f" end '{src_full}' "))
+            tag.replace_with(new_tag)
+        else:  # .svg or .png
+            b64 = base64.b64encode(data).decode()
+            # we are sure ext is in MIME_BY_EXT, so ignore type error
+            tag[attr] = f"data:{MIME_BY_EXT[ext]};base64,{b64}"  # type: ignore[index]
+            if cfg.include_filename_comments:
+                tag.insert_before(Comment(f" begin '{src_full}' "))
+                tag.insert_after(Comment(f" end '{src_full}' "))
+
+    return str(soup)
+
+
+# Public API
+# ---------------------------------------------------------------------
+
+
+def inline_html_assets(
+    html: str,
+    *,
+    base_path: Path,
+    config: InlineConfig | None = None,
+    prettify: bool = False,  # kept for API compatibility (ignored in regex mode)
+) -> str:
+    """Inline permitted external assets inside *html*.
+
+    # Parameters
+    - `html : str`
+        Raw HTML text.
+    - `base_path : Path`
+        Directory used to resolve relative asset paths.
+    - `config : InlineConfig | None`
+        Inlining options (see `InlineConfig`).
+    - `prettify : bool`
+        Pretty-print output (only effective in BS4 mode).
+
+    # Returns
+    - `str`
+        Modified HTML.
+    """
+    cfg: InlineConfig = config or InlineConfig()
+    if cfg.use_bs4:
+        html_out: str = _inline_with_bs4(html, base_path, cfg)
+        if prettify:
+            # lazy import to avoid unconditional dependency
+            from bs4 import BeautifulSoup
+
+            # TYPING: .prettify() returns str if no encoding is set
+            html_out = str(BeautifulSoup(html_out, "html.parser").prettify())
+    else:
+        html_out = _inline_with_regex(html, base_path, cfg)
+    return html_out
+
+
 def inline_html_file(
     html_path: Path,
-    output_path: Path,
-    include_filename_comments: bool = True,
+    *,
+    output_path: Path | None = None,
+    config: InlineConfig | None = None,
     prettify: bool = False,
-) -> None:
-    "given a path to an HTML file, inline the local CSS/JS files into it and save it to output_path"
-    base_path: Path = html_path.parent
-    # read the HTML file
-    html: str = html_path.read_text()
-    # read the assets
-    assets: list[tuple[AssetType, Path]] = []
-    for asset in base_path.glob("*.js"):
-        assets.append(("script", Path(asset.name)))
-    for asset in base_path.glob("*.css"):
-        assets.append(("style", Path(asset.name)))
-    # inline the assets
+) -> Path:
+    """Read *html_path*, inline its assets, and write the result.
+
+    # Parameters
+    - `html_path : Path`
+        Source HTML file.
+    - `output_path : Path | None`
+        Destination (defaults to in-place).
+    - `config : InlineConfig | None`
+        Inlining options.
+    - `prettify : bool`
+        Pretty-print when `use_bs4=True`.
+
+    # Returns
+    - `Path`
+        Path actually written.
+    """
+    html_raw: str = html_path.read_text()
     html_new: str = inline_html_assets(
-        html,
-        assets,
-        base_path,
-        include_filename_comments=include_filename_comments,
+        html_raw,
+        base_path=html_path.parent,
+        config=config,
         prettify=prettify,
     )
-    # write the new HTML file
-    output_path.write_text(html_new)
+    dest: Path = output_path or html_path
+    dest.write_text(html_new)
+    return dest
 
+
+# CLI
+# ---------------------------------------------------------------------
 
 if __name__ == "__main__":
     import argparse
+    import json
 
-    parser: argparse.ArgumentParser = argparse.ArgumentParser(
-        description="Inline local CSS/JS files into an HTML document."
+    parser = argparse.ArgumentParser(
+        description="Inline / bundle CSS, JS, SVG, PNG assets. "
+        "Uses regex parsing by default; pass --bs4 to require BeautifulSoup."
+    )
+    parser.add_argument("html", type=Path, help="input HTML file")
+    parser.add_argument(
+        "-o", "--output", type=Path, help="output file (default: overwrite input)"
+    )
+    parser.add_argument("--remote", action="store_true", help="allow remote URLs")
+    parser.add_argument("--bs4", action="store_true", help="use BeautifulSoup parser")
+    parser.add_argument("--prettify", action="store_true", help="pretty-print (BS4)")
+    parser.add_argument(
+        "--max-bytes", type=int, default=128 * 1024, help="size limit per asset"
     )
     parser.add_argument(
-        "-i",
-        "--input-path",
-        type=Path,
-        help="Path to the HTML file to process.",
+        "--ext",
+        nargs="+",
+        default=list(DEFAULT_ALLOWED_EXTENSIONS),
+        help="extensions to inline",
     )
     parser.add_argument(
-        "-o",
-        "--output-path",
-        type=str,
-        help="Path to save the modified HTML file.",
+        "--tag-attr",
+        type=json.loads,
+        default=None,
+        help='override tag->attr map (JSON, e.g. \'{"link":"href"}\')',
     )
+    parser.add_argument("--no-comments", dest="comments", action="store_false")
+    args = parser.parse_args()
 
-    parser.add_argument(
-        "-c",
-        "--no-filename-comments",
-        action="store_true",
-        help="don't include comments with the filename in the inlined assets",
+    cfg = InlineConfig(
+        allowed_extensions=set(args.ext),  # type: ignore[arg-type]
+        tag_attr=args.tag_attr or dict(DEFAULT_TAG_ATTR),
+        max_bytes=args.max_bytes,
+        remote=args.remote,
+        include_filename_comments=args.comments,
+        use_bs4=args.bs4,
     )
-
-    parser.add_argument(
-        "-p",
-        "--no-prettify",
-        action="store_true",
-        help="don't prettify the HTML file",
-    )
-
-    args: argparse.Namespace = parser.parse_args()
 
     inline_html_file(
-        html_path=Path(args.input_path),
-        output_path=Path(args.output_path),
-        include_filename_comments=not args.no_filename_comments,
-        prettify=not args.no_prettify,
+        args.html,
+        output_path=args.output,
+        config=cfg,
+        prettify=args.prettify,
     )
 
-``````{ end_of_file="muutils/web/inline_html.py" }
+``````{ end_of_file="muutils/web/bundle_html.py" }
 
 ``````{ path="muutils/__init__.py"  }
 """
@@ -11281,7 +11485,7 @@ format-check:
 # but it complains when we specify arguments by keyword where positional is fine
 # not sure how to fix this
 .PHONY: typing
-typing: clean gen-extra-tests
+typing: gen-extra-tests
 	@echo "running type checks"
 	...
 
@@ -11423,7 +11627,7 @@ help: help-targets info
 # ==================================================
 [project]
 	name = "muutils"
-	version = "0.8.8"
+	version = "0.8.9"
 	description = "miscellaneous python utilities"
 	readme = "README.md"
 	requires-python = ">=3.8"

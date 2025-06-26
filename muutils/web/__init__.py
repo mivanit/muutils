@@ -1,3 +1,3 @@
 __all__ = [
-    "inline_html",
+    "bundle_html",
 ]

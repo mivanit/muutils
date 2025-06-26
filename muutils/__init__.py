@@ -13,6 +13,7 @@ __all__ = [
     "nbutils",
     "web",
     # submodules
+    "collect_warnings",
     "console_unicode",
     "dbg",
     "dictmagic",

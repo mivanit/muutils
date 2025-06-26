@@ -211,6 +211,108 @@ def tensor_info(tensor: typing.Any) -> str:
     return array_summary(tensor, **DBG_TENSOR_ARRAY_SUMMARY_DEFAULTS)
 
 
+DBG_DICT_DEFAULTS: typing.Dict[str, typing.Union[bool, int, str]] = dict(
+    key_types=True,
+    val_types=True,
+    max_len=32,
+    indent="  ",
+    max_depth=3,
+)
+
+DBG_LIST_DEFAULTS: typing.Dict[str, typing.Union[bool, int, str]] = dict(
+    max_len=16,
+    summary_show_types=True,
+)
+
+
+def list_info(
+    lst: typing.List[typing.Any],
+) -> str:
+    len_l: int = len(lst)
+    output: str
+    if len_l > DBG_LIST_DEFAULTS["max_len"]:
+        output = f"<list of len()={len_l}"
+        if DBG_LIST_DEFAULTS["summary_show_types"]:
+            val_types: typing.Set[str] = set(type(x).__name__ for x in lst)
+            output += f", types={{{', '.join(sorted(val_types))}}}"
+        output += ">"
+    else:
+        output = "[" + ", ".join(repr(x) for x in lst) + "]"
+
+    return output
+
+
+TENSOR_STR_TYPES: typing.Set[str] = {
+    "<class 'torch.Tensor'>",
+    "<class 'numpy.ndarray'>",
+}
+
+
+def dict_info(
+    d: typing.Dict[typing.Any, typing.Any],
+    depth: int = 0,
+) -> str:
+    len_d: int = len(d)
+    indent: str = DBG_DICT_DEFAULTS["indent"]
+
+    # summary line
+    output: str = f"{indent*depth}<dict of len()={len_d}"
+
+    if DBG_DICT_DEFAULTS["key_types"] and len_d > 0:
+        key_types: typing.Set[str] = set(type(k).__name__ for k in d.keys())
+        key_types_str: str = "{" + ", ".join(sorted(key_types)) + "}"
+        output += f", key_types={key_types_str}"
+
+    if DBG_DICT_DEFAULTS["val_types"] and len_d > 0:
+        val_types: typing.Set[str] = set(type(v).__name__ for v in d.values())
+        val_types_str: str = "{" + ", ".join(sorted(val_types)) + "}"
+        output += f", val_types={val_types_str}"
+
+    output += ">"
+
+    # keys/values if not to deep and not too many
+    if depth < DBG_DICT_DEFAULTS["max_depth"]:
+        if len_d > 0 and len_d < DBG_DICT_DEFAULTS["max_len"]:
+            for k, v in d.items():
+                key_str: str = repr(k) if not isinstance(k, str) else k
+
+                val_str: str
+                val_type_str: str = str(type(v))
+                if isinstance(v, dict):
+                    val_str = dict_info(v, depth + 1)
+                elif val_type_str in TENSOR_STR_TYPES:
+                    val_str = tensor_info(v)
+                elif isinstance(v, list):
+                    val_str = list_info(v)
+                else:
+                    val_str = repr(v)
+
+                output += (
+                    f"\n{indent*(depth+1)}{key_str}{DBG_TENSOR_VAL_JOINER}{val_str}"
+                )
+
+    return output
+
+
+def info_auto(
+    obj: typing.Any,
+) -> str:
+    """Automatically format an object for debugging."""
+    if isinstance(obj, dict):
+        return dict_info(obj)
+    elif isinstance(obj, list):
+        return list_info(obj)
+    elif type(obj) in TENSOR_STR_TYPES:
+        return tensor_info(obj)
+    else:
+        return repr(obj)
+
+
 dbg_tensor = functools.partial(
     dbg, formatter=tensor_info, val_joiner=DBG_TENSOR_VAL_JOINER
 )
+
+
+dbg_dict = functools.partial(dbg, formatter=dict_info, val_joiner=DBG_TENSOR_VAL_JOINER)
+
+dbg_auto = functools.partial(dbg, formatter=info_auto, val_joiner=DBG_TENSOR_VAL_JOINER)

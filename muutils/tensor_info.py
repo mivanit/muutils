@@ -8,19 +8,19 @@ COLORS: Dict[str, Dict[str, str]] = {
         "mean": r"\textcolor{teal}",
         "std": r"\textcolor{orange}",
         "median": r"\textcolor{green}",
-        "warning": r"\textcolor{red}",      
+        "warning": r"\textcolor{red}",
         "shape": r"\textcolor{magenta}",
         "dtype": r"\textcolor{gray}",
         "device": r"\textcolor{gray}",
         "requires_grad": r"\textcolor{gray}",
         "sparkline": r"\textcolor{blue}",
-        "torch": r"\textcolor{orange}", 
+        "torch": r"\textcolor{orange}",
         "dtype_bool": r"\textcolor{gray}",
-        "dtype_int": r"\textcolor{blue}", 
+        "dtype_int": r"\textcolor{blue}",
         "dtype_float": r"\textcolor{red!70}",  # 70% red intensity
         "dtype_str": r"\textcolor{red}",
         "device_cuda": r"\textcolor{green}",
-        "reset": "",    
+        "reset": "",
     },
     "terminal": {
         "range": "\033[35m",  # purple
@@ -28,7 +28,7 @@ COLORS: Dict[str, Dict[str, str]] = {
         "std": "\033[33m",  # yellow/orange
         "median": "\033[32m",  # green
         "warning": "\033[31m",  # red
-        "shape": "\033[95m",  # bright magenta          
+        "shape": "\033[95m",  # bright magenta
         "dtype": "\033[90m",  # gray
         "device": "\033[90m",  # gray
         "requires_grad": "\033[90m",  # gray
@@ -349,25 +349,30 @@ DEFAULT_SETTINGS: Dict[str, Any] = dict(
     eq_char="=",
 )
 
-def apply_color(text: str, color_key: str, colors: Dict[str, str], using_tex: bool) -> str:
+
+def apply_color(
+    text: str, color_key: str, colors: Dict[str, str], using_tex: bool
+) -> str:
     if using_tex:
         return f"{colors[color_key]}{{{text}}}" if colors[color_key] else text
     else:
-        return f"{colors[color_key]}{text}{colors['reset']}" if colors[color_key] else text
+        return (
+            f"{colors[color_key]}{text}{colors['reset']}" if colors[color_key] else text
+        )
 
 
 def colorize_dtype(dtype_str: str, colors: Dict[str, str], using_tex: bool) -> str:
     """Colorize dtype string with specific colors for torch and type names."""
-    
+
     # Handle torch prefix
     type_part: str = dtype_str
-    prefix_part: str|None = None
+    prefix_part: str | None = None
     if "torch." in dtype_str:
         parts = dtype_str.split("torch.")
         if len(parts) == 2:
             prefix_part = apply_color("torch", "torch", colors, using_tex)
             type_part = parts[1]
-    
+
     # Handle type coloring
     color_key: str = "dtype"
     if "bool" in dtype_str.lower():
@@ -387,12 +392,17 @@ def colorize_dtype(dtype_str: str, colors: Dict[str, str], using_tex: bool) -> s
 
 def format_shape_colored(shape_val, colors: Dict[str, str], using_tex: bool) -> str:
     """Format shape with proper coloring for both 1D and multi-D arrays."""
+
     def apply_color(text: str, color_key: str) -> str:
         if using_tex:
             return f"{colors[color_key]}{{{text}}}" if colors[color_key] else text
         else:
-            return f"{colors[color_key]}{text}{colors['reset']}" if colors[color_key] else text
-    
+            return (
+                f"{colors[color_key]}{text}{colors['reset']}"
+                if colors[color_key]
+                else text
+            )
+
     if len(shape_val) == 1:
         # For 1D arrays, still color the dimension value
         return apply_color(str(shape_val[0]), "shape")
@@ -400,14 +410,22 @@ def format_shape_colored(shape_val, colors: Dict[str, str], using_tex: bool) -> 
         # For multi-D arrays, color each dimension
         return "(" + ",".join(apply_color(str(dim), "shape") for dim in shape_val) + ")"
 
-def format_device_colored(device_str: str, colors: Dict[str, str], using_tex: bool) -> str:
+
+def format_device_colored(
+    device_str: str, colors: Dict[str, str], using_tex: bool
+) -> str:
     """Format device string with CUDA highlighting."""
+
     def apply_color(text: str, color_key: str) -> str:
         if using_tex:
             return f"{colors[color_key]}{{{text}}}" if colors[color_key] else text
         else:
-            return f"{colors[color_key]}{text}{colors['reset']}" if colors[color_key] else text
-    
+            return (
+                f"{colors[color_key]}{text}{colors['reset']}"
+                if colors[color_key]
+                else text
+            )
+
     if "cuda" in device_str.lower():
         return apply_color(device_str, "device_cuda")
     else:
@@ -535,7 +553,9 @@ def array_summary(  # type: ignore[misc]
 
     # Check if dtype is integer type
     dtype_str: str = array_data.get("dtype", "")
-    is_int_dtype: bool = any(int_type in dtype_str.lower() for int_type in ["int", "uint", "bool"])
+    is_int_dtype: bool = any(
+        int_type in dtype_str.lower() for int_type in ["int", "uint", "bool"]
+    )
 
     # Format string for numbers
     float_fmt: str = f".{precision}f"

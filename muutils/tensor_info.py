@@ -53,6 +53,7 @@ SYMBOLS: Dict[OutputFormat, Dict[str, str]] = {
         "std": r"\sigma",
         "median": r"\tilde{x}",
         "distribution": r"\mathbb{P}",
+        "distribution_log": r"\mathbb{P}_L",
         "nan_values": r"\text{NANvals}",
         "warning": "!!!",
         "requires_grad": r"\nabla",
@@ -65,6 +66,7 @@ SYMBOLS: Dict[OutputFormat, Dict[str, str]] = {
         "std": "σ",
         "median": "x̃",
         "distribution": "ℙ",
+        "distribution_log": "ℙ˪",
         "nan_values": "NANvals",
         "warning": "🚨",
         "requires_grad": "∇",
@@ -77,6 +79,7 @@ SYMBOLS: Dict[OutputFormat, Dict[str, str]] = {
         "std": "std",
         "median": "med",
         "distribution": "dist",
+        "distribution_log": "dist_log",
         "nan_values": "NANvals",
         "warning": "!!!",
         "requires_grad": "requires_grad",
@@ -253,30 +256,43 @@ def array_info(
 def generate_sparkline(
     histogram: np.ndarray,
     format: Literal["unicode", "latex", "ascii"] = "unicode",
-    log_y: bool = False,
-) -> str:
+    log_y: bool|None = None,
+) -> tuple[str, bool]:
     """Generate a sparkline visualization of the histogram.
 
     # Parameters:
-     - `histogram : np.ndarray`
-            Histogram data
-     - `format : Literal["unicode", "latex", "ascii"]`
-            Output format (defaults to `"unicode"`)
-     - `log_y : bool`
-            Whether to use logarithmic y-scale (defaults to `False`)
+    - `histogram : np.ndarray`
+        Histogram data
+    - `format : Literal["unicode", "latex", "ascii"]`
+        Output format (defaults to `"unicode"`)
+    - `log_y : bool|None`
+        Whether to use logarithmic y-scale. `None` for automatic detection
+        (defaults to `None`)
 
     # Returns:
-     - `str`
-            Sparkline visualization
+    - `tuple[str, bool]`
+        Sparkline visualization and whether log scale was used
     """
     if histogram is None or len(histogram) == 0:
-        return ""
+        return "", False
 
     # Get the appropriate character set
+    chars: List[str]
     if format in SPARK_CHARS:
         chars = SPARK_CHARS[format]
     else:
         chars = SPARK_CHARS["ascii"]
+   
+    # automatic detection of log_y
+    if log_y is None:
+        # we bin the histogram values to the number of levels in our sparkline characters
+        hist_hist = np.histogram(histogram, bins=len(chars))[0]
+        # if every bin except the smallest (first) and largest (last) is empty,
+        # then we should use the log scale. if those bins are nonempty, keep the linear scale
+        if hist_hist[1:-1].max() > 0:
+            log_y = False
+        else:
+            log_y = True
 
     # Handle log scale
     if log_y:
@@ -294,10 +310,10 @@ def generate_sparkline(
     # Convert to characters
     spark = ""
     for val in normalized:
-        idx = int(val)
+        idx = round(val)
         spark += chars[idx]
 
-    return spark
+    return spark, log_y
 
 
 DEFAULT_SETTINGS: Dict[str, Any] = dict(
@@ -310,7 +326,7 @@ DEFAULT_SETTINGS: Dict[str, Any] = dict(
     requires_grad=True,
     sparkline=False,
     sparkline_bins=5,
-    sparkline_logy=False,
+    sparkline_logy=None,
     colored=False,
     as_list=False,
     eq_char="=",
@@ -345,7 +361,7 @@ def array_summary(  # type: ignore[misc]
     requires_grad: bool = _USE_DEFAULT,  # type: ignore[assignment]
     sparkline: bool = _USE_DEFAULT,  # type: ignore[assignment]
     sparkline_bins: int = _USE_DEFAULT,  # type: ignore[assignment]
-    sparkline_logy: bool = _USE_DEFAULT,  # type: ignore[assignment]
+    sparkline_logy: bool|None = _USE_DEFAULT,  # type: ignore[assignment]
     colored: bool = _USE_DEFAULT,  # type: ignore[assignment]
     eq_char: str = _USE_DEFAULT,  # type: ignore[assignment]
     as_list: bool = _USE_DEFAULT,  # type: ignore[assignment]
@@ -373,8 +389,8 @@ def array_summary(  # type: ignore[misc]
             Whether to include a sparkline visualization (defaults to `False`)
      - `sparkline_width : int`
             Width of the sparkline (defaults to `20`)
-     - `sparkline_logy : bool`
-            Whether to use logarithmic y-scale for sparkline (defaults to `False`)
+     - `sparkline_logy : bool|None`
+            Whether to use logarithmic y-scale for sparkline (defaults to `None`)
      - `colored : bool`
             Whether to add color to output (defaults to `False`)
      - `as_list : bool`
@@ -473,12 +489,16 @@ def array_summary(  # type: ignore[misc]
 
     # Add sparkline if requested
     if sparkline and array_data["histogram"] is not None:
-        spark = generate_sparkline(
-            array_data["histogram"], format=fmt, log_y=sparkline_logy
+        # this should return whether log_y is used or not and then we set the symbol accordingly
+        spark, used_log = generate_sparkline(
+            array_data["histogram"],
+            format=fmt,
+            log_y=sparkline_logy,
         )
         if spark:
             spark_colored = colorize(spark, "sparkline")
-            result_parts.append(f"{symbols['distribution']}{eq_char}|{spark_colored}|")
+            dist_symbol = symbols["distribution_log"] if used_log else symbols["distribution"]
+            result_parts.append(f"{dist_symbol}{eq_char}|{spark_colored}|")
 
     # Add shape if requested
     if shape and array_data["shape"]:

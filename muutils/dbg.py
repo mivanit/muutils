@@ -302,7 +302,7 @@ def info_auto(
         return dict_info(obj)
     elif isinstance(obj, list):
         return list_info(obj)
-    elif type(obj) in TENSOR_STR_TYPES:
+    elif str(type(obj)) in TENSOR_STR_TYPES:
         return tensor_info(obj)
     else:
         return repr(obj)

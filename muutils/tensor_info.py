@@ -8,13 +8,19 @@ COLORS: Dict[str, Dict[str, str]] = {
         "mean": r"\textcolor{teal}",
         "std": r"\textcolor{orange}",
         "median": r"\textcolor{green}",
-        "warning": r"\textcolor{red}",
+        "warning": r"\textcolor{red}",      
         "shape": r"\textcolor{magenta}",
         "dtype": r"\textcolor{gray}",
         "device": r"\textcolor{gray}",
         "requires_grad": r"\textcolor{gray}",
         "sparkline": r"\textcolor{blue}",
-        "reset": "",
+        "torch": r"\textcolor{orange}", 
+        "dtype_bool": r"\textcolor{gray}",
+        "dtype_int": r"\textcolor{blue}", 
+        "dtype_float": r"\textcolor{red!70}",  # 70% red intensity
+        "dtype_str": r"\textcolor{red}",
+        "device_cuda": r"\textcolor{green}",
+        "reset": "",    
     },
     "terminal": {
         "range": "\033[35m",  # purple
@@ -22,11 +28,16 @@ COLORS: Dict[str, Dict[str, str]] = {
         "std": "\033[33m",  # yellow/orange
         "median": "\033[32m",  # green
         "warning": "\033[31m",  # red
-        "shape": "\033[95m",  # bright magenta
+        "shape": "\033[95m",  # bright magenta          
         "dtype": "\033[90m",  # gray
         "device": "\033[90m",  # gray
         "requires_grad": "\033[90m",  # gray
         "sparkline": "\033[34m",  # blue
+        "torch": "\033[38;5;208m",  # bright orange
+        "dtype_bool": "\033[38;5;245m",  # medium grey
+        "dtype_int": "\033[38;5;39m",  # bright blue
+        "dtype_float": "\033[38;5;167m",  # softer red/coral
+        "device_cuda": "\033[38;5;76m",  # NVIDIA-style bright green
         "reset": "\033[0m",
     },
     "none": {
@@ -40,6 +51,12 @@ COLORS: Dict[str, Dict[str, str]] = {
         "device": "",
         "requires_grad": "",
         "sparkline": "",
+        "torch": "",
+        "dtype_bool": "",
+        "dtype_int": "",
+        "dtype_float": "",
+        "dtype_str": "",
+        "device_cuda": "",
         "reset": "",
     },
 }
@@ -332,6 +349,70 @@ DEFAULT_SETTINGS: Dict[str, Any] = dict(
     eq_char="=",
 )
 
+def apply_color(text: str, color_key: str, colors: Dict[str, str], using_tex: bool) -> str:
+    if using_tex:
+        return f"{colors[color_key]}{{{text}}}" if colors[color_key] else text
+    else:
+        return f"{colors[color_key]}{text}{colors['reset']}" if colors[color_key] else text
+
+
+def colorize_dtype(dtype_str: str, colors: Dict[str, str], using_tex: bool) -> str:
+    """Colorize dtype string with specific colors for torch and type names."""
+    
+    # Handle torch prefix
+    type_part: str = dtype_str
+    prefix_part: str|None = None
+    if "torch." in dtype_str:
+        parts = dtype_str.split("torch.")
+        if len(parts) == 2:
+            prefix_part = apply_color("torch", "torch", colors, using_tex)
+            type_part = parts[1]
+    
+    # Handle type coloring
+    color_key: str = "dtype"
+    if "bool" in dtype_str.lower():
+        color_key = "dtype_bool"
+    elif "int" in dtype_str.lower():
+        color_key = "dtype_int"
+    elif "float" in dtype_str.lower():
+        color_key = "dtype_float"
+
+    type_colored: str = apply_color(type_part, color_key, colors, using_tex)
+
+    if prefix_part:
+        return f"{prefix_part}.{type_colored}"
+    else:
+        return type_colored
+
+
+def format_shape_colored(shape_val, colors: Dict[str, str], using_tex: bool) -> str:
+    """Format shape with proper coloring for both 1D and multi-D arrays."""
+    def apply_color(text: str, color_key: str) -> str:
+        if using_tex:
+            return f"{colors[color_key]}{{{text}}}" if colors[color_key] else text
+        else:
+            return f"{colors[color_key]}{text}{colors['reset']}" if colors[color_key] else text
+    
+    if len(shape_val) == 1:
+        # For 1D arrays, still color the dimension value
+        return apply_color(str(shape_val[0]), "shape")
+    else:
+        # For multi-D arrays, color each dimension
+        return "(" + ",".join(apply_color(str(dim), "shape") for dim in shape_val) + ")"
+
+def format_device_colored(device_str: str, colors: Dict[str, str], using_tex: bool) -> str:
+    """Format device string with CUDA highlighting."""
+    def apply_color(text: str, color_key: str) -> str:
+        if using_tex:
+            return f"{colors[color_key]}{{{text}}}" if colors[color_key] else text
+        else:
+            return f"{colors[color_key]}{text}{colors['reset']}" if colors[color_key] else text
+    
+    if "cuda" in device_str.lower():
+        return apply_color(device_str, "device_cuda")
+    else:
+        return apply_color(device_str, "device")
+
 
 class _UseDefaultType:
     pass
@@ -513,23 +594,18 @@ def array_summary(  # type: ignore[misc]
     # Add shape if requested
     if shape and array_data["shape"]:
         shape_val = array_data["shape"]
-        if len(shape_val) == 1:
-            shape_str = str(shape_val[0])
-        else:
-            shape_str = (
-                "(" + ",".join(colorize(str(dim), "shape") for dim in shape_val) + ")"
-            )
+        shape_str = format_shape_colored(shape_val, colors, using_tex)
         result_parts.append(f"shape{eq_char}{shape_str}")
 
     # Add dtype if requested
     if dtype and array_data["dtype"]:
-        result_parts.append(colorize(f"dtype={array_data['dtype']}", "dtype"))
+        dtype_colored = colorize_dtype(array_data["dtype"], colors, using_tex)
+        result_parts.append(f"dtype={dtype_colored}")
 
     # Add device if requested and it's a tensor with device info
     if device and array_data["is_tensor"] and array_data["device"]:
-        result_parts.append(
-            colorize(f"device{eq_char}{array_data['device']}", "device")
-        )
+        device_colored = format_device_colored(array_data["device"], colors, using_tex)
+        result_parts.append(f"device{eq_char}{device_colored}")
 
     # Add gradient info
     if requires_grad and array_data["is_tensor"]:

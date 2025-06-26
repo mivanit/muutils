@@ -235,6 +235,8 @@ def array_info(
         # Calculate histogram data for sparklines
         if A_hist.size > 0:
             try:
+                # TODO: handle bool tensors correctly
+                # muutils/tensor_info.py:238: RuntimeWarning: Converting input from bool to <class 'numpy.uint8'> for compatibility.
                 hist, bins = np.histogram(A_hist, bins=hist_bins)
                 result["histogram"] = hist
                 result["bins"] = bins

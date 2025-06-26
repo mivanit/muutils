@@ -195,7 +195,7 @@ DBG_TENSOR_ARRAY_SUMMARY_DEFAULTS: typing.Dict[str, typing.Union[bool, int, str]
         requires_grad=True,
         sparkline=True,
         sparkline_bins=7,
-        sparkline_logy=None, # None means auto-detect
+        sparkline_logy=None,  # None means auto-detect
         colored=True,
         eq_char="=",
     )

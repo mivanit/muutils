@@ -256,7 +256,7 @@ def array_info(
 def generate_sparkline(
     histogram: np.ndarray,
     format: Literal["unicode", "latex", "ascii"] = "unicode",
-    log_y: bool|None = None,
+    log_y: bool | None = None,
 ) -> tuple[str, bool]:
     """Generate a sparkline visualization of the histogram.
 
@@ -282,7 +282,7 @@ def generate_sparkline(
         chars = SPARK_CHARS[format]
     else:
         chars = SPARK_CHARS["ascii"]
-   
+
     # automatic detection of log_y
     if log_y is None:
         # we bin the histogram values to the number of levels in our sparkline characters
@@ -361,7 +361,7 @@ def array_summary(  # type: ignore[misc]
     requires_grad: bool = _USE_DEFAULT,  # type: ignore[assignment]
     sparkline: bool = _USE_DEFAULT,  # type: ignore[assignment]
     sparkline_bins: int = _USE_DEFAULT,  # type: ignore[assignment]
-    sparkline_logy: bool|None = _USE_DEFAULT,  # type: ignore[assignment]
+    sparkline_logy: bool | None = _USE_DEFAULT,  # type: ignore[assignment]
     colored: bool = _USE_DEFAULT,  # type: ignore[assignment]
     eq_char: str = _USE_DEFAULT,  # type: ignore[assignment]
     as_list: bool = _USE_DEFAULT,  # type: ignore[assignment]
@@ -497,7 +497,9 @@ def array_summary(  # type: ignore[misc]
         )
         if spark:
             spark_colored = colorize(spark, "sparkline")
-            dist_symbol = symbols["distribution_log"] if used_log else symbols["distribution"]
+            dist_symbol = (
+                symbols["distribution_log"] if used_log else symbols["distribution"]
+            )
             result_parts.append(f"{dist_symbol}{eq_char}|{spark_colored}|")
 
     # Add shape if requested

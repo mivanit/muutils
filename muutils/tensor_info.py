@@ -452,6 +452,10 @@ def array_summary(  # type: ignore[misc]
                 else text
             )
 
+    # Check if dtype is integer type
+    dtype_str: str = array_data.get("dtype", "")
+    is_int_dtype: bool = any(int_type in dtype_str.lower() for int_type in ["int", "uint", "bool"])
+
     # Format string for numbers
     float_fmt: str = f".{precision}f"
 
@@ -480,8 +484,12 @@ def array_summary(  # type: ignore[misc]
             # Range (min, max)
             if array_data["range"] is not None:
                 min_val, max_val = array_data["range"]
-                min_str: str = f"{min_val:{float_fmt}}"
-                max_str: str = f"{max_val:{float_fmt}}"
+                if is_int_dtype:
+                    min_str: str = f"{int(min_val):d}"
+                    max_str: str = f"{int(max_val):d}"
+                else:
+                    min_str = f"{min_val:{float_fmt}}"
+                    max_str = f"{max_val:{float_fmt}}"
                 min_colored: str = colorize(min_str, "range")
                 max_colored: str = colorize(max_str, "range")
                 range_str: str = f"{symbols['range']}=[{min_colored},{max_colored}]"

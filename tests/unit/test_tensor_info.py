@@ -298,13 +298,33 @@ def test_generate_sparkline_basic() -> None:
     Test the sparkline generator with a fixed histogram.
     """
     histogram: np.ndarray = np.array([1, 3, 5, 2, 0])
-    spark: str = generate_sparkline(histogram, format="unicode", log_y=False)
+    spark, logy = generate_sparkline(histogram, format="unicode", log_y=None)
     assert isinstance(spark, str)
+    assert isinstance(logy, bool)
+    assert not logy
     assert len(spark) == len(histogram)
     # Test with log_y=True
-    spark_log: str = generate_sparkline(histogram, format="ascii", log_y=True)
+    spark_log, logy_true = generate_sparkline(histogram, format="ascii", log_y=True)
     assert isinstance(spark_log, str)
     assert len(spark_log) == len(histogram)
+    assert logy_true
+
+
+def test_generate_sparkline_logy() -> None:
+    """
+    Test the sparkline generator with a fixed histogram.
+    """
+    histogram: np.ndarray = np.array([99999, 3, 5, 2, 0])
+    spark, logy = generate_sparkline(histogram, format="unicode", log_y=None)
+    assert isinstance(spark, str)
+    assert isinstance(logy, bool)
+    assert logy
+    assert len(spark) == len(histogram)
+    # Test with log_y=True
+    spark_log, logy_true = generate_sparkline(histogram, format="ascii", log_y=True)
+    assert isinstance(spark_log, str)
+    assert len(spark_log) == len(histogram)
+    assert logy_true
 
 
 if __name__ == "__main__":

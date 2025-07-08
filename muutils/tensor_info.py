@@ -1,5 +1,5 @@
 import numpy as np
-from typing import Union, Any, Literal, List, Dict, overload
+from typing import Union, Any, Literal, List, Dict, overload, Optional
 
 # Global color definitions
 COLORS: Dict[str, Dict[str, str]] = {
@@ -273,7 +273,7 @@ def array_info(
 def generate_sparkline(
     histogram: np.ndarray,
     format: Literal["unicode", "latex", "ascii"] = "unicode",
-    log_y: bool | None = None,
+    log_y: Optional[bool] = None,
 ) -> tuple[str, bool]:
     """Generate a sparkline visualization of the histogram.
 
@@ -366,7 +366,7 @@ def colorize_dtype(dtype_str: str, colors: Dict[str, str], using_tex: bool) -> s
 
     # Handle torch prefix
     type_part: str = dtype_str
-    prefix_part: str | None = None
+    prefix_part: Optional[str] = None
     if "torch." in dtype_str:
         parts = dtype_str.split("torch.")
         if len(parts) == 2:
@@ -460,7 +460,7 @@ def array_summary(  # type: ignore[misc]
     requires_grad: bool = _USE_DEFAULT,  # type: ignore[assignment]
     sparkline: bool = _USE_DEFAULT,  # type: ignore[assignment]
     sparkline_bins: int = _USE_DEFAULT,  # type: ignore[assignment]
-    sparkline_logy: bool | None = _USE_DEFAULT,  # type: ignore[assignment]
+    sparkline_logy: Optional[bool] = _USE_DEFAULT,  # type: ignore[assignment]
     colored: bool = _USE_DEFAULT,  # type: ignore[assignment]
     eq_char: str = _USE_DEFAULT,  # type: ignore[assignment]
     as_list: bool = _USE_DEFAULT,  # type: ignore[assignment]

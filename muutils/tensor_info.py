@@ -1,3 +1,7 @@
+"get metadata about a tensor, mostly for `muutils.dbg`"
+
+from __future__ import annotations
+
 import numpy as np
 from typing import Union, Any, Literal, List, Dict, overload, Optional
 

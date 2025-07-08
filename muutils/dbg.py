@@ -184,21 +184,21 @@ def dbg(
 
 # formatted `dbg_*` functions with their helpers
 
-DBG_TENSOR_ARRAY_SUMMARY_DEFAULTS: typing.Dict[str, typing.Union[bool, int, str]] = (
-    dict(
-        fmt="unicode",
-        precision=2,
-        stats=True,
-        shape=True,
-        dtype=True,
-        device=True,
-        requires_grad=True,
-        sparkline=True,
-        sparkline_bins=7,
-        sparkline_logy=None,  # None means auto-detect
-        colored=True,
-        eq_char="=",
-    )
+DBG_TENSOR_ARRAY_SUMMARY_DEFAULTS: typing.Dict[
+    str, typing.Union[None, bool, int, str]
+] = dict(
+    fmt="unicode",
+    precision=2,
+    stats=True,
+    shape=True,
+    dtype=True,
+    device=True,
+    requires_grad=True,
+    sparkline=True,
+    sparkline_bins=7,
+    sparkline_logy=None,  # None means auto-detect
+    colored=True,
+    eq_char="=",
 )
 
 
@@ -230,7 +230,8 @@ def list_info(
 ) -> str:
     len_l: int = len(lst)
     output: str
-    if len_l > DBG_LIST_DEFAULTS["max_len"]:
+    # TYPING: make `DBG_LIST_DEFAULTS` and the others typed dicts
+    if len_l > DBG_LIST_DEFAULTS["max_len"]:  # type: ignore[operator]
         output = f"<list of len()={len_l}"
         if DBG_LIST_DEFAULTS["summary_show_types"]:
             val_types: typing.Set[str] = set(type(x).__name__ for x in lst)
@@ -253,7 +254,7 @@ def dict_info(
     depth: int = 0,
 ) -> str:
     len_d: int = len(d)
-    indent: str = DBG_DICT_DEFAULTS["indent"]
+    indent: str = DBG_DICT_DEFAULTS["indent"]  # type: ignore[assignment]
 
     # summary line
     output: str = f"{indent*depth}<dict of len()={len_d}"
@@ -271,8 +272,8 @@ def dict_info(
     output += ">"
 
     # keys/values if not to deep and not too many
-    if depth < DBG_DICT_DEFAULTS["max_depth"]:
-        if len_d > 0 and len_d < DBG_DICT_DEFAULTS["max_len"]:
+    if depth < DBG_DICT_DEFAULTS["max_depth"]:  # type: ignore[operator]
+        if len_d > 0 and len_d < DBG_DICT_DEFAULTS["max_len"]:  # type: ignore[operator]
             for k, v in d.items():
                 key_str: str = repr(k) if not isinstance(k, str) else k
 

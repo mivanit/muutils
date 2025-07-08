@@ -1,3 +1,7 @@
+"parallel processing utilities, chiefly `run_maybe_parallel`"
+
+from __future__ import annotations
+
 import multiprocessing
 import functools
 from typing import (

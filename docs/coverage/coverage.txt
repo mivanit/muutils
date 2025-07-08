@@ -1,8 +1,9 @@
 Name                                                                              Stmts   Miss  Cover   Missing
 ---------------------------------------------------------------------------------------------------------------
 muutils/__init__.py                                                                   2      0   100%
+muutils/collect_warnings.py                                                          38     38     0%   1-132
 muutils/console_unicode.py                                                            7      0   100%
-muutils/dbg.py                                                                       80     16    80%   126, 140-160
+muutils/dbg.py                                                                      130     58    55%   126, 140-160, 231-243, 256-295, 302-309
 muutils/dictmagic.py                                                                160     23    86%   37-42, 45-50, 309, 469-473, 477, 510-522
 muutils/errormode.py                                                                 75     31    59%   10-34, 43, 78-91, 144, 149, 160-163, 197, 200, 203, 206-207, 215-241
 muutils/group_equiv.py                                                               29      0   100%
@@ -43,11 +44,11 @@ muutils/nbutils/convert_ipynb_to_script.py                                      
 muutils/nbutils/mermaid.py                                                           11      7    36%   7-10, 17-20
 muutils/nbutils/print_tex.py                                                         10     10     0%   3-21
 muutils/nbutils/run_notebook_tests.py                                                87     17    80%   94-101, 129, 133, 137, 143, 185, 191-196, 201-204
-muutils/parallel.py                                                                  92      6    93%   46-48, 60, 219, 223-224
+muutils/parallel.py                                                                  93      6    94%   50-52, 64, 223, 227-228
 muutils/spinner.py                                                                  147     10    93%   280, 307, 370-371, 417, 420, 423, 465, 469, 508
 muutils/statcounter.py                                                               89     32    64%   30-41, 56, 82, 110, 122, 132, 149-179, 199, 209, 212, 217-222, 231
 muutils/sysinfo.py                                                                   79     14    82%   22-25, 67-68, 117-118, 159-168, 180, 198-200
-muutils/tensor_info.py                                                              199     21    89%   141-142, 152-153, 156-160, 172-173, 181-182, 195-196, 210-211, 241-242, 271, 277, 290
+muutils/tensor_info.py                                                              250     26    90%   165-166, 176-177, 180-184, 196-197, 205-206, 219-220, 234-235, 267-268, 298, 305, 329, 361, 383, 402, 425, 434
 muutils/tensor_utils.py                                                             133     18    86%   101, 104, 123, 127, 144, 147-150, 158, 165, 179-187
 muutils/timeit_fancy.py                                                              33      2    94%   90-91
 muutils/validate_type.py                                                             90     23    74%   3-37, 54, 58, 193, 196, 216-223, 228-229
@@ -87,7 +88,7 @@ tests/unit/test_parallel.py                                                     
 tests/unit/test_spinner.py                                                          295      8    97%   352-362
 tests/unit/test_statcounter.py                                                       14      0   100%
 tests/unit/test_sysinfo.py                                                            6      0   100%
-tests/unit/test_tensor_info.py                                                       95      9    91%   21-22, 49, 56, 58, 63, 256, 311-313
+tests/unit/test_tensor_info.py                                                      109      9    92%   21-22, 49, 56, 58, 63, 256, 331-333
 tests/unit/test_tensor_utils.py                                                      51      0   100%
 tests/unit/test_timeit_fancy.py                                                      69      0   100%
 tests/unit/validate_type/test_get_kwargs.py                                          53     13    75%   8, 15, 22, 29, 36, 43, 51-52, 58-59, 66, 78, 87
@@ -97,4 +98,4 @@ tests/unit/validate_type/test_validate_type_special.py                          
 tests/unit/web/test_bundle_html.py                                                  202      0   100%
 tests/util/test_fire.py                                                               8      6    25%   2-5, 9-11
 ---------------------------------------------------------------------------------------------------------------
-TOTAL                                                                              7964   1135    86%
+TOTAL                                                                              8118   1220    85%

@@ -1,4 +1,4 @@
-  docs for muutils v0.8.10
+  docs for muutils v0.8.11
 
 Contents
 
@@ -125,6 +125,7 @@ Submodules
 -   misc
 -   nbutils
 -   web
+-   collect_warnings
 -   console_unicode
 -   dbg
 -   dictmagic
@@ -264,7 +265,82 @@ at your own risk!
 
 View Source on GitHub
 
-  docs for muutils v0.8.10
+  docs for muutils v0.8.11
+
+API Documentation
+
+-   CollateWarnings
+
+View Source on GitHub
+
+muutils.collect_warnings
+
+View Source on GitHub
+
+class CollateWarnings(contextlib.AbstractContextManager[&#39;CollateWarnings&#39;]):
+
+View Source on GitHub
+
+Capture every warning issued inside a with block and print a collated
+summary when the block exits.
+
+Internally this wraps warnings.catch_warnings(record=True) so that all
+warnings raised in the block are recorded. When the context exits,
+identical warnings are grouped and (optionally) printed with a
+user-defined format.
+
+Parameters:
+
+-   print_on_exit : bool Whether to print the summary when the context
+    exits (defaults to True)
+
+-   fmt : str Format string used for printing each line of the summary.
+    Available fields are:
+
+    -   {count} : number of occurrences
+    -   {filename} : file where the warning originated
+    -   {lineno} : line number
+    -   {category} : warning class name
+    -   {message} : warning message text
+
+    (defaults to "({count}x) {filename}:{lineno} {category}: {message}")
+
+Returns:
+
+-   CollateWarnings The context-manager instance. After exit, the
+    attribute counts holds a mapping
+
+        {(filename, lineno, category, message): count}
+
+Usage:
+
+    >>> import warnings
+    >>> with CollateWarnings() as cw:
+    ...     warnings.warn("deprecated", DeprecationWarning)
+    ...     warnings.warn("deprecated", DeprecationWarning)
+    ...     warnings.warn("other", UserWarning)
+    (2x) /tmp/example.py:42 DeprecationWarning: deprecated
+    (1x) /tmp/example.py:43 UserWarning: other
+    >>> cw.counts
+    {('/tmp/example.py', 42, 'DeprecationWarning', 'deprecated'): 2,
+     ('/tmp/example.py', 43, 'UserWarning', 'other'): 1}
+
+CollateWarnings
+
+    (
+        print_on_exit: bool = True,
+        fmt: str = '({count}x) {filename}:{lineno} {category}: {message}'
+    )
+
+View Source on GitHub
+
+-   counts: collections.Counter[tuple[str, int, str, str]]
+
+-   print_on_exit: bool
+
+-   fmt: str
+
+  docs for muutils v0.8.11
 
 API Documentation
 
@@ -305,7 +381,7 @@ Usage:
     >>> get_console_safe_str("café", "cafe")
     "café"  # This result may vary based on the system's preferred encoding.
 
-  docs for muutils v0.8.10
+  docs for muutils v0.8.11
 
 Contents
 
@@ -345,7 +421,15 @@ API Documentation
 -   DBG_TENSOR_ARRAY_SUMMARY_DEFAULTS
 -   DBG_TENSOR_VAL_JOINER
 -   tensor_info
+-   DBG_DICT_DEFAULTS
+-   DBG_LIST_DEFAULTS
+-   list_info
+-   TENSOR_STR_TYPES
+-   dict_info
+-   info_auto
 -   dbg_tensor
+-   dbg_dict
+-   dbg_auto
 
 View Source on GitHub
 
@@ -412,7 +496,7 @@ well as the passed expression and what the expression evaluates to:
 
         dbg(square(a))
 
--   DBG_TENSOR_ARRAY_SUMMARY_DEFAULTS: Dict[str, Union[str, int, bool]] = {'fmt': 'unicode', 'precision': 2, 'stats': True, 'shape': True, 'dtype': True, 'device': True, 'requires_grad': True, 'sparkline': True, 'sparkline_bins': 7, 'sparkline_logy': False, 'colored': True, 'eq_char': '='}
+-   DBG_TENSOR_ARRAY_SUMMARY_DEFAULTS: Dict[str, Union[NoneType, bool, int, str]] = {'fmt': 'unicode', 'precision': 2, 'stats': True, 'shape': True, 'dtype': True, 'device': True, 'requires_grad': True, 'sparkline': True, 'sparkline_bins': 7, 'sparkline_logy': None, 'colored': True, 'eq_char': '='}
 
 -   DBG_TENSOR_VAL_JOINER: str = ': '
 
@@ -422,9 +506,39 @@ def tensor_info
 
 View Source on GitHub
 
+-   DBG_DICT_DEFAULTS: Dict[str, Union[str, int, bool]] = {'key_types': True, 'val_types': True, 'max_len': 32, 'indent': '  ', 'max_depth': 3}
+
+-   DBG_LIST_DEFAULTS: Dict[str, Union[str, int, bool]] = {'max_len': 16, 'summary_show_types': True}
+
+def list_info
+
+    (lst: List[Any]) -> str
+
+View Source on GitHub
+
+-   TENSOR_STR_TYPES: Set[str] = {"<class 'torch.Tensor'>", "<class 'numpy.ndarray'>"}
+
+def dict_info
+
+    (d: Dict[Any, Any], depth: int = 0) -> str
+
+View Source on GitHub
+
+def info_auto
+
+    (obj: Any) -> str
+
+View Source on GitHub
+
+Automatically format an object for debugging.
+
 -   dbg_tensor = functools.partial(<function dbg>, formatter=<function tensor_info>, val_joiner=': ')
 
-  docs for muutils v0.8.10
+-   dbg_dict = functools.partial(<function dbg>, formatter=<function dict_info>, val_joiner=': ')
+
+-   dbg_auto = functools.partial(<function dbg>, formatter=<function info_auto>, val_joiner=': ')
+
+  docs for muutils v0.8.11
 
 Contents
 
@@ -779,7 +893,7 @@ Raises:
     ‘yaml’, or if you try to use ‘yaml’ output without having PyYAML
     installed
 
-  docs for muutils v0.8.10
+  docs for muutils v0.8.11
 
 Contents
 
@@ -994,7 +1108,7 @@ Inherited Members
 
 map of string aliases to ErrorMode instances
 
-  docs for muutils v0.8.10
+  docs for muutils v0.8.11
 
 Contents
 
@@ -1036,7 +1150,7 @@ Arguments
 -   eq_func: Callable[[T, T], bool] a function that returns true if two
     items are equivalent. need not be transitive
 
-  docs for muutils v0.8.10
+  docs for muutils v0.8.11
 
 Contents
 
@@ -1332,7 +1446,7 @@ Inherited Members
 -   intersection
 -   union
 
-  docs for muutils v0.8.10
+  docs for muutils v0.8.11
 
 Contents
 
@@ -1941,7 +2055,7 @@ Parameters:
     - `nested_dict : dict[str, Any]`
         nested dict to update the instance with
 
-  docs for muutils v0.8.10
+  docs for muutils v0.8.11
 
 Contents
 
@@ -2063,7 +2177,7 @@ View Source on GitHub
 
 load a json-serialized array, infer the mode if not specified
 
-  docs for muutils v0.8.10
+  docs for muutils v0.8.11
 
 Contents
 
@@ -2239,7 +2353,7 @@ View Source on GitHub
 
 serialize object to json-serializable object with default config
 
-  docs for muutils v0.8.10
+  docs for muutils v0.8.11
 
 Contents
 
@@ -2837,7 +2951,7 @@ Raises:
 -   AttributeError : if a property is not found on the class
 -   FieldLoadingError : if there is an error loading a field
 
-  docs for muutils v0.8.10
+  docs for muutils v0.8.11
 
 Contents
 
@@ -3029,7 +3143,7 @@ the container. ZANJ will automatically do this for you.
 
 TODO: custom_value_check_fn: function taking the value of the field and returning whether the value itself is valid. if not provided, any value is valid as long as it passes the type test
 
-  docs for muutils v0.8.10
+  docs for muutils v0.8.11
 
 Contents
 
@@ -3212,7 +3326,7 @@ View Source on GitHub
 
 tuple type hint, but for a tuple of any length with all the same type
 
-  docs for muutils v0.8.10
+  docs for muutils v0.8.11
 
 Contents
 
@@ -3262,7 +3376,7 @@ def jsonl_write
 
 View Source on GitHub
 
-  docs for muutils v0.8.10
+  docs for muutils v0.8.11
 
 Contents
 
@@ -3318,7 +3432,7 @@ Inherited Members
 -   items
 -   values
 
-  docs for muutils v0.8.10
+  docs for muutils v0.8.11
 
 Contents
 
@@ -3539,7 +3653,7 @@ context manager for timing code
 
 -   elapsed_time: float
 
-  docs for muutils v0.8.10
+  docs for muutils v0.8.11
 
 API Documentation
 
@@ -3576,7 +3690,7 @@ View Source on GitHub
 
 -   stream
 
-  docs for muutils v0.8.10
+  docs for muutils v0.8.11
 
 API Documentation
 
@@ -3668,7 +3782,7 @@ standard header function. will output
 
 -   HEADER_FUNCTIONS: dict[str, muutils.logger.headerfuncs.HeaderFunction] = {'md': <function md_header_function>}
 
-  docs for muutils v0.8.10
+  docs for muutils v0.8.11
 
 API Documentation
 
@@ -3733,7 +3847,7 @@ then gather_val("log.jsonl", "s1", ("a", "b")) will return
         [4, 5]
     ]
 
-  docs for muutils v0.8.10
+  docs for muutils v0.8.11
 
 Contents
 
@@ -3875,7 +3989,7 @@ View Source on GitHub
 
 flush all streams
 
-  docs for muutils v0.8.10
+  docs for muutils v0.8.11
 
 API Documentation
 
@@ -3937,7 +4051,7 @@ def make_handler
 
 View Source on GitHub
 
-  docs for muutils v0.8.10
+  docs for muutils v0.8.11
 
 API Documentation
 
@@ -4012,7 +4126,7 @@ View Source on GitHub
 
 log a message to the log file, and optionally to the console
 
-  docs for muutils v0.8.10
+  docs for muutils v0.8.11
 
 API Documentation
 
@@ -4099,7 +4213,7 @@ View Source on GitHub
 
 returns a progress string
 
-  docs for muutils v0.8.10
+  docs for muutils v0.8.11
 
 Submodules
 
@@ -4112,7 +4226,7 @@ muutils.math
 
 View Source on GitHub
 
-  docs for muutils v0.8.10
+  docs for muutils v0.8.11
 
 API Documentation
 
@@ -4161,7 +4275,7 @@ def changed_n_bins_copy
 
 View Source on GitHub
 
-  docs for muutils v0.8.10
+  docs for muutils v0.8.11
 
 API Documentation
 
@@ -4228,7 +4342,7 @@ Raises:
 -   ValueError : If no powers are requested or if A is not a square
     matrix
 
-  docs for muutils v0.8.10
+  docs for muutils v0.8.11
 
 Contents
 
@@ -4799,7 +4913,7 @@ Duplicates are ignored in the same manner as a set. Unfrozen dataclasses
 can’t be placed in sets since they’re not hashable. Collections of them
 may be compared using this function.
 
-  docs for muutils v0.8.10
+  docs for muutils v0.8.11
 
 API Documentation
 
@@ -4929,7 +5043,7 @@ Duplicates are ignored in the same manner as a set. Unfrozen dataclasses
 can’t be placed in sets since they’re not hashable. Collections of them
 may be compared using this function.
 
-  docs for muutils v0.8.10
+  docs for muutils v0.8.11
 
 API Documentation
 
@@ -5045,7 +5159,7 @@ you can’t rely on that. always use the return value.
 
 the gelidum package is a more complete implementation of this idea
 
-  docs for muutils v0.8.10
+  docs for muutils v0.8.11
 
 API Documentation
 
@@ -5247,7 +5361,7 @@ Raises:
 -   ValueError if the number of input types doesn’t match the lambda’s
     parameters.
 
-  docs for muutils v0.8.10
+  docs for muutils v0.8.11
 
 API Documentation
 
@@ -5285,7 +5399,7 @@ View Source on GitHub
 Returns a base64 representation of the hash of the given string. not
 cryptographically secure
 
-  docs for muutils v0.8.10
+  docs for muutils v0.8.11
 
 API Documentation
 
@@ -5342,7 +5456,7 @@ Examples:
     >>> str_to_numeric("1.2e2")
     120.0
 
-  docs for muutils v0.8.10
+  docs for muutils v0.8.11
 
 API Documentation
 
@@ -5517,7 +5631,7 @@ Raises:
     is "except"
 -   ValueError : if when_missing is invalid
 
-  docs for muutils v0.8.10
+  docs for muutils v0.8.11
 
 API Documentation
 
@@ -5602,7 +5716,7 @@ def dynamic_docstring
 
 View Source on GitHub
 
-  docs for muutils v0.8.10
+  docs for muutils v0.8.11
 
 Contents
 
@@ -5698,7 +5812,7 @@ def pprint_summary
 
 View Source on GitHub
 
-  docs for muutils v0.8.10
+  docs for muutils v0.8.11
 
 Contents
 
@@ -5742,7 +5856,7 @@ View Source on GitHub
 
 for plotting mermaid.js diagrams
 
-  docs for muutils v0.8.10
+  docs for muutils v0.8.11
 
 Contents
 
@@ -5914,7 +6028,7 @@ View Source on GitHub
 
 Show the active plot, depending on global configs
 
-  docs for muutils v0.8.10
+  docs for muutils v0.8.11
 
 Contents
 
@@ -6018,7 +6132,7 @@ Arguments
     - `filter_out_lines: str|typing.Sequence[str] = ('%', '!')`: comment out lines starting with these strings (in code blocks).
         if a string is passed, it will be split by char and each char will be treated as a separate filter.
 
-  docs for muutils v0.8.10
+  docs for muutils v0.8.11
 
 Contents
 
@@ -6046,7 +6160,7 @@ View Source on GitHub
 
 for plotting mermaid.js diagrams
 
-  docs for muutils v0.8.10
+  docs for muutils v0.8.11
 
 Contents
 
@@ -6077,7 +6191,7 @@ View Source on GitHub
 
 function for easily rendering a sympy expression in latex
 
-  docs for muutils v0.8.10
+  docs for muutils v0.8.11
 
 Contents
 
@@ -6197,7 +6311,11 @@ Usage:
         Output in temp/converted/notebook1.CI-output.txt
         {SUCCESS_STR} Run completed with return code 0
 
-  docs for muutils v0.8.10
+  docs for muutils v0.8.11
+
+Contents
+
+parallel processing utilities, chiefly run_maybe_parallel
 
 API Documentation
 
@@ -6213,6 +6331,8 @@ API Documentation
 View Source on GitHub
 
 muutils.parallel
+
+parallel processing utilities, chiefly run_maybe_parallel
 
 View Source on GitHub
 
@@ -6337,7 +6457,7 @@ Raises:
 -   ImportError : if use_multiprocess=True and multiprocess is not
     available
 
-  docs for muutils v0.8.10
+  docs for muutils v0.8.11
 
 Contents
 
@@ -6733,7 +6853,7 @@ As a decorator:
             spinner.update_value(f"Step {i+1}")
         return "Function completed"
 
-  docs for muutils v0.8.10
+  docs for muutils v0.8.11
 
 Contents
 
@@ -6944,7 +7064,7 @@ Inherited Members
 
 -   clear
 
-  docs for muutils v0.8.10
+  docs for muutils v0.8.11
 
 Contents
 
@@ -7014,7 +7134,11 @@ def get_all
 
 View Source on GitHub
 
-  docs for muutils v0.8.10
+  docs for muutils v0.8.11
+
+Contents
+
+get metadata about a tensor, mostly for muutils.dbg
 
 API Documentation
 
@@ -7025,19 +7149,26 @@ API Documentation
 -   array_info
 -   generate_sparkline
 -   DEFAULT_SETTINGS
+-   apply_color
+-   colorize_dtype
+-   format_shape_colored
+-   format_device_colored
 -   array_summary
 
 View Source on GitHub
 
 muutils.tensor_info
 
+get metadata about a tensor, mostly for
+<a href="dbg.html">muutils.dbg</a>
+
 View Source on GitHub
 
--   COLORS: Dict[str, Dict[str, str]] = {'latex': {'range': '\\textcolor{purple}', 'mean': '\\textcolor{teal}', 'std': '\\textcolor{orange}', 'median': '\\textcolor{green}', 'warning': '\\textcolor{red}', 'shape': '\\textcolor{magenta}', 'dtype': '\\textcolor{gray}', 'device': '\\textcolor{gray}', 'requires_grad': '\\textcolor{gray}', 'sparkline': '\\textcolor{blue}', 'reset': ''}, 'terminal': {'range': '\x1b[35m', 'mean': '\x1b[36m', 'std': '\x1b[33m', 'median': '\x1b[32m', 'warning': '\x1b[31m', 'shape': '\x1b[95m', 'dtype': '\x1b[90m', 'device': '\x1b[90m', 'requires_grad': '\x1b[90m', 'sparkline': '\x1b[34m', 'reset': '\x1b[0m'}, 'none': {'range': '', 'mean': '', 'std': '', 'median': '', 'warning': '', 'shape': '', 'dtype': '', 'device': '', 'requires_grad': '', 'sparkline': '', 'reset': ''}}
+-   COLORS: Dict[str, Dict[str, str]] = {'latex': {'range': '\\textcolor{purple}', 'mean': '\\textcolor{teal}', 'std': '\\textcolor{orange}', 'median': '\\textcolor{green}', 'warning': '\\textcolor{red}', 'shape': '\\textcolor{magenta}', 'dtype': '\\textcolor{gray}', 'device': '\\textcolor{gray}', 'requires_grad': '\\textcolor{gray}', 'sparkline': '\\textcolor{blue}', 'torch': '\\textcolor{orange}', 'dtype_bool': '\\textcolor{gray}', 'dtype_int': '\\textcolor{blue}', 'dtype_float': '\\textcolor{red!70}', 'dtype_str': '\\textcolor{red}', 'device_cuda': '\\textcolor{green}', 'reset': ''}, 'terminal': {'range': '\x1b[35m', 'mean': '\x1b[36m', 'std': '\x1b[33m', 'median': '\x1b[32m', 'warning': '\x1b[31m', 'shape': '\x1b[95m', 'dtype': '\x1b[90m', 'device': '\x1b[90m', 'requires_grad': '\x1b[90m', 'sparkline': '\x1b[34m', 'torch': '\x1b[38;5;208m', 'dtype_bool': '\x1b[38;5;245m', 'dtype_int': '\x1b[38;5;39m', 'dtype_float': '\x1b[38;5;167m', 'device_cuda': '\x1b[38;5;76m', 'reset': '\x1b[0m'}, 'none': {'range': '', 'mean': '', 'std': '', 'median': '', 'warning': '', 'shape': '', 'dtype': '', 'device': '', 'requires_grad': '', 'sparkline': '', 'torch': '', 'dtype_bool': '', 'dtype_int': '', 'dtype_float': '', 'dtype_str': '', 'device_cuda': '', 'reset': ''}}
 
 -   OutputFormat = typing.Literal['unicode', 'latex', 'ascii']
 
--   SYMBOLS: Dict[Literal['unicode', 'latex', 'ascii'], Dict[str, str]] = {'latex': {'range': '\\mathcal{R}', 'mean': '\\mu', 'std': '\\sigma', 'median': '\\tilde{x}', 'distribution': '\\mathbb{P}', 'nan_values': '\\text{NANvals}', 'warning': '!!!', 'requires_grad': '\\nabla', 'true': '\\checkmark', 'false': '\\times'}, 'unicode': {'range': 'R', 'mean': 'μ', 'std': 'σ', 'median': 'x̃', 'distribution': 'ℙ', 'nan_values': 'NANvals', 'warning': '🚨', 'requires_grad': '∇', 'true': '✓', 'false': '✗'}, 'ascii': {'range': 'range', 'mean': 'mean', 'std': 'std', 'median': 'med', 'distribution': 'dist', 'nan_values': 'NANvals', 'warning': '!!!', 'requires_grad': 'requires_grad', 'true': '1', 'false': '0'}}
+-   SYMBOLS: Dict[Literal['unicode', 'latex', 'ascii'], Dict[str, str]] = {'latex': {'range': '\\mathcal{R}', 'mean': '\\mu', 'std': '\\sigma', 'median': '\\tilde{x}', 'distribution': '\\mathbb{P}', 'distribution_log': '\\mathbb{P}_L', 'nan_values': '\\text{NANvals}', 'warning': '!!!', 'requires_grad': '\\nabla', 'true': '\\checkmark', 'false': '\\times'}, 'unicode': {'range': 'R', 'mean': 'μ', 'std': 'σ', 'median': 'x̃', 'distribution': 'ℙ', 'distribution_log': 'ℙ˪', 'nan_values': 'NANvals', 'warning': '🚨', 'requires_grad': '∇', 'true': '✓', 'false': '✗'}, 'ascii': {'range': 'range', 'mean': 'mean', 'std': 'std', 'median': 'med', 'distribution': 'dist', 'distribution_log': 'dist_log', 'nan_values': 'NANvals', 'warning': '!!!', 'requires_grad': 'requires_grad', 'true': '1', 'false': '0'}}
 
 Symbols for different formats
 
@@ -7067,8 +7198,8 @@ def generate_sparkline
     (
         histogram: numpy.ndarray,
         format: Literal['unicode', 'latex', 'ascii'] = 'unicode',
-        log_y: bool = False
-    ) -> str
+        log_y: Optional[bool] = None
+    ) -> tuple[str, bool]
 
 View Source on GitHub
 
@@ -7079,13 +7210,50 @@ Parameters:
 -   histogram : np.ndarray Histogram data
 -   format : Literal["unicode", "latex", "ascii"] Output format
     (defaults to "unicode")
--   log_y : bool Whether to use logarithmic y-scale (defaults to False)
+-   log_y : bool|None Whether to use logarithmic y-scale. None for
+    automatic detection (defaults to None)
 
 Returns:
 
--   str Sparkline visualization
+-   tuple[str, bool] Sparkline visualization and whether log scale was
+    used
 
--   DEFAULT_SETTINGS: Dict[str, Any] = {'fmt': 'unicode', 'precision': 2, 'stats': True, 'shape': True, 'dtype': True, 'device': True, 'requires_grad': True, 'sparkline': False, 'sparkline_bins': 5, 'sparkline_logy': False, 'colored': False, 'as_list': False, 'eq_char': '='}
+-   DEFAULT_SETTINGS: Dict[str, Any] = {'fmt': 'unicode', 'precision': 2, 'stats': True, 'shape': True, 'dtype': True, 'device': True, 'requires_grad': True, 'sparkline': False, 'sparkline_bins': 5, 'sparkline_logy': None, 'colored': False, 'as_list': False, 'eq_char': '='}
+
+def apply_color
+
+    (
+        text: str,
+        color_key: str,
+        colors: Dict[str, str],
+        using_tex: bool
+    ) -> str
+
+View Source on GitHub
+
+def colorize_dtype
+
+    (dtype_str: str, colors: Dict[str, str], using_tex: bool) -> str
+
+View Source on GitHub
+
+Colorize dtype string with specific colors for torch and type names.
+
+def format_shape_colored
+
+    (shape_val, colors: Dict[str, str], using_tex: bool) -> str
+
+View Source on GitHub
+
+Format shape with proper coloring for both 1D and multi-D arrays.
+
+def format_device_colored
+
+    (device_str: str, colors: Dict[str, str], using_tex: bool) -> str
+
+View Source on GitHub
+
+Format device string with CUDA highlighting.
 
 def array_summary
 
@@ -7100,7 +7268,7 @@ def array_summary
         requires_grad: bool = <muutils.tensor_info._UseDefaultType object>,
         sparkline: bool = <muutils.tensor_info._UseDefaultType object>,
         sparkline_bins: int = <muutils.tensor_info._UseDefaultType object>,
-        sparkline_logy: bool = <muutils.tensor_info._UseDefaultType object>,
+        sparkline_logy: Optional[bool] = <muutils.tensor_info._UseDefaultType object>,
         colored: bool = <muutils.tensor_info._UseDefaultType object>,
         eq_char: str = <muutils.tensor_info._UseDefaultType object>,
         as_list: bool = <muutils.tensor_info._UseDefaultType object>
@@ -7127,8 +7295,8 @@ Parameters:
 -   sparkline : bool Whether to include a sparkline visualization
     (defaults to False)
 -   sparkline_width : int Width of the sparkline (defaults to 20)
--   sparkline_logy : bool Whether to use logarithmic y-scale for
-    sparkline (defaults to False)
+-   sparkline_logy : bool|None Whether to use logarithmic y-scale for
+    sparkline (defaults to None)
 -   colored : bool Whether to add color to output (defaults to False)
 -   as_list : bool Whether to return as list of strings instead of
     joined string (defaults to False)
@@ -7138,7 +7306,7 @@ Returns:
 -   Union[str, List[str]] Formatted statistical summary, either as
     string or list of strings
 
-  docs for muutils v0.8.10
+  docs for muutils v0.8.11
 
 Contents
 
@@ -7433,7 +7601,7 @@ Raises:
 -   StateDictShapeError : shapes don’t match (but keys do)
 -   StateDictValueError : values don’t match (but keys and shapes do)
 
-  docs for muutils v0.8.10
+  docs for muutils v0.8.11
 
 Contents
 
@@ -7534,7 +7702,7 @@ FancyTimeitResult, which is a NamedTuple with the following fields:
 -   profile: pstats.Stats|None A pstats.Stats object if do_profiling is
     True, otherwise None.
 
-  docs for muutils v0.8.10
+  docs for muutils v0.8.11
 
 Contents
 
@@ -7647,11 +7815,11 @@ View Source on GitHub
 Get the allowed kwargs for a function, raising an exception if the
 signature cannot be determined.
 
-  docs for muutils v0.8.10
+  docs for muutils v0.8.11
 
-API Documentation
+Submodules
 
--   inline_html
+-   bundle_html
 
 View Source on GitHub
 
@@ -7659,4 +7827,142 @@ muutils.web
 
 View Source on GitHub
 
--   inline_html
+  docs for muutils v0.8.11
+
+Contents
+
+Inline / bundle external assets (CSS, JS, SVG, PNG) into an HTML
+document.
+
+Default mode uses zero external dependencies and a few well-targeted
+regular expressions. If you install beautifulsoup4 you can enable the
+far more robust BS4 mode by passing InlineConfig(use_bs4=True).
+
+API Documentation
+
+-   AssetExt
+-   DEFAULT_ALLOWED_EXTENSIONS
+-   DEFAULT_TAG_ATTR
+-   MIME_BY_EXT
+-   InlineConfig
+-   inline_html_assets
+-   inline_html_file
+
+View Source on GitHub
+
+muutils.web.bundle_html
+
+Inline / bundle external assets (CSS, JS, SVG, PNG) into an HTML
+document.
+
+Default mode uses zero external dependencies and a few well-targeted
+regular expressions. If you install beautifulsoup4 you can enable the
+far more robust BS4 mode by passing InlineConfig(use_bs4=True).
+
+View Source on GitHub
+
+-   AssetExt = typing.Literal['.css', '.js', '.svg', '.png']
+
+-   DEFAULT_ALLOWED_EXTENSIONS: Final[set[Literal['.css', '.js', '.svg', '.png']]] = {'.png', '.svg', '.css', '.js'}
+
+-   DEFAULT_TAG_ATTR: Final[dict[str, str]] = {'link': 'href', 'script': 'src', 'img': 'src', 'use': 'xlink:href'}
+
+-   MIME_BY_EXT: Final[dict[Literal['.css', '.js', '.svg', '.png'], str]] = {'.css': 'text/css', '.js': 'application/javascript', '.svg': 'image/svg+xml', '.png': 'image/png'}
+
+class InlineConfig:
+
+View Source on GitHub
+
+High-level configuration for the inliner.
+
+Parameters
+
+-   allowed_extensions : set[AssetExt] Extensions that may be inlined.
+-   tag_attr : dict[str, str] Mapping tag -> attribute that holds the
+    asset reference.
+-   max_bytes : int Assets larger than this are ignored.
+-   local : bool Allow local filesystem assets.
+-   remote : bool Allow remote http/https assets.
+-   include_filename_comments : bool Surround every replacement with
+    <!-- begin '...' --> and <!-- end '...' -->.
+-   use_bs4 : bool Parse the document with BeautifulSoup if available.
+
+InlineConfig
+
+    (
+        allowed_extensions: set[typing.Literal['.css', '.js', '.svg', '.png']] = <factory>,
+        tag_attr: dict[str, str] = <factory>,
+        max_bytes: int = 131072,
+        local: bool = True,
+        remote: bool = False,
+        include_filename_comments: bool = True,
+        use_bs4: bool = False
+    )
+
+-   allowed_extensions: set[typing.Literal['.css', '.js', '.svg', '.png']]
+
+-   tag_attr: dict[str, str]
+
+-   max_bytes: int = 131072
+
+-   local: bool = True
+
+-   remote: bool = False
+
+-   include_filename_comments: bool = True
+
+-   use_bs4: bool = False
+
+def inline_html_assets
+
+    (
+        html: str,
+        *,
+        base_path: pathlib.Path,
+        config: muutils.web.bundle_html.InlineConfig | None = None,
+        prettify: bool = False
+    ) -> str
+
+View Source on GitHub
+
+Inline permitted external assets inside html.
+
+Parameters
+
+-   html : str Raw HTML text.
+-   base_path : Path Directory used to resolve relative asset paths.
+-   config : InlineConfig | None Inlining options (see InlineConfig).
+-   prettify : bool Pretty-print output (only effective in BS4 mode).
+
+Returns
+
+-   str Modified HTML.
+
+def inline_html_file
+
+    (
+        html_path: pathlib.Path,
+        output_path: pathlib.Path,
+        base_path: pathlib.Path | None = None,
+        config: muutils.web.bundle_html.InlineConfig | None = None,
+        prettify: bool = False
+    ) -> pathlib.Path
+
+View Source on GitHub
+
+Read html_path, inline its assets, and write the result.
+
+Parameters
+
+-   html_path : Path Source HTML file.
+-   output_path : Path Destination path to write the modified HTML.
+-   base_path : Path | None Directory used to resolve relative asset
+    paths (defaults to the HTML file’s directory). If None, uses the
+    directory of html_path. (default: None -> use html_path.parent)
+-   config : InlineConfig | None Inlining options. If None, uses default
+    configuration. (default: None -> use InlineConfig())
+-   prettify : bool Pretty-print when use_bs4=True. (default: False)
+
+Returns
+
+-   Path Path actually written.

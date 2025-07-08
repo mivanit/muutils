@@ -1,8 +1,8 @@
 # Stats
-- 60 files
-- 11878 (12K) lines
-- 409406 (409K) chars
-- 43863 (44K) `whitespace-split` tokens
+- 61 files
+- 12255 (12K) lines
+- 421916 (422K) chars
+- 45065 (45K) `whitespace-split` tokens
 
 # File Tree
 
@@ -54,9 +54,10 @@ muutils
 │   ├── web                              
 │   │   ├── __init__.py                  [    3L     33C     5T]
 │   │   └── bundle_html.py               [  388L 13,079C 1,271T]
-│   ├── __init__.py                      [   33L    520C    42T]
+│   ├── __init__.py                      [   34L    544C    43T]
+│   ├── collect_warnings.py              [  132L  4,073C   375T]
 │   ├── console_unicode.py               [   34L  1,070C   133T]
-│   ├── dbg.py                           [  216L  6,506C   729T]
+│   ├── dbg.py                           [  319L  9,663C 1,047T]
 │   ├── dictmagic.py                     [  522L 18,132C 1,968T]
 │   ├── errormode.py                     [  241L  7,939C   816T]
 │   ├── group_equiv.py                   [   66L  2,060C   246T]
@@ -64,12 +65,12 @@ muutils
 │   ├── jsonlines.py                     [   77L  1,991C   246T]
 │   ├── kappa.py                         [   46L  1,260C   150T]
 │   ├── mlutils.py                       [  165L  5,198C   495T]
-│   ├── parallel.py                      [  275L  9,146C 1,082T]
+│   ├── parallel.py                      [  279L  9,245C 1,091T]
 │   ├── py.typed                         [    0L      0C     0T]
 │   ├── spinner.py                       [  511L 17,879C 1,688T]
 │   ├── statcounter.py                   [  231L  7,373C   768T]
 │   ├── sysinfo.py                       [  200L  6,934C   499T]
-│   ├── tensor_info.py                   [  516L 16,627C 1,637T]
+│   ├── tensor_info.py                   [  648L 21,619C 2,123T]
 │   ├── tensor_utils.py                  [  495L 14,793C 1,418T]
 │   ├── timeit_fancy.py                  [  107L  3,900C   482T]
 │   └── validate_type.py                 [  237L  8,401C   896T]
@@ -5646,7 +5647,7 @@ if __name__ == "__main__":
 
 ``````{ path="muutils/web/__init__.py"  }
 __all__ = [
-    "inline_html",
+    "bundle_html",
 ]
 
 ``````{ end_of_file="muutils/web/__init__.py" }
@@ -6059,6 +6060,7 @@ __all__ = [
     "nbutils",
     "web",
     # submodules
+    "collect_warnings",
     "console_unicode",
     "dbg",
     "dictmagic",
@@ -6079,6 +6081,142 @@ __all__ = [
 ]
 
 ``````{ end_of_file="muutils/__init__.py" }
+
+``````{ path="muutils/collect_warnings.py"  }
+from __future__ import annotations
+
+import sys
+import warnings
+from collections import Counter
+from contextlib import AbstractContextManager
+from types import TracebackType
+from typing import Any, Literal
+
+
+class CollateWarnings(AbstractContextManager["CollateWarnings"]):
+    """Capture every warning issued inside a `with` block and print a collated
+    summary when the block exits.
+
+    Internally this wraps `warnings.catch_warnings(record=True)` so that all
+    warnings raised in the block are recorded.  When the context exits, identical
+    warnings are grouped and (optionally) printed with a user-defined format.
+
+    # Parameters:
+     - `print_on_exit : bool`
+       Whether to print the summary when the context exits
+       (defaults to `True`)
+     - `fmt : str`
+       Format string used for printing each line of the summary.
+       Available fields are:
+
+       * `{count}`     : number of occurrences
+       * `{filename}`  : file where the warning originated
+       * `{lineno}`    : line number
+       * `{category}`  : warning class name
+       * `{message}`   : warning message text
+
+       (defaults to `"({count}x) {filename}:{lineno} {category}: {message}"`)
+
+    # Returns:
+     - `CollateWarnings`
+       The context-manager instance.  After exit, the attribute
+       `counts` holds a mapping
+
+       ```python
+       {(filename, lineno, category, message): count}
+       ```
+
+    # Usage:
+    ```python
+    >>> import warnings
+    >>> with CollateWarnings() as cw:
+    ...     warnings.warn("deprecated", DeprecationWarning)
+    ...     warnings.warn("deprecated", DeprecationWarning)
+    ...     warnings.warn("other", UserWarning)
+    (2x) /tmp/example.py:42 DeprecationWarning: deprecated
+    (1x) /tmp/example.py:43 UserWarning: other
+    >>> cw.counts
+    {('/tmp/example.py', 42, 'DeprecationWarning', 'deprecated'): 2,
+     ('/tmp/example.py', 43, 'UserWarning', 'other'): 1}
+    ```
+    """
+
+    _active: bool
+    _catcher: Any
+    _records: list[warnings.WarningMessage]
+    counts: Counter[
+        tuple[
+            str,  # filename
+            int,  # lineno
+            str,  # category name
+            str,  # message
+        ]
+    ]
+    print_on_exit: bool
+    fmt: str
+
+    def __init__(
+        self,
+        print_on_exit: bool = True,
+        fmt: str = "({count}x) {filename}:{lineno} {category}: {message}",
+    ) -> None:
+        self.print_on_exit = print_on_exit
+        self.fmt = fmt
+        self._active = False
+        self._records = []
+        self.counts = Counter()
+
+    def __enter__(self) -> CollateWarnings:
+        if self._active:
+            raise RuntimeError("CollateWarnings cannot be re-entered")
+
+        self._active = True
+        self._catcher = warnings.catch_warnings(record=True)
+        self._records = self._catcher.__enter__()
+        warnings.simplefilter("always")  # capture every warning
+        return self
+
+    def __exit__(
+        self,
+        exc_type: type[BaseException] | None,
+        exc_val: BaseException | None,
+        exc_tb: TracebackType | None,
+    ) -> Literal[False]:
+        if not self._active:
+            raise RuntimeError("CollateWarnings exited twice")
+
+        self._active = False
+        # stop capturing
+        self._catcher.__exit__(exc_type, exc_val, exc_tb)
+
+        # collate
+        self.counts = Counter(
+            (
+                rec.filename,
+                rec.lineno,
+                rec.category.__name__,
+                str(rec.message),
+            )
+            for rec in self._records
+        )
+
+        if self.print_on_exit:
+            for (filename, lineno, category, message), count in self.counts.items():
+                print(
+                    self.fmt.format(
+                        count=count,
+                        filename=filename,
+                        lineno=lineno,
+                        category=category,
+                        message=message,
+                    ),
+                    file=sys.stderr,
+                )
+
+        # propagate any exception from the with-block
+        return False
+
+``````{ end_of_file="muutils/collect_warnings.py" }
 
 ``````{ path="muutils/console_unicode.py"  }
 import locale
@@ -6305,21 +6443,21 @@ def dbg(
 
 # formatted `dbg_*` functions with their helpers
 
-DBG_TENSOR_ARRAY_SUMMARY_DEFAULTS: typing.Dict[str, typing.Union[bool, int, str]] = (
-    dict(
-        fmt="unicode",
-        precision=2,
-        stats=True,
-        shape=True,
-        dtype=True,
-        device=True,
-        requires_grad=True,
-        sparkline=True,
-        sparkline_bins=7,
-        sparkline_logy=False,
-        colored=True,
-        eq_char="=",
-    )
+DBG_TENSOR_ARRAY_SUMMARY_DEFAULTS: typing.Dict[
+    str, typing.Union[None, bool, int, str]
+] = dict(
+    fmt="unicode",
+    precision=2,
+    stats=True,
+    shape=True,
+    dtype=True,
+    device=True,
+    requires_grad=True,
+    sparkline=True,
+    sparkline_bins=7,
+    sparkline_logy=None,  # None means auto-detect
+    colored=True,
+    eq_char="=",
 )
 
 
@@ -6332,9 +6470,112 @@ def tensor_info(tensor: typing.Any) -> str:
     return array_summary(tensor, **DBG_TENSOR_ARRAY_SUMMARY_DEFAULTS)
 
 
+DBG_DICT_DEFAULTS: typing.Dict[str, typing.Union[bool, int, str]] = dict(
+    key_types=True,
+    val_types=True,
+    max_len=32,
+    indent="  ",
+    max_depth=3,
+)
+
+DBG_LIST_DEFAULTS: typing.Dict[str, typing.Union[bool, int, str]] = dict(
+    max_len=16,
+    summary_show_types=True,
+)
+
+
+def list_info(
+    lst: typing.List[typing.Any],
+) -> str:
+    len_l: int = len(lst)
+    output: str
+    # TYPING: make `DBG_LIST_DEFAULTS` and the others typed dicts
+    if len_l > DBG_LIST_DEFAULTS["max_len"]:  # type: ignore[operator]
+        output = f"<list of len()={len_l}"
+        if DBG_LIST_DEFAULTS["summary_show_types"]:
+            val_types: typing.Set[str] = set(type(x).__name__ for x in lst)
+            output += f", types={{{', '.join(sorted(val_types))}}}"
+        output += ">"
+    else:
+        output = "[" + ", ".join(repr(x) for x in lst) + "]"
+
+    return output
+
+
+TENSOR_STR_TYPES: typing.Set[str] = {
+    "<class 'torch.Tensor'>",
+    "<class 'numpy.ndarray'>",
+}
+
+
+def dict_info(
+    d: typing.Dict[typing.Any, typing.Any],
+    depth: int = 0,
+) -> str:
+    len_d: int = len(d)
+    indent: str = DBG_DICT_DEFAULTS["indent"]  # type: ignore[assignment]
+
+    # summary line
+    output: str = f"{indent*depth}<dict of len()={len_d}"
+
+    if DBG_DICT_DEFAULTS["key_types"] and len_d > 0:
+        key_types: typing.Set[str] = set(type(k).__name__ for k in d.keys())
+        key_types_str: str = "{" + ", ".join(sorted(key_types)) + "}"
+        output += f", key_types={key_types_str}"
+
+    if DBG_DICT_DEFAULTS["val_types"] and len_d > 0:
+        val_types: typing.Set[str] = set(type(v).__name__ for v in d.values())
+        val_types_str: str = "{" + ", ".join(sorted(val_types)) + "}"
+        output += f", val_types={val_types_str}"
+
+    output += ">"
+
+    # keys/values if not to deep and not too many
+    if depth < DBG_DICT_DEFAULTS["max_depth"]:  # type: ignore[operator]
+        if len_d > 0 and len_d < DBG_DICT_DEFAULTS["max_len"]:  # type: ignore[operator]
+            for k, v in d.items():
+                key_str: str = repr(k) if not isinstance(k, str) else k
+
+                val_str: str
+                val_type_str: str = str(type(v))
+                if isinstance(v, dict):
+                    val_str = dict_info(v, depth + 1)
+                elif val_type_str in TENSOR_STR_TYPES:
+                    val_str = tensor_info(v)
+                elif isinstance(v, list):
+                    val_str = list_info(v)
+                else:
+                    val_str = repr(v)
+
+                output += (
+                    f"\n{indent*(depth+1)}{key_str}{DBG_TENSOR_VAL_JOINER}{val_str}"
+                )
+
+    return output
+
+
+def info_auto(
+    obj: typing.Any,
+) -> str:
+    """Automatically format an object for debugging."""
+    if isinstance(obj, dict):
+        return dict_info(obj)
+    elif isinstance(obj, list):
+        return list_info(obj)
+    elif str(type(obj)) in TENSOR_STR_TYPES:
+        return tensor_info(obj)
+    else:
+        return repr(obj)
+
+
 dbg_tensor = functools.partial(
     dbg, formatter=tensor_info, val_joiner=DBG_TENSOR_VAL_JOINER
 )
+
+
+dbg_dict = functools.partial(dbg, formatter=dict_info, val_joiner=DBG_TENSOR_VAL_JOINER)
+
+dbg_auto = functools.partial(dbg, formatter=info_auto, val_joiner=DBG_TENSOR_VAL_JOINER)
 
 ``````{ end_of_file="muutils/dbg.py" }
 
@@ -8016,6 +8257,10 @@ def pprint_summary(summary: dict):
 ``````{ end_of_file="muutils/mlutils.py" }
 
 ``````{ path="muutils/parallel.py"  }
+"parallel processing utilities, chiefly `run_maybe_parallel`"
+
+from __future__ import annotations
+
 import multiprocessing
 import functools
 from typing import (
@@ -9253,8 +9498,12 @@ if __name__ == "__main__":
 ``````{ end_of_file="muutils/sysinfo.py" }
 
 ``````{ path="muutils/tensor_info.py"  }
+"get metadata about a tensor, mostly for `muutils.dbg`"
+
+from __future__ import annotations
+
 import numpy as np
-from typing import Union, Any, Literal, List, Dict, overload
+from typing import Union, Any, Literal, List, Dict, overload, Optional
 
 # Global color definitions
 COLORS: Dict[str, Dict[str, str]] = {
@@ -9269,6 +9518,12 @@ COLORS: Dict[str, Dict[str, str]] = {
         "device": r"\textcolor{gray}",
         "requires_grad": r"\textcolor{gray}",
         "sparkline": r"\textcolor{blue}",
+        "torch": r"\textcolor{orange}",
+        "dtype_bool": r"\textcolor{gray}",
+        "dtype_int": r"\textcolor{blue}",
+        "dtype_float": r"\textcolor{red!70}",  # 70% red intensity
+        "dtype_str": r"\textcolor{red}",
+        "device_cuda": r"\textcolor{green}",
         "reset": "",
     },
     "terminal": {
@@ -9282,6 +9537,11 @@ COLORS: Dict[str, Dict[str, str]] = {
         "device": "\033[90m",  # gray
         "requires_grad": "\033[90m",  # gray
         "sparkline": "\033[34m",  # blue
+        "torch": "\033[38;5;208m",  # bright orange
+        "dtype_bool": "\033[38;5;245m",  # medium grey
+        "dtype_int": "\033[38;5;39m",  # bright blue
+        "dtype_float": "\033[38;5;167m",  # softer red/coral
+        "device_cuda": "\033[38;5;76m",  # NVIDIA-style bright green
         "reset": "\033[0m",
     },
     "none": {
@@ -9295,6 +9555,12 @@ COLORS: Dict[str, Dict[str, str]] = {
         "device": "",
         "requires_grad": "",
         "sparkline": "",
+        "torch": "",
+        "dtype_bool": "",
+        "dtype_int": "",
+        "dtype_float": "",
+        "dtype_str": "",
+        "device_cuda": "",
         "reset": "",
     },
 }
@@ -9308,6 +9574,7 @@ SYMBOLS: Dict[OutputFormat, Dict[str, str]] = {
         "std": r"\sigma",
         "median": r"\tilde{x}",
         "distribution": r"\mathbb{P}",
+        "distribution_log": r"\mathbb{P}_L",
         "nan_values": r"\text{NANvals}",
         "warning": "!!!",
         "requires_grad": r"\nabla",
@@ -9320,6 +9587,7 @@ SYMBOLS: Dict[OutputFormat, Dict[str, str]] = {
         "std": "σ",
         "median": "x̃",
         "distribution": "ℙ",
+        "distribution_log": "ℙ˪",
         "nan_values": "NANvals",
         "warning": "🚨",
         "requires_grad": "∇",
@@ -9332,6 +9600,7 @@ SYMBOLS: Dict[OutputFormat, Dict[str, str]] = {
         "std": "std",
         "median": "med",
         "distribution": "dist",
+        "distribution_log": "dist_log",
         "nan_values": "NANvals",
         "warning": "!!!",
         "requires_grad": "requires_grad",
@@ -9490,6 +9759,8 @@ def array_info(
         # Calculate histogram data for sparklines
         if A_hist.size > 0:
             try:
+                # TODO: handle bool tensors correctly
+                # muutils/tensor_info.py:238: RuntimeWarning: Converting input from bool to <class 'numpy.uint8'> for compatibility.
                 hist, bins = np.histogram(A_hist, bins=hist_bins)
                 result["histogram"] = hist
                 result["bins"] = bins
@@ -9506,30 +9777,43 @@ def array_info(
 def generate_sparkline(
     histogram: np.ndarray,
     format: Literal["unicode", "latex", "ascii"] = "unicode",
-    log_y: bool = False,
-) -> str:
+    log_y: Optional[bool] = None,
+) -> tuple[str, bool]:
     """Generate a sparkline visualization of the histogram.
 
     # Parameters:
-     - `histogram : np.ndarray`
-            Histogram data
-     - `format : Literal["unicode", "latex", "ascii"]`
-            Output format (defaults to `"unicode"`)
-     - `log_y : bool`
-            Whether to use logarithmic y-scale (defaults to `False`)
+    - `histogram : np.ndarray`
+        Histogram data
+    - `format : Literal["unicode", "latex", "ascii"]`
+        Output format (defaults to `"unicode"`)
+    - `log_y : bool|None`
+        Whether to use logarithmic y-scale. `None` for automatic detection
+        (defaults to `None`)
 
     # Returns:
-     - `str`
-            Sparkline visualization
+    - `tuple[str, bool]`
+        Sparkline visualization and whether log scale was used
     """
     if histogram is None or len(histogram) == 0:
-        return ""
+        return "", False
 
     # Get the appropriate character set
+    chars: List[str]
     if format in SPARK_CHARS:
         chars = SPARK_CHARS[format]
     else:
         chars = SPARK_CHARS["ascii"]
+
+    # automatic detection of log_y
+    if log_y is None:
+        # we bin the histogram values to the number of levels in our sparkline characters
+        hist_hist = np.histogram(histogram, bins=len(chars))[0]
+        # if every bin except the smallest (first) and largest (last) is empty,
+        # then we should use the log scale. if those bins are nonempty, keep the linear scale
+        if hist_hist[1:-1].max() > 0:
+            log_y = False
+        else:
+            log_y = True
 
     # Handle log scale
     if log_y:
@@ -9547,10 +9831,10 @@ def generate_sparkline(
     # Convert to characters
     spark = ""
     for val in normalized:
-        idx = int(val)
+        idx = round(val)
         spark += chars[idx]
 
-    return spark
+    return spark, log_y
 
 
 DEFAULT_SETTINGS: Dict[str, Any] = dict(
@@ -9563,11 +9847,93 @@ DEFAULT_SETTINGS: Dict[str, Any] = dict(
     requires_grad=True,
     sparkline=False,
     sparkline_bins=5,
-    sparkline_logy=False,
+    sparkline_logy=None,
     colored=False,
     as_list=False,
     eq_char="=",
 )
+
+
+def apply_color(
+    text: str, color_key: str, colors: Dict[str, str], using_tex: bool
+) -> str:
+    if using_tex:
+        return f"{colors[color_key]}{{{text}}}" if colors[color_key] else text
+    else:
+        return (
+            f"{colors[color_key]}{text}{colors['reset']}" if colors[color_key] else text
+        )
+
+
+def colorize_dtype(dtype_str: str, colors: Dict[str, str], using_tex: bool) -> str:
+    """Colorize dtype string with specific colors for torch and type names."""
+
+    # Handle torch prefix
+    type_part: str = dtype_str
+    prefix_part: Optional[str] = None
+    if "torch." in dtype_str:
+        parts = dtype_str.split("torch.")
+        if len(parts) == 2:
+            prefix_part = apply_color("torch", "torch", colors, using_tex)
+            type_part = parts[1]
+
+    # Handle type coloring
+    color_key: str = "dtype"
+    if "bool" in dtype_str.lower():
+        color_key = "dtype_bool"
+    elif "int" in dtype_str.lower():
+        color_key = "dtype_int"
+    elif "float" in dtype_str.lower():
+        color_key = "dtype_float"
+
+    type_colored: str = apply_color(type_part, color_key, colors, using_tex)
+
+    if prefix_part:
+        return f"{prefix_part}.{type_colored}"
+    else:
+        return type_colored
+
+
+def format_shape_colored(shape_val, colors: Dict[str, str], using_tex: bool) -> str:
+    """Format shape with proper coloring for both 1D and multi-D arrays."""
+
+    def apply_color(text: str, color_key: str) -> str:
+        if using_tex:
+            return f"{colors[color_key]}{{{text}}}" if colors[color_key] else text
+        else:
+            return (
+                f"{colors[color_key]}{text}{colors['reset']}"
+                if colors[color_key]
+                else text
+            )
+
+    if len(shape_val) == 1:
+        # For 1D arrays, still color the dimension value
+        return apply_color(str(shape_val[0]), "shape")
+    else:
+        # For multi-D arrays, color each dimension
+        return "(" + ",".join(apply_color(str(dim), "shape") for dim in shape_val) + ")"
+
+
+def format_device_colored(
+    device_str: str, colors: Dict[str, str], using_tex: bool
+) -> str:
+    """Format device string with CUDA highlighting."""
+
+    def apply_color(text: str, color_key: str) -> str:
+        if using_tex:
+            return f"{colors[color_key]}{{{text}}}" if colors[color_key] else text
+        else:
+            return (
+                f"{colors[color_key]}{text}{colors['reset']}"
+                if colors[color_key]
+                else text
+            )
+
+    if "cuda" in device_str.lower():
+        return apply_color(device_str, "device_cuda")
+    else:
+        return apply_color(device_str, "device")
 
 
 class _UseDefaultType:
@@ -9598,7 +9964,7 @@ def array_summary(  # type: ignore[misc]
     requires_grad: bool = _USE_DEFAULT,  # type: ignore[assignment]
     sparkline: bool = _USE_DEFAULT,  # type: ignore[assignment]
     sparkline_bins: int = _USE_DEFAULT,  # type: ignore[assignment]
-    sparkline_logy: bool = _USE_DEFAULT,  # type: ignore[assignment]
+    sparkline_logy: Optional[bool] = _USE_DEFAULT,  # type: ignore[assignment]
     colored: bool = _USE_DEFAULT,  # type: ignore[assignment]
     eq_char: str = _USE_DEFAULT,  # type: ignore[assignment]
     as_list: bool = _USE_DEFAULT,  # type: ignore[assignment]
@@ -9626,8 +9992,8 @@ def array_summary(  # type: ignore[misc]
             Whether to include a sparkline visualization (defaults to `False`)
      - `sparkline_width : int`
             Width of the sparkline (defaults to `20`)
-     - `sparkline_logy : bool`
-            Whether to use logarithmic y-scale for sparkline (defaults to `False`)
+     - `sparkline_logy : bool|None`
+            Whether to use logarithmic y-scale for sparkline (defaults to `None`)
      - `colored : bool`
             Whether to add color to output (defaults to `False`)
      - `as_list : bool`
@@ -9689,6 +10055,12 @@ def array_summary(  # type: ignore[misc]
                 else text
             )
 
+    # Check if dtype is integer type
+    dtype_str: str = array_data.get("dtype", "")
+    is_int_dtype: bool = any(
+        int_type in dtype_str.lower() for int_type in ["int", "uint", "bool"]
+    )
+
     # Format string for numbers
     float_fmt: str = f".{precision}f"
 
@@ -9717,8 +10089,12 @@ def array_summary(  # type: ignore[misc]
             # Range (min, max)
             if array_data["range"] is not None:
                 min_val, max_val = array_data["range"]
-                min_str: str = f"{min_val:{float_fmt}}"
-                max_str: str = f"{max_val:{float_fmt}}"
+                if is_int_dtype:
+                    min_str: str = f"{int(min_val):d}"
+                    max_str: str = f"{int(max_val):d}"
+                else:
+                    min_str = f"{min_val:{float_fmt}}"
+                    max_str = f"{max_val:{float_fmt}}"
                 min_colored: str = colorize(min_str, "range")
                 max_colored: str = colorize(max_str, "range")
                 range_str: str = f"{symbols['range']}=[{min_colored},{max_colored}]"
@@ -9726,33 +10102,34 @@ def array_summary(  # type: ignore[misc]
 
     # Add sparkline if requested
     if sparkline and array_data["histogram"] is not None:
-        spark = generate_sparkline(
-            array_data["histogram"], format=fmt, log_y=sparkline_logy
+        # this should return whether log_y is used or not and then we set the symbol accordingly
+        spark, used_log = generate_sparkline(
+            array_data["histogram"],
+            format=fmt,
+            log_y=sparkline_logy,
         )
         if spark:
             spark_colored = colorize(spark, "sparkline")
-            result_parts.append(f"{symbols['distribution']}{eq_char}|{spark_colored}|")
+            dist_symbol = (
+                symbols["distribution_log"] if used_log else symbols["distribution"]
+            )
+            result_parts.append(f"{dist_symbol}{eq_char}|{spark_colored}|")
 
     # Add shape if requested
     if shape and array_data["shape"]:
         shape_val = array_data["shape"]
-        if len(shape_val) == 1:
-            shape_str = str(shape_val[0])
-        else:
-            shape_str = (
-                "(" + ",".join(colorize(str(dim), "shape") for dim in shape_val) + ")"
-            )
+        shape_str = format_shape_colored(shape_val, colors, using_tex)
         result_parts.append(f"shape{eq_char}{shape_str}")
 
     # Add dtype if requested
     if dtype and array_data["dtype"]:
-        result_parts.append(colorize(f"dtype={array_data['dtype']}", "dtype"))
+        dtype_colored = colorize_dtype(array_data["dtype"], colors, using_tex)
+        result_parts.append(f"dtype={dtype_colored}")
 
     # Add device if requested and it's a tensor with device info
     if device and array_data["is_tensor"] and array_data["device"]:
-        result_parts.append(
-            colorize(f"device{eq_char}{array_data['device']}", "device")
-        )
+        device_colored = format_device_colored(array_data["device"], colors, using_tex)
+        result_parts.append(f"device{eq_char}{device_colored}")
 
     # Add gradient info
     if requires_grad and array_data["is_tensor"]:
@@ -11662,7 +12039,7 @@ help: help-targets info
 # ==================================================
 [project]
 	name = "muutils"
-	version = "0.8.10"
+	version = "0.8.11"
 	description = "miscellaneous python utilities"
 	readme = "README.md"
 	requires-python = ">=3.8"

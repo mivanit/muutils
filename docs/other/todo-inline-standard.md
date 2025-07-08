@@ -504,9 +504,9 @@
 ## [`muutils/parallel.py`](/muutils/parallel.py)
 
 - if `parallel` is a negative int, use `multiprocessing.cpu_count() + parallel` to determine the number of processes  
-  local link: [`/muutils/parallel.py:141`](/muutils/parallel.py#L141) 
-  | view on GitHub: [muutils/parallel.py#L141](https://github.com/mivanit/muutils/blob/main/muutils/parallel.py#L141)
-  | [Make Issue](https://github.com/mivanit/muutils/issues/new?title=if%20%60parallel%60%20is%20a%20negative%20int%2C%20use%20%60multiprocessing.cpu_count%28%29%20%2B%20parallel%60%20to%20determine%20the%20number%20of%20processes&body=%23%20source%0A%0A%5B%60muutils%2Fparallel.py%23L141%60%5D%28https%3A%2F%2Fgithub.com%2Fmivanit%2Fmuutils%2Fblob%2Fmain%2Fmuutils%2Fparallel.py%23L141%29%0A%0A%23%20context%0A%60%60%60python%0A%20%20%20%20%20%20%20%20pbar_fn%20%3D%20pbar%0A%0A%20%20%20%20return%20pbar_fn%2C%20pbar_kwargs%0A%0A%0A%23%20TODO%3A%20if%20%60parallel%60%20is%20a%20negative%20int%2C%20use%20%60multiprocessing.cpu_count%28%29%20%2B%20parallel%60%20to%20determine%20the%20number%20of%20processes%0Adef%20run_maybe_parallel%28%0A%20%20%20%20func%3A%20Callable%5B%5BInputType%5D%2C%20OutputType%5D%2C%0A%20%20%20%20iterable%3A%20Iterable%5BInputType%5D%2C%0A%20%20%20%20parallel%3A%20Union%5Bbool%2C%20int%5D%2C%0A%20%20%20%20pbar_kwargs%3A%20Optional%5BDict%5Bstr%2C%20Any%5D%5D%20%3D%20None%2C%0A%60%60%60&labels=enhancement)
+  local link: [`/muutils/parallel.py:145`](/muutils/parallel.py#L145) 
+  | view on GitHub: [muutils/parallel.py#L145](https://github.com/mivanit/muutils/blob/main/muutils/parallel.py#L145)
+  | [Make Issue](https://github.com/mivanit/muutils/issues/new?title=if%20%60parallel%60%20is%20a%20negative%20int%2C%20use%20%60multiprocessing.cpu_count%28%29%20%2B%20parallel%60%20to%20determine%20the%20number%20of%20processes&body=%23%20source%0A%0A%5B%60muutils%2Fparallel.py%23L145%60%5D%28https%3A%2F%2Fgithub.com%2Fmivanit%2Fmuutils%2Fblob%2Fmain%2Fmuutils%2Fparallel.py%23L145%29%0A%0A%23%20context%0A%60%60%60python%0A%20%20%20%20%20%20%20%20pbar_fn%20%3D%20pbar%0A%0A%20%20%20%20return%20pbar_fn%2C%20pbar_kwargs%0A%0A%0A%23%20TODO%3A%20if%20%60parallel%60%20is%20a%20negative%20int%2C%20use%20%60multiprocessing.cpu_count%28%29%20%2B%20parallel%60%20to%20determine%20the%20number%20of%20processes%0Adef%20run_maybe_parallel%28%0A%20%20%20%20func%3A%20Callable%5B%5BInputType%5D%2C%20OutputType%5D%2C%0A%20%20%20%20iterable%3A%20Iterable%5BInputType%5D%2C%0A%20%20%20%20parallel%3A%20Union%5Bbool%2C%20int%5D%2C%0A%20%20%20%20pbar_kwargs%3A%20Optional%5BDict%5Bstr%2C%20Any%5D%5D%20%3D%20None%2C%0A%60%60%60&labels=enhancement)
 
   ```python
           pbar_fn = pbar
@@ -562,6 +562,30 @@
   if not args:
       # called as `@spinner_decorator(stuff)`
       return decorator
+  ```
+
+
+
+
+## [`muutils/tensor_info.py`](/muutils/tensor_info.py)
+
+- handle bool tensors correctly  
+  local link: [`/muutils/tensor_info.py:262`](/muutils/tensor_info.py#L262) 
+  | view on GitHub: [muutils/tensor_info.py#L262](https://github.com/mivanit/muutils/blob/main/muutils/tensor_info.py#L262)
+  | [Make Issue](https://github.com/mivanit/muutils/issues/new?title=handle%20bool%20tensors%20correctly&body=%23%20source%0A%0A%5B%60muutils%2Ftensor_info.py%23L262%60%5D%28https%3A%2F%2Fgithub.com%2Fmivanit%2Fmuutils%2Fblob%2Fmain%2Fmuutils%2Ftensor_info.py%23L262%29%0A%0A%23%20context%0A%60%60%60python%0A%20%20%20%20%20%20%20%20%20%20%20%20A_hist%20%3D%20A_flat%0A%0A%20%20%20%20%20%20%20%20%23%20Calculate%20histogram%20data%20for%20sparklines%0A%20%20%20%20%20%20%20%20if%20A_hist.size%20%3E%200%3A%0A%20%20%20%20%20%20%20%20%20%20%20%20try%3A%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%23%20TODO%3A%20handle%20bool%20tensors%20correctly%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%23%20muutils%2Ftensor_info.py%3A238%3A%20RuntimeWarning%3A%20Converting%20input%20from%20bool%20to%20%3Cclass%20%27numpy.uint8%27%3E%20for%20compatibility.%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20hist%2C%20bins%20%3D%20np.histogram%28A_hist%2C%20bins%3Dhist_bins%29%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20result%5B%22histogram%22%5D%20%3D%20hist%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20result%5B%22bins%22%5D%20%3D%20bins%0A%20%20%20%20%20%20%20%20%20%20%20%20except%3A%20%20%23%20noqa%3A%20E722%0A%60%60%60&labels=enhancement)
+
+  ```python
+      A_hist = A_flat
+
+  # Calculate histogram data for sparklines
+  if A_hist.size > 0:
+      try:
+          # TODO: handle bool tensors correctly
+          # muutils/tensor_info.py:238: RuntimeWarning: Converting input from bool to <class 'numpy.uint8'> for compatibility.
+          hist, bins = np.histogram(A_hist, bins=hist_bins)
+          result["histogram"] = hist
+          result["bins"] = bins
+      except:  # noqa: E722
   ```
 
 

@@ -46,7 +46,7 @@
 </script></head>
 <body>
 <div class="package-version">
-    docs for <a href="https://github.com/mivanit/muutils">muutils</a> v0.8.10<br>
+    docs for <a href="https://github.com/mivanit/muutils">muutils</a> v0.8.11<br>
 </div>
     <nav class="pdoc">
         <label id="navtoggle" for="togglestate" class="pdoc-button">
@@ -84,7 +84,31 @@
                     <a class="function" href="#tensor_info">tensor_info</a>
             </li>
             <li>
+                    <a class="variable" href="#DBG_DICT_DEFAULTS">DBG_DICT_DEFAULTS</a>
+            </li>
+            <li>
+                    <a class="variable" href="#DBG_LIST_DEFAULTS">DBG_LIST_DEFAULTS</a>
+            </li>
+            <li>
+                    <a class="function" href="#list_info">list_info</a>
+            </li>
+            <li>
+                    <a class="variable" href="#TENSOR_STR_TYPES">TENSOR_STR_TYPES</a>
+            </li>
+            <li>
+                    <a class="function" href="#dict_info">dict_info</a>
+            </li>
+            <li>
+                    <a class="function" href="#info_auto">info_auto</a>
+            </li>
+            <li>
                     <a class="variable" href="#dbg_tensor">dbg_tensor</a>
+            </li>
+            <li>
+                    <a class="variable" href="#dbg_dict">dbg_dict</a>
+            </li>
+            <li>
+                    <a class="variable" href="#dbg_auto">dbg_auto</a>
             </li>
     </ul>
 
@@ -112,7 +136,7 @@
     </nav>
     <main class="pdoc">
             <section class="module-info">
-                        <a class="pdoc-button git-button" href="https://github.com/mivanit/muutils/blob/0.8.10/dbg.py">View Source on GitHub</a>
+                        <a class="pdoc-button git-button" href="https://github.com/mivanit/muutils/blob/0.8.11/dbg.py">View Source on GitHub</a>
                     <h1 class="modulename">
 <a href="./../muutils.html">muutils</a><wbr>.dbg    </h1>
 
@@ -148,7 +172,7 @@ THE SOFTWARE.</p>
                         <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="mod-dbg-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.10/dbg.py#L0-L215" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.11/dbg.py#L0-L318" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -341,21 +365,21 @@ THE SOFTWARE.</p>
 </span><span id="L-184"><a href="#L-184"><span class="linenos">184</span></a>
 </span><span id="L-185"><a href="#L-185"><span class="linenos">185</span></a><span class="c1"># formatted `dbg_*` functions with their helpers</span>
 </span><span id="L-186"><a href="#L-186"><span class="linenos">186</span></a>
-</span><span id="L-187"><a href="#L-187"><span class="linenos">187</span></a><span class="n">DBG_TENSOR_ARRAY_SUMMARY_DEFAULTS</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">typing</span><span class="o">.</span><span class="n">Union</span><span class="p">[</span><span class="nb">bool</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="p">(</span>
-</span><span id="L-188"><a href="#L-188"><span class="linenos">188</span></a>    <span class="nb">dict</span><span class="p">(</span>
-</span><span id="L-189"><a href="#L-189"><span class="linenos">189</span></a>        <span class="n">fmt</span><span class="o">=</span><span class="s2">&quot;unicode&quot;</span><span class="p">,</span>
-</span><span id="L-190"><a href="#L-190"><span class="linenos">190</span></a>        <span class="n">precision</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
-</span><span id="L-191"><a href="#L-191"><span class="linenos">191</span></a>        <span class="n">stats</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-</span><span id="L-192"><a href="#L-192"><span class="linenos">192</span></a>        <span class="n">shape</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-</span><span id="L-193"><a href="#L-193"><span class="linenos">193</span></a>        <span class="n">dtype</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-</span><span id="L-194"><a href="#L-194"><span class="linenos">194</span></a>        <span class="n">device</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-</span><span id="L-195"><a href="#L-195"><span class="linenos">195</span></a>        <span class="n">requires_grad</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-</span><span id="L-196"><a href="#L-196"><span class="linenos">196</span></a>        <span class="n">sparkline</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-</span><span id="L-197"><a href="#L-197"><span class="linenos">197</span></a>        <span class="n">sparkline_bins</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span>
-</span><span id="L-198"><a href="#L-198"><span class="linenos">198</span></a>        <span class="n">sparkline_logy</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-</span><span id="L-199"><a href="#L-199"><span class="linenos">199</span></a>        <span class="n">colored</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-</span><span id="L-200"><a href="#L-200"><span class="linenos">200</span></a>        <span class="n">eq_char</span><span class="o">=</span><span class="s2">&quot;=&quot;</span><span class="p">,</span>
-</span><span id="L-201"><a href="#L-201"><span class="linenos">201</span></a>    <span class="p">)</span>
+</span><span id="L-187"><a href="#L-187"><span class="linenos">187</span></a><span class="n">DBG_TENSOR_ARRAY_SUMMARY_DEFAULTS</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Dict</span><span class="p">[</span>
+</span><span id="L-188"><a href="#L-188"><span class="linenos">188</span></a>    <span class="nb">str</span><span class="p">,</span> <span class="n">typing</span><span class="o">.</span><span class="n">Union</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="nb">bool</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span>
+</span><span id="L-189"><a href="#L-189"><span class="linenos">189</span></a><span class="p">]</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
+</span><span id="L-190"><a href="#L-190"><span class="linenos">190</span></a>    <span class="n">fmt</span><span class="o">=</span><span class="s2">&quot;unicode&quot;</span><span class="p">,</span>
+</span><span id="L-191"><a href="#L-191"><span class="linenos">191</span></a>    <span class="n">precision</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+</span><span id="L-192"><a href="#L-192"><span class="linenos">192</span></a>    <span class="n">stats</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+</span><span id="L-193"><a href="#L-193"><span class="linenos">193</span></a>    <span class="n">shape</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+</span><span id="L-194"><a href="#L-194"><span class="linenos">194</span></a>    <span class="n">dtype</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+</span><span id="L-195"><a href="#L-195"><span class="linenos">195</span></a>    <span class="n">device</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+</span><span id="L-196"><a href="#L-196"><span class="linenos">196</span></a>    <span class="n">requires_grad</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+</span><span id="L-197"><a href="#L-197"><span class="linenos">197</span></a>    <span class="n">sparkline</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+</span><span id="L-198"><a href="#L-198"><span class="linenos">198</span></a>    <span class="n">sparkline_bins</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span>
+</span><span id="L-199"><a href="#L-199"><span class="linenos">199</span></a>    <span class="n">sparkline_logy</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>  <span class="c1"># None means auto-detect</span>
+</span><span id="L-200"><a href="#L-200"><span class="linenos">200</span></a>    <span class="n">colored</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+</span><span id="L-201"><a href="#L-201"><span class="linenos">201</span></a>    <span class="n">eq_char</span><span class="o">=</span><span class="s2">&quot;=&quot;</span><span class="p">,</span>
 </span><span id="L-202"><a href="#L-202"><span class="linenos">202</span></a><span class="p">)</span>
 </span><span id="L-203"><a href="#L-203"><span class="linenos">203</span></a>
 </span><span id="L-204"><a href="#L-204"><span class="linenos">204</span></a>
@@ -368,9 +392,112 @@ THE SOFTWARE.</p>
 </span><span id="L-211"><a href="#L-211"><span class="linenos">211</span></a>    <span class="k">return</span> <span class="n">array_summary</span><span class="p">(</span><span class="n">tensor</span><span class="p">,</span> <span class="o">**</span><span class="n">DBG_TENSOR_ARRAY_SUMMARY_DEFAULTS</span><span class="p">)</span>
 </span><span id="L-212"><a href="#L-212"><span class="linenos">212</span></a>
 </span><span id="L-213"><a href="#L-213"><span class="linenos">213</span></a>
-</span><span id="L-214"><a href="#L-214"><span class="linenos">214</span></a><span class="n">dbg_tensor</span> <span class="o">=</span> <span class="n">functools</span><span class="o">.</span><span class="n">partial</span><span class="p">(</span>
-</span><span id="L-215"><a href="#L-215"><span class="linenos">215</span></a>    <span class="n">dbg</span><span class="p">,</span> <span class="n">formatter</span><span class="o">=</span><span class="n">tensor_info</span><span class="p">,</span> <span class="n">val_joiner</span><span class="o">=</span><span class="n">DBG_TENSOR_VAL_JOINER</span>
-</span><span id="L-216"><a href="#L-216"><span class="linenos">216</span></a><span class="p">)</span>
+</span><span id="L-214"><a href="#L-214"><span class="linenos">214</span></a><span class="n">DBG_DICT_DEFAULTS</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">typing</span><span class="o">.</span><span class="n">Union</span><span class="p">[</span><span class="nb">bool</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
+</span><span id="L-215"><a href="#L-215"><span class="linenos">215</span></a>    <span class="n">key_types</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+</span><span id="L-216"><a href="#L-216"><span class="linenos">216</span></a>    <span class="n">val_types</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+</span><span id="L-217"><a href="#L-217"><span class="linenos">217</span></a>    <span class="n">max_len</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span>
+</span><span id="L-218"><a href="#L-218"><span class="linenos">218</span></a>    <span class="n">indent</span><span class="o">=</span><span class="s2">&quot;  &quot;</span><span class="p">,</span>
+</span><span id="L-219"><a href="#L-219"><span class="linenos">219</span></a>    <span class="n">max_depth</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+</span><span id="L-220"><a href="#L-220"><span class="linenos">220</span></a><span class="p">)</span>
+</span><span id="L-221"><a href="#L-221"><span class="linenos">221</span></a>
+</span><span id="L-222"><a href="#L-222"><span class="linenos">222</span></a><span class="n">DBG_LIST_DEFAULTS</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">typing</span><span class="o">.</span><span class="n">Union</span><span class="p">[</span><span class="nb">bool</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
+</span><span id="L-223"><a href="#L-223"><span class="linenos">223</span></a>    <span class="n">max_len</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span>
+</span><span id="L-224"><a href="#L-224"><span class="linenos">224</span></a>    <span class="n">summary_show_types</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+</span><span id="L-225"><a href="#L-225"><span class="linenos">225</span></a><span class="p">)</span>
+</span><span id="L-226"><a href="#L-226"><span class="linenos">226</span></a>
+</span><span id="L-227"><a href="#L-227"><span class="linenos">227</span></a>
+</span><span id="L-228"><a href="#L-228"><span class="linenos">228</span></a><span class="k">def</span> <span class="nf">list_info</span><span class="p">(</span>
+</span><span id="L-229"><a href="#L-229"><span class="linenos">229</span></a>    <span class="n">lst</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">List</span><span class="p">[</span><span class="n">typing</span><span class="o">.</span><span class="n">Any</span><span class="p">],</span>
+</span><span id="L-230"><a href="#L-230"><span class="linenos">230</span></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+</span><span id="L-231"><a href="#L-231"><span class="linenos">231</span></a>    <span class="n">len_l</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">lst</span><span class="p">)</span>
+</span><span id="L-232"><a href="#L-232"><span class="linenos">232</span></a>    <span class="n">output</span><span class="p">:</span> <span class="nb">str</span>
+</span><span id="L-233"><a href="#L-233"><span class="linenos">233</span></a>    <span class="c1"># TYPING: make `DBG_LIST_DEFAULTS` and the others typed dicts</span>
+</span><span id="L-234"><a href="#L-234"><span class="linenos">234</span></a>    <span class="k">if</span> <span class="n">len_l</span> <span class="o">&gt;</span> <span class="n">DBG_LIST_DEFAULTS</span><span class="p">[</span><span class="s2">&quot;max_len&quot;</span><span class="p">]:</span>  <span class="c1"># type: ignore[operator]</span>
+</span><span id="L-235"><a href="#L-235"><span class="linenos">235</span></a>        <span class="n">output</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&lt;list of len()=</span><span class="si">{</span><span class="n">len_l</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span id="L-236"><a href="#L-236"><span class="linenos">236</span></a>        <span class="k">if</span> <span class="n">DBG_LIST_DEFAULTS</span><span class="p">[</span><span class="s2">&quot;summary_show_types&quot;</span><span class="p">]:</span>
+</span><span id="L-237"><a href="#L-237"><span class="linenos">237</span></a>            <span class="n">val_types</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">lst</span><span class="p">)</span>
+</span><span id="L-238"><a href="#L-238"><span class="linenos">238</span></a>            <span class="n">output</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;, types=</span><span class="se">{{</span><span class="si">{</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">val_types</span><span class="p">))</span><span class="si">}</span><span class="se">}}</span><span class="s2">&quot;</span>
+</span><span id="L-239"><a href="#L-239"><span class="linenos">239</span></a>        <span class="n">output</span> <span class="o">+=</span> <span class="s2">&quot;&gt;&quot;</span>
+</span><span id="L-240"><a href="#L-240"><span class="linenos">240</span></a>    <span class="k">else</span><span class="p">:</span>
+</span><span id="L-241"><a href="#L-241"><span class="linenos">241</span></a>        <span class="n">output</span> <span class="o">=</span> <span class="s2">&quot;[&quot;</span> <span class="o">+</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">repr</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">lst</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;]&quot;</span>
+</span><span id="L-242"><a href="#L-242"><span class="linenos">242</span></a>
+</span><span id="L-243"><a href="#L-243"><span class="linenos">243</span></a>    <span class="k">return</span> <span class="n">output</span>
+</span><span id="L-244"><a href="#L-244"><span class="linenos">244</span></a>
+</span><span id="L-245"><a href="#L-245"><span class="linenos">245</span></a>
+</span><span id="L-246"><a href="#L-246"><span class="linenos">246</span></a><span class="n">TENSOR_STR_TYPES</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+</span><span id="L-247"><a href="#L-247"><span class="linenos">247</span></a>    <span class="s2">&quot;&lt;class &#39;torch.Tensor&#39;&gt;&quot;</span><span class="p">,</span>
+</span><span id="L-248"><a href="#L-248"><span class="linenos">248</span></a>    <span class="s2">&quot;&lt;class &#39;numpy.ndarray&#39;&gt;&quot;</span><span class="p">,</span>
+</span><span id="L-249"><a href="#L-249"><span class="linenos">249</span></a><span class="p">}</span>
+</span><span id="L-250"><a href="#L-250"><span class="linenos">250</span></a>
+</span><span id="L-251"><a href="#L-251"><span class="linenos">251</span></a>
+</span><span id="L-252"><a href="#L-252"><span class="linenos">252</span></a><span class="k">def</span> <span class="nf">dict_info</span><span class="p">(</span>
+</span><span id="L-253"><a href="#L-253"><span class="linenos">253</span></a>    <span class="n">d</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Dict</span><span class="p">[</span><span class="n">typing</span><span class="o">.</span><span class="n">Any</span><span class="p">,</span> <span class="n">typing</span><span class="o">.</span><span class="n">Any</span><span class="p">],</span>
+</span><span id="L-254"><a href="#L-254"><span class="linenos">254</span></a>    <span class="n">depth</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+</span><span id="L-255"><a href="#L-255"><span class="linenos">255</span></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+</span><span id="L-256"><a href="#L-256"><span class="linenos">256</span></a>    <span class="n">len_d</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+</span><span id="L-257"><a href="#L-257"><span class="linenos">257</span></a>    <span class="n">indent</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">DBG_DICT_DEFAULTS</span><span class="p">[</span><span class="s2">&quot;indent&quot;</span><span class="p">]</span>  <span class="c1"># type: ignore[assignment]</span>
+</span><span id="L-258"><a href="#L-258"><span class="linenos">258</span></a>
+</span><span id="L-259"><a href="#L-259"><span class="linenos">259</span></a>    <span class="c1"># summary line</span>
+</span><span id="L-260"><a href="#L-260"><span class="linenos">260</span></a>    <span class="n">output</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">indent</span><span class="o">*</span><span class="n">depth</span><span class="si">}</span><span class="s2">&lt;dict of len()=</span><span class="si">{</span><span class="n">len_d</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span id="L-261"><a href="#L-261"><span class="linenos">261</span></a>
+</span><span id="L-262"><a href="#L-262"><span class="linenos">262</span></a>    <span class="k">if</span> <span class="n">DBG_DICT_DEFAULTS</span><span class="p">[</span><span class="s2">&quot;key_types&quot;</span><span class="p">]</span> <span class="ow">and</span> <span class="n">len_d</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+</span><span id="L-263"><a href="#L-263"><span class="linenos">263</span></a>        <span class="n">key_types</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">k</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">d</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+</span><span id="L-264"><a href="#L-264"><span class="linenos">264</span></a>        <span class="n">key_types_str</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;{&quot;</span> <span class="o">+</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">key_types</span><span class="p">))</span> <span class="o">+</span> <span class="s2">&quot;}&quot;</span>
+</span><span id="L-265"><a href="#L-265"><span class="linenos">265</span></a>        <span class="n">output</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;, key_types=</span><span class="si">{</span><span class="n">key_types_str</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span id="L-266"><a href="#L-266"><span class="linenos">266</span></a>
+</span><span id="L-267"><a href="#L-267"><span class="linenos">267</span></a>    <span class="k">if</span> <span class="n">DBG_DICT_DEFAULTS</span><span class="p">[</span><span class="s2">&quot;val_types&quot;</span><span class="p">]</span> <span class="ow">and</span> <span class="n">len_d</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+</span><span id="L-268"><a href="#L-268"><span class="linenos">268</span></a>        <span class="n">val_types</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">v</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">d</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+</span><span id="L-269"><a href="#L-269"><span class="linenos">269</span></a>        <span class="n">val_types_str</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;{&quot;</span> <span class="o">+</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">val_types</span><span class="p">))</span> <span class="o">+</span> <span class="s2">&quot;}&quot;</span>
+</span><span id="L-270"><a href="#L-270"><span class="linenos">270</span></a>        <span class="n">output</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;, val_types=</span><span class="si">{</span><span class="n">val_types_str</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span id="L-271"><a href="#L-271"><span class="linenos">271</span></a>
+</span><span id="L-272"><a href="#L-272"><span class="linenos">272</span></a>    <span class="n">output</span> <span class="o">+=</span> <span class="s2">&quot;&gt;&quot;</span>
+</span><span id="L-273"><a href="#L-273"><span class="linenos">273</span></a>
+</span><span id="L-274"><a href="#L-274"><span class="linenos">274</span></a>    <span class="c1"># keys/values if not to deep and not too many</span>
+</span><span id="L-275"><a href="#L-275"><span class="linenos">275</span></a>    <span class="k">if</span> <span class="n">depth</span> <span class="o">&lt;</span> <span class="n">DBG_DICT_DEFAULTS</span><span class="p">[</span><span class="s2">&quot;max_depth&quot;</span><span class="p">]:</span>  <span class="c1"># type: ignore[operator]</span>
+</span><span id="L-276"><a href="#L-276"><span class="linenos">276</span></a>        <span class="k">if</span> <span class="n">len_d</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">len_d</span> <span class="o">&lt;</span> <span class="n">DBG_DICT_DEFAULTS</span><span class="p">[</span><span class="s2">&quot;max_len&quot;</span><span class="p">]:</span>  <span class="c1"># type: ignore[operator]</span>
+</span><span id="L-277"><a href="#L-277"><span class="linenos">277</span></a>            <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">d</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+</span><span id="L-278"><a href="#L-278"><span class="linenos">278</span></a>                <span class="n">key_str</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="nb">repr</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="k">else</span> <span class="n">k</span>
+</span><span id="L-279"><a href="#L-279"><span class="linenos">279</span></a>
+</span><span id="L-280"><a href="#L-280"><span class="linenos">280</span></a>                <span class="n">val_str</span><span class="p">:</span> <span class="nb">str</span>
+</span><span id="L-281"><a href="#L-281"><span class="linenos">281</span></a>                <span class="n">val_type_str</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">v</span><span class="p">))</span>
+</span><span id="L-282"><a href="#L-282"><span class="linenos">282</span></a>                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+</span><span id="L-283"><a href="#L-283"><span class="linenos">283</span></a>                    <span class="n">val_str</span> <span class="o">=</span> <span class="n">dict_info</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">depth</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+</span><span id="L-284"><a href="#L-284"><span class="linenos">284</span></a>                <span class="k">elif</span> <span class="n">val_type_str</span> <span class="ow">in</span> <span class="n">TENSOR_STR_TYPES</span><span class="p">:</span>
+</span><span id="L-285"><a href="#L-285"><span class="linenos">285</span></a>                    <span class="n">val_str</span> <span class="o">=</span> <span class="n">tensor_info</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+</span><span id="L-286"><a href="#L-286"><span class="linenos">286</span></a>                <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+</span><span id="L-287"><a href="#L-287"><span class="linenos">287</span></a>                    <span class="n">val_str</span> <span class="o">=</span> <span class="n">list_info</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+</span><span id="L-288"><a href="#L-288"><span class="linenos">288</span></a>                <span class="k">else</span><span class="p">:</span>
+</span><span id="L-289"><a href="#L-289"><span class="linenos">289</span></a>                    <span class="n">val_str</span> <span class="o">=</span> <span class="nb">repr</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+</span><span id="L-290"><a href="#L-290"><span class="linenos">290</span></a>
+</span><span id="L-291"><a href="#L-291"><span class="linenos">291</span></a>                <span class="n">output</span> <span class="o">+=</span> <span class="p">(</span>
+</span><span id="L-292"><a href="#L-292"><span class="linenos">292</span></a>                    <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="si">{</span><span class="n">indent</span><span class="o">*</span><span class="p">(</span><span class="n">depth</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="si">}{</span><span class="n">key_str</span><span class="si">}{</span><span class="n">DBG_TENSOR_VAL_JOINER</span><span class="si">}{</span><span class="n">val_str</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span id="L-293"><a href="#L-293"><span class="linenos">293</span></a>                <span class="p">)</span>
+</span><span id="L-294"><a href="#L-294"><span class="linenos">294</span></a>
+</span><span id="L-295"><a href="#L-295"><span class="linenos">295</span></a>    <span class="k">return</span> <span class="n">output</span>
+</span><span id="L-296"><a href="#L-296"><span class="linenos">296</span></a>
+</span><span id="L-297"><a href="#L-297"><span class="linenos">297</span></a>
+</span><span id="L-298"><a href="#L-298"><span class="linenos">298</span></a><span class="k">def</span> <span class="nf">info_auto</span><span class="p">(</span>
+</span><span id="L-299"><a href="#L-299"><span class="linenos">299</span></a>    <span class="n">obj</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Any</span><span class="p">,</span>
+</span><span id="L-300"><a href="#L-300"><span class="linenos">300</span></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+</span><span id="L-301"><a href="#L-301"><span class="linenos">301</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Automatically format an object for debugging.&quot;&quot;&quot;</span>
+</span><span id="L-302"><a href="#L-302"><span class="linenos">302</span></a>    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+</span><span id="L-303"><a href="#L-303"><span class="linenos">303</span></a>        <span class="k">return</span> <span class="n">dict_info</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+</span><span id="L-304"><a href="#L-304"><span class="linenos">304</span></a>    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+</span><span id="L-305"><a href="#L-305"><span class="linenos">305</span></a>        <span class="k">return</span> <span class="n">list_info</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+</span><span id="L-306"><a href="#L-306"><span class="linenos">306</span></a>    <span class="k">elif</span> <span class="nb">str</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">obj</span><span class="p">))</span> <span class="ow">in</span> <span class="n">TENSOR_STR_TYPES</span><span class="p">:</span>
+</span><span id="L-307"><a href="#L-307"><span class="linenos">307</span></a>        <span class="k">return</span> <span class="n">tensor_info</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+</span><span id="L-308"><a href="#L-308"><span class="linenos">308</span></a>    <span class="k">else</span><span class="p">:</span>
+</span><span id="L-309"><a href="#L-309"><span class="linenos">309</span></a>        <span class="k">return</span> <span class="nb">repr</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+</span><span id="L-310"><a href="#L-310"><span class="linenos">310</span></a>
+</span><span id="L-311"><a href="#L-311"><span class="linenos">311</span></a>
+</span><span id="L-312"><a href="#L-312"><span class="linenos">312</span></a><span class="n">dbg_tensor</span> <span class="o">=</span> <span class="n">functools</span><span class="o">.</span><span class="n">partial</span><span class="p">(</span>
+</span><span id="L-313"><a href="#L-313"><span class="linenos">313</span></a>    <span class="n">dbg</span><span class="p">,</span> <span class="n">formatter</span><span class="o">=</span><span class="n">tensor_info</span><span class="p">,</span> <span class="n">val_joiner</span><span class="o">=</span><span class="n">DBG_TENSOR_VAL_JOINER</span>
+</span><span id="L-314"><a href="#L-314"><span class="linenos">314</span></a><span class="p">)</span>
+</span><span id="L-315"><a href="#L-315"><span class="linenos">315</span></a>
+</span><span id="L-316"><a href="#L-316"><span class="linenos">316</span></a>
+</span><span id="L-317"><a href="#L-317"><span class="linenos">317</span></a><span class="n">dbg_dict</span> <span class="o">=</span> <span class="n">functools</span><span class="o">.</span><span class="n">partial</span><span class="p">(</span><span class="n">dbg</span><span class="p">,</span> <span class="n">formatter</span><span class="o">=</span><span class="n">dict_info</span><span class="p">,</span> <span class="n">val_joiner</span><span class="o">=</span><span class="n">DBG_TENSOR_VAL_JOINER</span><span class="p">)</span>
+</span><span id="L-318"><a href="#L-318"><span class="linenos">318</span></a>
+</span><span id="L-319"><a href="#L-319"><span class="linenos">319</span></a><span class="n">dbg_auto</span> <span class="o">=</span> <span class="n">functools</span><span class="o">.</span><span class="n">partial</span><span class="p">(</span><span class="n">dbg</span><span class="p">,</span> <span class="n">formatter</span><span class="o">=</span><span class="n">info_auto</span><span class="p">,</span> <span class="n">val_joiner</span><span class="o">=</span><span class="n">DBG_TENSOR_VAL_JOINER</span><span class="p">)</span>
 </span></pre></div>
 
 
@@ -410,7 +537,7 @@ THE SOFTWARE.</p>
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="dbg-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.10/dbg.py#L95-L182" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.11/dbg.py#L95-L182" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -532,9 +659,9 @@ as well as the passed expression and what the expression evaluates to:</p>
                 </section>
                 <section id="DBG_TENSOR_ARRAY_SUMMARY_DEFAULTS">
                     <div class="attr variable">
-            <span class="name">DBG_TENSOR_ARRAY_SUMMARY_DEFAULTS</span><span class="annotation">: Dict[str, Union[str, int, bool]]</span>        =
+            <span class="name">DBG_TENSOR_ARRAY_SUMMARY_DEFAULTS</span><span class="annotation">: Dict[str, Union[NoneType, bool, int, str]]</span>        =
 <input id="DBG_TENSOR_ARRAY_SUMMARY_DEFAULTS-view-value" class="view-value-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
-            <label class="view-value-button pdoc-button" for="DBG_TENSOR_ARRAY_SUMMARY_DEFAULTS-view-value"></label><span class="default_value">{&#39;fmt&#39;: &#39;unicode&#39;, &#39;precision&#39;: 2, &#39;stats&#39;: True, &#39;shape&#39;: True, &#39;dtype&#39;: True, &#39;device&#39;: True, &#39;requires_grad&#39;: True, &#39;sparkline&#39;: True, &#39;sparkline_bins&#39;: 7, &#39;sparkline_logy&#39;: False, &#39;colored&#39;: True, &#39;eq_char&#39;: &#39;=&#39;}</span>
+            <label class="view-value-button pdoc-button" for="DBG_TENSOR_ARRAY_SUMMARY_DEFAULTS-view-value"></label><span class="default_value">{&#39;fmt&#39;: &#39;unicode&#39;, &#39;precision&#39;: 2, &#39;stats&#39;: True, &#39;shape&#39;: True, &#39;dtype&#39;: True, &#39;device&#39;: True, &#39;requires_grad&#39;: True, &#39;sparkline&#39;: True, &#39;sparkline_bins&#39;: 7, &#39;sparkline_logy&#39;: None, &#39;colored&#39;: True, &#39;eq_char&#39;: &#39;=&#39;}</span>
 
         
     </div>
@@ -565,7 +692,7 @@ as well as the passed expression and what the expression evaluates to:</p>
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="tensor_info-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.10/dbg.py#L208-L211" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.11/dbg.py#L208-L211" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -583,6 +710,188 @@ as well as the passed expression and what the expression evaluates to:</p>
     
 
                 </section>
+                <section id="DBG_DICT_DEFAULTS">
+                    <div class="attr variable">
+            <span class="name">DBG_DICT_DEFAULTS</span><span class="annotation">: Dict[str, Union[str, int, bool]]</span>        =
+<span class="default_value">{&#39;key_types&#39;: True, &#39;val_types&#39;: True, &#39;max_len&#39;: 32, &#39;indent&#39;: &#39;  &#39;, &#39;max_depth&#39;: 3}</span>
+
+        
+    </div>
+    <a class="headerlink" href="#DBG_DICT_DEFAULTS"></a>
+    
+    
+
+                </section>
+                <section id="DBG_LIST_DEFAULTS">
+                    <div class="attr variable">
+            <span class="name">DBG_LIST_DEFAULTS</span><span class="annotation">: Dict[str, Union[str, int, bool]]</span>        =
+<span class="default_value">{&#39;max_len&#39;: 16, &#39;summary_show_types&#39;: True}</span>
+
+        
+    </div>
+    <a class="headerlink" href="#DBG_LIST_DEFAULTS"></a>
+    
+    
+
+                </section>
+                <section id="list_info">
+                            <input id="list_info-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr function">
+            
+        <span class="def">def</span>
+        <span class="name">list_info</span><span class="signature pdoc-code condensed">(<span class="param"><span class="n">lst</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Any</span><span class="p">]</span></span><span class="return-annotation">) -> <span class="nb">str</span>:</span></span>
+
+                <div class="source-button-container">
+            <label class="pdoc-button view-source-button" for="list_info-view-source"><span>View Source</span></label>
+            <div class="github-button-wrapper">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.11/dbg.py#L228-L243" target="_blank">
+                    <span>View on GitHub</span>
+                </a>
+            </div>
+        </div>
+
+    </div>
+    <a class="headerlink" href="#list_info"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="list_info-229"><a href="#list_info-229"><span class="linenos">229</span></a><span class="k">def</span> <span class="nf">list_info</span><span class="p">(</span>
+</span><span id="list_info-230"><a href="#list_info-230"><span class="linenos">230</span></a>    <span class="n">lst</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">List</span><span class="p">[</span><span class="n">typing</span><span class="o">.</span><span class="n">Any</span><span class="p">],</span>
+</span><span id="list_info-231"><a href="#list_info-231"><span class="linenos">231</span></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+</span><span id="list_info-232"><a href="#list_info-232"><span class="linenos">232</span></a>    <span class="n">len_l</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">lst</span><span class="p">)</span>
+</span><span id="list_info-233"><a href="#list_info-233"><span class="linenos">233</span></a>    <span class="n">output</span><span class="p">:</span> <span class="nb">str</span>
+</span><span id="list_info-234"><a href="#list_info-234"><span class="linenos">234</span></a>    <span class="c1"># TYPING: make `DBG_LIST_DEFAULTS` and the others typed dicts</span>
+</span><span id="list_info-235"><a href="#list_info-235"><span class="linenos">235</span></a>    <span class="k">if</span> <span class="n">len_l</span> <span class="o">&gt;</span> <span class="n">DBG_LIST_DEFAULTS</span><span class="p">[</span><span class="s2">&quot;max_len&quot;</span><span class="p">]:</span>  <span class="c1"># type: ignore[operator]</span>
+</span><span id="list_info-236"><a href="#list_info-236"><span class="linenos">236</span></a>        <span class="n">output</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&lt;list of len()=</span><span class="si">{</span><span class="n">len_l</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span id="list_info-237"><a href="#list_info-237"><span class="linenos">237</span></a>        <span class="k">if</span> <span class="n">DBG_LIST_DEFAULTS</span><span class="p">[</span><span class="s2">&quot;summary_show_types&quot;</span><span class="p">]:</span>
+</span><span id="list_info-238"><a href="#list_info-238"><span class="linenos">238</span></a>            <span class="n">val_types</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">lst</span><span class="p">)</span>
+</span><span id="list_info-239"><a href="#list_info-239"><span class="linenos">239</span></a>            <span class="n">output</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;, types=</span><span class="se">{{</span><span class="si">{</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">val_types</span><span class="p">))</span><span class="si">}</span><span class="se">}}</span><span class="s2">&quot;</span>
+</span><span id="list_info-240"><a href="#list_info-240"><span class="linenos">240</span></a>        <span class="n">output</span> <span class="o">+=</span> <span class="s2">&quot;&gt;&quot;</span>
+</span><span id="list_info-241"><a href="#list_info-241"><span class="linenos">241</span></a>    <span class="k">else</span><span class="p">:</span>
+</span><span id="list_info-242"><a href="#list_info-242"><span class="linenos">242</span></a>        <span class="n">output</span> <span class="o">=</span> <span class="s2">&quot;[&quot;</span> <span class="o">+</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">repr</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">lst</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;]&quot;</span>
+</span><span id="list_info-243"><a href="#list_info-243"><span class="linenos">243</span></a>
+</span><span id="list_info-244"><a href="#list_info-244"><span class="linenos">244</span></a>    <span class="k">return</span> <span class="n">output</span>
+</span></pre></div>
+
+
+    
+
+                </section>
+                <section id="TENSOR_STR_TYPES">
+                    <div class="attr variable">
+            <span class="name">TENSOR_STR_TYPES</span><span class="annotation">: Set[str]</span>        =
+<span class="default_value">{&#34;&lt;class &#39;torch.Tensor&#39;&gt;&#34;, &#34;&lt;class &#39;numpy.ndarray&#39;&gt;&#34;}</span>
+
+        
+    </div>
+    <a class="headerlink" href="#TENSOR_STR_TYPES"></a>
+    
+    
+
+                </section>
+                <section id="dict_info">
+                            <input id="dict_info-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr function">
+            
+        <span class="def">def</span>
+        <span class="name">dict_info</span><span class="signature pdoc-code condensed">(<span class="param"><span class="n">d</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span>, </span><span class="param"><span class="n">depth</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span></span><span class="return-annotation">) -> <span class="nb">str</span>:</span></span>
+
+                <div class="source-button-container">
+            <label class="pdoc-button view-source-button" for="dict_info-view-source"><span>View Source</span></label>
+            <div class="github-button-wrapper">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.11/dbg.py#L252-L295" target="_blank">
+                    <span>View on GitHub</span>
+                </a>
+            </div>
+        </div>
+
+    </div>
+    <a class="headerlink" href="#dict_info"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="dict_info-253"><a href="#dict_info-253"><span class="linenos">253</span></a><span class="k">def</span> <span class="nf">dict_info</span><span class="p">(</span>
+</span><span id="dict_info-254"><a href="#dict_info-254"><span class="linenos">254</span></a>    <span class="n">d</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Dict</span><span class="p">[</span><span class="n">typing</span><span class="o">.</span><span class="n">Any</span><span class="p">,</span> <span class="n">typing</span><span class="o">.</span><span class="n">Any</span><span class="p">],</span>
+</span><span id="dict_info-255"><a href="#dict_info-255"><span class="linenos">255</span></a>    <span class="n">depth</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+</span><span id="dict_info-256"><a href="#dict_info-256"><span class="linenos">256</span></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+</span><span id="dict_info-257"><a href="#dict_info-257"><span class="linenos">257</span></a>    <span class="n">len_d</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+</span><span id="dict_info-258"><a href="#dict_info-258"><span class="linenos">258</span></a>    <span class="n">indent</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">DBG_DICT_DEFAULTS</span><span class="p">[</span><span class="s2">&quot;indent&quot;</span><span class="p">]</span>  <span class="c1"># type: ignore[assignment]</span>
+</span><span id="dict_info-259"><a href="#dict_info-259"><span class="linenos">259</span></a>
+</span><span id="dict_info-260"><a href="#dict_info-260"><span class="linenos">260</span></a>    <span class="c1"># summary line</span>
+</span><span id="dict_info-261"><a href="#dict_info-261"><span class="linenos">261</span></a>    <span class="n">output</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">indent</span><span class="o">*</span><span class="n">depth</span><span class="si">}</span><span class="s2">&lt;dict of len()=</span><span class="si">{</span><span class="n">len_d</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span id="dict_info-262"><a href="#dict_info-262"><span class="linenos">262</span></a>
+</span><span id="dict_info-263"><a href="#dict_info-263"><span class="linenos">263</span></a>    <span class="k">if</span> <span class="n">DBG_DICT_DEFAULTS</span><span class="p">[</span><span class="s2">&quot;key_types&quot;</span><span class="p">]</span> <span class="ow">and</span> <span class="n">len_d</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+</span><span id="dict_info-264"><a href="#dict_info-264"><span class="linenos">264</span></a>        <span class="n">key_types</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">k</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">d</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+</span><span id="dict_info-265"><a href="#dict_info-265"><span class="linenos">265</span></a>        <span class="n">key_types_str</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;{&quot;</span> <span class="o">+</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">key_types</span><span class="p">))</span> <span class="o">+</span> <span class="s2">&quot;}&quot;</span>
+</span><span id="dict_info-266"><a href="#dict_info-266"><span class="linenos">266</span></a>        <span class="n">output</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;, key_types=</span><span class="si">{</span><span class="n">key_types_str</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span id="dict_info-267"><a href="#dict_info-267"><span class="linenos">267</span></a>
+</span><span id="dict_info-268"><a href="#dict_info-268"><span class="linenos">268</span></a>    <span class="k">if</span> <span class="n">DBG_DICT_DEFAULTS</span><span class="p">[</span><span class="s2">&quot;val_types&quot;</span><span class="p">]</span> <span class="ow">and</span> <span class="n">len_d</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+</span><span id="dict_info-269"><a href="#dict_info-269"><span class="linenos">269</span></a>        <span class="n">val_types</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">v</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">d</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+</span><span id="dict_info-270"><a href="#dict_info-270"><span class="linenos">270</span></a>        <span class="n">val_types_str</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;{&quot;</span> <span class="o">+</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">val_types</span><span class="p">))</span> <span class="o">+</span> <span class="s2">&quot;}&quot;</span>
+</span><span id="dict_info-271"><a href="#dict_info-271"><span class="linenos">271</span></a>        <span class="n">output</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;, val_types=</span><span class="si">{</span><span class="n">val_types_str</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span id="dict_info-272"><a href="#dict_info-272"><span class="linenos">272</span></a>
+</span><span id="dict_info-273"><a href="#dict_info-273"><span class="linenos">273</span></a>    <span class="n">output</span> <span class="o">+=</span> <span class="s2">&quot;&gt;&quot;</span>
+</span><span id="dict_info-274"><a href="#dict_info-274"><span class="linenos">274</span></a>
+</span><span id="dict_info-275"><a href="#dict_info-275"><span class="linenos">275</span></a>    <span class="c1"># keys/values if not to deep and not too many</span>
+</span><span id="dict_info-276"><a href="#dict_info-276"><span class="linenos">276</span></a>    <span class="k">if</span> <span class="n">depth</span> <span class="o">&lt;</span> <span class="n">DBG_DICT_DEFAULTS</span><span class="p">[</span><span class="s2">&quot;max_depth&quot;</span><span class="p">]:</span>  <span class="c1"># type: ignore[operator]</span>
+</span><span id="dict_info-277"><a href="#dict_info-277"><span class="linenos">277</span></a>        <span class="k">if</span> <span class="n">len_d</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">len_d</span> <span class="o">&lt;</span> <span class="n">DBG_DICT_DEFAULTS</span><span class="p">[</span><span class="s2">&quot;max_len&quot;</span><span class="p">]:</span>  <span class="c1"># type: ignore[operator]</span>
+</span><span id="dict_info-278"><a href="#dict_info-278"><span class="linenos">278</span></a>            <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">d</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+</span><span id="dict_info-279"><a href="#dict_info-279"><span class="linenos">279</span></a>                <span class="n">key_str</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="nb">repr</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="k">else</span> <span class="n">k</span>
+</span><span id="dict_info-280"><a href="#dict_info-280"><span class="linenos">280</span></a>
+</span><span id="dict_info-281"><a href="#dict_info-281"><span class="linenos">281</span></a>                <span class="n">val_str</span><span class="p">:</span> <span class="nb">str</span>
+</span><span id="dict_info-282"><a href="#dict_info-282"><span class="linenos">282</span></a>                <span class="n">val_type_str</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">v</span><span class="p">))</span>
+</span><span id="dict_info-283"><a href="#dict_info-283"><span class="linenos">283</span></a>                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+</span><span id="dict_info-284"><a href="#dict_info-284"><span class="linenos">284</span></a>                    <span class="n">val_str</span> <span class="o">=</span> <span class="n">dict_info</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">depth</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+</span><span id="dict_info-285"><a href="#dict_info-285"><span class="linenos">285</span></a>                <span class="k">elif</span> <span class="n">val_type_str</span> <span class="ow">in</span> <span class="n">TENSOR_STR_TYPES</span><span class="p">:</span>
+</span><span id="dict_info-286"><a href="#dict_info-286"><span class="linenos">286</span></a>                    <span class="n">val_str</span> <span class="o">=</span> <span class="n">tensor_info</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+</span><span id="dict_info-287"><a href="#dict_info-287"><span class="linenos">287</span></a>                <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+</span><span id="dict_info-288"><a href="#dict_info-288"><span class="linenos">288</span></a>                    <span class="n">val_str</span> <span class="o">=</span> <span class="n">list_info</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+</span><span id="dict_info-289"><a href="#dict_info-289"><span class="linenos">289</span></a>                <span class="k">else</span><span class="p">:</span>
+</span><span id="dict_info-290"><a href="#dict_info-290"><span class="linenos">290</span></a>                    <span class="n">val_str</span> <span class="o">=</span> <span class="nb">repr</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+</span><span id="dict_info-291"><a href="#dict_info-291"><span class="linenos">291</span></a>
+</span><span id="dict_info-292"><a href="#dict_info-292"><span class="linenos">292</span></a>                <span class="n">output</span> <span class="o">+=</span> <span class="p">(</span>
+</span><span id="dict_info-293"><a href="#dict_info-293"><span class="linenos">293</span></a>                    <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="si">{</span><span class="n">indent</span><span class="o">*</span><span class="p">(</span><span class="n">depth</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="si">}{</span><span class="n">key_str</span><span class="si">}{</span><span class="n">DBG_TENSOR_VAL_JOINER</span><span class="si">}{</span><span class="n">val_str</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span id="dict_info-294"><a href="#dict_info-294"><span class="linenos">294</span></a>                <span class="p">)</span>
+</span><span id="dict_info-295"><a href="#dict_info-295"><span class="linenos">295</span></a>
+</span><span id="dict_info-296"><a href="#dict_info-296"><span class="linenos">296</span></a>    <span class="k">return</span> <span class="n">output</span>
+</span></pre></div>
+
+
+    
+
+                </section>
+                <section id="info_auto">
+                            <input id="info_auto-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr function">
+            
+        <span class="def">def</span>
+        <span class="name">info_auto</span><span class="signature pdoc-code condensed">(<span class="param"><span class="n">obj</span><span class="p">:</span> <span class="n">Any</span></span><span class="return-annotation">) -> <span class="nb">str</span>:</span></span>
+
+                <div class="source-button-container">
+            <label class="pdoc-button view-source-button" for="info_auto-view-source"><span>View Source</span></label>
+            <div class="github-button-wrapper">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.11/dbg.py#L298-L309" target="_blank">
+                    <span>View on GitHub</span>
+                </a>
+            </div>
+        </div>
+
+    </div>
+    <a class="headerlink" href="#info_auto"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="info_auto-299"><a href="#info_auto-299"><span class="linenos">299</span></a><span class="k">def</span> <span class="nf">info_auto</span><span class="p">(</span>
+</span><span id="info_auto-300"><a href="#info_auto-300"><span class="linenos">300</span></a>    <span class="n">obj</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Any</span><span class="p">,</span>
+</span><span id="info_auto-301"><a href="#info_auto-301"><span class="linenos">301</span></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+</span><span id="info_auto-302"><a href="#info_auto-302"><span class="linenos">302</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Automatically format an object for debugging.&quot;&quot;&quot;</span>
+</span><span id="info_auto-303"><a href="#info_auto-303"><span class="linenos">303</span></a>    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+</span><span id="info_auto-304"><a href="#info_auto-304"><span class="linenos">304</span></a>        <span class="k">return</span> <span class="n">dict_info</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+</span><span id="info_auto-305"><a href="#info_auto-305"><span class="linenos">305</span></a>    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+</span><span id="info_auto-306"><a href="#info_auto-306"><span class="linenos">306</span></a>        <span class="k">return</span> <span class="n">list_info</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+</span><span id="info_auto-307"><a href="#info_auto-307"><span class="linenos">307</span></a>    <span class="k">elif</span> <span class="nb">str</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">obj</span><span class="p">))</span> <span class="ow">in</span> <span class="n">TENSOR_STR_TYPES</span><span class="p">:</span>
+</span><span id="info_auto-308"><a href="#info_auto-308"><span class="linenos">308</span></a>        <span class="k">return</span> <span class="n">tensor_info</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+</span><span id="info_auto-309"><a href="#info_auto-309"><span class="linenos">309</span></a>    <span class="k">else</span><span class="p">:</span>
+</span><span id="info_auto-310"><a href="#info_auto-310"><span class="linenos">310</span></a>        <span class="k">return</span> <span class="nb">repr</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+</span></pre></div>
+
+
+            <div class="docstring"><p>Automatically format an object for debugging.</p>
+</div>
+
+
+                </section>
                 <section id="dbg_tensor">
                     <div class="attr variable">
             <span class="name">dbg_tensor</span>        =
@@ -591,6 +900,30 @@ as well as the passed expression and what the expression evaluates to:</p>
         
     </div>
     <a class="headerlink" href="#dbg_tensor"></a>
+    
+    
+
+                </section>
+                <section id="dbg_dict">
+                    <div class="attr variable">
+            <span class="name">dbg_dict</span>        =
+<span class="default_value">functools.partial(&lt;function dbg&gt;, formatter=&lt;function dict_info&gt;, val_joiner=&#39;: &#39;)</span>
+
+        
+    </div>
+    <a class="headerlink" href="#dbg_dict"></a>
+    
+    
+
+                </section>
+                <section id="dbg_auto">
+                    <div class="attr variable">
+            <span class="name">dbg_auto</span>        =
+<span class="default_value">functools.partial(&lt;function dbg&gt;, formatter=&lt;function info_auto&gt;, val_joiner=&#39;: &#39;)</span>
+
+        
+    </div>
+    <a class="headerlink" href="#dbg_auto"></a>
     
     
 

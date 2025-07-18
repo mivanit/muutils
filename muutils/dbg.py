@@ -34,7 +34,6 @@ import inspect
 import sys
 import typing
 from pathlib import Path
-import functools
 import re
 
 # type defs
@@ -310,14 +309,37 @@ def info_auto(
         return repr(obj)
 
 
-dbg_tensor = functools.partial(
-    dbg, formatter=tensor_info, val_joiner=DBG_TENSOR_VAL_JOINER
-)
+def dbg_tensor(
+    tensor: typing.Any,  # numpy array or torch tensor
+) -> _ExpType:
+    """dbg function for tensors, using tensor_info formatter."""
+    return dbg(
+        tensor,
+        formatter=tensor_info,
+        val_joiner=DBG_TENSOR_VAL_JOINER,
+    )
 
 
-dbg_dict = functools.partial(dbg, formatter=dict_info, val_joiner=DBG_TENSOR_VAL_JOINER)
+def dbg_dict(
+    d: typing.Dict[typing.Any, typing.Any],
+) -> _ExpType:
+    """dbg function for dictionaries, using dict_info formatter."""
+    return dbg(
+        d,
+        formatter=dict_info,
+        val_joiner=DBG_TENSOR_VAL_JOINER,
+    )
 
-dbg_auto = functools.partial(dbg, formatter=info_auto, val_joiner=DBG_TENSOR_VAL_JOINER)
+
+def dbg_auto(
+    obj: typing.Any,
+) -> _ExpType:
+    """dbg function for automatic formatting based on type."""
+    return dbg(
+        obj,
+        formatter=info_auto,
+        val_joiner=DBG_TENSOR_VAL_JOINER,
+    )
 
 
 def _normalize_for_loose(text: str) -> str:

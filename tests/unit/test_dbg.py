@@ -3,6 +3,7 @@ import tempfile
 from pathlib import Path
 import importlib
 from typing import Any, Callable, Optional, List, Tuple
+import re
 
 import pytest
 
@@ -13,6 +14,9 @@ from muutils.dbg import (
     _CWD,
     # we do use this as a global in `test_dbg_counter_increments`
     _COUNTER,  # noqa: F401
+    grep_repr,
+    _normalize_for_loose,
+    _compile_pattern,
 )
 
 
@@ -286,3 +290,258 @@ def test_dbg_non_callable_formatter() -> None:
 #     captured: str = capsys.readouterr().err
 #     assert "shape=(7,)" in captured
 #     assert result is tensor
+
+
+# ============================================================================
+# Tests for grep_repr functionality
+# ============================================================================
+
+
+def test_normalize_for_loose() -> None:
+    assert _normalize_for_loose("hello_world") == "hello world"
+    assert _normalize_for_loose("doThing") == "doThing"  # camelCase preserved
+    assert _normalize_for_loose("DO-THING") == "DO THING"
+    assert _normalize_for_loose("a__b__c") == "a b c"
+    assert _normalize_for_loose("test.method()") == "test method"
+    assert _normalize_for_loose("   spaces   ") == "spaces"
+
+
+def test_compile_pattern_case_sensitivity() -> None:
+    # String patterns default to case-insensitive
+    pattern = _compile_pattern("hello")
+    assert pattern.match("HELLO") is not None
+    assert pattern.match("Hello") is not None
+
+    # With cased=True, string patterns are case-sensitive
+    pattern_cased = _compile_pattern("hello", cased=True)
+    assert pattern_cased.match("HELLO") is None
+    assert pattern_cased.match("hello") is not None
+
+
+def test_compile_pattern_loose() -> None:
+    pattern = _compile_pattern("hello world", loose=True)
+    # Pattern should be normalized
+    assert pattern.pattern == "hello world"
+
+
+def test_grep_repr_basic_match(capsys: pytest.CaptureFixture) -> None:
+    test_list = [1, 2, 42, 3, 4]
+    grep_repr(test_list, "42")
+    captured = capsys.readouterr().out
+    assert "42" in captured
+    assert captured.count("42") >= 1
+
+
+def test_grep_repr_no_match(capsys: pytest.CaptureFixture) -> None:
+    test_list = [1, 2, 3, 4]
+    grep_repr(test_list, "999")
+    captured = capsys.readouterr().out
+    assert captured.strip() == ""
+
+
+def test_grep_repr_case_insensitive_default(capsys: pytest.CaptureFixture) -> None:
+    test_dict = {"Hello": "World"}
+    grep_repr(test_dict, "hello")  # Should match "Hello" by default
+    captured = capsys.readouterr().out
+    assert "Hello" in captured
+
+
+def test_grep_repr_case_sensitive(capsys: pytest.CaptureFixture) -> None:
+    test_dict = {"Hello": "World"}
+    grep_repr(test_dict, "hello", cased=True)  # Should NOT match
+    captured = capsys.readouterr().out
+    assert captured.strip() == ""
+
+
+def test_grep_repr_loose_matching(capsys: pytest.CaptureFixture) -> None:
+    class TestObj:
+        def __repr__(self) -> str:
+            return "method_name(arg_value)"
+
+    obj = TestObj()
+    grep_repr(obj, "method name", loose=True)
+    captured = capsys.readouterr().out
+    # With loose=True, both pattern and text are normalized, so we should see "method name" highlighted
+    assert "method name" in captured
+
+
+def test_grep_repr_char_context(capsys: pytest.CaptureFixture) -> None:
+    test_string = "prefix_42_suffix"
+    grep_repr(test_string, "42", char_context=3)
+    captured = capsys.readouterr().out
+    # Should show 3 chars before and after: "ix_42_su"
+    assert "ix_" in captured and "_su" in captured
+
+
+def test_grep_repr_char_context_zero(capsys: pytest.CaptureFixture) -> None:
+    test_string = "prefix_42_suffix"
+    grep_repr(test_string, "42", char_context=0)
+    captured = capsys.readouterr().out
+    # Should only show the match itself
+    lines = captured.strip().split("\n")
+    assert len(lines) == 1
+    assert "42" in lines[0]
+
+
+def test_grep_repr_line_context(capsys: pytest.CaptureFixture) -> None:
+    test_obj = {"line1": 1, "line2": 2, "target": 42, "line4": 4}
+    grep_repr(test_obj, "42", line_context=1)
+    captured = capsys.readouterr().out
+    assert "42" in captured
+
+
+def test_grep_repr_before_after_context(capsys: pytest.CaptureFixture) -> None:
+    class MultilineRepr:
+        def __repr__(self) -> str:
+            return "line1\nline2\ntarget_line\nline4\nline5"
+
+    multiline_obj = MultilineRepr()
+    grep_repr(multiline_obj, "target", before_context=1, after_context=1)
+    captured = capsys.readouterr().out
+    assert "line2" in captured
+    assert "target" in captured
+    assert "line4" in captured
+
+
+def test_grep_repr_context_shortcut(capsys: pytest.CaptureFixture) -> None:
+    class MultilineRepr:
+        def __repr__(self) -> str:
+            return "line1\nline2\ntarget_line\nline4\nline5"
+
+    multiline_obj = MultilineRepr()
+    grep_repr(multiline_obj, "target", context=1)
+    captured = capsys.readouterr().out
+    assert "line2" in captured
+    assert "target" in captured
+    assert "line4" in captured
+
+
+def test_grep_repr_max_count(capsys: pytest.CaptureFixture) -> None:
+    test_list = [42, 42, 42, 42, 42]  # 5 matches in repr
+    grep_repr(
+        test_list, "42", max_count=2, char_context=0
+    )  # No context to avoid duplicates
+    captured = capsys.readouterr().out
+    # Should only show 2 match blocks due to max_count=2
+    lines = [line for line in captured.strip().split("\n") if line and line != "--"]
+    assert len(lines) == 2
+
+
+def test_grep_repr_line_numbers(capsys: pytest.CaptureFixture) -> None:
+    # Create an object whose repr contains actual newlines
+    class MultilineRepr:
+        def __repr__(self) -> str:
+            return "line1\nline2\ntarget_line\nline4"
+
+    multiline_obj = MultilineRepr()
+    grep_repr(multiline_obj, "target", line_context=1, line_numbers=True)
+    captured = capsys.readouterr().out
+    assert "3:" in captured  # Line number for target line
+    assert "2:" in captured  # Line number for context
+    assert "4:" in captured  # Line number for context
+
+
+def test_grep_repr_no_highlight(capsys: pytest.CaptureFixture) -> None:
+    test_list = [1, 2, 42, 3]
+    grep_repr(test_list, "42", highlight=False)
+    captured = capsys.readouterr().out
+    # Should not contain ANSI escape sequences
+    assert "\033[" not in captured
+    assert "42" in captured
+
+
+def test_grep_repr_custom_color(capsys: pytest.CaptureFixture) -> None:
+    test_list = [1, 2, 42, 3]
+    grep_repr(test_list, "42", color="32")  # Green instead of red
+    captured = capsys.readouterr().out
+    assert "\033[1;32m" in captured  # Green color code
+
+
+def test_grep_repr_custom_separator(capsys: pytest.CaptureFixture) -> None:
+    test_list = [42, 99, 42]  # Multiple matches
+    grep_repr(test_list, r"\d+", separator="---")
+    captured = capsys.readouterr().out
+    assert "---" in captured
+
+
+def test_grep_repr_quiet_mode() -> None:
+    test_list = [1, 2, 42, 3]
+    result = grep_repr(test_list, "42", quiet=True)
+    assert result is not None
+    assert isinstance(result, list)
+    assert len(result) >= 1
+    assert any("42" in line for line in result)
+
+
+def test_grep_repr_multiple_matches(capsys: pytest.CaptureFixture) -> None:
+    test_dict = {"key1": 42, "key2": 24, "key3": 42}
+    grep_repr(test_dict, "42")
+    captured = capsys.readouterr().out
+    # Should show multiple matches
+    assert captured.count("42") >= 2
+
+
+def test_grep_repr_regex_pattern(capsys: pytest.CaptureFixture) -> None:
+    test_list = [1, 22, 333, 4444]
+    grep_repr(test_list, r"\d{3}")  # Exactly 3 digits
+    captured = capsys.readouterr().out
+    assert "333" in captured
+    # Note: "4444" contains "444" which matches \d{3}, so it will be highlighted
+    assert "444" in captured
+    # The whole list repr is shown, so "22" will be in the output but not highlighted
+    # Check that 333 and 444 are highlighted (contain ANSI codes) but 22 is not
+    assert "\033[1;31m333\033[0m" in captured
+    assert "\033[1;31m444\033[0m" in captured
+
+
+def test_grep_repr_compiled_regex(capsys: pytest.CaptureFixture) -> None:
+    import re
+
+    test_string = "Hello World"
+    pattern = re.compile(r"hello", re.IGNORECASE)
+    grep_repr(test_string, pattern)
+    captured = capsys.readouterr().out
+    assert "Hello" in captured
+
+
+def test_grep_repr_empty_pattern(capsys: pytest.CaptureFixture) -> None:
+    test_list = [1, 2, 3]
+    # Empty pattern matches everything, should not raise an error but show all content
+    grep_repr(test_list, "", char_context=0)
+    captured = capsys.readouterr().out
+    # Empty pattern should match at every position, but with char_context=0 should show minimal output
+    assert len(captured.strip()) > 0
+
+
+def test_grep_repr_invalid_regex() -> None:
+    test_list = [1, 2, 3]
+    with pytest.raises(re.error):
+        grep_repr(test_list, "[invalid")
+
+
+def test_grep_repr_large_object() -> None:
+    large_dict = {f"key_{i}": i for i in range(1000)}
+    large_dict["special_key"] = 42
+
+    # Should handle large objects without issues
+    result = grep_repr(large_dict, "special_key", quiet=True)
+    assert result is not None
+    assert any("special_key" in line for line in result)
+
+
+def test_grep_repr_nested_objects(capsys: pytest.CaptureFixture) -> None:
+    nested = {"outer": {"inner": {"value": 42}}}
+    grep_repr(nested, "42")
+    captured = capsys.readouterr().out
+    assert "42" in captured
+
+
+def test_grep_repr_custom_objects(capsys: pytest.CaptureFixture) -> None:
+    class CustomObject:
+        def __repr__(self) -> str:
+            return "CustomObject(special_value=123)"
+
+    obj = CustomObject()
+    grep_repr(obj, "special_value")
+    captured = capsys.readouterr().out
+    assert "special_value" in captured

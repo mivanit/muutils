@@ -35,6 +35,7 @@ import sys
 import typing
 from pathlib import Path
 import functools
+import re
 
 # type defs
 _ExpType = typing.TypeVar("_ExpType")
@@ -317,3 +318,173 @@ dbg_tensor = functools.partial(
 dbg_dict = functools.partial(dbg, formatter=dict_info, val_joiner=DBG_TENSOR_VAL_JOINER)
 
 dbg_auto = functools.partial(dbg, formatter=info_auto, val_joiner=DBG_TENSOR_VAL_JOINER)
+
+
+def _normalize_for_loose(text: str) -> str:
+    """Normalize text for loose matching by replacing non-alphanumeric chars with spaces."""
+    normalized: str = re.sub(r"[^a-zA-Z0-9]+", " ", text)
+    return " ".join(normalized.split())
+
+
+def _compile_pattern(
+    pattern: str | re.Pattern[str],
+    *,
+    cased: bool = False,
+    loose: bool = False,
+) -> re.Pattern[str]:
+    """Compile pattern with appropriate flags for case sensitivity and loose matching."""
+    if isinstance(pattern, re.Pattern):
+        return pattern
+
+    # Start with no flags for case-insensitive default
+    flags: int = 0
+    if not cased:
+        flags |= re.IGNORECASE
+
+    if loose:
+        pattern = _normalize_for_loose(pattern)
+
+    return re.compile(pattern, flags)
+
+
+def grep_repr(
+    obj: typing.Any,
+    pattern: str | re.Pattern[str],
+    *,
+    char_context: int | None = 20,
+    line_context: int | None = None,
+    before_context: int = 0,
+    after_context: int = 0,
+    context: int | None = None,
+    max_count: int | None = None,
+    cased: bool = False,
+    loose: bool = False,
+    line_numbers: bool = False,
+    highlight: bool = True,
+    color: str = "31",
+    separator: str = "--",
+    quiet: bool = False,
+) -> typing.List[str] | None:
+    """grep-like search on ``repr(obj)`` with improved grep-style options.
+
+    By default, string patterns are case-insensitive. Pre-compiled regex
+    patterns use their own flags.
+
+    Parameters:
+    - obj: Object to search (its repr() string is scanned)
+    - pattern: Regular expression pattern (string or pre-compiled)
+    - char_context: Characters of context before/after each match (default: 20)
+    - line_context: Lines of context before/after; overrides char_context
+    - before_context: Lines of context before match (like grep -B)
+    - after_context: Lines of context after match (like grep -A)
+    - context: Lines of context before AND after (like grep -C)
+    - max_count: Stop after this many matches
+    - cased: Force case-sensitive search for string patterns
+    - loose: Normalize spaces/punctuation for flexible matching
+    - line_numbers: Show line numbers in output
+    - highlight: Wrap matches with ANSI color codes
+    - color: ANSI color code (default: "31" for red)
+    - separator: Separator between multiple matches
+    - quiet: Return results instead of printing
+
+    Returns:
+    - None if quiet=False (prints to stdout)
+    - List[str] if quiet=True (returns formatted output lines)
+    """
+    # Handle context parameter shortcuts
+    if context is not None:
+        before_context = after_context = context
+
+    # Prepare text and pattern
+    text: str = repr(obj)
+    if loose:
+        text = _normalize_for_loose(text)
+
+    regex: re.Pattern[str] = _compile_pattern(pattern, cased=cased, loose=loose)
+
+    def _color_match(segment: str) -> str:
+        if not highlight:
+            return segment
+        return regex.sub(lambda m: f"\033[1;{color}m{m.group(0)}\033[0m", segment)
+
+    output_lines: list[str] = []
+    match_count: int = 0
+
+    # Determine if we're using line-based context
+    using_line_context = (
+        line_context is not None or before_context > 0 or after_context > 0
+    )
+
+    if using_line_context:
+        lines: list[str] = text.splitlines()
+        line_starts: list[int] = []
+        pos: int = 0
+        for line in lines:
+            line_starts.append(pos)
+            pos += len(line) + 1  # +1 for newline
+
+        processed_lines: set[int] = set()
+
+        for match in regex.finditer(text):
+            if max_count is not None and match_count >= max_count:
+                break
+
+            # Find which line contains this match
+            match_line = max(
+                i for i, start in enumerate(line_starts) if start <= match.start()
+            )
+
+            # Calculate context range
+            ctx_before: int
+            ctx_after: int
+            if line_context is not None:
+                ctx_before = ctx_after = line_context
+            else:
+                ctx_before, ctx_after = before_context, after_context
+
+            start_line: int = max(0, match_line - ctx_before)
+            end_line: int = min(len(lines), match_line + ctx_after + 1)
+
+            # Avoid duplicate output for overlapping contexts
+            line_range: set[int] = set(range(start_line, end_line))
+            if line_range & processed_lines:
+                continue
+            processed_lines.update(line_range)
+
+            # Format the context block
+            context_lines: list[str] = []
+            for i in range(start_line, end_line):
+                line_text = lines[i]
+                if line_numbers:
+                    line_prefix = f"{i+1}:"
+                    line_text = f"{line_prefix}{line_text}"
+                context_lines.append(_color_match(line_text))
+
+            if output_lines and separator:
+                output_lines.append(separator)
+            output_lines.extend(context_lines)
+            match_count += 1
+
+    else:
+        # Character-based context
+        ctx: int = 0 if char_context is None else char_context
+
+        for match in regex.finditer(text):
+            if max_count is not None and match_count >= max_count:
+                break
+
+            start: int = max(0, match.start() - ctx)
+            end: int = min(len(text), match.end() + ctx)
+            snippet: str = text[start:end]
+
+            if output_lines and separator:
+                output_lines.append(separator)
+            output_lines.append(_color_match(snippet))
+            match_count += 1
+
+    if quiet:
+        return output_lines
+    else:
+        for line in output_lines:
+            print(line)
+        return None

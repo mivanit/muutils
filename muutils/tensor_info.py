@@ -445,11 +445,13 @@ _USE_DEFAULT = _UseDefaultType()
 
 @overload
 def array_summary(
+    array: Any,
     as_list: Literal[True],
     **kwargs,
 ) -> List[str]: ...
 @overload
 def array_summary(
+    array: Any,
     as_list: Literal[False],
     **kwargs,
 ) -> str: ...

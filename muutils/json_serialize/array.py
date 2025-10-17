@@ -181,32 +181,32 @@ def load_array(arr: JSONitem, array_mode: Optional[ArrayMode] = None) -> Any:
 
     # actually load the array
     if array_mode == "array_list_meta":
-        assert isinstance(
-            arr, typing.Mapping
-        ), f"invalid list format: {type(arr) = }\n{arr = }"
+        assert isinstance(arr, typing.Mapping), (
+            f"invalid list format: {type(arr) = }\n{arr = }"
+        )
         data = np.array(arr["data"], dtype=arr["dtype"])  # type: ignore
         if tuple(arr["shape"]) != tuple(data.shape):  # type: ignore
             raise ValueError(f"invalid shape: {arr}")
         return data
 
     elif array_mode == "array_hex_meta":
-        assert isinstance(
-            arr, typing.Mapping
-        ), f"invalid list format: {type(arr) = }\n{arr = }"
+        assert isinstance(arr, typing.Mapping), (
+            f"invalid list format: {type(arr) = }\n{arr = }"
+        )
         data = np.frombuffer(bytes.fromhex(arr["data"]), dtype=arr["dtype"])  # type: ignore
         return data.reshape(arr["shape"])  # type: ignore
 
     elif array_mode == "array_b64_meta":
-        assert isinstance(
-            arr, typing.Mapping
-        ), f"invalid list format: {type(arr) = }\n{arr = }"
+        assert isinstance(arr, typing.Mapping), (
+            f"invalid list format: {type(arr) = }\n{arr = }"
+        )
         data = np.frombuffer(base64.b64decode(arr["data"]), dtype=arr["dtype"])  # type: ignore
         return data.reshape(arr["shape"])  # type: ignore
 
     elif array_mode == "list":
-        assert isinstance(
-            arr, typing.Sequence
-        ), f"invalid list format: {type(arr) = }\n{arr = }"
+        assert isinstance(arr, typing.Sequence), (
+            f"invalid list format: {type(arr) = }\n{arr = }"
+        )
         return np.array(arr)  # type: ignore
     elif array_mode == "external":
         # assume ZANJ has taken care of it

@@ -26,9 +26,9 @@ def test_list_split():
         [],
         [4],
     ], "Empty sublists should be created for consecutive delimiters"
-    assert list_split([], 2) == [
-        []
-    ], "Empty list should return a list with one empty sublist"
+    assert list_split([], 2) == [[]], (
+        "Empty list should return a list with one empty sublist"
+    )
 
     # with strings
     assert list_split(["a", "b", "c", "b", "d"], "b") == [
@@ -42,9 +42,9 @@ def test_list_split():
         [],
         ["d"],
     ], "Empty sublists should be created for consecutive delimiters"
-    assert list_split([], "b") == [
-        []
-    ], "Empty list should return a list with one empty sublist"
+    assert list_split([], "b") == [[]], (
+        "Empty list should return a list with one empty sublist"
+    )
 
     # mixed types
     assert list_split([1, "b", 3, "b", 4], "b") == [
@@ -58,9 +58,9 @@ def test_list_split():
         [],
         [4],
     ], "Empty sublists should be created for consecutive delimiters"
-    assert list_split([], "b") == [
-        []
-    ], "Empty list should return a list with one empty sublist"
+    assert list_split([], "b") == [[]], (
+        "Empty list should return a list with one empty sublist"
+    )
 
     assert list_split([1, 2, 3, 0, 4, 5, 0, 6], 0) == [[1, 2, 3], [4, 5], [6]]
     assert list_split([0, 1, 2, 3], 0) == [[], [1, 2, 3]]
@@ -88,9 +88,9 @@ def test_list_join():
         "x",
         "c",
     ], "Items should be joined correctly with factory-produced values"
-    assert list_join(["a"], lambda: "x") == [
-        "a"
-    ], "Single item list should remain unchanged"
+    assert list_join(["a"], lambda: "x") == ["a"], (
+        "Single item list should remain unchanged"
+    )
     assert list_join([], lambda: "x") == [], "Empty list should remain unchanged"
 
     # mixed types
@@ -101,9 +101,9 @@ def test_list_join():
         "x",
         3,
     ], "Items should be joined correctly with factory-produced values"
-    assert list_join([1], lambda: "x") == [
-        1
-    ], "Single item list should remain unchanged"
+    assert list_join([1], lambda: "x") == [1], (
+        "Single item list should remain unchanged"
+    )
     assert list_join([], lambda: "x") == [], "Empty list should remain unchanged"
 
 

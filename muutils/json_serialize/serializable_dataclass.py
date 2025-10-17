@@ -194,9 +194,9 @@ def SerializableDataclass__validate_field_type(
         )
         return True
 
-    assert isinstance(
-        _field, SerializableField
-    ), f"Field '{_field.name = }' on class {self.__class__ = } is not a SerializableField, but a {type(_field) = }"
+    assert isinstance(_field, SerializableField), (
+        f"Field '{_field.name = }' on class {self.__class__ = } is not a SerializableField, but a {type(_field) = }"
+    )
 
     # get field type hints
     try:
@@ -779,9 +779,9 @@ def serializable_dataclass(
             if isinstance(data, cls):
                 return data
 
-            assert isinstance(
-                data, typing.Mapping
-            ), f"When loading {cls.__name__ = } expected a Mapping, but got {type(data) = }:\n{data = }"
+            assert isinstance(data, typing.Mapping), (
+                f"When loading {cls.__name__ = } expected a Mapping, but got {type(data) = }:\n{data = }"
+            )
 
             cls_type_hints: dict[str, Any] = get_cls_type_hints(cls)
 
@@ -791,9 +791,9 @@ def serializable_dataclass(
             # iterate over the fields of the class
             for field in dataclasses.fields(cls):
                 # check if the field is a SerializableField
-                assert isinstance(
-                    field, SerializableField
-                ), f"Field '{field.name}' on class {cls.__name__} is not a SerializableField, but a {type(field)}. this state should be inaccessible, please report this bug!\nhttps://github.com/mivanit/muutils/issues/new"
+                assert isinstance(field, SerializableField), (
+                    f"Field '{field.name}' on class {cls.__name__} is not a SerializableField, but a {type(field)}. this state should be inaccessible, please report this bug!\nhttps://github.com/mivanit/muutils/issues/new"
+                )
 
                 # check if the field is in the data and if it should be initialized
                 if (field.name in data) and field.init:

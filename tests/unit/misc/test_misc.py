@@ -22,24 +22,24 @@ from muutils.misc import (
 
 def test_stable_hash():
     # no real way to test this without running multiple interpreters, but I'm pretty sure it works lol
-    assert stable_hash("test") == stable_hash(
-        "test"
-    ), "Hash should be stable for the same input"
-    assert stable_hash("test") != stable_hash(
-        "Test"
-    ), "Hash should be different for different inputs"
+    assert stable_hash("test") == stable_hash("test"), (
+        "Hash should be stable for the same input"
+    )
+    assert stable_hash("test") != stable_hash("Test"), (
+        "Hash should be different for different inputs"
+    )
 
 
 def test_sanitize_fname():
-    assert (
-        sanitize_fname("filename.txt") == "filename.txt"
-    ), "Alphanumeric characters and '.' should remain"
-    assert (
-        sanitize_fname("file-name.txt") == "file-name.txt"
-    ), "Alphanumeric characters, '-' and '.' should remain"
-    assert (
-        sanitize_fname("file@name!?.txt") == "filename.txt"
-    ), "Special characters should be removed"
+    assert sanitize_fname("filename.txt") == "filename.txt", (
+        "Alphanumeric characters and '.' should remain"
+    )
+    assert sanitize_fname("file-name.txt") == "file-name.txt", (
+        "Alphanumeric characters, '-' and '.' should remain"
+    )
+    assert sanitize_fname("file@name!?.txt") == "filename.txt", (
+        "Special characters should be removed"
+    )
     assert sanitize_fname(None) == "_None_", "None input should return '_None_'"
 
 
@@ -81,14 +81,14 @@ def test_sanitize_identifier():
 
 def test_dict_to_filename():
     data = {"key1": "value1", "key2": "value2"}
-    assert (
-        dict_to_filename(data) == "key1_value1.key2_value2"
-    ), "Filename should be formatted correctly"
+    assert dict_to_filename(data) == "key1_value1.key2_value2", (
+        "Filename should be formatted correctly"
+    )
 
     long_data = {f"key{i}": f"value{i}" for i in range(100)}
-    assert dict_to_filename(long_data).startswith(
-        "h_"
-    ), "Filename should be hashed if too long"
+    assert dict_to_filename(long_data).startswith("h_"), (
+        "Filename should be hashed if too long"
+    )
 
 
 def test_freeze():

@@ -51,9 +51,9 @@ def jsonl_load_log(
 ) -> list[dict]:
     data: list[JSONitem] = jsonl_load(path, use_gzip=use_gzip)
     for idx, item in enumerate(data):
-        assert isinstance(
-            item, dict
-        ), f"item {idx = } from file {path} is not a dict: {type(item) = }\t{item = }"
+        assert isinstance(item, dict), (
+            f"item {idx = } from file {path} is not a dict: {type(item) = }\t{item = }"
+        )
 
     # mypy complains that we are returning a list[JSONitem] but the function signature says list[dict]
     # it can't figure out that we are asserting that all items are dicts

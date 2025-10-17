@@ -51,9 +51,9 @@ def test_statcounter() -> None:
     for a in arrs:
         r = _compare_np_custom(a)
 
-        assert all(
-            [x["diff"] < EPSILON for x in r.values()]
-        ), f"errs for rantint array: {a.shape = } {np.min(a) = } {np.max(a) = } data = {r}"
+        assert all([x["diff"] < EPSILON for x in r.values()]), (
+            f"errs for rantint array: {a.shape = } {np.min(a) = } {np.max(a) = } data = {r}"
+        )
         # s = StatCounter(a)
         # print(s.total(), s)
         # print(sorted(list(s.elements())))

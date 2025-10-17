@@ -602,9 +602,9 @@ def test_interval_edge_cases():
 
     # Test with intervals smaller than epsilon
     tiny = Interval(1, 1 + _EPSILON / 2)
-    assert math.isclose(
-        tiny.size(), _EPSILON / 2, rel_tol=1e-9, abs_tol=1e-12
-    ), f"Size: {tiny.size()}, Epsilon: {_EPSILON}, {tiny = }"
+    assert math.isclose(tiny.size(), _EPSILON / 2, rel_tol=1e-9, abs_tol=1e-12), (
+        f"Size: {tiny.size()}, Epsilon: {_EPSILON}, {tiny = }"
+    )
     with pytest.raises(ValueError):
         assert math.isclose(
             tiny.clamp(0), 1 + _EPSILON / 4, rel_tol=1e-9, abs_tol=1e-15
@@ -1118,14 +1118,14 @@ def test_interval_string_round_trip(interval):
     parsed_interval = Interval.from_str(interval_str)
 
     # Check if the parsed interval is equal to the original
-    assert (
-        parsed_interval == interval
-    ), f"Round trip failed for {interval}. Got {parsed_interval}"
+    assert parsed_interval == interval, (
+        f"Round trip failed for {interval}. Got {parsed_interval}"
+    )
 
     # Additional check for string representation consistency
-    assert (
-        str(parsed_interval) == interval_str
-    ), f"String representation mismatch for {interval}. Expected {interval_str}, got {str(parsed_interval)}"
+    assert str(parsed_interval) == interval_str, (
+        f"String representation mismatch for {interval}. Expected {interval_str}, got {str(parsed_interval)}"
+    )
 
 
 def test_empty_set_string_representations():
@@ -1172,9 +1172,9 @@ def test_mixed_closure_string_representations():
 )
 def test_string_parsing_consistency(string_repr):
     parsed_interval = Interval.from_str(string_repr)
-    assert (
-        str(parsed_interval) == string_repr
-    ), f"Parsing inconsistency for {string_repr}. Got {str(parsed_interval)}"
+    assert str(parsed_interval) == string_repr, (
+        f"Parsing inconsistency for {string_repr}. Got {str(parsed_interval)}"
+    )
 
 
 def test_string_parsing_edge_cases():

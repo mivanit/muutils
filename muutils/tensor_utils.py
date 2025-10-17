@@ -68,9 +68,10 @@ TYPE_TO_JAX_DTYPE: dict = {
 }
 "dict mapping python, numpy, and torch types to `jaxtyping` types"
 
+# we check for version here, so it shouldn't error
 if np.version.version < "2.0.0":
-    TYPE_TO_JAX_DTYPE[np.float_] = jaxtyping.Float
-    TYPE_TO_JAX_DTYPE[np.int_] = jaxtyping.Int
+    TYPE_TO_JAX_DTYPE[np.float_] = jaxtyping.Float  # type: ignore[attr-defined]
+    TYPE_TO_JAX_DTYPE[np.int_] = jaxtyping.Int  # type: ignore[attr-defined]
 
 
 # TODO: add proper type annotations to this signature
@@ -261,7 +262,7 @@ DTYPE_LIST: list = [
 "list of all the python, numpy, and torch numerical types I could think of"
 
 if np.version.version < "2.0.0":
-    DTYPE_LIST.extend([np.float_, np.int_])
+    DTYPE_LIST.extend([np.float_, np.int_])  # type: ignore[attr-defined]
 
 DTYPE_MAP: dict = {
     **{str(x): x for x in DTYPE_LIST},

@@ -38,6 +38,10 @@ import re
 
 # type defs
 _ExpType = typing.TypeVar("_ExpType")
+_ExpType_dict = typing.TypeVar(
+    "_ExpType_dict", bound=typing.Dict[typing.Any, typing.Any]
+)
+_ExpType_list = typing.TypeVar("_ExpType_list", bound=typing.List[typing.Any])
 
 
 # Sentinel type for no expression passed
@@ -208,7 +212,7 @@ DBG_TENSOR_VAL_JOINER: str = ": "
 def tensor_info(tensor: typing.Any) -> str:
     from muutils.tensor_info import array_summary
 
-    return array_summary(tensor, **DBG_TENSOR_ARRAY_SUMMARY_DEFAULTS)
+    return array_summary(tensor, as_list=False, **DBG_TENSOR_ARRAY_SUMMARY_DEFAULTS)
 
 
 DBG_DICT_DEFAULTS: typing.Dict[str, typing.Union[bool, int, str]] = dict(
@@ -257,7 +261,7 @@ def dict_info(
     indent: str = DBG_DICT_DEFAULTS["indent"]  # type: ignore[assignment]
 
     # summary line
-    output: str = f"{indent*depth}<dict of len()={len_d}"
+    output: str = f"{indent * depth}<dict of len()={len_d}"
 
     if DBG_DICT_DEFAULTS["key_types"] and len_d > 0:
         key_types: typing.Set[str] = set(type(k).__name__ for k in d.keys())
@@ -289,7 +293,7 @@ def dict_info(
                     val_str = repr(v)
 
                 output += (
-                    f"\n{indent*(depth+1)}{key_str}{DBG_TENSOR_VAL_JOINER}{val_str}"
+                    f"\n{indent * (depth + 1)}{key_str}{DBG_TENSOR_VAL_JOINER}{val_str}"
                 )
 
     return output
@@ -310,7 +314,7 @@ def info_auto(
 
 
 def dbg_tensor(
-    tensor: typing.Any,  # numpy array or torch tensor
+    tensor: _ExpType,  # numpy array or torch tensor
 ) -> _ExpType:
     """dbg function for tensors, using tensor_info formatter."""
     return dbg(
@@ -321,8 +325,8 @@ def dbg_tensor(
 
 
 def dbg_dict(
-    d: typing.Dict[typing.Any, typing.Any],
-) -> _ExpType:
+    d: _ExpType_dict,
+) -> _ExpType_dict:
     """dbg function for dictionaries, using dict_info formatter."""
     return dbg(
         d,
@@ -332,7 +336,7 @@ def dbg_dict(
 
 
 def dbg_auto(
-    obj: typing.Any,
+    obj: _ExpType,
 ) -> _ExpType:
     """dbg function for automatic formatting based on type."""
     return dbg(
@@ -478,7 +482,7 @@ def grep_repr(
             for i in range(start_line, end_line):
                 line_text = lines[i]
                 if line_numbers:
-                    line_prefix = f"{i+1}:"
+                    line_prefix = f"{i + 1}:"
                     line_text = f"{line_prefix}{line_text}"
                 context_lines.append(_color_match(line_text))
 

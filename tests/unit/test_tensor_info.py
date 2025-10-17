@@ -215,29 +215,29 @@ def test_array_summary_comprehensive(
     if (hasattr(arr, "size") and arr.size == 0) or (
         torch is not None and isinstance(arr, torch.Tensor) and arr.numel() == 0
     ):
-        assert (
-            "empty" in summary_str.lower()
-        ), f"Expected 'empty' in summary for {input_type}"
+        assert "empty" in summary_str.lower(), (
+            f"Expected 'empty' in summary for {input_type}"
+        )
     else:
         # For non-empty arrays, if the options ask for dtype and shape info, they should appear.
         if options["dtype"]:
-            assert (
-                "dtype" in summary_str.lower()
-            ), f"Expected 'dtype' info in summary for {input_type}"
+            assert "dtype" in summary_str.lower(), (
+                f"Expected 'dtype' info in summary for {input_type}"
+            )
         if options["shape"]:
-            assert (
-                "shape" in summary_str.lower()
-            ), f"Expected 'shape' info in summary for {input_type}"
+            assert "shape" in summary_str.lower(), (
+                f"Expected 'shape' info in summary for {input_type}"
+            )
         # For torch inputs with device info requested.
         if torch is not None and isinstance(arr, torch.Tensor) and options["device"]:
-            assert (
-                "device" in summary_str.lower()
-            ), f"Expected 'device' info in summary for {input_type}"
+            assert "device" in summary_str.lower(), (
+                f"Expected 'device' info in summary for {input_type}"
+            )
         # For arrays with NaNs, if not empty, a warning should be present.
         if input_type.endswith("with_nan"):
-            assert (
-                "nan" in summary_str.lower() or "nAN" in summary_str
-            ), f"Expected NaN warning in summary for {input_type}"
+            assert "nan" in summary_str.lower() or "nAN" in summary_str, (
+                f"Expected NaN warning in summary for {input_type}"
+            )
         # Check that the equality character appears in the summary (or its an error)
         assert (
             options["eq_char"] in summary_str
@@ -249,17 +249,17 @@ def test_array_summary_comprehensive(
         ):
             # The symbol for mean depends on format.
             if options["fmt"] == "unicode":
-                assert (
-                    "μ" in summary_str
-                ), f"Expected unicode mean symbol in summary for {input_type}"
+                assert "μ" in summary_str, (
+                    f"Expected unicode mean symbol in summary for {input_type}"
+                )
             elif options["fmt"] == "latex":
-                assert (
-                    r"\mu" in summary_str
-                ), f"Expected latex mean symbol in summary for {input_type}"
+                assert r"\mu" in summary_str, (
+                    f"Expected latex mean symbol in summary for {input_type}"
+                )
             elif options["fmt"] == "ascii":
-                assert (
-                    "mean" in summary_str
-                ), f"Expected ascii 'mean' in summary for {input_type}"
+                assert "mean" in summary_str, (
+                    f"Expected ascii 'mean' in summary for {input_type}"
+                )
         # If sparkline is enabled and the input is non-empty (and not all NaN) then a sparkline should appear.
         if (
             options["sparkline"]
@@ -286,9 +286,9 @@ def test_array_summary_comprehensive(
 def test_array_summary_failure(bad_input: Any) -> None:
     """
     Test that array_summary returns a summary indicating failure or empty array
-    when given non–array inputs.
+    when given non-array inputs.
     """
-    summary = array_summary(bad_input)
+    summary = array_summary(bad_input)  # type: ignore[call-overload]
     summary_str: str = summary if isinstance(summary, str) else " ".join(summary)
     assert summary_str
 

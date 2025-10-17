@@ -53,6 +53,6 @@ def test_Kappa_doc_works_with_function_with_docstring():
     func.__doc__ = "This is a test function"
     result = Kappa(func)
     expected_doc = _BASE_DOC + "This is a test function"
-    assert (
-        result.doc == expected_doc
-    ), "doc was not correctly formatted with function with docstring"
+    assert result.doc == expected_doc, (
+        "doc was not correctly formatted with function with docstring"
+    )

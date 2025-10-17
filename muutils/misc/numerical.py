@@ -140,9 +140,9 @@ def str_to_numeric(
                 num_sign = -1
                 num = num[1:]
             # assert that both are digits
-            assert (
-                num.isdigit() and den.isdigit()
-            ), "numerator and denominator must be digits"
+            assert num.isdigit() and den.isdigit(), (
+                "numerator and denominator must be digits"
+            )
             # return the fraction
             result = num_sign * (
                 int(num) / int(den)

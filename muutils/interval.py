@@ -74,9 +74,9 @@ class Interval:
             if len(args) == 1 and isinstance(
                 args[0], (list, tuple, Sequence, Iterable)
             ):
-                assert (
-                    len(args[0]) == 2
-                ), "if arg is a list or tuple, it must have length 2"
+                assert len(args[0]) == 2, (
+                    "if arg is a list or tuple, it must have length 2"
+                )
                 self.lower = args[0][0]
                 self.upper = args[0][1]
                 # Determine closure type based on the container type
@@ -270,9 +270,9 @@ class Interval:
             # empty set
             if input_str == "∅":
                 return cls.get_empty()
-            assert input_str.startswith("{") and input_str.endswith(
-                "}"
-            ), "Invalid input string"
+            assert input_str.startswith("{") and input_str.endswith("}"), (
+                "Invalid input string"
+            )
             input_str_set_interior: str = input_str.strip("{}").strip()
             if len(input_str_set_interior) == 0:
                 return cls.get_empty()

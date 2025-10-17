@@ -53,7 +53,7 @@ def test_spinner_complex():
         """
         for i in range(normal_arg):
             time.sleep(0.1)  # Simulate some work
-            update_status(f"Step {i+1} of {normal_arg}")
+            update_status(f"Step {i + 1} of {normal_arg}")
         return "Function with status completed"
 
     # Run the example functions
@@ -75,7 +75,7 @@ def test_spinner_ctx_mgr():
     with SpinnerContext(message="Current value: ", update_interval=0.05) as spinner:
         for i in range(1):
             time.sleep(0.1)
-            spinner.update_value(f"Step {i+1}")
+            spinner.update_value(f"Step {i + 1}")
     print("Done!")
 
 
@@ -381,9 +381,9 @@ def test_spinner_width_calculations():
 
     # Check the actual content length (excluding \r)
     content_length = len(output_line.replace("\r", ""))
-    assert (
-        content_length <= narrow_width
-    ), f"Line too long: {content_length} > {narrow_width}"
+    assert content_length <= narrow_width, (
+        f"Line too long: {content_length} > {narrow_width}"
+    )
 
 
 def test_format_string_updates():

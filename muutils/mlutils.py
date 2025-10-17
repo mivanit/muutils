@@ -117,7 +117,9 @@ def get_checkpoint_paths_for_run(
      - a wildcard for the iteration number
     """
 
-    assert run_path.is_dir(), f"Model path {run_path} is not a directory (expect run directory, not model files)"
+    assert run_path.is_dir(), (
+        f"Model path {run_path} is not a directory (expect run directory, not model files)"
+    )
 
     return [
         (int(checkpoint_path.stem.split("_")[-1].split(".")[0]), checkpoint_path)
@@ -152,9 +154,9 @@ def register_method(
         else:
             method_name = custom_name
             method.__name__ = custom_name
-        assert (
-            method_name not in method_dict
-        ), f"Method name already exists in method_dict: {method_name = }, {list(method_dict.keys()) = }"
+        assert method_name not in method_dict, (
+            f"Method name already exists in method_dict: {method_name = }, {list(method_dict.keys()) = }"
+        )
         method_dict[method_name] = method
         return method
 

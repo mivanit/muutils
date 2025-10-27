@@ -41,7 +41,7 @@
 		"numpy>1.24.4; python_version >= '3.9'",
 		"torch>=1.13.1,<2.5.0; python_version < '3.9'",
 		"torch>=1.13.1; python_version >= '3.9' and python_version < '3.13'",
-		"torch>=2.5.0; python_version >= '3.13'",
+		"torch>=2.5.0; python_version >= '3.13' and python_version < '3.14'",
 		"jaxtyping>=0.2.12",
 	]
 

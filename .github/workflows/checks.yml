@@ -58,7 +58,7 @@ jobs:
             numpy: "1.24.4"
           - group: "latest"
             torch: ""
-            numpy: ""            
+            numpy: ""
         exclude:
           - python: "3.12"
             pkg:
@@ -88,7 +88,7 @@ jobs:
         run: make setup
 
       - name: Install different pytorch version
-        if: ${{ matrix.pkg.torch != '' }}
+        if: ${{ matrix.pkg.torch != '' && matrix.python != '3.14' }}
         run: |
           uv pip install torch==${{ matrix.pkg.torch }}+cpu --extra-index-url https://download.pytorch.org/whl/cpu
       

@@ -51,7 +51,7 @@ jobs:
     # needs: [lint, check-deps] # for conditionally running this job
     strategy:
       matrix:
-        python: ["3.8", "3.9", "3.10", "3.11", "3.12", "3.13"]
+        python: ["3.8", "3.9", "3.10", "3.11", "3.12", "3.13", "3.14"]
         pkg:
           - group: "legacy"
             torch: "1.13.1"
@@ -64,6 +64,9 @@ jobs:
             pkg:
               group: "legacy"
           - python: "3.13"
+            pkg:
+              group: "legacy"
+          - python: "3.14"
             pkg:
               group: "legacy"
     

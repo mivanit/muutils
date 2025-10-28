@@ -22,6 +22,6 @@ from muutils.console_unicode import get_console_safe_str
 def test_get_console_safe_str(default, fallback, encoding, expected):
     with patch("locale.getpreferredencoding", return_value=encoding):
         result = get_console_safe_str(default, fallback)
-        assert (
-            result == expected
-        ), f"Test failed for default='{default}', fallback='{fallback}', encoding='{encoding}'. Expected '{expected}', got '{result}'."
+        assert result == expected, (
+            f"Test failed for default='{default}', fallback='{fallback}', encoding='{encoding}'. Expected '{expected}', got '{result}'."
+        )

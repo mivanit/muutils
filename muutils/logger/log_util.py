@@ -1,3 +1,4 @@
+from __future__ import annotations
 from muutils.jsonlines import jsonl_load_log
 
 
@@ -16,7 +17,7 @@ def gather_log(file: str) -> dict[str, list[dict]]:
     output: dict[str, list[dict]] = dict()
 
     for item in data:
-        stream: str = item.get("_stream", None)
+        stream: str = item.get("_stream", "default")
         if stream not in output:
             output[stream] = list()
         output[stream].append(item)

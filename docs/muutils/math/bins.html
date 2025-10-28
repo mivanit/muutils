@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="generator" content="pdoc 14.7.0"/>
+    <meta name="generator" content="pdoc 15.0.4"/>
     <title>muutils.math.bins API documentation</title>
 <link rel="stylesheet" href="../../resources/css/bootstrap-reboot.min.css"><link rel="stylesheet" href="../../resources/css/syntax-highlighting.css"><link rel="stylesheet" href="../../resources/css/theme.css"><link rel="stylesheet" href="../../resources/css/layout.css"><link rel="stylesheet" href="../../resources/css/content.css"><link rel="stylesheet" href="../../resources/css/custom.css"><script>
     window.MathJax = {
@@ -34,7 +34,7 @@
     }
 </style>
 <script type="module" defer>
-    import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs";
+    import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs";
 
     /* Re-invoke Mermaid when DOM content changes, for example during search. */
     document.addEventListener("DOMContentLoaded", () => {
@@ -46,7 +46,7 @@
 </script></head>
 <body>
 <div class="package-version">
-    docs for <a href="https://github.com/mivanit/muutils">muutils</a> v0.8.11<br>
+    docs for <a href="https://github.com/mivanit/muutils">muutils</a> v0.8.12<br>
 </div>
     <nav class="pdoc">
         <label id="navtoggle" for="togglestate" class="pdoc-button">
@@ -121,7 +121,7 @@
     </nav>
     <main class="pdoc">
             <section class="module-info">
-                        <a class="pdoc-button git-button" href="https://github.com/mivanit/muutils/blob/0.8.11/math/bins.py">View Source on GitHub</a>
+                        <a class="pdoc-button git-button" href="https://github.com/mivanit/muutils/blob/0.8.12/math/bins.py">View Source on GitHub</a>
                     <h1 class="modulename">
 <a href="./../../muutils.html">muutils</a><wbr>.<a href="./../math.html">math</a><wbr>.bins    </h1>
 
@@ -131,25 +131,25 @@
                         <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="mod-bins-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.11/math/bins.py#L0-L66" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/math/bins.py#L0-L66" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
         </div>
 
                 <br/>
-                        <div class="pdoc-code codehilite"><pre><span></span><span id="L-1"><a href="#L-1"><span class="linenos"> 1</span></a><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+                        <div class="pdoc-code codehilite"><pre><span></span><span id="L-1"><a href="#L-1"><span class="linenos"> 1</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
 </span><span id="L-2"><a href="#L-2"><span class="linenos"> 2</span></a>
-</span><span id="L-3"><a href="#L-3"><span class="linenos"> 3</span></a><span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span>
-</span><span id="L-4"><a href="#L-4"><span class="linenos"> 4</span></a><span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">cached_property</span>
-</span><span id="L-5"><a href="#L-5"><span class="linenos"> 5</span></a><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Literal</span>
+</span><span id="L-3"><a href="#L-3"><span class="linenos"> 3</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span>
+</span><span id="L-4"><a href="#L-4"><span class="linenos"> 4</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">functools</span><span class="w"> </span><span class="kn">import</span> <span class="n">cached_property</span>
+</span><span id="L-5"><a href="#L-5"><span class="linenos"> 5</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Literal</span>
 </span><span id="L-6"><a href="#L-6"><span class="linenos"> 6</span></a>
-</span><span id="L-7"><a href="#L-7"><span class="linenos"> 7</span></a><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-</span><span id="L-8"><a href="#L-8"><span class="linenos"> 8</span></a><span class="kn">from</span> <span class="nn">jaxtyping</span> <span class="kn">import</span> <span class="n">Float</span>
+</span><span id="L-7"><a href="#L-7"><span class="linenos"> 7</span></a><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+</span><span id="L-8"><a href="#L-8"><span class="linenos"> 8</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">jaxtyping</span><span class="w"> </span><span class="kn">import</span> <span class="n">Float</span>
 </span><span id="L-9"><a href="#L-9"><span class="linenos"> 9</span></a>
 </span><span id="L-10"><a href="#L-10"><span class="linenos">10</span></a>
 </span><span id="L-11"><a href="#L-11"><span class="linenos">11</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</span><span id="L-12"><a href="#L-12"><span class="linenos">12</span></a><span class="k">class</span> <span class="nc">Bins</span><span class="p">:</span>
+</span><span id="L-12"><a href="#L-12"><span class="linenos">12</span></a><span class="k">class</span><span class="w"> </span><span class="nc">Bins</span><span class="p">:</span>
 </span><span id="L-13"><a href="#L-13"><span class="linenos">13</span></a>    <span class="n">n_bins</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">32</span>
 </span><span id="L-14"><a href="#L-14"><span class="linenos">14</span></a>    <span class="n">start</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">0</span>
 </span><span id="L-15"><a href="#L-15"><span class="linenos">15</span></a>    <span class="n">stop</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span>
@@ -159,7 +159,7 @@
 </span><span id="L-19"><a href="#L-19"><span class="linenos">19</span></a>    <span class="n">_zero_in_small_start_log</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
 </span><span id="L-20"><a href="#L-20"><span class="linenos">20</span></a>
 </span><span id="L-21"><a href="#L-21"><span class="linenos">21</span></a>    <span class="nd">@cached_property</span>
-</span><span id="L-22"><a href="#L-22"><span class="linenos">22</span></a>    <span class="k">def</span> <span class="nf">edges</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Float</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="s2">&quot;n_bins+1&quot;</span><span class="p">]:</span>
+</span><span id="L-22"><a href="#L-22"><span class="linenos">22</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">edges</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Float</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="s2">&quot;n_bins+1&quot;</span><span class="p">]:</span>
 </span><span id="L-23"><a href="#L-23"><span class="linenos">23</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">scale</span> <span class="o">==</span> <span class="s2">&quot;lin&quot;</span><span class="p">:</span>
 </span><span id="L-24"><a href="#L-24"><span class="linenos">24</span></a>            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">start</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">stop</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_bins</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
 </span><span id="L-25"><a href="#L-25"><span class="linenos">25</span></a>        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">scale</span> <span class="o">==</span> <span class="s2">&quot;log&quot;</span><span class="p">:</span>
@@ -193,10 +193,10 @@
 </span><span id="L-53"><a href="#L-53"><span class="linenos">53</span></a>            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Invalid scale </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">scale</span><span class="si">}</span><span class="s2">, expected lin or log&quot;</span><span class="p">)</span>
 </span><span id="L-54"><a href="#L-54"><span class="linenos">54</span></a>
 </span><span id="L-55"><a href="#L-55"><span class="linenos">55</span></a>    <span class="nd">@cached_property</span>
-</span><span id="L-56"><a href="#L-56"><span class="linenos">56</span></a>    <span class="k">def</span> <span class="nf">centers</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Float</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="s2">&quot;n_bins&quot;</span><span class="p">]:</span>
+</span><span id="L-56"><a href="#L-56"><span class="linenos">56</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">centers</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Float</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="s2">&quot;n_bins&quot;</span><span class="p">]:</span>
 </span><span id="L-57"><a href="#L-57"><span class="linenos">57</span></a>        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">edges</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span> <span class="o">/</span> <span class="mi">2</span>
 </span><span id="L-58"><a href="#L-58"><span class="linenos">58</span></a>
-</span><span id="L-59"><a href="#L-59"><span class="linenos">59</span></a>    <span class="k">def</span> <span class="nf">changed_n_bins_copy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_bins</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Bins&quot;</span><span class="p">:</span>
+</span><span id="L-59"><a href="#L-59"><span class="linenos">59</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">changed_n_bins_copy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_bins</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Bins&quot;</span><span class="p">:</span>
 </span><span id="L-60"><a href="#L-60"><span class="linenos">60</span></a>        <span class="k">return</span> <span class="n">Bins</span><span class="p">(</span>
 </span><span id="L-61"><a href="#L-61"><span class="linenos">61</span></a>            <span class="n">n_bins</span><span class="o">=</span><span class="n">n_bins</span><span class="p">,</span>
 </span><span id="L-62"><a href="#L-62"><span class="linenos">62</span></a>            <span class="n">start</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">start</span><span class="p">,</span>
@@ -221,7 +221,7 @@
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="Bins-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.11/math/bins.py#L11-L67" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/math/bins.py#L11-L67" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -230,7 +230,7 @@
     </div>
     <a class="headerlink" href="#Bins"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Bins-12"><a href="#Bins-12"><span class="linenos">12</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</span><span id="Bins-13"><a href="#Bins-13"><span class="linenos">13</span></a><span class="k">class</span> <span class="nc">Bins</span><span class="p">:</span>
+</span><span id="Bins-13"><a href="#Bins-13"><span class="linenos">13</span></a><span class="k">class</span><span class="w"> </span><span class="nc">Bins</span><span class="p">:</span>
 </span><span id="Bins-14"><a href="#Bins-14"><span class="linenos">14</span></a>    <span class="n">n_bins</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">32</span>
 </span><span id="Bins-15"><a href="#Bins-15"><span class="linenos">15</span></a>    <span class="n">start</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">0</span>
 </span><span id="Bins-16"><a href="#Bins-16"><span class="linenos">16</span></a>    <span class="n">stop</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span>
@@ -240,7 +240,7 @@
 </span><span id="Bins-20"><a href="#Bins-20"><span class="linenos">20</span></a>    <span class="n">_zero_in_small_start_log</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
 </span><span id="Bins-21"><a href="#Bins-21"><span class="linenos">21</span></a>
 </span><span id="Bins-22"><a href="#Bins-22"><span class="linenos">22</span></a>    <span class="nd">@cached_property</span>
-</span><span id="Bins-23"><a href="#Bins-23"><span class="linenos">23</span></a>    <span class="k">def</span> <span class="nf">edges</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Float</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="s2">&quot;n_bins+1&quot;</span><span class="p">]:</span>
+</span><span id="Bins-23"><a href="#Bins-23"><span class="linenos">23</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">edges</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Float</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="s2">&quot;n_bins+1&quot;</span><span class="p">]:</span>
 </span><span id="Bins-24"><a href="#Bins-24"><span class="linenos">24</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">scale</span> <span class="o">==</span> <span class="s2">&quot;lin&quot;</span><span class="p">:</span>
 </span><span id="Bins-25"><a href="#Bins-25"><span class="linenos">25</span></a>            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">start</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">stop</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_bins</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
 </span><span id="Bins-26"><a href="#Bins-26"><span class="linenos">26</span></a>        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">scale</span> <span class="o">==</span> <span class="s2">&quot;log&quot;</span><span class="p">:</span>
@@ -274,10 +274,10 @@
 </span><span id="Bins-54"><a href="#Bins-54"><span class="linenos">54</span></a>            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Invalid scale </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">scale</span><span class="si">}</span><span class="s2">, expected lin or log&quot;</span><span class="p">)</span>
 </span><span id="Bins-55"><a href="#Bins-55"><span class="linenos">55</span></a>
 </span><span id="Bins-56"><a href="#Bins-56"><span class="linenos">56</span></a>    <span class="nd">@cached_property</span>
-</span><span id="Bins-57"><a href="#Bins-57"><span class="linenos">57</span></a>    <span class="k">def</span> <span class="nf">centers</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Float</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="s2">&quot;n_bins&quot;</span><span class="p">]:</span>
+</span><span id="Bins-57"><a href="#Bins-57"><span class="linenos">57</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">centers</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Float</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="s2">&quot;n_bins&quot;</span><span class="p">]:</span>
 </span><span id="Bins-58"><a href="#Bins-58"><span class="linenos">58</span></a>        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">edges</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span> <span class="o">/</span> <span class="mi">2</span>
 </span><span id="Bins-59"><a href="#Bins-59"><span class="linenos">59</span></a>
-</span><span id="Bins-60"><a href="#Bins-60"><span class="linenos">60</span></a>    <span class="k">def</span> <span class="nf">changed_n_bins_copy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_bins</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Bins&quot;</span><span class="p">:</span>
+</span><span id="Bins-60"><a href="#Bins-60"><span class="linenos">60</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">changed_n_bins_copy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_bins</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Bins&quot;</span><span class="p">:</span>
 </span><span id="Bins-61"><a href="#Bins-61"><span class="linenos">61</span></a>        <span class="k">return</span> <span class="n">Bins</span><span class="p">(</span>
 </span><span id="Bins-62"><a href="#Bins-62"><span class="linenos">62</span></a>            <span class="n">n_bins</span><span class="o">=</span><span class="n">n_bins</span><span class="p">,</span>
 </span><span id="Bins-63"><a href="#Bins-63"><span class="linenos">63</span></a>            <span class="n">start</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">start</span><span class="p">,</span>
@@ -359,7 +359,7 @@
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="Bins.edges-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.11/math/bins.py#L21-L53" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/math/bins.py#L21-L53" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -368,7 +368,7 @@
     </div>
     <a class="headerlink" href="#Bins.edges"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Bins.edges-22"><a href="#Bins.edges-22"><span class="linenos">22</span></a>    <span class="nd">@cached_property</span>
-</span><span id="Bins.edges-23"><a href="#Bins.edges-23"><span class="linenos">23</span></a>    <span class="k">def</span> <span class="nf">edges</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Float</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="s2">&quot;n_bins+1&quot;</span><span class="p">]:</span>
+</span><span id="Bins.edges-23"><a href="#Bins.edges-23"><span class="linenos">23</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">edges</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Float</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="s2">&quot;n_bins+1&quot;</span><span class="p">]:</span>
 </span><span id="Bins.edges-24"><a href="#Bins.edges-24"><span class="linenos">24</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">scale</span> <span class="o">==</span> <span class="s2">&quot;lin&quot;</span><span class="p">:</span>
 </span><span id="Bins.edges-25"><a href="#Bins.edges-25"><span class="linenos">25</span></a>            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">start</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">stop</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_bins</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
 </span><span id="Bins.edges-26"><a href="#Bins.edges-26"><span class="linenos">26</span></a>        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">scale</span> <span class="o">==</span> <span class="s2">&quot;log&quot;</span><span class="p">:</span>
@@ -414,7 +414,7 @@
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="Bins.centers-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.11/math/bins.py#L55-L57" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/math/bins.py#L55-L57" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -423,7 +423,7 @@
     </div>
     <a class="headerlink" href="#Bins.centers"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Bins.centers-56"><a href="#Bins.centers-56"><span class="linenos">56</span></a>    <span class="nd">@cached_property</span>
-</span><span id="Bins.centers-57"><a href="#Bins.centers-57"><span class="linenos">57</span></a>    <span class="k">def</span> <span class="nf">centers</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Float</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="s2">&quot;n_bins&quot;</span><span class="p">]:</span>
+</span><span id="Bins.centers-57"><a href="#Bins.centers-57"><span class="linenos">57</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">centers</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Float</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="s2">&quot;n_bins&quot;</span><span class="p">]:</span>
 </span><span id="Bins.centers-58"><a href="#Bins.centers-58"><span class="linenos">58</span></a>        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">edges</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span> <span class="o">/</span> <span class="mi">2</span>
 </span></pre></div>
 
@@ -441,7 +441,7 @@
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="Bins.changed_n_bins_copy-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.11/math/bins.py#L59-L67" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/math/bins.py#L59-L67" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -449,7 +449,7 @@
 
     </div>
     <a class="headerlink" href="#Bins.changed_n_bins_copy"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Bins.changed_n_bins_copy-60"><a href="#Bins.changed_n_bins_copy-60"><span class="linenos">60</span></a>    <span class="k">def</span> <span class="nf">changed_n_bins_copy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_bins</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Bins&quot;</span><span class="p">:</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Bins.changed_n_bins_copy-60"><a href="#Bins.changed_n_bins_copy-60"><span class="linenos">60</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">changed_n_bins_copy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_bins</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Bins&quot;</span><span class="p">:</span>
 </span><span id="Bins.changed_n_bins_copy-61"><a href="#Bins.changed_n_bins_copy-61"><span class="linenos">61</span></a>        <span class="k">return</span> <span class="n">Bins</span><span class="p">(</span>
 </span><span id="Bins.changed_n_bins_copy-62"><a href="#Bins.changed_n_bins_copy-62"><span class="linenos">62</span></a>            <span class="n">n_bins</span><span class="o">=</span><span class="n">n_bins</span><span class="p">,</span>
 </span><span id="Bins.changed_n_bins_copy-63"><a href="#Bins.changed_n_bins_copy-63"><span class="linenos">63</span></a>            <span class="n">start</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">start</span><span class="p">,</span>

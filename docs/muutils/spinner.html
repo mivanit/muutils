@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="generator" content="pdoc 14.7.0"/>
+    <meta name="generator" content="pdoc 15.0.4"/>
     <title>muutils.spinner API documentation</title>
 <link rel="stylesheet" href="../resources/css/bootstrap-reboot.min.css"><link rel="stylesheet" href="../resources/css/syntax-highlighting.css"><link rel="stylesheet" href="../resources/css/theme.css"><link rel="stylesheet" href="../resources/css/layout.css"><link rel="stylesheet" href="../resources/css/content.css"><link rel="stylesheet" href="../resources/css/custom.css"><script>
     window.MathJax = {
@@ -34,7 +34,7 @@
     }
 </style>
 <script type="module" defer>
-    import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs";
+    import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs";
 
     /* Re-invoke Mermaid when DOM content changes, for example during search. */
     document.addEventListener("DOMContentLoaded", () => {
@@ -46,7 +46,7 @@
 </script></head>
 <body>
 <div class="package-version">
-    docs for <a href="https://github.com/mivanit/muutils">muutils</a> v0.8.11<br>
+    docs for <a href="https://github.com/mivanit/muutils">muutils</a> v0.8.12<br>
 </div>
     <nav class="pdoc">
         <label id="navtoggle" for="togglestate" class="pdoc-button">
@@ -208,7 +208,7 @@
     </nav>
     <main class="pdoc">
             <section class="module-info">
-                        <a class="pdoc-button git-button" href="https://github.com/mivanit/muutils/blob/0.8.11/spinner.py">View Source on GitHub</a>
+                        <a class="pdoc-button git-button" href="https://github.com/mivanit/muutils/blob/0.8.12/spinner.py">View Source on GitHub</a>
                     <h1 class="modulename">
 <a href="./../muutils.html">muutils</a><wbr>.spinner    </h1>
 
@@ -222,7 +222,7 @@
                         <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="mod-spinner-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.11/spinner.py#L0-L510" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/spinner.py#L0-L510" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -234,13 +234,13 @@
 </span><span id="L-3"><a href="#L-3"><span class="linenos">  3</span></a><span class="sd">using the base `Spinner` class while some code is running.</span>
 </span><span id="L-4"><a href="#L-4"><span class="linenos">  4</span></a><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="L-5"><a href="#L-5"><span class="linenos">  5</span></a>
-</span><span id="L-6"><a href="#L-6"><span class="linenos">  6</span></a><span class="kn">import</span> <span class="nn">os</span>
-</span><span id="L-7"><a href="#L-7"><span class="linenos">  7</span></a><span class="kn">import</span> <span class="nn">time</span>
-</span><span id="L-8"><a href="#L-8"><span class="linenos">  8</span></a><span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span>
-</span><span id="L-9"><a href="#L-9"><span class="linenos">  9</span></a><span class="kn">import</span> <span class="nn">threading</span>
-</span><span id="L-10"><a href="#L-10"><span class="linenos"> 10</span></a><span class="kn">import</span> <span class="nn">sys</span>
-</span><span id="L-11"><a href="#L-11"><span class="linenos"> 11</span></a><span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">wraps</span>
-</span><span id="L-12"><a href="#L-12"><span class="linenos"> 12</span></a><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="p">(</span>
+</span><span id="L-6"><a href="#L-6"><span class="linenos">  6</span></a><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+</span><span id="L-7"><a href="#L-7"><span class="linenos">  7</span></a><span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+</span><span id="L-8"><a href="#L-8"><span class="linenos">  8</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span>
+</span><span id="L-9"><a href="#L-9"><span class="linenos">  9</span></a><span class="kn">import</span><span class="w"> </span><span class="nn">threading</span>
+</span><span id="L-10"><a href="#L-10"><span class="linenos"> 10</span></a><span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+</span><span id="L-11"><a href="#L-11"><span class="linenos"> 11</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">functools</span><span class="w"> </span><span class="kn">import</span> <span class="n">wraps</span>
+</span><span id="L-12"><a href="#L-12"><span class="linenos"> 12</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
 </span><span id="L-13"><a href="#L-13"><span class="linenos"> 13</span></a>    <span class="n">List</span><span class="p">,</span>
 </span><span id="L-14"><a href="#L-14"><span class="linenos"> 14</span></a>    <span class="n">Dict</span><span class="p">,</span>
 </span><span id="L-15"><a href="#L-15"><span class="linenos"> 15</span></a>    <span class="n">Callable</span><span class="p">,</span>
@@ -253,23 +253,23 @@
 </span><span id="L-22"><a href="#L-22"><span class="linenos"> 22</span></a>    <span class="n">Union</span><span class="p">,</span>
 </span><span id="L-23"><a href="#L-23"><span class="linenos"> 23</span></a>    <span class="n">ContextManager</span><span class="p">,</span>
 </span><span id="L-24"><a href="#L-24"><span class="linenos"> 24</span></a><span class="p">)</span>
-</span><span id="L-25"><a href="#L-25"><span class="linenos"> 25</span></a><span class="kn">import</span> <span class="nn">warnings</span>
+</span><span id="L-25"><a href="#L-25"><span class="linenos"> 25</span></a><span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
 </span><span id="L-26"><a href="#L-26"><span class="linenos"> 26</span></a>
 </span><span id="L-27"><a href="#L-27"><span class="linenos"> 27</span></a><span class="n">DecoratedFunction</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s2">&quot;DecoratedFunction&quot;</span><span class="p">,</span> <span class="n">bound</span><span class="o">=</span><span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span>
 </span><span id="L-28"><a href="#L-28"><span class="linenos"> 28</span></a><span class="s2">&quot;Define a generic type for the decorated function&quot;</span>
 </span><span id="L-29"><a href="#L-29"><span class="linenos"> 29</span></a>
 </span><span id="L-30"><a href="#L-30"><span class="linenos"> 30</span></a>
 </span><span id="L-31"><a href="#L-31"><span class="linenos"> 31</span></a><span class="nd">@dataclass</span>
-</span><span id="L-32"><a href="#L-32"><span class="linenos"> 32</span></a><span class="k">class</span> <span class="nc">SpinnerConfig</span><span class="p">:</span>
+</span><span id="L-32"><a href="#L-32"><span class="linenos"> 32</span></a><span class="k">class</span><span class="w"> </span><span class="nc">SpinnerConfig</span><span class="p">:</span>
 </span><span id="L-33"><a href="#L-33"><span class="linenos"> 33</span></a>    <span class="n">working</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;|&quot;</span><span class="p">,</span> <span class="s2">&quot;/&quot;</span><span class="p">,</span> <span class="s2">&quot;-&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\\</span><span class="s2">&quot;</span><span class="p">])</span>
 </span><span id="L-34"><a href="#L-34"><span class="linenos"> 34</span></a>    <span class="n">success</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;✔️&quot;</span>
 </span><span id="L-35"><a href="#L-35"><span class="linenos"> 35</span></a>    <span class="n">fail</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;❌&quot;</span>
 </span><span id="L-36"><a href="#L-36"><span class="linenos"> 36</span></a>
-</span><span id="L-37"><a href="#L-37"><span class="linenos"> 37</span></a>    <span class="k">def</span> <span class="nf">is_ascii</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</span><span id="L-37"><a href="#L-37"><span class="linenos"> 37</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">is_ascii</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 </span><span id="L-38"><a href="#L-38"><span class="linenos"> 38</span></a>        <span class="s2">&quot;whether all characters are ascii&quot;</span>
 </span><span id="L-39"><a href="#L-39"><span class="linenos"> 39</span></a>        <span class="k">return</span> <span class="nb">all</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">isascii</span><span class="p">()</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">working</span> <span class="o">+</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">success</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">fail</span><span class="p">])</span>
 </span><span id="L-40"><a href="#L-40"><span class="linenos"> 40</span></a>
-</span><span id="L-41"><a href="#L-41"><span class="linenos"> 41</span></a>    <span class="k">def</span> <span class="nf">eq_lens</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</span><span id="L-41"><a href="#L-41"><span class="linenos"> 41</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">eq_lens</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 </span><span id="L-42"><a href="#L-42"><span class="linenos"> 42</span></a>        <span class="s2">&quot;whether all working characters are the same length&quot;</span>
 </span><span id="L-43"><a href="#L-43"><span class="linenos"> 43</span></a>        <span class="n">expected_len</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">working</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
 </span><span id="L-44"><a href="#L-44"><span class="linenos"> 44</span></a>        <span class="k">return</span> <span class="nb">all</span><span class="p">(</span>
@@ -279,7 +279,7 @@
 </span><span id="L-48"><a href="#L-48"><span class="linenos"> 48</span></a>            <span class="p">]</span>
 </span><span id="L-49"><a href="#L-49"><span class="linenos"> 49</span></a>        <span class="p">)</span>
 </span><span id="L-50"><a href="#L-50"><span class="linenos"> 50</span></a>
-</span><span id="L-51"><a href="#L-51"><span class="linenos"> 51</span></a>    <span class="k">def</span> <span class="nf">is_valid</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</span><span id="L-51"><a href="#L-51"><span class="linenos"> 51</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">is_valid</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 </span><span id="L-52"><a href="#L-52"><span class="linenos"> 52</span></a>        <span class="s2">&quot;whether the spinner config is valid&quot;</span>
 </span><span id="L-53"><a href="#L-53"><span class="linenos"> 53</span></a>        <span class="k">return</span> <span class="nb">all</span><span class="p">(</span>
 </span><span id="L-54"><a href="#L-54"><span class="linenos"> 54</span></a>            <span class="p">[</span>
@@ -291,12 +291,12 @@
 </span><span id="L-60"><a href="#L-60"><span class="linenos"> 60</span></a>            <span class="p">]</span>
 </span><span id="L-61"><a href="#L-61"><span class="linenos"> 61</span></a>        <span class="p">)</span>
 </span><span id="L-62"><a href="#L-62"><span class="linenos"> 62</span></a>
-</span><span id="L-63"><a href="#L-63"><span class="linenos"> 63</span></a>    <span class="k">def</span> <span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span id="L-63"><a href="#L-63"><span class="linenos"> 63</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 </span><span id="L-64"><a href="#L-64"><span class="linenos"> 64</span></a>        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_valid</span><span class="p">():</span>
 </span><span id="L-65"><a href="#L-65"><span class="linenos"> 65</span></a>            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Invalid SpinnerConfig: </span><span class="si">{</span><span class="bp">self</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 </span><span id="L-66"><a href="#L-66"><span class="linenos"> 66</span></a>
 </span><span id="L-67"><a href="#L-67"><span class="linenos"> 67</span></a>    <span class="nd">@classmethod</span>
-</span><span id="L-68"><a href="#L-68"><span class="linenos"> 68</span></a>    <span class="k">def</span> <span class="nf">from_any</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">arg</span><span class="p">:</span> <span class="s2">&quot;SpinnerConfigArg&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;SpinnerConfig&quot;</span><span class="p">:</span>
+</span><span id="L-68"><a href="#L-68"><span class="linenos"> 68</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">from_any</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">arg</span><span class="p">:</span> <span class="s2">&quot;SpinnerConfigArg&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;SpinnerConfig&quot;</span><span class="p">:</span>
 </span><span id="L-69"><a href="#L-69"><span class="linenos"> 69</span></a>        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
 </span><span id="L-70"><a href="#L-70"><span class="linenos"> 70</span></a>            <span class="k">return</span> <span class="n">SPINNERS</span><span class="p">[</span><span class="n">arg</span><span class="p">]</span>
 </span><span id="L-71"><a href="#L-71"><span class="linenos"> 71</span></a>        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
@@ -429,7 +429,7 @@
 </span><span id="L-198"><a href="#L-198"><span class="linenos">198</span></a><span class="c1"># spinner configurations</span>
 </span><span id="L-199"><a href="#L-199"><span class="linenos">199</span></a>
 </span><span id="L-200"><a href="#L-200"><span class="linenos">200</span></a>
-</span><span id="L-201"><a href="#L-201"><span class="linenos">201</span></a><span class="k">class</span> <span class="nc">Spinner</span><span class="p">:</span>
+</span><span id="L-201"><a href="#L-201"><span class="linenos">201</span></a><span class="k">class</span><span class="w"> </span><span class="nc">Spinner</span><span class="p">:</span>
 </span><span id="L-202"><a href="#L-202"><span class="linenos">202</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;displays a spinner, and optionally elapsed time and a mutable value while a function is running.</span>
 </span><span id="L-203"><a href="#L-203"><span class="linenos">203</span></a>
 </span><span id="L-204"><a href="#L-204"><span class="linenos">204</span></a><span class="sd">    # Parameters:</span>
@@ -490,7 +490,7 @@
 </span><span id="L-259"><a href="#L-259"><span class="linenos">259</span></a><span class="sd">    ```</span>
 </span><span id="L-260"><a href="#L-260"><span class="linenos">260</span></a><span class="sd">    &quot;&quot;&quot;</span>
 </span><span id="L-261"><a href="#L-261"><span class="linenos">261</span></a>
-</span><span id="L-262"><a href="#L-262"><span class="linenos">262</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+</span><span id="L-262"><a href="#L-262"><span class="linenos">262</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
 </span><span id="L-263"><a href="#L-263"><span class="linenos">263</span></a>        <span class="bp">self</span><span class="p">,</span>
 </span><span id="L-264"><a href="#L-264"><span class="linenos">264</span></a>        <span class="c1"># no positional args</span>
 </span><span id="L-265"><a href="#L-265"><span class="linenos">265</span></a>        <span class="o">*</span><span class="n">args</span><span class="p">,</span>
@@ -559,7 +559,7 @@
 </span><span id="L-328"><a href="#L-328"><span class="linenos">328</span></a>            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
 </span><span id="L-329"><a href="#L-329"><span class="linenos">329</span></a>                <span class="sa">f</span><span class="s2">&quot;Invalid format string: </span><span class="si">{</span><span class="n">format_string</span><span class="si">}</span><span class="s2">. Must take keys &quot;</span>
 </span><span id="L-330"><a href="#L-330"><span class="linenos">330</span></a>                <span class="o">+</span> <span class="s2">&quot;&#39;spinner: str&#39;, &#39;elapsed_time: float&#39;, &#39;message: str&#39;, and &#39;value: Any&#39;.&quot;</span>
-</span><span id="L-331"><a href="#L-331"><span class="linenos">331</span></a>            <span class="p">)</span> <span class="kn">from</span> <span class="nn">e</span>
+</span><span id="L-331"><a href="#L-331"><span class="linenos">331</span></a>            <span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">e</span>
 </span><span id="L-332"><a href="#L-332"><span class="linenos">332</span></a>
 </span><span id="L-333"><a href="#L-333"><span class="linenos">333</span></a>        <span class="c1"># init</span>
 </span><span id="L-334"><a href="#L-334"><span class="linenos">334</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">start_time</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">0</span>
@@ -580,7 +580,7 @@
 </span><span id="L-349"><a href="#L-349"><span class="linenos">349</span></a>        <span class="c1"># state of the spinner</span>
 </span><span id="L-350"><a href="#L-350"><span class="linenos">350</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;initialized&quot;</span><span class="p">,</span> <span class="s2">&quot;running&quot;</span><span class="p">,</span> <span class="s2">&quot;success&quot;</span><span class="p">,</span> <span class="s2">&quot;fail&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;initialized&quot;</span>
 </span><span id="L-351"><a href="#L-351"><span class="linenos">351</span></a>
-</span><span id="L-352"><a href="#L-352"><span class="linenos">352</span></a>    <span class="k">def</span> <span class="nf">spin</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="L-352"><a href="#L-352"><span class="linenos">352</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">spin</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 </span><span id="L-353"><a href="#L-353"><span class="linenos">353</span></a>        <span class="s2">&quot;Function to run in a separate thread, displaying the spinner and optional information&quot;</span>
 </span><span id="L-354"><a href="#L-354"><span class="linenos">354</span></a>        <span class="n">i</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
 </span><span id="L-355"><a href="#L-355"><span class="linenos">355</span></a>        <span class="k">while</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">stop_spinner</span><span class="o">.</span><span class="n">is_set</span><span class="p">():</span>
@@ -610,19 +610,19 @@
 </span><span id="L-379"><a href="#L-379"><span class="linenos">379</span></a>            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">update_interval</span><span class="p">)</span>
 </span><span id="L-380"><a href="#L-380"><span class="linenos">380</span></a>            <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
 </span><span id="L-381"><a href="#L-381"><span class="linenos">381</span></a>
-</span><span id="L-382"><a href="#L-382"><span class="linenos">382</span></a>    <span class="k">def</span> <span class="nf">update_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="L-382"><a href="#L-382"><span class="linenos">382</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">update_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 </span><span id="L-383"><a href="#L-383"><span class="linenos">383</span></a>        <span class="s2">&quot;Update the current value displayed by the spinner&quot;</span>
 </span><span id="L-384"><a href="#L-384"><span class="linenos">384</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">current_value</span> <span class="o">=</span> <span class="n">value</span>
 </span><span id="L-385"><a href="#L-385"><span class="linenos">385</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">value_changed</span> <span class="o">=</span> <span class="kc">True</span>
 </span><span id="L-386"><a href="#L-386"><span class="linenos">386</span></a>
-</span><span id="L-387"><a href="#L-387"><span class="linenos">387</span></a>    <span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="L-387"><a href="#L-387"><span class="linenos">387</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 </span><span id="L-388"><a href="#L-388"><span class="linenos">388</span></a>        <span class="s2">&quot;Start the spinner&quot;</span>
 </span><span id="L-389"><a href="#L-389"><span class="linenos">389</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">start_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
 </span><span id="L-390"><a href="#L-390"><span class="linenos">390</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">spinner_thread</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">spin</span><span class="p">)</span>
 </span><span id="L-391"><a href="#L-391"><span class="linenos">391</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">spinner_thread</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
 </span><span id="L-392"><a href="#L-392"><span class="linenos">392</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="s2">&quot;running&quot;</span>
 </span><span id="L-393"><a href="#L-393"><span class="linenos">393</span></a>
-</span><span id="L-394"><a href="#L-394"><span class="linenos">394</span></a>    <span class="k">def</span> <span class="nf">stop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">failed</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="L-394"><a href="#L-394"><span class="linenos">394</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">stop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">failed</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 </span><span id="L-395"><a href="#L-395"><span class="linenos">395</span></a>        <span class="s2">&quot;Stop the spinner&quot;</span>
 </span><span id="L-396"><a href="#L-396"><span class="linenos">396</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">output_stream</span><span class="o">.</span><span class="n">write</span><span class="p">(</span>
 </span><span id="L-397"><a href="#L-397"><span class="linenos">397</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">format_string</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
@@ -641,27 +641,27 @@
 </span><span id="L-410"><a href="#L-410"><span class="linenos">410</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="s2">&quot;fail&quot;</span> <span class="k">if</span> <span class="n">failed</span> <span class="k">else</span> <span class="s2">&quot;success&quot;</span>
 </span><span id="L-411"><a href="#L-411"><span class="linenos">411</span></a>
 </span><span id="L-412"><a href="#L-412"><span class="linenos">412</span></a>
-</span><span id="L-413"><a href="#L-413"><span class="linenos">413</span></a><span class="k">class</span> <span class="nc">NoOpContextManager</span><span class="p">(</span><span class="n">ContextManager</span><span class="p">):</span>
+</span><span id="L-413"><a href="#L-413"><span class="linenos">413</span></a><span class="k">class</span><span class="w"> </span><span class="nc">NoOpContextManager</span><span class="p">(</span><span class="n">ContextManager</span><span class="p">):</span>
 </span><span id="L-414"><a href="#L-414"><span class="linenos">414</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;A context manager that does nothing.&quot;&quot;&quot;</span>
 </span><span id="L-415"><a href="#L-415"><span class="linenos">415</span></a>
-</span><span id="L-416"><a href="#L-416"><span class="linenos">416</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+</span><span id="L-416"><a href="#L-416"><span class="linenos">416</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 </span><span id="L-417"><a href="#L-417"><span class="linenos">417</span></a>        <span class="k">pass</span>
 </span><span id="L-418"><a href="#L-418"><span class="linenos">418</span></a>
-</span><span id="L-419"><a href="#L-419"><span class="linenos">419</span></a>    <span class="k">def</span> <span class="fm">__enter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span id="L-419"><a href="#L-419"><span class="linenos">419</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__enter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 </span><span id="L-420"><a href="#L-420"><span class="linenos">420</span></a>        <span class="k">return</span> <span class="bp">self</span>
 </span><span id="L-421"><a href="#L-421"><span class="linenos">421</span></a>
-</span><span id="L-422"><a href="#L-422"><span class="linenos">422</span></a>    <span class="k">def</span> <span class="fm">__exit__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exc_type</span><span class="p">,</span> <span class="n">exc_value</span><span class="p">,</span> <span class="n">traceback</span><span class="p">):</span>
+</span><span id="L-422"><a href="#L-422"><span class="linenos">422</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__exit__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exc_type</span><span class="p">,</span> <span class="n">exc_value</span><span class="p">,</span> <span class="n">traceback</span><span class="p">):</span>
 </span><span id="L-423"><a href="#L-423"><span class="linenos">423</span></a>        <span class="k">pass</span>
 </span><span id="L-424"><a href="#L-424"><span class="linenos">424</span></a>
 </span><span id="L-425"><a href="#L-425"><span class="linenos">425</span></a>
-</span><span id="L-426"><a href="#L-426"><span class="linenos">426</span></a><span class="k">class</span> <span class="nc">SpinnerContext</span><span class="p">(</span><span class="n">Spinner</span><span class="p">,</span> <span class="n">ContextManager</span><span class="p">):</span>
+</span><span id="L-426"><a href="#L-426"><span class="linenos">426</span></a><span class="k">class</span><span class="w"> </span><span class="nc">SpinnerContext</span><span class="p">(</span><span class="n">Spinner</span><span class="p">,</span> <span class="n">ContextManager</span><span class="p">):</span>
 </span><span id="L-427"><a href="#L-427"><span class="linenos">427</span></a>    <span class="s2">&quot;see `Spinner` for parameters&quot;</span>
 </span><span id="L-428"><a href="#L-428"><span class="linenos">428</span></a>
-</span><span id="L-429"><a href="#L-429"><span class="linenos">429</span></a>    <span class="k">def</span> <span class="fm">__enter__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;SpinnerContext&quot;</span><span class="p">:</span>
+</span><span id="L-429"><a href="#L-429"><span class="linenos">429</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__enter__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;SpinnerContext&quot;</span><span class="p">:</span>
 </span><span id="L-430"><a href="#L-430"><span class="linenos">430</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
 </span><span id="L-431"><a href="#L-431"><span class="linenos">431</span></a>        <span class="k">return</span> <span class="bp">self</span>
 </span><span id="L-432"><a href="#L-432"><span class="linenos">432</span></a>
-</span><span id="L-433"><a href="#L-433"><span class="linenos">433</span></a>    <span class="k">def</span> <span class="fm">__exit__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exc_type</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">exc_val</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">exc_tb</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="L-433"><a href="#L-433"><span class="linenos">433</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__exit__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exc_type</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">exc_val</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">exc_tb</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 </span><span id="L-434"><a href="#L-434"><span class="linenos">434</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">stop</span><span class="p">(</span><span class="n">failed</span><span class="o">=</span><span class="n">exc_type</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span>
 </span><span id="L-435"><a href="#L-435"><span class="linenos">435</span></a>
 </span><span id="L-436"><a href="#L-436"><span class="linenos">436</span></a>
@@ -669,7 +669,7 @@
 </span><span id="L-438"><a href="#L-438"><span class="linenos">438</span></a>
 </span><span id="L-439"><a href="#L-439"><span class="linenos">439</span></a>
 </span><span id="L-440"><a href="#L-440"><span class="linenos">440</span></a><span class="c1"># TODO: type hint that the `update_status` kwarg is not needed when calling the function we just decorated</span>
-</span><span id="L-441"><a href="#L-441"><span class="linenos">441</span></a><span class="k">def</span> <span class="nf">spinner_decorator</span><span class="p">(</span>
+</span><span id="L-441"><a href="#L-441"><span class="linenos">441</span></a><span class="k">def</span><span class="w"> </span><span class="nf">spinner_decorator</span><span class="p">(</span>
 </span><span id="L-442"><a href="#L-442"><span class="linenos">442</span></a>    <span class="o">*</span><span class="n">args</span><span class="p">,</span>
 </span><span id="L-443"><a href="#L-443"><span class="linenos">443</span></a>    <span class="c1"># passed to `Spinner.__init__`</span>
 </span><span id="L-444"><a href="#L-444"><span class="linenos">444</span></a>    <span class="n">config</span><span class="p">:</span> <span class="n">SpinnerConfigArg</span> <span class="o">=</span> <span class="s2">&quot;default&quot;</span><span class="p">,</span>
@@ -701,9 +701,9 @@
 </span><span id="L-470"><a href="#L-470"><span class="linenos">470</span></a>            <span class="sa">f</span><span class="s2">&quot;spinner_decorator did not recognize these keyword arguments: </span><span class="si">{</span><span class="n">kwargs</span><span class="si">}</span><span class="s2">&quot;</span>
 </span><span id="L-471"><a href="#L-471"><span class="linenos">471</span></a>        <span class="p">)</span>
 </span><span id="L-472"><a href="#L-472"><span class="linenos">472</span></a>
-</span><span id="L-473"><a href="#L-473"><span class="linenos">473</span></a>    <span class="k">def</span> <span class="nf">decorator</span><span class="p">(</span><span class="n">func</span><span class="p">:</span> <span class="n">DecoratedFunction</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DecoratedFunction</span><span class="p">:</span>
+</span><span id="L-473"><a href="#L-473"><span class="linenos">473</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">decorator</span><span class="p">(</span><span class="n">func</span><span class="p">:</span> <span class="n">DecoratedFunction</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DecoratedFunction</span><span class="p">:</span>
 </span><span id="L-474"><a href="#L-474"><span class="linenos">474</span></a>        <span class="nd">@wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
-</span><span id="L-475"><a href="#L-475"><span class="linenos">475</span></a>        <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+</span><span id="L-475"><a href="#L-475"><span class="linenos">475</span></a>        <span class="k">def</span><span class="w"> </span><span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
 </span><span id="L-476"><a href="#L-476"><span class="linenos">476</span></a>            <span class="n">spinner</span><span class="p">:</span> <span class="n">Spinner</span> <span class="o">=</span> <span class="n">Spinner</span><span class="p">(</span>
 </span><span id="L-477"><a href="#L-477"><span class="linenos">477</span></a>                <span class="n">config</span><span class="o">=</span><span class="n">config</span><span class="p">,</span>
 </span><span id="L-478"><a href="#L-478"><span class="linenos">478</span></a>                <span class="n">update_interval</span><span class="o">=</span><span class="n">update_interval</span><span class="p">,</span>
@@ -770,7 +770,7 @@
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="SpinnerConfig-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.11/spinner.py#L31-L80" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/spinner.py#L31-L80" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -779,16 +779,16 @@
     </div>
     <a class="headerlink" href="#SpinnerConfig"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="SpinnerConfig-32"><a href="#SpinnerConfig-32"><span class="linenos">32</span></a><span class="nd">@dataclass</span>
-</span><span id="SpinnerConfig-33"><a href="#SpinnerConfig-33"><span class="linenos">33</span></a><span class="k">class</span> <span class="nc">SpinnerConfig</span><span class="p">:</span>
+</span><span id="SpinnerConfig-33"><a href="#SpinnerConfig-33"><span class="linenos">33</span></a><span class="k">class</span><span class="w"> </span><span class="nc">SpinnerConfig</span><span class="p">:</span>
 </span><span id="SpinnerConfig-34"><a href="#SpinnerConfig-34"><span class="linenos">34</span></a>    <span class="n">working</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;|&quot;</span><span class="p">,</span> <span class="s2">&quot;/&quot;</span><span class="p">,</span> <span class="s2">&quot;-&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\\</span><span class="s2">&quot;</span><span class="p">])</span>
 </span><span id="SpinnerConfig-35"><a href="#SpinnerConfig-35"><span class="linenos">35</span></a>    <span class="n">success</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;✔️&quot;</span>
 </span><span id="SpinnerConfig-36"><a href="#SpinnerConfig-36"><span class="linenos">36</span></a>    <span class="n">fail</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;❌&quot;</span>
 </span><span id="SpinnerConfig-37"><a href="#SpinnerConfig-37"><span class="linenos">37</span></a>
-</span><span id="SpinnerConfig-38"><a href="#SpinnerConfig-38"><span class="linenos">38</span></a>    <span class="k">def</span> <span class="nf">is_ascii</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</span><span id="SpinnerConfig-38"><a href="#SpinnerConfig-38"><span class="linenos">38</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">is_ascii</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 </span><span id="SpinnerConfig-39"><a href="#SpinnerConfig-39"><span class="linenos">39</span></a>        <span class="s2">&quot;whether all characters are ascii&quot;</span>
 </span><span id="SpinnerConfig-40"><a href="#SpinnerConfig-40"><span class="linenos">40</span></a>        <span class="k">return</span> <span class="nb">all</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">isascii</span><span class="p">()</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">working</span> <span class="o">+</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">success</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">fail</span><span class="p">])</span>
 </span><span id="SpinnerConfig-41"><a href="#SpinnerConfig-41"><span class="linenos">41</span></a>
-</span><span id="SpinnerConfig-42"><a href="#SpinnerConfig-42"><span class="linenos">42</span></a>    <span class="k">def</span> <span class="nf">eq_lens</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</span><span id="SpinnerConfig-42"><a href="#SpinnerConfig-42"><span class="linenos">42</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">eq_lens</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 </span><span id="SpinnerConfig-43"><a href="#SpinnerConfig-43"><span class="linenos">43</span></a>        <span class="s2">&quot;whether all working characters are the same length&quot;</span>
 </span><span id="SpinnerConfig-44"><a href="#SpinnerConfig-44"><span class="linenos">44</span></a>        <span class="n">expected_len</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">working</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
 </span><span id="SpinnerConfig-45"><a href="#SpinnerConfig-45"><span class="linenos">45</span></a>        <span class="k">return</span> <span class="nb">all</span><span class="p">(</span>
@@ -798,7 +798,7 @@
 </span><span id="SpinnerConfig-49"><a href="#SpinnerConfig-49"><span class="linenos">49</span></a>            <span class="p">]</span>
 </span><span id="SpinnerConfig-50"><a href="#SpinnerConfig-50"><span class="linenos">50</span></a>        <span class="p">)</span>
 </span><span id="SpinnerConfig-51"><a href="#SpinnerConfig-51"><span class="linenos">51</span></a>
-</span><span id="SpinnerConfig-52"><a href="#SpinnerConfig-52"><span class="linenos">52</span></a>    <span class="k">def</span> <span class="nf">is_valid</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</span><span id="SpinnerConfig-52"><a href="#SpinnerConfig-52"><span class="linenos">52</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">is_valid</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 </span><span id="SpinnerConfig-53"><a href="#SpinnerConfig-53"><span class="linenos">53</span></a>        <span class="s2">&quot;whether the spinner config is valid&quot;</span>
 </span><span id="SpinnerConfig-54"><a href="#SpinnerConfig-54"><span class="linenos">54</span></a>        <span class="k">return</span> <span class="nb">all</span><span class="p">(</span>
 </span><span id="SpinnerConfig-55"><a href="#SpinnerConfig-55"><span class="linenos">55</span></a>            <span class="p">[</span>
@@ -810,12 +810,12 @@
 </span><span id="SpinnerConfig-61"><a href="#SpinnerConfig-61"><span class="linenos">61</span></a>            <span class="p">]</span>
 </span><span id="SpinnerConfig-62"><a href="#SpinnerConfig-62"><span class="linenos">62</span></a>        <span class="p">)</span>
 </span><span id="SpinnerConfig-63"><a href="#SpinnerConfig-63"><span class="linenos">63</span></a>
-</span><span id="SpinnerConfig-64"><a href="#SpinnerConfig-64"><span class="linenos">64</span></a>    <span class="k">def</span> <span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span id="SpinnerConfig-64"><a href="#SpinnerConfig-64"><span class="linenos">64</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 </span><span id="SpinnerConfig-65"><a href="#SpinnerConfig-65"><span class="linenos">65</span></a>        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_valid</span><span class="p">():</span>
 </span><span id="SpinnerConfig-66"><a href="#SpinnerConfig-66"><span class="linenos">66</span></a>            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Invalid SpinnerConfig: </span><span class="si">{</span><span class="bp">self</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 </span><span id="SpinnerConfig-67"><a href="#SpinnerConfig-67"><span class="linenos">67</span></a>
 </span><span id="SpinnerConfig-68"><a href="#SpinnerConfig-68"><span class="linenos">68</span></a>    <span class="nd">@classmethod</span>
-</span><span id="SpinnerConfig-69"><a href="#SpinnerConfig-69"><span class="linenos">69</span></a>    <span class="k">def</span> <span class="nf">from_any</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">arg</span><span class="p">:</span> <span class="s2">&quot;SpinnerConfigArg&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;SpinnerConfig&quot;</span><span class="p">:</span>
+</span><span id="SpinnerConfig-69"><a href="#SpinnerConfig-69"><span class="linenos">69</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">from_any</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">arg</span><span class="p">:</span> <span class="s2">&quot;SpinnerConfigArg&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;SpinnerConfig&quot;</span><span class="p">:</span>
 </span><span id="SpinnerConfig-70"><a href="#SpinnerConfig-70"><span class="linenos">70</span></a>        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
 </span><span id="SpinnerConfig-71"><a href="#SpinnerConfig-71"><span class="linenos">71</span></a>            <span class="k">return</span> <span class="n">SPINNERS</span><span class="p">[</span><span class="n">arg</span><span class="p">]</span>
 </span><span id="SpinnerConfig-72"><a href="#SpinnerConfig-72"><span class="linenos">72</span></a>        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
@@ -890,7 +890,7 @@
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="SpinnerConfig.is_ascii-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.11/spinner.py#L37-L39" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/spinner.py#L37-L39" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -898,7 +898,7 @@
 
     </div>
     <a class="headerlink" href="#SpinnerConfig.is_ascii"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="SpinnerConfig.is_ascii-38"><a href="#SpinnerConfig.is_ascii-38"><span class="linenos">38</span></a>    <span class="k">def</span> <span class="nf">is_ascii</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="SpinnerConfig.is_ascii-38"><a href="#SpinnerConfig.is_ascii-38"><span class="linenos">38</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">is_ascii</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 </span><span id="SpinnerConfig.is_ascii-39"><a href="#SpinnerConfig.is_ascii-39"><span class="linenos">39</span></a>        <span class="s2">&quot;whether all characters are ascii&quot;</span>
 </span><span id="SpinnerConfig.is_ascii-40"><a href="#SpinnerConfig.is_ascii-40"><span class="linenos">40</span></a>        <span class="k">return</span> <span class="nb">all</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">isascii</span><span class="p">()</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">working</span> <span class="o">+</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">success</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">fail</span><span class="p">])</span>
 </span></pre></div>
@@ -919,7 +919,7 @@
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="SpinnerConfig.eq_lens-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.11/spinner.py#L41-L49" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/spinner.py#L41-L49" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -927,7 +927,7 @@
 
     </div>
     <a class="headerlink" href="#SpinnerConfig.eq_lens"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="SpinnerConfig.eq_lens-42"><a href="#SpinnerConfig.eq_lens-42"><span class="linenos">42</span></a>    <span class="k">def</span> <span class="nf">eq_lens</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="SpinnerConfig.eq_lens-42"><a href="#SpinnerConfig.eq_lens-42"><span class="linenos">42</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">eq_lens</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 </span><span id="SpinnerConfig.eq_lens-43"><a href="#SpinnerConfig.eq_lens-43"><span class="linenos">43</span></a>        <span class="s2">&quot;whether all working characters are the same length&quot;</span>
 </span><span id="SpinnerConfig.eq_lens-44"><a href="#SpinnerConfig.eq_lens-44"><span class="linenos">44</span></a>        <span class="n">expected_len</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">working</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
 </span><span id="SpinnerConfig.eq_lens-45"><a href="#SpinnerConfig.eq_lens-45"><span class="linenos">45</span></a>        <span class="k">return</span> <span class="nb">all</span><span class="p">(</span>
@@ -954,7 +954,7 @@
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="SpinnerConfig.is_valid-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.11/spinner.py#L51-L61" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/spinner.py#L51-L61" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -962,7 +962,7 @@
 
     </div>
     <a class="headerlink" href="#SpinnerConfig.is_valid"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="SpinnerConfig.is_valid-52"><a href="#SpinnerConfig.is_valid-52"><span class="linenos">52</span></a>    <span class="k">def</span> <span class="nf">is_valid</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="SpinnerConfig.is_valid-52"><a href="#SpinnerConfig.is_valid-52"><span class="linenos">52</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">is_valid</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 </span><span id="SpinnerConfig.is_valid-53"><a href="#SpinnerConfig.is_valid-53"><span class="linenos">53</span></a>        <span class="s2">&quot;whether the spinner config is valid&quot;</span>
 </span><span id="SpinnerConfig.is_valid-54"><a href="#SpinnerConfig.is_valid-54"><span class="linenos">54</span></a>        <span class="k">return</span> <span class="nb">all</span><span class="p">(</span>
 </span><span id="SpinnerConfig.is_valid-55"><a href="#SpinnerConfig.is_valid-55"><span class="linenos">55</span></a>            <span class="p">[</span>
@@ -992,7 +992,7 @@
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="SpinnerConfig.from_any-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.11/spinner.py#L67-L80" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/spinner.py#L67-L80" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -1001,7 +1001,7 @@
     </div>
     <a class="headerlink" href="#SpinnerConfig.from_any"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="SpinnerConfig.from_any-68"><a href="#SpinnerConfig.from_any-68"><span class="linenos">68</span></a>    <span class="nd">@classmethod</span>
-</span><span id="SpinnerConfig.from_any-69"><a href="#SpinnerConfig.from_any-69"><span class="linenos">69</span></a>    <span class="k">def</span> <span class="nf">from_any</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">arg</span><span class="p">:</span> <span class="s2">&quot;SpinnerConfigArg&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;SpinnerConfig&quot;</span><span class="p">:</span>
+</span><span id="SpinnerConfig.from_any-69"><a href="#SpinnerConfig.from_any-69"><span class="linenos">69</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">from_any</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">arg</span><span class="p">:</span> <span class="s2">&quot;SpinnerConfigArg&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;SpinnerConfig&quot;</span><span class="p">:</span>
 </span><span id="SpinnerConfig.from_any-70"><a href="#SpinnerConfig.from_any-70"><span class="linenos">70</span></a>        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
 </span><span id="SpinnerConfig.from_any-71"><a href="#SpinnerConfig.from_any-71"><span class="linenos">71</span></a>            <span class="k">return</span> <span class="n">SPINNERS</span><span class="p">[</span><span class="n">arg</span><span class="p">]</span>
 </span><span id="SpinnerConfig.from_any-72"><a href="#SpinnerConfig.from_any-72"><span class="linenos">72</span></a>        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
@@ -1056,7 +1056,7 @@
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="Spinner-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.11/spinner.py#L201-L410" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/spinner.py#L201-L410" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -1064,7 +1064,7 @@
 
     </div>
     <a class="headerlink" href="#Spinner"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Spinner-202"><a href="#Spinner-202"><span class="linenos">202</span></a><span class="k">class</span> <span class="nc">Spinner</span><span class="p">:</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Spinner-202"><a href="#Spinner-202"><span class="linenos">202</span></a><span class="k">class</span><span class="w"> </span><span class="nc">Spinner</span><span class="p">:</span>
 </span><span id="Spinner-203"><a href="#Spinner-203"><span class="linenos">203</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;displays a spinner, and optionally elapsed time and a mutable value while a function is running.</span>
 </span><span id="Spinner-204"><a href="#Spinner-204"><span class="linenos">204</span></a>
 </span><span id="Spinner-205"><a href="#Spinner-205"><span class="linenos">205</span></a><span class="sd">    # Parameters:</span>
@@ -1125,7 +1125,7 @@
 </span><span id="Spinner-260"><a href="#Spinner-260"><span class="linenos">260</span></a><span class="sd">    ```</span>
 </span><span id="Spinner-261"><a href="#Spinner-261"><span class="linenos">261</span></a><span class="sd">    &quot;&quot;&quot;</span>
 </span><span id="Spinner-262"><a href="#Spinner-262"><span class="linenos">262</span></a>
-</span><span id="Spinner-263"><a href="#Spinner-263"><span class="linenos">263</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+</span><span id="Spinner-263"><a href="#Spinner-263"><span class="linenos">263</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
 </span><span id="Spinner-264"><a href="#Spinner-264"><span class="linenos">264</span></a>        <span class="bp">self</span><span class="p">,</span>
 </span><span id="Spinner-265"><a href="#Spinner-265"><span class="linenos">265</span></a>        <span class="c1"># no positional args</span>
 </span><span id="Spinner-266"><a href="#Spinner-266"><span class="linenos">266</span></a>        <span class="o">*</span><span class="n">args</span><span class="p">,</span>
@@ -1194,7 +1194,7 @@
 </span><span id="Spinner-329"><a href="#Spinner-329"><span class="linenos">329</span></a>            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
 </span><span id="Spinner-330"><a href="#Spinner-330"><span class="linenos">330</span></a>                <span class="sa">f</span><span class="s2">&quot;Invalid format string: </span><span class="si">{</span><span class="n">format_string</span><span class="si">}</span><span class="s2">. Must take keys &quot;</span>
 </span><span id="Spinner-331"><a href="#Spinner-331"><span class="linenos">331</span></a>                <span class="o">+</span> <span class="s2">&quot;&#39;spinner: str&#39;, &#39;elapsed_time: float&#39;, &#39;message: str&#39;, and &#39;value: Any&#39;.&quot;</span>
-</span><span id="Spinner-332"><a href="#Spinner-332"><span class="linenos">332</span></a>            <span class="p">)</span> <span class="kn">from</span> <span class="nn">e</span>
+</span><span id="Spinner-332"><a href="#Spinner-332"><span class="linenos">332</span></a>            <span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">e</span>
 </span><span id="Spinner-333"><a href="#Spinner-333"><span class="linenos">333</span></a>
 </span><span id="Spinner-334"><a href="#Spinner-334"><span class="linenos">334</span></a>        <span class="c1"># init</span>
 </span><span id="Spinner-335"><a href="#Spinner-335"><span class="linenos">335</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">start_time</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">0</span>
@@ -1215,7 +1215,7 @@
 </span><span id="Spinner-350"><a href="#Spinner-350"><span class="linenos">350</span></a>        <span class="c1"># state of the spinner</span>
 </span><span id="Spinner-351"><a href="#Spinner-351"><span class="linenos">351</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;initialized&quot;</span><span class="p">,</span> <span class="s2">&quot;running&quot;</span><span class="p">,</span> <span class="s2">&quot;success&quot;</span><span class="p">,</span> <span class="s2">&quot;fail&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;initialized&quot;</span>
 </span><span id="Spinner-352"><a href="#Spinner-352"><span class="linenos">352</span></a>
-</span><span id="Spinner-353"><a href="#Spinner-353"><span class="linenos">353</span></a>    <span class="k">def</span> <span class="nf">spin</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="Spinner-353"><a href="#Spinner-353"><span class="linenos">353</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">spin</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 </span><span id="Spinner-354"><a href="#Spinner-354"><span class="linenos">354</span></a>        <span class="s2">&quot;Function to run in a separate thread, displaying the spinner and optional information&quot;</span>
 </span><span id="Spinner-355"><a href="#Spinner-355"><span class="linenos">355</span></a>        <span class="n">i</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
 </span><span id="Spinner-356"><a href="#Spinner-356"><span class="linenos">356</span></a>        <span class="k">while</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">stop_spinner</span><span class="o">.</span><span class="n">is_set</span><span class="p">():</span>
@@ -1245,19 +1245,19 @@
 </span><span id="Spinner-380"><a href="#Spinner-380"><span class="linenos">380</span></a>            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">update_interval</span><span class="p">)</span>
 </span><span id="Spinner-381"><a href="#Spinner-381"><span class="linenos">381</span></a>            <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
 </span><span id="Spinner-382"><a href="#Spinner-382"><span class="linenos">382</span></a>
-</span><span id="Spinner-383"><a href="#Spinner-383"><span class="linenos">383</span></a>    <span class="k">def</span> <span class="nf">update_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="Spinner-383"><a href="#Spinner-383"><span class="linenos">383</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">update_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 </span><span id="Spinner-384"><a href="#Spinner-384"><span class="linenos">384</span></a>        <span class="s2">&quot;Update the current value displayed by the spinner&quot;</span>
 </span><span id="Spinner-385"><a href="#Spinner-385"><span class="linenos">385</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">current_value</span> <span class="o">=</span> <span class="n">value</span>
 </span><span id="Spinner-386"><a href="#Spinner-386"><span class="linenos">386</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">value_changed</span> <span class="o">=</span> <span class="kc">True</span>
 </span><span id="Spinner-387"><a href="#Spinner-387"><span class="linenos">387</span></a>
-</span><span id="Spinner-388"><a href="#Spinner-388"><span class="linenos">388</span></a>    <span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="Spinner-388"><a href="#Spinner-388"><span class="linenos">388</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 </span><span id="Spinner-389"><a href="#Spinner-389"><span class="linenos">389</span></a>        <span class="s2">&quot;Start the spinner&quot;</span>
 </span><span id="Spinner-390"><a href="#Spinner-390"><span class="linenos">390</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">start_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
 </span><span id="Spinner-391"><a href="#Spinner-391"><span class="linenos">391</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">spinner_thread</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">spin</span><span class="p">)</span>
 </span><span id="Spinner-392"><a href="#Spinner-392"><span class="linenos">392</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">spinner_thread</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
 </span><span id="Spinner-393"><a href="#Spinner-393"><span class="linenos">393</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="s2">&quot;running&quot;</span>
 </span><span id="Spinner-394"><a href="#Spinner-394"><span class="linenos">394</span></a>
-</span><span id="Spinner-395"><a href="#Spinner-395"><span class="linenos">395</span></a>    <span class="k">def</span> <span class="nf">stop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">failed</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="Spinner-395"><a href="#Spinner-395"><span class="linenos">395</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">stop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">failed</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 </span><span id="Spinner-396"><a href="#Spinner-396"><span class="linenos">396</span></a>        <span class="s2">&quot;Stop the spinner&quot;</span>
 </span><span id="Spinner-397"><a href="#Spinner-397"><span class="linenos">397</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">output_stream</span><span class="o">.</span><span class="n">write</span><span class="p">(</span>
 </span><span id="Spinner-398"><a href="#Spinner-398"><span class="linenos">398</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">format_string</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
@@ -1339,7 +1339,7 @@ update the current value displayed by the spinner</li>
 
 <div class="pdoc-code codehilite">
 <pre><span></span><code><span class="nd">@spinner_decorator</span>
-<span class="k">def</span> <span class="nf">long_running_function</span><span class="p">():</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">long_running_function</span><span class="p">():</span>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">):</span>
         <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span>
         <span class="n">spinner</span><span class="o">.</span><span class="n">update_value</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Step </span><span class="si">{</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
@@ -1353,12 +1353,12 @@ update the current value displayed by the spinner</li>
                                         <input id="Spinner.__init__-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 <div class="attr function">
             
-        <span class="name">Spinner</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="o">*</span><span class="n">args</span>,</span><span class="param">	<span class="n">config</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n"><a href="#SpinnerConfig">SpinnerConfig</a></span><span class="p">,</span> <span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;default&#39;</span>,</span><span class="param">	<span class="n">update_interval</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.1</span>,</span><span class="param">	<span class="n">initial_value</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>,</span><span class="param">	<span class="n">message</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>,</span><span class="param">	<span class="n">format_string</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\r</span><span class="si">{spinner}</span><span class="s1"> (</span><span class="si">{elapsed_time:.2f}</span><span class="s1">s) </span><span class="si">{message}{value}</span><span class="s1">&#39;</span>,</span><span class="param">	output_stream: &lt;class &#x27;TextIO&#x27;&gt; = &lt;_io.StringIO object&gt;,</span><span class="param">	<span class="n">format_string_when_updated</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>,</span><span class="param">	<span class="n">spinner_chars</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">NoneType</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">spinner_complete</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span></span>)</span>
+        <span class="name">Spinner</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="o">*</span><span class="n">args</span>,</span><span class="param">	<span class="n">config</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n"><a href="#SpinnerConfig">SpinnerConfig</a></span><span class="p">,</span> <span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;default&#39;</span>,</span><span class="param">	<span class="n">update_interval</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.1</span>,</span><span class="param">	<span class="n">initial_value</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>,</span><span class="param">	<span class="n">message</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>,</span><span class="param">	<span class="n">format_string</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\r</span><span class="si">{spinner}</span><span class="s1"> (</span><span class="si">{elapsed_time:.2f}</span><span class="s1">s) </span><span class="si">{message}{value}</span><span class="s1">&#39;</span>,</span><span class="param">	output_stream: &lt;class &#x27;TextIO&#x27;&gt; = &lt;_io.TextIOWrapper encoding=&#x27;UTF-8&#x27;&gt;,</span><span class="param">	<span class="n">format_string_when_updated</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>,</span><span class="param">	<span class="n">spinner_chars</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">NoneType</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">spinner_complete</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span></span>)</span>
 
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="Spinner.__init__-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.11/spinner.py#L262-L350" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/spinner.py#L262-L350" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -1366,7 +1366,7 @@ update the current value displayed by the spinner</li>
 
     </div>
     <a class="headerlink" href="#Spinner.__init__"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Spinner.__init__-263"><a href="#Spinner.__init__-263"><span class="linenos">263</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Spinner.__init__-263"><a href="#Spinner.__init__-263"><span class="linenos">263</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
 </span><span id="Spinner.__init__-264"><a href="#Spinner.__init__-264"><span class="linenos">264</span></a>        <span class="bp">self</span><span class="p">,</span>
 </span><span id="Spinner.__init__-265"><a href="#Spinner.__init__-265"><span class="linenos">265</span></a>        <span class="c1"># no positional args</span>
 </span><span id="Spinner.__init__-266"><a href="#Spinner.__init__-266"><span class="linenos">266</span></a>        <span class="o">*</span><span class="n">args</span><span class="p">,</span>
@@ -1435,7 +1435,7 @@ update the current value displayed by the spinner</li>
 </span><span id="Spinner.__init__-329"><a href="#Spinner.__init__-329"><span class="linenos">329</span></a>            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
 </span><span id="Spinner.__init__-330"><a href="#Spinner.__init__-330"><span class="linenos">330</span></a>                <span class="sa">f</span><span class="s2">&quot;Invalid format string: </span><span class="si">{</span><span class="n">format_string</span><span class="si">}</span><span class="s2">. Must take keys &quot;</span>
 </span><span id="Spinner.__init__-331"><a href="#Spinner.__init__-331"><span class="linenos">331</span></a>                <span class="o">+</span> <span class="s2">&quot;&#39;spinner: str&#39;, &#39;elapsed_time: float&#39;, &#39;message: str&#39;, and &#39;value: Any&#39;.&quot;</span>
-</span><span id="Spinner.__init__-332"><a href="#Spinner.__init__-332"><span class="linenos">332</span></a>            <span class="p">)</span> <span class="kn">from</span> <span class="nn">e</span>
+</span><span id="Spinner.__init__-332"><a href="#Spinner.__init__-332"><span class="linenos">332</span></a>            <span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">e</span>
 </span><span id="Spinner.__init__-333"><a href="#Spinner.__init__-333"><span class="linenos">333</span></a>
 </span><span id="Spinner.__init__-334"><a href="#Spinner.__init__-334"><span class="linenos">334</span></a>        <span class="c1"># init</span>
 </span><span id="Spinner.__init__-335"><a href="#Spinner.__init__-335"><span class="linenos">335</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">start_time</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">0</span>
@@ -1626,7 +1626,7 @@ update the current value displayed by the spinner</li>
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="Spinner.spin-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.11/spinner.py#L352-L380" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/spinner.py#L352-L380" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -1634,7 +1634,7 @@ update the current value displayed by the spinner</li>
 
     </div>
     <a class="headerlink" href="#Spinner.spin"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Spinner.spin-353"><a href="#Spinner.spin-353"><span class="linenos">353</span></a>    <span class="k">def</span> <span class="nf">spin</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Spinner.spin-353"><a href="#Spinner.spin-353"><span class="linenos">353</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">spin</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 </span><span id="Spinner.spin-354"><a href="#Spinner.spin-354"><span class="linenos">354</span></a>        <span class="s2">&quot;Function to run in a separate thread, displaying the spinner and optional information&quot;</span>
 </span><span id="Spinner.spin-355"><a href="#Spinner.spin-355"><span class="linenos">355</span></a>        <span class="n">i</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
 </span><span id="Spinner.spin-356"><a href="#Spinner.spin-356"><span class="linenos">356</span></a>        <span class="k">while</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">stop_spinner</span><span class="o">.</span><span class="n">is_set</span><span class="p">():</span>
@@ -1681,7 +1681,7 @@ update the current value displayed by the spinner</li>
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="Spinner.update_value-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.11/spinner.py#L382-L385" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/spinner.py#L382-L385" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -1689,7 +1689,7 @@ update the current value displayed by the spinner</li>
 
     </div>
     <a class="headerlink" href="#Spinner.update_value"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Spinner.update_value-383"><a href="#Spinner.update_value-383"><span class="linenos">383</span></a>    <span class="k">def</span> <span class="nf">update_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Spinner.update_value-383"><a href="#Spinner.update_value-383"><span class="linenos">383</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">update_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 </span><span id="Spinner.update_value-384"><a href="#Spinner.update_value-384"><span class="linenos">384</span></a>        <span class="s2">&quot;Update the current value displayed by the spinner&quot;</span>
 </span><span id="Spinner.update_value-385"><a href="#Spinner.update_value-385"><span class="linenos">385</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">current_value</span> <span class="o">=</span> <span class="n">value</span>
 </span><span id="Spinner.update_value-386"><a href="#Spinner.update_value-386"><span class="linenos">386</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">value_changed</span> <span class="o">=</span> <span class="kc">True</span>
@@ -1711,7 +1711,7 @@ update the current value displayed by the spinner</li>
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="Spinner.start-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.11/spinner.py#L387-L392" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/spinner.py#L387-L392" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -1719,7 +1719,7 @@ update the current value displayed by the spinner</li>
 
     </div>
     <a class="headerlink" href="#Spinner.start"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Spinner.start-388"><a href="#Spinner.start-388"><span class="linenos">388</span></a>    <span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Spinner.start-388"><a href="#Spinner.start-388"><span class="linenos">388</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 </span><span id="Spinner.start-389"><a href="#Spinner.start-389"><span class="linenos">389</span></a>        <span class="s2">&quot;Start the spinner&quot;</span>
 </span><span id="Spinner.start-390"><a href="#Spinner.start-390"><span class="linenos">390</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">start_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
 </span><span id="Spinner.start-391"><a href="#Spinner.start-391"><span class="linenos">391</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">spinner_thread</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">spin</span><span class="p">)</span>
@@ -1743,7 +1743,7 @@ update the current value displayed by the spinner</li>
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="Spinner.stop-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.11/spinner.py#L394-L410" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/spinner.py#L394-L410" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -1751,7 +1751,7 @@ update the current value displayed by the spinner</li>
 
     </div>
     <a class="headerlink" href="#Spinner.stop"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Spinner.stop-395"><a href="#Spinner.stop-395"><span class="linenos">395</span></a>    <span class="k">def</span> <span class="nf">stop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">failed</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Spinner.stop-395"><a href="#Spinner.stop-395"><span class="linenos">395</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">stop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">failed</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 </span><span id="Spinner.stop-396"><a href="#Spinner.stop-396"><span class="linenos">396</span></a>        <span class="s2">&quot;Stop the spinner&quot;</span>
 </span><span id="Spinner.stop-397"><a href="#Spinner.stop-397"><span class="linenos">397</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">output_stream</span><span class="o">.</span><span class="n">write</span><span class="p">(</span>
 </span><span id="Spinner.stop-398"><a href="#Spinner.stop-398"><span class="linenos">398</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">format_string</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
@@ -1787,7 +1787,7 @@ update the current value displayed by the spinner</li>
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="NoOpContextManager-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.11/spinner.py#L413-L423" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/spinner.py#L413-L423" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -1795,16 +1795,16 @@ update the current value displayed by the spinner</li>
 
     </div>
     <a class="headerlink" href="#NoOpContextManager"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="NoOpContextManager-414"><a href="#NoOpContextManager-414"><span class="linenos">414</span></a><span class="k">class</span> <span class="nc">NoOpContextManager</span><span class="p">(</span><span class="n">ContextManager</span><span class="p">):</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="NoOpContextManager-414"><a href="#NoOpContextManager-414"><span class="linenos">414</span></a><span class="k">class</span><span class="w"> </span><span class="nc">NoOpContextManager</span><span class="p">(</span><span class="n">ContextManager</span><span class="p">):</span>
 </span><span id="NoOpContextManager-415"><a href="#NoOpContextManager-415"><span class="linenos">415</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;A context manager that does nothing.&quot;&quot;&quot;</span>
 </span><span id="NoOpContextManager-416"><a href="#NoOpContextManager-416"><span class="linenos">416</span></a>
-</span><span id="NoOpContextManager-417"><a href="#NoOpContextManager-417"><span class="linenos">417</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+</span><span id="NoOpContextManager-417"><a href="#NoOpContextManager-417"><span class="linenos">417</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 </span><span id="NoOpContextManager-418"><a href="#NoOpContextManager-418"><span class="linenos">418</span></a>        <span class="k">pass</span>
 </span><span id="NoOpContextManager-419"><a href="#NoOpContextManager-419"><span class="linenos">419</span></a>
-</span><span id="NoOpContextManager-420"><a href="#NoOpContextManager-420"><span class="linenos">420</span></a>    <span class="k">def</span> <span class="fm">__enter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span id="NoOpContextManager-420"><a href="#NoOpContextManager-420"><span class="linenos">420</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__enter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 </span><span id="NoOpContextManager-421"><a href="#NoOpContextManager-421"><span class="linenos">421</span></a>        <span class="k">return</span> <span class="bp">self</span>
 </span><span id="NoOpContextManager-422"><a href="#NoOpContextManager-422"><span class="linenos">422</span></a>
-</span><span id="NoOpContextManager-423"><a href="#NoOpContextManager-423"><span class="linenos">423</span></a>    <span class="k">def</span> <span class="fm">__exit__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exc_type</span><span class="p">,</span> <span class="n">exc_value</span><span class="p">,</span> <span class="n">traceback</span><span class="p">):</span>
+</span><span id="NoOpContextManager-423"><a href="#NoOpContextManager-423"><span class="linenos">423</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__exit__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exc_type</span><span class="p">,</span> <span class="n">exc_value</span><span class="p">,</span> <span class="n">traceback</span><span class="p">):</span>
 </span><span id="NoOpContextManager-424"><a href="#NoOpContextManager-424"><span class="linenos">424</span></a>        <span class="k">pass</span>
 </span></pre></div>
 
@@ -1822,7 +1822,7 @@ update the current value displayed by the spinner</li>
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="NoOpContextManager.__init__-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.11/spinner.py#L416-L417" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/spinner.py#L416-L417" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -1830,7 +1830,7 @@ update the current value displayed by the spinner</li>
 
     </div>
     <a class="headerlink" href="#NoOpContextManager.__init__"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="NoOpContextManager.__init__-417"><a href="#NoOpContextManager.__init__-417"><span class="linenos">417</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="NoOpContextManager.__init__-417"><a href="#NoOpContextManager.__init__-417"><span class="linenos">417</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 </span><span id="NoOpContextManager.__init__-418"><a href="#NoOpContextManager.__init__-418"><span class="linenos">418</span></a>        <span class="k">pass</span>
 </span></pre></div>
 
@@ -1849,7 +1849,7 @@ update the current value displayed by the spinner</li>
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="SpinnerContext-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.11/spinner.py#L426-L434" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/spinner.py#L426-L434" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -1857,14 +1857,14 @@ update the current value displayed by the spinner</li>
 
     </div>
     <a class="headerlink" href="#SpinnerContext"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="SpinnerContext-427"><a href="#SpinnerContext-427"><span class="linenos">427</span></a><span class="k">class</span> <span class="nc">SpinnerContext</span><span class="p">(</span><span class="n">Spinner</span><span class="p">,</span> <span class="n">ContextManager</span><span class="p">):</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="SpinnerContext-427"><a href="#SpinnerContext-427"><span class="linenos">427</span></a><span class="k">class</span><span class="w"> </span><span class="nc">SpinnerContext</span><span class="p">(</span><span class="n">Spinner</span><span class="p">,</span> <span class="n">ContextManager</span><span class="p">):</span>
 </span><span id="SpinnerContext-428"><a href="#SpinnerContext-428"><span class="linenos">428</span></a>    <span class="s2">&quot;see `Spinner` for parameters&quot;</span>
 </span><span id="SpinnerContext-429"><a href="#SpinnerContext-429"><span class="linenos">429</span></a>
-</span><span id="SpinnerContext-430"><a href="#SpinnerContext-430"><span class="linenos">430</span></a>    <span class="k">def</span> <span class="fm">__enter__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;SpinnerContext&quot;</span><span class="p">:</span>
+</span><span id="SpinnerContext-430"><a href="#SpinnerContext-430"><span class="linenos">430</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__enter__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;SpinnerContext&quot;</span><span class="p">:</span>
 </span><span id="SpinnerContext-431"><a href="#SpinnerContext-431"><span class="linenos">431</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
 </span><span id="SpinnerContext-432"><a href="#SpinnerContext-432"><span class="linenos">432</span></a>        <span class="k">return</span> <span class="bp">self</span>
 </span><span id="SpinnerContext-433"><a href="#SpinnerContext-433"><span class="linenos">433</span></a>
-</span><span id="SpinnerContext-434"><a href="#SpinnerContext-434"><span class="linenos">434</span></a>    <span class="k">def</span> <span class="fm">__exit__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exc_type</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">exc_val</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">exc_tb</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="SpinnerContext-434"><a href="#SpinnerContext-434"><span class="linenos">434</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__exit__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exc_type</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">exc_val</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">exc_tb</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 </span><span id="SpinnerContext-435"><a href="#SpinnerContext-435"><span class="linenos">435</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">stop</span><span class="p">(</span><span class="n">failed</span><span class="o">=</span><span class="n">exc_type</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span>
 </span></pre></div>
 
@@ -1931,7 +1931,7 @@ update the current value displayed by the spinner</li>
 
 <div class="pdoc-code codehilite">
 <pre><span></span><code><span class="nd">@spinner_decorator</span>
-<span class="k">def</span> <span class="nf">long_running_function</span><span class="p">():</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">long_running_function</span><span class="p">():</span>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">):</span>
         <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span>
         <span class="n">spinner</span><span class="o">.</span><span class="n">update_value</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Step </span><span class="si">{</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
@@ -1973,12 +1973,12 @@ update the current value displayed by the spinner</li>
 <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">spinner_decorator</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="o">*</span><span class="n">args</span>,</span><span class="param">	<span class="n">config</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n"><a href="#SpinnerConfig">SpinnerConfig</a></span><span class="p">,</span> <span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;default&#39;</span>,</span><span class="param">	<span class="n">update_interval</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.1</span>,</span><span class="param">	<span class="n">initial_value</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>,</span><span class="param">	<span class="n">message</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>,</span><span class="param">	<span class="n">format_string</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{spinner}</span><span class="s1"> (</span><span class="si">{elapsed_time:.2f}</span><span class="s1">s) </span><span class="si">{message}{value}</span><span class="s1">&#39;</span>,</span><span class="param">	output_stream: &lt;class &#x27;TextIO&#x27;&gt; = &lt;_io.StringIO object&gt;,</span><span class="param">	<span class="n">mutable_kwarg_key</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">spinner_chars</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">NoneType</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">spinner_complete</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="o">**</span><span class="n">kwargs</span></span><span class="return-annotation">) -> <span class="n">Callable</span><span class="p">[[</span><span class="o">~</span><span class="n">DecoratedFunction</span><span class="p">],</span> <span class="o">~</span><span class="n">DecoratedFunction</span><span class="p">]</span>:</span></span>
+        <span class="name">spinner_decorator</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="o">*</span><span class="n">args</span>,</span><span class="param">	<span class="n">config</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n"><a href="#SpinnerConfig">SpinnerConfig</a></span><span class="p">,</span> <span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;default&#39;</span>,</span><span class="param">	<span class="n">update_interval</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.1</span>,</span><span class="param">	<span class="n">initial_value</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>,</span><span class="param">	<span class="n">message</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>,</span><span class="param">	<span class="n">format_string</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{spinner}</span><span class="s1"> (</span><span class="si">{elapsed_time:.2f}</span><span class="s1">s) </span><span class="si">{message}{value}</span><span class="s1">&#39;</span>,</span><span class="param">	output_stream: &lt;class &#x27;TextIO&#x27;&gt; = &lt;_io.TextIOWrapper encoding=&#x27;UTF-8&#x27;&gt;,</span><span class="param">	<span class="n">mutable_kwarg_key</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">spinner_chars</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">NoneType</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">spinner_complete</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="o">**</span><span class="n">kwargs</span></span><span class="return-annotation">) -> <span class="n">Callable</span><span class="p">[[</span><span class="o">~</span><span class="n">DecoratedFunction</span><span class="p">],</span> <span class="o">~</span><span class="n">DecoratedFunction</span><span class="p">]</span>:</span></span>
 
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="spinner_decorator-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.11/spinner.py#L441-L508" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/spinner.py#L441-L508" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -1986,7 +1986,7 @@ update the current value displayed by the spinner</li>
 
     </div>
     <a class="headerlink" href="#spinner_decorator"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="spinner_decorator-442"><a href="#spinner_decorator-442"><span class="linenos">442</span></a><span class="k">def</span> <span class="nf">spinner_decorator</span><span class="p">(</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="spinner_decorator-442"><a href="#spinner_decorator-442"><span class="linenos">442</span></a><span class="k">def</span><span class="w"> </span><span class="nf">spinner_decorator</span><span class="p">(</span>
 </span><span id="spinner_decorator-443"><a href="#spinner_decorator-443"><span class="linenos">443</span></a>    <span class="o">*</span><span class="n">args</span><span class="p">,</span>
 </span><span id="spinner_decorator-444"><a href="#spinner_decorator-444"><span class="linenos">444</span></a>    <span class="c1"># passed to `Spinner.__init__`</span>
 </span><span id="spinner_decorator-445"><a href="#spinner_decorator-445"><span class="linenos">445</span></a>    <span class="n">config</span><span class="p">:</span> <span class="n">SpinnerConfigArg</span> <span class="o">=</span> <span class="s2">&quot;default&quot;</span><span class="p">,</span>
@@ -2018,9 +2018,9 @@ update the current value displayed by the spinner</li>
 </span><span id="spinner_decorator-471"><a href="#spinner_decorator-471"><span class="linenos">471</span></a>            <span class="sa">f</span><span class="s2">&quot;spinner_decorator did not recognize these keyword arguments: </span><span class="si">{</span><span class="n">kwargs</span><span class="si">}</span><span class="s2">&quot;</span>
 </span><span id="spinner_decorator-472"><a href="#spinner_decorator-472"><span class="linenos">472</span></a>        <span class="p">)</span>
 </span><span id="spinner_decorator-473"><a href="#spinner_decorator-473"><span class="linenos">473</span></a>
-</span><span id="spinner_decorator-474"><a href="#spinner_decorator-474"><span class="linenos">474</span></a>    <span class="k">def</span> <span class="nf">decorator</span><span class="p">(</span><span class="n">func</span><span class="p">:</span> <span class="n">DecoratedFunction</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DecoratedFunction</span><span class="p">:</span>
+</span><span id="spinner_decorator-474"><a href="#spinner_decorator-474"><span class="linenos">474</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">decorator</span><span class="p">(</span><span class="n">func</span><span class="p">:</span> <span class="n">DecoratedFunction</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DecoratedFunction</span><span class="p">:</span>
 </span><span id="spinner_decorator-475"><a href="#spinner_decorator-475"><span class="linenos">475</span></a>        <span class="nd">@wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
-</span><span id="spinner_decorator-476"><a href="#spinner_decorator-476"><span class="linenos">476</span></a>        <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+</span><span id="spinner_decorator-476"><a href="#spinner_decorator-476"><span class="linenos">476</span></a>        <span class="k">def</span><span class="w"> </span><span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
 </span><span id="spinner_decorator-477"><a href="#spinner_decorator-477"><span class="linenos">477</span></a>            <span class="n">spinner</span><span class="p">:</span> <span class="n">Spinner</span> <span class="o">=</span> <span class="n">Spinner</span><span class="p">(</span>
 </span><span id="spinner_decorator-478"><a href="#spinner_decorator-478"><span class="linenos">478</span></a>                <span class="n">config</span><span class="o">=</span><span class="n">config</span><span class="p">,</span>
 </span><span id="spinner_decorator-479"><a href="#spinner_decorator-479"><span class="linenos">479</span></a>                <span class="n">update_interval</span><span class="o">=</span><span class="n">update_interval</span><span class="p">,</span>
@@ -2119,7 +2119,7 @@ update the current value displayed by the spinner</li>
 
 <div class="pdoc-code codehilite">
 <pre><span></span><code><span class="nd">@spinner_decorator</span>
-<span class="k">def</span> <span class="nf">long_running_function</span><span class="p">():</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">long_running_function</span><span class="p">():</span>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">):</span>
         <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span>
         <span class="n">spinner</span><span class="o">.</span><span class="n">update_value</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Step </span><span class="si">{</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>

@@ -51,8 +51,18 @@ class SysInfo:
     @staticmethod
     def pip() -> dict:
         """installed packages info"""
-        # for some reason, python 3.8 thinks `Distribution` has no attribute `name`?
-        pckgs: list[tuple[str, str]] = [(x.name, x.version) for x in distributions()]  # type: ignore[attr-defined]
+        # in python <= 3.9  `Distribution` has no attribute `name`
+        pckgs: list[tuple[str, str]] = [
+            (
+                (
+                    x.metadata.get("Name", "<unknown>")  # type: ignore[attr-defined]
+                    if sys.version_info < (3, 10)
+                    else x.name  # type: ignore[attr-defined]
+                ),
+                x.version,
+            )
+            for x in distributions()
+        ]
         return {
             "n_packages": len(pckgs),
             "packages": pckgs,

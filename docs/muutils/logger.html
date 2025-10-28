@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="generator" content="pdoc 14.7.0"/>
+    <meta name="generator" content="pdoc 15.0.4"/>
     <title>muutils.logger API documentation</title>
 <link rel="stylesheet" href="../resources/css/bootstrap-reboot.min.css"><link rel="stylesheet" href="../resources/css/syntax-highlighting.css"><link rel="stylesheet" href="../resources/css/theme.css"><link rel="stylesheet" href="../resources/css/layout.css"><link rel="stylesheet" href="../resources/css/content.css"><link rel="stylesheet" href="../resources/css/custom.css"><script>
     window.MathJax = {
@@ -34,7 +34,7 @@
     }
 </style>
 <script type="module" defer>
-    import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs";
+    import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs";
 
     /* Re-invoke Mermaid when DOM content changes, for example during search. */
     document.addEventListener("DOMContentLoaded", () => {
@@ -46,7 +46,7 @@
 </script></head>
 <body>
 <div class="package-version">
-    docs for <a href="https://github.com/mivanit/muutils">muutils</a> v0.8.11<br>
+    docs for <a href="https://github.com/mivanit/muutils">muutils</a> v0.8.12<br>
 </div>
     <nav class="pdoc">
         <label id="navtoggle" for="togglestate" class="pdoc-button">
@@ -176,7 +176,7 @@
     </nav>
     <main class="pdoc">
             <section class="module-info">
-                        <a class="pdoc-button git-button" href="https://github.com/mivanit/muutils/blob/0.8.11/logger/__init__.py">View Source on GitHub</a>
+                        <a class="pdoc-button git-button" href="https://github.com/mivanit/muutils/blob/0.8.12/logger/__init__.py">View Source on GitHub</a>
                     <h1 class="modulename">
 <a href="./../muutils.html">muutils</a><wbr>.logger    </h1>
 
@@ -188,7 +188,7 @@
                         <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="mod-logger-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.11/logger/__init__.py#L0-L29" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/logger/__init__.py#L0-L29" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -197,12 +197,12 @@
                 <br/>
                         <div class="pdoc-code codehilite"><pre><span></span><span id="L-1"><a href="#L-1"><span class="linenos"> 1</span></a><span class="sd">&quot;&quot;&quot;(deprecated) experimenting with logging utilities&quot;&quot;&quot;</span>
 </span><span id="L-2"><a href="#L-2"><span class="linenos"> 2</span></a>
-</span><span id="L-3"><a href="#L-3"><span class="linenos"> 3</span></a><span class="kn">import</span> <span class="nn">warnings</span>
+</span><span id="L-3"><a href="#L-3"><span class="linenos"> 3</span></a><span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
 </span><span id="L-4"><a href="#L-4"><span class="linenos"> 4</span></a>
-</span><span id="L-5"><a href="#L-5"><span class="linenos"> 5</span></a><span class="kn">from</span> <span class="nn">muutils.logger.logger</span> <span class="kn">import</span> <span class="n">Logger</span>
-</span><span id="L-6"><a href="#L-6"><span class="linenos"> 6</span></a><span class="kn">from</span> <span class="nn">muutils.logger.loggingstream</span> <span class="kn">import</span> <span class="n">LoggingStream</span>
-</span><span id="L-7"><a href="#L-7"><span class="linenos"> 7</span></a><span class="kn">from</span> <span class="nn">muutils.logger.simplelogger</span> <span class="kn">import</span> <span class="n">SimpleLogger</span>
-</span><span id="L-8"><a href="#L-8"><span class="linenos"> 8</span></a><span class="kn">from</span> <span class="nn">muutils.logger.timing</span> <span class="kn">import</span> <span class="n">TimerContext</span>
+</span><span id="L-5"><a href="#L-5"><span class="linenos"> 5</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">muutils.logger.logger</span><span class="w"> </span><span class="kn">import</span> <span class="n">Logger</span>
+</span><span id="L-6"><a href="#L-6"><span class="linenos"> 6</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">muutils.logger.loggingstream</span><span class="w"> </span><span class="kn">import</span> <span class="n">LoggingStream</span>
+</span><span id="L-7"><a href="#L-7"><span class="linenos"> 7</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">muutils.logger.simplelogger</span><span class="w"> </span><span class="kn">import</span> <span class="n">SimpleLogger</span>
+</span><span id="L-8"><a href="#L-8"><span class="linenos"> 8</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">muutils.logger.timing</span><span class="w"> </span><span class="kn">import</span> <span class="n">TimerContext</span>
 </span><span id="L-9"><a href="#L-9"><span class="linenos"> 9</span></a>
 </span><span id="L-10"><a href="#L-10"><span class="linenos">10</span></a><span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
 </span><span id="L-11"><a href="#L-11"><span class="linenos">11</span></a>    <span class="ne">DeprecationWarning</span><span class="p">(</span>
@@ -240,7 +240,7 @@
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="Logger-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.11/logger/__init__.py#L40-L306" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/logger/__init__.py#L40-L306" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -248,7 +248,7 @@
 
     </div>
     <a class="headerlink" href="#Logger"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Logger-41"><a href="#Logger-41"><span class="linenos"> 41</span></a><span class="k">class</span> <span class="nc">Logger</span><span class="p">(</span><span class="n">SimpleLogger</span><span class="p">):</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Logger-41"><a href="#Logger-41"><span class="linenos"> 41</span></a><span class="k">class</span><span class="w"> </span><span class="nc">Logger</span><span class="p">(</span><span class="n">SimpleLogger</span><span class="p">):</span>
 </span><span id="Logger-42"><a href="#Logger-42"><span class="linenos"> 42</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;logger with more features, including log levels and streams</span>
 </span><span id="Logger-43"><a href="#Logger-43"><span class="linenos"> 43</span></a>
 </span><span id="Logger-44"><a href="#Logger-44"><span class="linenos"> 44</span></a><span class="sd">    # Parameters:</span>
@@ -279,7 +279,7 @@
 </span><span id="Logger-69"><a href="#Logger-69"><span class="linenos"> 69</span></a><span class="sd">            - `ValueError` : _description_</span>
 </span><span id="Logger-70"><a href="#Logger-70"><span class="linenos"> 70</span></a><span class="sd">    &quot;&quot;&quot;</span>
 </span><span id="Logger-71"><a href="#Logger-71"><span class="linenos"> 71</span></a>
-</span><span id="Logger-72"><a href="#Logger-72"><span class="linenos"> 72</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+</span><span id="Logger-72"><a href="#Logger-72"><span class="linenos"> 72</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
 </span><span id="Logger-73"><a href="#Logger-73"><span class="linenos"> 73</span></a>        <span class="bp">self</span><span class="p">,</span>
 </span><span id="Logger-74"><a href="#Logger-74"><span class="linenos"> 74</span></a>        <span class="n">log_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 </span><span id="Logger-75"><a href="#Logger-75"><span class="linenos"> 75</span></a>        <span class="n">log_file</span><span class="p">:</span> <span class="n">AnyIO</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -357,7 +357,7 @@
 </span><span id="Logger-147"><a href="#Logger-147"><span class="linenos">147</span></a>
 </span><span id="Logger-148"><a href="#Logger-148"><span class="linenos">148</span></a>        <span class="nb">print</span><span class="p">({</span><span class="n">k</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_streams</span><span class="o">.</span><span class="n">items</span><span class="p">()})</span>
 </span><span id="Logger-149"><a href="#Logger-149"><span class="linenos">149</span></a>
-</span><span id="Logger-150"><a href="#Logger-150"><span class="linenos">150</span></a>    <span class="k">def</span> <span class="nf">_exception_context</span><span class="p">(</span>
+</span><span id="Logger-150"><a href="#Logger-150"><span class="linenos">150</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_exception_context</span><span class="p">(</span>
 </span><span id="Logger-151"><a href="#Logger-151"><span class="linenos">151</span></a>        <span class="bp">self</span><span class="p">,</span>
 </span><span id="Logger-152"><a href="#Logger-152"><span class="linenos">152</span></a>        <span class="n">stream</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;error&quot;</span><span class="p">,</span>
 </span><span id="Logger-153"><a href="#Logger-153"><span class="linenos">153</span></a>        <span class="c1"># level: int = -256,</span>
@@ -366,7 +366,7 @@
 </span><span id="Logger-156"><a href="#Logger-156"><span class="linenos">156</span></a>        <span class="n">s</span><span class="p">:</span> <span class="n">LoggingStream</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_streams</span><span class="p">[</span><span class="n">stream</span><span class="p">]</span>
 </span><span id="Logger-157"><a href="#Logger-157"><span class="linenos">157</span></a>        <span class="k">return</span> <span class="n">ExceptionContext</span><span class="p">(</span><span class="n">stream</span><span class="o">=</span><span class="n">s</span><span class="p">)</span>
 </span><span id="Logger-158"><a href="#Logger-158"><span class="linenos">158</span></a>
-</span><span id="Logger-159"><a href="#Logger-159"><span class="linenos">159</span></a>    <span class="k">def</span> <span class="nf">log</span><span class="p">(</span>  <span class="c1"># type: ignore # yes, the signatures are different here.</span>
+</span><span id="Logger-159"><a href="#Logger-159"><span class="linenos">159</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">log</span><span class="p">(</span>  <span class="c1"># type: ignore # yes, the signatures are different here.</span>
 </span><span id="Logger-160"><a href="#Logger-160"><span class="linenos">160</span></a>        <span class="bp">self</span><span class="p">,</span>
 </span><span id="Logger-161"><a href="#Logger-161"><span class="linenos">161</span></a>        <span class="n">msg</span><span class="p">:</span> <span class="n">JSONitem</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 </span><span id="Logger-162"><a href="#Logger-162"><span class="linenos">162</span></a>        <span class="n">lvl</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -477,7 +477,7 @@
 </span><span id="Logger-267"><a href="#Logger-267"><span class="linenos">267</span></a>        <span class="k">if</span> <span class="n">_printed</span><span class="p">:</span>
 </span><span id="Logger-268"><a href="#Logger-268"><span class="linenos">268</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">flush_all</span><span class="p">()</span>
 </span><span id="Logger-269"><a href="#Logger-269"><span class="linenos">269</span></a>
-</span><span id="Logger-270"><a href="#Logger-270"><span class="linenos">270</span></a>    <span class="k">def</span> <span class="nf">log_elapsed_last</span><span class="p">(</span>
+</span><span id="Logger-270"><a href="#Logger-270"><span class="linenos">270</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">log_elapsed_last</span><span class="p">(</span>
 </span><span id="Logger-271"><a href="#Logger-271"><span class="linenos">271</span></a>        <span class="bp">self</span><span class="p">,</span>
 </span><span id="Logger-272"><a href="#Logger-272"><span class="linenos">272</span></a>        <span class="n">lvl</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 </span><span id="Logger-273"><a href="#Logger-273"><span class="linenos">273</span></a>        <span class="n">stream</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -496,7 +496,7 @@
 </span><span id="Logger-286"><a href="#Logger-286"><span class="linenos">286</span></a>                <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
 </span><span id="Logger-287"><a href="#Logger-287"><span class="linenos">287</span></a>            <span class="p">)</span>
 </span><span id="Logger-288"><a href="#Logger-288"><span class="linenos">288</span></a>
-</span><span id="Logger-289"><a href="#Logger-289"><span class="linenos">289</span></a>    <span class="k">def</span> <span class="nf">flush_all</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span id="Logger-289"><a href="#Logger-289"><span class="linenos">289</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">flush_all</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 </span><span id="Logger-290"><a href="#Logger-290"><span class="linenos">290</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;flush all streams&quot;&quot;&quot;</span>
 </span><span id="Logger-291"><a href="#Logger-291"><span class="linenos">291</span></a>
 </span><span id="Logger-292"><a href="#Logger-292"><span class="linenos">292</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_log_file_handle</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
@@ -505,15 +505,15 @@
 </span><span id="Logger-295"><a href="#Logger-295"><span class="linenos">295</span></a>            <span class="k">if</span> <span class="n">stream</span><span class="o">.</span><span class="n">handler</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
 </span><span id="Logger-296"><a href="#Logger-296"><span class="linenos">296</span></a>                <span class="n">stream</span><span class="o">.</span><span class="n">handler</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
 </span><span id="Logger-297"><a href="#Logger-297"><span class="linenos">297</span></a>
-</span><span id="Logger-298"><a href="#Logger-298"><span class="linenos">298</span></a>    <span class="k">def</span> <span class="fm">__getattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stream</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">:</span>
+</span><span id="Logger-298"><a href="#Logger-298"><span class="linenos">298</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__getattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stream</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">:</span>
 </span><span id="Logger-299"><a href="#Logger-299"><span class="linenos">299</span></a>        <span class="k">if</span> <span class="n">stream</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">):</span>
 </span><span id="Logger-300"><a href="#Logger-300"><span class="linenos">300</span></a>            <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;invalid stream name </span><span class="si">{</span><span class="n">stream</span><span class="si">}</span><span class="s2"> (no underscores)&quot;</span><span class="p">)</span>
 </span><span id="Logger-301"><a href="#Logger-301"><span class="linenos">301</span></a>        <span class="k">return</span> <span class="n">partial</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="p">,</span> <span class="n">stream</span><span class="o">=</span><span class="n">stream</span><span class="p">)</span>
 </span><span id="Logger-302"><a href="#Logger-302"><span class="linenos">302</span></a>
-</span><span id="Logger-303"><a href="#Logger-303"><span class="linenos">303</span></a>    <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stream</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+</span><span id="Logger-303"><a href="#Logger-303"><span class="linenos">303</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stream</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
 </span><span id="Logger-304"><a href="#Logger-304"><span class="linenos">304</span></a>        <span class="k">return</span> <span class="n">partial</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="p">,</span> <span class="n">stream</span><span class="o">=</span><span class="n">stream</span><span class="p">)</span>
 </span><span id="Logger-305"><a href="#Logger-305"><span class="linenos">305</span></a>
-</span><span id="Logger-306"><a href="#Logger-306"><span class="linenos">306</span></a>    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+</span><span id="Logger-306"><a href="#Logger-306"><span class="linenos">306</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 </span><span id="Logger-307"><a href="#Logger-307"><span class="linenos">307</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 </span></pre></div>
 
@@ -566,7 +566,7 @@ whether to keep the last message time
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="Logger.__init__-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.11/logger/__init__.py#L71-L147" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/logger/__init__.py#L71-L147" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -574,7 +574,7 @@ whether to keep the last message time
 
     </div>
     <a class="headerlink" href="#Logger.__init__"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Logger.__init__-72"><a href="#Logger.__init__-72"><span class="linenos"> 72</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Logger.__init__-72"><a href="#Logger.__init__-72"><span class="linenos"> 72</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
 </span><span id="Logger.__init__-73"><a href="#Logger.__init__-73"><span class="linenos"> 73</span></a>        <span class="bp">self</span><span class="p">,</span>
 </span><span id="Logger.__init__-74"><a href="#Logger.__init__-74"><span class="linenos"> 74</span></a>        <span class="n">log_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 </span><span id="Logger.__init__-75"><a href="#Logger.__init__-75"><span class="linenos"> 75</span></a>        <span class="n">log_file</span><span class="p">:</span> <span class="n">AnyIO</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -667,7 +667,7 @@ whether to keep the last message time
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="Logger.log-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.11/logger/__init__.py#L158-L267" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/logger/__init__.py#L158-L267" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -675,7 +675,7 @@ whether to keep the last message time
 
     </div>
     <a class="headerlink" href="#Logger.log"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Logger.log-159"><a href="#Logger.log-159"><span class="linenos">159</span></a>    <span class="k">def</span> <span class="nf">log</span><span class="p">(</span>  <span class="c1"># type: ignore # yes, the signatures are different here.</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Logger.log-159"><a href="#Logger.log-159"><span class="linenos">159</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">log</span><span class="p">(</span>  <span class="c1"># type: ignore # yes, the signatures are different here.</span>
 </span><span id="Logger.log-160"><a href="#Logger.log-160"><span class="linenos">160</span></a>        <span class="bp">self</span><span class="p">,</span>
 </span><span id="Logger.log-161"><a href="#Logger.log-161"><span class="linenos">161</span></a>        <span class="n">msg</span><span class="p">:</span> <span class="n">JSONitem</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 </span><span id="Logger.log-162"><a href="#Logger.log-162"><span class="linenos">162</span></a>        <span class="n">lvl</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -819,7 +819,7 @@ whether to log to a stream (defaults to <code>None</code>), which logs to the de
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="Logger.log_elapsed_last-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.11/logger/__init__.py#L269-L286" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/logger/__init__.py#L269-L286" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -827,7 +827,7 @@ whether to log to a stream (defaults to <code>None</code>), which logs to the de
 
     </div>
     <a class="headerlink" href="#Logger.log_elapsed_last"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Logger.log_elapsed_last-270"><a href="#Logger.log_elapsed_last-270"><span class="linenos">270</span></a>    <span class="k">def</span> <span class="nf">log_elapsed_last</span><span class="p">(</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Logger.log_elapsed_last-270"><a href="#Logger.log_elapsed_last-270"><span class="linenos">270</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">log_elapsed_last</span><span class="p">(</span>
 </span><span id="Logger.log_elapsed_last-271"><a href="#Logger.log_elapsed_last-271"><span class="linenos">271</span></a>        <span class="bp">self</span><span class="p">,</span>
 </span><span id="Logger.log_elapsed_last-272"><a href="#Logger.log_elapsed_last-272"><span class="linenos">272</span></a>        <span class="n">lvl</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 </span><span id="Logger.log_elapsed_last-273"><a href="#Logger.log_elapsed_last-273"><span class="linenos">273</span></a>        <span class="n">stream</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -863,7 +863,7 @@ whether to log to a stream (defaults to <code>None</code>), which logs to the de
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="Logger.flush_all-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.11/logger/__init__.py#L288-L295" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/logger/__init__.py#L288-L295" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -871,7 +871,7 @@ whether to log to a stream (defaults to <code>None</code>), which logs to the de
 
     </div>
     <a class="headerlink" href="#Logger.flush_all"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Logger.flush_all-289"><a href="#Logger.flush_all-289"><span class="linenos">289</span></a>    <span class="k">def</span> <span class="nf">flush_all</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Logger.flush_all-289"><a href="#Logger.flush_all-289"><span class="linenos">289</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">flush_all</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 </span><span id="Logger.flush_all-290"><a href="#Logger.flush_all-290"><span class="linenos">290</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;flush all streams&quot;&quot;&quot;</span>
 </span><span id="Logger.flush_all-291"><a href="#Logger.flush_all-291"><span class="linenos">291</span></a>
 </span><span id="Logger.flush_all-292"><a href="#Logger.flush_all-292"><span class="linenos">292</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_log_file_handle</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
@@ -899,7 +899,7 @@ whether to log to a stream (defaults to <code>None</code>), which logs to the de
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="LoggingStream-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.11/logger/__init__.py#L11-L95" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/logger/__init__.py#L11-L95" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -908,7 +908,7 @@ whether to log to a stream (defaults to <code>None</code>), which logs to the de
     </div>
     <a class="headerlink" href="#LoggingStream"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="LoggingStream-12"><a href="#LoggingStream-12"><span class="linenos">12</span></a><span class="nd">@dataclass</span>
-</span><span id="LoggingStream-13"><a href="#LoggingStream-13"><span class="linenos">13</span></a><span class="k">class</span> <span class="nc">LoggingStream</span><span class="p">:</span>
+</span><span id="LoggingStream-13"><a href="#LoggingStream-13"><span class="linenos">13</span></a><span class="k">class</span><span class="w"> </span><span class="nc">LoggingStream</span><span class="p">:</span>
 </span><span id="LoggingStream-14"><a href="#LoggingStream-14"><span class="linenos">14</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;properties of a logging stream</span>
 </span><span id="LoggingStream-15"><a href="#LoggingStream-15"><span class="linenos">15</span></a>
 </span><span id="LoggingStream-16"><a href="#LoggingStream-16"><span class="linenos">16</span></a><span class="sd">    - `name: str` name of the stream</span>
@@ -936,7 +936,7 @@ whether to log to a stream (defaults to <code>None</code>), which logs to the de
 </span><span id="LoggingStream-38"><a href="#LoggingStream-38"><span class="linenos">38</span></a>    <span class="c1"># TODO: implement last-message caching</span>
 </span><span id="LoggingStream-39"><a href="#LoggingStream-39"><span class="linenos">39</span></a>    <span class="c1"># last_msg: tuple[float, Any]|None = None</span>
 </span><span id="LoggingStream-40"><a href="#LoggingStream-40"><span class="linenos">40</span></a>
-</span><span id="LoggingStream-41"><a href="#LoggingStream-41"><span class="linenos">41</span></a>    <span class="k">def</span> <span class="nf">make_handler</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AnyIO</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="LoggingStream-41"><a href="#LoggingStream-41"><span class="linenos">41</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">make_handler</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AnyIO</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
 </span><span id="LoggingStream-42"><a href="#LoggingStream-42"><span class="linenos">42</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">file</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
 </span><span id="LoggingStream-43"><a href="#LoggingStream-43"><span class="linenos">43</span></a>            <span class="k">return</span> <span class="kc">None</span>
 </span><span id="LoggingStream-44"><a href="#LoggingStream-44"><span class="linenos">44</span></a>        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">file</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
@@ -974,7 +974,7 @@ whether to log to a stream (defaults to <code>None</code>), which logs to the de
 </span><span id="LoggingStream-76"><a href="#LoggingStream-76"><span class="linenos">76</span></a>            <span class="c1"># assume the user knows what they&#39;re doing</span>
 </span><span id="LoggingStream-77"><a href="#LoggingStream-77"><span class="linenos">77</span></a>            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">file</span>  <span class="c1"># type: ignore</span>
 </span><span id="LoggingStream-78"><a href="#LoggingStream-78"><span class="linenos">78</span></a>
-</span><span id="LoggingStream-79"><a href="#LoggingStream-79"><span class="linenos">79</span></a>    <span class="k">def</span> <span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span id="LoggingStream-79"><a href="#LoggingStream-79"><span class="linenos">79</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 </span><span id="LoggingStream-80"><a href="#LoggingStream-80"><span class="linenos">80</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">aliases</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">aliases</span><span class="p">)</span>
 </span><span id="LoggingStream-81"><a href="#LoggingStream-81"><span class="linenos">81</span></a>        <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">aliases</span> <span class="k">if</span> <span class="n">x</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span>
 </span><span id="LoggingStream-82"><a href="#LoggingStream-82"><span class="linenos">82</span></a>            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
@@ -985,12 +985,12 @@ whether to log to a stream (defaults to <code>None</code>), which logs to the de
 </span><span id="LoggingStream-87"><a href="#LoggingStream-87"><span class="linenos">87</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">default_contents</span><span class="p">[</span><span class="s2">&quot;_stream&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="k">lambda</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span>
 </span><span id="LoggingStream-88"><a href="#LoggingStream-88"><span class="linenos">88</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">handler</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_handler</span><span class="p">()</span>
 </span><span id="LoggingStream-89"><a href="#LoggingStream-89"><span class="linenos">89</span></a>
-</span><span id="LoggingStream-90"><a href="#LoggingStream-90"><span class="linenos">90</span></a>    <span class="k">def</span> <span class="fm">__del__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span id="LoggingStream-90"><a href="#LoggingStream-90"><span class="linenos">90</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__del__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 </span><span id="LoggingStream-91"><a href="#LoggingStream-91"><span class="linenos">91</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">handler</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
 </span><span id="LoggingStream-92"><a href="#LoggingStream-92"><span class="linenos">92</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">handler</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
 </span><span id="LoggingStream-93"><a href="#LoggingStream-93"><span class="linenos">93</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">handler</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 </span><span id="LoggingStream-94"><a href="#LoggingStream-94"><span class="linenos">94</span></a>
-</span><span id="LoggingStream-95"><a href="#LoggingStream-95"><span class="linenos">95</span></a>    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span id="LoggingStream-95"><a href="#LoggingStream-95"><span class="linenos">95</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 </span><span id="LoggingStream-96"><a href="#LoggingStream-96"><span class="linenos">96</span></a>        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;LoggingStream(name=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">, aliases=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">aliases</span><span class="si">}</span><span class="s2">, file=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">file</span><span class="si">}</span><span class="s2">, default_level=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">default_level</span><span class="si">}</span><span class="s2">, default_contents=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">default_contents</span><span class="si">}</span><span class="s2">)&quot;</span>
 </span></pre></div>
 
@@ -1108,7 +1108,7 @@ TODO: perhaps duplicate alises should result in duplicate writes?</li>
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="LoggingStream.make_handler-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.11/logger/__init__.py#L40-L76" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/logger/__init__.py#L40-L76" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -1116,7 +1116,7 @@ TODO: perhaps duplicate alises should result in duplicate writes?</li>
 
     </div>
     <a class="headerlink" href="#LoggingStream.make_handler"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="LoggingStream.make_handler-41"><a href="#LoggingStream.make_handler-41"><span class="linenos">41</span></a>    <span class="k">def</span> <span class="nf">make_handler</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AnyIO</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="LoggingStream.make_handler-41"><a href="#LoggingStream.make_handler-41"><span class="linenos">41</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">make_handler</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AnyIO</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
 </span><span id="LoggingStream.make_handler-42"><a href="#LoggingStream.make_handler-42"><span class="linenos">42</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">file</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
 </span><span id="LoggingStream.make_handler-43"><a href="#LoggingStream.make_handler-43"><span class="linenos">43</span></a>            <span class="k">return</span> <span class="kc">None</span>
 </span><span id="LoggingStream.make_handler-44"><a href="#LoggingStream.make_handler-44"><span class="linenos">44</span></a>        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">file</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
@@ -1170,7 +1170,7 @@ TODO: perhaps duplicate alises should result in duplicate writes?</li>
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="SimpleLogger-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.11/logger/__init__.py#L34-L81" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/logger/__init__.py#L34-L81" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -1178,10 +1178,10 @@ TODO: perhaps duplicate alises should result in duplicate writes?</li>
 
     </div>
     <a class="headerlink" href="#SimpleLogger"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="SimpleLogger-35"><a href="#SimpleLogger-35"><span class="linenos">35</span></a><span class="k">class</span> <span class="nc">SimpleLogger</span><span class="p">:</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="SimpleLogger-35"><a href="#SimpleLogger-35"><span class="linenos">35</span></a><span class="k">class</span><span class="w"> </span><span class="nc">SimpleLogger</span><span class="p">:</span>
 </span><span id="SimpleLogger-36"><a href="#SimpleLogger-36"><span class="linenos">36</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;logs training data to a jsonl file&quot;&quot;&quot;</span>
 </span><span id="SimpleLogger-37"><a href="#SimpleLogger-37"><span class="linenos">37</span></a>
-</span><span id="SimpleLogger-38"><a href="#SimpleLogger-38"><span class="linenos">38</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+</span><span id="SimpleLogger-38"><a href="#SimpleLogger-38"><span class="linenos">38</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
 </span><span id="SimpleLogger-39"><a href="#SimpleLogger-39"><span class="linenos">39</span></a>        <span class="bp">self</span><span class="p">,</span>
 </span><span id="SimpleLogger-40"><a href="#SimpleLogger-40"><span class="linenos">40</span></a>        <span class="n">log_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 </span><span id="SimpleLogger-41"><a href="#SimpleLogger-41"><span class="linenos">41</span></a>        <span class="n">log_file</span><span class="p">:</span> <span class="n">AnyIO</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -1211,7 +1211,7 @@ TODO: perhaps duplicate alises should result in duplicate writes?</li>
 </span><span id="SimpleLogger-65"><a href="#SimpleLogger-65"><span class="linenos">65</span></a>                <span class="k">assert</span> <span class="n">log_path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
 </span><span id="SimpleLogger-66"><a href="#SimpleLogger-66"><span class="linenos">66</span></a>                <span class="bp">self</span><span class="o">.</span><span class="n">_log_file_handle</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">log_path</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span>
 </span><span id="SimpleLogger-67"><a href="#SimpleLogger-67"><span class="linenos">67</span></a>
-</span><span id="SimpleLogger-68"><a href="#SimpleLogger-68"><span class="linenos">68</span></a>    <span class="k">def</span> <span class="nf">log</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">msg</span><span class="p">:</span> <span class="n">JSONitem</span><span class="p">,</span> <span class="n">console_print</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+</span><span id="SimpleLogger-68"><a href="#SimpleLogger-68"><span class="linenos">68</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">log</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">msg</span><span class="p">:</span> <span class="n">JSONitem</span><span class="p">,</span> <span class="n">console_print</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 </span><span id="SimpleLogger-69"><a href="#SimpleLogger-69"><span class="linenos">69</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;log a message to the log file, and optionally to the console&quot;&quot;&quot;</span>
 </span><span id="SimpleLogger-70"><a href="#SimpleLogger-70"><span class="linenos">70</span></a>        <span class="k">if</span> <span class="n">console_print</span><span class="p">:</span>
 </span><span id="SimpleLogger-71"><a href="#SimpleLogger-71"><span class="linenos">71</span></a>            <span class="nb">print</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
@@ -1242,7 +1242,7 @@ TODO: perhaps duplicate alises should result in duplicate writes?</li>
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="SimpleLogger.__init__-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.11/logger/__init__.py#L37-L65" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/logger/__init__.py#L37-L65" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -1250,7 +1250,7 @@ TODO: perhaps duplicate alises should result in duplicate writes?</li>
 
     </div>
     <a class="headerlink" href="#SimpleLogger.__init__"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="SimpleLogger.__init__-38"><a href="#SimpleLogger.__init__-38"><span class="linenos">38</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="SimpleLogger.__init__-38"><a href="#SimpleLogger.__init__-38"><span class="linenos">38</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
 </span><span id="SimpleLogger.__init__-39"><a href="#SimpleLogger.__init__-39"><span class="linenos">39</span></a>        <span class="bp">self</span><span class="p">,</span>
 </span><span id="SimpleLogger.__init__-40"><a href="#SimpleLogger.__init__-40"><span class="linenos">40</span></a>        <span class="n">log_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 </span><span id="SimpleLogger.__init__-41"><a href="#SimpleLogger.__init__-41"><span class="linenos">41</span></a>        <span class="n">log_file</span><span class="p">:</span> <span class="n">AnyIO</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -1295,7 +1295,7 @@ TODO: perhaps duplicate alises should result in duplicate writes?</li>
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="SimpleLogger.log-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.11/logger/__init__.py#L67-L81" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/logger/__init__.py#L67-L81" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -1303,7 +1303,7 @@ TODO: perhaps duplicate alises should result in duplicate writes?</li>
 
     </div>
     <a class="headerlink" href="#SimpleLogger.log"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="SimpleLogger.log-68"><a href="#SimpleLogger.log-68"><span class="linenos">68</span></a>    <span class="k">def</span> <span class="nf">log</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">msg</span><span class="p">:</span> <span class="n">JSONitem</span><span class="p">,</span> <span class="n">console_print</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="SimpleLogger.log-68"><a href="#SimpleLogger.log-68"><span class="linenos">68</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">log</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">msg</span><span class="p">:</span> <span class="n">JSONitem</span><span class="p">,</span> <span class="n">console_print</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 </span><span id="SimpleLogger.log-69"><a href="#SimpleLogger.log-69"><span class="linenos">69</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;log a message to the log file, and optionally to the console&quot;&quot;&quot;</span>
 </span><span id="SimpleLogger.log-70"><a href="#SimpleLogger.log-70"><span class="linenos">70</span></a>        <span class="k">if</span> <span class="n">console_print</span><span class="p">:</span>
 </span><span id="SimpleLogger.log-71"><a href="#SimpleLogger.log-71"><span class="linenos">71</span></a>            <span class="nb">print</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
@@ -1337,7 +1337,7 @@ TODO: perhaps duplicate alises should result in duplicate writes?</li>
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="TimerContext-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.11/logger/__init__.py#L7-L22" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/logger/__init__.py#L7-L22" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -1345,19 +1345,19 @@ TODO: perhaps duplicate alises should result in duplicate writes?</li>
 
     </div>
     <a class="headerlink" href="#TimerContext"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="TimerContext-8"><a href="#TimerContext-8"><span class="linenos"> 8</span></a><span class="k">class</span> <span class="nc">TimerContext</span><span class="p">:</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="TimerContext-8"><a href="#TimerContext-8"><span class="linenos"> 8</span></a><span class="k">class</span><span class="w"> </span><span class="nc">TimerContext</span><span class="p">:</span>
 </span><span id="TimerContext-9"><a href="#TimerContext-9"><span class="linenos"> 9</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;context manager for timing code&quot;&quot;&quot;</span>
 </span><span id="TimerContext-10"><a href="#TimerContext-10"><span class="linenos">10</span></a>
-</span><span id="TimerContext-11"><a href="#TimerContext-11"><span class="linenos">11</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="TimerContext-11"><a href="#TimerContext-11"><span class="linenos">11</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 </span><span id="TimerContext-12"><a href="#TimerContext-12"><span class="linenos">12</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">start_time</span><span class="p">:</span> <span class="nb">float</span>
 </span><span id="TimerContext-13"><a href="#TimerContext-13"><span class="linenos">13</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">end_time</span><span class="p">:</span> <span class="nb">float</span>
 </span><span id="TimerContext-14"><a href="#TimerContext-14"><span class="linenos">14</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">elapsed_time</span><span class="p">:</span> <span class="nb">float</span>
 </span><span id="TimerContext-15"><a href="#TimerContext-15"><span class="linenos">15</span></a>
-</span><span id="TimerContext-16"><a href="#TimerContext-16"><span class="linenos">16</span></a>    <span class="k">def</span> <span class="fm">__enter__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;TimerContext&quot;</span><span class="p">:</span>
+</span><span id="TimerContext-16"><a href="#TimerContext-16"><span class="linenos">16</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__enter__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;TimerContext&quot;</span><span class="p">:</span>
 </span><span id="TimerContext-17"><a href="#TimerContext-17"><span class="linenos">17</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">start_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
 </span><span id="TimerContext-18"><a href="#TimerContext-18"><span class="linenos">18</span></a>        <span class="k">return</span> <span class="bp">self</span>
 </span><span id="TimerContext-19"><a href="#TimerContext-19"><span class="linenos">19</span></a>
-</span><span id="TimerContext-20"><a href="#TimerContext-20"><span class="linenos">20</span></a>    <span class="k">def</span> <span class="fm">__exit__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exc_type</span><span class="p">,</span> <span class="n">exc_val</span><span class="p">,</span> <span class="n">exc_tb</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Literal</span><span class="p">[</span><span class="kc">False</span><span class="p">]:</span>
+</span><span id="TimerContext-20"><a href="#TimerContext-20"><span class="linenos">20</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__exit__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exc_type</span><span class="p">,</span> <span class="n">exc_val</span><span class="p">,</span> <span class="n">exc_tb</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Literal</span><span class="p">[</span><span class="kc">False</span><span class="p">]:</span>
 </span><span id="TimerContext-21"><a href="#TimerContext-21"><span class="linenos">21</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">end_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
 </span><span id="TimerContext-22"><a href="#TimerContext-22"><span class="linenos">22</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">elapsed_time</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">end_time</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">start_time</span>
 </span><span id="TimerContext-23"><a href="#TimerContext-23"><span class="linenos">23</span></a>        <span class="k">return</span> <span class="kc">False</span>

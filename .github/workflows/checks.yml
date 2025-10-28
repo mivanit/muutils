@@ -51,19 +51,22 @@ jobs:
     # needs: [lint, check-deps] # for conditionally running this job
     strategy:
       matrix:
-        python: ["3.8", "3.9", "3.10", "3.11", "3.12", "3.13"]
+        python: ["3.8", "3.9", "3.10", "3.11", "3.12", "3.13", "3.14"]
         pkg:
           - group: "legacy"
             torch: "1.13.1"
             numpy: "1.24.4"
           - group: "latest"
             torch: ""
-            numpy: ""            
+            numpy: ""
         exclude:
           - python: "3.12"
             pkg:
               group: "legacy"
           - python: "3.13"
+            pkg:
+              group: "legacy"
+          - python: "3.14"
             pkg:
               group: "legacy"
     
@@ -85,7 +88,7 @@ jobs:
         run: make setup
 
       - name: Install different pytorch version
-        if: ${{ matrix.pkg.torch != '' }}
+        if: ${{ matrix.pkg.torch != '' && matrix.python != '3.14' }}
         run: |
           uv pip install torch==${{ matrix.pkg.torch }}+cpu --extra-index-url https://download.pytorch.org/whl/cpu
       
@@ -94,7 +97,7 @@ jobs:
         run: uv pip install numpy==${{ matrix.pkg.numpy }}
     
       - name: tests
-        run: make test
+        run: make test UV_NOSYNC=1
 
       # - name: tests in strict mode
       #   # TODO: until zanj ported to 3.8 and 3.9
@@ -102,4 +105,6 @@ jobs:
       #   run: make test WARN_STRICT=1
 
       - name: check typing
-        run: make typing
+        # TODO[torch-python-3.14]: lack of torch causes mypy issues in 3.14
+        if: ${{ matrix.python != '3.14' }}
+        run: make typing UV_NOSYNC=1

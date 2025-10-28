@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="generator" content="pdoc 14.7.0"/>
+    <meta name="generator" content="pdoc 15.0.4"/>
     <title>muutils.misc.func API documentation</title>
 <link rel="stylesheet" href="../../resources/css/bootstrap-reboot.min.css"><link rel="stylesheet" href="../../resources/css/syntax-highlighting.css"><link rel="stylesheet" href="../../resources/css/theme.css"><link rel="stylesheet" href="../../resources/css/layout.css"><link rel="stylesheet" href="../../resources/css/content.css"><link rel="stylesheet" href="../../resources/css/custom.css"><script>
     window.MathJax = {
@@ -34,7 +34,7 @@
     }
 </style>
 <script type="module" defer>
-    import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs";
+    import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs";
 
     /* Re-invoke Mermaid when DOM content changes, for example during search. */
     document.addEventListener("DOMContentLoaded", () => {
@@ -46,7 +46,7 @@
 </script></head>
 <body>
 <div class="package-version">
-    docs for <a href="https://github.com/mivanit/muutils">muutils</a> v0.8.11<br>
+    docs for <a href="https://github.com/mivanit/muutils">muutils</a> v0.8.12<br>
 </div>
     <nav class="pdoc">
         <label id="navtoggle" for="togglestate" class="pdoc-button">
@@ -124,7 +124,7 @@
     </nav>
     <main class="pdoc">
             <section class="module-info">
-                        <a class="pdoc-button git-button" href="https://github.com/mivanit/muutils/blob/0.8.11/misc/func.py">View Source on GitHub</a>
+                        <a class="pdoc-button git-button" href="https://github.com/mivanit/muutils/blob/0.8.12/misc/func.py">View Source on GitHub</a>
                     <h1 class="modulename">
 <a href="./../../muutils.html">muutils</a><wbr>.<a href="./../misc.html">misc</a><wbr>.func    </h1>
 
@@ -134,27 +134,27 @@
                         <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="mod-func-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.11/misc/func.py#L0-L276" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/misc/func.py#L0-L276" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
         </div>
 
                 <br/>
-                        <div class="pdoc-code codehilite"><pre><span></span><span id="L-1"><a href="#L-1"><span class="linenos">  1</span></a><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
-</span><span id="L-2"><a href="#L-2"><span class="linenos">  2</span></a><span class="kn">import</span> <span class="nn">functools</span>
-</span><span id="L-3"><a href="#L-3"><span class="linenos">  3</span></a><span class="kn">import</span> <span class="nn">sys</span>
-</span><span id="L-4"><a href="#L-4"><span class="linenos">  4</span></a><span class="kn">from</span> <span class="nn">types</span> <span class="kn">import</span> <span class="n">CodeType</span>
-</span><span id="L-5"><a href="#L-5"><span class="linenos">  5</span></a><span class="kn">import</span> <span class="nn">warnings</span>
-</span><span id="L-6"><a href="#L-6"><span class="linenos">  6</span></a><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">cast</span><span class="p">,</span> <span class="n">TypeVar</span>
+                        <div class="pdoc-code codehilite"><pre><span></span><span id="L-1"><a href="#L-1"><span class="linenos">  1</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+</span><span id="L-2"><a href="#L-2"><span class="linenos">  2</span></a><span class="kn">import</span><span class="w"> </span><span class="nn">functools</span>
+</span><span id="L-3"><a href="#L-3"><span class="linenos">  3</span></a><span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+</span><span id="L-4"><a href="#L-4"><span class="linenos">  4</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">types</span><span class="w"> </span><span class="kn">import</span> <span class="n">CodeType</span>
+</span><span id="L-5"><a href="#L-5"><span class="linenos">  5</span></a><span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
+</span><span id="L-6"><a href="#L-6"><span class="linenos">  6</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">cast</span><span class="p">,</span> <span class="n">TypeVar</span>
 </span><span id="L-7"><a href="#L-7"><span class="linenos">  7</span></a>
 </span><span id="L-8"><a href="#L-8"><span class="linenos">  8</span></a><span class="k">try</span><span class="p">:</span>
 </span><span id="L-9"><a href="#L-9"><span class="linenos">  9</span></a>    <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span> <span class="o">&gt;=</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">11</span><span class="p">):</span>
 </span><span id="L-10"><a href="#L-10"><span class="linenos"> 10</span></a>        <span class="c1"># 3.11+</span>
-</span><span id="L-11"><a href="#L-11"><span class="linenos"> 11</span></a>        <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Unpack</span><span class="p">,</span> <span class="n">TypeVarTuple</span><span class="p">,</span> <span class="n">ParamSpec</span>
+</span><span id="L-11"><a href="#L-11"><span class="linenos"> 11</span></a>        <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Unpack</span><span class="p">,</span> <span class="n">TypeVarTuple</span><span class="p">,</span> <span class="n">ParamSpec</span>
 </span><span id="L-12"><a href="#L-12"><span class="linenos"> 12</span></a>    <span class="k">else</span><span class="p">:</span>
 </span><span id="L-13"><a href="#L-13"><span class="linenos"> 13</span></a>        <span class="c1"># 3.9+</span>
-</span><span id="L-14"><a href="#L-14"><span class="linenos"> 14</span></a>        <span class="kn">from</span> <span class="nn">typing_extensions</span> <span class="kn">import</span> <span class="n">Unpack</span><span class="p">,</span> <span class="n">TypeVarTuple</span><span class="p">,</span> <span class="n">ParamSpec</span>  <span class="c1"># type: ignore[assignment]</span>
+</span><span id="L-14"><a href="#L-14"><span class="linenos"> 14</span></a>        <span class="kn">from</span><span class="w"> </span><span class="nn">typing_extensions</span><span class="w"> </span><span class="kn">import</span> <span class="n">Unpack</span><span class="p">,</span> <span class="n">TypeVarTuple</span><span class="p">,</span> <span class="n">ParamSpec</span>  <span class="c1"># type: ignore[assignment]</span>
 </span><span id="L-15"><a href="#L-15"><span class="linenos"> 15</span></a><span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
 </span><span id="L-16"><a href="#L-16"><span class="linenos"> 16</span></a>    <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
 </span><span id="L-17"><a href="#L-17"><span class="linenos"> 17</span></a>        <span class="s2">&quot;muutils.misc.func could not import Unpack and TypeVarTuple from typing or typing_extensions, typed_lambda may not work&quot;</span>
@@ -164,7 +164,7 @@
 </span><span id="L-21"><a href="#L-21"><span class="linenos"> 21</span></a>    <span class="n">TypeVarTuple</span> <span class="o">=</span> <span class="n">TypeVar</span>  <span class="c1"># type: ignore</span>
 </span><span id="L-22"><a href="#L-22"><span class="linenos"> 22</span></a>
 </span><span id="L-23"><a href="#L-23"><span class="linenos"> 23</span></a>
-</span><span id="L-24"><a href="#L-24"><span class="linenos"> 24</span></a><span class="kn">from</span> <span class="nn">muutils.errormode</span> <span class="kn">import</span> <span class="n">ErrorMode</span>
+</span><span id="L-24"><a href="#L-24"><span class="linenos"> 24</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">muutils.errormode</span><span class="w"> </span><span class="kn">import</span> <span class="n">ErrorMode</span>
 </span><span id="L-25"><a href="#L-25"><span class="linenos"> 25</span></a>
 </span><span id="L-26"><a href="#L-26"><span class="linenos"> 26</span></a><span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;muutils.misc.func is experimental, use with caution&quot;</span><span class="p">)</span>
 </span><span id="L-27"><a href="#L-27"><span class="linenos"> 27</span></a>
@@ -177,7 +177,7 @@
 </span><span id="L-34"><a href="#L-34"><span class="linenos"> 34</span></a><span class="n">FuncParamsPreWrap</span> <span class="o">=</span> <span class="n">ParamSpec</span><span class="p">(</span><span class="s2">&quot;FuncParamsPreWrap&quot;</span><span class="p">)</span>
 </span><span id="L-35"><a href="#L-35"><span class="linenos"> 35</span></a>
 </span><span id="L-36"><a href="#L-36"><span class="linenos"> 36</span></a>
-</span><span id="L-37"><a href="#L-37"><span class="linenos"> 37</span></a><span class="k">def</span> <span class="nf">process_kwarg</span><span class="p">(</span>
+</span><span id="L-37"><a href="#L-37"><span class="linenos"> 37</span></a><span class="k">def</span><span class="w"> </span><span class="nf">process_kwarg</span><span class="p">(</span>
 </span><span id="L-38"><a href="#L-38"><span class="linenos"> 38</span></a>    <span class="n">kwarg_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
 </span><span id="L-39"><a href="#L-39"><span class="linenos"> 39</span></a>    <span class="n">processor</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">T_process_in</span><span class="p">],</span> <span class="n">T_process_out</span><span class="p">],</span>
 </span><span id="L-40"><a href="#L-40"><span class="linenos"> 40</span></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[</span>
@@ -202,11 +202,11 @@
 </span><span id="L-59"><a href="#L-59"><span class="linenos"> 59</span></a><span class="sd">       into one of type `Callable[InputParams, ReturnType]` (accepting `kwarg_name` of type `T_in`).</span>
 </span><span id="L-60"><a href="#L-60"><span class="linenos"> 60</span></a><span class="sd">    &quot;&quot;&quot;</span>
 </span><span id="L-61"><a href="#L-61"><span class="linenos"> 61</span></a>
-</span><span id="L-62"><a href="#L-62"><span class="linenos"> 62</span></a>    <span class="k">def</span> <span class="nf">decorator</span><span class="p">(</span>
+</span><span id="L-62"><a href="#L-62"><span class="linenos"> 62</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">decorator</span><span class="p">(</span>
 </span><span id="L-63"><a href="#L-63"><span class="linenos"> 63</span></a>        <span class="n">func</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[</span><span class="n">FuncParamsPreWrap</span><span class="p">,</span> <span class="n">ReturnType</span><span class="p">],</span>
 </span><span id="L-64"><a href="#L-64"><span class="linenos"> 64</span></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[</span><span class="n">FuncParams</span><span class="p">,</span> <span class="n">ReturnType</span><span class="p">]:</span>
 </span><span id="L-65"><a href="#L-65"><span class="linenos"> 65</span></a>        <span class="nd">@functools</span><span class="o">.</span><span class="n">wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
-</span><span id="L-66"><a href="#L-66"><span class="linenos"> 66</span></a>        <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ReturnType</span><span class="p">:</span>
+</span><span id="L-66"><a href="#L-66"><span class="linenos"> 66</span></a>        <span class="k">def</span><span class="w"> </span><span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ReturnType</span><span class="p">:</span>
 </span><span id="L-67"><a href="#L-67"><span class="linenos"> 67</span></a>            <span class="k">if</span> <span class="n">kwarg_name</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
 </span><span id="L-68"><a href="#L-68"><span class="linenos"> 68</span></a>                <span class="c1"># Convert the caller’s value (of type T_in) to T_out</span>
 </span><span id="L-69"><a href="#L-69"><span class="linenos"> 69</span></a>                <span class="n">kwargs</span><span class="p">[</span><span class="n">kwarg_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">processor</span><span class="p">(</span><span class="n">kwargs</span><span class="p">[</span><span class="n">kwarg_name</span><span class="p">])</span>
@@ -218,7 +218,7 @@
 </span><span id="L-75"><a href="#L-75"><span class="linenos"> 75</span></a>
 </span><span id="L-76"><a href="#L-76"><span class="linenos"> 76</span></a>
 </span><span id="L-77"><a href="#L-77"><span class="linenos"> 77</span></a><span class="nd">@process_kwarg</span><span class="p">(</span><span class="s2">&quot;action&quot;</span><span class="p">,</span> <span class="n">ErrorMode</span><span class="o">.</span><span class="n">from_any</span><span class="p">)</span>
-</span><span id="L-78"><a href="#L-78"><span class="linenos"> 78</span></a><span class="k">def</span> <span class="nf">validate_kwarg</span><span class="p">(</span>
+</span><span id="L-78"><a href="#L-78"><span class="linenos"> 78</span></a><span class="k">def</span><span class="w"> </span><span class="nf">validate_kwarg</span><span class="p">(</span>
 </span><span id="L-79"><a href="#L-79"><span class="linenos"> 79</span></a>    <span class="n">kwarg_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
 </span><span id="L-80"><a href="#L-80"><span class="linenos"> 80</span></a>    <span class="n">validator</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">T_kwarg</span><span class="p">],</span> <span class="nb">bool</span><span class="p">],</span>
 </span><span id="L-81"><a href="#L-81"><span class="linenos"> 81</span></a>    <span class="n">description</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -258,11 +258,11 @@
 </span><span id="L-115"><a href="#L-115"><span class="linenos">115</span></a><span class="sd">     - `ValueError` if validation fails and `action == &quot;raise&quot;`.</span>
 </span><span id="L-116"><a href="#L-116"><span class="linenos">116</span></a><span class="sd">    &quot;&quot;&quot;</span>
 </span><span id="L-117"><a href="#L-117"><span class="linenos">117</span></a>
-</span><span id="L-118"><a href="#L-118"><span class="linenos">118</span></a>    <span class="k">def</span> <span class="nf">decorator</span><span class="p">(</span>
+</span><span id="L-118"><a href="#L-118"><span class="linenos">118</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">decorator</span><span class="p">(</span>
 </span><span id="L-119"><a href="#L-119"><span class="linenos">119</span></a>        <span class="n">func</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[</span><span class="n">FuncParams</span><span class="p">,</span> <span class="n">ReturnType</span><span class="p">],</span>
 </span><span id="L-120"><a href="#L-120"><span class="linenos">120</span></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[</span><span class="n">FuncParams</span><span class="p">,</span> <span class="n">ReturnType</span><span class="p">]:</span>
 </span><span id="L-121"><a href="#L-121"><span class="linenos">121</span></a>        <span class="nd">@functools</span><span class="o">.</span><span class="n">wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
-</span><span id="L-122"><a href="#L-122"><span class="linenos">122</span></a>        <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">FuncParams</span><span class="o">.</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">FuncParams</span><span class="o">.</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ReturnType</span><span class="p">:</span>
+</span><span id="L-122"><a href="#L-122"><span class="linenos">122</span></a>        <span class="k">def</span><span class="w"> </span><span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">FuncParams</span><span class="o">.</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">FuncParams</span><span class="o">.</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ReturnType</span><span class="p">:</span>
 </span><span id="L-123"><a href="#L-123"><span class="linenos">123</span></a>            <span class="k">if</span> <span class="n">kwarg_name</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
 </span><span id="L-124"><a href="#L-124"><span class="linenos">124</span></a>                <span class="n">value</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="n">kwarg_name</span><span class="p">]</span>
 </span><span id="L-125"><a href="#L-125"><span class="linenos">125</span></a>                <span class="k">if</span> <span class="ow">not</span> <span class="n">validator</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
@@ -282,7 +282,7 @@
 </span><span id="L-139"><a href="#L-139"><span class="linenos">139</span></a>    <span class="k">return</span> <span class="n">decorator</span>
 </span><span id="L-140"><a href="#L-140"><span class="linenos">140</span></a>
 </span><span id="L-141"><a href="#L-141"><span class="linenos">141</span></a>
-</span><span id="L-142"><a href="#L-142"><span class="linenos">142</span></a><span class="k">def</span> <span class="nf">replace_kwarg</span><span class="p">(</span>
+</span><span id="L-142"><a href="#L-142"><span class="linenos">142</span></a><span class="k">def</span><span class="w"> </span><span class="nf">replace_kwarg</span><span class="p">(</span>
 </span><span id="L-143"><a href="#L-143"><span class="linenos">143</span></a>    <span class="n">kwarg_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
 </span><span id="L-144"><a href="#L-144"><span class="linenos">144</span></a>    <span class="n">check</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">T_kwarg</span><span class="p">],</span> <span class="nb">bool</span><span class="p">],</span>
 </span><span id="L-145"><a href="#L-145"><span class="linenos">145</span></a>    <span class="n">replacement_value</span><span class="p">:</span> <span class="n">T_kwarg</span><span class="p">,</span>
@@ -318,11 +318,11 @@
 </span><span id="L-175"><a href="#L-175"><span class="linenos">175</span></a><span class="sd">    ```</span>
 </span><span id="L-176"><a href="#L-176"><span class="linenos">176</span></a><span class="sd">    &quot;&quot;&quot;</span>
 </span><span id="L-177"><a href="#L-177"><span class="linenos">177</span></a>
-</span><span id="L-178"><a href="#L-178"><span class="linenos">178</span></a>    <span class="k">def</span> <span class="nf">decorator</span><span class="p">(</span>
+</span><span id="L-178"><a href="#L-178"><span class="linenos">178</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">decorator</span><span class="p">(</span>
 </span><span id="L-179"><a href="#L-179"><span class="linenos">179</span></a>        <span class="n">func</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[</span><span class="n">FuncParams</span><span class="p">,</span> <span class="n">ReturnType</span><span class="p">],</span>
 </span><span id="L-180"><a href="#L-180"><span class="linenos">180</span></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[</span><span class="n">FuncParams</span><span class="p">,</span> <span class="n">ReturnType</span><span class="p">]:</span>
 </span><span id="L-181"><a href="#L-181"><span class="linenos">181</span></a>        <span class="nd">@functools</span><span class="o">.</span><span class="n">wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
-</span><span id="L-182"><a href="#L-182"><span class="linenos">182</span></a>        <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">FuncParams</span><span class="o">.</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">FuncParams</span><span class="o">.</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ReturnType</span><span class="p">:</span>
+</span><span id="L-182"><a href="#L-182"><span class="linenos">182</span></a>        <span class="k">def</span><span class="w"> </span><span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">FuncParams</span><span class="o">.</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">FuncParams</span><span class="o">.</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ReturnType</span><span class="p">:</span>
 </span><span id="L-183"><a href="#L-183"><span class="linenos">183</span></a>            <span class="k">if</span> <span class="n">kwarg_name</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
 </span><span id="L-184"><a href="#L-184"><span class="linenos">184</span></a>                <span class="c1"># TODO: no way to type hint this, I think</span>
 </span><span id="L-185"><a href="#L-185"><span class="linenos">185</span></a>                <span class="k">if</span> <span class="n">check</span><span class="p">(</span><span class="n">kwargs</span><span class="p">[</span><span class="n">kwarg_name</span><span class="p">]):</span>  <span class="c1"># type: ignore[arg-type]</span>
@@ -336,24 +336,24 @@
 </span><span id="L-193"><a href="#L-193"><span class="linenos">193</span></a>    <span class="k">return</span> <span class="n">decorator</span>
 </span><span id="L-194"><a href="#L-194"><span class="linenos">194</span></a>
 </span><span id="L-195"><a href="#L-195"><span class="linenos">195</span></a>
-</span><span id="L-196"><a href="#L-196"><span class="linenos">196</span></a><span class="k">def</span> <span class="nf">is_none</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</span><span id="L-196"><a href="#L-196"><span class="linenos">196</span></a><span class="k">def</span><span class="w"> </span><span class="nf">is_none</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 </span><span id="L-197"><a href="#L-197"><span class="linenos">197</span></a>    <span class="k">return</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span>
 </span><span id="L-198"><a href="#L-198"><span class="linenos">198</span></a>
 </span><span id="L-199"><a href="#L-199"><span class="linenos">199</span></a>
-</span><span id="L-200"><a href="#L-200"><span class="linenos">200</span></a><span class="k">def</span> <span class="nf">always_true</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</span><span id="L-200"><a href="#L-200"><span class="linenos">200</span></a><span class="k">def</span><span class="w"> </span><span class="nf">always_true</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 </span><span id="L-201"><a href="#L-201"><span class="linenos">201</span></a>    <span class="k">return</span> <span class="kc">True</span>
 </span><span id="L-202"><a href="#L-202"><span class="linenos">202</span></a>
 </span><span id="L-203"><a href="#L-203"><span class="linenos">203</span></a>
-</span><span id="L-204"><a href="#L-204"><span class="linenos">204</span></a><span class="k">def</span> <span class="nf">always_false</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</span><span id="L-204"><a href="#L-204"><span class="linenos">204</span></a><span class="k">def</span><span class="w"> </span><span class="nf">always_false</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 </span><span id="L-205"><a href="#L-205"><span class="linenos">205</span></a>    <span class="k">return</span> <span class="kc">False</span>
 </span><span id="L-206"><a href="#L-206"><span class="linenos">206</span></a>
 </span><span id="L-207"><a href="#L-207"><span class="linenos">207</span></a>
-</span><span id="L-208"><a href="#L-208"><span class="linenos">208</span></a><span class="k">def</span> <span class="nf">format_docstring</span><span class="p">(</span>
+</span><span id="L-208"><a href="#L-208"><span class="linenos">208</span></a><span class="k">def</span><span class="w"> </span><span class="nf">format_docstring</span><span class="p">(</span>
 </span><span id="L-209"><a href="#L-209"><span class="linenos">209</span></a>    <span class="o">**</span><span class="n">fmt_kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
 </span><span id="L-210"><a href="#L-210"><span class="linenos">210</span></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">Callable</span><span class="p">[</span><span class="n">FuncParams</span><span class="p">,</span> <span class="n">ReturnType</span><span class="p">]],</span> <span class="n">Callable</span><span class="p">[</span><span class="n">FuncParams</span><span class="p">,</span> <span class="n">ReturnType</span><span class="p">]]:</span>
 </span><span id="L-211"><a href="#L-211"><span class="linenos">211</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Decorator that formats a function&#39;s docstring with the provided keyword arguments.&quot;&quot;&quot;</span>
 </span><span id="L-212"><a href="#L-212"><span class="linenos">212</span></a>
-</span><span id="L-213"><a href="#L-213"><span class="linenos">213</span></a>    <span class="k">def</span> <span class="nf">decorator</span><span class="p">(</span>
+</span><span id="L-213"><a href="#L-213"><span class="linenos">213</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">decorator</span><span class="p">(</span>
 </span><span id="L-214"><a href="#L-214"><span class="linenos">214</span></a>        <span class="n">func</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[</span><span class="n">FuncParams</span><span class="p">,</span> <span class="n">ReturnType</span><span class="p">],</span>
 </span><span id="L-215"><a href="#L-215"><span class="linenos">215</span></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[</span><span class="n">FuncParams</span><span class="p">,</span> <span class="n">ReturnType</span><span class="p">]:</span>
 </span><span id="L-216"><a href="#L-216"><span class="linenos">216</span></a>        <span class="k">if</span> <span class="n">func</span><span class="o">.</span><span class="vm">__doc__</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -368,7 +368,7 @@
 </span><span id="L-225"><a href="#L-225"><span class="linenos">225</span></a><span class="n">LambdaArgsTypes</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s2">&quot;LambdaArgsTypes&quot;</span><span class="p">,</span> <span class="n">bound</span><span class="o">=</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">type</span><span class="p">,</span> <span class="o">...</span><span class="p">])</span>
 </span><span id="L-226"><a href="#L-226"><span class="linenos">226</span></a>
 </span><span id="L-227"><a href="#L-227"><span class="linenos">227</span></a>
-</span><span id="L-228"><a href="#L-228"><span class="linenos">228</span></a><span class="k">def</span> <span class="nf">typed_lambda</span><span class="p">(</span>
+</span><span id="L-228"><a href="#L-228"><span class="linenos">228</span></a><span class="k">def</span><span class="w"> </span><span class="nf">typed_lambda</span><span class="p">(</span>
 </span><span id="L-229"><a href="#L-229"><span class="linenos">229</span></a>    <span class="n">fn</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">Unpack</span><span class="p">[</span><span class="n">LambdaArgs</span><span class="p">]],</span> <span class="n">ReturnType</span><span class="p">],</span>
 </span><span id="L-230"><a href="#L-230"><span class="linenos">230</span></a>    <span class="n">in_types</span><span class="p">:</span> <span class="n">LambdaArgsTypes</span><span class="p">,</span>
 </span><span id="L-231"><a href="#L-231"><span class="linenos">231</span></a>    <span class="n">out_type</span><span class="p">:</span> <span class="nb">type</span><span class="p">[</span><span class="n">ReturnType</span><span class="p">],</span>
@@ -413,7 +413,7 @@
 </span><span id="L-270"><a href="#L-270"><span class="linenos">270</span></a>    <span class="n">annotations</span><span class="p">[</span><span class="s2">&quot;return&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">out_type</span>
 </span><span id="L-271"><a href="#L-271"><span class="linenos">271</span></a>
 </span><span id="L-272"><a href="#L-272"><span class="linenos">272</span></a>    <span class="nd">@functools</span><span class="o">.</span><span class="n">wraps</span><span class="p">(</span><span class="n">fn</span><span class="p">)</span>
-</span><span id="L-273"><a href="#L-273"><span class="linenos">273</span></a>    <span class="k">def</span> <span class="nf">wrapped</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">Unpack</span><span class="p">[</span><span class="n">LambdaArgs</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">ReturnType</span><span class="p">:</span>
+</span><span id="L-273"><a href="#L-273"><span class="linenos">273</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">wrapped</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">Unpack</span><span class="p">[</span><span class="n">LambdaArgs</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">ReturnType</span><span class="p">:</span>
 </span><span id="L-274"><a href="#L-274"><span class="linenos">274</span></a>        <span class="k">return</span> <span class="n">fn</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">)</span>
 </span><span id="L-275"><a href="#L-275"><span class="linenos">275</span></a>
 </span><span id="L-276"><a href="#L-276"><span class="linenos">276</span></a>    <span class="n">wrapped</span><span class="o">.</span><span class="vm">__annotations__</span> <span class="o">=</span> <span class="n">annotations</span>
@@ -457,7 +457,7 @@
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="process_kwarg-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.11/misc/func.py#L37-L74" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/misc/func.py#L37-L74" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -465,7 +465,7 @@
 
     </div>
     <a class="headerlink" href="#process_kwarg"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="process_kwarg-38"><a href="#process_kwarg-38"><span class="linenos">38</span></a><span class="k">def</span> <span class="nf">process_kwarg</span><span class="p">(</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="process_kwarg-38"><a href="#process_kwarg-38"><span class="linenos">38</span></a><span class="k">def</span><span class="w"> </span><span class="nf">process_kwarg</span><span class="p">(</span>
 </span><span id="process_kwarg-39"><a href="#process_kwarg-39"><span class="linenos">39</span></a>    <span class="n">kwarg_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
 </span><span id="process_kwarg-40"><a href="#process_kwarg-40"><span class="linenos">40</span></a>    <span class="n">processor</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">T_process_in</span><span class="p">],</span> <span class="n">T_process_out</span><span class="p">],</span>
 </span><span id="process_kwarg-41"><a href="#process_kwarg-41"><span class="linenos">41</span></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[</span>
@@ -490,11 +490,11 @@
 </span><span id="process_kwarg-60"><a href="#process_kwarg-60"><span class="linenos">60</span></a><span class="sd">       into one of type `Callable[InputParams, ReturnType]` (accepting `kwarg_name` of type `T_in`).</span>
 </span><span id="process_kwarg-61"><a href="#process_kwarg-61"><span class="linenos">61</span></a><span class="sd">    &quot;&quot;&quot;</span>
 </span><span id="process_kwarg-62"><a href="#process_kwarg-62"><span class="linenos">62</span></a>
-</span><span id="process_kwarg-63"><a href="#process_kwarg-63"><span class="linenos">63</span></a>    <span class="k">def</span> <span class="nf">decorator</span><span class="p">(</span>
+</span><span id="process_kwarg-63"><a href="#process_kwarg-63"><span class="linenos">63</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">decorator</span><span class="p">(</span>
 </span><span id="process_kwarg-64"><a href="#process_kwarg-64"><span class="linenos">64</span></a>        <span class="n">func</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[</span><span class="n">FuncParamsPreWrap</span><span class="p">,</span> <span class="n">ReturnType</span><span class="p">],</span>
 </span><span id="process_kwarg-65"><a href="#process_kwarg-65"><span class="linenos">65</span></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[</span><span class="n">FuncParams</span><span class="p">,</span> <span class="n">ReturnType</span><span class="p">]:</span>
 </span><span id="process_kwarg-66"><a href="#process_kwarg-66"><span class="linenos">66</span></a>        <span class="nd">@functools</span><span class="o">.</span><span class="n">wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
-</span><span id="process_kwarg-67"><a href="#process_kwarg-67"><span class="linenos">67</span></a>        <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ReturnType</span><span class="p">:</span>
+</span><span id="process_kwarg-67"><a href="#process_kwarg-67"><span class="linenos">67</span></a>        <span class="k">def</span><span class="w"> </span><span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ReturnType</span><span class="p">:</span>
 </span><span id="process_kwarg-68"><a href="#process_kwarg-68"><span class="linenos">68</span></a>            <span class="k">if</span> <span class="n">kwarg_name</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
 </span><span id="process_kwarg-69"><a href="#process_kwarg-69"><span class="linenos">69</span></a>                <span class="c1"># Convert the caller’s value (of type T_in) to T_out</span>
 </span><span id="process_kwarg-70"><a href="#process_kwarg-70"><span class="linenos">70</span></a>                <span class="n">kwargs</span><span class="p">[</span><span class="n">kwarg_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">processor</span><span class="p">(</span><span class="n">kwargs</span><span class="p">[</span><span class="n">kwarg_name</span><span class="p">])</span>
@@ -544,7 +544,7 @@ into one of type <code>Callable[InputParams, ReturnType]</code> (accepting <code
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="validate_kwarg-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.11/misc/func.py#L77-L139" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/misc/func.py#L77-L139" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -553,7 +553,7 @@ into one of type <code>Callable[InputParams, ReturnType]</code> (accepting <code
     </div>
     <a class="headerlink" href="#validate_kwarg"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="validate_kwarg-78"><a href="#validate_kwarg-78"><span class="linenos"> 78</span></a><span class="nd">@process_kwarg</span><span class="p">(</span><span class="s2">&quot;action&quot;</span><span class="p">,</span> <span class="n">ErrorMode</span><span class="o">.</span><span class="n">from_any</span><span class="p">)</span>
-</span><span id="validate_kwarg-79"><a href="#validate_kwarg-79"><span class="linenos"> 79</span></a><span class="k">def</span> <span class="nf">validate_kwarg</span><span class="p">(</span>
+</span><span id="validate_kwarg-79"><a href="#validate_kwarg-79"><span class="linenos"> 79</span></a><span class="k">def</span><span class="w"> </span><span class="nf">validate_kwarg</span><span class="p">(</span>
 </span><span id="validate_kwarg-80"><a href="#validate_kwarg-80"><span class="linenos"> 80</span></a>    <span class="n">kwarg_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
 </span><span id="validate_kwarg-81"><a href="#validate_kwarg-81"><span class="linenos"> 81</span></a>    <span class="n">validator</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">T_kwarg</span><span class="p">],</span> <span class="nb">bool</span><span class="p">],</span>
 </span><span id="validate_kwarg-82"><a href="#validate_kwarg-82"><span class="linenos"> 82</span></a>    <span class="n">description</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -593,11 +593,11 @@ into one of type <code>Callable[InputParams, ReturnType]</code> (accepting <code
 </span><span id="validate_kwarg-116"><a href="#validate_kwarg-116"><span class="linenos">116</span></a><span class="sd">     - `ValueError` if validation fails and `action == &quot;raise&quot;`.</span>
 </span><span id="validate_kwarg-117"><a href="#validate_kwarg-117"><span class="linenos">117</span></a><span class="sd">    &quot;&quot;&quot;</span>
 </span><span id="validate_kwarg-118"><a href="#validate_kwarg-118"><span class="linenos">118</span></a>
-</span><span id="validate_kwarg-119"><a href="#validate_kwarg-119"><span class="linenos">119</span></a>    <span class="k">def</span> <span class="nf">decorator</span><span class="p">(</span>
+</span><span id="validate_kwarg-119"><a href="#validate_kwarg-119"><span class="linenos">119</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">decorator</span><span class="p">(</span>
 </span><span id="validate_kwarg-120"><a href="#validate_kwarg-120"><span class="linenos">120</span></a>        <span class="n">func</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[</span><span class="n">FuncParams</span><span class="p">,</span> <span class="n">ReturnType</span><span class="p">],</span>
 </span><span id="validate_kwarg-121"><a href="#validate_kwarg-121"><span class="linenos">121</span></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[</span><span class="n">FuncParams</span><span class="p">,</span> <span class="n">ReturnType</span><span class="p">]:</span>
 </span><span id="validate_kwarg-122"><a href="#validate_kwarg-122"><span class="linenos">122</span></a>        <span class="nd">@functools</span><span class="o">.</span><span class="n">wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
-</span><span id="validate_kwarg-123"><a href="#validate_kwarg-123"><span class="linenos">123</span></a>        <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">FuncParams</span><span class="o">.</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">FuncParams</span><span class="o">.</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ReturnType</span><span class="p">:</span>
+</span><span id="validate_kwarg-123"><a href="#validate_kwarg-123"><span class="linenos">123</span></a>        <span class="k">def</span><span class="w"> </span><span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">FuncParams</span><span class="o">.</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">FuncParams</span><span class="o">.</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ReturnType</span><span class="p">:</span>
 </span><span id="validate_kwarg-124"><a href="#validate_kwarg-124"><span class="linenos">124</span></a>            <span class="k">if</span> <span class="n">kwarg_name</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
 </span><span id="validate_kwarg-125"><a href="#validate_kwarg-125"><span class="linenos">125</span></a>                <span class="n">value</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="n">kwarg_name</span><span class="p">]</span>
 </span><span id="validate_kwarg-126"><a href="#validate_kwarg-126"><span class="linenos">126</span></a>                <span class="k">if</span> <span class="ow">not</span> <span class="n">validator</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
@@ -651,7 +651,7 @@ Otherwise, raises a ValueError.</li>
 
 <div class="pdoc-code codehilite">
 <pre><span></span><code><span class="nd">@validate_kwarg</span><span class="p">(</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">val</span><span class="p">:</span> <span class="n">val</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Invalid </span><span class="si">{kwarg_name}</span><span class="s2">: </span><span class="si">{value}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">my_func</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">my_func</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
     <span class="k">return</span> <span class="n">x</span>
 
 <span class="k">assert</span> <span class="n">my_func</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span>
@@ -677,7 +677,7 @@ Otherwise, raises a ValueError.</li>
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="replace_kwarg-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.11/misc/func.py#L142-L193" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/misc/func.py#L142-L193" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -685,7 +685,7 @@ Otherwise, raises a ValueError.</li>
 
     </div>
     <a class="headerlink" href="#replace_kwarg"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="replace_kwarg-143"><a href="#replace_kwarg-143"><span class="linenos">143</span></a><span class="k">def</span> <span class="nf">replace_kwarg</span><span class="p">(</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="replace_kwarg-143"><a href="#replace_kwarg-143"><span class="linenos">143</span></a><span class="k">def</span><span class="w"> </span><span class="nf">replace_kwarg</span><span class="p">(</span>
 </span><span id="replace_kwarg-144"><a href="#replace_kwarg-144"><span class="linenos">144</span></a>    <span class="n">kwarg_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
 </span><span id="replace_kwarg-145"><a href="#replace_kwarg-145"><span class="linenos">145</span></a>    <span class="n">check</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">T_kwarg</span><span class="p">],</span> <span class="nb">bool</span><span class="p">],</span>
 </span><span id="replace_kwarg-146"><a href="#replace_kwarg-146"><span class="linenos">146</span></a>    <span class="n">replacement_value</span><span class="p">:</span> <span class="n">T_kwarg</span><span class="p">,</span>
@@ -721,11 +721,11 @@ Otherwise, raises a ValueError.</li>
 </span><span id="replace_kwarg-176"><a href="#replace_kwarg-176"><span class="linenos">176</span></a><span class="sd">    ```</span>
 </span><span id="replace_kwarg-177"><a href="#replace_kwarg-177"><span class="linenos">177</span></a><span class="sd">    &quot;&quot;&quot;</span>
 </span><span id="replace_kwarg-178"><a href="#replace_kwarg-178"><span class="linenos">178</span></a>
-</span><span id="replace_kwarg-179"><a href="#replace_kwarg-179"><span class="linenos">179</span></a>    <span class="k">def</span> <span class="nf">decorator</span><span class="p">(</span>
+</span><span id="replace_kwarg-179"><a href="#replace_kwarg-179"><span class="linenos">179</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">decorator</span><span class="p">(</span>
 </span><span id="replace_kwarg-180"><a href="#replace_kwarg-180"><span class="linenos">180</span></a>        <span class="n">func</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[</span><span class="n">FuncParams</span><span class="p">,</span> <span class="n">ReturnType</span><span class="p">],</span>
 </span><span id="replace_kwarg-181"><a href="#replace_kwarg-181"><span class="linenos">181</span></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[</span><span class="n">FuncParams</span><span class="p">,</span> <span class="n">ReturnType</span><span class="p">]:</span>
 </span><span id="replace_kwarg-182"><a href="#replace_kwarg-182"><span class="linenos">182</span></a>        <span class="nd">@functools</span><span class="o">.</span><span class="n">wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
-</span><span id="replace_kwarg-183"><a href="#replace_kwarg-183"><span class="linenos">183</span></a>        <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">FuncParams</span><span class="o">.</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">FuncParams</span><span class="o">.</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ReturnType</span><span class="p">:</span>
+</span><span id="replace_kwarg-183"><a href="#replace_kwarg-183"><span class="linenos">183</span></a>        <span class="k">def</span><span class="w"> </span><span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">FuncParams</span><span class="o">.</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">FuncParams</span><span class="o">.</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ReturnType</span><span class="p">:</span>
 </span><span id="replace_kwarg-184"><a href="#replace_kwarg-184"><span class="linenos">184</span></a>            <span class="k">if</span> <span class="n">kwarg_name</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
 </span><span id="replace_kwarg-185"><a href="#replace_kwarg-185"><span class="linenos">185</span></a>                <span class="c1"># TODO: no way to type hint this, I think</span>
 </span><span id="replace_kwarg-186"><a href="#replace_kwarg-186"><span class="linenos">186</span></a>                <span class="k">if</span> <span class="n">check</span><span class="p">(</span><span class="n">kwargs</span><span class="p">[</span><span class="n">kwarg_name</span><span class="p">]):</span>  <span class="c1"># type: ignore[arg-type]</span>
@@ -772,7 +772,7 @@ A decorator that replaces the keyword argument value.</li>
 
 <div class="pdoc-code codehilite">
 <pre><span></span><code><span class="nd">@replace_kwarg</span><span class="p">(</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;default_string&quot;</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">my_func</span><span class="p">(</span><span class="o">*</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">my_func</span><span class="p">(</span><span class="o">*</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
     <span class="k">return</span> <span class="n">x</span>
 
 <span class="k">assert</span> <span class="n">my_func</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;default_string&quot;</span>
@@ -792,7 +792,7 @@ A decorator that replaces the keyword argument value.</li>
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="is_none-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.11/misc/func.py#L196-L197" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/misc/func.py#L196-L197" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -800,7 +800,7 @@ A decorator that replaces the keyword argument value.</li>
 
     </div>
     <a class="headerlink" href="#is_none"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="is_none-197"><a href="#is_none-197"><span class="linenos">197</span></a><span class="k">def</span> <span class="nf">is_none</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="is_none-197"><a href="#is_none-197"><span class="linenos">197</span></a><span class="k">def</span><span class="w"> </span><span class="nf">is_none</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 </span><span id="is_none-198"><a href="#is_none-198"><span class="linenos">198</span></a>    <span class="k">return</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span>
 </span></pre></div>
 
@@ -818,7 +818,7 @@ A decorator that replaces the keyword argument value.</li>
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="always_true-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.11/misc/func.py#L200-L201" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/misc/func.py#L200-L201" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -826,7 +826,7 @@ A decorator that replaces the keyword argument value.</li>
 
     </div>
     <a class="headerlink" href="#always_true"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="always_true-201"><a href="#always_true-201"><span class="linenos">201</span></a><span class="k">def</span> <span class="nf">always_true</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="always_true-201"><a href="#always_true-201"><span class="linenos">201</span></a><span class="k">def</span><span class="w"> </span><span class="nf">always_true</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 </span><span id="always_true-202"><a href="#always_true-202"><span class="linenos">202</span></a>    <span class="k">return</span> <span class="kc">True</span>
 </span></pre></div>
 
@@ -844,7 +844,7 @@ A decorator that replaces the keyword argument value.</li>
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="always_false-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.11/misc/func.py#L204-L205" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/misc/func.py#L204-L205" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -852,7 +852,7 @@ A decorator that replaces the keyword argument value.</li>
 
     </div>
     <a class="headerlink" href="#always_false"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="always_false-205"><a href="#always_false-205"><span class="linenos">205</span></a><span class="k">def</span> <span class="nf">always_false</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="always_false-205"><a href="#always_false-205"><span class="linenos">205</span></a><span class="k">def</span><span class="w"> </span><span class="nf">always_false</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 </span><span id="always_false-206"><a href="#always_false-206"><span class="linenos">206</span></a>    <span class="k">return</span> <span class="kc">False</span>
 </span></pre></div>
 
@@ -870,7 +870,7 @@ A decorator that replaces the keyword argument value.</li>
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="format_docstring-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.11/misc/func.py#L208-L220" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/misc/func.py#L208-L220" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -878,12 +878,12 @@ A decorator that replaces the keyword argument value.</li>
 
     </div>
     <a class="headerlink" href="#format_docstring"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="format_docstring-209"><a href="#format_docstring-209"><span class="linenos">209</span></a><span class="k">def</span> <span class="nf">format_docstring</span><span class="p">(</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="format_docstring-209"><a href="#format_docstring-209"><span class="linenos">209</span></a><span class="k">def</span><span class="w"> </span><span class="nf">format_docstring</span><span class="p">(</span>
 </span><span id="format_docstring-210"><a href="#format_docstring-210"><span class="linenos">210</span></a>    <span class="o">**</span><span class="n">fmt_kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
 </span><span id="format_docstring-211"><a href="#format_docstring-211"><span class="linenos">211</span></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">Callable</span><span class="p">[</span><span class="n">FuncParams</span><span class="p">,</span> <span class="n">ReturnType</span><span class="p">]],</span> <span class="n">Callable</span><span class="p">[</span><span class="n">FuncParams</span><span class="p">,</span> <span class="n">ReturnType</span><span class="p">]]:</span>
 </span><span id="format_docstring-212"><a href="#format_docstring-212"><span class="linenos">212</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Decorator that formats a function&#39;s docstring with the provided keyword arguments.&quot;&quot;&quot;</span>
 </span><span id="format_docstring-213"><a href="#format_docstring-213"><span class="linenos">213</span></a>
-</span><span id="format_docstring-214"><a href="#format_docstring-214"><span class="linenos">214</span></a>    <span class="k">def</span> <span class="nf">decorator</span><span class="p">(</span>
+</span><span id="format_docstring-214"><a href="#format_docstring-214"><span class="linenos">214</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">decorator</span><span class="p">(</span>
 </span><span id="format_docstring-215"><a href="#format_docstring-215"><span class="linenos">215</span></a>        <span class="n">func</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[</span><span class="n">FuncParams</span><span class="p">,</span> <span class="n">ReturnType</span><span class="p">],</span>
 </span><span id="format_docstring-216"><a href="#format_docstring-216"><span class="linenos">216</span></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[</span><span class="n">FuncParams</span><span class="p">,</span> <span class="n">ReturnType</span><span class="p">]:</span>
 </span><span id="format_docstring-217"><a href="#format_docstring-217"><span class="linenos">217</span></a>        <span class="k">if</span> <span class="n">func</span><span class="o">.</span><span class="vm">__doc__</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -921,7 +921,7 @@ A decorator that replaces the keyword argument value.</li>
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="typed_lambda-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.11/misc/func.py#L228-L277" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/misc/func.py#L228-L277" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -929,7 +929,7 @@ A decorator that replaces the keyword argument value.</li>
 
     </div>
     <a class="headerlink" href="#typed_lambda"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="typed_lambda-229"><a href="#typed_lambda-229"><span class="linenos">229</span></a><span class="k">def</span> <span class="nf">typed_lambda</span><span class="p">(</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="typed_lambda-229"><a href="#typed_lambda-229"><span class="linenos">229</span></a><span class="k">def</span><span class="w"> </span><span class="nf">typed_lambda</span><span class="p">(</span>
 </span><span id="typed_lambda-230"><a href="#typed_lambda-230"><span class="linenos">230</span></a>    <span class="n">fn</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">Unpack</span><span class="p">[</span><span class="n">LambdaArgs</span><span class="p">]],</span> <span class="n">ReturnType</span><span class="p">],</span>
 </span><span id="typed_lambda-231"><a href="#typed_lambda-231"><span class="linenos">231</span></a>    <span class="n">in_types</span><span class="p">:</span> <span class="n">LambdaArgsTypes</span><span class="p">,</span>
 </span><span id="typed_lambda-232"><a href="#typed_lambda-232"><span class="linenos">232</span></a>    <span class="n">out_type</span><span class="p">:</span> <span class="nb">type</span><span class="p">[</span><span class="n">ReturnType</span><span class="p">],</span>
@@ -974,7 +974,7 @@ A decorator that replaces the keyword argument value.</li>
 </span><span id="typed_lambda-271"><a href="#typed_lambda-271"><span class="linenos">271</span></a>    <span class="n">annotations</span><span class="p">[</span><span class="s2">&quot;return&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">out_type</span>
 </span><span id="typed_lambda-272"><a href="#typed_lambda-272"><span class="linenos">272</span></a>
 </span><span id="typed_lambda-273"><a href="#typed_lambda-273"><span class="linenos">273</span></a>    <span class="nd">@functools</span><span class="o">.</span><span class="n">wraps</span><span class="p">(</span><span class="n">fn</span><span class="p">)</span>
-</span><span id="typed_lambda-274"><a href="#typed_lambda-274"><span class="linenos">274</span></a>    <span class="k">def</span> <span class="nf">wrapped</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">Unpack</span><span class="p">[</span><span class="n">LambdaArgs</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">ReturnType</span><span class="p">:</span>
+</span><span id="typed_lambda-274"><a href="#typed_lambda-274"><span class="linenos">274</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">wrapped</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">Unpack</span><span class="p">[</span><span class="n">LambdaArgs</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">ReturnType</span><span class="p">:</span>
 </span><span id="typed_lambda-275"><a href="#typed_lambda-275"><span class="linenos">275</span></a>        <span class="k">return</span> <span class="n">fn</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">)</span>
 </span><span id="typed_lambda-276"><a href="#typed_lambda-276"><span class="linenos">276</span></a>
 </span><span id="typed_lambda-277"><a href="#typed_lambda-277"><span class="linenos">277</span></a>    <span class="n">wrapped</span><span class="o">.</span><span class="vm">__annotations__</span> <span class="o">=</span> <span class="n">annotations</span>

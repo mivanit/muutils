@@ -191,7 +191,7 @@ def _inline_with_bs4(html: str, base: Path, cfg: InlineConfig) -> str:
         if not src_full:
             continue
 
-        clean_src: str = re.split(r"[?#]", src_full, 1)[0]
+        clean_src: str = re.split(r"[?#]", src_full, maxsplit=1)[0]
         ext: str = Path(clean_src).suffix.lower()
 
         if ext not in cfg.allowed_extensions:

@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="generator" content="pdoc 14.7.0"/>
+    <meta name="generator" content="pdoc 15.0.4"/>
     <title>muutils.mlutils API documentation</title>
 <link rel="stylesheet" href="../resources/css/bootstrap-reboot.min.css"><link rel="stylesheet" href="../resources/css/syntax-highlighting.css"><link rel="stylesheet" href="../resources/css/theme.css"><link rel="stylesheet" href="../resources/css/layout.css"><link rel="stylesheet" href="../resources/css/content.css"><link rel="stylesheet" href="../resources/css/custom.css"><script>
     window.MathJax = {
@@ -34,7 +34,7 @@
     }
 </style>
 <script type="module" defer>
-    import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs";
+    import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs";
 
     /* Re-invoke Mermaid when DOM content changes, for example during search. */
     document.addEventListener("DOMContentLoaded", () => {
@@ -46,7 +46,7 @@
 </script></head>
 <body>
 <div class="package-version">
-    docs for <a href="https://github.com/mivanit/muutils">muutils</a> v0.8.11<br>
+    docs for <a href="https://github.com/mivanit/muutils">muutils</a> v0.8.12<br>
 </div>
     <nav class="pdoc">
         <label id="navtoggle" for="togglestate" class="pdoc-button">
@@ -118,7 +118,7 @@
     </nav>
     <main class="pdoc">
             <section class="module-info">
-                        <a class="pdoc-button git-button" href="https://github.com/mivanit/muutils/blob/0.8.11/mlutils.py">View Source on GitHub</a>
+                        <a class="pdoc-button git-button" href="https://github.com/mivanit/muutils/blob/0.8.12/mlutils.py">View Source on GitHub</a>
                     <h1 class="modulename">
 <a href="./../muutils.html">muutils</a><wbr>.mlutils    </h1>
 
@@ -130,7 +130,7 @@
                         <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="mod-mlutils-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.11/mlutils.py#L0-L164" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/mlutils.py#L0-L166" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -139,21 +139,21 @@
                 <br/>
                         <div class="pdoc-code codehilite"><pre><span></span><span id="L-1"><a href="#L-1"><span class="linenos">  1</span></a><span class="s2">&quot;miscellaneous utilities for ML pipelines&quot;</span>
 </span><span id="L-2"><a href="#L-2"><span class="linenos">  2</span></a>
-</span><span id="L-3"><a href="#L-3"><span class="linenos">  3</span></a><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+</span><span id="L-3"><a href="#L-3"><span class="linenos">  3</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
 </span><span id="L-4"><a href="#L-4"><span class="linenos">  4</span></a>
-</span><span id="L-5"><a href="#L-5"><span class="linenos">  5</span></a><span class="kn">import</span> <span class="nn">json</span>
-</span><span id="L-6"><a href="#L-6"><span class="linenos">  6</span></a><span class="kn">import</span> <span class="nn">os</span>
-</span><span id="L-7"><a href="#L-7"><span class="linenos">  7</span></a><span class="kn">import</span> <span class="nn">random</span>
-</span><span id="L-8"><a href="#L-8"><span class="linenos">  8</span></a><span class="kn">import</span> <span class="nn">typing</span>
-</span><span id="L-9"><a href="#L-9"><span class="linenos">  9</span></a><span class="kn">import</span> <span class="nn">warnings</span>
-</span><span id="L-10"><a href="#L-10"><span class="linenos"> 10</span></a><span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">islice</span>
-</span><span id="L-11"><a href="#L-11"><span class="linenos"> 11</span></a><span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
-</span><span id="L-12"><a href="#L-12"><span class="linenos"> 12</span></a><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">TypeVar</span><span class="p">,</span> <span class="n">Union</span>
+</span><span id="L-5"><a href="#L-5"><span class="linenos">  5</span></a><span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+</span><span id="L-6"><a href="#L-6"><span class="linenos">  6</span></a><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+</span><span id="L-7"><a href="#L-7"><span class="linenos">  7</span></a><span class="kn">import</span><span class="w"> </span><span class="nn">random</span>
+</span><span id="L-8"><a href="#L-8"><span class="linenos">  8</span></a><span class="kn">import</span><span class="w"> </span><span class="nn">typing</span>
+</span><span id="L-9"><a href="#L-9"><span class="linenos">  9</span></a><span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
+</span><span id="L-10"><a href="#L-10"><span class="linenos"> 10</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">itertools</span><span class="w"> </span><span class="kn">import</span> <span class="n">islice</span>
+</span><span id="L-11"><a href="#L-11"><span class="linenos"> 11</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+</span><span id="L-12"><a href="#L-12"><span class="linenos"> 12</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">TypeVar</span><span class="p">,</span> <span class="n">Union</span>
 </span><span id="L-13"><a href="#L-13"><span class="linenos"> 13</span></a>
 </span><span id="L-14"><a href="#L-14"><span class="linenos"> 14</span></a><span class="n">ARRAY_IMPORTS</span><span class="p">:</span> <span class="nb">bool</span>
 </span><span id="L-15"><a href="#L-15"><span class="linenos"> 15</span></a><span class="k">try</span><span class="p">:</span>
-</span><span id="L-16"><a href="#L-16"><span class="linenos"> 16</span></a>    <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-</span><span id="L-17"><a href="#L-17"><span class="linenos"> 17</span></a>    <span class="kn">import</span> <span class="nn">torch</span>
+</span><span id="L-16"><a href="#L-16"><span class="linenos"> 16</span></a>    <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+</span><span id="L-17"><a href="#L-17"><span class="linenos"> 17</span></a>    <span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
 </span><span id="L-18"><a href="#L-18"><span class="linenos"> 18</span></a>
 </span><span id="L-19"><a href="#L-19"><span class="linenos"> 19</span></a>    <span class="n">ARRAY_IMPORTS</span> <span class="o">=</span> <span class="kc">True</span>
 </span><span id="L-20"><a href="#L-20"><span class="linenos"> 20</span></a><span class="k">except</span> <span class="ne">ImportError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
@@ -166,7 +166,7 @@
 </span><span id="L-27"><a href="#L-27"><span class="linenos"> 27</span></a><span class="n">GLOBAL_SEED</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">DEFAULT_SEED</span>
 </span><span id="L-28"><a href="#L-28"><span class="linenos"> 28</span></a>
 </span><span id="L-29"><a href="#L-29"><span class="linenos"> 29</span></a>
-</span><span id="L-30"><a href="#L-30"><span class="linenos"> 30</span></a><span class="k">def</span> <span class="nf">get_device</span><span class="p">(</span><span class="n">device</span><span class="p">:</span> <span class="s2">&quot;Union[str,torch.device,None]&quot;</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;torch.device&quot;</span><span class="p">:</span>
+</span><span id="L-30"><a href="#L-30"><span class="linenos"> 30</span></a><span class="k">def</span><span class="w"> </span><span class="nf">get_device</span><span class="p">(</span><span class="n">device</span><span class="p">:</span> <span class="s2">&quot;Union[str,torch.device,None]&quot;</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;torch.device&quot;</span><span class="p">:</span>
 </span><span id="L-31"><a href="#L-31"><span class="linenos"> 31</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Get the torch.device instance on which `torch.Tensor`s should be allocated.&quot;&quot;&quot;</span>
 </span><span id="L-32"><a href="#L-32"><span class="linenos"> 32</span></a>    <span class="k">if</span> <span class="ow">not</span> <span class="n">ARRAY_IMPORTS</span><span class="p">:</span>
 </span><span id="L-33"><a href="#L-33"><span class="linenos"> 33</span></a>        <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span>
@@ -213,7 +213,7 @@
 </span><span id="L-74"><a href="#L-74"><span class="linenos"> 74</span></a>        <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s2">&quot;cpu&quot;</span><span class="p">)</span>
 </span><span id="L-75"><a href="#L-75"><span class="linenos"> 75</span></a>
 </span><span id="L-76"><a href="#L-76"><span class="linenos"> 76</span></a>
-</span><span id="L-77"><a href="#L-77"><span class="linenos"> 77</span></a><span class="k">def</span> <span class="nf">set_reproducibility</span><span class="p">(</span><span class="n">seed</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">DEFAULT_SEED</span><span class="p">):</span>
+</span><span id="L-77"><a href="#L-77"><span class="linenos"> 77</span></a><span class="k">def</span><span class="w"> </span><span class="nf">set_reproducibility</span><span class="p">(</span><span class="n">seed</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">DEFAULT_SEED</span><span class="p">):</span>
 </span><span id="L-78"><a href="#L-78"><span class="linenos"> 78</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="L-79"><a href="#L-79"><span class="linenos"> 79</span></a><span class="sd">    Improve model reproducibility. See https://github.com/NVIDIA/framework-determinism for more information.</span>
 </span><span id="L-80"><a href="#L-80"><span class="linenos"> 80</span></a>
@@ -236,7 +236,7 @@
 </span><span id="L-97"><a href="#L-97"><span class="linenos"> 97</span></a>        <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;CUBLAS_WORKSPACE_CONFIG&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;:4096:8&quot;</span>
 </span><span id="L-98"><a href="#L-98"><span class="linenos"> 98</span></a>
 </span><span id="L-99"><a href="#L-99"><span class="linenos"> 99</span></a>
-</span><span id="L-100"><a href="#L-100"><span class="linenos">100</span></a><span class="k">def</span> <span class="nf">chunks</span><span class="p">(</span><span class="n">it</span><span class="p">,</span> <span class="n">chunk_size</span><span class="p">):</span>
+</span><span id="L-100"><a href="#L-100"><span class="linenos">100</span></a><span class="k">def</span><span class="w"> </span><span class="nf">chunks</span><span class="p">(</span><span class="n">it</span><span class="p">,</span> <span class="n">chunk_size</span><span class="p">):</span>
 </span><span id="L-101"><a href="#L-101"><span class="linenos">101</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Yield successive chunks from an iterator.&quot;&quot;&quot;</span>
 </span><span id="L-102"><a href="#L-102"><span class="linenos">102</span></a>    <span class="c1"># https://stackoverflow.com/a/61435714</span>
 </span><span id="L-103"><a href="#L-103"><span class="linenos">103</span></a>    <span class="n">iterator</span> <span class="o">=</span> <span class="nb">iter</span><span class="p">(</span><span class="n">it</span><span class="p">)</span>
@@ -244,7 +244,7 @@
 </span><span id="L-105"><a href="#L-105"><span class="linenos">105</span></a>        <span class="k">yield</span> <span class="n">chunk</span>
 </span><span id="L-106"><a href="#L-106"><span class="linenos">106</span></a>
 </span><span id="L-107"><a href="#L-107"><span class="linenos">107</span></a>
-</span><span id="L-108"><a href="#L-108"><span class="linenos">108</span></a><span class="k">def</span> <span class="nf">get_checkpoint_paths_for_run</span><span class="p">(</span>
+</span><span id="L-108"><a href="#L-108"><span class="linenos">108</span></a><span class="k">def</span><span class="w"> </span><span class="nf">get_checkpoint_paths_for_run</span><span class="p">(</span>
 </span><span id="L-109"><a href="#L-109"><span class="linenos">109</span></a>    <span class="n">run_path</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span>
 </span><span id="L-110"><a href="#L-110"><span class="linenos">110</span></a>    <span class="n">extension</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;pt&quot;</span><span class="p">,</span> <span class="s2">&quot;zanj&quot;</span><span class="p">],</span>
 </span><span id="L-111"><a href="#L-111"><span class="linenos">111</span></a>    <span class="n">checkpoints_format</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;checkpoints/model.iter_*.</span><span class="si">{extension}</span><span class="s2">&quot;</span><span class="p">,</span>
@@ -256,52 +256,54 @@
 </span><span id="L-117"><a href="#L-117"><span class="linenos">117</span></a><span class="sd">     - a wildcard for the iteration number</span>
 </span><span id="L-118"><a href="#L-118"><span class="linenos">118</span></a><span class="sd">    &quot;&quot;&quot;</span>
 </span><span id="L-119"><a href="#L-119"><span class="linenos">119</span></a>
-</span><span id="L-120"><a href="#L-120"><span class="linenos">120</span></a>    <span class="k">assert</span> <span class="n">run_path</span><span class="o">.</span><span class="n">is_dir</span><span class="p">(),</span> <span class="sa">f</span><span class="s2">&quot;Model path </span><span class="si">{</span><span class="n">run_path</span><span class="si">}</span><span class="s2"> is not a directory (expect run directory, not model files)&quot;</span>
-</span><span id="L-121"><a href="#L-121"><span class="linenos">121</span></a>
-</span><span id="L-122"><a href="#L-122"><span class="linenos">122</span></a>    <span class="k">return</span> <span class="p">[</span>
-</span><span id="L-123"><a href="#L-123"><span class="linenos">123</span></a>        <span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">checkpoint_path</span><span class="o">.</span><span class="n">stem</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]),</span> <span class="n">checkpoint_path</span><span class="p">)</span>
-</span><span id="L-124"><a href="#L-124"><span class="linenos">124</span></a>        <span class="k">for</span> <span class="n">checkpoint_path</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span>
-</span><span id="L-125"><a href="#L-125"><span class="linenos">125</span></a>            <span class="n">Path</span><span class="p">(</span><span class="n">run_path</span><span class="p">)</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">checkpoints_format</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">extension</span><span class="o">=</span><span class="n">extension</span><span class="p">))</span>
-</span><span id="L-126"><a href="#L-126"><span class="linenos">126</span></a>        <span class="p">)</span>
-</span><span id="L-127"><a href="#L-127"><span class="linenos">127</span></a>    <span class="p">]</span>
-</span><span id="L-128"><a href="#L-128"><span class="linenos">128</span></a>
-</span><span id="L-129"><a href="#L-129"><span class="linenos">129</span></a>
-</span><span id="L-130"><a href="#L-130"><span class="linenos">130</span></a><span class="n">F</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s2">&quot;F&quot;</span><span class="p">,</span> <span class="n">bound</span><span class="o">=</span><span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span>
+</span><span id="L-120"><a href="#L-120"><span class="linenos">120</span></a>    <span class="k">assert</span> <span class="n">run_path</span><span class="o">.</span><span class="n">is_dir</span><span class="p">(),</span> <span class="p">(</span>
+</span><span id="L-121"><a href="#L-121"><span class="linenos">121</span></a>        <span class="sa">f</span><span class="s2">&quot;Model path </span><span class="si">{</span><span class="n">run_path</span><span class="si">}</span><span class="s2"> is not a directory (expect run directory, not model files)&quot;</span>
+</span><span id="L-122"><a href="#L-122"><span class="linenos">122</span></a>    <span class="p">)</span>
+</span><span id="L-123"><a href="#L-123"><span class="linenos">123</span></a>
+</span><span id="L-124"><a href="#L-124"><span class="linenos">124</span></a>    <span class="k">return</span> <span class="p">[</span>
+</span><span id="L-125"><a href="#L-125"><span class="linenos">125</span></a>        <span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">checkpoint_path</span><span class="o">.</span><span class="n">stem</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]),</span> <span class="n">checkpoint_path</span><span class="p">)</span>
+</span><span id="L-126"><a href="#L-126"><span class="linenos">126</span></a>        <span class="k">for</span> <span class="n">checkpoint_path</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span>
+</span><span id="L-127"><a href="#L-127"><span class="linenos">127</span></a>            <span class="n">Path</span><span class="p">(</span><span class="n">run_path</span><span class="p">)</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">checkpoints_format</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">extension</span><span class="o">=</span><span class="n">extension</span><span class="p">))</span>
+</span><span id="L-128"><a href="#L-128"><span class="linenos">128</span></a>        <span class="p">)</span>
+</span><span id="L-129"><a href="#L-129"><span class="linenos">129</span></a>    <span class="p">]</span>
+</span><span id="L-130"><a href="#L-130"><span class="linenos">130</span></a>
 </span><span id="L-131"><a href="#L-131"><span class="linenos">131</span></a>
-</span><span id="L-132"><a href="#L-132"><span class="linenos">132</span></a>
-</span><span id="L-133"><a href="#L-133"><span class="linenos">133</span></a><span class="k">def</span> <span class="nf">register_method</span><span class="p">(</span>
-</span><span id="L-134"><a href="#L-134"><span class="linenos">134</span></a>    <span class="n">method_dict</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">Any</span><span class="p">]],</span>
-</span><span id="L-135"><a href="#L-135"><span class="linenos">135</span></a>    <span class="n">custom_name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-</span><span id="L-136"><a href="#L-136"><span class="linenos">136</span></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">F</span><span class="p">],</span> <span class="n">F</span><span class="p">]:</span>
-</span><span id="L-137"><a href="#L-137"><span class="linenos">137</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Decorator to add a method to the method_dict&quot;&quot;&quot;</span>
-</span><span id="L-138"><a href="#L-138"><span class="linenos">138</span></a>
-</span><span id="L-139"><a href="#L-139"><span class="linenos">139</span></a>    <span class="k">def</span> <span class="nf">decorator</span><span class="p">(</span><span class="n">method</span><span class="p">:</span> <span class="n">F</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">F</span><span class="p">:</span>
-</span><span id="L-140"><a href="#L-140"><span class="linenos">140</span></a>        <span class="n">method_name</span><span class="p">:</span> <span class="nb">str</span>
-</span><span id="L-141"><a href="#L-141"><span class="linenos">141</span></a>        <span class="k">if</span> <span class="n">custom_name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="L-142"><a href="#L-142"><span class="linenos">142</span></a>            <span class="n">method_name_orig</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">method</span><span class="p">,</span> <span class="s2">&quot;__name__&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
-</span><span id="L-143"><a href="#L-143"><span class="linenos">143</span></a>            <span class="k">if</span> <span class="n">method_name_orig</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="L-144"><a href="#L-144"><span class="linenos">144</span></a>                <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
-</span><span id="L-145"><a href="#L-145"><span class="linenos">145</span></a>                    <span class="sa">f</span><span class="s2">&quot;Method </span><span class="si">{</span><span class="n">method</span><span class="si">}</span><span class="s2"> does not have a name, using sanitized repr&quot;</span>
-</span><span id="L-146"><a href="#L-146"><span class="linenos">146</span></a>                <span class="p">)</span>
-</span><span id="L-147"><a href="#L-147"><span class="linenos">147</span></a>                <span class="kn">from</span> <span class="nn">muutils.misc</span> <span class="kn">import</span> <span class="n">sanitize_identifier</span>
-</span><span id="L-148"><a href="#L-148"><span class="linenos">148</span></a>
-</span><span id="L-149"><a href="#L-149"><span class="linenos">149</span></a>                <span class="n">method_name</span> <span class="o">=</span> <span class="n">sanitize_identifier</span><span class="p">(</span><span class="nb">repr</span><span class="p">(</span><span class="n">method</span><span class="p">))</span>
-</span><span id="L-150"><a href="#L-150"><span class="linenos">150</span></a>            <span class="k">else</span><span class="p">:</span>
-</span><span id="L-151"><a href="#L-151"><span class="linenos">151</span></a>                <span class="n">method_name</span> <span class="o">=</span> <span class="n">method_name_orig</span>
-</span><span id="L-152"><a href="#L-152"><span class="linenos">152</span></a>        <span class="k">else</span><span class="p">:</span>
-</span><span id="L-153"><a href="#L-153"><span class="linenos">153</span></a>            <span class="n">method_name</span> <span class="o">=</span> <span class="n">custom_name</span>
-</span><span id="L-154"><a href="#L-154"><span class="linenos">154</span></a>            <span class="n">method</span><span class="o">.</span><span class="vm">__name__</span> <span class="o">=</span> <span class="n">custom_name</span>
-</span><span id="L-155"><a href="#L-155"><span class="linenos">155</span></a>        <span class="k">assert</span> <span class="p">(</span>
-</span><span id="L-156"><a href="#L-156"><span class="linenos">156</span></a>            <span class="n">method_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">method_dict</span>
-</span><span id="L-157"><a href="#L-157"><span class="linenos">157</span></a>        <span class="p">),</span> <span class="sa">f</span><span class="s2">&quot;Method name already exists in method_dict: </span><span class="si">{</span><span class="n">method_name</span><span class="w"> </span><span class="si">= }</span><span class="s2">, </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="n">method_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span><span class="w"> </span><span class="si">= }</span><span class="s2">&quot;</span>
-</span><span id="L-158"><a href="#L-158"><span class="linenos">158</span></a>        <span class="n">method_dict</span><span class="p">[</span><span class="n">method_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">method</span>
-</span><span id="L-159"><a href="#L-159"><span class="linenos">159</span></a>        <span class="k">return</span> <span class="n">method</span>
-</span><span id="L-160"><a href="#L-160"><span class="linenos">160</span></a>
-</span><span id="L-161"><a href="#L-161"><span class="linenos">161</span></a>    <span class="k">return</span> <span class="n">decorator</span>
+</span><span id="L-132"><a href="#L-132"><span class="linenos">132</span></a><span class="n">F</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s2">&quot;F&quot;</span><span class="p">,</span> <span class="n">bound</span><span class="o">=</span><span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span>
+</span><span id="L-133"><a href="#L-133"><span class="linenos">133</span></a>
+</span><span id="L-134"><a href="#L-134"><span class="linenos">134</span></a>
+</span><span id="L-135"><a href="#L-135"><span class="linenos">135</span></a><span class="k">def</span><span class="w"> </span><span class="nf">register_method</span><span class="p">(</span>
+</span><span id="L-136"><a href="#L-136"><span class="linenos">136</span></a>    <span class="n">method_dict</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">Any</span><span class="p">]],</span>
+</span><span id="L-137"><a href="#L-137"><span class="linenos">137</span></a>    <span class="n">custom_name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+</span><span id="L-138"><a href="#L-138"><span class="linenos">138</span></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">F</span><span class="p">],</span> <span class="n">F</span><span class="p">]:</span>
+</span><span id="L-139"><a href="#L-139"><span class="linenos">139</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Decorator to add a method to the method_dict&quot;&quot;&quot;</span>
+</span><span id="L-140"><a href="#L-140"><span class="linenos">140</span></a>
+</span><span id="L-141"><a href="#L-141"><span class="linenos">141</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">decorator</span><span class="p">(</span><span class="n">method</span><span class="p">:</span> <span class="n">F</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">F</span><span class="p">:</span>
+</span><span id="L-142"><a href="#L-142"><span class="linenos">142</span></a>        <span class="n">method_name</span><span class="p">:</span> <span class="nb">str</span>
+</span><span id="L-143"><a href="#L-143"><span class="linenos">143</span></a>        <span class="k">if</span> <span class="n">custom_name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="L-144"><a href="#L-144"><span class="linenos">144</span></a>            <span class="n">method_name_orig</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">method</span><span class="p">,</span> <span class="s2">&quot;__name__&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+</span><span id="L-145"><a href="#L-145"><span class="linenos">145</span></a>            <span class="k">if</span> <span class="n">method_name_orig</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="L-146"><a href="#L-146"><span class="linenos">146</span></a>                <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+</span><span id="L-147"><a href="#L-147"><span class="linenos">147</span></a>                    <span class="sa">f</span><span class="s2">&quot;Method </span><span class="si">{</span><span class="n">method</span><span class="si">}</span><span class="s2"> does not have a name, using sanitized repr&quot;</span>
+</span><span id="L-148"><a href="#L-148"><span class="linenos">148</span></a>                <span class="p">)</span>
+</span><span id="L-149"><a href="#L-149"><span class="linenos">149</span></a>                <span class="kn">from</span><span class="w"> </span><span class="nn">muutils.misc</span><span class="w"> </span><span class="kn">import</span> <span class="n">sanitize_identifier</span>
+</span><span id="L-150"><a href="#L-150"><span class="linenos">150</span></a>
+</span><span id="L-151"><a href="#L-151"><span class="linenos">151</span></a>                <span class="n">method_name</span> <span class="o">=</span> <span class="n">sanitize_identifier</span><span class="p">(</span><span class="nb">repr</span><span class="p">(</span><span class="n">method</span><span class="p">))</span>
+</span><span id="L-152"><a href="#L-152"><span class="linenos">152</span></a>            <span class="k">else</span><span class="p">:</span>
+</span><span id="L-153"><a href="#L-153"><span class="linenos">153</span></a>                <span class="n">method_name</span> <span class="o">=</span> <span class="n">method_name_orig</span>
+</span><span id="L-154"><a href="#L-154"><span class="linenos">154</span></a>        <span class="k">else</span><span class="p">:</span>
+</span><span id="L-155"><a href="#L-155"><span class="linenos">155</span></a>            <span class="n">method_name</span> <span class="o">=</span> <span class="n">custom_name</span>
+</span><span id="L-156"><a href="#L-156"><span class="linenos">156</span></a>            <span class="n">method</span><span class="o">.</span><span class="vm">__name__</span> <span class="o">=</span> <span class="n">custom_name</span>
+</span><span id="L-157"><a href="#L-157"><span class="linenos">157</span></a>        <span class="k">assert</span> <span class="n">method_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">method_dict</span><span class="p">,</span> <span class="p">(</span>
+</span><span id="L-158"><a href="#L-158"><span class="linenos">158</span></a>            <span class="sa">f</span><span class="s2">&quot;Method name already exists in method_dict: </span><span class="si">{</span><span class="n">method_name</span><span class="w"> </span><span class="si">= }</span><span class="s2">, </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="n">method_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span><span class="w"> </span><span class="si">= }</span><span class="s2">&quot;</span>
+</span><span id="L-159"><a href="#L-159"><span class="linenos">159</span></a>        <span class="p">)</span>
+</span><span id="L-160"><a href="#L-160"><span class="linenos">160</span></a>        <span class="n">method_dict</span><span class="p">[</span><span class="n">method_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">method</span>
+</span><span id="L-161"><a href="#L-161"><span class="linenos">161</span></a>        <span class="k">return</span> <span class="n">method</span>
 </span><span id="L-162"><a href="#L-162"><span class="linenos">162</span></a>
-</span><span id="L-163"><a href="#L-163"><span class="linenos">163</span></a>
-</span><span id="L-164"><a href="#L-164"><span class="linenos">164</span></a><span class="k">def</span> <span class="nf">pprint_summary</span><span class="p">(</span><span class="n">summary</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
-</span><span id="L-165"><a href="#L-165"><span class="linenos">165</span></a>    <span class="nb">print</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">summary</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">))</span>
+</span><span id="L-163"><a href="#L-163"><span class="linenos">163</span></a>    <span class="k">return</span> <span class="n">decorator</span>
+</span><span id="L-164"><a href="#L-164"><span class="linenos">164</span></a>
+</span><span id="L-165"><a href="#L-165"><span class="linenos">165</span></a>
+</span><span id="L-166"><a href="#L-166"><span class="linenos">166</span></a><span class="k">def</span><span class="w"> </span><span class="nf">pprint_summary</span><span class="p">(</span><span class="n">summary</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
+</span><span id="L-167"><a href="#L-167"><span class="linenos">167</span></a>    <span class="nb">print</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">summary</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">))</span>
 </span></pre></div>
 
 
@@ -353,7 +355,7 @@
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="get_device-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.11/mlutils.py#L30-L74" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/mlutils.py#L30-L74" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -361,7 +363,7 @@
 
     </div>
     <a class="headerlink" href="#get_device"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="get_device-31"><a href="#get_device-31"><span class="linenos">31</span></a><span class="k">def</span> <span class="nf">get_device</span><span class="p">(</span><span class="n">device</span><span class="p">:</span> <span class="s2">&quot;Union[str,torch.device,None]&quot;</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;torch.device&quot;</span><span class="p">:</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="get_device-31"><a href="#get_device-31"><span class="linenos">31</span></a><span class="k">def</span><span class="w"> </span><span class="nf">get_device</span><span class="p">(</span><span class="n">device</span><span class="p">:</span> <span class="s2">&quot;Union[str,torch.device,None]&quot;</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;torch.device&quot;</span><span class="p">:</span>
 </span><span id="get_device-32"><a href="#get_device-32"><span class="linenos">32</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Get the torch.device instance on which `torch.Tensor`s should be allocated.&quot;&quot;&quot;</span>
 </span><span id="get_device-33"><a href="#get_device-33"><span class="linenos">33</span></a>    <span class="k">if</span> <span class="ow">not</span> <span class="n">ARRAY_IMPORTS</span><span class="p">:</span>
 </span><span id="get_device-34"><a href="#get_device-34"><span class="linenos">34</span></a>        <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span>
@@ -424,7 +426,7 @@
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="set_reproducibility-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.11/mlutils.py#L77-L97" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/mlutils.py#L77-L97" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -432,7 +434,7 @@
 
     </div>
     <a class="headerlink" href="#set_reproducibility"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="set_reproducibility-78"><a href="#set_reproducibility-78"><span class="linenos">78</span></a><span class="k">def</span> <span class="nf">set_reproducibility</span><span class="p">(</span><span class="n">seed</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">DEFAULT_SEED</span><span class="p">):</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="set_reproducibility-78"><a href="#set_reproducibility-78"><span class="linenos">78</span></a><span class="k">def</span><span class="w"> </span><span class="nf">set_reproducibility</span><span class="p">(</span><span class="n">seed</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">DEFAULT_SEED</span><span class="p">):</span>
 </span><span id="set_reproducibility-79"><a href="#set_reproducibility-79"><span class="linenos">79</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="set_reproducibility-80"><a href="#set_reproducibility-80"><span class="linenos">80</span></a><span class="sd">    Improve model reproducibility. See https://github.com/NVIDIA/framework-determinism for more information.</span>
 </span><span id="set_reproducibility-81"><a href="#set_reproducibility-81"><span class="linenos">81</span></a>
@@ -474,7 +476,7 @@ off performance for reproducibility. Set use_deterministic_algorithms to True to
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="chunks-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.11/mlutils.py#L100-L105" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/mlutils.py#L100-L105" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -482,7 +484,7 @@ off performance for reproducibility. Set use_deterministic_algorithms to True to
 
     </div>
     <a class="headerlink" href="#chunks"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="chunks-101"><a href="#chunks-101"><span class="linenos">101</span></a><span class="k">def</span> <span class="nf">chunks</span><span class="p">(</span><span class="n">it</span><span class="p">,</span> <span class="n">chunk_size</span><span class="p">):</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="chunks-101"><a href="#chunks-101"><span class="linenos">101</span></a><span class="k">def</span><span class="w"> </span><span class="nf">chunks</span><span class="p">(</span><span class="n">it</span><span class="p">,</span> <span class="n">chunk_size</span><span class="p">):</span>
 </span><span id="chunks-102"><a href="#chunks-102"><span class="linenos">102</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Yield successive chunks from an iterator.&quot;&quot;&quot;</span>
 </span><span id="chunks-103"><a href="#chunks-103"><span class="linenos">103</span></a>    <span class="c1"># https://stackoverflow.com/a/61435714</span>
 </span><span id="chunks-104"><a href="#chunks-104"><span class="linenos">104</span></a>    <span class="n">iterator</span> <span class="o">=</span> <span class="nb">iter</span><span class="p">(</span><span class="n">it</span><span class="p">)</span>
@@ -501,12 +503,12 @@ off performance for reproducibility. Set use_deterministic_algorithms to True to
 <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">get_checkpoint_paths_for_run</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">run_path</span><span class="p">:</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span>,</span><span class="param">	<span class="n">extension</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s1">&#39;pt&#39;</span><span class="p">,</span> <span class="s1">&#39;zanj&#39;</span><span class="p">]</span>,</span><span class="param">	<span class="n">checkpoints_format</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;checkpoints/model.iter_*.</span><span class="si">{extension}</span><span class="s1">&#39;</span></span><span class="return-annotation">) -> <span class="nb">list</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">]]</span>:</span></span>
+        <span class="name">get_checkpoint_paths_for_run</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">run_path</span><span class="p">:</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">_local</span><span class="o">.</span><span class="n">Path</span>,</span><span class="param">	<span class="n">extension</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s1">&#39;pt&#39;</span><span class="p">,</span> <span class="s1">&#39;zanj&#39;</span><span class="p">]</span>,</span><span class="param">	<span class="n">checkpoints_format</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;checkpoints/model.iter_*.</span><span class="si">{extension}</span><span class="s1">&#39;</span></span><span class="return-annotation">) -> <span class="nb">list</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">_local</span><span class="o">.</span><span class="n">Path</span><span class="p">]]</span>:</span></span>
 
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="get_checkpoint_paths_for_run-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.11/mlutils.py#L108-L127" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/mlutils.py#L108-L129" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -514,7 +516,7 @@ off performance for reproducibility. Set use_deterministic_algorithms to True to
 
     </div>
     <a class="headerlink" href="#get_checkpoint_paths_for_run"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="get_checkpoint_paths_for_run-109"><a href="#get_checkpoint_paths_for_run-109"><span class="linenos">109</span></a><span class="k">def</span> <span class="nf">get_checkpoint_paths_for_run</span><span class="p">(</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="get_checkpoint_paths_for_run-109"><a href="#get_checkpoint_paths_for_run-109"><span class="linenos">109</span></a><span class="k">def</span><span class="w"> </span><span class="nf">get_checkpoint_paths_for_run</span><span class="p">(</span>
 </span><span id="get_checkpoint_paths_for_run-110"><a href="#get_checkpoint_paths_for_run-110"><span class="linenos">110</span></a>    <span class="n">run_path</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span>
 </span><span id="get_checkpoint_paths_for_run-111"><a href="#get_checkpoint_paths_for_run-111"><span class="linenos">111</span></a>    <span class="n">extension</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;pt&quot;</span><span class="p">,</span> <span class="s2">&quot;zanj&quot;</span><span class="p">],</span>
 </span><span id="get_checkpoint_paths_for_run-112"><a href="#get_checkpoint_paths_for_run-112"><span class="linenos">112</span></a>    <span class="n">checkpoints_format</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;checkpoints/model.iter_*.</span><span class="si">{extension}</span><span class="s2">&quot;</span><span class="p">,</span>
@@ -526,14 +528,16 @@ off performance for reproducibility. Set use_deterministic_algorithms to True to
 </span><span id="get_checkpoint_paths_for_run-118"><a href="#get_checkpoint_paths_for_run-118"><span class="linenos">118</span></a><span class="sd">     - a wildcard for the iteration number</span>
 </span><span id="get_checkpoint_paths_for_run-119"><a href="#get_checkpoint_paths_for_run-119"><span class="linenos">119</span></a><span class="sd">    &quot;&quot;&quot;</span>
 </span><span id="get_checkpoint_paths_for_run-120"><a href="#get_checkpoint_paths_for_run-120"><span class="linenos">120</span></a>
-</span><span id="get_checkpoint_paths_for_run-121"><a href="#get_checkpoint_paths_for_run-121"><span class="linenos">121</span></a>    <span class="k">assert</span> <span class="n">run_path</span><span class="o">.</span><span class="n">is_dir</span><span class="p">(),</span> <span class="sa">f</span><span class="s2">&quot;Model path </span><span class="si">{</span><span class="n">run_path</span><span class="si">}</span><span class="s2"> is not a directory (expect run directory, not model files)&quot;</span>
-</span><span id="get_checkpoint_paths_for_run-122"><a href="#get_checkpoint_paths_for_run-122"><span class="linenos">122</span></a>
-</span><span id="get_checkpoint_paths_for_run-123"><a href="#get_checkpoint_paths_for_run-123"><span class="linenos">123</span></a>    <span class="k">return</span> <span class="p">[</span>
-</span><span id="get_checkpoint_paths_for_run-124"><a href="#get_checkpoint_paths_for_run-124"><span class="linenos">124</span></a>        <span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">checkpoint_path</span><span class="o">.</span><span class="n">stem</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]),</span> <span class="n">checkpoint_path</span><span class="p">)</span>
-</span><span id="get_checkpoint_paths_for_run-125"><a href="#get_checkpoint_paths_for_run-125"><span class="linenos">125</span></a>        <span class="k">for</span> <span class="n">checkpoint_path</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span>
-</span><span id="get_checkpoint_paths_for_run-126"><a href="#get_checkpoint_paths_for_run-126"><span class="linenos">126</span></a>            <span class="n">Path</span><span class="p">(</span><span class="n">run_path</span><span class="p">)</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">checkpoints_format</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">extension</span><span class="o">=</span><span class="n">extension</span><span class="p">))</span>
-</span><span id="get_checkpoint_paths_for_run-127"><a href="#get_checkpoint_paths_for_run-127"><span class="linenos">127</span></a>        <span class="p">)</span>
-</span><span id="get_checkpoint_paths_for_run-128"><a href="#get_checkpoint_paths_for_run-128"><span class="linenos">128</span></a>    <span class="p">]</span>
+</span><span id="get_checkpoint_paths_for_run-121"><a href="#get_checkpoint_paths_for_run-121"><span class="linenos">121</span></a>    <span class="k">assert</span> <span class="n">run_path</span><span class="o">.</span><span class="n">is_dir</span><span class="p">(),</span> <span class="p">(</span>
+</span><span id="get_checkpoint_paths_for_run-122"><a href="#get_checkpoint_paths_for_run-122"><span class="linenos">122</span></a>        <span class="sa">f</span><span class="s2">&quot;Model path </span><span class="si">{</span><span class="n">run_path</span><span class="si">}</span><span class="s2"> is not a directory (expect run directory, not model files)&quot;</span>
+</span><span id="get_checkpoint_paths_for_run-123"><a href="#get_checkpoint_paths_for_run-123"><span class="linenos">123</span></a>    <span class="p">)</span>
+</span><span id="get_checkpoint_paths_for_run-124"><a href="#get_checkpoint_paths_for_run-124"><span class="linenos">124</span></a>
+</span><span id="get_checkpoint_paths_for_run-125"><a href="#get_checkpoint_paths_for_run-125"><span class="linenos">125</span></a>    <span class="k">return</span> <span class="p">[</span>
+</span><span id="get_checkpoint_paths_for_run-126"><a href="#get_checkpoint_paths_for_run-126"><span class="linenos">126</span></a>        <span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">checkpoint_path</span><span class="o">.</span><span class="n">stem</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]),</span> <span class="n">checkpoint_path</span><span class="p">)</span>
+</span><span id="get_checkpoint_paths_for_run-127"><a href="#get_checkpoint_paths_for_run-127"><span class="linenos">127</span></a>        <span class="k">for</span> <span class="n">checkpoint_path</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span>
+</span><span id="get_checkpoint_paths_for_run-128"><a href="#get_checkpoint_paths_for_run-128"><span class="linenos">128</span></a>            <span class="n">Path</span><span class="p">(</span><span class="n">run_path</span><span class="p">)</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">checkpoints_format</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">extension</span><span class="o">=</span><span class="n">extension</span><span class="p">))</span>
+</span><span id="get_checkpoint_paths_for_run-129"><a href="#get_checkpoint_paths_for_run-129"><span class="linenos">129</span></a>        <span class="p">)</span>
+</span><span id="get_checkpoint_paths_for_run-130"><a href="#get_checkpoint_paths_for_run-130"><span class="linenos">130</span></a>    <span class="p">]</span>
 </span></pre></div>
 
 
@@ -559,7 +563,7 @@ off performance for reproducibility. Set use_deterministic_algorithms to True to
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="register_method-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.11/mlutils.py#L133-L161" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/mlutils.py#L135-L163" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -567,35 +571,35 @@ off performance for reproducibility. Set use_deterministic_algorithms to True to
 
     </div>
     <a class="headerlink" href="#register_method"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="register_method-134"><a href="#register_method-134"><span class="linenos">134</span></a><span class="k">def</span> <span class="nf">register_method</span><span class="p">(</span>
-</span><span id="register_method-135"><a href="#register_method-135"><span class="linenos">135</span></a>    <span class="n">method_dict</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">Any</span><span class="p">]],</span>
-</span><span id="register_method-136"><a href="#register_method-136"><span class="linenos">136</span></a>    <span class="n">custom_name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-</span><span id="register_method-137"><a href="#register_method-137"><span class="linenos">137</span></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">F</span><span class="p">],</span> <span class="n">F</span><span class="p">]:</span>
-</span><span id="register_method-138"><a href="#register_method-138"><span class="linenos">138</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Decorator to add a method to the method_dict&quot;&quot;&quot;</span>
-</span><span id="register_method-139"><a href="#register_method-139"><span class="linenos">139</span></a>
-</span><span id="register_method-140"><a href="#register_method-140"><span class="linenos">140</span></a>    <span class="k">def</span> <span class="nf">decorator</span><span class="p">(</span><span class="n">method</span><span class="p">:</span> <span class="n">F</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">F</span><span class="p">:</span>
-</span><span id="register_method-141"><a href="#register_method-141"><span class="linenos">141</span></a>        <span class="n">method_name</span><span class="p">:</span> <span class="nb">str</span>
-</span><span id="register_method-142"><a href="#register_method-142"><span class="linenos">142</span></a>        <span class="k">if</span> <span class="n">custom_name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="register_method-143"><a href="#register_method-143"><span class="linenos">143</span></a>            <span class="n">method_name_orig</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">method</span><span class="p">,</span> <span class="s2">&quot;__name__&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
-</span><span id="register_method-144"><a href="#register_method-144"><span class="linenos">144</span></a>            <span class="k">if</span> <span class="n">method_name_orig</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="register_method-145"><a href="#register_method-145"><span class="linenos">145</span></a>                <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
-</span><span id="register_method-146"><a href="#register_method-146"><span class="linenos">146</span></a>                    <span class="sa">f</span><span class="s2">&quot;Method </span><span class="si">{</span><span class="n">method</span><span class="si">}</span><span class="s2"> does not have a name, using sanitized repr&quot;</span>
-</span><span id="register_method-147"><a href="#register_method-147"><span class="linenos">147</span></a>                <span class="p">)</span>
-</span><span id="register_method-148"><a href="#register_method-148"><span class="linenos">148</span></a>                <span class="kn">from</span> <span class="nn">muutils.misc</span> <span class="kn">import</span> <span class="n">sanitize_identifier</span>
-</span><span id="register_method-149"><a href="#register_method-149"><span class="linenos">149</span></a>
-</span><span id="register_method-150"><a href="#register_method-150"><span class="linenos">150</span></a>                <span class="n">method_name</span> <span class="o">=</span> <span class="n">sanitize_identifier</span><span class="p">(</span><span class="nb">repr</span><span class="p">(</span><span class="n">method</span><span class="p">))</span>
-</span><span id="register_method-151"><a href="#register_method-151"><span class="linenos">151</span></a>            <span class="k">else</span><span class="p">:</span>
-</span><span id="register_method-152"><a href="#register_method-152"><span class="linenos">152</span></a>                <span class="n">method_name</span> <span class="o">=</span> <span class="n">method_name_orig</span>
-</span><span id="register_method-153"><a href="#register_method-153"><span class="linenos">153</span></a>        <span class="k">else</span><span class="p">:</span>
-</span><span id="register_method-154"><a href="#register_method-154"><span class="linenos">154</span></a>            <span class="n">method_name</span> <span class="o">=</span> <span class="n">custom_name</span>
-</span><span id="register_method-155"><a href="#register_method-155"><span class="linenos">155</span></a>            <span class="n">method</span><span class="o">.</span><span class="vm">__name__</span> <span class="o">=</span> <span class="n">custom_name</span>
-</span><span id="register_method-156"><a href="#register_method-156"><span class="linenos">156</span></a>        <span class="k">assert</span> <span class="p">(</span>
-</span><span id="register_method-157"><a href="#register_method-157"><span class="linenos">157</span></a>            <span class="n">method_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">method_dict</span>
-</span><span id="register_method-158"><a href="#register_method-158"><span class="linenos">158</span></a>        <span class="p">),</span> <span class="sa">f</span><span class="s2">&quot;Method name already exists in method_dict: </span><span class="si">{</span><span class="n">method_name</span><span class="w"> </span><span class="si">= }</span><span class="s2">, </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="n">method_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span><span class="w"> </span><span class="si">= }</span><span class="s2">&quot;</span>
-</span><span id="register_method-159"><a href="#register_method-159"><span class="linenos">159</span></a>        <span class="n">method_dict</span><span class="p">[</span><span class="n">method_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">method</span>
-</span><span id="register_method-160"><a href="#register_method-160"><span class="linenos">160</span></a>        <span class="k">return</span> <span class="n">method</span>
-</span><span id="register_method-161"><a href="#register_method-161"><span class="linenos">161</span></a>
-</span><span id="register_method-162"><a href="#register_method-162"><span class="linenos">162</span></a>    <span class="k">return</span> <span class="n">decorator</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="register_method-136"><a href="#register_method-136"><span class="linenos">136</span></a><span class="k">def</span><span class="w"> </span><span class="nf">register_method</span><span class="p">(</span>
+</span><span id="register_method-137"><a href="#register_method-137"><span class="linenos">137</span></a>    <span class="n">method_dict</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">Any</span><span class="p">]],</span>
+</span><span id="register_method-138"><a href="#register_method-138"><span class="linenos">138</span></a>    <span class="n">custom_name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+</span><span id="register_method-139"><a href="#register_method-139"><span class="linenos">139</span></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">F</span><span class="p">],</span> <span class="n">F</span><span class="p">]:</span>
+</span><span id="register_method-140"><a href="#register_method-140"><span class="linenos">140</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Decorator to add a method to the method_dict&quot;&quot;&quot;</span>
+</span><span id="register_method-141"><a href="#register_method-141"><span class="linenos">141</span></a>
+</span><span id="register_method-142"><a href="#register_method-142"><span class="linenos">142</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">decorator</span><span class="p">(</span><span class="n">method</span><span class="p">:</span> <span class="n">F</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">F</span><span class="p">:</span>
+</span><span id="register_method-143"><a href="#register_method-143"><span class="linenos">143</span></a>        <span class="n">method_name</span><span class="p">:</span> <span class="nb">str</span>
+</span><span id="register_method-144"><a href="#register_method-144"><span class="linenos">144</span></a>        <span class="k">if</span> <span class="n">custom_name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="register_method-145"><a href="#register_method-145"><span class="linenos">145</span></a>            <span class="n">method_name_orig</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">method</span><span class="p">,</span> <span class="s2">&quot;__name__&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+</span><span id="register_method-146"><a href="#register_method-146"><span class="linenos">146</span></a>            <span class="k">if</span> <span class="n">method_name_orig</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="register_method-147"><a href="#register_method-147"><span class="linenos">147</span></a>                <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+</span><span id="register_method-148"><a href="#register_method-148"><span class="linenos">148</span></a>                    <span class="sa">f</span><span class="s2">&quot;Method </span><span class="si">{</span><span class="n">method</span><span class="si">}</span><span class="s2"> does not have a name, using sanitized repr&quot;</span>
+</span><span id="register_method-149"><a href="#register_method-149"><span class="linenos">149</span></a>                <span class="p">)</span>
+</span><span id="register_method-150"><a href="#register_method-150"><span class="linenos">150</span></a>                <span class="kn">from</span><span class="w"> </span><span class="nn">muutils.misc</span><span class="w"> </span><span class="kn">import</span> <span class="n">sanitize_identifier</span>
+</span><span id="register_method-151"><a href="#register_method-151"><span class="linenos">151</span></a>
+</span><span id="register_method-152"><a href="#register_method-152"><span class="linenos">152</span></a>                <span class="n">method_name</span> <span class="o">=</span> <span class="n">sanitize_identifier</span><span class="p">(</span><span class="nb">repr</span><span class="p">(</span><span class="n">method</span><span class="p">))</span>
+</span><span id="register_method-153"><a href="#register_method-153"><span class="linenos">153</span></a>            <span class="k">else</span><span class="p">:</span>
+</span><span id="register_method-154"><a href="#register_method-154"><span class="linenos">154</span></a>                <span class="n">method_name</span> <span class="o">=</span> <span class="n">method_name_orig</span>
+</span><span id="register_method-155"><a href="#register_method-155"><span class="linenos">155</span></a>        <span class="k">else</span><span class="p">:</span>
+</span><span id="register_method-156"><a href="#register_method-156"><span class="linenos">156</span></a>            <span class="n">method_name</span> <span class="o">=</span> <span class="n">custom_name</span>
+</span><span id="register_method-157"><a href="#register_method-157"><span class="linenos">157</span></a>            <span class="n">method</span><span class="o">.</span><span class="vm">__name__</span> <span class="o">=</span> <span class="n">custom_name</span>
+</span><span id="register_method-158"><a href="#register_method-158"><span class="linenos">158</span></a>        <span class="k">assert</span> <span class="n">method_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">method_dict</span><span class="p">,</span> <span class="p">(</span>
+</span><span id="register_method-159"><a href="#register_method-159"><span class="linenos">159</span></a>            <span class="sa">f</span><span class="s2">&quot;Method name already exists in method_dict: </span><span class="si">{</span><span class="n">method_name</span><span class="w"> </span><span class="si">= }</span><span class="s2">, </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="n">method_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span><span class="w"> </span><span class="si">= }</span><span class="s2">&quot;</span>
+</span><span id="register_method-160"><a href="#register_method-160"><span class="linenos">160</span></a>        <span class="p">)</span>
+</span><span id="register_method-161"><a href="#register_method-161"><span class="linenos">161</span></a>        <span class="n">method_dict</span><span class="p">[</span><span class="n">method_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">method</span>
+</span><span id="register_method-162"><a href="#register_method-162"><span class="linenos">162</span></a>        <span class="k">return</span> <span class="n">method</span>
+</span><span id="register_method-163"><a href="#register_method-163"><span class="linenos">163</span></a>
+</span><span id="register_method-164"><a href="#register_method-164"><span class="linenos">164</span></a>    <span class="k">return</span> <span class="n">decorator</span>
 </span></pre></div>
 
 
@@ -614,7 +618,7 @@ off performance for reproducibility. Set use_deterministic_algorithms to True to
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="pprint_summary-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.11/mlutils.py#L164-L165" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/mlutils.py#L166-L167" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -622,8 +626,8 @@ off performance for reproducibility. Set use_deterministic_algorithms to True to
 
     </div>
     <a class="headerlink" href="#pprint_summary"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="pprint_summary-165"><a href="#pprint_summary-165"><span class="linenos">165</span></a><span class="k">def</span> <span class="nf">pprint_summary</span><span class="p">(</span><span class="n">summary</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
-</span><span id="pprint_summary-166"><a href="#pprint_summary-166"><span class="linenos">166</span></a>    <span class="nb">print</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">summary</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">))</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="pprint_summary-167"><a href="#pprint_summary-167"><span class="linenos">167</span></a><span class="k">def</span><span class="w"> </span><span class="nf">pprint_summary</span><span class="p">(</span><span class="n">summary</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
+</span><span id="pprint_summary-168"><a href="#pprint_summary-168"><span class="linenos">168</span></a>    <span class="nb">print</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">summary</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">))</span>
 </span></pre></div>
 
 

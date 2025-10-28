@@ -70,9 +70,9 @@ def disable_plots_in_script(script_lines: list[str]) -> list[str]:
         script_lines_new = DISABLE_PLOTS["muutils"] + script_lines_new
 
     if "matplotlib" in result_str_TEMP:
-        assert (
-            "import matplotlib.pyplot as plt" in result_str_TEMP
-        ), "matplotlib.pyplot must be imported as plt"
+        assert "import matplotlib.pyplot as plt" in result_str_TEMP, (
+            "matplotlib.pyplot must be imported as plt"
+        )
 
         # find the last import statement involving matplotlib, and the first line that uses plt
         mpl_last_import_index: int = -1
@@ -87,13 +87,13 @@ def disable_plots_in_script(script_lines: list[str]) -> list[str]:
             if "plt." in line:
                 mpl_first_usage_index = i
 
-        assert (
-            mpl_last_import_index != -1
-        ), f"matplotlib imports not found! see line {mpl_last_import_index}"
+        assert mpl_last_import_index != -1, (
+            f"matplotlib imports not found! see line {mpl_last_import_index}"
+        )
         if mpl_first_usage_index != -1:
-            assert (
-                mpl_first_usage_index > mpl_last_import_index
-            ), f"matplotlib plots created before import! see lines {mpl_first_usage_index}, {mpl_last_import_index}"
+            assert mpl_first_usage_index > mpl_last_import_index, (
+                f"matplotlib plots created before import! see lines {mpl_first_usage_index}, {mpl_last_import_index}"
+            )
         else:
             warnings.warn(
                 "could not find where matplotlib is used, plot disabling might not work!"
@@ -125,13 +125,13 @@ def disable_plots_in_script(script_lines: list[str]) -> list[str]:
                 if "render" in line:
                     cirv_first_usage_index = i
 
-        assert (
-            cirv_last_import_index != -1
-        ), f"circuitsvis imports not found! see line {cirv_last_import_index}"
+        assert cirv_last_import_index != -1, (
+            f"circuitsvis imports not found! see line {cirv_last_import_index}"
+        )
         if cirv_first_usage_index != -1:
-            assert (
-                cirv_first_usage_index > cirv_last_import_index
-            ), f"circuitsvis plots created before import! see lines {cirv_first_usage_index}, {cirv_last_import_index}"
+            assert cirv_first_usage_index > cirv_last_import_index, (
+                f"circuitsvis plots created before import! see lines {cirv_first_usage_index}, {cirv_last_import_index}"
+            )
         else:
             warnings.warn(
                 "could not find where circuitsvis is used, plot disabling might not work!"
@@ -199,7 +199,7 @@ def convert_ipynb(
                     )
                     for line in source
                 ]
-            result.append(f'{header_comment}\n{"".join(source)}')
+            result.append(f"{header_comment}\n{''.join(source)}")
 
     if disable_plots:
         result = disable_plots_in_script(result)
@@ -284,7 +284,7 @@ def process_dir(
         output_stream=sys.stderr,
     ) as spinner:
         for idx, fname in enumerate(filenames):
-            spinner.update_value(f"\tConverting {idx+1}/{n_files}: {fname}")
+            spinner.update_value(f"\tConverting {idx + 1}/{n_files}: {fname}")
             in_file: str = os.path.join(input_dir, fname)
             out_file: str = os.path.join(output_dir, fname.replace(".ipynb", ".py"))
 

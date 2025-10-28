@@ -2,7 +2,7 @@
 # ==================================================
 [project]
 	name = "muutils"
-	version = "0.8.11"
+	version = "0.8.12"
 	description = "miscellaneous python utilities"
 	readme = "README.md"
 	requires-python = ">=3.8"
@@ -41,7 +41,7 @@
 		"numpy>1.24.4; python_version >= '3.9'",
 		"torch>=1.13.1,<2.5.0; python_version < '3.9'",
 		"torch>=1.13.1; python_version >= '3.9' and python_version < '3.13'",
-		"torch>=2.5.0; python_version >= '3.13'",
+		"torch>=2.5.0; python_version >= '3.13' and python_version < '3.14'",
 		"jaxtyping>=0.2.12",
 	]
 
@@ -125,7 +125,7 @@
 		"muutils/tensor_info.py" = [
 			"E701", # multiple statements on one line (colon)
 		]
-		"tests/unit/math/test_matrix_powers.py" = [
+		"tests/unit/math/test_matrix_powers_torch.py" = [
 			"F722", # jaxtyping stuff
 		]
 		"muutils/math/matrix_powers.py" = [

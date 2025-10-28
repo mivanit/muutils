@@ -161,7 +161,7 @@ def run_notebook_tests(
         n_notebooks: int = len(converted_notebooks)
         for idx, file in enumerate(converted_notebooks):
             # run the file
-            print(f"Running {idx+1}/{n_notebooks}: {file.as_posix()}")
+            print(f"Running {idx + 1}/{n_notebooks}: {file.as_posix()}")
             output_file: Path = file.with_suffix(CI_output_suffix)
             print(f"    Output in {output_file.as_posix()}")
             with SpinnerContext(
@@ -190,7 +190,7 @@ def run_notebook_tests(
             if process.returncode != 0:
                 with open(root_relative_to_notebooks / output_file, "r") as f:
                     file_output: str = f.read()
-                err: str = f"Error in {file}:\n{'-'*term_width}\n{file_output}"
+                err: str = f"Error in {file}:\n{'-' * term_width}\n{file_output}"
                 exceptions[file.as_posix()] = err
                 if exit_on_first_fail:
                     raise NotebookTestError(err)

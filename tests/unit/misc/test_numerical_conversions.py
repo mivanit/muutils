@@ -158,6 +158,6 @@ def test_round_trip_fuzzing(exponent_range, n_tests):
         print(f"num: {num}, shortened: {shortened}")
         restored: float = str_to_numeric(shortened)
 
-        assert isclose(
-            num, restored, rel_tol=1e-1
-        ), f"Failed for num: {num}, shortened: {shortened}, restored: {restored}"
+        assert isclose(num, restored, rel_tol=1e-1), (
+            f"Failed for num: {num}, shortened: {shortened}, restored: {restored}"
+        )

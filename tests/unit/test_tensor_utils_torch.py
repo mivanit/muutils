@@ -13,14 +13,21 @@ from muutils.tensor_utils import (
     compare_state_dicts,
     get_dict_shapes,
     jaxtype_factory,
-    lpad_array,
     lpad_tensor,
     numpy_to_torch_dtype,
-    pad_array,
     pad_tensor,
-    rpad_array,
     rpad_tensor,
+    lpad_array,
+    pad_array,
+    rpad_array,
 )
+
+
+def test_pad_array():
+    array = np.array([1, 2, 3])
+    assert np.array_equal(pad_array(array, 5), np.array([0, 0, 1, 2, 3]))
+    assert np.array_equal(lpad_array(array, 5), np.array([0, 0, 1, 2, 3]))
+    assert np.array_equal(rpad_array(array, 5), np.array([1, 2, 3, 0, 0]))
 
 
 def test_jaxtype_factory():
@@ -56,13 +63,6 @@ def test_pad_tensor():
     assert torch.all(pad_tensor(tensor, 5) == torch.tensor([0, 0, 1, 2, 3]))
     assert torch.all(lpad_tensor(tensor, 5) == torch.tensor([0, 0, 1, 2, 3]))
     assert torch.all(rpad_tensor(tensor, 5) == torch.tensor([1, 2, 3, 0, 0]))
-
-
-def test_pad_array():
-    array = np.array([1, 2, 3])
-    assert np.array_equal(pad_array(array, 5), np.array([0, 0, 1, 2, 3]))
-    assert np.array_equal(lpad_array(array, 5), np.array([0, 0, 1, 2, 3]))
-    assert np.array_equal(rpad_array(array, 5), np.array([1, 2, 3, 0, 0]))
 
 
 def test_compare_state_dicts():

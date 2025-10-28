@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="generator" content="pdoc 14.7.0"/>
+    <meta name="generator" content="pdoc 15.0.4"/>
     <title>muutils.json_serialize.serializable_dataclass API documentation</title>
 <link rel="stylesheet" href="../../resources/css/bootstrap-reboot.min.css"><link rel="stylesheet" href="../../resources/css/syntax-highlighting.css"><link rel="stylesheet" href="../../resources/css/theme.css"><link rel="stylesheet" href="../../resources/css/layout.css"><link rel="stylesheet" href="../../resources/css/content.css"><link rel="stylesheet" href="../../resources/css/custom.css"><script>
     window.MathJax = {
@@ -34,7 +34,7 @@
     }
 </style>
 <script type="module" defer>
-    import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs";
+    import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs";
 
     /* Re-invoke Mermaid when DOM content changes, for example during search. */
     document.addEventListener("DOMContentLoaded", () => {
@@ -46,7 +46,7 @@
 </script></head>
 <body>
 <div class="package-version">
-    docs for <a href="https://github.com/mivanit/muutils">muutils</a> v0.8.11<br>
+    docs for <a href="https://github.com/mivanit/muutils">muutils</a> v0.8.12<br>
 </div>
     <nav class="pdoc">
         <label id="navtoggle" for="togglestate" class="pdoc-button">
@@ -190,7 +190,7 @@
     </nav>
     <main class="pdoc">
             <section class="module-info">
-                        <a class="pdoc-button git-button" href="https://github.com/mivanit/muutils/blob/0.8.11/json_serialize/serializable_dataclass.py">View Source on GitHub</a>
+                        <a class="pdoc-button git-button" href="https://github.com/mivanit/muutils/blob/0.8.12/json_serialize/serializable_dataclass.py">View Source on GitHub</a>
                     <h1 class="modulename">
 <a href="./../../muutils.html">muutils</a><wbr>.<a href="./../json_serialize.html">json_serialize</a><wbr>.serializable_dataclass    </h1>
 
@@ -203,7 +203,7 @@ you will get an error when you call <code>json.dumps(d)</code>. This module prov
 
 <div class="pdoc-code codehilite">
 <pre><span></span><code><span class="nd">@serializable_dataclass</span>
-<span class="k">class</span> <span class="nc">MyClass</span><span class="p">(</span><span class="n">SerializableDataclass</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">MyClass</span><span class="p">(</span><span class="n">SerializableDataclass</span><span class="p">):</span>
     <span class="n">a</span><span class="p">:</span> <span class="nb">int</span>
     <span class="n">b</span><span class="p">:</span> <span class="nb">str</span>
 </code></pre>
@@ -225,7 +225,7 @@ or fields that are not json-serializable by default:</p>
 
 <div class="pdoc-code codehilite">
 <pre><span></span><code><span class="nd">@serializable_dataclass</span>
-<span class="k">class</span> <span class="nc">NestedClass</span><span class="p">(</span><span class="n">SerializableDataclass</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">NestedClass</span><span class="p">(</span><span class="n">SerializableDataclass</span><span class="p">):</span>
     <span class="n">x</span><span class="p">:</span> <span class="nb">str</span>
     <span class="n">y</span><span class="p">:</span> <span class="n">MyClass</span>
     <span class="n">act_fun</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span> <span class="o">=</span> <span class="n">serializable_field</span><span class="p">(</span>
@@ -253,7 +253,7 @@ True
                         <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="mod-serializable_dataclass-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.11/json_serialize/serializable_dataclass.py#L0-L904" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/json_serialize/serializable_dataclass.py#L0-L904" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -311,24 +311,24 @@ True
 </span><span id="L-49"><a href="#L-49"><span class="linenos"> 49</span></a>
 </span><span id="L-50"><a href="#L-50"><span class="linenos"> 50</span></a><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="L-51"><a href="#L-51"><span class="linenos"> 51</span></a>
-</span><span id="L-52"><a href="#L-52"><span class="linenos"> 52</span></a><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+</span><span id="L-52"><a href="#L-52"><span class="linenos"> 52</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
 </span><span id="L-53"><a href="#L-53"><span class="linenos"> 53</span></a>
-</span><span id="L-54"><a href="#L-54"><span class="linenos"> 54</span></a><span class="kn">import</span> <span class="nn">abc</span>
-</span><span id="L-55"><a href="#L-55"><span class="linenos"> 55</span></a><span class="kn">import</span> <span class="nn">dataclasses</span>
-</span><span id="L-56"><a href="#L-56"><span class="linenos"> 56</span></a><span class="kn">import</span> <span class="nn">functools</span>
-</span><span id="L-57"><a href="#L-57"><span class="linenos"> 57</span></a><span class="kn">import</span> <span class="nn">json</span>
-</span><span id="L-58"><a href="#L-58"><span class="linenos"> 58</span></a><span class="kn">import</span> <span class="nn">sys</span>
-</span><span id="L-59"><a href="#L-59"><span class="linenos"> 59</span></a><span class="kn">import</span> <span class="nn">typing</span>
-</span><span id="L-60"><a href="#L-60"><span class="linenos"> 60</span></a><span class="kn">import</span> <span class="nn">warnings</span>
-</span><span id="L-61"><a href="#L-61"><span class="linenos"> 61</span></a><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Type</span><span class="p">,</span> <span class="n">TypeVar</span>
+</span><span id="L-54"><a href="#L-54"><span class="linenos"> 54</span></a><span class="kn">import</span><span class="w"> </span><span class="nn">abc</span>
+</span><span id="L-55"><a href="#L-55"><span class="linenos"> 55</span></a><span class="kn">import</span><span class="w"> </span><span class="nn">dataclasses</span>
+</span><span id="L-56"><a href="#L-56"><span class="linenos"> 56</span></a><span class="kn">import</span><span class="w"> </span><span class="nn">functools</span>
+</span><span id="L-57"><a href="#L-57"><span class="linenos"> 57</span></a><span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+</span><span id="L-58"><a href="#L-58"><span class="linenos"> 58</span></a><span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+</span><span id="L-59"><a href="#L-59"><span class="linenos"> 59</span></a><span class="kn">import</span><span class="w"> </span><span class="nn">typing</span>
+</span><span id="L-60"><a href="#L-60"><span class="linenos"> 60</span></a><span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
+</span><span id="L-61"><a href="#L-61"><span class="linenos"> 61</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Type</span><span class="p">,</span> <span class="n">TypeVar</span>
 </span><span id="L-62"><a href="#L-62"><span class="linenos"> 62</span></a>
-</span><span id="L-63"><a href="#L-63"><span class="linenos"> 63</span></a><span class="kn">from</span> <span class="nn">muutils.errormode</span> <span class="kn">import</span> <span class="n">ErrorMode</span>
-</span><span id="L-64"><a href="#L-64"><span class="linenos"> 64</span></a><span class="kn">from</span> <span class="nn">muutils.validate_type</span> <span class="kn">import</span> <span class="n">validate_type</span>
-</span><span id="L-65"><a href="#L-65"><span class="linenos"> 65</span></a><span class="kn">from</span> <span class="nn">muutils.json_serialize.serializable_field</span> <span class="kn">import</span> <span class="p">(</span>
+</span><span id="L-63"><a href="#L-63"><span class="linenos"> 63</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">muutils.errormode</span><span class="w"> </span><span class="kn">import</span> <span class="n">ErrorMode</span>
+</span><span id="L-64"><a href="#L-64"><span class="linenos"> 64</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">muutils.validate_type</span><span class="w"> </span><span class="kn">import</span> <span class="n">validate_type</span>
+</span><span id="L-65"><a href="#L-65"><span class="linenos"> 65</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">muutils.json_serialize.serializable_field</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
 </span><span id="L-66"><a href="#L-66"><span class="linenos"> 66</span></a>    <span class="n">SerializableField</span><span class="p">,</span>
 </span><span id="L-67"><a href="#L-67"><span class="linenos"> 67</span></a>    <span class="n">serializable_field</span><span class="p">,</span>
 </span><span id="L-68"><a href="#L-68"><span class="linenos"> 68</span></a><span class="p">)</span>
-</span><span id="L-69"><a href="#L-69"><span class="linenos"> 69</span></a><span class="kn">from</span> <span class="nn">muutils.json_serialize.util</span> <span class="kn">import</span> <span class="n">_FORMAT_KEY</span><span class="p">,</span> <span class="n">array_safe_eq</span><span class="p">,</span> <span class="n">dc_eq</span>
+</span><span id="L-69"><a href="#L-69"><span class="linenos"> 69</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">muutils.json_serialize.util</span><span class="w"> </span><span class="kn">import</span> <span class="n">_FORMAT_KEY</span><span class="p">,</span> <span class="n">array_safe_eq</span><span class="p">,</span> <span class="n">dc_eq</span>
 </span><span id="L-70"><a href="#L-70"><span class="linenos"> 70</span></a>
 </span><span id="L-71"><a href="#L-71"><span class="linenos"> 71</span></a><span class="c1"># pylint: disable=bad-mcs-classmethod-argument, too-many-arguments, protected-access</span>
 </span><span id="L-72"><a href="#L-72"><span class="linenos"> 72</span></a>
@@ -337,22 +337,22 @@ True
 </span><span id="L-75"><a href="#L-75"><span class="linenos"> 75</span></a><span class="k">try</span><span class="p">:</span>
 </span><span id="L-76"><a href="#L-76"><span class="linenos"> 76</span></a>    <span class="k">try</span><span class="p">:</span>
 </span><span id="L-77"><a href="#L-77"><span class="linenos"> 77</span></a>        <span class="c1"># type ignore here for legacy versions</span>
-</span><span id="L-78"><a href="#L-78"><span class="linenos"> 78</span></a>        <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">dataclass_transform</span>  <span class="c1"># type: ignore[attr-defined]</span>
+</span><span id="L-78"><a href="#L-78"><span class="linenos"> 78</span></a>        <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass_transform</span>  <span class="c1"># type: ignore[attr-defined]</span>
 </span><span id="L-79"><a href="#L-79"><span class="linenos"> 79</span></a>    <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
-</span><span id="L-80"><a href="#L-80"><span class="linenos"> 80</span></a>        <span class="kn">from</span> <span class="nn">typing_extensions</span> <span class="kn">import</span> <span class="n">dataclass_transform</span>
+</span><span id="L-80"><a href="#L-80"><span class="linenos"> 80</span></a>        <span class="kn">from</span><span class="w"> </span><span class="nn">typing_extensions</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass_transform</span>
 </span><span id="L-81"><a href="#L-81"><span class="linenos"> 81</span></a><span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
-</span><span id="L-82"><a href="#L-82"><span class="linenos"> 82</span></a>    <span class="kn">from</span> <span class="nn">muutils.json_serialize.dataclass_transform_mock</span> <span class="kn">import</span> <span class="n">dataclass_transform</span>
+</span><span id="L-82"><a href="#L-82"><span class="linenos"> 82</span></a>    <span class="kn">from</span><span class="w"> </span><span class="nn">muutils.json_serialize.dataclass_transform_mock</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass_transform</span>
 </span><span id="L-83"><a href="#L-83"><span class="linenos"> 83</span></a>
 </span><span id="L-84"><a href="#L-84"><span class="linenos"> 84</span></a><span class="n">T</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s2">&quot;T&quot;</span><span class="p">)</span>
 </span><span id="L-85"><a href="#L-85"><span class="linenos"> 85</span></a>
 </span><span id="L-86"><a href="#L-86"><span class="linenos"> 86</span></a>
-</span><span id="L-87"><a href="#L-87"><span class="linenos"> 87</span></a><span class="k">class</span> <span class="nc">CantGetTypeHintsWarning</span><span class="p">(</span><span class="ne">UserWarning</span><span class="p">):</span>
+</span><span id="L-87"><a href="#L-87"><span class="linenos"> 87</span></a><span class="k">class</span><span class="w"> </span><span class="nc">CantGetTypeHintsWarning</span><span class="p">(</span><span class="ne">UserWarning</span><span class="p">):</span>
 </span><span id="L-88"><a href="#L-88"><span class="linenos"> 88</span></a>    <span class="s2">&quot;special warning for when we can&#39;t get type hints&quot;</span>
 </span><span id="L-89"><a href="#L-89"><span class="linenos"> 89</span></a>
 </span><span id="L-90"><a href="#L-90"><span class="linenos"> 90</span></a>    <span class="k">pass</span>
 </span><span id="L-91"><a href="#L-91"><span class="linenos"> 91</span></a>
 </span><span id="L-92"><a href="#L-92"><span class="linenos"> 92</span></a>
-</span><span id="L-93"><a href="#L-93"><span class="linenos"> 93</span></a><span class="k">class</span> <span class="nc">ZanjMissingWarning</span><span class="p">(</span><span class="ne">UserWarning</span><span class="p">):</span>
+</span><span id="L-93"><a href="#L-93"><span class="linenos"> 93</span></a><span class="k">class</span><span class="w"> </span><span class="nc">ZanjMissingWarning</span><span class="p">(</span><span class="ne">UserWarning</span><span class="p">):</span>
 </span><span id="L-94"><a href="#L-94"><span class="linenos"> 94</span></a>    <span class="s2">&quot;special warning for when [`ZANJ`](https://github.com/mivanit/ZANJ) is missing -- `register_loader_serializable_dataclass` will not work&quot;</span>
 </span><span id="L-95"><a href="#L-95"><span class="linenos"> 95</span></a>
 </span><span id="L-96"><a href="#L-96"><span class="linenos"> 96</span></a>    <span class="k">pass</span>
@@ -362,7 +362,7 @@ True
 </span><span id="L-100"><a href="#L-100"><span class="linenos">100</span></a><span class="s2">&quot;flag to keep track of if we have successfully imported ZANJ&quot;</span>
 </span><span id="L-101"><a href="#L-101"><span class="linenos">101</span></a>
 </span><span id="L-102"><a href="#L-102"><span class="linenos">102</span></a>
-</span><span id="L-103"><a href="#L-103"><span class="linenos">103</span></a><span class="k">def</span> <span class="nf">zanj_register_loader_serializable_dataclass</span><span class="p">(</span><span class="bp">cls</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Type</span><span class="p">[</span><span class="n">T</span><span class="p">]):</span>
+</span><span id="L-103"><a href="#L-103"><span class="linenos">103</span></a><span class="k">def</span><span class="w"> </span><span class="nf">zanj_register_loader_serializable_dataclass</span><span class="p">(</span><span class="bp">cls</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Type</span><span class="p">[</span><span class="n">T</span><span class="p">]):</span>
 </span><span id="L-104"><a href="#L-104"><span class="linenos">104</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Register a serializable dataclass with the ZANJ import</span>
 </span><span id="L-105"><a href="#L-105"><span class="linenos">105</span></a>
 </span><span id="L-106"><a href="#L-106"><span class="linenos">106</span></a><span class="sd">    this allows `ZANJ().read()` to load the class and not just return plain dicts</span>
@@ -374,7 +374,7 @@ True
 </span><span id="L-112"><a href="#L-112"><span class="linenos">112</span></a>
 </span><span id="L-113"><a href="#L-113"><span class="linenos">113</span></a>    <span class="k">if</span> <span class="n">_zanj_loading_needs_import</span><span class="p">:</span>
 </span><span id="L-114"><a href="#L-114"><span class="linenos">114</span></a>        <span class="k">try</span><span class="p">:</span>
-</span><span id="L-115"><a href="#L-115"><span class="linenos">115</span></a>            <span class="kn">from</span> <span class="nn">zanj.loading</span> <span class="kn">import</span> <span class="p">(</span>  <span class="c1"># type: ignore[import]</span>
+</span><span id="L-115"><a href="#L-115"><span class="linenos">115</span></a>            <span class="kn">from</span><span class="w"> </span><span class="nn">zanj.loading</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>  <span class="c1"># type: ignore[import]</span>
 </span><span id="L-116"><a href="#L-116"><span class="linenos">116</span></a>                <span class="n">LoaderHandler</span><span class="p">,</span>
 </span><span id="L-117"><a href="#L-117"><span class="linenos">117</span></a>                <span class="n">register_loader_handler</span><span class="p">,</span>
 </span><span id="L-118"><a href="#L-118"><span class="linenos">118</span></a>            <span class="p">)</span>
@@ -408,11 +408,11 @@ True
 </span><span id="L-146"><a href="#L-146"><span class="linenos">146</span></a><span class="n">_DEFAULT_ON_TYPECHECK_ERROR</span><span class="p">:</span> <span class="n">ErrorMode</span> <span class="o">=</span> <span class="n">ErrorMode</span><span class="o">.</span><span class="n">EXCEPT</span>
 </span><span id="L-147"><a href="#L-147"><span class="linenos">147</span></a>
 </span><span id="L-148"><a href="#L-148"><span class="linenos">148</span></a>
-</span><span id="L-149"><a href="#L-149"><span class="linenos">149</span></a><span class="k">class</span> <span class="nc">FieldIsNotInitOrSerializeWarning</span><span class="p">(</span><span class="ne">UserWarning</span><span class="p">):</span>
+</span><span id="L-149"><a href="#L-149"><span class="linenos">149</span></a><span class="k">class</span><span class="w"> </span><span class="nc">FieldIsNotInitOrSerializeWarning</span><span class="p">(</span><span class="ne">UserWarning</span><span class="p">):</span>
 </span><span id="L-150"><a href="#L-150"><span class="linenos">150</span></a>    <span class="k">pass</span>
 </span><span id="L-151"><a href="#L-151"><span class="linenos">151</span></a>
 </span><span id="L-152"><a href="#L-152"><span class="linenos">152</span></a>
-</span><span id="L-153"><a href="#L-153"><span class="linenos">153</span></a><span class="k">def</span> <span class="nf">SerializableDataclass__validate_field_type</span><span class="p">(</span>
+</span><span id="L-153"><a href="#L-153"><span class="linenos">153</span></a><span class="k">def</span><span class="w"> </span><span class="nf">SerializableDataclass__validate_field_type</span><span class="p">(</span>
 </span><span id="L-154"><a href="#L-154"><span class="linenos">154</span></a>    <span class="bp">self</span><span class="p">:</span> <span class="n">SerializableDataclass</span><span class="p">,</span>
 </span><span id="L-155"><a href="#L-155"><span class="linenos">155</span></a>    <span class="n">field</span><span class="p">:</span> <span class="n">SerializableField</span> <span class="o">|</span> <span class="nb">str</span><span class="p">,</span>
 </span><span id="L-156"><a href="#L-156"><span class="linenos">156</span></a>    <span class="n">on_typecheck_error</span><span class="p">:</span> <span class="n">ErrorMode</span> <span class="o">=</span> <span class="n">_DEFAULT_ON_TYPECHECK_ERROR</span><span class="p">,</span>
@@ -456,9 +456,9 @@ True
 </span><span id="L-194"><a href="#L-194"><span class="linenos">194</span></a>        <span class="p">)</span>
 </span><span id="L-195"><a href="#L-195"><span class="linenos">195</span></a>        <span class="k">return</span> <span class="kc">True</span>
 </span><span id="L-196"><a href="#L-196"><span class="linenos">196</span></a>
-</span><span id="L-197"><a href="#L-197"><span class="linenos">197</span></a>    <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span>
-</span><span id="L-198"><a href="#L-198"><span class="linenos">198</span></a>        <span class="n">_field</span><span class="p">,</span> <span class="n">SerializableField</span>
-</span><span id="L-199"><a href="#L-199"><span class="linenos">199</span></a>    <span class="p">),</span> <span class="sa">f</span><span class="s2">&quot;Field &#39;</span><span class="si">{</span><span class="n">_field</span><span class="o">.</span><span class="n">name</span><span class="w"> </span><span class="si">= }</span><span class="s2">&#39; on class </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="w"> </span><span class="si">= }</span><span class="s2"> is not a SerializableField, but a </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">_field</span><span class="p">)</span><span class="w"> </span><span class="si">= }</span><span class="s2">&quot;</span>
+</span><span id="L-197"><a href="#L-197"><span class="linenos">197</span></a>    <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">_field</span><span class="p">,</span> <span class="n">SerializableField</span><span class="p">),</span> <span class="p">(</span>
+</span><span id="L-198"><a href="#L-198"><span class="linenos">198</span></a>        <span class="sa">f</span><span class="s2">&quot;Field &#39;</span><span class="si">{</span><span class="n">_field</span><span class="o">.</span><span class="n">name</span><span class="w"> </span><span class="si">= }</span><span class="s2">&#39; on class </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="w"> </span><span class="si">= }</span><span class="s2"> is not a SerializableField, but a </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">_field</span><span class="p">)</span><span class="w"> </span><span class="si">= }</span><span class="s2">&quot;</span>
+</span><span id="L-199"><a href="#L-199"><span class="linenos">199</span></a>    <span class="p">)</span>
 </span><span id="L-200"><a href="#L-200"><span class="linenos">200</span></a>
 </span><span id="L-201"><a href="#L-201"><span class="linenos">201</span></a>    <span class="c1"># get field type hints</span>
 </span><span id="L-202"><a href="#L-202"><span class="linenos">202</span></a>    <span class="k">try</span><span class="p">:</span>
@@ -504,7 +504,7 @@ True
 </span><span id="L-242"><a href="#L-242"><span class="linenos">242</span></a>        <span class="k">return</span> <span class="kc">False</span>
 </span><span id="L-243"><a href="#L-243"><span class="linenos">243</span></a>
 </span><span id="L-244"><a href="#L-244"><span class="linenos">244</span></a>
-</span><span id="L-245"><a href="#L-245"><span class="linenos">245</span></a><span class="k">def</span> <span class="nf">SerializableDataclass__validate_fields_types__dict</span><span class="p">(</span>
+</span><span id="L-245"><a href="#L-245"><span class="linenos">245</span></a><span class="k">def</span><span class="w"> </span><span class="nf">SerializableDataclass__validate_fields_types__dict</span><span class="p">(</span>
 </span><span id="L-246"><a href="#L-246"><span class="linenos">246</span></a>    <span class="bp">self</span><span class="p">:</span> <span class="n">SerializableDataclass</span><span class="p">,</span>
 </span><span id="L-247"><a href="#L-247"><span class="linenos">247</span></a>    <span class="n">on_typecheck_error</span><span class="p">:</span> <span class="n">ErrorMode</span> <span class="o">=</span> <span class="n">_DEFAULT_ON_TYPECHECK_ERROR</span><span class="p">,</span>
 </span><span id="L-248"><a href="#L-248"><span class="linenos">248</span></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">bool</span><span class="p">]:</span>
@@ -541,7 +541,7 @@ True
 </span><span id="L-279"><a href="#L-279"><span class="linenos">279</span></a>    <span class="k">return</span> <span class="n">results</span>
 </span><span id="L-280"><a href="#L-280"><span class="linenos">280</span></a>
 </span><span id="L-281"><a href="#L-281"><span class="linenos">281</span></a>
-</span><span id="L-282"><a href="#L-282"><span class="linenos">282</span></a><span class="k">def</span> <span class="nf">SerializableDataclass__validate_fields_types</span><span class="p">(</span>
+</span><span id="L-282"><a href="#L-282"><span class="linenos">282</span></a><span class="k">def</span><span class="w"> </span><span class="nf">SerializableDataclass__validate_fields_types</span><span class="p">(</span>
 </span><span id="L-283"><a href="#L-283"><span class="linenos">283</span></a>    <span class="bp">self</span><span class="p">:</span> <span class="n">SerializableDataclass</span><span class="p">,</span>
 </span><span id="L-284"><a href="#L-284"><span class="linenos">284</span></a>    <span class="n">on_typecheck_error</span><span class="p">:</span> <span class="n">ErrorMode</span> <span class="o">=</span> <span class="n">_DEFAULT_ON_TYPECHECK_ERROR</span><span class="p">,</span>
 </span><span id="L-285"><a href="#L-285"><span class="linenos">285</span></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
@@ -556,7 +556,7 @@ True
 </span><span id="L-294"><a href="#L-294"><span class="linenos">294</span></a><span class="nd">@dataclass_transform</span><span class="p">(</span>
 </span><span id="L-295"><a href="#L-295"><span class="linenos">295</span></a>    <span class="n">field_specifiers</span><span class="o">=</span><span class="p">(</span><span class="n">serializable_field</span><span class="p">,</span> <span class="n">SerializableField</span><span class="p">),</span>
 </span><span id="L-296"><a href="#L-296"><span class="linenos">296</span></a><span class="p">)</span>
-</span><span id="L-297"><a href="#L-297"><span class="linenos">297</span></a><span class="k">class</span> <span class="nc">SerializableDataclass</span><span class="p">(</span><span class="n">abc</span><span class="o">.</span><span class="n">ABC</span><span class="p">):</span>
+</span><span id="L-297"><a href="#L-297"><span class="linenos">297</span></a><span class="k">class</span><span class="w"> </span><span class="nc">SerializableDataclass</span><span class="p">(</span><span class="n">abc</span><span class="o">.</span><span class="n">ABC</span><span class="p">):</span>
 </span><span id="L-298"><a href="#L-298"><span class="linenos">298</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Base class for serializable dataclasses</span>
 </span><span id="L-299"><a href="#L-299"><span class="linenos">299</span></a>
 </span><span id="L-300"><a href="#L-300"><span class="linenos">300</span></a><span class="sd">    only for linting and type checking, still need to call `serializable_dataclass` decorator</span>
@@ -606,18 +606,18 @@ True
 </span><span id="L-344"><a href="#L-344"><span class="linenos">344</span></a><span class="sd">        True</span>
 </span><span id="L-345"><a href="#L-345"><span class="linenos">345</span></a><span class="sd">    &quot;&quot;&quot;</span>
 </span><span id="L-346"><a href="#L-346"><span class="linenos">346</span></a>
-</span><span id="L-347"><a href="#L-347"><span class="linenos">347</span></a>    <span class="k">def</span> <span class="nf">serialize</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+</span><span id="L-347"><a href="#L-347"><span class="linenos">347</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">serialize</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
 </span><span id="L-348"><a href="#L-348"><span class="linenos">348</span></a>        <span class="s2">&quot;returns the class as a dict, implemented by using `@serializable_dataclass` decorator&quot;</span>
 </span><span id="L-349"><a href="#L-349"><span class="linenos">349</span></a>        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span>
 </span><span id="L-350"><a href="#L-350"><span class="linenos">350</span></a>            <span class="sa">f</span><span class="s2">&quot;decorate </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="w"> </span><span class="si">= }</span><span class="s2"> with `@serializable_dataclass`&quot;</span>
 </span><span id="L-351"><a href="#L-351"><span class="linenos">351</span></a>        <span class="p">)</span>
 </span><span id="L-352"><a href="#L-352"><span class="linenos">352</span></a>
 </span><span id="L-353"><a href="#L-353"><span class="linenos">353</span></a>    <span class="nd">@classmethod</span>
-</span><span id="L-354"><a href="#L-354"><span class="linenos">354</span></a>    <span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="bp">cls</span><span class="p">:</span> <span class="n">Type</span><span class="p">[</span><span class="n">T</span><span class="p">],</span> <span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">|</span> <span class="n">T</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
+</span><span id="L-354"><a href="#L-354"><span class="linenos">354</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">load</span><span class="p">(</span><span class="bp">cls</span><span class="p">:</span> <span class="n">Type</span><span class="p">[</span><span class="n">T</span><span class="p">],</span> <span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">|</span> <span class="n">T</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
 </span><span id="L-355"><a href="#L-355"><span class="linenos">355</span></a>        <span class="s2">&quot;takes in an appropriately structured dict and returns an instance of the class, implemented by using `@serializable_dataclass` decorator&quot;</span>
 </span><span id="L-356"><a href="#L-356"><span class="linenos">356</span></a>        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;decorate </span><span class="si">{</span><span class="bp">cls</span><span class="w"> </span><span class="si">= }</span><span class="s2"> with `@serializable_dataclass`&quot;</span><span class="p">)</span>
 </span><span id="L-357"><a href="#L-357"><span class="linenos">357</span></a>
-</span><span id="L-358"><a href="#L-358"><span class="linenos">358</span></a>    <span class="k">def</span> <span class="nf">validate_fields_types</span><span class="p">(</span>
+</span><span id="L-358"><a href="#L-358"><span class="linenos">358</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">validate_fields_types</span><span class="p">(</span>
 </span><span id="L-359"><a href="#L-359"><span class="linenos">359</span></a>        <span class="bp">self</span><span class="p">,</span> <span class="n">on_typecheck_error</span><span class="p">:</span> <span class="n">ErrorMode</span> <span class="o">=</span> <span class="n">_DEFAULT_ON_TYPECHECK_ERROR</span>
 </span><span id="L-360"><a href="#L-360"><span class="linenos">360</span></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 </span><span id="L-361"><a href="#L-361"><span class="linenos">361</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;validate the types of all the fields on a `SerializableDataclass`. calls `SerializableDataclass__validate_field_type` for each field&quot;&quot;&quot;</span>
@@ -625,7 +625,7 @@ True
 </span><span id="L-363"><a href="#L-363"><span class="linenos">363</span></a>            <span class="bp">self</span><span class="p">,</span> <span class="n">on_typecheck_error</span><span class="o">=</span><span class="n">on_typecheck_error</span>
 </span><span id="L-364"><a href="#L-364"><span class="linenos">364</span></a>        <span class="p">)</span>
 </span><span id="L-365"><a href="#L-365"><span class="linenos">365</span></a>
-</span><span id="L-366"><a href="#L-366"><span class="linenos">366</span></a>    <span class="k">def</span> <span class="nf">validate_field_type</span><span class="p">(</span>
+</span><span id="L-366"><a href="#L-366"><span class="linenos">366</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">validate_field_type</span><span class="p">(</span>
 </span><span id="L-367"><a href="#L-367"><span class="linenos">367</span></a>        <span class="bp">self</span><span class="p">,</span>
 </span><span id="L-368"><a href="#L-368"><span class="linenos">368</span></a>        <span class="n">field</span><span class="p">:</span> <span class="s2">&quot;SerializableField|str&quot;</span><span class="p">,</span>
 </span><span id="L-369"><a href="#L-369"><span class="linenos">369</span></a>        <span class="n">on_typecheck_error</span><span class="p">:</span> <span class="n">ErrorMode</span> <span class="o">=</span> <span class="n">_DEFAULT_ON_TYPECHECK_ERROR</span><span class="p">,</span>
@@ -635,14 +635,14 @@ True
 </span><span id="L-373"><a href="#L-373"><span class="linenos">373</span></a>            <span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">on_typecheck_error</span><span class="o">=</span><span class="n">on_typecheck_error</span>
 </span><span id="L-374"><a href="#L-374"><span class="linenos">374</span></a>        <span class="p">)</span>
 </span><span id="L-375"><a href="#L-375"><span class="linenos">375</span></a>
-</span><span id="L-376"><a href="#L-376"><span class="linenos">376</span></a>    <span class="k">def</span> <span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</span><span id="L-376"><a href="#L-376"><span class="linenos">376</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 </span><span id="L-377"><a href="#L-377"><span class="linenos">377</span></a>        <span class="k">return</span> <span class="n">dc_eq</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">)</span>
 </span><span id="L-378"><a href="#L-378"><span class="linenos">378</span></a>
-</span><span id="L-379"><a href="#L-379"><span class="linenos">379</span></a>    <span class="k">def</span> <span class="fm">__hash__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+</span><span id="L-379"><a href="#L-379"><span class="linenos">379</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__hash__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
 </span><span id="L-380"><a href="#L-380"><span class="linenos">380</span></a>        <span class="s2">&quot;hashes the json-serialized representation of the class&quot;</span>
 </span><span id="L-381"><a href="#L-381"><span class="linenos">381</span></a>        <span class="k">return</span> <span class="nb">hash</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">serialize</span><span class="p">()))</span>
 </span><span id="L-382"><a href="#L-382"><span class="linenos">382</span></a>
-</span><span id="L-383"><a href="#L-383"><span class="linenos">383</span></a>    <span class="k">def</span> <span class="nf">diff</span><span class="p">(</span>
+</span><span id="L-383"><a href="#L-383"><span class="linenos">383</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">diff</span><span class="p">(</span>
 </span><span id="L-384"><a href="#L-384"><span class="linenos">384</span></a>        <span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="s2">&quot;SerializableDataclass&quot;</span><span class="p">,</span> <span class="n">of_serialized</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
 </span><span id="L-385"><a href="#L-385"><span class="linenos">385</span></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
 </span><span id="L-386"><a href="#L-386"><span class="linenos">386</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;get a rich and recursive diff between two instances of a serializable dataclass</span>
@@ -726,7 +726,7 @@ True
 </span><span id="L-464"><a href="#L-464"><span class="linenos">464</span></a>        <span class="c1"># return the diff result</span>
 </span><span id="L-465"><a href="#L-465"><span class="linenos">465</span></a>        <span class="k">return</span> <span class="n">diff_result</span>
 </span><span id="L-466"><a href="#L-466"><span class="linenos">466</span></a>
-</span><span id="L-467"><a href="#L-467"><span class="linenos">467</span></a>    <span class="k">def</span> <span class="nf">update_from_nested_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nested_dict</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]):</span>
+</span><span id="L-467"><a href="#L-467"><span class="linenos">467</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">update_from_nested_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nested_dict</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]):</span>
 </span><span id="L-468"><a href="#L-468"><span class="linenos">468</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;update the instance from a nested dict, useful for configuration from command line args</span>
 </span><span id="L-469"><a href="#L-469"><span class="linenos">469</span></a>
 </span><span id="L-470"><a href="#L-470"><span class="linenos">470</span></a><span class="sd">        # Parameters:</span>
@@ -743,11 +743,11 @@ True
 </span><span id="L-481"><a href="#L-481"><span class="linenos">481</span></a>                <span class="k">else</span><span class="p">:</span>
 </span><span id="L-482"><a href="#L-482"><span class="linenos">482</span></a>                    <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field_name</span><span class="p">,</span> <span class="n">nested_dict</span><span class="p">[</span><span class="n">field_name</span><span class="p">])</span>
 </span><span id="L-483"><a href="#L-483"><span class="linenos">483</span></a>
-</span><span id="L-484"><a href="#L-484"><span class="linenos">484</span></a>    <span class="k">def</span> <span class="nf">__copy__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;SerializableDataclass&quot;</span><span class="p">:</span>
+</span><span id="L-484"><a href="#L-484"><span class="linenos">484</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">__copy__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;SerializableDataclass&quot;</span><span class="p">:</span>
 </span><span id="L-485"><a href="#L-485"><span class="linenos">485</span></a>        <span class="s2">&quot;deep copy by serializing and loading the instance to json&quot;</span>
 </span><span id="L-486"><a href="#L-486"><span class="linenos">486</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">serialize</span><span class="p">())))</span>
 </span><span id="L-487"><a href="#L-487"><span class="linenos">487</span></a>
-</span><span id="L-488"><a href="#L-488"><span class="linenos">488</span></a>    <span class="k">def</span> <span class="nf">__deepcopy__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">memo</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;SerializableDataclass&quot;</span><span class="p">:</span>
+</span><span id="L-488"><a href="#L-488"><span class="linenos">488</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">__deepcopy__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">memo</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;SerializableDataclass&quot;</span><span class="p">:</span>
 </span><span id="L-489"><a href="#L-489"><span class="linenos">489</span></a>        <span class="s2">&quot;deep copy by serializing and loading the instance to json&quot;</span>
 </span><span id="L-490"><a href="#L-490"><span class="linenos">490</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">serialize</span><span class="p">())))</span>
 </span><span id="L-491"><a href="#L-491"><span class="linenos">491</span></a>
@@ -755,12 +755,12 @@ True
 </span><span id="L-493"><a href="#L-493"><span class="linenos">493</span></a><span class="c1"># cache this so we don&#39;t have to keep getting it</span>
 </span><span id="L-494"><a href="#L-494"><span class="linenos">494</span></a><span class="c1"># TODO: are the types hashable? does this even make sense?</span>
 </span><span id="L-495"><a href="#L-495"><span class="linenos">495</span></a><span class="nd">@functools</span><span class="o">.</span><span class="n">lru_cache</span><span class="p">(</span><span class="n">typed</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</span><span id="L-496"><a href="#L-496"><span class="linenos">496</span></a><span class="k">def</span> <span class="nf">get_cls_type_hints_cached</span><span class="p">(</span><span class="bp">cls</span><span class="p">:</span> <span class="n">Type</span><span class="p">[</span><span class="n">T</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+</span><span id="L-496"><a href="#L-496"><span class="linenos">496</span></a><span class="k">def</span><span class="w"> </span><span class="nf">get_cls_type_hints_cached</span><span class="p">(</span><span class="bp">cls</span><span class="p">:</span> <span class="n">Type</span><span class="p">[</span><span class="n">T</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
 </span><span id="L-497"><a href="#L-497"><span class="linenos">497</span></a>    <span class="s2">&quot;cached typing.get_type_hints for a class&quot;</span>
 </span><span id="L-498"><a href="#L-498"><span class="linenos">498</span></a>    <span class="k">return</span> <span class="n">typing</span><span class="o">.</span><span class="n">get_type_hints</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span>
 </span><span id="L-499"><a href="#L-499"><span class="linenos">499</span></a>
 </span><span id="L-500"><a href="#L-500"><span class="linenos">500</span></a>
-</span><span id="L-501"><a href="#L-501"><span class="linenos">501</span></a><span class="k">def</span> <span class="nf">get_cls_type_hints</span><span class="p">(</span><span class="bp">cls</span><span class="p">:</span> <span class="n">Type</span><span class="p">[</span><span class="n">T</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+</span><span id="L-501"><a href="#L-501"><span class="linenos">501</span></a><span class="k">def</span><span class="w"> </span><span class="nf">get_cls_type_hints</span><span class="p">(</span><span class="bp">cls</span><span class="p">:</span> <span class="n">Type</span><span class="p">[</span><span class="n">T</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
 </span><span id="L-502"><a href="#L-502"><span class="linenos">502</span></a>    <span class="s2">&quot;helper function to get type hints for a class&quot;</span>
 </span><span id="L-503"><a href="#L-503"><span class="linenos">503</span></a>    <span class="n">cls_type_hints</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span>
 </span><span id="L-504"><a href="#L-504"><span class="linenos">504</span></a>    <span class="k">try</span><span class="p">:</span>
@@ -776,42 +776,42 @@ True
 </span><span id="L-514"><a href="#L-514"><span class="linenos">514</span></a>            <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot;  Python version is </span><span class="si">{</span><span class="n">sys</span><span class="o">.</span><span class="n">version_info</span><span class="w"> </span><span class="si">= }</span><span class="s2"> (use hints like `typing.Dict` instead of `dict` in type hints on python &lt; 3.9)</span><span class="se">\n</span><span class="s2">&quot;</span>
 </span><span id="L-515"><a href="#L-515"><span class="linenos">515</span></a>            <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot;  </span><span class="si">{</span><span class="n">dataclasses</span><span class="o">.</span><span class="n">fields</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span><span class="w"> </span><span class="si">= }</span><span class="se">\n</span><span class="s2">&quot;</span>  <span class="c1"># type: ignore[arg-type]</span>
 </span><span id="L-516"><a href="#L-516"><span class="linenos">516</span></a>            <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot;  </span><span class="si">{</span><span class="n">e</span><span class="w"> </span><span class="si">= }</span><span class="s2">&quot;</span>
-</span><span id="L-517"><a href="#L-517"><span class="linenos">517</span></a>        <span class="p">)</span> <span class="kn">from</span> <span class="nn">e</span>
+</span><span id="L-517"><a href="#L-517"><span class="linenos">517</span></a>        <span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">e</span>
 </span><span id="L-518"><a href="#L-518"><span class="linenos">518</span></a>
 </span><span id="L-519"><a href="#L-519"><span class="linenos">519</span></a>    <span class="k">return</span> <span class="n">cls_type_hints</span>
 </span><span id="L-520"><a href="#L-520"><span class="linenos">520</span></a>
 </span><span id="L-521"><a href="#L-521"><span class="linenos">521</span></a>
-</span><span id="L-522"><a href="#L-522"><span class="linenos">522</span></a><span class="k">class</span> <span class="nc">KWOnlyError</span><span class="p">(</span><span class="ne">NotImplementedError</span><span class="p">):</span>
+</span><span id="L-522"><a href="#L-522"><span class="linenos">522</span></a><span class="k">class</span><span class="w"> </span><span class="nc">KWOnlyError</span><span class="p">(</span><span class="ne">NotImplementedError</span><span class="p">):</span>
 </span><span id="L-523"><a href="#L-523"><span class="linenos">523</span></a>    <span class="s2">&quot;kw-only dataclasses are not supported in python &lt;3.9&quot;</span>
 </span><span id="L-524"><a href="#L-524"><span class="linenos">524</span></a>
 </span><span id="L-525"><a href="#L-525"><span class="linenos">525</span></a>    <span class="k">pass</span>
 </span><span id="L-526"><a href="#L-526"><span class="linenos">526</span></a>
 </span><span id="L-527"><a href="#L-527"><span class="linenos">527</span></a>
-</span><span id="L-528"><a href="#L-528"><span class="linenos">528</span></a><span class="k">class</span> <span class="nc">FieldError</span><span class="p">(</span><span class="ne">ValueError</span><span class="p">):</span>
+</span><span id="L-528"><a href="#L-528"><span class="linenos">528</span></a><span class="k">class</span><span class="w"> </span><span class="nc">FieldError</span><span class="p">(</span><span class="ne">ValueError</span><span class="p">):</span>
 </span><span id="L-529"><a href="#L-529"><span class="linenos">529</span></a>    <span class="s2">&quot;base class for field errors&quot;</span>
 </span><span id="L-530"><a href="#L-530"><span class="linenos">530</span></a>
 </span><span id="L-531"><a href="#L-531"><span class="linenos">531</span></a>    <span class="k">pass</span>
 </span><span id="L-532"><a href="#L-532"><span class="linenos">532</span></a>
 </span><span id="L-533"><a href="#L-533"><span class="linenos">533</span></a>
-</span><span id="L-534"><a href="#L-534"><span class="linenos">534</span></a><span class="k">class</span> <span class="nc">NotSerializableFieldException</span><span class="p">(</span><span class="n">FieldError</span><span class="p">):</span>
+</span><span id="L-534"><a href="#L-534"><span class="linenos">534</span></a><span class="k">class</span><span class="w"> </span><span class="nc">NotSerializableFieldException</span><span class="p">(</span><span class="n">FieldError</span><span class="p">):</span>
 </span><span id="L-535"><a href="#L-535"><span class="linenos">535</span></a>    <span class="s2">&quot;field is not a `SerializableField`&quot;</span>
 </span><span id="L-536"><a href="#L-536"><span class="linenos">536</span></a>
 </span><span id="L-537"><a href="#L-537"><span class="linenos">537</span></a>    <span class="k">pass</span>
 </span><span id="L-538"><a href="#L-538"><span class="linenos">538</span></a>
 </span><span id="L-539"><a href="#L-539"><span class="linenos">539</span></a>
-</span><span id="L-540"><a href="#L-540"><span class="linenos">540</span></a><span class="k">class</span> <span class="nc">FieldSerializationError</span><span class="p">(</span><span class="n">FieldError</span><span class="p">):</span>
+</span><span id="L-540"><a href="#L-540"><span class="linenos">540</span></a><span class="k">class</span><span class="w"> </span><span class="nc">FieldSerializationError</span><span class="p">(</span><span class="n">FieldError</span><span class="p">):</span>
 </span><span id="L-541"><a href="#L-541"><span class="linenos">541</span></a>    <span class="s2">&quot;error while serializing a field&quot;</span>
 </span><span id="L-542"><a href="#L-542"><span class="linenos">542</span></a>
 </span><span id="L-543"><a href="#L-543"><span class="linenos">543</span></a>    <span class="k">pass</span>
 </span><span id="L-544"><a href="#L-544"><span class="linenos">544</span></a>
 </span><span id="L-545"><a href="#L-545"><span class="linenos">545</span></a>
-</span><span id="L-546"><a href="#L-546"><span class="linenos">546</span></a><span class="k">class</span> <span class="nc">FieldLoadingError</span><span class="p">(</span><span class="n">FieldError</span><span class="p">):</span>
+</span><span id="L-546"><a href="#L-546"><span class="linenos">546</span></a><span class="k">class</span><span class="w"> </span><span class="nc">FieldLoadingError</span><span class="p">(</span><span class="n">FieldError</span><span class="p">):</span>
 </span><span id="L-547"><a href="#L-547"><span class="linenos">547</span></a>    <span class="s2">&quot;error while loading a field&quot;</span>
 </span><span id="L-548"><a href="#L-548"><span class="linenos">548</span></a>
 </span><span id="L-549"><a href="#L-549"><span class="linenos">549</span></a>    <span class="k">pass</span>
 </span><span id="L-550"><a href="#L-550"><span class="linenos">550</span></a>
 </span><span id="L-551"><a href="#L-551"><span class="linenos">551</span></a>
-</span><span id="L-552"><a href="#L-552"><span class="linenos">552</span></a><span class="k">class</span> <span class="nc">FieldTypeMismatchError</span><span class="p">(</span><span class="n">FieldError</span><span class="p">,</span> <span class="ne">TypeError</span><span class="p">):</span>
+</span><span id="L-552"><a href="#L-552"><span class="linenos">552</span></a><span class="k">class</span><span class="w"> </span><span class="nc">FieldTypeMismatchError</span><span class="p">(</span><span class="n">FieldError</span><span class="p">,</span> <span class="ne">TypeError</span><span class="p">):</span>
 </span><span id="L-553"><a href="#L-553"><span class="linenos">553</span></a>    <span class="s2">&quot;error when a field type does not match the type hint&quot;</span>
 </span><span id="L-554"><a href="#L-554"><span class="linenos">554</span></a>
 </span><span id="L-555"><a href="#L-555"><span class="linenos">555</span></a>    <span class="k">pass</span>
@@ -820,7 +820,7 @@ True
 </span><span id="L-558"><a href="#L-558"><span class="linenos">558</span></a><span class="nd">@dataclass_transform</span><span class="p">(</span>
 </span><span id="L-559"><a href="#L-559"><span class="linenos">559</span></a>    <span class="n">field_specifiers</span><span class="o">=</span><span class="p">(</span><span class="n">serializable_field</span><span class="p">,</span> <span class="n">SerializableField</span><span class="p">),</span>
 </span><span id="L-560"><a href="#L-560"><span class="linenos">560</span></a><span class="p">)</span>
-</span><span id="L-561"><a href="#L-561"><span class="linenos">561</span></a><span class="k">def</span> <span class="nf">serializable_dataclass</span><span class="p">(</span>
+</span><span id="L-561"><a href="#L-561"><span class="linenos">561</span></a><span class="k">def</span><span class="w"> </span><span class="nf">serializable_dataclass</span><span class="p">(</span>
 </span><span id="L-562"><a href="#L-562"><span class="linenos">562</span></a>    <span class="c1"># this should be `_cls: Type[T] | None = None,` but mypy doesn&#39;t like it</span>
 </span><span id="L-563"><a href="#L-563"><span class="linenos">563</span></a>    <span class="n">_cls</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>  <span class="c1"># type: ignore</span>
 </span><span id="L-564"><a href="#L-564"><span class="linenos">564</span></a>    <span class="o">*</span><span class="p">,</span>
@@ -930,7 +930,7 @@ True
 </span><span id="L-668"><a href="#L-668"><span class="linenos">668</span></a>    <span class="k">else</span><span class="p">:</span>
 </span><span id="L-669"><a href="#L-669"><span class="linenos">669</span></a>        <span class="n">_properties_to_serialize</span> <span class="o">=</span> <span class="n">properties_to_serialize</span>
 </span><span id="L-670"><a href="#L-670"><span class="linenos">670</span></a>
-</span><span id="L-671"><a href="#L-671"><span class="linenos">671</span></a>    <span class="k">def</span> <span class="nf">wrap</span><span class="p">(</span><span class="bp">cls</span><span class="p">:</span> <span class="n">Type</span><span class="p">[</span><span class="n">T</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Type</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
+</span><span id="L-671"><a href="#L-671"><span class="linenos">671</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">wrap</span><span class="p">(</span><span class="bp">cls</span><span class="p">:</span> <span class="n">Type</span><span class="p">[</span><span class="n">T</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Type</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
 </span><span id="L-672"><a href="#L-672"><span class="linenos">672</span></a>        <span class="c1"># Modify the __annotations__ dictionary to replace regular fields with SerializableField</span>
 </span><span id="L-673"><a href="#L-673"><span class="linenos">673</span></a>        <span class="k">for</span> <span class="n">field_name</span><span class="p">,</span> <span class="n">field_type</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="vm">__annotations__</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
 </span><span id="L-674"><a href="#L-674"><span class="linenos">674</span></a>            <span class="n">field_value</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">field_name</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
@@ -972,7 +972,7 @@ True
 </span><span id="L-710"><a href="#L-710"><span class="linenos">710</span></a>        <span class="c1"># define `serialize` func</span>
 </span><span id="L-711"><a href="#L-711"><span class="linenos">711</span></a>        <span class="c1"># done locally since it depends on args to the decorator</span>
 </span><span id="L-712"><a href="#L-712"><span class="linenos">712</span></a>        <span class="c1"># ======================================================================</span>
-</span><span id="L-713"><a href="#L-713"><span class="linenos">713</span></a>        <span class="k">def</span> <span class="nf">serialize</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+</span><span id="L-713"><a href="#L-713"><span class="linenos">713</span></a>        <span class="k">def</span><span class="w"> </span><span class="nf">serialize</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
 </span><span id="L-714"><a href="#L-714"><span class="linenos">714</span></a>            <span class="n">result</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
 </span><span id="L-715"><a href="#L-715"><span class="linenos">715</span></a>                <span class="n">_FORMAT_KEY</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">(SerializableDataclass)&quot;</span>
 </span><span id="L-716"><a href="#L-716"><span class="linenos">716</span></a>            <span class="p">}</span>
@@ -1014,7 +1014,7 @@ True
 </span><span id="L-752"><a href="#L-752"><span class="linenos">752</span></a>                                    <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="w"> </span><span class="si">= }</span><span class="s2">&quot;</span><span class="p">,</span>
 </span><span id="L-753"><a href="#L-753"><span class="linenos">753</span></a>                                <span class="p">]</span>
 </span><span id="L-754"><a href="#L-754"><span class="linenos">754</span></a>                            <span class="p">)</span>
-</span><span id="L-755"><a href="#L-755"><span class="linenos">755</span></a>                        <span class="p">)</span> <span class="kn">from</span> <span class="nn">e</span>
+</span><span id="L-755"><a href="#L-755"><span class="linenos">755</span></a>                        <span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">e</span>
 </span><span id="L-756"><a href="#L-756"><span class="linenos">756</span></a>
 </span><span id="L-757"><a href="#L-757"><span class="linenos">757</span></a>            <span class="c1"># store each property if we can get it</span>
 </span><span id="L-758"><a href="#L-758"><span class="linenos">758</span></a>            <span class="k">for</span> <span class="n">prop</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_properties_to_serialize</span><span class="p">:</span>
@@ -1036,14 +1036,14 @@ True
 </span><span id="L-774"><a href="#L-774"><span class="linenos">774</span></a>        <span class="c1"># ======================================================================</span>
 </span><span id="L-775"><a href="#L-775"><span class="linenos">775</span></a>        <span class="c1"># mypy thinks this isnt a classmethod</span>
 </span><span id="L-776"><a href="#L-776"><span class="linenos">776</span></a>        <span class="nd">@classmethod</span>  <span class="c1"># type: ignore[misc]</span>
-</span><span id="L-777"><a href="#L-777"><span class="linenos">777</span></a>        <span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">|</span> <span class="n">T</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Type</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
+</span><span id="L-777"><a href="#L-777"><span class="linenos">777</span></a>        <span class="k">def</span><span class="w"> </span><span class="nf">load</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">|</span> <span class="n">T</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Type</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
 </span><span id="L-778"><a href="#L-778"><span class="linenos">778</span></a>            <span class="c1"># HACK: this is kind of ugly, but it fixes a lot of issues for when we do recursive loading with ZANJ</span>
 </span><span id="L-779"><a href="#L-779"><span class="linenos">779</span></a>            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="bp">cls</span><span class="p">):</span>
 </span><span id="L-780"><a href="#L-780"><span class="linenos">780</span></a>                <span class="k">return</span> <span class="n">data</span>
 </span><span id="L-781"><a href="#L-781"><span class="linenos">781</span></a>
-</span><span id="L-782"><a href="#L-782"><span class="linenos">782</span></a>            <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span>
-</span><span id="L-783"><a href="#L-783"><span class="linenos">783</span></a>                <span class="n">data</span><span class="p">,</span> <span class="n">typing</span><span class="o">.</span><span class="n">Mapping</span>
-</span><span id="L-784"><a href="#L-784"><span class="linenos">784</span></a>            <span class="p">),</span> <span class="sa">f</span><span class="s2">&quot;When loading </span><span class="si">{</span><span class="bp">cls</span><span class="o">.</span><span class="vm">__name__</span><span class="w"> </span><span class="si">= }</span><span class="s2"> expected a Mapping, but got </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">data</span><span class="p">)</span><span class="w"> </span><span class="si">= }</span><span class="s2">:</span><span class="se">\n</span><span class="si">{</span><span class="n">data</span><span class="w"> </span><span class="si">= }</span><span class="s2">&quot;</span>
+</span><span id="L-782"><a href="#L-782"><span class="linenos">782</span></a>            <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">typing</span><span class="o">.</span><span class="n">Mapping</span><span class="p">),</span> <span class="p">(</span>
+</span><span id="L-783"><a href="#L-783"><span class="linenos">783</span></a>                <span class="sa">f</span><span class="s2">&quot;When loading </span><span class="si">{</span><span class="bp">cls</span><span class="o">.</span><span class="vm">__name__</span><span class="w"> </span><span class="si">= }</span><span class="s2"> expected a Mapping, but got </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">data</span><span class="p">)</span><span class="w"> </span><span class="si">= }</span><span class="s2">:</span><span class="se">\n</span><span class="si">{</span><span class="n">data</span><span class="w"> </span><span class="si">= }</span><span class="s2">&quot;</span>
+</span><span id="L-784"><a href="#L-784"><span class="linenos">784</span></a>            <span class="p">)</span>
 </span><span id="L-785"><a href="#L-785"><span class="linenos">785</span></a>
 </span><span id="L-786"><a href="#L-786"><span class="linenos">786</span></a>            <span class="n">cls_type_hints</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="n">get_cls_type_hints</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span>
 </span><span id="L-787"><a href="#L-787"><span class="linenos">787</span></a>
@@ -1053,9 +1053,9 @@ True
 </span><span id="L-791"><a href="#L-791"><span class="linenos">791</span></a>            <span class="c1"># iterate over the fields of the class</span>
 </span><span id="L-792"><a href="#L-792"><span class="linenos">792</span></a>            <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">dataclasses</span><span class="o">.</span><span class="n">fields</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
 </span><span id="L-793"><a href="#L-793"><span class="linenos">793</span></a>                <span class="c1"># check if the field is a SerializableField</span>
-</span><span id="L-794"><a href="#L-794"><span class="linenos">794</span></a>                <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span>
-</span><span id="L-795"><a href="#L-795"><span class="linenos">795</span></a>                    <span class="n">field</span><span class="p">,</span> <span class="n">SerializableField</span>
-</span><span id="L-796"><a href="#L-796"><span class="linenos">796</span></a>                <span class="p">),</span> <span class="sa">f</span><span class="s2">&quot;Field &#39;</span><span class="si">{</span><span class="n">field</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&#39; on class </span><span class="si">{</span><span class="bp">cls</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> is not a SerializableField, but a </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">field</span><span class="p">)</span><span class="si">}</span><span class="s2">. this state should be inaccessible, please report this bug!</span><span class="se">\n</span><span class="s2">https://github.com/mivanit/muutils/issues/new&quot;</span>
+</span><span id="L-794"><a href="#L-794"><span class="linenos">794</span></a>                <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="n">SerializableField</span><span class="p">),</span> <span class="p">(</span>
+</span><span id="L-795"><a href="#L-795"><span class="linenos">795</span></a>                    <span class="sa">f</span><span class="s2">&quot;Field &#39;</span><span class="si">{</span><span class="n">field</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&#39; on class </span><span class="si">{</span><span class="bp">cls</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> is not a SerializableField, but a </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">field</span><span class="p">)</span><span class="si">}</span><span class="s2">. this state should be inaccessible, please report this bug!</span><span class="se">\n</span><span class="s2">https://github.com/mivanit/muutils/issues/new&quot;</span>
+</span><span id="L-796"><a href="#L-796"><span class="linenos">796</span></a>                <span class="p">)</span>
 </span><span id="L-797"><a href="#L-797"><span class="linenos">797</span></a>
 </span><span id="L-798"><a href="#L-798"><span class="linenos">798</span></a>                <span class="c1"># check if the field is in the data and if it should be initialized</span>
 </span><span id="L-799"><a href="#L-799"><span class="linenos">799</span></a>                <span class="k">if</span> <span class="p">(</span><span class="n">field</span><span class="o">.</span><span class="n">name</span> <span class="ow">in</span> <span class="n">data</span><span class="p">)</span> <span class="ow">and</span> <span class="n">field</span><span class="o">.</span><span class="n">init</span><span class="p">:</span>
@@ -1180,7 +1180,7 @@ True
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="CantGetTypeHintsWarning-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.11/json_serialize/serializable_dataclass.py#L87-L90" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/json_serialize/serializable_dataclass.py#L87-L90" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -1188,7 +1188,7 @@ True
 
     </div>
     <a class="headerlink" href="#CantGetTypeHintsWarning"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="CantGetTypeHintsWarning-88"><a href="#CantGetTypeHintsWarning-88"><span class="linenos">88</span></a><span class="k">class</span> <span class="nc">CantGetTypeHintsWarning</span><span class="p">(</span><span class="ne">UserWarning</span><span class="p">):</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="CantGetTypeHintsWarning-88"><a href="#CantGetTypeHintsWarning-88"><span class="linenos">88</span></a><span class="k">class</span><span class="w"> </span><span class="nc">CantGetTypeHintsWarning</span><span class="p">(</span><span class="ne">UserWarning</span><span class="p">):</span>
 </span><span id="CantGetTypeHintsWarning-89"><a href="#CantGetTypeHintsWarning-89"><span class="linenos">89</span></a>    <span class="s2">&quot;special warning for when we can&#39;t get type hints&quot;</span>
 </span><span id="CantGetTypeHintsWarning-90"><a href="#CantGetTypeHintsWarning-90"><span class="linenos">90</span></a>
 </span><span id="CantGetTypeHintsWarning-91"><a href="#CantGetTypeHintsWarning-91"><span class="linenos">91</span></a>    <span class="k">pass</span>
@@ -1225,7 +1225,7 @@ True
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="ZanjMissingWarning-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.11/json_serialize/serializable_dataclass.py#L93-L96" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/json_serialize/serializable_dataclass.py#L93-L96" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -1233,7 +1233,7 @@ True
 
     </div>
     <a class="headerlink" href="#ZanjMissingWarning"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="ZanjMissingWarning-94"><a href="#ZanjMissingWarning-94"><span class="linenos">94</span></a><span class="k">class</span> <span class="nc">ZanjMissingWarning</span><span class="p">(</span><span class="ne">UserWarning</span><span class="p">):</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="ZanjMissingWarning-94"><a href="#ZanjMissingWarning-94"><span class="linenos">94</span></a><span class="k">class</span><span class="w"> </span><span class="nc">ZanjMissingWarning</span><span class="p">(</span><span class="ne">UserWarning</span><span class="p">):</span>
 </span><span id="ZanjMissingWarning-95"><a href="#ZanjMissingWarning-95"><span class="linenos">95</span></a>    <span class="s2">&quot;special warning for when [`ZANJ`](https://github.com/mivanit/ZANJ) is missing -- `register_loader_serializable_dataclass` will not work&quot;</span>
 </span><span id="ZanjMissingWarning-96"><a href="#ZanjMissingWarning-96"><span class="linenos">96</span></a>
 </span><span id="ZanjMissingWarning-97"><a href="#ZanjMissingWarning-97"><span class="linenos">97</span></a>    <span class="k">pass</span>
@@ -1270,7 +1270,7 @@ True
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="zanj_register_loader_serializable_dataclass-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.11/json_serialize/serializable_dataclass.py#L103-L142" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/json_serialize/serializable_dataclass.py#L103-L142" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -1278,7 +1278,7 @@ True
 
     </div>
     <a class="headerlink" href="#zanj_register_loader_serializable_dataclass"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="zanj_register_loader_serializable_dataclass-104"><a href="#zanj_register_loader_serializable_dataclass-104"><span class="linenos">104</span></a><span class="k">def</span> <span class="nf">zanj_register_loader_serializable_dataclass</span><span class="p">(</span><span class="bp">cls</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Type</span><span class="p">[</span><span class="n">T</span><span class="p">]):</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="zanj_register_loader_serializable_dataclass-104"><a href="#zanj_register_loader_serializable_dataclass-104"><span class="linenos">104</span></a><span class="k">def</span><span class="w"> </span><span class="nf">zanj_register_loader_serializable_dataclass</span><span class="p">(</span><span class="bp">cls</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Type</span><span class="p">[</span><span class="n">T</span><span class="p">]):</span>
 </span><span id="zanj_register_loader_serializable_dataclass-105"><a href="#zanj_register_loader_serializable_dataclass-105"><span class="linenos">105</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Register a serializable dataclass with the ZANJ import</span>
 </span><span id="zanj_register_loader_serializable_dataclass-106"><a href="#zanj_register_loader_serializable_dataclass-106"><span class="linenos">106</span></a>
 </span><span id="zanj_register_loader_serializable_dataclass-107"><a href="#zanj_register_loader_serializable_dataclass-107"><span class="linenos">107</span></a><span class="sd">    this allows `ZANJ().read()` to load the class and not just return plain dicts</span>
@@ -1290,7 +1290,7 @@ True
 </span><span id="zanj_register_loader_serializable_dataclass-113"><a href="#zanj_register_loader_serializable_dataclass-113"><span class="linenos">113</span></a>
 </span><span id="zanj_register_loader_serializable_dataclass-114"><a href="#zanj_register_loader_serializable_dataclass-114"><span class="linenos">114</span></a>    <span class="k">if</span> <span class="n">_zanj_loading_needs_import</span><span class="p">:</span>
 </span><span id="zanj_register_loader_serializable_dataclass-115"><a href="#zanj_register_loader_serializable_dataclass-115"><span class="linenos">115</span></a>        <span class="k">try</span><span class="p">:</span>
-</span><span id="zanj_register_loader_serializable_dataclass-116"><a href="#zanj_register_loader_serializable_dataclass-116"><span class="linenos">116</span></a>            <span class="kn">from</span> <span class="nn">zanj.loading</span> <span class="kn">import</span> <span class="p">(</span>  <span class="c1"># type: ignore[import]</span>
+</span><span id="zanj_register_loader_serializable_dataclass-116"><a href="#zanj_register_loader_serializable_dataclass-116"><span class="linenos">116</span></a>            <span class="kn">from</span><span class="w"> </span><span class="nn">zanj.loading</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>  <span class="c1"># type: ignore[import]</span>
 </span><span id="zanj_register_loader_serializable_dataclass-117"><a href="#zanj_register_loader_serializable_dataclass-117"><span class="linenos">117</span></a>                <span class="n">LoaderHandler</span><span class="p">,</span>
 </span><span id="zanj_register_loader_serializable_dataclass-118"><a href="#zanj_register_loader_serializable_dataclass-118"><span class="linenos">118</span></a>                <span class="n">register_loader_handler</span><span class="p">,</span>
 </span><span id="zanj_register_loader_serializable_dataclass-119"><a href="#zanj_register_loader_serializable_dataclass-119"><span class="linenos">119</span></a>            <span class="p">)</span>
@@ -1340,7 +1340,7 @@ True
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="FieldIsNotInitOrSerializeWarning-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.11/json_serialize/serializable_dataclass.py#L149-L150" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/json_serialize/serializable_dataclass.py#L149-L150" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -1348,7 +1348,7 @@ True
 
     </div>
     <a class="headerlink" href="#FieldIsNotInitOrSerializeWarning"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="FieldIsNotInitOrSerializeWarning-150"><a href="#FieldIsNotInitOrSerializeWarning-150"><span class="linenos">150</span></a><span class="k">class</span> <span class="nc">FieldIsNotInitOrSerializeWarning</span><span class="p">(</span><span class="ne">UserWarning</span><span class="p">):</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="FieldIsNotInitOrSerializeWarning-150"><a href="#FieldIsNotInitOrSerializeWarning-150"><span class="linenos">150</span></a><span class="k">class</span><span class="w"> </span><span class="nc">FieldIsNotInitOrSerializeWarning</span><span class="p">(</span><span class="ne">UserWarning</span><span class="p">):</span>
 </span><span id="FieldIsNotInitOrSerializeWarning-151"><a href="#FieldIsNotInitOrSerializeWarning-151"><span class="linenos">151</span></a>    <span class="k">pass</span>
 </span></pre></div>
 
@@ -1383,7 +1383,7 @@ True
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="SerializableDataclass__validate_field_type-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.11/json_serialize/serializable_dataclass.py#L153-L242" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/json_serialize/serializable_dataclass.py#L153-L242" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -1391,7 +1391,7 @@ True
 
     </div>
     <a class="headerlink" href="#SerializableDataclass__validate_field_type"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="SerializableDataclass__validate_field_type-154"><a href="#SerializableDataclass__validate_field_type-154"><span class="linenos">154</span></a><span class="k">def</span> <span class="nf">SerializableDataclass__validate_field_type</span><span class="p">(</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="SerializableDataclass__validate_field_type-154"><a href="#SerializableDataclass__validate_field_type-154"><span class="linenos">154</span></a><span class="k">def</span><span class="w"> </span><span class="nf">SerializableDataclass__validate_field_type</span><span class="p">(</span>
 </span><span id="SerializableDataclass__validate_field_type-155"><a href="#SerializableDataclass__validate_field_type-155"><span class="linenos">155</span></a>    <span class="bp">self</span><span class="p">:</span> <span class="n">SerializableDataclass</span><span class="p">,</span>
 </span><span id="SerializableDataclass__validate_field_type-156"><a href="#SerializableDataclass__validate_field_type-156"><span class="linenos">156</span></a>    <span class="n">field</span><span class="p">:</span> <span class="n">SerializableField</span> <span class="o">|</span> <span class="nb">str</span><span class="p">,</span>
 </span><span id="SerializableDataclass__validate_field_type-157"><a href="#SerializableDataclass__validate_field_type-157"><span class="linenos">157</span></a>    <span class="n">on_typecheck_error</span><span class="p">:</span> <span class="n">ErrorMode</span> <span class="o">=</span> <span class="n">_DEFAULT_ON_TYPECHECK_ERROR</span><span class="p">,</span>
@@ -1435,9 +1435,9 @@ True
 </span><span id="SerializableDataclass__validate_field_type-195"><a href="#SerializableDataclass__validate_field_type-195"><span class="linenos">195</span></a>        <span class="p">)</span>
 </span><span id="SerializableDataclass__validate_field_type-196"><a href="#SerializableDataclass__validate_field_type-196"><span class="linenos">196</span></a>        <span class="k">return</span> <span class="kc">True</span>
 </span><span id="SerializableDataclass__validate_field_type-197"><a href="#SerializableDataclass__validate_field_type-197"><span class="linenos">197</span></a>
-</span><span id="SerializableDataclass__validate_field_type-198"><a href="#SerializableDataclass__validate_field_type-198"><span class="linenos">198</span></a>    <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span>
-</span><span id="SerializableDataclass__validate_field_type-199"><a href="#SerializableDataclass__validate_field_type-199"><span class="linenos">199</span></a>        <span class="n">_field</span><span class="p">,</span> <span class="n">SerializableField</span>
-</span><span id="SerializableDataclass__validate_field_type-200"><a href="#SerializableDataclass__validate_field_type-200"><span class="linenos">200</span></a>    <span class="p">),</span> <span class="sa">f</span><span class="s2">&quot;Field &#39;</span><span class="si">{</span><span class="n">_field</span><span class="o">.</span><span class="n">name</span><span class="w"> </span><span class="si">= }</span><span class="s2">&#39; on class </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="w"> </span><span class="si">= }</span><span class="s2"> is not a SerializableField, but a </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">_field</span><span class="p">)</span><span class="w"> </span><span class="si">= }</span><span class="s2">&quot;</span>
+</span><span id="SerializableDataclass__validate_field_type-198"><a href="#SerializableDataclass__validate_field_type-198"><span class="linenos">198</span></a>    <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">_field</span><span class="p">,</span> <span class="n">SerializableField</span><span class="p">),</span> <span class="p">(</span>
+</span><span id="SerializableDataclass__validate_field_type-199"><a href="#SerializableDataclass__validate_field_type-199"><span class="linenos">199</span></a>        <span class="sa">f</span><span class="s2">&quot;Field &#39;</span><span class="si">{</span><span class="n">_field</span><span class="o">.</span><span class="n">name</span><span class="w"> </span><span class="si">= }</span><span class="s2">&#39; on class </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="w"> </span><span class="si">= }</span><span class="s2"> is not a SerializableField, but a </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">_field</span><span class="p">)</span><span class="w"> </span><span class="si">= }</span><span class="s2">&quot;</span>
+</span><span id="SerializableDataclass__validate_field_type-200"><a href="#SerializableDataclass__validate_field_type-200"><span class="linenos">200</span></a>    <span class="p">)</span>
 </span><span id="SerializableDataclass__validate_field_type-201"><a href="#SerializableDataclass__validate_field_type-201"><span class="linenos">201</span></a>
 </span><span id="SerializableDataclass__validate_field_type-202"><a href="#SerializableDataclass__validate_field_type-202"><span class="linenos">202</span></a>    <span class="c1"># get field type hints</span>
 </span><span id="SerializableDataclass__validate_field_type-203"><a href="#SerializableDataclass__validate_field_type-203"><span class="linenos">203</span></a>    <span class="k">try</span><span class="p">:</span>
@@ -1520,7 +1520,7 @@ if the field type is correct. <code>False</code> if the field type is incorrect 
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="SerializableDataclass__validate_fields_types__dict-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.11/json_serialize/serializable_dataclass.py#L245-L279" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/json_serialize/serializable_dataclass.py#L245-L279" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -1528,7 +1528,7 @@ if the field type is correct. <code>False</code> if the field type is incorrect 
 
     </div>
     <a class="headerlink" href="#SerializableDataclass__validate_fields_types__dict"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="SerializableDataclass__validate_fields_types__dict-246"><a href="#SerializableDataclass__validate_fields_types__dict-246"><span class="linenos">246</span></a><span class="k">def</span> <span class="nf">SerializableDataclass__validate_fields_types__dict</span><span class="p">(</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="SerializableDataclass__validate_fields_types__dict-246"><a href="#SerializableDataclass__validate_fields_types__dict-246"><span class="linenos">246</span></a><span class="k">def</span><span class="w"> </span><span class="nf">SerializableDataclass__validate_fields_types__dict</span><span class="p">(</span>
 </span><span id="SerializableDataclass__validate_fields_types__dict-247"><a href="#SerializableDataclass__validate_fields_types__dict-247"><span class="linenos">247</span></a>    <span class="bp">self</span><span class="p">:</span> <span class="n">SerializableDataclass</span><span class="p">,</span>
 </span><span id="SerializableDataclass__validate_fields_types__dict-248"><a href="#SerializableDataclass__validate_fields_types__dict-248"><span class="linenos">248</span></a>    <span class="n">on_typecheck_error</span><span class="p">:</span> <span class="n">ErrorMode</span> <span class="o">=</span> <span class="n">_DEFAULT_ON_TYPECHECK_ERROR</span><span class="p">,</span>
 </span><span id="SerializableDataclass__validate_fields_types__dict-249"><a href="#SerializableDataclass__validate_fields_types__dict-249"><span class="linenos">249</span></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">bool</span><span class="p">]:</span>
@@ -1583,7 +1583,7 @@ if the field type is correct. <code>False</code> if the field type is incorrect 
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="SerializableDataclass__validate_fields_types-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.11/json_serialize/serializable_dataclass.py#L282-L291" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/json_serialize/serializable_dataclass.py#L282-L291" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -1591,7 +1591,7 @@ if the field type is correct. <code>False</code> if the field type is incorrect 
 
     </div>
     <a class="headerlink" href="#SerializableDataclass__validate_fields_types"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="SerializableDataclass__validate_fields_types-283"><a href="#SerializableDataclass__validate_fields_types-283"><span class="linenos">283</span></a><span class="k">def</span> <span class="nf">SerializableDataclass__validate_fields_types</span><span class="p">(</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="SerializableDataclass__validate_fields_types-283"><a href="#SerializableDataclass__validate_fields_types-283"><span class="linenos">283</span></a><span class="k">def</span><span class="w"> </span><span class="nf">SerializableDataclass__validate_fields_types</span><span class="p">(</span>
 </span><span id="SerializableDataclass__validate_fields_types-284"><a href="#SerializableDataclass__validate_fields_types-284"><span class="linenos">284</span></a>    <span class="bp">self</span><span class="p">:</span> <span class="n">SerializableDataclass</span><span class="p">,</span>
 </span><span id="SerializableDataclass__validate_fields_types-285"><a href="#SerializableDataclass__validate_fields_types-285"><span class="linenos">285</span></a>    <span class="n">on_typecheck_error</span><span class="p">:</span> <span class="n">ErrorMode</span> <span class="o">=</span> <span class="n">_DEFAULT_ON_TYPECHECK_ERROR</span><span class="p">,</span>
 </span><span id="SerializableDataclass__validate_fields_types-286"><a href="#SerializableDataclass__validate_fields_types-286"><span class="linenos">286</span></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
@@ -1620,7 +1620,7 @@ if the field type is correct. <code>False</code> if the field type is incorrect 
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="SerializableDataclass-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.11/json_serialize/serializable_dataclass.py#L294-L490" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/json_serialize/serializable_dataclass.py#L294-L490" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -1631,7 +1631,7 @@ if the field type is correct. <code>False</code> if the field type is incorrect 
             <div class="pdoc-code codehilite"><pre><span></span><span id="SerializableDataclass-295"><a href="#SerializableDataclass-295"><span class="linenos">295</span></a><span class="nd">@dataclass_transform</span><span class="p">(</span>
 </span><span id="SerializableDataclass-296"><a href="#SerializableDataclass-296"><span class="linenos">296</span></a>    <span class="n">field_specifiers</span><span class="o">=</span><span class="p">(</span><span class="n">serializable_field</span><span class="p">,</span> <span class="n">SerializableField</span><span class="p">),</span>
 </span><span id="SerializableDataclass-297"><a href="#SerializableDataclass-297"><span class="linenos">297</span></a><span class="p">)</span>
-</span><span id="SerializableDataclass-298"><a href="#SerializableDataclass-298"><span class="linenos">298</span></a><span class="k">class</span> <span class="nc">SerializableDataclass</span><span class="p">(</span><span class="n">abc</span><span class="o">.</span><span class="n">ABC</span><span class="p">):</span>
+</span><span id="SerializableDataclass-298"><a href="#SerializableDataclass-298"><span class="linenos">298</span></a><span class="k">class</span><span class="w"> </span><span class="nc">SerializableDataclass</span><span class="p">(</span><span class="n">abc</span><span class="o">.</span><span class="n">ABC</span><span class="p">):</span>
 </span><span id="SerializableDataclass-299"><a href="#SerializableDataclass-299"><span class="linenos">299</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Base class for serializable dataclasses</span>
 </span><span id="SerializableDataclass-300"><a href="#SerializableDataclass-300"><span class="linenos">300</span></a>
 </span><span id="SerializableDataclass-301"><a href="#SerializableDataclass-301"><span class="linenos">301</span></a><span class="sd">    only for linting and type checking, still need to call `serializable_dataclass` decorator</span>
@@ -1681,18 +1681,18 @@ if the field type is correct. <code>False</code> if the field type is incorrect 
 </span><span id="SerializableDataclass-345"><a href="#SerializableDataclass-345"><span class="linenos">345</span></a><span class="sd">        True</span>
 </span><span id="SerializableDataclass-346"><a href="#SerializableDataclass-346"><span class="linenos">346</span></a><span class="sd">    &quot;&quot;&quot;</span>
 </span><span id="SerializableDataclass-347"><a href="#SerializableDataclass-347"><span class="linenos">347</span></a>
-</span><span id="SerializableDataclass-348"><a href="#SerializableDataclass-348"><span class="linenos">348</span></a>    <span class="k">def</span> <span class="nf">serialize</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+</span><span id="SerializableDataclass-348"><a href="#SerializableDataclass-348"><span class="linenos">348</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">serialize</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
 </span><span id="SerializableDataclass-349"><a href="#SerializableDataclass-349"><span class="linenos">349</span></a>        <span class="s2">&quot;returns the class as a dict, implemented by using `@serializable_dataclass` decorator&quot;</span>
 </span><span id="SerializableDataclass-350"><a href="#SerializableDataclass-350"><span class="linenos">350</span></a>        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span>
 </span><span id="SerializableDataclass-351"><a href="#SerializableDataclass-351"><span class="linenos">351</span></a>            <span class="sa">f</span><span class="s2">&quot;decorate </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="w"> </span><span class="si">= }</span><span class="s2"> with `@serializable_dataclass`&quot;</span>
 </span><span id="SerializableDataclass-352"><a href="#SerializableDataclass-352"><span class="linenos">352</span></a>        <span class="p">)</span>
 </span><span id="SerializableDataclass-353"><a href="#SerializableDataclass-353"><span class="linenos">353</span></a>
 </span><span id="SerializableDataclass-354"><a href="#SerializableDataclass-354"><span class="linenos">354</span></a>    <span class="nd">@classmethod</span>
-</span><span id="SerializableDataclass-355"><a href="#SerializableDataclass-355"><span class="linenos">355</span></a>    <span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="bp">cls</span><span class="p">:</span> <span class="n">Type</span><span class="p">[</span><span class="n">T</span><span class="p">],</span> <span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">|</span> <span class="n">T</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
+</span><span id="SerializableDataclass-355"><a href="#SerializableDataclass-355"><span class="linenos">355</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">load</span><span class="p">(</span><span class="bp">cls</span><span class="p">:</span> <span class="n">Type</span><span class="p">[</span><span class="n">T</span><span class="p">],</span> <span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">|</span> <span class="n">T</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
 </span><span id="SerializableDataclass-356"><a href="#SerializableDataclass-356"><span class="linenos">356</span></a>        <span class="s2">&quot;takes in an appropriately structured dict and returns an instance of the class, implemented by using `@serializable_dataclass` decorator&quot;</span>
 </span><span id="SerializableDataclass-357"><a href="#SerializableDataclass-357"><span class="linenos">357</span></a>        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;decorate </span><span class="si">{</span><span class="bp">cls</span><span class="w"> </span><span class="si">= }</span><span class="s2"> with `@serializable_dataclass`&quot;</span><span class="p">)</span>
 </span><span id="SerializableDataclass-358"><a href="#SerializableDataclass-358"><span class="linenos">358</span></a>
-</span><span id="SerializableDataclass-359"><a href="#SerializableDataclass-359"><span class="linenos">359</span></a>    <span class="k">def</span> <span class="nf">validate_fields_types</span><span class="p">(</span>
+</span><span id="SerializableDataclass-359"><a href="#SerializableDataclass-359"><span class="linenos">359</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">validate_fields_types</span><span class="p">(</span>
 </span><span id="SerializableDataclass-360"><a href="#SerializableDataclass-360"><span class="linenos">360</span></a>        <span class="bp">self</span><span class="p">,</span> <span class="n">on_typecheck_error</span><span class="p">:</span> <span class="n">ErrorMode</span> <span class="o">=</span> <span class="n">_DEFAULT_ON_TYPECHECK_ERROR</span>
 </span><span id="SerializableDataclass-361"><a href="#SerializableDataclass-361"><span class="linenos">361</span></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 </span><span id="SerializableDataclass-362"><a href="#SerializableDataclass-362"><span class="linenos">362</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;validate the types of all the fields on a `SerializableDataclass`. calls `SerializableDataclass__validate_field_type` for each field&quot;&quot;&quot;</span>
@@ -1700,7 +1700,7 @@ if the field type is correct. <code>False</code> if the field type is incorrect 
 </span><span id="SerializableDataclass-364"><a href="#SerializableDataclass-364"><span class="linenos">364</span></a>            <span class="bp">self</span><span class="p">,</span> <span class="n">on_typecheck_error</span><span class="o">=</span><span class="n">on_typecheck_error</span>
 </span><span id="SerializableDataclass-365"><a href="#SerializableDataclass-365"><span class="linenos">365</span></a>        <span class="p">)</span>
 </span><span id="SerializableDataclass-366"><a href="#SerializableDataclass-366"><span class="linenos">366</span></a>
-</span><span id="SerializableDataclass-367"><a href="#SerializableDataclass-367"><span class="linenos">367</span></a>    <span class="k">def</span> <span class="nf">validate_field_type</span><span class="p">(</span>
+</span><span id="SerializableDataclass-367"><a href="#SerializableDataclass-367"><span class="linenos">367</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">validate_field_type</span><span class="p">(</span>
 </span><span id="SerializableDataclass-368"><a href="#SerializableDataclass-368"><span class="linenos">368</span></a>        <span class="bp">self</span><span class="p">,</span>
 </span><span id="SerializableDataclass-369"><a href="#SerializableDataclass-369"><span class="linenos">369</span></a>        <span class="n">field</span><span class="p">:</span> <span class="s2">&quot;SerializableField|str&quot;</span><span class="p">,</span>
 </span><span id="SerializableDataclass-370"><a href="#SerializableDataclass-370"><span class="linenos">370</span></a>        <span class="n">on_typecheck_error</span><span class="p">:</span> <span class="n">ErrorMode</span> <span class="o">=</span> <span class="n">_DEFAULT_ON_TYPECHECK_ERROR</span><span class="p">,</span>
@@ -1710,14 +1710,14 @@ if the field type is correct. <code>False</code> if the field type is incorrect 
 </span><span id="SerializableDataclass-374"><a href="#SerializableDataclass-374"><span class="linenos">374</span></a>            <span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">on_typecheck_error</span><span class="o">=</span><span class="n">on_typecheck_error</span>
 </span><span id="SerializableDataclass-375"><a href="#SerializableDataclass-375"><span class="linenos">375</span></a>        <span class="p">)</span>
 </span><span id="SerializableDataclass-376"><a href="#SerializableDataclass-376"><span class="linenos">376</span></a>
-</span><span id="SerializableDataclass-377"><a href="#SerializableDataclass-377"><span class="linenos">377</span></a>    <span class="k">def</span> <span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</span><span id="SerializableDataclass-377"><a href="#SerializableDataclass-377"><span class="linenos">377</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 </span><span id="SerializableDataclass-378"><a href="#SerializableDataclass-378"><span class="linenos">378</span></a>        <span class="k">return</span> <span class="n">dc_eq</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">)</span>
 </span><span id="SerializableDataclass-379"><a href="#SerializableDataclass-379"><span class="linenos">379</span></a>
-</span><span id="SerializableDataclass-380"><a href="#SerializableDataclass-380"><span class="linenos">380</span></a>    <span class="k">def</span> <span class="fm">__hash__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+</span><span id="SerializableDataclass-380"><a href="#SerializableDataclass-380"><span class="linenos">380</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__hash__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
 </span><span id="SerializableDataclass-381"><a href="#SerializableDataclass-381"><span class="linenos">381</span></a>        <span class="s2">&quot;hashes the json-serialized representation of the class&quot;</span>
 </span><span id="SerializableDataclass-382"><a href="#SerializableDataclass-382"><span class="linenos">382</span></a>        <span class="k">return</span> <span class="nb">hash</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">serialize</span><span class="p">()))</span>
 </span><span id="SerializableDataclass-383"><a href="#SerializableDataclass-383"><span class="linenos">383</span></a>
-</span><span id="SerializableDataclass-384"><a href="#SerializableDataclass-384"><span class="linenos">384</span></a>    <span class="k">def</span> <span class="nf">diff</span><span class="p">(</span>
+</span><span id="SerializableDataclass-384"><a href="#SerializableDataclass-384"><span class="linenos">384</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">diff</span><span class="p">(</span>
 </span><span id="SerializableDataclass-385"><a href="#SerializableDataclass-385"><span class="linenos">385</span></a>        <span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="s2">&quot;SerializableDataclass&quot;</span><span class="p">,</span> <span class="n">of_serialized</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
 </span><span id="SerializableDataclass-386"><a href="#SerializableDataclass-386"><span class="linenos">386</span></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
 </span><span id="SerializableDataclass-387"><a href="#SerializableDataclass-387"><span class="linenos">387</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;get a rich and recursive diff between two instances of a serializable dataclass</span>
@@ -1801,7 +1801,7 @@ if the field type is correct. <code>False</code> if the field type is incorrect 
 </span><span id="SerializableDataclass-465"><a href="#SerializableDataclass-465"><span class="linenos">465</span></a>        <span class="c1"># return the diff result</span>
 </span><span id="SerializableDataclass-466"><a href="#SerializableDataclass-466"><span class="linenos">466</span></a>        <span class="k">return</span> <span class="n">diff_result</span>
 </span><span id="SerializableDataclass-467"><a href="#SerializableDataclass-467"><span class="linenos">467</span></a>
-</span><span id="SerializableDataclass-468"><a href="#SerializableDataclass-468"><span class="linenos">468</span></a>    <span class="k">def</span> <span class="nf">update_from_nested_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nested_dict</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]):</span>
+</span><span id="SerializableDataclass-468"><a href="#SerializableDataclass-468"><span class="linenos">468</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">update_from_nested_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nested_dict</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]):</span>
 </span><span id="SerializableDataclass-469"><a href="#SerializableDataclass-469"><span class="linenos">469</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;update the instance from a nested dict, useful for configuration from command line args</span>
 </span><span id="SerializableDataclass-470"><a href="#SerializableDataclass-470"><span class="linenos">470</span></a>
 </span><span id="SerializableDataclass-471"><a href="#SerializableDataclass-471"><span class="linenos">471</span></a><span class="sd">        # Parameters:</span>
@@ -1818,11 +1818,11 @@ if the field type is correct. <code>False</code> if the field type is incorrect 
 </span><span id="SerializableDataclass-482"><a href="#SerializableDataclass-482"><span class="linenos">482</span></a>                <span class="k">else</span><span class="p">:</span>
 </span><span id="SerializableDataclass-483"><a href="#SerializableDataclass-483"><span class="linenos">483</span></a>                    <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field_name</span><span class="p">,</span> <span class="n">nested_dict</span><span class="p">[</span><span class="n">field_name</span><span class="p">])</span>
 </span><span id="SerializableDataclass-484"><a href="#SerializableDataclass-484"><span class="linenos">484</span></a>
-</span><span id="SerializableDataclass-485"><a href="#SerializableDataclass-485"><span class="linenos">485</span></a>    <span class="k">def</span> <span class="nf">__copy__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;SerializableDataclass&quot;</span><span class="p">:</span>
+</span><span id="SerializableDataclass-485"><a href="#SerializableDataclass-485"><span class="linenos">485</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">__copy__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;SerializableDataclass&quot;</span><span class="p">:</span>
 </span><span id="SerializableDataclass-486"><a href="#SerializableDataclass-486"><span class="linenos">486</span></a>        <span class="s2">&quot;deep copy by serializing and loading the instance to json&quot;</span>
 </span><span id="SerializableDataclass-487"><a href="#SerializableDataclass-487"><span class="linenos">487</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">serialize</span><span class="p">())))</span>
 </span><span id="SerializableDataclass-488"><a href="#SerializableDataclass-488"><span class="linenos">488</span></a>
-</span><span id="SerializableDataclass-489"><a href="#SerializableDataclass-489"><span class="linenos">489</span></a>    <span class="k">def</span> <span class="nf">__deepcopy__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">memo</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;SerializableDataclass&quot;</span><span class="p">:</span>
+</span><span id="SerializableDataclass-489"><a href="#SerializableDataclass-489"><span class="linenos">489</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">__deepcopy__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">memo</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;SerializableDataclass&quot;</span><span class="p">:</span>
 </span><span id="SerializableDataclass-490"><a href="#SerializableDataclass-490"><span class="linenos">490</span></a>        <span class="s2">&quot;deep copy by serializing and loading the instance to json&quot;</span>
 </span><span id="SerializableDataclass-491"><a href="#SerializableDataclass-491"><span class="linenos">491</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">serialize</span><span class="p">())))</span>
 </span></pre></div>
@@ -1836,7 +1836,7 @@ if the field type is correct. <code>False</code> if the field type is incorrect 
 
 <div class="pdoc-code codehilite">
 <pre><span></span><code><span class="nd">@serializable_dataclass</span>
-<span class="k">class</span> <span class="nc">MyClass</span><span class="p">(</span><span class="n">SerializableDataclass</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">MyClass</span><span class="p">(</span><span class="n">SerializableDataclass</span><span class="p">):</span>
     <span class="n">a</span><span class="p">:</span> <span class="nb">int</span>
     <span class="n">b</span><span class="p">:</span> <span class="nb">str</span>
 </code></pre>
@@ -1858,7 +1858,7 @@ or fields that are not json-serializable by default:</p>
 
 <div class="pdoc-code codehilite">
 <pre><span></span><code><span class="nd">@serializable_dataclass</span>
-<span class="k">class</span> <span class="nc">NestedClass</span><span class="p">(</span><span class="n">SerializableDataclass</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">NestedClass</span><span class="p">(</span><span class="n">SerializableDataclass</span><span class="p">):</span>
     <span class="n">x</span><span class="p">:</span> <span class="nb">str</span>
     <span class="n">y</span><span class="p">:</span> <span class="n">MyClass</span>
     <span class="n">act_fun</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span> <span class="o">=</span> <span class="n">serializable_field</span><span class="p">(</span>
@@ -1892,7 +1892,7 @@ True
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="SerializableDataclass.serialize-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.11/json_serialize/serializable_dataclass.py#L347-L351" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/json_serialize/serializable_dataclass.py#L347-L351" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -1900,7 +1900,7 @@ True
 
     </div>
     <a class="headerlink" href="#SerializableDataclass.serialize"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="SerializableDataclass.serialize-348"><a href="#SerializableDataclass.serialize-348"><span class="linenos">348</span></a>    <span class="k">def</span> <span class="nf">serialize</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="SerializableDataclass.serialize-348"><a href="#SerializableDataclass.serialize-348"><span class="linenos">348</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">serialize</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
 </span><span id="SerializableDataclass.serialize-349"><a href="#SerializableDataclass.serialize-349"><span class="linenos">349</span></a>        <span class="s2">&quot;returns the class as a dict, implemented by using `@serializable_dataclass` decorator&quot;</span>
 </span><span id="SerializableDataclass.serialize-350"><a href="#SerializableDataclass.serialize-350"><span class="linenos">350</span></a>        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span>
 </span><span id="SerializableDataclass.serialize-351"><a href="#SerializableDataclass.serialize-351"><span class="linenos">351</span></a>            <span class="sa">f</span><span class="s2">&quot;decorate </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="w"> </span><span class="si">= }</span><span class="s2"> with `@serializable_dataclass`&quot;</span>
@@ -1924,7 +1924,7 @@ True
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="SerializableDataclass.load-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.11/json_serialize/serializable_dataclass.py#L353-L356" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/json_serialize/serializable_dataclass.py#L353-L356" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -1933,7 +1933,7 @@ True
     </div>
     <a class="headerlink" href="#SerializableDataclass.load"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="SerializableDataclass.load-354"><a href="#SerializableDataclass.load-354"><span class="linenos">354</span></a>    <span class="nd">@classmethod</span>
-</span><span id="SerializableDataclass.load-355"><a href="#SerializableDataclass.load-355"><span class="linenos">355</span></a>    <span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="bp">cls</span><span class="p">:</span> <span class="n">Type</span><span class="p">[</span><span class="n">T</span><span class="p">],</span> <span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">|</span> <span class="n">T</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
+</span><span id="SerializableDataclass.load-355"><a href="#SerializableDataclass.load-355"><span class="linenos">355</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">load</span><span class="p">(</span><span class="bp">cls</span><span class="p">:</span> <span class="n">Type</span><span class="p">[</span><span class="n">T</span><span class="p">],</span> <span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">|</span> <span class="n">T</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
 </span><span id="SerializableDataclass.load-356"><a href="#SerializableDataclass.load-356"><span class="linenos">356</span></a>        <span class="s2">&quot;takes in an appropriately structured dict and returns an instance of the class, implemented by using `@serializable_dataclass` decorator&quot;</span>
 </span><span id="SerializableDataclass.load-357"><a href="#SerializableDataclass.load-357"><span class="linenos">357</span></a>        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;decorate </span><span class="si">{</span><span class="bp">cls</span><span class="w"> </span><span class="si">= }</span><span class="s2"> with `@serializable_dataclass`&quot;</span><span class="p">)</span>
 </span></pre></div>
@@ -1954,7 +1954,7 @@ True
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="SerializableDataclass.validate_fields_types-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.11/json_serialize/serializable_dataclass.py#L358-L364" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/json_serialize/serializable_dataclass.py#L358-L364" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -1962,7 +1962,7 @@ True
 
     </div>
     <a class="headerlink" href="#SerializableDataclass.validate_fields_types"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="SerializableDataclass.validate_fields_types-359"><a href="#SerializableDataclass.validate_fields_types-359"><span class="linenos">359</span></a>    <span class="k">def</span> <span class="nf">validate_fields_types</span><span class="p">(</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="SerializableDataclass.validate_fields_types-359"><a href="#SerializableDataclass.validate_fields_types-359"><span class="linenos">359</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">validate_fields_types</span><span class="p">(</span>
 </span><span id="SerializableDataclass.validate_fields_types-360"><a href="#SerializableDataclass.validate_fields_types-360"><span class="linenos">360</span></a>        <span class="bp">self</span><span class="p">,</span> <span class="n">on_typecheck_error</span><span class="p">:</span> <span class="n">ErrorMode</span> <span class="o">=</span> <span class="n">_DEFAULT_ON_TYPECHECK_ERROR</span>
 </span><span id="SerializableDataclass.validate_fields_types-361"><a href="#SerializableDataclass.validate_fields_types-361"><span class="linenos">361</span></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 </span><span id="SerializableDataclass.validate_fields_types-362"><a href="#SerializableDataclass.validate_fields_types-362"><span class="linenos">362</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;validate the types of all the fields on a `SerializableDataclass`. calls `SerializableDataclass__validate_field_type` for each field&quot;&quot;&quot;</span>
@@ -1987,7 +1987,7 @@ True
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="SerializableDataclass.validate_field_type-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.11/json_serialize/serializable_dataclass.py#L366-L374" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/json_serialize/serializable_dataclass.py#L366-L374" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -1995,7 +1995,7 @@ True
 
     </div>
     <a class="headerlink" href="#SerializableDataclass.validate_field_type"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="SerializableDataclass.validate_field_type-367"><a href="#SerializableDataclass.validate_field_type-367"><span class="linenos">367</span></a>    <span class="k">def</span> <span class="nf">validate_field_type</span><span class="p">(</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="SerializableDataclass.validate_field_type-367"><a href="#SerializableDataclass.validate_field_type-367"><span class="linenos">367</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">validate_field_type</span><span class="p">(</span>
 </span><span id="SerializableDataclass.validate_field_type-368"><a href="#SerializableDataclass.validate_field_type-368"><span class="linenos">368</span></a>        <span class="bp">self</span><span class="p">,</span>
 </span><span id="SerializableDataclass.validate_field_type-369"><a href="#SerializableDataclass.validate_field_type-369"><span class="linenos">369</span></a>        <span class="n">field</span><span class="p">:</span> <span class="s2">&quot;SerializableField|str&quot;</span><span class="p">,</span>
 </span><span id="SerializableDataclass.validate_field_type-370"><a href="#SerializableDataclass.validate_field_type-370"><span class="linenos">370</span></a>        <span class="n">on_typecheck_error</span><span class="p">:</span> <span class="n">ErrorMode</span> <span class="o">=</span> <span class="n">_DEFAULT_ON_TYPECHECK_ERROR</span><span class="p">,</span>
@@ -2022,7 +2022,7 @@ True
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="SerializableDataclass.diff-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.11/json_serialize/serializable_dataclass.py#L383-L465" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/json_serialize/serializable_dataclass.py#L383-L465" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -2030,7 +2030,7 @@ True
 
     </div>
     <a class="headerlink" href="#SerializableDataclass.diff"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="SerializableDataclass.diff-384"><a href="#SerializableDataclass.diff-384"><span class="linenos">384</span></a>    <span class="k">def</span> <span class="nf">diff</span><span class="p">(</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="SerializableDataclass.diff-384"><a href="#SerializableDataclass.diff-384"><span class="linenos">384</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">diff</span><span class="p">(</span>
 </span><span id="SerializableDataclass.diff-385"><a href="#SerializableDataclass.diff-385"><span class="linenos">385</span></a>        <span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="s2">&quot;SerializableDataclass&quot;</span><span class="p">,</span> <span class="n">of_serialized</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
 </span><span id="SerializableDataclass.diff-386"><a href="#SerializableDataclass.diff-386"><span class="linenos">386</span></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
 </span><span id="SerializableDataclass.diff-387"><a href="#SerializableDataclass.diff-387"><span class="linenos">387</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;get a rich and recursive diff between two instances of a serializable dataclass</span>
@@ -2162,7 +2162,7 @@ if true, compare serialized data and not raw values
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="SerializableDataclass.update_from_nested_dict-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.11/json_serialize/serializable_dataclass.py#L467-L482" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/json_serialize/serializable_dataclass.py#L467-L482" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -2170,7 +2170,7 @@ if true, compare serialized data and not raw values
 
     </div>
     <a class="headerlink" href="#SerializableDataclass.update_from_nested_dict"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="SerializableDataclass.update_from_nested_dict-468"><a href="#SerializableDataclass.update_from_nested_dict-468"><span class="linenos">468</span></a>    <span class="k">def</span> <span class="nf">update_from_nested_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nested_dict</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]):</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="SerializableDataclass.update_from_nested_dict-468"><a href="#SerializableDataclass.update_from_nested_dict-468"><span class="linenos">468</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">update_from_nested_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nested_dict</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]):</span>
 </span><span id="SerializableDataclass.update_from_nested_dict-469"><a href="#SerializableDataclass.update_from_nested_dict-469"><span class="linenos">469</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;update the instance from a nested dict, useful for configuration from command line args</span>
 </span><span id="SerializableDataclass.update_from_nested_dict-470"><a href="#SerializableDataclass.update_from_nested_dict-470"><span class="linenos">470</span></a>
 </span><span id="SerializableDataclass.update_from_nested_dict-471"><a href="#SerializableDataclass.update_from_nested_dict-471"><span class="linenos">471</span></a><span class="sd">        # Parameters:</span>
@@ -2212,7 +2212,7 @@ if true, compare serialized data and not raw values
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="get_cls_type_hints_cached-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.11/json_serialize/serializable_dataclass.py#L495-L498" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/json_serialize/serializable_dataclass.py#L495-L498" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -2221,7 +2221,7 @@ if true, compare serialized data and not raw values
     </div>
     <a class="headerlink" href="#get_cls_type_hints_cached"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="get_cls_type_hints_cached-496"><a href="#get_cls_type_hints_cached-496"><span class="linenos">496</span></a><span class="nd">@functools</span><span class="o">.</span><span class="n">lru_cache</span><span class="p">(</span><span class="n">typed</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</span><span id="get_cls_type_hints_cached-497"><a href="#get_cls_type_hints_cached-497"><span class="linenos">497</span></a><span class="k">def</span> <span class="nf">get_cls_type_hints_cached</span><span class="p">(</span><span class="bp">cls</span><span class="p">:</span> <span class="n">Type</span><span class="p">[</span><span class="n">T</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+</span><span id="get_cls_type_hints_cached-497"><a href="#get_cls_type_hints_cached-497"><span class="linenos">497</span></a><span class="k">def</span><span class="w"> </span><span class="nf">get_cls_type_hints_cached</span><span class="p">(</span><span class="bp">cls</span><span class="p">:</span> <span class="n">Type</span><span class="p">[</span><span class="n">T</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
 </span><span id="get_cls_type_hints_cached-498"><a href="#get_cls_type_hints_cached-498"><span class="linenos">498</span></a>    <span class="s2">&quot;cached typing.get_type_hints for a class&quot;</span>
 </span><span id="get_cls_type_hints_cached-499"><a href="#get_cls_type_hints_cached-499"><span class="linenos">499</span></a>    <span class="k">return</span> <span class="n">typing</span><span class="o">.</span><span class="n">get_type_hints</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span>
 </span></pre></div>
@@ -2242,7 +2242,7 @@ if true, compare serialized data and not raw values
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="get_cls_type_hints-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.11/json_serialize/serializable_dataclass.py#L501-L519" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/json_serialize/serializable_dataclass.py#L501-L519" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -2250,7 +2250,7 @@ if true, compare serialized data and not raw values
 
     </div>
     <a class="headerlink" href="#get_cls_type_hints"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="get_cls_type_hints-502"><a href="#get_cls_type_hints-502"><span class="linenos">502</span></a><span class="k">def</span> <span class="nf">get_cls_type_hints</span><span class="p">(</span><span class="bp">cls</span><span class="p">:</span> <span class="n">Type</span><span class="p">[</span><span class="n">T</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="get_cls_type_hints-502"><a href="#get_cls_type_hints-502"><span class="linenos">502</span></a><span class="k">def</span><span class="w"> </span><span class="nf">get_cls_type_hints</span><span class="p">(</span><span class="bp">cls</span><span class="p">:</span> <span class="n">Type</span><span class="p">[</span><span class="n">T</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
 </span><span id="get_cls_type_hints-503"><a href="#get_cls_type_hints-503"><span class="linenos">503</span></a>    <span class="s2">&quot;helper function to get type hints for a class&quot;</span>
 </span><span id="get_cls_type_hints-504"><a href="#get_cls_type_hints-504"><span class="linenos">504</span></a>    <span class="n">cls_type_hints</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span>
 </span><span id="get_cls_type_hints-505"><a href="#get_cls_type_hints-505"><span class="linenos">505</span></a>    <span class="k">try</span><span class="p">:</span>
@@ -2266,7 +2266,7 @@ if true, compare serialized data and not raw values
 </span><span id="get_cls_type_hints-515"><a href="#get_cls_type_hints-515"><span class="linenos">515</span></a>            <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot;  Python version is </span><span class="si">{</span><span class="n">sys</span><span class="o">.</span><span class="n">version_info</span><span class="w"> </span><span class="si">= }</span><span class="s2"> (use hints like `typing.Dict` instead of `dict` in type hints on python &lt; 3.9)</span><span class="se">\n</span><span class="s2">&quot;</span>
 </span><span id="get_cls_type_hints-516"><a href="#get_cls_type_hints-516"><span class="linenos">516</span></a>            <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot;  </span><span class="si">{</span><span class="n">dataclasses</span><span class="o">.</span><span class="n">fields</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span><span class="w"> </span><span class="si">= }</span><span class="se">\n</span><span class="s2">&quot;</span>  <span class="c1"># type: ignore[arg-type]</span>
 </span><span id="get_cls_type_hints-517"><a href="#get_cls_type_hints-517"><span class="linenos">517</span></a>            <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot;  </span><span class="si">{</span><span class="n">e</span><span class="w"> </span><span class="si">= }</span><span class="s2">&quot;</span>
-</span><span id="get_cls_type_hints-518"><a href="#get_cls_type_hints-518"><span class="linenos">518</span></a>        <span class="p">)</span> <span class="kn">from</span> <span class="nn">e</span>
+</span><span id="get_cls_type_hints-518"><a href="#get_cls_type_hints-518"><span class="linenos">518</span></a>        <span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">e</span>
 </span><span id="get_cls_type_hints-519"><a href="#get_cls_type_hints-519"><span class="linenos">519</span></a>
 </span><span id="get_cls_type_hints-520"><a href="#get_cls_type_hints-520"><span class="linenos">520</span></a>    <span class="k">return</span> <span class="n">cls_type_hints</span>
 </span></pre></div>
@@ -2287,7 +2287,7 @@ if true, compare serialized data and not raw values
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="KWOnlyError-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.11/json_serialize/serializable_dataclass.py#L522-L525" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/json_serialize/serializable_dataclass.py#L522-L525" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -2295,7 +2295,7 @@ if true, compare serialized data and not raw values
 
     </div>
     <a class="headerlink" href="#KWOnlyError"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="KWOnlyError-523"><a href="#KWOnlyError-523"><span class="linenos">523</span></a><span class="k">class</span> <span class="nc">KWOnlyError</span><span class="p">(</span><span class="ne">NotImplementedError</span><span class="p">):</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="KWOnlyError-523"><a href="#KWOnlyError-523"><span class="linenos">523</span></a><span class="k">class</span><span class="w"> </span><span class="nc">KWOnlyError</span><span class="p">(</span><span class="ne">NotImplementedError</span><span class="p">):</span>
 </span><span id="KWOnlyError-524"><a href="#KWOnlyError-524"><span class="linenos">524</span></a>    <span class="s2">&quot;kw-only dataclasses are not supported in python &lt;3.9&quot;</span>
 </span><span id="KWOnlyError-525"><a href="#KWOnlyError-525"><span class="linenos">525</span></a>
 </span><span id="KWOnlyError-526"><a href="#KWOnlyError-526"><span class="linenos">526</span></a>    <span class="k">pass</span>
@@ -2332,7 +2332,7 @@ if true, compare serialized data and not raw values
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="FieldError-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.11/json_serialize/serializable_dataclass.py#L528-L531" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/json_serialize/serializable_dataclass.py#L528-L531" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -2340,7 +2340,7 @@ if true, compare serialized data and not raw values
 
     </div>
     <a class="headerlink" href="#FieldError"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="FieldError-529"><a href="#FieldError-529"><span class="linenos">529</span></a><span class="k">class</span> <span class="nc">FieldError</span><span class="p">(</span><span class="ne">ValueError</span><span class="p">):</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="FieldError-529"><a href="#FieldError-529"><span class="linenos">529</span></a><span class="k">class</span><span class="w"> </span><span class="nc">FieldError</span><span class="p">(</span><span class="ne">ValueError</span><span class="p">):</span>
 </span><span id="FieldError-530"><a href="#FieldError-530"><span class="linenos">530</span></a>    <span class="s2">&quot;base class for field errors&quot;</span>
 </span><span id="FieldError-531"><a href="#FieldError-531"><span class="linenos">531</span></a>
 </span><span id="FieldError-532"><a href="#FieldError-532"><span class="linenos">532</span></a>    <span class="k">pass</span>
@@ -2377,7 +2377,7 @@ if true, compare serialized data and not raw values
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="NotSerializableFieldException-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.11/json_serialize/serializable_dataclass.py#L534-L537" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/json_serialize/serializable_dataclass.py#L534-L537" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -2385,7 +2385,7 @@ if true, compare serialized data and not raw values
 
     </div>
     <a class="headerlink" href="#NotSerializableFieldException"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="NotSerializableFieldException-535"><a href="#NotSerializableFieldException-535"><span class="linenos">535</span></a><span class="k">class</span> <span class="nc">NotSerializableFieldException</span><span class="p">(</span><span class="n">FieldError</span><span class="p">):</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="NotSerializableFieldException-535"><a href="#NotSerializableFieldException-535"><span class="linenos">535</span></a><span class="k">class</span><span class="w"> </span><span class="nc">NotSerializableFieldException</span><span class="p">(</span><span class="n">FieldError</span><span class="p">):</span>
 </span><span id="NotSerializableFieldException-536"><a href="#NotSerializableFieldException-536"><span class="linenos">536</span></a>    <span class="s2">&quot;field is not a `SerializableField`&quot;</span>
 </span><span id="NotSerializableFieldException-537"><a href="#NotSerializableFieldException-537"><span class="linenos">537</span></a>
 </span><span id="NotSerializableFieldException-538"><a href="#NotSerializableFieldException-538"><span class="linenos">538</span></a>    <span class="k">pass</span>
@@ -2422,7 +2422,7 @@ if true, compare serialized data and not raw values
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="FieldSerializationError-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.11/json_serialize/serializable_dataclass.py#L540-L543" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/json_serialize/serializable_dataclass.py#L540-L543" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -2430,7 +2430,7 @@ if true, compare serialized data and not raw values
 
     </div>
     <a class="headerlink" href="#FieldSerializationError"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="FieldSerializationError-541"><a href="#FieldSerializationError-541"><span class="linenos">541</span></a><span class="k">class</span> <span class="nc">FieldSerializationError</span><span class="p">(</span><span class="n">FieldError</span><span class="p">):</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="FieldSerializationError-541"><a href="#FieldSerializationError-541"><span class="linenos">541</span></a><span class="k">class</span><span class="w"> </span><span class="nc">FieldSerializationError</span><span class="p">(</span><span class="n">FieldError</span><span class="p">):</span>
 </span><span id="FieldSerializationError-542"><a href="#FieldSerializationError-542"><span class="linenos">542</span></a>    <span class="s2">&quot;error while serializing a field&quot;</span>
 </span><span id="FieldSerializationError-543"><a href="#FieldSerializationError-543"><span class="linenos">543</span></a>
 </span><span id="FieldSerializationError-544"><a href="#FieldSerializationError-544"><span class="linenos">544</span></a>    <span class="k">pass</span>
@@ -2467,7 +2467,7 @@ if true, compare serialized data and not raw values
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="FieldLoadingError-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.11/json_serialize/serializable_dataclass.py#L546-L549" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/json_serialize/serializable_dataclass.py#L546-L549" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -2475,7 +2475,7 @@ if true, compare serialized data and not raw values
 
     </div>
     <a class="headerlink" href="#FieldLoadingError"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="FieldLoadingError-547"><a href="#FieldLoadingError-547"><span class="linenos">547</span></a><span class="k">class</span> <span class="nc">FieldLoadingError</span><span class="p">(</span><span class="n">FieldError</span><span class="p">):</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="FieldLoadingError-547"><a href="#FieldLoadingError-547"><span class="linenos">547</span></a><span class="k">class</span><span class="w"> </span><span class="nc">FieldLoadingError</span><span class="p">(</span><span class="n">FieldError</span><span class="p">):</span>
 </span><span id="FieldLoadingError-548"><a href="#FieldLoadingError-548"><span class="linenos">548</span></a>    <span class="s2">&quot;error while loading a field&quot;</span>
 </span><span id="FieldLoadingError-549"><a href="#FieldLoadingError-549"><span class="linenos">549</span></a>
 </span><span id="FieldLoadingError-550"><a href="#FieldLoadingError-550"><span class="linenos">550</span></a>    <span class="k">pass</span>
@@ -2512,7 +2512,7 @@ if true, compare serialized data and not raw values
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="FieldTypeMismatchError-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.11/json_serialize/serializable_dataclass.py#L552-L555" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/json_serialize/serializable_dataclass.py#L552-L555" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -2520,7 +2520,7 @@ if true, compare serialized data and not raw values
 
     </div>
     <a class="headerlink" href="#FieldTypeMismatchError"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="FieldTypeMismatchError-553"><a href="#FieldTypeMismatchError-553"><span class="linenos">553</span></a><span class="k">class</span> <span class="nc">FieldTypeMismatchError</span><span class="p">(</span><span class="n">FieldError</span><span class="p">,</span> <span class="ne">TypeError</span><span class="p">):</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="FieldTypeMismatchError-553"><a href="#FieldTypeMismatchError-553"><span class="linenos">553</span></a><span class="k">class</span><span class="w"> </span><span class="nc">FieldTypeMismatchError</span><span class="p">(</span><span class="n">FieldError</span><span class="p">,</span> <span class="ne">TypeError</span><span class="p">):</span>
 </span><span id="FieldTypeMismatchError-554"><a href="#FieldTypeMismatchError-554"><span class="linenos">554</span></a>    <span class="s2">&quot;error when a field type does not match the type hint&quot;</span>
 </span><span id="FieldTypeMismatchError-555"><a href="#FieldTypeMismatchError-555"><span class="linenos">555</span></a>
 </span><span id="FieldTypeMismatchError-556"><a href="#FieldTypeMismatchError-556"><span class="linenos">556</span></a>    <span class="k">pass</span>
@@ -2558,7 +2558,7 @@ if true, compare serialized data and not raw values
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="serializable_dataclass-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.11/json_serialize/serializable_dataclass.py#L558-L905" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/json_serialize/serializable_dataclass.py#L558-L905" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -2569,7 +2569,7 @@ if true, compare serialized data and not raw values
             <div class="pdoc-code codehilite"><pre><span></span><span id="serializable_dataclass-559"><a href="#serializable_dataclass-559"><span class="linenos">559</span></a><span class="nd">@dataclass_transform</span><span class="p">(</span>
 </span><span id="serializable_dataclass-560"><a href="#serializable_dataclass-560"><span class="linenos">560</span></a>    <span class="n">field_specifiers</span><span class="o">=</span><span class="p">(</span><span class="n">serializable_field</span><span class="p">,</span> <span class="n">SerializableField</span><span class="p">),</span>
 </span><span id="serializable_dataclass-561"><a href="#serializable_dataclass-561"><span class="linenos">561</span></a><span class="p">)</span>
-</span><span id="serializable_dataclass-562"><a href="#serializable_dataclass-562"><span class="linenos">562</span></a><span class="k">def</span> <span class="nf">serializable_dataclass</span><span class="p">(</span>
+</span><span id="serializable_dataclass-562"><a href="#serializable_dataclass-562"><span class="linenos">562</span></a><span class="k">def</span><span class="w"> </span><span class="nf">serializable_dataclass</span><span class="p">(</span>
 </span><span id="serializable_dataclass-563"><a href="#serializable_dataclass-563"><span class="linenos">563</span></a>    <span class="c1"># this should be `_cls: Type[T] | None = None,` but mypy doesn&#39;t like it</span>
 </span><span id="serializable_dataclass-564"><a href="#serializable_dataclass-564"><span class="linenos">564</span></a>    <span class="n">_cls</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>  <span class="c1"># type: ignore</span>
 </span><span id="serializable_dataclass-565"><a href="#serializable_dataclass-565"><span class="linenos">565</span></a>    <span class="o">*</span><span class="p">,</span>
@@ -2679,7 +2679,7 @@ if true, compare serialized data and not raw values
 </span><span id="serializable_dataclass-669"><a href="#serializable_dataclass-669"><span class="linenos">669</span></a>    <span class="k">else</span><span class="p">:</span>
 </span><span id="serializable_dataclass-670"><a href="#serializable_dataclass-670"><span class="linenos">670</span></a>        <span class="n">_properties_to_serialize</span> <span class="o">=</span> <span class="n">properties_to_serialize</span>
 </span><span id="serializable_dataclass-671"><a href="#serializable_dataclass-671"><span class="linenos">671</span></a>
-</span><span id="serializable_dataclass-672"><a href="#serializable_dataclass-672"><span class="linenos">672</span></a>    <span class="k">def</span> <span class="nf">wrap</span><span class="p">(</span><span class="bp">cls</span><span class="p">:</span> <span class="n">Type</span><span class="p">[</span><span class="n">T</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Type</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
+</span><span id="serializable_dataclass-672"><a href="#serializable_dataclass-672"><span class="linenos">672</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">wrap</span><span class="p">(</span><span class="bp">cls</span><span class="p">:</span> <span class="n">Type</span><span class="p">[</span><span class="n">T</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Type</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
 </span><span id="serializable_dataclass-673"><a href="#serializable_dataclass-673"><span class="linenos">673</span></a>        <span class="c1"># Modify the __annotations__ dictionary to replace regular fields with SerializableField</span>
 </span><span id="serializable_dataclass-674"><a href="#serializable_dataclass-674"><span class="linenos">674</span></a>        <span class="k">for</span> <span class="n">field_name</span><span class="p">,</span> <span class="n">field_type</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="vm">__annotations__</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
 </span><span id="serializable_dataclass-675"><a href="#serializable_dataclass-675"><span class="linenos">675</span></a>            <span class="n">field_value</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">field_name</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
@@ -2721,7 +2721,7 @@ if true, compare serialized data and not raw values
 </span><span id="serializable_dataclass-711"><a href="#serializable_dataclass-711"><span class="linenos">711</span></a>        <span class="c1"># define `serialize` func</span>
 </span><span id="serializable_dataclass-712"><a href="#serializable_dataclass-712"><span class="linenos">712</span></a>        <span class="c1"># done locally since it depends on args to the decorator</span>
 </span><span id="serializable_dataclass-713"><a href="#serializable_dataclass-713"><span class="linenos">713</span></a>        <span class="c1"># ======================================================================</span>
-</span><span id="serializable_dataclass-714"><a href="#serializable_dataclass-714"><span class="linenos">714</span></a>        <span class="k">def</span> <span class="nf">serialize</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+</span><span id="serializable_dataclass-714"><a href="#serializable_dataclass-714"><span class="linenos">714</span></a>        <span class="k">def</span><span class="w"> </span><span class="nf">serialize</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
 </span><span id="serializable_dataclass-715"><a href="#serializable_dataclass-715"><span class="linenos">715</span></a>            <span class="n">result</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
 </span><span id="serializable_dataclass-716"><a href="#serializable_dataclass-716"><span class="linenos">716</span></a>                <span class="n">_FORMAT_KEY</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">(SerializableDataclass)&quot;</span>
 </span><span id="serializable_dataclass-717"><a href="#serializable_dataclass-717"><span class="linenos">717</span></a>            <span class="p">}</span>
@@ -2763,7 +2763,7 @@ if true, compare serialized data and not raw values
 </span><span id="serializable_dataclass-753"><a href="#serializable_dataclass-753"><span class="linenos">753</span></a>                                    <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="w"> </span><span class="si">= }</span><span class="s2">&quot;</span><span class="p">,</span>
 </span><span id="serializable_dataclass-754"><a href="#serializable_dataclass-754"><span class="linenos">754</span></a>                                <span class="p">]</span>
 </span><span id="serializable_dataclass-755"><a href="#serializable_dataclass-755"><span class="linenos">755</span></a>                            <span class="p">)</span>
-</span><span id="serializable_dataclass-756"><a href="#serializable_dataclass-756"><span class="linenos">756</span></a>                        <span class="p">)</span> <span class="kn">from</span> <span class="nn">e</span>
+</span><span id="serializable_dataclass-756"><a href="#serializable_dataclass-756"><span class="linenos">756</span></a>                        <span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">e</span>
 </span><span id="serializable_dataclass-757"><a href="#serializable_dataclass-757"><span class="linenos">757</span></a>
 </span><span id="serializable_dataclass-758"><a href="#serializable_dataclass-758"><span class="linenos">758</span></a>            <span class="c1"># store each property if we can get it</span>
 </span><span id="serializable_dataclass-759"><a href="#serializable_dataclass-759"><span class="linenos">759</span></a>            <span class="k">for</span> <span class="n">prop</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_properties_to_serialize</span><span class="p">:</span>
@@ -2785,14 +2785,14 @@ if true, compare serialized data and not raw values
 </span><span id="serializable_dataclass-775"><a href="#serializable_dataclass-775"><span class="linenos">775</span></a>        <span class="c1"># ======================================================================</span>
 </span><span id="serializable_dataclass-776"><a href="#serializable_dataclass-776"><span class="linenos">776</span></a>        <span class="c1"># mypy thinks this isnt a classmethod</span>
 </span><span id="serializable_dataclass-777"><a href="#serializable_dataclass-777"><span class="linenos">777</span></a>        <span class="nd">@classmethod</span>  <span class="c1"># type: ignore[misc]</span>
-</span><span id="serializable_dataclass-778"><a href="#serializable_dataclass-778"><span class="linenos">778</span></a>        <span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">|</span> <span class="n">T</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Type</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
+</span><span id="serializable_dataclass-778"><a href="#serializable_dataclass-778"><span class="linenos">778</span></a>        <span class="k">def</span><span class="w"> </span><span class="nf">load</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">|</span> <span class="n">T</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Type</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
 </span><span id="serializable_dataclass-779"><a href="#serializable_dataclass-779"><span class="linenos">779</span></a>            <span class="c1"># HACK: this is kind of ugly, but it fixes a lot of issues for when we do recursive loading with ZANJ</span>
 </span><span id="serializable_dataclass-780"><a href="#serializable_dataclass-780"><span class="linenos">780</span></a>            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="bp">cls</span><span class="p">):</span>
 </span><span id="serializable_dataclass-781"><a href="#serializable_dataclass-781"><span class="linenos">781</span></a>                <span class="k">return</span> <span class="n">data</span>
 </span><span id="serializable_dataclass-782"><a href="#serializable_dataclass-782"><span class="linenos">782</span></a>
-</span><span id="serializable_dataclass-783"><a href="#serializable_dataclass-783"><span class="linenos">783</span></a>            <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span>
-</span><span id="serializable_dataclass-784"><a href="#serializable_dataclass-784"><span class="linenos">784</span></a>                <span class="n">data</span><span class="p">,</span> <span class="n">typing</span><span class="o">.</span><span class="n">Mapping</span>
-</span><span id="serializable_dataclass-785"><a href="#serializable_dataclass-785"><span class="linenos">785</span></a>            <span class="p">),</span> <span class="sa">f</span><span class="s2">&quot;When loading </span><span class="si">{</span><span class="bp">cls</span><span class="o">.</span><span class="vm">__name__</span><span class="w"> </span><span class="si">= }</span><span class="s2"> expected a Mapping, but got </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">data</span><span class="p">)</span><span class="w"> </span><span class="si">= }</span><span class="s2">:</span><span class="se">\n</span><span class="si">{</span><span class="n">data</span><span class="w"> </span><span class="si">= }</span><span class="s2">&quot;</span>
+</span><span id="serializable_dataclass-783"><a href="#serializable_dataclass-783"><span class="linenos">783</span></a>            <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">typing</span><span class="o">.</span><span class="n">Mapping</span><span class="p">),</span> <span class="p">(</span>
+</span><span id="serializable_dataclass-784"><a href="#serializable_dataclass-784"><span class="linenos">784</span></a>                <span class="sa">f</span><span class="s2">&quot;When loading </span><span class="si">{</span><span class="bp">cls</span><span class="o">.</span><span class="vm">__name__</span><span class="w"> </span><span class="si">= }</span><span class="s2"> expected a Mapping, but got </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">data</span><span class="p">)</span><span class="w"> </span><span class="si">= }</span><span class="s2">:</span><span class="se">\n</span><span class="si">{</span><span class="n">data</span><span class="w"> </span><span class="si">= }</span><span class="s2">&quot;</span>
+</span><span id="serializable_dataclass-785"><a href="#serializable_dataclass-785"><span class="linenos">785</span></a>            <span class="p">)</span>
 </span><span id="serializable_dataclass-786"><a href="#serializable_dataclass-786"><span class="linenos">786</span></a>
 </span><span id="serializable_dataclass-787"><a href="#serializable_dataclass-787"><span class="linenos">787</span></a>            <span class="n">cls_type_hints</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="n">get_cls_type_hints</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span>
 </span><span id="serializable_dataclass-788"><a href="#serializable_dataclass-788"><span class="linenos">788</span></a>
@@ -2802,9 +2802,9 @@ if true, compare serialized data and not raw values
 </span><span id="serializable_dataclass-792"><a href="#serializable_dataclass-792"><span class="linenos">792</span></a>            <span class="c1"># iterate over the fields of the class</span>
 </span><span id="serializable_dataclass-793"><a href="#serializable_dataclass-793"><span class="linenos">793</span></a>            <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">dataclasses</span><span class="o">.</span><span class="n">fields</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
 </span><span id="serializable_dataclass-794"><a href="#serializable_dataclass-794"><span class="linenos">794</span></a>                <span class="c1"># check if the field is a SerializableField</span>
-</span><span id="serializable_dataclass-795"><a href="#serializable_dataclass-795"><span class="linenos">795</span></a>                <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span>
-</span><span id="serializable_dataclass-796"><a href="#serializable_dataclass-796"><span class="linenos">796</span></a>                    <span class="n">field</span><span class="p">,</span> <span class="n">SerializableField</span>
-</span><span id="serializable_dataclass-797"><a href="#serializable_dataclass-797"><span class="linenos">797</span></a>                <span class="p">),</span> <span class="sa">f</span><span class="s2">&quot;Field &#39;</span><span class="si">{</span><span class="n">field</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&#39; on class </span><span class="si">{</span><span class="bp">cls</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> is not a SerializableField, but a </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">field</span><span class="p">)</span><span class="si">}</span><span class="s2">. this state should be inaccessible, please report this bug!</span><span class="se">\n</span><span class="s2">https://github.com/mivanit/muutils/issues/new&quot;</span>
+</span><span id="serializable_dataclass-795"><a href="#serializable_dataclass-795"><span class="linenos">795</span></a>                <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="n">SerializableField</span><span class="p">),</span> <span class="p">(</span>
+</span><span id="serializable_dataclass-796"><a href="#serializable_dataclass-796"><span class="linenos">796</span></a>                    <span class="sa">f</span><span class="s2">&quot;Field &#39;</span><span class="si">{</span><span class="n">field</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&#39; on class </span><span class="si">{</span><span class="bp">cls</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> is not a SerializableField, but a </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">field</span><span class="p">)</span><span class="si">}</span><span class="s2">. this state should be inaccessible, please report this bug!</span><span class="se">\n</span><span class="s2">https://github.com/mivanit/muutils/issues/new&quot;</span>
+</span><span id="serializable_dataclass-797"><a href="#serializable_dataclass-797"><span class="linenos">797</span></a>                <span class="p">)</span>
 </span><span id="serializable_dataclass-798"><a href="#serializable_dataclass-798"><span class="linenos">798</span></a>
 </span><span id="serializable_dataclass-799"><a href="#serializable_dataclass-799"><span class="linenos">799</span></a>                <span class="c1"># check if the field is in the data and if it should be initialized</span>
 </span><span id="serializable_dataclass-800"><a href="#serializable_dataclass-800"><span class="linenos">800</span></a>                <span class="k">if</span> <span class="p">(</span><span class="n">field</span><span class="o">.</span><span class="n">name</span> <span class="ow">in</span> <span class="n">data</span><span class="p">)</span> <span class="ow">and</span> <span class="n">field</span><span class="o">.</span><span class="n">init</span><span class="p">:</span>
@@ -2931,7 +2931,7 @@ if true, compare serialized data and not raw values
 
 <div class="pdoc-code codehilite">
 <pre><span></span><code><span class="nd">@serializable_dataclass</span><span class="p">(</span><span class="n">kw_only</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="k">class</span> <span class="nc">Myclass</span><span class="p">(</span><span class="n">SerializableDataclass</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Myclass</span><span class="p">(</span><span class="n">SerializableDataclass</span><span class="p">):</span>
     <span class="n">a</span><span class="p">:</span> <span class="nb">int</span>
     <span class="n">b</span><span class="p">:</span> <span class="nb">str</span>
 </code></pre>

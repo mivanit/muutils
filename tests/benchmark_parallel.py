@@ -6,7 +6,7 @@ Run with: python tests/benchmark_parallel.py
 
 import time
 import multiprocessing
-from typing import List, Callable, Any, Dict, Tuple
+from typing import List, Callable, Any, Dict, Tuple, Union
 import pandas as pd
 import numpy as np
 from collections import defaultdict
@@ -229,7 +229,7 @@ def benchmark_pool_imap_unordered(
 def benchmark_run_maybe_parallel(
     func: Callable,
     data: List[int],
-    parallel: bool | int,
+    parallel: Union[bool, int],
     keep_ordered: bool = True,
     chunksize: int = None,
 ) -> Tuple[List[Any], float]:

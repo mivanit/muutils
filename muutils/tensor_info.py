@@ -218,7 +218,7 @@ def array_info(
         else:
             A_flat = A_np  # type: ignore[assignment]
     except:  # noqa: E722
-        A_flat = A_np
+        A_flat = A_np  # type: ignore[assignment]
 
     # Check for NaN values
     try:

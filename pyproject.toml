@@ -142,6 +142,7 @@
 		"tests/input_data",
 		"tests/junk_data",
 		"tests/_temp/",
+		"tests/benchmark_parallel.py",
 		# wip stuff
 		"_wip/",
 		# not our problem

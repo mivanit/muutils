@@ -7,7 +7,7 @@ Run with: python tests/benchmark_parallel.py
 import time
 import multiprocessing
 from typing import List, Callable, Any, Dict, Tuple, Union
-import pandas as pd
+import pandas as pd  # type: ignore[import-untyped]
 import numpy as np
 from collections import defaultdict
 
@@ -251,7 +251,7 @@ def plot_speedup_by_data_size(
     df: pd.DataFrame, task_type: str = None, save_path: str = None
 ):
     """Plot speedup vs data size for different methods."""
-    import matplotlib.pyplot as plt
+    import matplotlib.pyplot as plt  # type: ignore[import-untyped]
 
     fig, ax = plt.subplots(figsize=(10, 6))
 
@@ -283,7 +283,7 @@ def plot_timing_comparison(
     df: pd.DataFrame, data_size: int = None, save_path: str = None
 ):
     """Plot timing comparison as bar chart."""
-    import matplotlib.pyplot as plt
+    import matplotlib.pyplot as plt  # type: ignore[import-untyped]
 
     # Filter by data size if specified
     plot_df = df[df["data_size"] == data_size] if data_size else df
@@ -307,8 +307,8 @@ def plot_timing_comparison(
 
 def plot_efficiency_heatmap(df: pd.DataFrame, save_path: str = None):
     """Plot efficiency heatmap (speedup across methods and tasks)."""
-    import matplotlib.pyplot as plt
-    import seaborn as sns
+    import matplotlib.pyplot as plt  # type: ignore[import-untyped]
+    import seaborn as sns  # type: ignore[import-untyped]
 
     # Create pivot table for heatmap
     pivot_df = df.pivot_table(
@@ -392,7 +392,7 @@ def main():
     print_summary_stats(df)
 
     # Create visualizations
-    import matplotlib
+    import matplotlib  # type: ignore[import-untyped]
 
     matplotlib.use("Agg")  # Use non-interactive backend
 

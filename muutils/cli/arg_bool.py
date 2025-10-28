@@ -1,9 +1,11 @@
 import argparse
 from collections.abc import Callable, Iterable, Sequence
-from typing import Any, Final, override
+from typing import Any, Final, override, TypeVar
+
+T_callable = TypeVar("T_callable", bound=Callable[..., Any])
 
 
-def format_function_docstring[T_callable: Callable[..., Any]](
+def format_function_docstring(
     mapping: dict[str, Any],
     /,
 ) -> Callable[[T_callable], T_callable]:
@@ -152,7 +154,9 @@ class BoolFlagOrValue(argparse.Action):
                 return  # pyright: ignore[reportUnreachable]
             if values is not None:
                 dest_flag: str = self.dest.replace("_", "-")
-                parser.error(f"{option_string} does not take a value; use --{dest_flag} true|false")
+                parser.error(
+                    f"{option_string} does not take a value; use --{dest_flag} true|false"
+                )
                 return  # pyright: ignore[reportUnreachable]
             setattr(namespace, self.dest, False)
             return
@@ -161,7 +165,9 @@ class BoolFlagOrValue(argparse.Action):
         if values is None:
             if not self.allow_bare:
                 valid: list[str] = sorted(self.true_set | self.false_set)
-                parser.error(f"option {option_string} requires a value; expected one of {valid}")
+                parser.error(
+                    f"option {option_string} requires a value; expected one of {valid}"
+                )
                 return  # pyright: ignore[reportUnreachable]
             setattr(namespace, self.dest, True)
             return
@@ -244,7 +250,9 @@ def add_bool_flag(
 
     tokens_preview: str = "{true,false}"
     readable_name: str = name.replace("-", " ")
-    arg_help: str = help or (f"enable/disable {readable_name}; also accepts explicit true|false")
+    arg_help: str = help or (
+        f"enable/disable {readable_name}; also accepts explicit true|false"
+    )
 
     parser.add_argument(
         *option_strings,

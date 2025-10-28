@@ -3,6 +3,7 @@ import subprocess
 
 from weasyprint import HTML as WeasyHTML
 
+
 def html_to_pdf(src: Path, dst: Path) -> None:
     "write HTML file to PDF using WeasyPrint."
     WeasyHTML(filename=src.as_posix()).write_pdf(dst.as_posix())

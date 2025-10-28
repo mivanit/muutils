@@ -105,6 +105,6 @@ jobs:
       #   run: make test WARN_STRICT=1
 
       - name: check typing
-        # lack of torch causes mypy issues in 3.14
+        # TODO[torch-python-3.14]: lack of torch causes mypy issues in 3.14
         if: ${{ matrix.python != '3.14' }}
         run: make typing UV_NOSYNC=1

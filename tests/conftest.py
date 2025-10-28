@@ -9,6 +9,7 @@ def pytest_ignore_collect(path: Path, config) -> bool:
     Also ignore tests/unit/validate_type/ on Python < 3.11 (these use modern type syntax)
     """
     path_str: str = str(path).replace("\\", "/")
+    # TODO[torch-python-3.14]: remove when torch supports Python 3.14
     # ignore torch tests on Python 3.14+
     if sys.version_info >= (3, 14):
         warnings.warn(

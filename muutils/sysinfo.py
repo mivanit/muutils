@@ -55,7 +55,7 @@ class SysInfo:
         pckgs: list[tuple[str, str]] = [
             (
                 (
-                    x.metadata.get("Name", "<unknown>")
+                    x.metadata.get("Name", "<unknown>")  # type: ignore[attr-defined]
                     if sys.version_info < (3, 10)
                     else x.name  # type: ignore[attr-defined]
                 ),

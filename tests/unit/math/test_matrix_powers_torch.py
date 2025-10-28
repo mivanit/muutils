@@ -185,4 +185,3 @@ class TestMatrixPowers:
             warnings.warn(
                 f"Warning: Binary exponentiation with `matrix_powers_torch()` ({torch_time:.4f}s) not faster than naive approach ({naive_time:.4f}s)"
             )
-

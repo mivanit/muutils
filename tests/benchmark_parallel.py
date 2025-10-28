@@ -6,7 +6,7 @@ Run with: python tests/benchmark_parallel.py
 
 import time
 import multiprocessing
-from typing import List, Callable, Any, Dict
+from typing import List, Callable, Any, Dict, Tuple
 import pandas as pd
 import numpy as np
 from collections import defaultdict
@@ -142,7 +142,7 @@ class BenchmarkRunner:
         return df
 
 
-def benchmark_sequential(func: Callable, data: List[int]) -> tuple[List[Any], float]:
+def benchmark_sequential(func: Callable, data: List[int]) -> Tuple[List[Any], float]:
     """Benchmark sequential processing."""
     start = time.perf_counter()
     results = [func(x) for x in data]
@@ -150,7 +150,7 @@ def benchmark_sequential(func: Callable, data: List[int]) -> tuple[List[Any], fl
     return results, end - start
 
 
-def benchmark_pool_map(func: Callable, data: List[int], processes: int = None) -> tuple[List[Any], float]:
+def benchmark_pool_map(func: Callable, data: List[int], processes: int = None) -> Tuple[List[Any], float]:
     """Benchmark using multiprocessing.Pool.map."""
     start = time.perf_counter()
     with multiprocessing.Pool(processes) as pool:
@@ -159,7 +159,7 @@ def benchmark_pool_map(func: Callable, data: List[int], processes: int = None) -
     return results, end - start
 
 
-def benchmark_pool_imap(func: Callable, data: List[int], processes: int = None, chunksize: int = 1) -> tuple[List[Any], float]:
+def benchmark_pool_imap(func: Callable, data: List[int], processes: int = None, chunksize: int = 1) -> Tuple[List[Any], float]:
     """Benchmark using multiprocessing.Pool.imap."""
     start = time.perf_counter()
     with multiprocessing.Pool(processes) as pool:
@@ -168,7 +168,7 @@ def benchmark_pool_imap(func: Callable, data: List[int], processes: int = None, 
     return results, end - start
 
 
-def benchmark_pool_imap_unordered(func: Callable, data: List[int], processes: int = None, chunksize: int = 1) -> tuple[List[Any], float]:
+def benchmark_pool_imap_unordered(func: Callable, data: List[int], processes: int = None, chunksize: int = 1) -> Tuple[List[Any], float]:
     """Benchmark using multiprocessing.Pool.imap_unordered."""
     start = time.perf_counter()
     with multiprocessing.Pool(processes) as pool:
@@ -177,7 +177,7 @@ def benchmark_pool_imap_unordered(func: Callable, data: List[int], processes: in
     return results, end - start
 
 
-def benchmark_run_maybe_parallel(func: Callable, data: List[int], parallel: bool | int, keep_ordered: bool = True, chunksize: int = None) -> tuple[List[Any], float]:
+def benchmark_run_maybe_parallel(func: Callable, data: List[int], parallel: bool | int, keep_ordered: bool = True, chunksize: int = None) -> Tuple[List[Any], float]:
     """Benchmark using run_maybe_parallel."""
     start = time.perf_counter()
     results = run_maybe_parallel(

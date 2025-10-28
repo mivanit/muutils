@@ -279,6 +279,12 @@ def serializable_field(  # general implementation
     assert len(_args) == 0, f"unexpected positional arguments: {_args}"
 
     if "description" in kwargs:
+        import warnings
+
+        warnings.warn(
+            "`description` is deprecated, use `doc` instead",
+            DeprecationWarning,
+        )
         if doc is not None:
             err_msg: str = f"cannot pass both `doc` and `description`: {doc=}, {kwargs['description']=}"
             raise ValueError(err_msg)

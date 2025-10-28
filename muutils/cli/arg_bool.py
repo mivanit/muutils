@@ -1,6 +1,12 @@
 import argparse
+import sys
 from collections.abc import Callable, Iterable, Sequence
-from typing import Any, Final, override, TypeVar
+from typing import Any, Final, TypeVar
+
+if sys.version_info >= (3, 12):
+    from typing import override
+else:
+    from typing_extensions import override
 
 T_callable = TypeVar("T_callable", bound=Callable[..., Any])
 

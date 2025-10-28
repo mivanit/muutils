@@ -3957,7 +3957,7 @@ dev = [
     { name = "mypy", marker = "python_full_version < '3.9'", specifier = ">=1.0.1" },
     { name = "mypy", marker = "python_full_version >= '3.9'", specifier = ">=1.15" },
     { name = "pandas" },
-    { name = "pdoc", specifier = ">=14.6.0,<16.0.0" },
+    { name = "pdoc", specifier = ">=14.6.0" },
     { name = "plotly", specifier = ">=5.0.0" },
     { name = "pytest", specifier = ">=8.2.2" },
     { name = "pytest-cov", specifier = ">=4.1.0" },

@@ -86,8 +86,7 @@
 		"plotly>=5.0.0",
 		"beautifulsoup4",
 		# generating docs
-		"pdoc>=14.6.0,<16.0.0",
-		# "pdoc>=16.0.0; python_version > '3.9'",
+		"pdoc>=14.6.0",
 		# https://github.com/mivanit/muutils/security/dependabot/7
 		"jinja2>=3.1.6",
 		# lmcat -- a custom library. not exactly docs, but lets an LLM see all the code

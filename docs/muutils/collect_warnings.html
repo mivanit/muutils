@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="generator" content="pdoc 14.7.0"/>
+    <meta name="generator" content="pdoc 15.0.4"/>
     <title>muutils.collect_warnings API documentation</title>
 <link rel="stylesheet" href="../resources/css/bootstrap-reboot.min.css"><link rel="stylesheet" href="../resources/css/syntax-highlighting.css"><link rel="stylesheet" href="../resources/css/theme.css"><link rel="stylesheet" href="../resources/css/layout.css"><link rel="stylesheet" href="../resources/css/content.css"><link rel="stylesheet" href="../resources/css/custom.css"><script>
     window.MathJax = {
@@ -34,7 +34,7 @@
     }
 </style>
 <script type="module" defer>
-    import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs";
+    import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs";
 
     /* Re-invoke Mermaid when DOM content changes, for example during search. */
     document.addEventListener("DOMContentLoaded", () => {
@@ -46,7 +46,7 @@
 </script></head>
 <body>
 <div class="package-version">
-    docs for <a href="https://github.com/mivanit/muutils">muutils</a> v0.8.11<br>
+    docs for <a href="https://github.com/mivanit/muutils">muutils</a> v0.8.12<br>
 </div>
     <nav class="pdoc">
         <label id="navtoggle" for="togglestate" class="pdoc-button">
@@ -109,7 +109,7 @@
     </nav>
     <main class="pdoc">
             <section class="module-info">
-                        <a class="pdoc-button git-button" href="https://github.com/mivanit/muutils/blob/0.8.11/collect_warnings.py">View Source on GitHub</a>
+                        <a class="pdoc-button git-button" href="https://github.com/mivanit/muutils/blob/0.8.12/collect_warnings.py">View Source on GitHub</a>
                     <h1 class="modulename">
 <a href="./../muutils.html">muutils</a><wbr>.collect_warnings    </h1>
 
@@ -119,24 +119,24 @@
                         <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="mod-collect_warnings-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.11/collect_warnings.py#L0-L131" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/collect_warnings.py#L0-L131" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
         </div>
 
                 <br/>
-                        <div class="pdoc-code codehilite"><pre><span></span><span id="L-1"><a href="#L-1"><span class="linenos">  1</span></a><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+                        <div class="pdoc-code codehilite"><pre><span></span><span id="L-1"><a href="#L-1"><span class="linenos">  1</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
 </span><span id="L-2"><a href="#L-2"><span class="linenos">  2</span></a>
-</span><span id="L-3"><a href="#L-3"><span class="linenos">  3</span></a><span class="kn">import</span> <span class="nn">sys</span>
-</span><span id="L-4"><a href="#L-4"><span class="linenos">  4</span></a><span class="kn">import</span> <span class="nn">warnings</span>
-</span><span id="L-5"><a href="#L-5"><span class="linenos">  5</span></a><span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">Counter</span>
-</span><span id="L-6"><a href="#L-6"><span class="linenos">  6</span></a><span class="kn">from</span> <span class="nn">contextlib</span> <span class="kn">import</span> <span class="n">AbstractContextManager</span>
-</span><span id="L-7"><a href="#L-7"><span class="linenos">  7</span></a><span class="kn">from</span> <span class="nn">types</span> <span class="kn">import</span> <span class="n">TracebackType</span>
-</span><span id="L-8"><a href="#L-8"><span class="linenos">  8</span></a><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Literal</span>
+</span><span id="L-3"><a href="#L-3"><span class="linenos">  3</span></a><span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+</span><span id="L-4"><a href="#L-4"><span class="linenos">  4</span></a><span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
+</span><span id="L-5"><a href="#L-5"><span class="linenos">  5</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">collections</span><span class="w"> </span><span class="kn">import</span> <span class="n">Counter</span>
+</span><span id="L-6"><a href="#L-6"><span class="linenos">  6</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">contextlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">AbstractContextManager</span>
+</span><span id="L-7"><a href="#L-7"><span class="linenos">  7</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">types</span><span class="w"> </span><span class="kn">import</span> <span class="n">TracebackType</span>
+</span><span id="L-8"><a href="#L-8"><span class="linenos">  8</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Literal</span>
 </span><span id="L-9"><a href="#L-9"><span class="linenos">  9</span></a>
 </span><span id="L-10"><a href="#L-10"><span class="linenos"> 10</span></a>
-</span><span id="L-11"><a href="#L-11"><span class="linenos"> 11</span></a><span class="k">class</span> <span class="nc">CollateWarnings</span><span class="p">(</span><span class="n">AbstractContextManager</span><span class="p">[</span><span class="s2">&quot;CollateWarnings&quot;</span><span class="p">]):</span>
+</span><span id="L-11"><a href="#L-11"><span class="linenos"> 11</span></a><span class="k">class</span><span class="w"> </span><span class="nc">CollateWarnings</span><span class="p">(</span><span class="n">AbstractContextManager</span><span class="p">[</span><span class="s2">&quot;CollateWarnings&quot;</span><span class="p">]):</span>
 </span><span id="L-12"><a href="#L-12"><span class="linenos"> 12</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Capture every warning issued inside a `with` block and print a collated</span>
 </span><span id="L-13"><a href="#L-13"><span class="linenos"> 13</span></a><span class="sd">    summary when the block exits.</span>
 </span><span id="L-14"><a href="#L-14"><span class="linenos"> 14</span></a>
@@ -198,7 +198,7 @@
 </span><span id="L-70"><a href="#L-70"><span class="linenos"> 70</span></a>    <span class="n">print_on_exit</span><span class="p">:</span> <span class="nb">bool</span>
 </span><span id="L-71"><a href="#L-71"><span class="linenos"> 71</span></a>    <span class="n">fmt</span><span class="p">:</span> <span class="nb">str</span>
 </span><span id="L-72"><a href="#L-72"><span class="linenos"> 72</span></a>
-</span><span id="L-73"><a href="#L-73"><span class="linenos"> 73</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+</span><span id="L-73"><a href="#L-73"><span class="linenos"> 73</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
 </span><span id="L-74"><a href="#L-74"><span class="linenos"> 74</span></a>        <span class="bp">self</span><span class="p">,</span>
 </span><span id="L-75"><a href="#L-75"><span class="linenos"> 75</span></a>        <span class="n">print_on_exit</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
 </span><span id="L-76"><a href="#L-76"><span class="linenos"> 76</span></a>        <span class="n">fmt</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;(</span><span class="si">{count}</span><span class="s2">x) </span><span class="si">{filename}</span><span class="s2">:</span><span class="si">{lineno}</span><span class="s2"> </span><span class="si">{category}</span><span class="s2">: </span><span class="si">{message}</span><span class="s2">&quot;</span><span class="p">,</span>
@@ -209,7 +209,7 @@
 </span><span id="L-81"><a href="#L-81"><span class="linenos"> 81</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_records</span> <span class="o">=</span> <span class="p">[]</span>
 </span><span id="L-82"><a href="#L-82"><span class="linenos"> 82</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">counts</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">()</span>
 </span><span id="L-83"><a href="#L-83"><span class="linenos"> 83</span></a>
-</span><span id="L-84"><a href="#L-84"><span class="linenos"> 84</span></a>    <span class="k">def</span> <span class="fm">__enter__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">CollateWarnings</span><span class="p">:</span>
+</span><span id="L-84"><a href="#L-84"><span class="linenos"> 84</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__enter__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">CollateWarnings</span><span class="p">:</span>
 </span><span id="L-85"><a href="#L-85"><span class="linenos"> 85</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_active</span><span class="p">:</span>
 </span><span id="L-86"><a href="#L-86"><span class="linenos"> 86</span></a>            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;CollateWarnings cannot be re-entered&quot;</span><span class="p">)</span>
 </span><span id="L-87"><a href="#L-87"><span class="linenos"> 87</span></a>
@@ -219,7 +219,7 @@
 </span><span id="L-91"><a href="#L-91"><span class="linenos"> 91</span></a>        <span class="n">warnings</span><span class="o">.</span><span class="n">simplefilter</span><span class="p">(</span><span class="s2">&quot;always&quot;</span><span class="p">)</span>  <span class="c1"># capture every warning</span>
 </span><span id="L-92"><a href="#L-92"><span class="linenos"> 92</span></a>        <span class="k">return</span> <span class="bp">self</span>
 </span><span id="L-93"><a href="#L-93"><span class="linenos"> 93</span></a>
-</span><span id="L-94"><a href="#L-94"><span class="linenos"> 94</span></a>    <span class="k">def</span> <span class="fm">__exit__</span><span class="p">(</span>
+</span><span id="L-94"><a href="#L-94"><span class="linenos"> 94</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__exit__</span><span class="p">(</span>
 </span><span id="L-95"><a href="#L-95"><span class="linenos"> 95</span></a>        <span class="bp">self</span><span class="p">,</span>
 </span><span id="L-96"><a href="#L-96"><span class="linenos"> 96</span></a>        <span class="n">exc_type</span><span class="p">:</span> <span class="nb">type</span><span class="p">[</span><span class="ne">BaseException</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span>
 </span><span id="L-97"><a href="#L-97"><span class="linenos"> 97</span></a>        <span class="n">exc_val</span><span class="p">:</span> <span class="ne">BaseException</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span>
@@ -273,7 +273,7 @@
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="CollateWarnings-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.11/collect_warnings.py#L11-L132" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/collect_warnings.py#L11-L132" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -281,7 +281,7 @@
 
     </div>
     <a class="headerlink" href="#CollateWarnings"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="CollateWarnings-12"><a href="#CollateWarnings-12"><span class="linenos"> 12</span></a><span class="k">class</span> <span class="nc">CollateWarnings</span><span class="p">(</span><span class="n">AbstractContextManager</span><span class="p">[</span><span class="s2">&quot;CollateWarnings&quot;</span><span class="p">]):</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="CollateWarnings-12"><a href="#CollateWarnings-12"><span class="linenos"> 12</span></a><span class="k">class</span><span class="w"> </span><span class="nc">CollateWarnings</span><span class="p">(</span><span class="n">AbstractContextManager</span><span class="p">[</span><span class="s2">&quot;CollateWarnings&quot;</span><span class="p">]):</span>
 </span><span id="CollateWarnings-13"><a href="#CollateWarnings-13"><span class="linenos"> 13</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Capture every warning issued inside a `with` block and print a collated</span>
 </span><span id="CollateWarnings-14"><a href="#CollateWarnings-14"><span class="linenos"> 14</span></a><span class="sd">    summary when the block exits.</span>
 </span><span id="CollateWarnings-15"><a href="#CollateWarnings-15"><span class="linenos"> 15</span></a>
@@ -343,7 +343,7 @@
 </span><span id="CollateWarnings-71"><a href="#CollateWarnings-71"><span class="linenos"> 71</span></a>    <span class="n">print_on_exit</span><span class="p">:</span> <span class="nb">bool</span>
 </span><span id="CollateWarnings-72"><a href="#CollateWarnings-72"><span class="linenos"> 72</span></a>    <span class="n">fmt</span><span class="p">:</span> <span class="nb">str</span>
 </span><span id="CollateWarnings-73"><a href="#CollateWarnings-73"><span class="linenos"> 73</span></a>
-</span><span id="CollateWarnings-74"><a href="#CollateWarnings-74"><span class="linenos"> 74</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+</span><span id="CollateWarnings-74"><a href="#CollateWarnings-74"><span class="linenos"> 74</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
 </span><span id="CollateWarnings-75"><a href="#CollateWarnings-75"><span class="linenos"> 75</span></a>        <span class="bp">self</span><span class="p">,</span>
 </span><span id="CollateWarnings-76"><a href="#CollateWarnings-76"><span class="linenos"> 76</span></a>        <span class="n">print_on_exit</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
 </span><span id="CollateWarnings-77"><a href="#CollateWarnings-77"><span class="linenos"> 77</span></a>        <span class="n">fmt</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;(</span><span class="si">{count}</span><span class="s2">x) </span><span class="si">{filename}</span><span class="s2">:</span><span class="si">{lineno}</span><span class="s2"> </span><span class="si">{category}</span><span class="s2">: </span><span class="si">{message}</span><span class="s2">&quot;</span><span class="p">,</span>
@@ -354,7 +354,7 @@
 </span><span id="CollateWarnings-82"><a href="#CollateWarnings-82"><span class="linenos"> 82</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_records</span> <span class="o">=</span> <span class="p">[]</span>
 </span><span id="CollateWarnings-83"><a href="#CollateWarnings-83"><span class="linenos"> 83</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">counts</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">()</span>
 </span><span id="CollateWarnings-84"><a href="#CollateWarnings-84"><span class="linenos"> 84</span></a>
-</span><span id="CollateWarnings-85"><a href="#CollateWarnings-85"><span class="linenos"> 85</span></a>    <span class="k">def</span> <span class="fm">__enter__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">CollateWarnings</span><span class="p">:</span>
+</span><span id="CollateWarnings-85"><a href="#CollateWarnings-85"><span class="linenos"> 85</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__enter__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">CollateWarnings</span><span class="p">:</span>
 </span><span id="CollateWarnings-86"><a href="#CollateWarnings-86"><span class="linenos"> 86</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_active</span><span class="p">:</span>
 </span><span id="CollateWarnings-87"><a href="#CollateWarnings-87"><span class="linenos"> 87</span></a>            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;CollateWarnings cannot be re-entered&quot;</span><span class="p">)</span>
 </span><span id="CollateWarnings-88"><a href="#CollateWarnings-88"><span class="linenos"> 88</span></a>
@@ -364,7 +364,7 @@
 </span><span id="CollateWarnings-92"><a href="#CollateWarnings-92"><span class="linenos"> 92</span></a>        <span class="n">warnings</span><span class="o">.</span><span class="n">simplefilter</span><span class="p">(</span><span class="s2">&quot;always&quot;</span><span class="p">)</span>  <span class="c1"># capture every warning</span>
 </span><span id="CollateWarnings-93"><a href="#CollateWarnings-93"><span class="linenos"> 93</span></a>        <span class="k">return</span> <span class="bp">self</span>
 </span><span id="CollateWarnings-94"><a href="#CollateWarnings-94"><span class="linenos"> 94</span></a>
-</span><span id="CollateWarnings-95"><a href="#CollateWarnings-95"><span class="linenos"> 95</span></a>    <span class="k">def</span> <span class="fm">__exit__</span><span class="p">(</span>
+</span><span id="CollateWarnings-95"><a href="#CollateWarnings-95"><span class="linenos"> 95</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__exit__</span><span class="p">(</span>
 </span><span id="CollateWarnings-96"><a href="#CollateWarnings-96"><span class="linenos"> 96</span></a>        <span class="bp">self</span><span class="p">,</span>
 </span><span id="CollateWarnings-97"><a href="#CollateWarnings-97"><span class="linenos"> 97</span></a>        <span class="n">exc_type</span><span class="p">:</span> <span class="nb">type</span><span class="p">[</span><span class="ne">BaseException</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span>
 </span><span id="CollateWarnings-98"><a href="#CollateWarnings-98"><span class="linenos"> 98</span></a>        <span class="n">exc_val</span><span class="p">:</span> <span class="ne">BaseException</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span>
@@ -450,7 +450,7 @@ The context-manager instance.  After exit, the attribute
 <h1 id="usage">Usage:</h1>
 
 <div class="pdoc-code codehilite">
-<pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="kn">import</span> <span class="nn">warnings</span>
+<pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="k">with</span> <span class="n">CollateWarnings</span><span class="p">()</span> <span class="k">as</span> <span class="n">cw</span><span class="p">:</span>
 <span class="o">...</span>     <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;deprecated&quot;</span><span class="p">,</span> <span class="ne">DeprecationWarning</span><span class="p">)</span>
 <span class="o">...</span>     <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;deprecated&quot;</span><span class="p">,</span> <span class="ne">DeprecationWarning</span><span class="p">)</span>
@@ -474,7 +474,7 @@ The context-manager instance.  After exit, the attribute
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="CollateWarnings.__init__-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.11/collect_warnings.py#L73-L82" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/collect_warnings.py#L73-L82" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -482,7 +482,7 @@ The context-manager instance.  After exit, the attribute
 
     </div>
     <a class="headerlink" href="#CollateWarnings.__init__"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="CollateWarnings.__init__-74"><a href="#CollateWarnings.__init__-74"><span class="linenos">74</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="CollateWarnings.__init__-74"><a href="#CollateWarnings.__init__-74"><span class="linenos">74</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
 </span><span id="CollateWarnings.__init__-75"><a href="#CollateWarnings.__init__-75"><span class="linenos">75</span></a>        <span class="bp">self</span><span class="p">,</span>
 </span><span id="CollateWarnings.__init__-76"><a href="#CollateWarnings.__init__-76"><span class="linenos">76</span></a>        <span class="n">print_on_exit</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
 </span><span id="CollateWarnings.__init__-77"><a href="#CollateWarnings.__init__-77"><span class="linenos">77</span></a>        <span class="n">fmt</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;(</span><span class="si">{count}</span><span class="s2">x) </span><span class="si">{filename}</span><span class="s2">:</span><span class="si">{lineno}</span><span class="s2"> </span><span class="si">{category}</span><span class="s2">: </span><span class="si">{message}</span><span class="s2">&quot;</span><span class="p">,</span>

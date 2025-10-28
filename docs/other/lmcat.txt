@@ -1,8 +1,8 @@
 # Stats
 - 61 files
-- 12255 (12K) lines
-- 421916 (422K) chars
-- 45065 (45K) `whitespace-split` tokens
+- 12504 (13K) lines
+- 430432 (430K) chars
+- 46022 (46K) `whitespace-split` tokens
 
 # File Tree
 
@@ -10,22 +10,22 @@
 muutils                                  
 ├── .github                              
 │   └── workflows                        
-│    ├── checks.yml                      [  105L  2,533C   272T]
+│    ├── checks.yml                      [  110L  2,773C   301T]
 │    └── make-docs.yml                   [   48L  1,261C   140T]
 ├── muutils                              
 │   ├── json_serialize                   
 │   │   ├── __init__.py                  [   51L  2,416C   297T]
-│   │   ├── array.py                     [  226L  7,948C   789T]
+│   │   ├── array.py                     [  226L  7,956C   789T]
 │   │   ├── dataclass_transform_mock.py  [   29L    817C    69T]
 │   │   ├── json_serialize.py            [  333L 11,880C 1,135T]
-│   │   ├── serializable_dataclass.py    [  905L 35,780C 3,564T]
-│   │   ├── serializable_field.py        [  279L 11,044C 1,095T]
+│   │   ├── serializable_dataclass.py    [  905L 35,786C 3,564T]
+│   │   ├── serializable_field.py        [  308L 12,195C 1,247T]
 │   │   └── util.py                      [  281L  9,185C   983T]
 │   ├── logger                           
 │   │   ├── __init__.py                  [   30L    684C    55T]
 │   │   ├── exception_context.py         [   43L  1,183C   110T]
 │   │   ├── headerfuncs.py               [   68L  1,695C   207T]
-│   │   ├── log_util.py                  [   80L  2,072C   264T]
+│   │   ├── log_util.py                  [   81L  2,112C   268T]
 │   │   ├── logger.py                    [  306L 10,726C 1,091T]
 │   │   ├── loggingstream.py             [   95L  3,856C   412T]
 │   │   ├── simplelogger.py              [   81L  2,173C   239T]
@@ -47,37 +47,37 @@ muutils
 │   ├── nbutils                          
 │   │   ├── __init__.py                  [   21L    488C    51T]
 │   │   ├── configure_notebook.py        [  320L  9,792C 1,038T]
-│   │   ├── convert_ipynb_to_script.py   [  374L 13,398C 1,217T]
+│   │   ├── convert_ipynb_to_script.py   [  374L 13,400C 1,219T]
 │   │   ├── mermaid.py                   [   20L    571C    52T]
 │   │   ├── print_tex.py                 [   21L    495C    70T]
-│   │   └── run_notebook_tests.py        [  255L  9,280C   822T]
+│   │   └── run_notebook_tests.py        [  255L  9,284C   826T]
 │   ├── web                              
 │   │   ├── __init__.py                  [    3L     33C     5T]
-│   │   └── bundle_html.py               [  388L 13,079C 1,271T]
+│   │   └── bundle_html.py               [  388L 13,088C 1,271T]
 │   ├── __init__.py                      [   34L    544C    43T]
 │   ├── collect_warnings.py              [  132L  4,073C   375T]
 │   ├── console_unicode.py               [   34L  1,070C   133T]
-│   ├── dbg.py                           [  319L  9,663C 1,047T]
+│   ├── dbg.py                           [  516L 15,967C 1,750T]
 │   ├── dictmagic.py                     [  522L 18,132C 1,968T]
 │   ├── errormode.py                     [  241L  7,939C   816T]
 │   ├── group_equiv.py                   [   66L  2,060C   246T]
-│   ├── interval.py                      [  532L 18,186C 1,720T]
-│   ├── jsonlines.py                     [   77L  1,991C   246T]
+│   ├── interval.py                      [  532L 18,188C 1,720T]
+│   ├── jsonlines.py                     [   77L  1,993C   246T]
 │   ├── kappa.py                         [   46L  1,260C   150T]
-│   ├── mlutils.py                       [  165L  5,198C   495T]
+│   ├── mlutils.py                       [  167L  5,214C   497T]
 │   ├── parallel.py                      [  279L  9,245C 1,091T]
 │   ├── py.typed                         [    0L      0C     0T]
 │   ├── spinner.py                       [  511L 17,879C 1,688T]
 │   ├── statcounter.py                   [  231L  7,373C   768T]
-│   ├── sysinfo.py                       [  200L  6,934C   499T]
-│   ├── tensor_info.py                   [  648L 21,619C 2,123T]
-│   ├── tensor_utils.py                  [  495L 14,793C 1,418T]
+│   ├── sysinfo.py                       [  210L  7,178C   514T]
+│   ├── tensor_info.py                   [  651L 21,853C 2,145T]
+│   ├── tensor_utils.py                  [  496L 14,934C 1,437T]
 │   ├── timeit_fancy.py                  [  107L  3,900C   482T]
 │   └── validate_type.py                 [  237L  8,401C   896T]
 ├── LICENSE                              [  674L 35,149C 5,644T]
-├── README.md                            [  131L  6,289C   551T]
-├── makefile                             [1,696L 52,560C 6,263T]
-├── pyproject.toml                       [  223L  6,537C   747T]
+├── README.md                            [  131L  6,356C   551T]
+├── makefile                             [1,695L 52,472C 6,256T]
+├── pyproject.toml                       [  224L  6,583C   752T]
 ```
 
 # File Contents
@@ -136,19 +136,22 @@ jobs:
     # needs: [lint, check-deps] # for conditionally running this job
     strategy:
       matrix:
-        python: ["3.8", "3.9", "3.10", "3.11", "3.12", "3.13"]
+        python: ["3.8", "3.9", "3.10", "3.11", "3.12", "3.13", "3.14"]
         pkg:
           - group: "legacy"
             torch: "1.13.1"
             numpy: "1.24.4"
           - group: "latest"
             torch: ""
-            numpy: ""            
+            numpy: ""
         exclude:
           - python: "3.12"
             pkg:
               group: "legacy"
           - python: "3.13"
+            pkg:
+              group: "legacy"
+          - python: "3.14"
             pkg:
               group: "legacy"
     
@@ -170,7 +173,7 @@ jobs:
         run: make setup
 
       - name: Install different pytorch version
-        if: ${{ matrix.pkg.torch != '' }}
+        if: ${{ matrix.pkg.torch != '' && matrix.python != '3.14' }}
         run: |
           uv pip install torch==${{ matrix.pkg.torch }}+cpu --extra-index-url https://download.pytorch.org/whl/cpu
       
@@ -179,7 +182,7 @@ jobs:
         run: uv pip install numpy==${{ matrix.pkg.numpy }}
     
       - name: tests
-        run: make test
+        run: make test UV_NOSYNC=1
 
       # - name: tests in strict mode
       #   # TODO: until zanj ported to 3.8 and 3.9
@@ -187,7 +190,9 @@ jobs:
       #   run: make test WARN_STRICT=1
 
       - name: check typing
-        run: make typing
+        # TODO[torch-python-3.14]: lack of torch causes mypy issues in 3.14
+        if: ${{ matrix.python != '3.14' }}
+        run: make typing UV_NOSYNC=1
 ``````{ end_of_file=".github/workflows/checks.yml" }
 
 ``````{ path=".github/workflows/make-docs.yml"  }
@@ -229,7 +234,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
+          python-version: '3.13'
 
       - name: set up uv
         run: curl -LsSf https://astral.sh/uv/install.sh | sh
@@ -480,32 +485,32 @@ def load_array(arr: JSONitem, array_mode: Optional[ArrayMode] = None) -> Any:
 
     # actually load the array
     if array_mode == "array_list_meta":
-        assert isinstance(
-            arr, typing.Mapping
-        ), f"invalid list format: {type(arr) = }\n{arr = }"
+        assert isinstance(arr, typing.Mapping), (
+            f"invalid list format: {type(arr) = }\n{arr = }"
+        )
         data = np.array(arr["data"], dtype=arr["dtype"])  # type: ignore
         if tuple(arr["shape"]) != tuple(data.shape):  # type: ignore
             raise ValueError(f"invalid shape: {arr}")
         return data
 
     elif array_mode == "array_hex_meta":
-        assert isinstance(
-            arr, typing.Mapping
-        ), f"invalid list format: {type(arr) = }\n{arr = }"
+        assert isinstance(arr, typing.Mapping), (
+            f"invalid list format: {type(arr) = }\n{arr = }"
+        )
         data = np.frombuffer(bytes.fromhex(arr["data"]), dtype=arr["dtype"])  # type: ignore
         return data.reshape(arr["shape"])  # type: ignore
 
     elif array_mode == "array_b64_meta":
-        assert isinstance(
-            arr, typing.Mapping
-        ), f"invalid list format: {type(arr) = }\n{arr = }"
+        assert isinstance(arr, typing.Mapping), (
+            f"invalid list format: {type(arr) = }\n{arr = }"
+        )
         data = np.frombuffer(base64.b64decode(arr["data"]), dtype=arr["dtype"])  # type: ignore
         return data.reshape(arr["shape"])  # type: ignore
 
     elif array_mode == "list":
-        assert isinstance(
-            arr, typing.Sequence
-        ), f"invalid list format: {type(arr) = }\n{arr = }"
+        assert isinstance(arr, typing.Sequence), (
+            f"invalid list format: {type(arr) = }\n{arr = }"
+        )
         return np.array(arr)  # type: ignore
     elif array_mode == "external":
         # assume ZANJ has taken care of it
@@ -1093,9 +1098,9 @@ def SerializableDataclass__validate_field_type(
         )
         return True
 
-    assert isinstance(
-        _field, SerializableField
-    ), f"Field '{_field.name = }' on class {self.__class__ = } is not a SerializableField, but a {type(_field) = }"
+    assert isinstance(_field, SerializableField), (
+        f"Field '{_field.name = }' on class {self.__class__ = } is not a SerializableField, but a {type(_field) = }"
+    )
 
     # get field type hints
     try:
@@ -1678,9 +1683,9 @@ def serializable_dataclass(
             if isinstance(data, cls):
                 return data
 
-            assert isinstance(
-                data, typing.Mapping
-            ), f"When loading {cls.__name__ = } expected a Mapping, but got {type(data) = }:\n{data = }"
+            assert isinstance(data, typing.Mapping), (
+                f"When loading {cls.__name__ = } expected a Mapping, but got {type(data) = }:\n{data = }"
+            )
 
             cls_type_hints: dict[str, Any] = get_cls_type_hints(cls)
 
@@ -1690,9 +1695,9 @@ def serializable_dataclass(
             # iterate over the fields of the class
             for field in dataclasses.fields(cls):
                 # check if the field is a SerializableField
-                assert isinstance(
-                    field, SerializableField
-                ), f"Field '{field.name}' on class {cls.__name__} is not a SerializableField, but a {type(field)}. this state should be inaccessible, please report this bug!\nhttps://github.com/mivanit/muutils/issues/new"
+                assert isinstance(field, SerializableField), (
+                    f"Field '{field.name}' on class {cls.__name__} is not a SerializableField, but a {type(field)}. this state should be inaccessible, please report this bug!\nhttps://github.com/mivanit/muutils/issues/new"
+                )
 
                 # check if the field is in the data and if it should be initialized
                 if (field.name in data) and field.init:
@@ -1838,6 +1843,7 @@ class SerializableField(dataclasses.Field):
         "hash",
         "init",
         "compare",
+        "doc",
         "metadata",
         "kw_only",
         "_field_type",  # Private: not to be used by user code.
@@ -1860,6 +1866,7 @@ class SerializableField(dataclasses.Field):
         repr: bool = True,
         hash: Optional[bool] = None,
         compare: bool = True,
+        doc: str | None = None,
         # TODO: add field for custom comparator (such as serializing)
         metadata: Optional[types.MappingProxyType] = None,
         kw_only: Union[bool, dataclasses._MISSING_TYPE] = dataclasses.MISSING,
@@ -1890,6 +1897,10 @@ class SerializableField(dataclasses.Field):
         else:
             super_kwargs["metadata"] = types.MappingProxyType({})
 
+        # only pass `doc` to super if python >=3.14
+        if sys.version_info >= (3, 14):
+            super_kwargs["doc"] = doc
+
         # special check, kw_only is not supported in python <3.9 and `dataclasses.MISSING` is truthy
         if sys.version_info < (3, 10):
             if super_kwargs["kw_only"] == True:  # noqa: E712
@@ -1899,6 +1910,10 @@ class SerializableField(dataclasses.Field):
 
         # actually init the super class
         super().__init__(**super_kwargs)  # type: ignore[call-arg]
+
+        # init doc if python <3.14
+        if sys.version_info < (3, 14):
+            self.doc: str | None = doc
 
         # now init the new fields
         self.serialize: bool = serialize
@@ -1926,6 +1941,7 @@ class SerializableField(dataclasses.Field):
             repr=field.repr,
             hash=field.hash,
             compare=field.compare,
+            doc=getattr(field, "doc", None),  # `doc` added in python <3.14
             metadata=field.metadata,
             kw_only=getattr(field, "kw_only", dataclasses.MISSING),  # for python <3.9
             serialize=field.repr,  # serialize if it's going to be repr'd
@@ -1939,7 +1955,7 @@ Sfield_T = TypeVar("Sfield_T")
 
 
 @overload
-def serializable_field(
+def serializable_field(  # only `default_factory` is provided
     *_args,
     default_factory: Callable[[], Sfield_T],
     default: dataclasses._MISSING_TYPE = dataclasses.MISSING,
@@ -1947,6 +1963,7 @@ def serializable_field(
     repr: bool = True,
     hash: Optional[bool] = None,
     compare: bool = True,
+    doc: str | None = None,
     metadata: Optional[types.MappingProxyType] = None,
     kw_only: Union[bool, dataclasses._MISSING_TYPE] = dataclasses.MISSING,
     serialize: bool = True,
@@ -1957,7 +1974,7 @@ def serializable_field(
     **kwargs: Any,
 ) -> Sfield_T: ...
 @overload
-def serializable_field(
+def serializable_field(  # only `default` is provided
     *_args,
     default: Sfield_T,
     default_factory: dataclasses._MISSING_TYPE = dataclasses.MISSING,
@@ -1965,6 +1982,7 @@ def serializable_field(
     repr: bool = True,
     hash: Optional[bool] = None,
     compare: bool = True,
+    doc: str | None = None,
     metadata: Optional[types.MappingProxyType] = None,
     kw_only: Union[bool, dataclasses._MISSING_TYPE] = dataclasses.MISSING,
     serialize: bool = True,
@@ -1975,7 +1993,7 @@ def serializable_field(
     **kwargs: Any,
 ) -> Sfield_T: ...
 @overload
-def serializable_field(
+def serializable_field(  # both `default` and `default_factory` are MISSING
     *_args,
     default: dataclasses._MISSING_TYPE = dataclasses.MISSING,
     default_factory: dataclasses._MISSING_TYPE = dataclasses.MISSING,
@@ -1983,6 +2001,7 @@ def serializable_field(
     repr: bool = True,
     hash: Optional[bool] = None,
     compare: bool = True,
+    doc: str | None = None,
     metadata: Optional[types.MappingProxyType] = None,
     kw_only: Union[bool, dataclasses._MISSING_TYPE] = dataclasses.MISSING,
     serialize: bool = True,
@@ -1992,7 +2011,7 @@ def serializable_field(
     custom_typecheck_fn: Optional[Callable[[type], bool]] = None,
     **kwargs: Any,
 ) -> Any: ...
-def serializable_field(
+def serializable_field(  # general implementation
     *_args,
     default: Union[Any, dataclasses._MISSING_TYPE] = dataclasses.MISSING,
     default_factory: Union[Any, dataclasses._MISSING_TYPE] = dataclasses.MISSING,
@@ -2000,6 +2019,7 @@ def serializable_field(
     repr: bool = True,
     hash: Optional[bool] = None,
     compare: bool = True,
+    doc: str | None = None,
     metadata: Optional[types.MappingProxyType] = None,
     kw_only: Union[bool, dataclasses._MISSING_TYPE] = dataclasses.MISSING,
     serialize: bool = True,
@@ -2019,6 +2039,7 @@ def serializable_field(
     repr: bool = True,
     hash: Optional[bool] = None,
     compare: bool = True,
+    doc: str | None = None, # new in python 3.14. can alternately pass `description` to match pydantic, but this is discouraged
     metadata: types.MappingProxyType | None = None,
     kw_only: bool | dataclasses._MISSING_TYPE = dataclasses.MISSING,
     # ----------------------------------------------------------------------
@@ -2069,6 +2090,19 @@ def serializable_field(
     # TODO: `custom_value_check_fn`: function taking the value of the field and returning whether the value itself is valid. if not provided, any value is valid as long as it passes the type test
     """
     assert len(_args) == 0, f"unexpected positional arguments: {_args}"
+
+    if "description" in kwargs:
+        import warnings
+
+        warnings.warn(
+            "`description` is deprecated, use `doc` instead",
+            DeprecationWarning,
+        )
+        if doc is not None:
+            err_msg: str = f"cannot pass both `doc` and `description`: {doc=}, {kwargs['description']=}"
+            raise ValueError(err_msg)
+        doc = kwargs.pop("description")
+
     return SerializableField(
         default=default,
         default_factory=default_factory,
@@ -2527,6 +2561,7 @@ HEADER_FUNCTIONS: dict[str, HeaderFunction] = {
 ``````{ end_of_file="muutils/logger/headerfuncs.py" }
 
 ``````{ path="muutils/logger/log_util.py"  }
+from __future__ import annotations
 from muutils.jsonlines import jsonl_load_log
 
 
@@ -2545,7 +2580,7 @@ def gather_log(file: str) -> dict[str, list[dict]]:
     output: dict[str, list[dict]] = dict()
 
     for item in data:
-        stream: str = item.get("_stream", None)
+        stream: str = item.get("_stream", "default")
         if stream not in output:
             output[stream] = list()
         output[stream].append(item)
@@ -4234,9 +4269,9 @@ def str_to_numeric(
                 num_sign = -1
                 num = num[1:]
             # assert that both are digits
-            assert (
-                num.isdigit() and den.isdigit()
-            ), "numerator and denominator must be digits"
+            assert num.isdigit() and den.isdigit(), (
+                "numerator and denominator must be digits"
+            )
             # return the fraction
             result = num_sign * (
                 int(num) / int(den)
@@ -5032,9 +5067,9 @@ def disable_plots_in_script(script_lines: list[str]) -> list[str]:
         script_lines_new = DISABLE_PLOTS["muutils"] + script_lines_new
 
     if "matplotlib" in result_str_TEMP:
-        assert (
-            "import matplotlib.pyplot as plt" in result_str_TEMP
-        ), "matplotlib.pyplot must be imported as plt"
+        assert "import matplotlib.pyplot as plt" in result_str_TEMP, (
+            "matplotlib.pyplot must be imported as plt"
+        )
 
         # find the last import statement involving matplotlib, and the first line that uses plt
         mpl_last_import_index: int = -1
@@ -5049,13 +5084,13 @@ def disable_plots_in_script(script_lines: list[str]) -> list[str]:
             if "plt." in line:
                 mpl_first_usage_index = i
 
-        assert (
-            mpl_last_import_index != -1
-        ), f"matplotlib imports not found! see line {mpl_last_import_index}"
+        assert mpl_last_import_index != -1, (
+            f"matplotlib imports not found! see line {mpl_last_import_index}"
+        )
         if mpl_first_usage_index != -1:
-            assert (
-                mpl_first_usage_index > mpl_last_import_index
-            ), f"matplotlib plots created before import! see lines {mpl_first_usage_index}, {mpl_last_import_index}"
+            assert mpl_first_usage_index > mpl_last_import_index, (
+                f"matplotlib plots created before import! see lines {mpl_first_usage_index}, {mpl_last_import_index}"
+            )
         else:
             warnings.warn(
                 "could not find where matplotlib is used, plot disabling might not work!"
@@ -5087,13 +5122,13 @@ def disable_plots_in_script(script_lines: list[str]) -> list[str]:
                 if "render" in line:
                     cirv_first_usage_index = i
 
-        assert (
-            cirv_last_import_index != -1
-        ), f"circuitsvis imports not found! see line {cirv_last_import_index}"
+        assert cirv_last_import_index != -1, (
+            f"circuitsvis imports not found! see line {cirv_last_import_index}"
+        )
         if cirv_first_usage_index != -1:
-            assert (
-                cirv_first_usage_index > cirv_last_import_index
-            ), f"circuitsvis plots created before import! see lines {cirv_first_usage_index}, {cirv_last_import_index}"
+            assert cirv_first_usage_index > cirv_last_import_index, (
+                f"circuitsvis plots created before import! see lines {cirv_first_usage_index}, {cirv_last_import_index}"
+            )
         else:
             warnings.warn(
                 "could not find where circuitsvis is used, plot disabling might not work!"
@@ -5161,7 +5196,7 @@ def convert_ipynb(
                     )
                     for line in source
                 ]
-            result.append(f'{header_comment}\n{"".join(source)}')
+            result.append(f"{header_comment}\n{''.join(source)}")
 
     if disable_plots:
         result = disable_plots_in_script(result)
@@ -5246,7 +5281,7 @@ def process_dir(
         output_stream=sys.stderr,
     ) as spinner:
         for idx, fname in enumerate(filenames):
-            spinner.update_value(f"\tConverting {idx+1}/{n_files}: {fname}")
+            spinner.update_value(f"\tConverting {idx + 1}/{n_files}: {fname}")
             in_file: str = os.path.join(input_dir, fname)
             out_file: str = os.path.join(output_dir, fname.replace(".ipynb", ".py"))
 
@@ -5550,7 +5585,7 @@ def run_notebook_tests(
         n_notebooks: int = len(converted_notebooks)
         for idx, file in enumerate(converted_notebooks):
             # run the file
-            print(f"Running {idx+1}/{n_notebooks}: {file.as_posix()}")
+            print(f"Running {idx + 1}/{n_notebooks}: {file.as_posix()}")
             output_file: Path = file.with_suffix(CI_output_suffix)
             print(f"    Output in {output_file.as_posix()}")
             with SpinnerContext(
@@ -5579,7 +5614,7 @@ def run_notebook_tests(
             if process.returncode != 0:
                 with open(root_relative_to_notebooks / output_file, "r") as f:
                     file_output: str = f.read()
-                err: str = f"Error in {file}:\n{'-'*term_width}\n{file_output}"
+                err: str = f"Error in {file}:\n{'-' * term_width}\n{file_output}"
                 exceptions[file.as_posix()] = err
                 if exit_on_first_fail:
                     raise NotebookTestError(err)
@@ -5846,7 +5881,7 @@ def _inline_with_bs4(html: str, base: Path, cfg: InlineConfig) -> str:
         if not src_full:
             continue
 
-        clean_src: str = re.split(r"[?#]", src_full, 1)[0]
+        clean_src: str = re.split(r"[?#]", src_full, maxsplit=1)[0]
         ext: str = Path(clean_src).suffix.lower()
 
         if ext not in cfg.allowed_extensions:
@@ -6293,10 +6328,14 @@ import inspect
 import sys
 import typing
 from pathlib import Path
-import functools
+import re
 
 # type defs
 _ExpType = typing.TypeVar("_ExpType")
+_ExpType_dict = typing.TypeVar(
+    "_ExpType_dict", bound=typing.Dict[typing.Any, typing.Any]
+)
+_ExpType_list = typing.TypeVar("_ExpType_list", bound=typing.List[typing.Any])
 
 
 # Sentinel type for no expression passed
@@ -6467,7 +6506,7 @@ DBG_TENSOR_VAL_JOINER: str = ": "
 def tensor_info(tensor: typing.Any) -> str:
     from muutils.tensor_info import array_summary
 
-    return array_summary(tensor, **DBG_TENSOR_ARRAY_SUMMARY_DEFAULTS)
+    return array_summary(tensor, as_list=False, **DBG_TENSOR_ARRAY_SUMMARY_DEFAULTS)
 
 
 DBG_DICT_DEFAULTS: typing.Dict[str, typing.Union[bool, int, str]] = dict(
@@ -6516,7 +6555,7 @@ def dict_info(
     indent: str = DBG_DICT_DEFAULTS["indent"]  # type: ignore[assignment]
 
     # summary line
-    output: str = f"{indent*depth}<dict of len()={len_d}"
+    output: str = f"{indent * depth}<dict of len()={len_d}"
 
     if DBG_DICT_DEFAULTS["key_types"] and len_d > 0:
         key_types: typing.Set[str] = set(type(k).__name__ for k in d.keys())
@@ -6548,7 +6587,7 @@ def dict_info(
                     val_str = repr(v)
 
                 output += (
-                    f"\n{indent*(depth+1)}{key_str}{DBG_TENSOR_VAL_JOINER}{val_str}"
+                    f"\n{indent * (depth + 1)}{key_str}{DBG_TENSOR_VAL_JOINER}{val_str}"
                 )
 
     return output
@@ -6568,14 +6607,207 @@ def info_auto(
         return repr(obj)
 
 
-dbg_tensor = functools.partial(
-    dbg, formatter=tensor_info, val_joiner=DBG_TENSOR_VAL_JOINER
-)
+def dbg_tensor(
+    tensor: _ExpType,  # numpy array or torch tensor
+) -> _ExpType:
+    """dbg function for tensors, using tensor_info formatter."""
+    return dbg(
+        tensor,
+        formatter=tensor_info,
+        val_joiner=DBG_TENSOR_VAL_JOINER,
+    )
 
 
-dbg_dict = functools.partial(dbg, formatter=dict_info, val_joiner=DBG_TENSOR_VAL_JOINER)
+def dbg_dict(
+    d: _ExpType_dict,
+) -> _ExpType_dict:
+    """dbg function for dictionaries, using dict_info formatter."""
+    return dbg(
+        d,
+        formatter=dict_info,
+        val_joiner=DBG_TENSOR_VAL_JOINER,
+    )
 
-dbg_auto = functools.partial(dbg, formatter=info_auto, val_joiner=DBG_TENSOR_VAL_JOINER)
+
+def dbg_auto(
+    obj: _ExpType,
+) -> _ExpType:
+    """dbg function for automatic formatting based on type."""
+    return dbg(
+        obj,
+        formatter=info_auto,
+        val_joiner=DBG_TENSOR_VAL_JOINER,
+    )
+
+
+def _normalize_for_loose(text: str) -> str:
+    """Normalize text for loose matching by replacing non-alphanumeric chars with spaces."""
+    normalized: str = re.sub(r"[^a-zA-Z0-9]+", " ", text)
+    return " ".join(normalized.split())
+
+
+def _compile_pattern(
+    pattern: str | re.Pattern[str],
+    *,
+    cased: bool = False,
+    loose: bool = False,
+) -> re.Pattern[str]:
+    """Compile pattern with appropriate flags for case sensitivity and loose matching."""
+    if isinstance(pattern, re.Pattern):
+        return pattern
+
+    # Start with no flags for case-insensitive default
+    flags: int = 0
+    if not cased:
+        flags |= re.IGNORECASE
+
+    if loose:
+        pattern = _normalize_for_loose(pattern)
+
+    return re.compile(pattern, flags)
+
+
+def grep_repr(
+    obj: typing.Any,
+    pattern: str | re.Pattern[str],
+    *,
+    char_context: int | None = 20,
+    line_context: int | None = None,
+    before_context: int = 0,
+    after_context: int = 0,
+    context: int | None = None,
+    max_count: int | None = None,
+    cased: bool = False,
+    loose: bool = False,
+    line_numbers: bool = False,
+    highlight: bool = True,
+    color: str = "31",
+    separator: str = "--",
+    quiet: bool = False,
+) -> typing.List[str] | None:
+    """grep-like search on ``repr(obj)`` with improved grep-style options.
+
+    By default, string patterns are case-insensitive. Pre-compiled regex
+    patterns use their own flags.
+
+    Parameters:
+    - obj: Object to search (its repr() string is scanned)
+    - pattern: Regular expression pattern (string or pre-compiled)
+    - char_context: Characters of context before/after each match (default: 20)
+    - line_context: Lines of context before/after; overrides char_context
+    - before_context: Lines of context before match (like grep -B)
+    - after_context: Lines of context after match (like grep -A)
+    - context: Lines of context before AND after (like grep -C)
+    - max_count: Stop after this many matches
+    - cased: Force case-sensitive search for string patterns
+    - loose: Normalize spaces/punctuation for flexible matching
+    - line_numbers: Show line numbers in output
+    - highlight: Wrap matches with ANSI color codes
+    - color: ANSI color code (default: "31" for red)
+    - separator: Separator between multiple matches
+    - quiet: Return results instead of printing
+
+    Returns:
+    - None if quiet=False (prints to stdout)
+    - List[str] if quiet=True (returns formatted output lines)
+    """
+    # Handle context parameter shortcuts
+    if context is not None:
+        before_context = after_context = context
+
+    # Prepare text and pattern
+    text: str = repr(obj)
+    if loose:
+        text = _normalize_for_loose(text)
+
+    regex: re.Pattern[str] = _compile_pattern(pattern, cased=cased, loose=loose)
+
+    def _color_match(segment: str) -> str:
+        if not highlight:
+            return segment
+        return regex.sub(lambda m: f"\033[1;{color}m{m.group(0)}\033[0m", segment)
+
+    output_lines: list[str] = []
+    match_count: int = 0
+
+    # Determine if we're using line-based context
+    using_line_context = (
+        line_context is not None or before_context > 0 or after_context > 0
+    )
+
+    if using_line_context:
+        lines: list[str] = text.splitlines()
+        line_starts: list[int] = []
+        pos: int = 0
+        for line in lines:
+            line_starts.append(pos)
+            pos += len(line) + 1  # +1 for newline
+
+        processed_lines: set[int] = set()
+
+        for match in regex.finditer(text):
+            if max_count is not None and match_count >= max_count:
+                break
+
+            # Find which line contains this match
+            match_line = max(
+                i for i, start in enumerate(line_starts) if start <= match.start()
+            )
+
+            # Calculate context range
+            ctx_before: int
+            ctx_after: int
+            if line_context is not None:
+                ctx_before = ctx_after = line_context
+            else:
+                ctx_before, ctx_after = before_context, after_context
+
+            start_line: int = max(0, match_line - ctx_before)
+            end_line: int = min(len(lines), match_line + ctx_after + 1)
+
+            # Avoid duplicate output for overlapping contexts
+            line_range: set[int] = set(range(start_line, end_line))
+            if line_range & processed_lines:
+                continue
+            processed_lines.update(line_range)
+
+            # Format the context block
+            context_lines: list[str] = []
+            for i in range(start_line, end_line):
+                line_text = lines[i]
+                if line_numbers:
+                    line_prefix = f"{i + 1}:"
+                    line_text = f"{line_prefix}{line_text}"
+                context_lines.append(_color_match(line_text))
+
+            if output_lines and separator:
+                output_lines.append(separator)
+            output_lines.extend(context_lines)
+            match_count += 1
+
+    else:
+        # Character-based context
+        ctx: int = 0 if char_context is None else char_context
+
+        for match in regex.finditer(text):
+            if max_count is not None and match_count >= max_count:
+                break
+
+            start: int = max(0, match.start() - ctx)
+            end: int = min(len(text), match.end() + ctx)
+            snippet: str = text[start:end]
+
+            if output_lines and separator:
+                output_lines.append(separator)
+            output_lines.append(_color_match(snippet))
+            match_count += 1
+
+    if quiet:
+        return output_lines
+    else:
+        for line in output_lines:
+            print(line)
+        return None
 
 ``````{ end_of_file="muutils/dbg.py" }
 
@@ -7497,9 +7729,9 @@ class Interval:
             if len(args) == 1 and isinstance(
                 args[0], (list, tuple, Sequence, Iterable)
             ):
-                assert (
-                    len(args[0]) == 2
-                ), "if arg is a list or tuple, it must have length 2"
+                assert len(args[0]) == 2, (
+                    "if arg is a list or tuple, it must have length 2"
+                )
                 self.lower = args[0][0]
                 self.upper = args[0][1]
                 # Determine closure type based on the container type
@@ -7693,9 +7925,9 @@ class Interval:
             # empty set
             if input_str == "∅":
                 return cls.get_empty()
-            assert input_str.startswith("{") and input_str.endswith(
-                "}"
-            ), "Invalid input string"
+            assert input_str.startswith("{") and input_str.endswith("}"), (
+                "Invalid input string"
+            )
             input_str_set_interior: str = input_str.strip("{}").strip()
             if len(input_str_set_interior) == 0:
                 return cls.get_empty()
@@ -8010,9 +8242,9 @@ def jsonl_load_log(
 ) -> list[dict]:
     data: list[JSONitem] = jsonl_load(path, use_gzip=use_gzip)
     for idx, item in enumerate(data):
-        assert isinstance(
-            item, dict
-        ), f"item {idx = } from file {path} is not a dict: {type(item) = }\t{item = }"
+        assert isinstance(item, dict), (
+            f"item {idx = } from file {path} is not a dict: {type(item) = }\t{item = }"
+        )
 
     # mypy complains that we are returning a list[JSONitem] but the function signature says list[dict]
     # it can't figure out that we are asserting that all items are dicts
@@ -8207,7 +8439,9 @@ def get_checkpoint_paths_for_run(
      - a wildcard for the iteration number
     """
 
-    assert run_path.is_dir(), f"Model path {run_path} is not a directory (expect run directory, not model files)"
+    assert run_path.is_dir(), (
+        f"Model path {run_path} is not a directory (expect run directory, not model files)"
+    )
 
     return [
         (int(checkpoint_path.stem.split("_")[-1].split(".")[0]), checkpoint_path)
@@ -8242,9 +8476,9 @@ def register_method(
         else:
             method_name = custom_name
             method.__name__ = custom_name
-        assert (
-            method_name not in method_dict
-        ), f"Method name already exists in method_dict: {method_name = }, {list(method_dict.keys()) = }"
+        assert method_name not in method_dict, (
+            f"Method name already exists in method_dict: {method_name = }, {list(method_dict.keys()) = }"
+        )
         method_dict[method_name] = method
         return method
 
@@ -9347,8 +9581,18 @@ class SysInfo:
     @staticmethod
     def pip() -> dict:
         """installed packages info"""
-        # for some reason, python 3.8 thinks `Distribution` has no attribute `name`?
-        pckgs: list[tuple[str, str]] = [(x.name, x.version) for x in distributions()]  # type: ignore[attr-defined]
+        # in python <= 3.9  `Distribution` has no attribute `name`
+        pckgs: list[tuple[str, str]] = [
+            (
+                (
+                    x.metadata.get("Name", "<unknown>")  # type: ignore[attr-defined]
+                    if sys.version_info < (3, 10)
+                    else x.name  # type: ignore[attr-defined]
+                ),
+                x.version,
+            )
+            for x in distributions()
+        ]
         return {
             "n_packages": len(pckgs),
             "packages": pckgs,
@@ -9711,13 +9955,14 @@ def array_info(
         return result
 
     # Flatten array for statistics if it's multi-dimensional
+    # TODO: type checks fail on 3.10, see https://github.com/mivanit/muutils/actions/runs/18883100459/job/53891346225
     try:
         if len(A_np.shape) > 1:
-            A_flat = A_np.flatten()
+            A_flat = A_np.flatten()  # type: ignore[assignment]
         else:
-            A_flat = A_np
+            A_flat = A_np  # type: ignore[assignment]
     except:  # noqa: E722
-        A_flat = A_np
+        A_flat = A_np  # type: ignore[assignment]
 
     # Check for NaN values
     try:
@@ -9945,11 +10190,13 @@ _USE_DEFAULT = _UseDefaultType()
 
 @overload
 def array_summary(
+    array: Any,
     as_list: Literal[True],
     **kwargs,
 ) -> List[str]: ...
 @overload
 def array_summary(
+    array: Any,
     as_list: Literal[False],
     **kwargs,
 ) -> str: ...
@@ -10220,9 +10467,10 @@ TYPE_TO_JAX_DTYPE: dict = {
 }
 "dict mapping python, numpy, and torch types to `jaxtyping` types"
 
+# we check for version here, so it shouldn't error
 if np.version.version < "2.0.0":
-    TYPE_TO_JAX_DTYPE[np.float_] = jaxtyping.Float
-    TYPE_TO_JAX_DTYPE[np.int_] = jaxtyping.Int
+    TYPE_TO_JAX_DTYPE[np.float_] = jaxtyping.Float  # type: ignore[attr-defined]
+    TYPE_TO_JAX_DTYPE[np.int_] = jaxtyping.Int  # type: ignore[attr-defined]
 
 
 # TODO: add proper type annotations to this signature
@@ -10413,7 +10661,7 @@ DTYPE_LIST: list = [
 "list of all the python, numpy, and torch numerical types I could think of"
 
 if np.version.version < "2.0.0":
-    DTYPE_LIST.extend([np.float_, np.int_])
+    DTYPE_LIST.extend([np.float_, np.int_])  # type: ignore[attr-defined]
 
 DTYPE_MAP: dict = {
     **{str(x): x for x in DTYPE_LIST},
@@ -11786,12 +12034,12 @@ contains utilities for working with jupyter notebooks, such as:
 - configuring notebooks, to make it easier to switch between figure output formats, locations, and more
 - shorthand for displaying mermaid diagrams and TeX
 
-## [`json_serialize`](https://github.com/mivanit/muutils/tree/main/muutils/json_serialize.py)
+## [`json_serialize`](https://github.com/mivanit/muutils/tree/main/muutils/json_serialize)
 
 a tool for serializing and loading arbitrary python objects into json. plays nicely with [`ZANJ`](https://github.com/mivanit/ZANJ/)
 
 
-## [`tensor_utils`]
+## [`tensor_utils`](https://github.com/mivanit/muutils/tree/main/muutils/tensor_utils.py)
 
 contains minor utilities for working with pytorch tensors and numpy arrays, mostly for making type conversions easier
 
@@ -12039,7 +12287,7 @@ help: help-targets info
 # ==================================================
 [project]
 	name = "muutils"
-	version = "0.8.11"
+	version = "0.8.12"
 	description = "miscellaneous python utilities"
 	readme = "README.md"
 	requires-python = ">=3.8"
@@ -12078,7 +12326,7 @@ help: help-targets info
 		"numpy>1.24.4; python_version >= '3.9'",
 		"torch>=1.13.1,<2.5.0; python_version < '3.9'",
 		"torch>=1.13.1; python_version >= '3.9' and python_version < '3.13'",
-		"torch>=2.5.0; python_version >= '3.13'",
+		"torch>=2.5.0; python_version >= '3.13' and python_version < '3.14'",
 		"jaxtyping>=0.2.12",
 	]
 
@@ -12118,6 +12366,7 @@ help: help-targets info
 		"h11>=0.16.0", # https://github.com/mivanit/muutils/security/dependabot/23
 		"tornado>=6.5; python_version >= '3.9'", # https://github.com/mivanit/muutils/security/dependabot/33
 		# plotting
+		"pandas",
 		"matplotlib>=3.0.0",
 		"plotly>=5.0.0",
 		"beautifulsoup4",
@@ -12161,7 +12410,7 @@ help: help-targets info
 		"muutils/tensor_info.py" = [
 			"E701", # multiple statements on one line (colon)
 		]
-		"tests/unit/math/test_matrix_powers.py" = [
+		"tests/unit/math/test_matrix_powers_torch.py" = [
 			"F722", # jaxtyping stuff
 		]
 		"muutils/math/matrix_powers.py" = [

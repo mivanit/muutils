@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="generator" content="pdoc 14.7.0"/>
+    <meta name="generator" content="pdoc 15.0.4"/>
     <title>muutils.logger.exception_context API documentation</title>
 <link rel="stylesheet" href="../../resources/css/bootstrap-reboot.min.css"><link rel="stylesheet" href="../../resources/css/syntax-highlighting.css"><link rel="stylesheet" href="../../resources/css/theme.css"><link rel="stylesheet" href="../../resources/css/layout.css"><link rel="stylesheet" href="../../resources/css/content.css"><link rel="stylesheet" href="../../resources/css/custom.css"><script>
     window.MathJax = {
@@ -34,7 +34,7 @@
     }
 </style>
 <script type="module" defer>
-    import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs";
+    import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs";
 
     /* Re-invoke Mermaid when DOM content changes, for example during search. */
     document.addEventListener("DOMContentLoaded", () => {
@@ -46,7 +46,7 @@
 </script></head>
 <body>
 <div class="package-version">
-    docs for <a href="https://github.com/mivanit/muutils">muutils</a> v0.8.11<br>
+    docs for <a href="https://github.com/mivanit/muutils">muutils</a> v0.8.12<br>
 </div>
     <nav class="pdoc">
         <label id="navtoggle" for="togglestate" class="pdoc-button">
@@ -103,7 +103,7 @@
     </nav>
     <main class="pdoc">
             <section class="module-info">
-                        <a class="pdoc-button git-button" href="https://github.com/mivanit/muutils/blob/0.8.11/logger/exception_context.py">View Source on GitHub</a>
+                        <a class="pdoc-button git-button" href="https://github.com/mivanit/muutils/blob/0.8.12/logger/exception_context.py">View Source on GitHub</a>
                     <h1 class="modulename">
 <a href="./../../muutils.html">muutils</a><wbr>.<a href="./../logger.html">logger</a><wbr>.exception_context    </h1>
 
@@ -113,19 +113,19 @@
                         <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="mod-exception_context-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.11/logger/exception_context.py#L0-L42" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/logger/exception_context.py#L0-L42" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
         </div>
 
                 <br/>
-                        <div class="pdoc-code codehilite"><pre><span></span><span id="L-1"><a href="#L-1"><span class="linenos"> 1</span></a><span class="kn">import</span> <span class="nn">json</span>
+                        <div class="pdoc-code codehilite"><pre><span></span><span id="L-1"><a href="#L-1"><span class="linenos"> 1</span></a><span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
 </span><span id="L-2"><a href="#L-2"><span class="linenos"> 2</span></a>
-</span><span id="L-3"><a href="#L-3"><span class="linenos"> 3</span></a><span class="kn">from</span> <span class="nn">muutils.json_serialize</span> <span class="kn">import</span> <span class="n">json_serialize</span>
+</span><span id="L-3"><a href="#L-3"><span class="linenos"> 3</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">muutils.json_serialize</span><span class="w"> </span><span class="kn">import</span> <span class="n">json_serialize</span>
 </span><span id="L-4"><a href="#L-4"><span class="linenos"> 4</span></a>
 </span><span id="L-5"><a href="#L-5"><span class="linenos"> 5</span></a>
-</span><span id="L-6"><a href="#L-6"><span class="linenos"> 6</span></a><span class="k">class</span> <span class="nc">ExceptionContext</span><span class="p">:</span>
+</span><span id="L-6"><a href="#L-6"><span class="linenos"> 6</span></a><span class="k">class</span><span class="w"> </span><span class="nc">ExceptionContext</span><span class="p">:</span>
 </span><span id="L-7"><a href="#L-7"><span class="linenos"> 7</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;context manager which catches all exceptions happening while the context is open, `.write()` the exception trace to the given stream, and then raises the exception</span>
 </span><span id="L-8"><a href="#L-8"><span class="linenos"> 8</span></a>
 </span><span id="L-9"><a href="#L-9"><span class="linenos"> 9</span></a>
@@ -142,13 +142,13 @@
 </span><span id="L-20"><a href="#L-20"><span class="linenos">20</span></a>
 </span><span id="L-21"><a href="#L-21"><span class="linenos">21</span></a><span class="sd">    &quot;&quot;&quot;</span>
 </span><span id="L-22"><a href="#L-22"><span class="linenos">22</span></a>
-</span><span id="L-23"><a href="#L-23"><span class="linenos">23</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stream</span><span class="p">):</span>
+</span><span id="L-23"><a href="#L-23"><span class="linenos">23</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stream</span><span class="p">):</span>
 </span><span id="L-24"><a href="#L-24"><span class="linenos">24</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">stream</span> <span class="o">=</span> <span class="n">stream</span>
 </span><span id="L-25"><a href="#L-25"><span class="linenos">25</span></a>
-</span><span id="L-26"><a href="#L-26"><span class="linenos">26</span></a>    <span class="k">def</span> <span class="fm">__enter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span id="L-26"><a href="#L-26"><span class="linenos">26</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__enter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 </span><span id="L-27"><a href="#L-27"><span class="linenos">27</span></a>        <span class="k">return</span> <span class="bp">self</span>
 </span><span id="L-28"><a href="#L-28"><span class="linenos">28</span></a>
-</span><span id="L-29"><a href="#L-29"><span class="linenos">29</span></a>    <span class="k">def</span> <span class="fm">__exit__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exc_type</span><span class="p">,</span> <span class="n">exc_value</span><span class="p">,</span> <span class="n">exc_traceback</span><span class="p">):</span>
+</span><span id="L-29"><a href="#L-29"><span class="linenos">29</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__exit__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exc_type</span><span class="p">,</span> <span class="n">exc_value</span><span class="p">,</span> <span class="n">exc_traceback</span><span class="p">):</span>
 </span><span id="L-30"><a href="#L-30"><span class="linenos">30</span></a>        <span class="k">if</span> <span class="n">exc_type</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
 </span><span id="L-31"><a href="#L-31"><span class="linenos">31</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">stream</span><span class="o">.</span><span class="n">write</span><span class="p">(</span>
 </span><span id="L-32"><a href="#L-32"><span class="linenos">32</span></a>                <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span>
@@ -178,7 +178,7 @@
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="ExceptionContext-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.11/logger/exception_context.py#L6-L43" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/logger/exception_context.py#L6-L43" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -186,7 +186,7 @@
 
     </div>
     <a class="headerlink" href="#ExceptionContext"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="ExceptionContext-7"><a href="#ExceptionContext-7"><span class="linenos"> 7</span></a><span class="k">class</span> <span class="nc">ExceptionContext</span><span class="p">:</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="ExceptionContext-7"><a href="#ExceptionContext-7"><span class="linenos"> 7</span></a><span class="k">class</span><span class="w"> </span><span class="nc">ExceptionContext</span><span class="p">:</span>
 </span><span id="ExceptionContext-8"><a href="#ExceptionContext-8"><span class="linenos"> 8</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;context manager which catches all exceptions happening while the context is open, `.write()` the exception trace to the given stream, and then raises the exception</span>
 </span><span id="ExceptionContext-9"><a href="#ExceptionContext-9"><span class="linenos"> 9</span></a>
 </span><span id="ExceptionContext-10"><a href="#ExceptionContext-10"><span class="linenos">10</span></a>
@@ -203,13 +203,13 @@
 </span><span id="ExceptionContext-21"><a href="#ExceptionContext-21"><span class="linenos">21</span></a>
 </span><span id="ExceptionContext-22"><a href="#ExceptionContext-22"><span class="linenos">22</span></a><span class="sd">    &quot;&quot;&quot;</span>
 </span><span id="ExceptionContext-23"><a href="#ExceptionContext-23"><span class="linenos">23</span></a>
-</span><span id="ExceptionContext-24"><a href="#ExceptionContext-24"><span class="linenos">24</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stream</span><span class="p">):</span>
+</span><span id="ExceptionContext-24"><a href="#ExceptionContext-24"><span class="linenos">24</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stream</span><span class="p">):</span>
 </span><span id="ExceptionContext-25"><a href="#ExceptionContext-25"><span class="linenos">25</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">stream</span> <span class="o">=</span> <span class="n">stream</span>
 </span><span id="ExceptionContext-26"><a href="#ExceptionContext-26"><span class="linenos">26</span></a>
-</span><span id="ExceptionContext-27"><a href="#ExceptionContext-27"><span class="linenos">27</span></a>    <span class="k">def</span> <span class="fm">__enter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span id="ExceptionContext-27"><a href="#ExceptionContext-27"><span class="linenos">27</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__enter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 </span><span id="ExceptionContext-28"><a href="#ExceptionContext-28"><span class="linenos">28</span></a>        <span class="k">return</span> <span class="bp">self</span>
 </span><span id="ExceptionContext-29"><a href="#ExceptionContext-29"><span class="linenos">29</span></a>
-</span><span id="ExceptionContext-30"><a href="#ExceptionContext-30"><span class="linenos">30</span></a>    <span class="k">def</span> <span class="fm">__exit__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exc_type</span><span class="p">,</span> <span class="n">exc_value</span><span class="p">,</span> <span class="n">exc_traceback</span><span class="p">):</span>
+</span><span id="ExceptionContext-30"><a href="#ExceptionContext-30"><span class="linenos">30</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__exit__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exc_type</span><span class="p">,</span> <span class="n">exc_value</span><span class="p">,</span> <span class="n">exc_traceback</span><span class="p">):</span>
 </span><span id="ExceptionContext-31"><a href="#ExceptionContext-31"><span class="linenos">31</span></a>        <span class="k">if</span> <span class="n">exc_type</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
 </span><span id="ExceptionContext-32"><a href="#ExceptionContext-32"><span class="linenos">32</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">stream</span><span class="o">.</span><span class="n">write</span><span class="p">(</span>
 </span><span id="ExceptionContext-33"><a href="#ExceptionContext-33"><span class="linenos">33</span></a>                <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span>
@@ -252,7 +252,7 @@
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="ExceptionContext.__init__-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.11/logger/exception_context.py#L23-L24" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/logger/exception_context.py#L23-L24" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -260,7 +260,7 @@
 
     </div>
     <a class="headerlink" href="#ExceptionContext.__init__"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="ExceptionContext.__init__-24"><a href="#ExceptionContext.__init__-24"><span class="linenos">24</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stream</span><span class="p">):</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="ExceptionContext.__init__-24"><a href="#ExceptionContext.__init__-24"><span class="linenos">24</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stream</span><span class="p">):</span>
 </span><span id="ExceptionContext.__init__-25"><a href="#ExceptionContext.__init__-25"><span class="linenos">25</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">stream</span> <span class="o">=</span> <span class="n">stream</span>
 </span></pre></div>
 

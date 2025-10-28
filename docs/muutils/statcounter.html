@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="generator" content="pdoc 14.7.0"/>
+    <meta name="generator" content="pdoc 15.0.4"/>
     <title>muutils.statcounter API documentation</title>
 <link rel="stylesheet" href="../resources/css/bootstrap-reboot.min.css"><link rel="stylesheet" href="../resources/css/syntax-highlighting.css"><link rel="stylesheet" href="../resources/css/theme.css"><link rel="stylesheet" href="../resources/css/layout.css"><link rel="stylesheet" href="../resources/css/content.css"><link rel="stylesheet" href="../resources/css/custom.css"><script>
     window.MathJax = {
@@ -34,7 +34,7 @@
     }
 </style>
 <script type="module" defer>
-    import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs";
+    import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs";
 
     /* Re-invoke Mermaid when DOM content changes, for example during search. */
     document.addEventListener("DOMContentLoaded", () => {
@@ -46,7 +46,7 @@
 </script></head>
 <body>
 <div class="package-version">
-    docs for <a href="https://github.com/mivanit/muutils">muutils</a> v0.8.11<br>
+    docs for <a href="https://github.com/mivanit/muutils">muutils</a> v0.8.12<br>
 </div>
     <nav class="pdoc">
         <label id="navtoggle" for="togglestate" class="pdoc-button">
@@ -145,7 +145,7 @@
     </nav>
     <main class="pdoc">
             <section class="module-info">
-                        <a class="pdoc-button git-button" href="https://github.com/mivanit/muutils/blob/0.8.11/statcounter.py">View Source on GitHub</a>
+                        <a class="pdoc-button git-button" href="https://github.com/mivanit/muutils/blob/0.8.12/statcounter.py">View Source on GitHub</a>
                     <h1 class="modulename">
 <a href="./../muutils.html">muutils</a><wbr>.statcounter    </h1>
 
@@ -159,7 +159,7 @@
                         <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="mod-statcounter-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.11/statcounter.py#L0-L230" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/statcounter.py#L0-L230" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -170,14 +170,14 @@
 </span><span id="L-2"><a href="#L-2"><span class="linenos">  2</span></a>
 </span><span id="L-3"><a href="#L-3"><span class="linenos">  3</span></a><span class="sd">cleaner and more efficient than just using a `Counter` or array&quot;&quot;&quot;</span>
 </span><span id="L-4"><a href="#L-4"><span class="linenos">  4</span></a>
-</span><span id="L-5"><a href="#L-5"><span class="linenos">  5</span></a><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+</span><span id="L-5"><a href="#L-5"><span class="linenos">  5</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
 </span><span id="L-6"><a href="#L-6"><span class="linenos">  6</span></a>
-</span><span id="L-7"><a href="#L-7"><span class="linenos">  7</span></a><span class="kn">import</span> <span class="nn">json</span>
-</span><span id="L-8"><a href="#L-8"><span class="linenos">  8</span></a><span class="kn">import</span> <span class="nn">math</span>
-</span><span id="L-9"><a href="#L-9"><span class="linenos">  9</span></a><span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">Counter</span>
-</span><span id="L-10"><a href="#L-10"><span class="linenos"> 10</span></a><span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">cached_property</span>
-</span><span id="L-11"><a href="#L-11"><span class="linenos"> 11</span></a><span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">chain</span>
-</span><span id="L-12"><a href="#L-12"><span class="linenos"> 12</span></a><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Union</span>
+</span><span id="L-7"><a href="#L-7"><span class="linenos">  7</span></a><span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+</span><span id="L-8"><a href="#L-8"><span class="linenos">  8</span></a><span class="kn">import</span><span class="w"> </span><span class="nn">math</span>
+</span><span id="L-9"><a href="#L-9"><span class="linenos">  9</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">collections</span><span class="w"> </span><span class="kn">import</span> <span class="n">Counter</span>
+</span><span id="L-10"><a href="#L-10"><span class="linenos"> 10</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">functools</span><span class="w"> </span><span class="kn">import</span> <span class="n">cached_property</span>
+</span><span id="L-11"><a href="#L-11"><span class="linenos"> 11</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">itertools</span><span class="w"> </span><span class="kn">import</span> <span class="n">chain</span>
+</span><span id="L-12"><a href="#L-12"><span class="linenos"> 12</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Union</span>
 </span><span id="L-13"><a href="#L-13"><span class="linenos"> 13</span></a>
 </span><span id="L-14"><a href="#L-14"><span class="linenos"> 14</span></a>
 </span><span id="L-15"><a href="#L-15"><span class="linenos"> 15</span></a><span class="c1"># _GeneralArray = Union[np.ndarray, &quot;torch.Tensor&quot;]</span>
@@ -189,7 +189,7 @@
 </span><span id="L-21"><a href="#L-21"><span class="linenos"> 21</span></a><span class="c1"># ==================================================</span>
 </span><span id="L-22"><a href="#L-22"><span class="linenos"> 22</span></a>
 </span><span id="L-23"><a href="#L-23"><span class="linenos"> 23</span></a>
-</span><span id="L-24"><a href="#L-24"><span class="linenos"> 24</span></a><span class="k">def</span> <span class="nf">universal_flatten</span><span class="p">(</span>
+</span><span id="L-24"><a href="#L-24"><span class="linenos"> 24</span></a><span class="k">def</span><span class="w"> </span><span class="nf">universal_flatten</span><span class="p">(</span>
 </span><span id="L-25"><a href="#L-25"><span class="linenos"> 25</span></a>    <span class="n">arr</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">NumericSequence</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="n">require_rectangular</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
 </span><span id="L-26"><a href="#L-26"><span class="linenos"> 26</span></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NumericSequence</span><span class="p">:</span>
 </span><span id="L-27"><a href="#L-27"><span class="linenos"> 27</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;flattens any iterable&quot;&quot;&quot;</span>
@@ -213,34 +213,34 @@
 </span><span id="L-45"><a href="#L-45"><span class="linenos"> 45</span></a><span class="c1"># ==================================================</span>
 </span><span id="L-46"><a href="#L-46"><span class="linenos"> 46</span></a>
 </span><span id="L-47"><a href="#L-47"><span class="linenos"> 47</span></a>
-</span><span id="L-48"><a href="#L-48"><span class="linenos"> 48</span></a><span class="k">class</span> <span class="nc">StatCounter</span><span class="p">(</span><span class="n">Counter</span><span class="p">):</span>
+</span><span id="L-48"><a href="#L-48"><span class="linenos"> 48</span></a><span class="k">class</span><span class="w"> </span><span class="nc">StatCounter</span><span class="p">(</span><span class="n">Counter</span><span class="p">):</span>
 </span><span id="L-49"><a href="#L-49"><span class="linenos"> 49</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;`Counter`, but with some stat calculation methods which assume the keys are numerical</span>
 </span><span id="L-50"><a href="#L-50"><span class="linenos"> 50</span></a>
 </span><span id="L-51"><a href="#L-51"><span class="linenos"> 51</span></a><span class="sd">    works best when the keys are `int`s</span>
 </span><span id="L-52"><a href="#L-52"><span class="linenos"> 52</span></a><span class="sd">    &quot;&quot;&quot;</span>
 </span><span id="L-53"><a href="#L-53"><span class="linenos"> 53</span></a>
-</span><span id="L-54"><a href="#L-54"><span class="linenos"> 54</span></a>    <span class="k">def</span> <span class="nf">validate</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</span><span id="L-54"><a href="#L-54"><span class="linenos"> 54</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">validate</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 </span><span id="L-55"><a href="#L-55"><span class="linenos"> 55</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;validate the counter as being all floats or ints&quot;&quot;&quot;</span>
 </span><span id="L-56"><a href="#L-56"><span class="linenos"> 56</span></a>        <span class="k">return</span> <span class="nb">all</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="p">(</span><span class="nb">bool</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="kc">None</span><span class="p">)))</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
 </span><span id="L-57"><a href="#L-57"><span class="linenos"> 57</span></a>
-</span><span id="L-58"><a href="#L-58"><span class="linenos"> 58</span></a>    <span class="k">def</span> <span class="nf">min</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span id="L-58"><a href="#L-58"><span class="linenos"> 58</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">min</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 </span><span id="L-59"><a href="#L-59"><span class="linenos"> 59</span></a>        <span class="s2">&quot;minimum value&quot;</span>
 </span><span id="L-60"><a href="#L-60"><span class="linenos"> 60</span></a>        <span class="k">return</span> <span class="nb">min</span><span class="p">(</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">v</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
 </span><span id="L-61"><a href="#L-61"><span class="linenos"> 61</span></a>
-</span><span id="L-62"><a href="#L-62"><span class="linenos"> 62</span></a>    <span class="k">def</span> <span class="nf">max</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span id="L-62"><a href="#L-62"><span class="linenos"> 62</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">max</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 </span><span id="L-63"><a href="#L-63"><span class="linenos"> 63</span></a>        <span class="s2">&quot;maximum value&quot;</span>
 </span><span id="L-64"><a href="#L-64"><span class="linenos"> 64</span></a>        <span class="k">return</span> <span class="nb">max</span><span class="p">(</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">v</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
 </span><span id="L-65"><a href="#L-65"><span class="linenos"> 65</span></a>
-</span><span id="L-66"><a href="#L-66"><span class="linenos"> 66</span></a>    <span class="k">def</span> <span class="nf">total</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span id="L-66"><a href="#L-66"><span class="linenos"> 66</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">total</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 </span><span id="L-67"><a href="#L-67"><span class="linenos"> 67</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Sum of the counts&quot;&quot;&quot;</span>
 </span><span id="L-68"><a href="#L-68"><span class="linenos"> 68</span></a>        <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
 </span><span id="L-69"><a href="#L-69"><span class="linenos"> 69</span></a>
 </span><span id="L-70"><a href="#L-70"><span class="linenos"> 70</span></a>    <span class="nd">@cached_property</span>
-</span><span id="L-71"><a href="#L-71"><span class="linenos"> 71</span></a>    <span class="k">def</span> <span class="nf">keys_sorted</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+</span><span id="L-71"><a href="#L-71"><span class="linenos"> 71</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">keys_sorted</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
 </span><span id="L-72"><a href="#L-72"><span class="linenos"> 72</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;return the keys&quot;&quot;&quot;</span>
 </span><span id="L-73"><a href="#L-73"><span class="linenos"> 73</span></a>        <span class="k">return</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
 </span><span id="L-74"><a href="#L-74"><span class="linenos"> 74</span></a>
-</span><span id="L-75"><a href="#L-75"><span class="linenos"> 75</span></a>    <span class="k">def</span> <span class="nf">percentile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+</span><span id="L-75"><a href="#L-75"><span class="linenos"> 75</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">percentile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
 </span><span id="L-76"><a href="#L-76"><span class="linenos"> 76</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;return the value at the given percentile</span>
 </span><span id="L-77"><a href="#L-77"><span class="linenos"> 77</span></a>
 </span><span id="L-78"><a href="#L-78"><span class="linenos"> 78</span></a><span class="sd">        this could be log time if we did binary search, but that would be a lot of added complexity</span>
@@ -289,24 +289,24 @@
 </span><span id="L-121"><a href="#L-121"><span class="linenos">121</span></a>
 </span><span id="L-122"><a href="#L-122"><span class="linenos">122</span></a>        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;percentile </span><span class="si">{</span><span class="n">p</span><span class="si">}</span><span class="s2"> not found???&quot;</span><span class="p">)</span>
 </span><span id="L-123"><a href="#L-123"><span class="linenos">123</span></a>
-</span><span id="L-124"><a href="#L-124"><span class="linenos">124</span></a>    <span class="k">def</span> <span class="nf">median</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+</span><span id="L-124"><a href="#L-124"><span class="linenos">124</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">median</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 </span><span id="L-125"><a href="#L-125"><span class="linenos">125</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">percentile</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span>
 </span><span id="L-126"><a href="#L-126"><span class="linenos">126</span></a>
-</span><span id="L-127"><a href="#L-127"><span class="linenos">127</span></a>    <span class="k">def</span> <span class="nf">mean</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+</span><span id="L-127"><a href="#L-127"><span class="linenos">127</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">mean</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 </span><span id="L-128"><a href="#L-128"><span class="linenos">128</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;return the mean of the values&quot;&quot;&quot;</span>
 </span><span id="L-129"><a href="#L-129"><span class="linenos">129</span></a>        <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">k</span> <span class="o">*</span> <span class="n">c</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">c</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="p">())</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">total</span><span class="p">())</span>
 </span><span id="L-130"><a href="#L-130"><span class="linenos">130</span></a>
-</span><span id="L-131"><a href="#L-131"><span class="linenos">131</span></a>    <span class="k">def</span> <span class="nf">mode</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+</span><span id="L-131"><a href="#L-131"><span class="linenos">131</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">mode</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 </span><span id="L-132"><a href="#L-132"><span class="linenos">132</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">most_common</span><span class="p">()[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
 </span><span id="L-133"><a href="#L-133"><span class="linenos">133</span></a>
-</span><span id="L-134"><a href="#L-134"><span class="linenos">134</span></a>    <span class="k">def</span> <span class="nf">std</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+</span><span id="L-134"><a href="#L-134"><span class="linenos">134</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">std</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 </span><span id="L-135"><a href="#L-135"><span class="linenos">135</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;return the standard deviation of the values&quot;&quot;&quot;</span>
 </span><span id="L-136"><a href="#L-136"><span class="linenos">136</span></a>        <span class="n">mean</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
 </span><span id="L-137"><a href="#L-137"><span class="linenos">137</span></a>        <span class="n">deviations</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">c</span> <span class="o">*</span> <span class="p">(</span><span class="n">k</span> <span class="o">-</span> <span class="n">mean</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">c</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
 </span><span id="L-138"><a href="#L-138"><span class="linenos">138</span></a>
 </span><span id="L-139"><a href="#L-139"><span class="linenos">139</span></a>        <span class="k">return</span> <span class="p">(</span><span class="n">deviations</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">total</span><span class="p">())</span> <span class="o">**</span> <span class="mf">0.5</span>
 </span><span id="L-140"><a href="#L-140"><span class="linenos">140</span></a>
-</span><span id="L-141"><a href="#L-141"><span class="linenos">141</span></a>    <span class="k">def</span> <span class="nf">summary</span><span class="p">(</span>
+</span><span id="L-141"><a href="#L-141"><span class="linenos">141</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">summary</span><span class="p">(</span>
 </span><span id="L-142"><a href="#L-142"><span class="linenos">142</span></a>        <span class="bp">self</span><span class="p">,</span>
 </span><span id="L-143"><a href="#L-143"><span class="linenos">143</span></a>        <span class="n">typecast</span><span class="p">:</span> <span class="n">Callable</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">,</span>
 </span><span id="L-144"><a href="#L-144"><span class="linenos">144</span></a>        <span class="o">*</span><span class="p">,</span>
@@ -346,7 +346,7 @@
 </span><span id="L-178"><a href="#L-178"><span class="linenos">178</span></a>
 </span><span id="L-179"><a href="#L-179"><span class="linenos">179</span></a>        <span class="k">return</span> <span class="n">output</span>
 </span><span id="L-180"><a href="#L-180"><span class="linenos">180</span></a>
-</span><span id="L-181"><a href="#L-181"><span class="linenos">181</span></a>    <span class="k">def</span> <span class="nf">serialize</span><span class="p">(</span>
+</span><span id="L-181"><a href="#L-181"><span class="linenos">181</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">serialize</span><span class="p">(</span>
 </span><span id="L-182"><a href="#L-182"><span class="linenos">182</span></a>        <span class="bp">self</span><span class="p">,</span>
 </span><span id="L-183"><a href="#L-183"><span class="linenos">183</span></a>        <span class="n">typecast</span><span class="p">:</span> <span class="n">Callable</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">,</span>
 </span><span id="L-184"><a href="#L-184"><span class="linenos">184</span></a>        <span class="o">*</span><span class="p">,</span>
@@ -372,15 +372,15 @@
 </span><span id="L-204"><a href="#L-204"><span class="linenos">204</span></a>            <span class="s2">&quot;summary&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">summary</span><span class="p">(</span><span class="n">typecast</span><span class="p">,</span> <span class="n">extra_percentiles</span><span class="o">=</span><span class="n">extra_percentiles</span><span class="p">),</span>
 </span><span id="L-205"><a href="#L-205"><span class="linenos">205</span></a>        <span class="p">}</span>
 </span><span id="L-206"><a href="#L-206"><span class="linenos">206</span></a>
-</span><span id="L-207"><a href="#L-207"><span class="linenos">207</span></a>    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+</span><span id="L-207"><a href="#L-207"><span class="linenos">207</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 </span><span id="L-208"><a href="#L-208"><span class="linenos">208</span></a>        <span class="s2">&quot;summary as json with 2 space indent, good for printing&quot;</span>
 </span><span id="L-209"><a href="#L-209"><span class="linenos">209</span></a>        <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">summary</span><span class="p">(),</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 </span><span id="L-210"><a href="#L-210"><span class="linenos">210</span></a>
-</span><span id="L-211"><a href="#L-211"><span class="linenos">211</span></a>    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+</span><span id="L-211"><a href="#L-211"><span class="linenos">211</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 </span><span id="L-212"><a href="#L-212"><span class="linenos">212</span></a>        <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">serialize</span><span class="p">(),</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 </span><span id="L-213"><a href="#L-213"><span class="linenos">213</span></a>
 </span><span id="L-214"><a href="#L-214"><span class="linenos">214</span></a>    <span class="nd">@classmethod</span>
-</span><span id="L-215"><a href="#L-215"><span class="linenos">215</span></a>    <span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;StatCounter&quot;</span><span class="p">:</span>
+</span><span id="L-215"><a href="#L-215"><span class="linenos">215</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">load</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;StatCounter&quot;</span><span class="p">:</span>
 </span><span id="L-216"><a href="#L-216"><span class="linenos">216</span></a>        <span class="s2">&quot;load from a the output of `StatCounter.serialize`&quot;</span>
 </span><span id="L-217"><a href="#L-217"><span class="linenos">217</span></a>        <span class="k">if</span> <span class="s2">&quot;StatCounter&quot;</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
 </span><span id="L-218"><a href="#L-218"><span class="linenos">218</span></a>            <span class="n">loadme</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;StatCounter&quot;</span><span class="p">]</span>
@@ -390,7 +390,7 @@
 </span><span id="L-222"><a href="#L-222"><span class="linenos">222</span></a>        <span class="k">return</span> <span class="bp">cls</span><span class="p">({</span><span class="nb">float</span><span class="p">(</span><span class="n">k</span><span class="p">):</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">loadme</span><span class="o">.</span><span class="n">items</span><span class="p">()})</span>
 </span><span id="L-223"><a href="#L-223"><span class="linenos">223</span></a>
 </span><span id="L-224"><a href="#L-224"><span class="linenos">224</span></a>    <span class="nd">@classmethod</span>
-</span><span id="L-225"><a href="#L-225"><span class="linenos">225</span></a>    <span class="k">def</span> <span class="nf">from_list_arrays</span><span class="p">(</span>
+</span><span id="L-225"><a href="#L-225"><span class="linenos">225</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">from_list_arrays</span><span class="p">(</span>
 </span><span id="L-226"><a href="#L-226"><span class="linenos">226</span></a>        <span class="bp">cls</span><span class="p">,</span>
 </span><span id="L-227"><a href="#L-227"><span class="linenos">227</span></a>        <span class="n">arr</span><span class="p">,</span>
 </span><span id="L-228"><a href="#L-228"><span class="linenos">228</span></a>        <span class="n">map_func</span><span class="p">:</span> <span class="n">Callable</span> <span class="o">=</span> <span class="nb">float</span><span class="p">,</span>
@@ -424,7 +424,7 @@
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="universal_flatten-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.11/statcounter.py#L24-L41" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/statcounter.py#L24-L41" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -432,7 +432,7 @@
 
     </div>
     <a class="headerlink" href="#universal_flatten"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="universal_flatten-25"><a href="#universal_flatten-25"><span class="linenos">25</span></a><span class="k">def</span> <span class="nf">universal_flatten</span><span class="p">(</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="universal_flatten-25"><a href="#universal_flatten-25"><span class="linenos">25</span></a><span class="k">def</span><span class="w"> </span><span class="nf">universal_flatten</span><span class="p">(</span>
 </span><span id="universal_flatten-26"><a href="#universal_flatten-26"><span class="linenos">26</span></a>    <span class="n">arr</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">NumericSequence</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="n">require_rectangular</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
 </span><span id="universal_flatten-27"><a href="#universal_flatten-27"><span class="linenos">27</span></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NumericSequence</span><span class="p">:</span>
 </span><span id="universal_flatten-28"><a href="#universal_flatten-28"><span class="linenos">28</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;flattens any iterable&quot;&quot;&quot;</span>
@@ -468,7 +468,7 @@
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="StatCounter-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.11/statcounter.py#L48-L231" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/statcounter.py#L48-L231" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -476,34 +476,34 @@
 
     </div>
     <a class="headerlink" href="#StatCounter"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="StatCounter-49"><a href="#StatCounter-49"><span class="linenos"> 49</span></a><span class="k">class</span> <span class="nc">StatCounter</span><span class="p">(</span><span class="n">Counter</span><span class="p">):</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="StatCounter-49"><a href="#StatCounter-49"><span class="linenos"> 49</span></a><span class="k">class</span><span class="w"> </span><span class="nc">StatCounter</span><span class="p">(</span><span class="n">Counter</span><span class="p">):</span>
 </span><span id="StatCounter-50"><a href="#StatCounter-50"><span class="linenos"> 50</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;`Counter`, but with some stat calculation methods which assume the keys are numerical</span>
 </span><span id="StatCounter-51"><a href="#StatCounter-51"><span class="linenos"> 51</span></a>
 </span><span id="StatCounter-52"><a href="#StatCounter-52"><span class="linenos"> 52</span></a><span class="sd">    works best when the keys are `int`s</span>
 </span><span id="StatCounter-53"><a href="#StatCounter-53"><span class="linenos"> 53</span></a><span class="sd">    &quot;&quot;&quot;</span>
 </span><span id="StatCounter-54"><a href="#StatCounter-54"><span class="linenos"> 54</span></a>
-</span><span id="StatCounter-55"><a href="#StatCounter-55"><span class="linenos"> 55</span></a>    <span class="k">def</span> <span class="nf">validate</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</span><span id="StatCounter-55"><a href="#StatCounter-55"><span class="linenos"> 55</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">validate</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 </span><span id="StatCounter-56"><a href="#StatCounter-56"><span class="linenos"> 56</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;validate the counter as being all floats or ints&quot;&quot;&quot;</span>
 </span><span id="StatCounter-57"><a href="#StatCounter-57"><span class="linenos"> 57</span></a>        <span class="k">return</span> <span class="nb">all</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="p">(</span><span class="nb">bool</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="kc">None</span><span class="p">)))</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
 </span><span id="StatCounter-58"><a href="#StatCounter-58"><span class="linenos"> 58</span></a>
-</span><span id="StatCounter-59"><a href="#StatCounter-59"><span class="linenos"> 59</span></a>    <span class="k">def</span> <span class="nf">min</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span id="StatCounter-59"><a href="#StatCounter-59"><span class="linenos"> 59</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">min</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 </span><span id="StatCounter-60"><a href="#StatCounter-60"><span class="linenos"> 60</span></a>        <span class="s2">&quot;minimum value&quot;</span>
 </span><span id="StatCounter-61"><a href="#StatCounter-61"><span class="linenos"> 61</span></a>        <span class="k">return</span> <span class="nb">min</span><span class="p">(</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">v</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
 </span><span id="StatCounter-62"><a href="#StatCounter-62"><span class="linenos"> 62</span></a>
-</span><span id="StatCounter-63"><a href="#StatCounter-63"><span class="linenos"> 63</span></a>    <span class="k">def</span> <span class="nf">max</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span id="StatCounter-63"><a href="#StatCounter-63"><span class="linenos"> 63</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">max</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 </span><span id="StatCounter-64"><a href="#StatCounter-64"><span class="linenos"> 64</span></a>        <span class="s2">&quot;maximum value&quot;</span>
 </span><span id="StatCounter-65"><a href="#StatCounter-65"><span class="linenos"> 65</span></a>        <span class="k">return</span> <span class="nb">max</span><span class="p">(</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">v</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
 </span><span id="StatCounter-66"><a href="#StatCounter-66"><span class="linenos"> 66</span></a>
-</span><span id="StatCounter-67"><a href="#StatCounter-67"><span class="linenos"> 67</span></a>    <span class="k">def</span> <span class="nf">total</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span id="StatCounter-67"><a href="#StatCounter-67"><span class="linenos"> 67</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">total</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 </span><span id="StatCounter-68"><a href="#StatCounter-68"><span class="linenos"> 68</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Sum of the counts&quot;&quot;&quot;</span>
 </span><span id="StatCounter-69"><a href="#StatCounter-69"><span class="linenos"> 69</span></a>        <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
 </span><span id="StatCounter-70"><a href="#StatCounter-70"><span class="linenos"> 70</span></a>
 </span><span id="StatCounter-71"><a href="#StatCounter-71"><span class="linenos"> 71</span></a>    <span class="nd">@cached_property</span>
-</span><span id="StatCounter-72"><a href="#StatCounter-72"><span class="linenos"> 72</span></a>    <span class="k">def</span> <span class="nf">keys_sorted</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+</span><span id="StatCounter-72"><a href="#StatCounter-72"><span class="linenos"> 72</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">keys_sorted</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
 </span><span id="StatCounter-73"><a href="#StatCounter-73"><span class="linenos"> 73</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;return the keys&quot;&quot;&quot;</span>
 </span><span id="StatCounter-74"><a href="#StatCounter-74"><span class="linenos"> 74</span></a>        <span class="k">return</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
 </span><span id="StatCounter-75"><a href="#StatCounter-75"><span class="linenos"> 75</span></a>
-</span><span id="StatCounter-76"><a href="#StatCounter-76"><span class="linenos"> 76</span></a>    <span class="k">def</span> <span class="nf">percentile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+</span><span id="StatCounter-76"><a href="#StatCounter-76"><span class="linenos"> 76</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">percentile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
 </span><span id="StatCounter-77"><a href="#StatCounter-77"><span class="linenos"> 77</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;return the value at the given percentile</span>
 </span><span id="StatCounter-78"><a href="#StatCounter-78"><span class="linenos"> 78</span></a>
 </span><span id="StatCounter-79"><a href="#StatCounter-79"><span class="linenos"> 79</span></a><span class="sd">        this could be log time if we did binary search, but that would be a lot of added complexity</span>
@@ -552,24 +552,24 @@
 </span><span id="StatCounter-122"><a href="#StatCounter-122"><span class="linenos">122</span></a>
 </span><span id="StatCounter-123"><a href="#StatCounter-123"><span class="linenos">123</span></a>        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;percentile </span><span class="si">{</span><span class="n">p</span><span class="si">}</span><span class="s2"> not found???&quot;</span><span class="p">)</span>
 </span><span id="StatCounter-124"><a href="#StatCounter-124"><span class="linenos">124</span></a>
-</span><span id="StatCounter-125"><a href="#StatCounter-125"><span class="linenos">125</span></a>    <span class="k">def</span> <span class="nf">median</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+</span><span id="StatCounter-125"><a href="#StatCounter-125"><span class="linenos">125</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">median</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 </span><span id="StatCounter-126"><a href="#StatCounter-126"><span class="linenos">126</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">percentile</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span>
 </span><span id="StatCounter-127"><a href="#StatCounter-127"><span class="linenos">127</span></a>
-</span><span id="StatCounter-128"><a href="#StatCounter-128"><span class="linenos">128</span></a>    <span class="k">def</span> <span class="nf">mean</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+</span><span id="StatCounter-128"><a href="#StatCounter-128"><span class="linenos">128</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">mean</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 </span><span id="StatCounter-129"><a href="#StatCounter-129"><span class="linenos">129</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;return the mean of the values&quot;&quot;&quot;</span>
 </span><span id="StatCounter-130"><a href="#StatCounter-130"><span class="linenos">130</span></a>        <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">k</span> <span class="o">*</span> <span class="n">c</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">c</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="p">())</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">total</span><span class="p">())</span>
 </span><span id="StatCounter-131"><a href="#StatCounter-131"><span class="linenos">131</span></a>
-</span><span id="StatCounter-132"><a href="#StatCounter-132"><span class="linenos">132</span></a>    <span class="k">def</span> <span class="nf">mode</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+</span><span id="StatCounter-132"><a href="#StatCounter-132"><span class="linenos">132</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">mode</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 </span><span id="StatCounter-133"><a href="#StatCounter-133"><span class="linenos">133</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">most_common</span><span class="p">()[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
 </span><span id="StatCounter-134"><a href="#StatCounter-134"><span class="linenos">134</span></a>
-</span><span id="StatCounter-135"><a href="#StatCounter-135"><span class="linenos">135</span></a>    <span class="k">def</span> <span class="nf">std</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+</span><span id="StatCounter-135"><a href="#StatCounter-135"><span class="linenos">135</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">std</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 </span><span id="StatCounter-136"><a href="#StatCounter-136"><span class="linenos">136</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;return the standard deviation of the values&quot;&quot;&quot;</span>
 </span><span id="StatCounter-137"><a href="#StatCounter-137"><span class="linenos">137</span></a>        <span class="n">mean</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
 </span><span id="StatCounter-138"><a href="#StatCounter-138"><span class="linenos">138</span></a>        <span class="n">deviations</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">c</span> <span class="o">*</span> <span class="p">(</span><span class="n">k</span> <span class="o">-</span> <span class="n">mean</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">c</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
 </span><span id="StatCounter-139"><a href="#StatCounter-139"><span class="linenos">139</span></a>
 </span><span id="StatCounter-140"><a href="#StatCounter-140"><span class="linenos">140</span></a>        <span class="k">return</span> <span class="p">(</span><span class="n">deviations</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">total</span><span class="p">())</span> <span class="o">**</span> <span class="mf">0.5</span>
 </span><span id="StatCounter-141"><a href="#StatCounter-141"><span class="linenos">141</span></a>
-</span><span id="StatCounter-142"><a href="#StatCounter-142"><span class="linenos">142</span></a>    <span class="k">def</span> <span class="nf">summary</span><span class="p">(</span>
+</span><span id="StatCounter-142"><a href="#StatCounter-142"><span class="linenos">142</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">summary</span><span class="p">(</span>
 </span><span id="StatCounter-143"><a href="#StatCounter-143"><span class="linenos">143</span></a>        <span class="bp">self</span><span class="p">,</span>
 </span><span id="StatCounter-144"><a href="#StatCounter-144"><span class="linenos">144</span></a>        <span class="n">typecast</span><span class="p">:</span> <span class="n">Callable</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">,</span>
 </span><span id="StatCounter-145"><a href="#StatCounter-145"><span class="linenos">145</span></a>        <span class="o">*</span><span class="p">,</span>
@@ -609,7 +609,7 @@
 </span><span id="StatCounter-179"><a href="#StatCounter-179"><span class="linenos">179</span></a>
 </span><span id="StatCounter-180"><a href="#StatCounter-180"><span class="linenos">180</span></a>        <span class="k">return</span> <span class="n">output</span>
 </span><span id="StatCounter-181"><a href="#StatCounter-181"><span class="linenos">181</span></a>
-</span><span id="StatCounter-182"><a href="#StatCounter-182"><span class="linenos">182</span></a>    <span class="k">def</span> <span class="nf">serialize</span><span class="p">(</span>
+</span><span id="StatCounter-182"><a href="#StatCounter-182"><span class="linenos">182</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">serialize</span><span class="p">(</span>
 </span><span id="StatCounter-183"><a href="#StatCounter-183"><span class="linenos">183</span></a>        <span class="bp">self</span><span class="p">,</span>
 </span><span id="StatCounter-184"><a href="#StatCounter-184"><span class="linenos">184</span></a>        <span class="n">typecast</span><span class="p">:</span> <span class="n">Callable</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">,</span>
 </span><span id="StatCounter-185"><a href="#StatCounter-185"><span class="linenos">185</span></a>        <span class="o">*</span><span class="p">,</span>
@@ -635,15 +635,15 @@
 </span><span id="StatCounter-205"><a href="#StatCounter-205"><span class="linenos">205</span></a>            <span class="s2">&quot;summary&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">summary</span><span class="p">(</span><span class="n">typecast</span><span class="p">,</span> <span class="n">extra_percentiles</span><span class="o">=</span><span class="n">extra_percentiles</span><span class="p">),</span>
 </span><span id="StatCounter-206"><a href="#StatCounter-206"><span class="linenos">206</span></a>        <span class="p">}</span>
 </span><span id="StatCounter-207"><a href="#StatCounter-207"><span class="linenos">207</span></a>
-</span><span id="StatCounter-208"><a href="#StatCounter-208"><span class="linenos">208</span></a>    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+</span><span id="StatCounter-208"><a href="#StatCounter-208"><span class="linenos">208</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 </span><span id="StatCounter-209"><a href="#StatCounter-209"><span class="linenos">209</span></a>        <span class="s2">&quot;summary as json with 2 space indent, good for printing&quot;</span>
 </span><span id="StatCounter-210"><a href="#StatCounter-210"><span class="linenos">210</span></a>        <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">summary</span><span class="p">(),</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 </span><span id="StatCounter-211"><a href="#StatCounter-211"><span class="linenos">211</span></a>
-</span><span id="StatCounter-212"><a href="#StatCounter-212"><span class="linenos">212</span></a>    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+</span><span id="StatCounter-212"><a href="#StatCounter-212"><span class="linenos">212</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 </span><span id="StatCounter-213"><a href="#StatCounter-213"><span class="linenos">213</span></a>        <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">serialize</span><span class="p">(),</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 </span><span id="StatCounter-214"><a href="#StatCounter-214"><span class="linenos">214</span></a>
 </span><span id="StatCounter-215"><a href="#StatCounter-215"><span class="linenos">215</span></a>    <span class="nd">@classmethod</span>
-</span><span id="StatCounter-216"><a href="#StatCounter-216"><span class="linenos">216</span></a>    <span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;StatCounter&quot;</span><span class="p">:</span>
+</span><span id="StatCounter-216"><a href="#StatCounter-216"><span class="linenos">216</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">load</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;StatCounter&quot;</span><span class="p">:</span>
 </span><span id="StatCounter-217"><a href="#StatCounter-217"><span class="linenos">217</span></a>        <span class="s2">&quot;load from a the output of `StatCounter.serialize`&quot;</span>
 </span><span id="StatCounter-218"><a href="#StatCounter-218"><span class="linenos">218</span></a>        <span class="k">if</span> <span class="s2">&quot;StatCounter&quot;</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
 </span><span id="StatCounter-219"><a href="#StatCounter-219"><span class="linenos">219</span></a>            <span class="n">loadme</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;StatCounter&quot;</span><span class="p">]</span>
@@ -653,7 +653,7 @@
 </span><span id="StatCounter-223"><a href="#StatCounter-223"><span class="linenos">223</span></a>        <span class="k">return</span> <span class="bp">cls</span><span class="p">({</span><span class="nb">float</span><span class="p">(</span><span class="n">k</span><span class="p">):</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">loadme</span><span class="o">.</span><span class="n">items</span><span class="p">()})</span>
 </span><span id="StatCounter-224"><a href="#StatCounter-224"><span class="linenos">224</span></a>
 </span><span id="StatCounter-225"><a href="#StatCounter-225"><span class="linenos">225</span></a>    <span class="nd">@classmethod</span>
-</span><span id="StatCounter-226"><a href="#StatCounter-226"><span class="linenos">226</span></a>    <span class="k">def</span> <span class="nf">from_list_arrays</span><span class="p">(</span>
+</span><span id="StatCounter-226"><a href="#StatCounter-226"><span class="linenos">226</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">from_list_arrays</span><span class="p">(</span>
 </span><span id="StatCounter-227"><a href="#StatCounter-227"><span class="linenos">227</span></a>        <span class="bp">cls</span><span class="p">,</span>
 </span><span id="StatCounter-228"><a href="#StatCounter-228"><span class="linenos">228</span></a>        <span class="n">arr</span><span class="p">,</span>
 </span><span id="StatCounter-229"><a href="#StatCounter-229"><span class="linenos">229</span></a>        <span class="n">map_func</span><span class="p">:</span> <span class="n">Callable</span> <span class="o">=</span> <span class="nb">float</span><span class="p">,</span>
@@ -679,7 +679,7 @@
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="StatCounter.validate-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.11/statcounter.py#L54-L56" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/statcounter.py#L54-L56" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -687,7 +687,7 @@
 
     </div>
     <a class="headerlink" href="#StatCounter.validate"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="StatCounter.validate-55"><a href="#StatCounter.validate-55"><span class="linenos">55</span></a>    <span class="k">def</span> <span class="nf">validate</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="StatCounter.validate-55"><a href="#StatCounter.validate-55"><span class="linenos">55</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">validate</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 </span><span id="StatCounter.validate-56"><a href="#StatCounter.validate-56"><span class="linenos">56</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;validate the counter as being all floats or ints&quot;&quot;&quot;</span>
 </span><span id="StatCounter.validate-57"><a href="#StatCounter.validate-57"><span class="linenos">57</span></a>        <span class="k">return</span> <span class="nb">all</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="p">(</span><span class="nb">bool</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="kc">None</span><span class="p">)))</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
 </span></pre></div>
@@ -708,7 +708,7 @@
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="StatCounter.min-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.11/statcounter.py#L58-L60" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/statcounter.py#L58-L60" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -716,7 +716,7 @@
 
     </div>
     <a class="headerlink" href="#StatCounter.min"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="StatCounter.min-59"><a href="#StatCounter.min-59"><span class="linenos">59</span></a>    <span class="k">def</span> <span class="nf">min</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="StatCounter.min-59"><a href="#StatCounter.min-59"><span class="linenos">59</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">min</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 </span><span id="StatCounter.min-60"><a href="#StatCounter.min-60"><span class="linenos">60</span></a>        <span class="s2">&quot;minimum value&quot;</span>
 </span><span id="StatCounter.min-61"><a href="#StatCounter.min-61"><span class="linenos">61</span></a>        <span class="k">return</span> <span class="nb">min</span><span class="p">(</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">v</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
 </span></pre></div>
@@ -737,7 +737,7 @@
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="StatCounter.max-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.11/statcounter.py#L62-L64" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/statcounter.py#L62-L64" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -745,7 +745,7 @@
 
     </div>
     <a class="headerlink" href="#StatCounter.max"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="StatCounter.max-63"><a href="#StatCounter.max-63"><span class="linenos">63</span></a>    <span class="k">def</span> <span class="nf">max</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="StatCounter.max-63"><a href="#StatCounter.max-63"><span class="linenos">63</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">max</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 </span><span id="StatCounter.max-64"><a href="#StatCounter.max-64"><span class="linenos">64</span></a>        <span class="s2">&quot;maximum value&quot;</span>
 </span><span id="StatCounter.max-65"><a href="#StatCounter.max-65"><span class="linenos">65</span></a>        <span class="k">return</span> <span class="nb">max</span><span class="p">(</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">v</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
 </span></pre></div>
@@ -766,7 +766,7 @@
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="StatCounter.total-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.11/statcounter.py#L66-L68" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/statcounter.py#L66-L68" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -774,7 +774,7 @@
 
     </div>
     <a class="headerlink" href="#StatCounter.total"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="StatCounter.total-67"><a href="#StatCounter.total-67"><span class="linenos">67</span></a>    <span class="k">def</span> <span class="nf">total</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="StatCounter.total-67"><a href="#StatCounter.total-67"><span class="linenos">67</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">total</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 </span><span id="StatCounter.total-68"><a href="#StatCounter.total-68"><span class="linenos">68</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Sum of the counts&quot;&quot;&quot;</span>
 </span><span id="StatCounter.total-69"><a href="#StatCounter.total-69"><span class="linenos">69</span></a>        <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
 </span></pre></div>
@@ -793,7 +793,7 @@
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="StatCounter.keys_sorted-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.11/statcounter.py#L70-L73" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/statcounter.py#L70-L73" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -802,7 +802,7 @@
     </div>
     <a class="headerlink" href="#StatCounter.keys_sorted"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="StatCounter.keys_sorted-71"><a href="#StatCounter.keys_sorted-71"><span class="linenos">71</span></a>    <span class="nd">@cached_property</span>
-</span><span id="StatCounter.keys_sorted-72"><a href="#StatCounter.keys_sorted-72"><span class="linenos">72</span></a>    <span class="k">def</span> <span class="nf">keys_sorted</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+</span><span id="StatCounter.keys_sorted-72"><a href="#StatCounter.keys_sorted-72"><span class="linenos">72</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">keys_sorted</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
 </span><span id="StatCounter.keys_sorted-73"><a href="#StatCounter.keys_sorted-73"><span class="linenos">73</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;return the keys&quot;&quot;&quot;</span>
 </span><span id="StatCounter.keys_sorted-74"><a href="#StatCounter.keys_sorted-74"><span class="linenos">74</span></a>        <span class="k">return</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
 </span></pre></div>
@@ -823,7 +823,7 @@
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="StatCounter.percentile-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.11/statcounter.py#L75-L122" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/statcounter.py#L75-L122" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -831,7 +831,7 @@
 
     </div>
     <a class="headerlink" href="#StatCounter.percentile"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="StatCounter.percentile-76"><a href="#StatCounter.percentile-76"><span class="linenos"> 76</span></a>    <span class="k">def</span> <span class="nf">percentile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="StatCounter.percentile-76"><a href="#StatCounter.percentile-76"><span class="linenos"> 76</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">percentile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
 </span><span id="StatCounter.percentile-77"><a href="#StatCounter.percentile-77"><span class="linenos"> 77</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;return the value at the given percentile</span>
 </span><span id="StatCounter.percentile-78"><a href="#StatCounter.percentile-78"><span class="linenos"> 78</span></a>
 </span><span id="StatCounter.percentile-79"><a href="#StatCounter.percentile-79"><span class="linenos"> 79</span></a><span class="sd">        this could be log time if we did binary search, but that would be a lot of added complexity</span>
@@ -899,7 +899,7 @@
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="StatCounter.median-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.11/statcounter.py#L124-L125" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/statcounter.py#L124-L125" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -907,7 +907,7 @@
 
     </div>
     <a class="headerlink" href="#StatCounter.median"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="StatCounter.median-125"><a href="#StatCounter.median-125"><span class="linenos">125</span></a>    <span class="k">def</span> <span class="nf">median</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="StatCounter.median-125"><a href="#StatCounter.median-125"><span class="linenos">125</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">median</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 </span><span id="StatCounter.median-126"><a href="#StatCounter.median-126"><span class="linenos">126</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">percentile</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span>
 </span></pre></div>
 
@@ -925,7 +925,7 @@
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="StatCounter.mean-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.11/statcounter.py#L127-L129" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/statcounter.py#L127-L129" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -933,7 +933,7 @@
 
     </div>
     <a class="headerlink" href="#StatCounter.mean"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="StatCounter.mean-128"><a href="#StatCounter.mean-128"><span class="linenos">128</span></a>    <span class="k">def</span> <span class="nf">mean</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="StatCounter.mean-128"><a href="#StatCounter.mean-128"><span class="linenos">128</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">mean</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 </span><span id="StatCounter.mean-129"><a href="#StatCounter.mean-129"><span class="linenos">129</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;return the mean of the values&quot;&quot;&quot;</span>
 </span><span id="StatCounter.mean-130"><a href="#StatCounter.mean-130"><span class="linenos">130</span></a>        <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">k</span> <span class="o">*</span> <span class="n">c</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">c</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="p">())</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">total</span><span class="p">())</span>
 </span></pre></div>
@@ -954,7 +954,7 @@
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="StatCounter.mode-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.11/statcounter.py#L131-L132" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/statcounter.py#L131-L132" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -962,7 +962,7 @@
 
     </div>
     <a class="headerlink" href="#StatCounter.mode"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="StatCounter.mode-132"><a href="#StatCounter.mode-132"><span class="linenos">132</span></a>    <span class="k">def</span> <span class="nf">mode</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="StatCounter.mode-132"><a href="#StatCounter.mode-132"><span class="linenos">132</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">mode</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 </span><span id="StatCounter.mode-133"><a href="#StatCounter.mode-133"><span class="linenos">133</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">most_common</span><span class="p">()[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
 </span></pre></div>
 
@@ -980,7 +980,7 @@
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="StatCounter.std-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.11/statcounter.py#L134-L139" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/statcounter.py#L134-L139" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -988,7 +988,7 @@
 
     </div>
     <a class="headerlink" href="#StatCounter.std"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="StatCounter.std-135"><a href="#StatCounter.std-135"><span class="linenos">135</span></a>    <span class="k">def</span> <span class="nf">std</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="StatCounter.std-135"><a href="#StatCounter.std-135"><span class="linenos">135</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">std</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 </span><span id="StatCounter.std-136"><a href="#StatCounter.std-136"><span class="linenos">136</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;return the standard deviation of the values&quot;&quot;&quot;</span>
 </span><span id="StatCounter.std-137"><a href="#StatCounter.std-137"><span class="linenos">137</span></a>        <span class="n">mean</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
 </span><span id="StatCounter.std-138"><a href="#StatCounter.std-138"><span class="linenos">138</span></a>        <span class="n">deviations</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">c</span> <span class="o">*</span> <span class="p">(</span><span class="n">k</span> <span class="o">-</span> <span class="n">mean</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">c</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
@@ -1012,7 +1012,7 @@
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="StatCounter.summary-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.11/statcounter.py#L141-L179" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/statcounter.py#L141-L179" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -1020,7 +1020,7 @@
 
     </div>
     <a class="headerlink" href="#StatCounter.summary"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="StatCounter.summary-142"><a href="#StatCounter.summary-142"><span class="linenos">142</span></a>    <span class="k">def</span> <span class="nf">summary</span><span class="p">(</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="StatCounter.summary-142"><a href="#StatCounter.summary-142"><span class="linenos">142</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">summary</span><span class="p">(</span>
 </span><span id="StatCounter.summary-143"><a href="#StatCounter.summary-143"><span class="linenos">143</span></a>        <span class="bp">self</span><span class="p">,</span>
 </span><span id="StatCounter.summary-144"><a href="#StatCounter.summary-144"><span class="linenos">144</span></a>        <span class="n">typecast</span><span class="p">:</span> <span class="n">Callable</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">,</span>
 </span><span id="StatCounter.summary-145"><a href="#StatCounter.summary-145"><span class="linenos">145</span></a>        <span class="o">*</span><span class="p">,</span>
@@ -1077,7 +1077,7 @@
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="StatCounter.serialize-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.11/statcounter.py#L181-L205" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/statcounter.py#L181-L205" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -1085,7 +1085,7 @@
 
     </div>
     <a class="headerlink" href="#StatCounter.serialize"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="StatCounter.serialize-182"><a href="#StatCounter.serialize-182"><span class="linenos">182</span></a>    <span class="k">def</span> <span class="nf">serialize</span><span class="p">(</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="StatCounter.serialize-182"><a href="#StatCounter.serialize-182"><span class="linenos">182</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">serialize</span><span class="p">(</span>
 </span><span id="StatCounter.serialize-183"><a href="#StatCounter.serialize-183"><span class="linenos">183</span></a>        <span class="bp">self</span><span class="p">,</span>
 </span><span id="StatCounter.serialize-184"><a href="#StatCounter.serialize-184"><span class="linenos">184</span></a>        <span class="n">typecast</span><span class="p">:</span> <span class="n">Callable</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">,</span>
 </span><span id="StatCounter.serialize-185"><a href="#StatCounter.serialize-185"><span class="linenos">185</span></a>        <span class="o">*</span><span class="p">,</span>
@@ -1137,7 +1137,7 @@
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="StatCounter.load-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.11/statcounter.py#L214-L222" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/statcounter.py#L214-L222" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -1146,7 +1146,7 @@
     </div>
     <a class="headerlink" href="#StatCounter.load"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="StatCounter.load-215"><a href="#StatCounter.load-215"><span class="linenos">215</span></a>    <span class="nd">@classmethod</span>
-</span><span id="StatCounter.load-216"><a href="#StatCounter.load-216"><span class="linenos">216</span></a>    <span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;StatCounter&quot;</span><span class="p">:</span>
+</span><span id="StatCounter.load-216"><a href="#StatCounter.load-216"><span class="linenos">216</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">load</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;StatCounter&quot;</span><span class="p">:</span>
 </span><span id="StatCounter.load-217"><a href="#StatCounter.load-217"><span class="linenos">217</span></a>        <span class="s2">&quot;load from a the output of `StatCounter.serialize`&quot;</span>
 </span><span id="StatCounter.load-218"><a href="#StatCounter.load-218"><span class="linenos">218</span></a>        <span class="k">if</span> <span class="s2">&quot;StatCounter&quot;</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
 </span><span id="StatCounter.load-219"><a href="#StatCounter.load-219"><span class="linenos">219</span></a>            <span class="n">loadme</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;StatCounter&quot;</span><span class="p">]</span>
@@ -1173,7 +1173,7 @@
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="StatCounter.from_list_arrays-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.11/statcounter.py#L224-L231" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/statcounter.py#L224-L231" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -1182,7 +1182,7 @@
     </div>
     <a class="headerlink" href="#StatCounter.from_list_arrays"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="StatCounter.from_list_arrays-225"><a href="#StatCounter.from_list_arrays-225"><span class="linenos">225</span></a>    <span class="nd">@classmethod</span>
-</span><span id="StatCounter.from_list_arrays-226"><a href="#StatCounter.from_list_arrays-226"><span class="linenos">226</span></a>    <span class="k">def</span> <span class="nf">from_list_arrays</span><span class="p">(</span>
+</span><span id="StatCounter.from_list_arrays-226"><a href="#StatCounter.from_list_arrays-226"><span class="linenos">226</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">from_list_arrays</span><span class="p">(</span>
 </span><span id="StatCounter.from_list_arrays-227"><a href="#StatCounter.from_list_arrays-227"><span class="linenos">227</span></a>        <span class="bp">cls</span><span class="p">,</span>
 </span><span id="StatCounter.from_list_arrays-228"><a href="#StatCounter.from_list_arrays-228"><span class="linenos">228</span></a>        <span class="n">arr</span><span class="p">,</span>
 </span><span id="StatCounter.from_list_arrays-229"><a href="#StatCounter.from_list_arrays-229"><span class="linenos">229</span></a>        <span class="n">map_func</span><span class="p">:</span> <span class="n">Callable</span> <span class="o">=</span> <span class="nb">float</span><span class="p">,</span>

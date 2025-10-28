@@ -1,4 +1,4 @@
-  docs for muutils v0.8.11
+  docs for muutils v0.8.12
 
 Contents
 
@@ -92,7 +92,7 @@ json_serialize
 a tool for serializing and loading arbitrary python objects into json.
 plays nicely with ZANJ
 
-[tensor_utils]
+tensor_utils
 
 contains minor utilities for working with pytorch tensors and numpy
 arrays, mostly for making type conversions easier
@@ -238,7 +238,7 @@ json_serialize
 a tool for serializing and loading arbitrary python objects into json.
 plays nicely with ZANJ
 
-[tensor_utils]
+tensor_utils
 
 contains minor utilities for working with pytorch tensors and numpy
 arrays, mostly for making type conversions easier
@@ -265,7 +265,7 @@ at your own risk!
 
 View Source on GitHub
 
-  docs for muutils v0.8.11
+  docs for muutils v0.8.12
 
 API Documentation
 
@@ -340,7 +340,7 @@ View Source on GitHub
 
 -   fmt: str
 
-  docs for muutils v0.8.11
+  docs for muutils v0.8.12
 
 API Documentation
 
@@ -381,7 +381,7 @@ Usage:
     >>> get_console_safe_str("café", "cafe")
     "café"  # This result may vary based on the system's preferred encoding.
 
-  docs for muutils v0.8.11
+  docs for muutils v0.8.12
 
 Contents
 
@@ -430,6 +430,7 @@ API Documentation
 -   dbg_tensor
 -   dbg_dict
 -   dbg_auto
+-   grep_repr
 
 View Source on GitHub
 
@@ -506,9 +507,9 @@ def tensor_info
 
 View Source on GitHub
 
--   DBG_DICT_DEFAULTS: Dict[str, Union[str, int, bool]] = {'key_types': True, 'val_types': True, 'max_len': 32, 'indent': '  ', 'max_depth': 3}
+-   DBG_DICT_DEFAULTS: Dict[str, Union[bool, int, str]] = {'key_types': True, 'val_types': True, 'max_len': 32, 'indent': '  ', 'max_depth': 3}
 
--   DBG_LIST_DEFAULTS: Dict[str, Union[str, int, bool]] = {'max_len': 16, 'summary_show_types': True}
+-   DBG_LIST_DEFAULTS: Dict[str, Union[bool, int, str]] = {'max_len': 16, 'summary_show_types': True}
 
 def list_info
 
@@ -516,7 +517,7 @@ def list_info
 
 View Source on GitHub
 
--   TENSOR_STR_TYPES: Set[str] = {"<class 'torch.Tensor'>", "<class 'numpy.ndarray'>"}
+-   TENSOR_STR_TYPES: Set[str] = {"<class 'numpy.ndarray'>", "<class 'torch.Tensor'>"}
 
 def dict_info
 
@@ -532,13 +533,76 @@ View Source on GitHub
 
 Automatically format an object for debugging.
 
--   dbg_tensor = functools.partial(<function dbg>, formatter=<function tensor_info>, val_joiner=': ')
+def dbg_tensor
 
--   dbg_dict = functools.partial(<function dbg>, formatter=<function dict_info>, val_joiner=': ')
+    (tensor: ~_ExpType) -> ~_ExpType
 
--   dbg_auto = functools.partial(<function dbg>, formatter=<function info_auto>, val_joiner=': ')
+View Source on GitHub
 
-  docs for muutils v0.8.11
+dbg function for tensors, using tensor_info formatter.
+
+def dbg_dict
+
+    (d: ~_ExpType_dict) -> ~_ExpType_dict
+
+View Source on GitHub
+
+dbg function for dictionaries, using dict_info formatter.
+
+def dbg_auto
+
+    (obj: ~_ExpType) -> ~_ExpType
+
+View Source on GitHub
+
+dbg function for automatic formatting based on type.
+
+def grep_repr
+
+    (
+        obj: Any,
+        pattern: str | re.Pattern[str],
+        *,
+        char_context: int | None = 20,
+        line_context: int | None = None,
+        before_context: int = 0,
+        after_context: int = 0,
+        context: int | None = None,
+        max_count: int | None = None,
+        cased: bool = False,
+        loose: bool = False,
+        line_numbers: bool = False,
+        highlight: bool = True,
+        color: str = '31',
+        separator: str = '--',
+        quiet: bool = False
+    ) -> Optional[List[str]]
+
+View Source on GitHub
+
+grep-like search on repr(obj) with improved grep-style options.
+
+By default, string patterns are case-insensitive. Pre-compiled regex
+patterns use their own flags.
+
+Parameters: - obj: Object to search (its repr() string is scanned) -
+pattern: Regular expression pattern (string or pre-compiled) -
+char_context: Characters of context before/after each match (default:
+20) - line_context: Lines of context before/after; overrides
+char_context - before_context: Lines of context before match (like grep
+-B) - after_context: Lines of context after match (like grep -A) -
+context: Lines of context before AND after (like grep -C) - max_count:
+Stop after this many matches - cased: Force case-sensitive search for
+string patterns - loose: Normalize spaces/punctuation for flexible
+matching - line_numbers: Show line numbers in output - highlight: Wrap
+matches with ANSI color codes - color: ANSI color code (default: “31”
+for red) - separator: Separator between multiple matches - quiet: Return
+results instead of printing
+
+Returns: - None if quiet=False (prints to stdout) - List[str] if
+quiet=True (returns formatted output lines)
+
+  docs for muutils v0.8.12
 
 Contents
 
@@ -893,7 +957,7 @@ Raises:
     ‘yaml’, or if you try to use ‘yaml’ output without having PyYAML
     installed
 
-  docs for muutils v0.8.11
+  docs for muutils v0.8.12
 
 Contents
 
@@ -1108,7 +1172,7 @@ Inherited Members
 
 map of string aliases to ErrorMode instances
 
-  docs for muutils v0.8.11
+  docs for muutils v0.8.12
 
 Contents
 
@@ -1150,7 +1214,7 @@ Arguments
 -   eq_func: Callable[[T, T], bool] a function that returns true if two
     items are equivalent. need not be transitive
 
-  docs for muutils v0.8.11
+  docs for muutils v0.8.12
 
 Contents
 
@@ -1446,7 +1510,7 @@ Inherited Members
 -   intersection
 -   union
 
-  docs for muutils v0.8.11
+  docs for muutils v0.8.12
 
 Contents
 
@@ -1658,6 +1722,7 @@ def serializable_field
         repr: bool = True,
         hash: Optional[bool] = None,
         compare: bool = True,
+        doc: str | None = None,
         metadata: Optional[mappingproxy] = None,
         kw_only: Union[bool, dataclasses._MISSING_TYPE] = <dataclasses._MISSING_TYPE object>,
         serialize: bool = True,
@@ -1679,6 +1744,7 @@ Create a new SerializableField
     repr: bool = True,
     hash: Optional[bool] = None,
     compare: bool = True,
+    doc: str | None = None, # new in python 3.14. can alternately pass `description` to match pydantic, but this is discouraged
     metadata: types.MappingProxyType | None = None,
     kw_only: bool | dataclasses._MISSING_TYPE = dataclasses.MISSING,
     ### ----------------------------------------------------------------------
@@ -2055,7 +2121,7 @@ Parameters:
     - `nested_dict : dict[str, Any]`
         nested dict to update the instance with
 
-  docs for muutils v0.8.11
+  docs for muutils v0.8.12
 
 Contents
 
@@ -2177,7 +2243,7 @@ View Source on GitHub
 
 load a json-serialized array, infer the mode if not specified
 
-  docs for muutils v0.8.11
+  docs for muutils v0.8.12
 
 Contents
 
@@ -2353,7 +2419,7 @@ View Source on GitHub
 
 serialize object to json-serializable object with default config
 
-  docs for muutils v0.8.11
+  docs for muutils v0.8.12
 
 Contents
 
@@ -2951,7 +3017,7 @@ Raises:
 -   AttributeError : if a property is not found on the class
 -   FieldLoadingError : if there is an error loading a field
 
-  docs for muutils v0.8.11
+  docs for muutils v0.8.12
 
 Contents
 
@@ -2999,6 +3065,7 @@ SerializableField
         repr: bool = True,
         hash: Optional[bool] = None,
         compare: bool = True,
+        doc: str | None = None,
         metadata: Optional[mappingproxy] = None,
         kw_only: Union[bool, dataclasses._MISSING_TYPE] = <dataclasses._MISSING_TYPE object>,
         serialize: bool = True,
@@ -3054,6 +3121,8 @@ copy all values from a dataclasses.Field to new SerializableField
 
 -   kw_only
 
+-   doc
+
 def serializable_field
 
     (
@@ -3064,6 +3133,7 @@ def serializable_field
         repr: bool = True,
         hash: Optional[bool] = None,
         compare: bool = True,
+        doc: str | None = None,
         metadata: Optional[mappingproxy] = None,
         kw_only: Union[bool, dataclasses._MISSING_TYPE] = <dataclasses._MISSING_TYPE object>,
         serialize: bool = True,
@@ -3085,6 +3155,7 @@ Create a new SerializableField
     repr: bool = True,
     hash: Optional[bool] = None,
     compare: bool = True,
+    doc: str | None = None, # new in python 3.14. can alternately pass `description` to match pydantic, but this is discouraged
     metadata: types.MappingProxyType | None = None,
     kw_only: bool | dataclasses._MISSING_TYPE = dataclasses.MISSING,
     ### ----------------------------------------------------------------------
@@ -3143,7 +3214,7 @@ the container. ZANJ will automatically do this for you.
 
 TODO: custom_value_check_fn: function taking the value of the field and returning whether the value itself is valid. if not provided, any value is valid as long as it passes the type test
 
-  docs for muutils v0.8.11
+  docs for muutils v0.8.12
 
 Contents
 
@@ -3326,7 +3397,7 @@ View Source on GitHub
 
 tuple type hint, but for a tuple of any length with all the same type
 
-  docs for muutils v0.8.11
+  docs for muutils v0.8.12
 
 Contents
 
@@ -3376,7 +3447,7 @@ def jsonl_write
 
 View Source on GitHub
 
-  docs for muutils v0.8.11
+  docs for muutils v0.8.12
 
 Contents
 
@@ -3432,7 +3503,7 @@ Inherited Members
 -   items
 -   values
 
-  docs for muutils v0.8.11
+  docs for muutils v0.8.12
 
 Contents
 
@@ -3653,7 +3724,7 @@ context manager for timing code
 
 -   elapsed_time: float
 
-  docs for muutils v0.8.11
+  docs for muutils v0.8.12
 
 API Documentation
 
@@ -3690,7 +3761,7 @@ View Source on GitHub
 
 -   stream
 
-  docs for muutils v0.8.11
+  docs for muutils v0.8.12
 
 API Documentation
 
@@ -3782,7 +3853,7 @@ standard header function. will output
 
 -   HEADER_FUNCTIONS: dict[str, muutils.logger.headerfuncs.HeaderFunction] = {'md': <function md_header_function>}
 
-  docs for muutils v0.8.11
+  docs for muutils v0.8.12
 
 API Documentation
 
@@ -3847,7 +3918,7 @@ then gather_val("log.jsonl", "s1", ("a", "b")) will return
         [4, 5]
     ]
 
-  docs for muutils v0.8.11
+  docs for muutils v0.8.12
 
 Contents
 
@@ -3989,7 +4060,7 @@ View Source on GitHub
 
 flush all streams
 
-  docs for muutils v0.8.11
+  docs for muutils v0.8.12
 
 API Documentation
 
@@ -4051,7 +4122,7 @@ def make_handler
 
 View Source on GitHub
 
-  docs for muutils v0.8.11
+  docs for muutils v0.8.12
 
 API Documentation
 
@@ -4126,7 +4197,7 @@ View Source on GitHub
 
 log a message to the log file, and optionally to the console
 
-  docs for muutils v0.8.11
+  docs for muutils v0.8.12
 
 API Documentation
 
@@ -4213,7 +4284,7 @@ View Source on GitHub
 
 returns a progress string
 
-  docs for muutils v0.8.11
+  docs for muutils v0.8.12
 
 Submodules
 
@@ -4226,7 +4297,7 @@ muutils.math
 
 View Source on GitHub
 
-  docs for muutils v0.8.11
+  docs for muutils v0.8.12
 
 API Documentation
 
@@ -4275,7 +4346,7 @@ def changed_n_bins_copy
 
 View Source on GitHub
 
-  docs for muutils v0.8.11
+  docs for muutils v0.8.12
 
 API Documentation
 
@@ -4342,7 +4413,7 @@ Raises:
 -   ValueError : If no powers are requested or if A is not a square
     matrix
 
-  docs for muutils v0.8.11
+  docs for muutils v0.8.12
 
 Contents
 
@@ -4913,7 +4984,7 @@ Duplicates are ignored in the same manner as a set. Unfrozen dataclasses
 can’t be placed in sets since they’re not hashable. Collections of them
 may be compared using this function.
 
-  docs for muutils v0.8.11
+  docs for muutils v0.8.12
 
 API Documentation
 
@@ -5043,7 +5114,7 @@ Duplicates are ignored in the same manner as a set. Unfrozen dataclasses
 can’t be placed in sets since they’re not hashable. Collections of them
 may be compared using this function.
 
-  docs for muutils v0.8.11
+  docs for muutils v0.8.12
 
 API Documentation
 
@@ -5159,7 +5230,7 @@ you can’t rely on that. always use the return value.
 
 the gelidum package is a more complete implementation of this idea
 
-  docs for muutils v0.8.11
+  docs for muutils v0.8.12
 
 API Documentation
 
@@ -5361,7 +5432,7 @@ Raises:
 -   ValueError if the number of input types doesn’t match the lambda’s
     parameters.
 
-  docs for muutils v0.8.11
+  docs for muutils v0.8.12
 
 API Documentation
 
@@ -5399,7 +5470,7 @@ View Source on GitHub
 Returns a base64 representation of the hash of the given string. not
 cryptographically secure
 
-  docs for muutils v0.8.11
+  docs for muutils v0.8.12
 
 API Documentation
 
@@ -5456,7 +5527,7 @@ Examples:
     >>> str_to_numeric("1.2e2")
     120.0
 
-  docs for muutils v0.8.11
+  docs for muutils v0.8.12
 
 API Documentation
 
@@ -5631,7 +5702,7 @@ Raises:
     is "except"
 -   ValueError : if when_missing is invalid
 
-  docs for muutils v0.8.11
+  docs for muutils v0.8.12
 
 API Documentation
 
@@ -5716,7 +5787,7 @@ def dynamic_docstring
 
 View Source on GitHub
 
-  docs for muutils v0.8.11
+  docs for muutils v0.8.12
 
 Contents
 
@@ -5782,10 +5853,10 @@ Yield successive chunks from an iterator.
 def get_checkpoint_paths_for_run
 
     (
-        run_path: pathlib.Path,
+        run_path: pathlib._local.Path,
         extension: Literal['pt', 'zanj'],
         checkpoints_format: str = 'checkpoints/model.iter_*.{extension}'
-    ) -> list[tuple[int, pathlib.Path]]
+    ) -> list[tuple[int, pathlib._local.Path]]
 
 View Source on GitHub
 
@@ -5812,7 +5883,7 @@ def pprint_summary
 
 View Source on GitHub
 
-  docs for muutils v0.8.11
+  docs for muutils v0.8.12
 
 Contents
 
@@ -5856,7 +5927,7 @@ View Source on GitHub
 
 for plotting mermaid.js diagrams
 
-  docs for muutils v0.8.11
+  docs for muutils v0.8.12
 
 Contents
 
@@ -6028,7 +6099,7 @@ View Source on GitHub
 
 Show the active plot, depending on global configs
 
-  docs for muutils v0.8.11
+  docs for muutils v0.8.12
 
 Contents
 
@@ -6110,8 +6181,8 @@ View Source on GitHub
 def process_dir
 
     (
-        input_dir: Union[str, pathlib.Path],
-        output_dir: Union[str, pathlib.Path],
+        input_dir: Union[str, pathlib._local.Path],
+        output_dir: Union[str, pathlib._local.Path],
         strip_md_cells: bool = False,
         header_comment: str = '#%%',
         disable_plots: bool = False,
@@ -6132,7 +6203,7 @@ Arguments
     - `filter_out_lines: str|typing.Sequence[str] = ('%', '!')`: comment out lines starting with these strings (in code blocks).
         if a string is passed, it will be split by char and each char will be treated as a separate filter.
 
-  docs for muutils v0.8.11
+  docs for muutils v0.8.12
 
 Contents
 
@@ -6160,7 +6231,7 @@ View Source on GitHub
 
 for plotting mermaid.js diagrams
 
-  docs for muutils v0.8.11
+  docs for muutils v0.8.12
 
 Contents
 
@@ -6191,7 +6262,7 @@ View Source on GitHub
 
 function for easily rendering a sympy expression in latex
 
-  docs for muutils v0.8.11
+  docs for muutils v0.8.12
 
 Contents
 
@@ -6245,8 +6316,8 @@ Inherited Members
 def run_notebook_tests
 
     (
-        notebooks_dir: pathlib.Path,
-        converted_notebooks_temp_dir: pathlib.Path,
+        notebooks_dir: pathlib._local.Path,
+        converted_notebooks_temp_dir: pathlib._local.Path,
         CI_output_suffix: str = '.CI-output.txt',
         run_python_cmd: Optional[str] = None,
         run_python_cmd_fmt: str = '{python_tool} run python',
@@ -6311,7 +6382,7 @@ Usage:
         Output in temp/converted/notebook1.CI-output.txt
         {SUCCESS_STR} Run completed with return code 0
 
-  docs for muutils v0.8.11
+  docs for muutils v0.8.12
 
 Contents
 
@@ -6457,7 +6528,7 @@ Raises:
 -   ImportError : if use_multiprocess=True and multiprocess is not
     available
 
-  docs for muutils v0.8.11
+  docs for muutils v0.8.12
 
 Contents
 
@@ -6610,7 +6681,7 @@ Spinner
         initial_value: str = '',
         message: str = '',
         format_string: str = '\r{spinner} ({elapsed_time:.2f}s) {message}{value}',
-        output_stream: <class 'TextIO'> = <_io.StringIO object>,
+        output_stream: <class 'TextIO'> = <_io.TextIOWrapper encoding='UTF-8'>,
         format_string_when_updated: Union[str, bool] = False,
         spinner_chars: Union[str, Sequence[str], NoneType] = None,
         spinner_complete: Optional[str] = None,
@@ -6790,7 +6861,7 @@ def spinner_decorator
         initial_value: str = '',
         message: str = '',
         format_string: str = '{spinner} ({elapsed_time:.2f}s) {message}{value}',
-        output_stream: <class 'TextIO'> = <_io.StringIO object>,
+        output_stream: <class 'TextIO'> = <_io.TextIOWrapper encoding='UTF-8'>,
         mutable_kwarg_key: Optional[str] = None,
         spinner_chars: Union[str, Sequence[str], NoneType] = None,
         spinner_complete: Optional[str] = None,
@@ -6853,7 +6924,7 @@ As a decorator:
             spinner.update_value(f"Step {i+1}")
         return "Function completed"
 
-  docs for muutils v0.8.11
+  docs for muutils v0.8.12
 
 Contents
 
@@ -7064,7 +7135,7 @@ Inherited Members
 
 -   clear
 
-  docs for muutils v0.8.11
+  docs for muutils v0.8.12
 
 Contents
 
@@ -7134,7 +7205,7 @@ def get_all
 
 View Source on GitHub
 
-  docs for muutils v0.8.11
+  docs for muutils v0.8.12
 
 Contents
 
@@ -7306,7 +7377,7 @@ Returns:
 -   Union[str, List[str]] Formatted statistical summary, either as
     string or list of strings
 
-  docs for muutils v0.8.11
+  docs for muutils v0.8.12
 
 Contents
 
@@ -7367,7 +7438,7 @@ notably:
 
 View Source on GitHub
 
--   TYPE_TO_JAX_DTYPE: dict = {<class 'float'>: <class 'jaxtyping.Float'>, <class 'int'>: <class 'jaxtyping.Int'>, <class 'jaxtyping.Float'>: <class 'jaxtyping.Float'>, <class 'jaxtyping.Int'>: <class 'jaxtyping.Int'>, <class 'bool'>: <class 'jaxtyping.Bool'>, <class 'jaxtyping.Bool'>: <class 'jaxtyping.Bool'>, <class 'numpy.bool_'>: <class 'jaxtyping.Bool'>, torch.bool: <class 'jaxtyping.Bool'>, <class 'numpy.float16'>: <class 'jaxtyping.Float'>, <class 'numpy.float32'>: <class 'jaxtyping.Float'>, <class 'numpy.float64'>: <class 'jaxtyping.Float'>, <class 'numpy.int8'>: <class 'jaxtyping.Int'>, <class 'numpy.int16'>: <class 'jaxtyping.Int'>, <class 'numpy.int32'>: <class 'jaxtyping.Int'>, <class 'numpy.int64'>: <class 'jaxtyping.Int'>, <class 'numpy.longlong'>: <class 'jaxtyping.Int'>, <class 'numpy.uint8'>: <class 'jaxtyping.Int'>, torch.float32: <class 'jaxtyping.Float'>, torch.float16: <class 'jaxtyping.Float'>, torch.float64: <class 'jaxtyping.Float'>, torch.bfloat16: <class 'jaxtyping.Float'>, torch.int32: <class 'jaxtyping.Int'>, torch.int8: <class 'jaxtyping.Int'>, torch.int16: <class 'jaxtyping.Int'>, torch.int64: <class 'jaxtyping.Int'>}
+-   TYPE_TO_JAX_DTYPE: dict = {<class 'float'>: <class 'jaxtyping.Float'>, <class 'int'>: <class 'jaxtyping.Int'>, <class 'jaxtyping.Float'>: <class 'jaxtyping.Float'>, <class 'jaxtyping.Int'>: <class 'jaxtyping.Int'>, <class 'bool'>: <class 'jaxtyping.Bool'>, <class 'jaxtyping.Bool'>: <class 'jaxtyping.Bool'>, <class 'numpy.bool'>: <class 'jaxtyping.Bool'>, torch.bool: <class 'jaxtyping.Bool'>, <class 'numpy.float16'>: <class 'jaxtyping.Float'>, <class 'numpy.float32'>: <class 'jaxtyping.Float'>, <class 'numpy.float64'>: <class 'jaxtyping.Float'>, <class 'numpy.int8'>: <class 'jaxtyping.Int'>, <class 'numpy.int16'>: <class 'jaxtyping.Int'>, <class 'numpy.int32'>: <class 'jaxtyping.Int'>, <class 'numpy.int64'>: <class 'jaxtyping.Int'>, <class 'numpy.longlong'>: <class 'jaxtyping.Int'>, <class 'numpy.uint8'>: <class 'jaxtyping.Int'>, torch.float32: <class 'jaxtyping.Float'>, torch.float16: <class 'jaxtyping.Float'>, torch.float64: <class 'jaxtyping.Float'>, torch.bfloat16: <class 'jaxtyping.Float'>, torch.int32: <class 'jaxtyping.Int'>, torch.int8: <class 'jaxtyping.Int'>, torch.int16: <class 'jaxtyping.Int'>, torch.int64: <class 'jaxtyping.Int'>}
 
 dict mapping python, numpy, and torch types to jaxtyping types
 
@@ -7399,16 +7470,16 @@ View Source on GitHub
 
 convert numpy dtype to torch dtype
 
--   DTYPE_LIST: list = [<class 'bool'>, <class 'int'>, <class 'float'>, torch.float32, torch.float32, torch.float64, torch.float16, torch.float64, torch.bfloat16, torch.complex64, torch.complex128, torch.int32, torch.int8, torch.int16, torch.int32, torch.int64, torch.int64, torch.int16, torch.uint8, torch.bool, <class 'numpy.float16'>, <class 'numpy.float32'>, <class 'numpy.float64'>, <class 'numpy.float16'>, <class 'numpy.float32'>, <class 'numpy.float64'>, <class 'numpy.complex64'>, <class 'numpy.complex128'>, <class 'numpy.int8'>, <class 'numpy.int16'>, <class 'numpy.int32'>, <class 'numpy.int64'>, <class 'numpy.longlong'>, <class 'numpy.int16'>, <class 'numpy.uint8'>, <class 'numpy.bool_'>, <class 'numpy.float64'>, <class 'numpy.int64'>]
+-   DTYPE_LIST: list = [<class 'bool'>, <class 'int'>, <class 'float'>, torch.float32, torch.float32, torch.float64, torch.float16, torch.float64, torch.bfloat16, torch.complex64, torch.complex128, torch.int32, torch.int8, torch.int16, torch.int32, torch.int64, torch.int64, torch.int16, torch.uint8, torch.bool, <class 'numpy.float16'>, <class 'numpy.float32'>, <class 'numpy.float64'>, <class 'numpy.float16'>, <class 'numpy.float32'>, <class 'numpy.float64'>, <class 'numpy.complex64'>, <class 'numpy.complex128'>, <class 'numpy.int8'>, <class 'numpy.int16'>, <class 'numpy.int32'>, <class 'numpy.int64'>, <class 'numpy.longlong'>, <class 'numpy.int16'>, <class 'numpy.uint8'>, <class 'numpy.bool'>]
 
 list of all the python, numpy, and torch numerical types I could think
 of
 
--   DTYPE_MAP: dict = {"<class 'bool'>": <class 'bool'>, "<class 'int'>": <class 'int'>, "<class 'float'>": <class 'float'>, 'torch.float32': torch.float32, 'torch.float64': torch.float64, 'torch.float16': torch.float16, 'torch.bfloat16': torch.bfloat16, 'torch.complex64': torch.complex64, 'torch.complex128': torch.complex128, 'torch.int32': torch.int32, 'torch.int8': torch.int8, 'torch.int16': torch.int16, 'torch.int64': torch.int64, 'torch.uint8': torch.uint8, 'torch.bool': torch.bool, "<class 'numpy.float16'>": <class 'numpy.float16'>, "<class 'numpy.float32'>": <class 'numpy.float32'>, "<class 'numpy.float64'>": <class 'numpy.float64'>, "<class 'numpy.complex64'>": <class 'numpy.complex64'>, "<class 'numpy.complex128'>": <class 'numpy.complex128'>, "<class 'numpy.int8'>": <class 'numpy.int8'>, "<class 'numpy.int16'>": <class 'numpy.int16'>, "<class 'numpy.int32'>": <class 'numpy.int32'>, "<class 'numpy.int64'>": <class 'numpy.int64'>, "<class 'numpy.longlong'>": <class 'numpy.longlong'>, "<class 'numpy.uint8'>": <class 'numpy.uint8'>, "<class 'numpy.bool_'>": <class 'numpy.bool_'>, 'float16': <class 'numpy.float16'>, 'float32': <class 'numpy.float32'>, 'float64': <class 'numpy.float64'>, 'complex64': <class 'numpy.complex64'>, 'complex128': <class 'numpy.complex128'>, 'int8': <class 'numpy.int8'>, 'int16': <class 'numpy.int16'>, 'int32': <class 'numpy.int32'>, 'int64': <class 'numpy.int64'>, 'longlong': <class 'numpy.longlong'>, 'uint8': <class 'numpy.uint8'>, 'bool_': <class 'numpy.bool_'>, 'bool': <class 'numpy.bool_'>}
+-   DTYPE_MAP: dict = {"<class 'bool'>": <class 'bool'>, "<class 'int'>": <class 'int'>, "<class 'float'>": <class 'float'>, 'torch.float32': torch.float32, 'torch.float64': torch.float64, 'torch.float16': torch.float16, 'torch.bfloat16': torch.bfloat16, 'torch.complex64': torch.complex64, 'torch.complex128': torch.complex128, 'torch.int32': torch.int32, 'torch.int8': torch.int8, 'torch.int16': torch.int16, 'torch.int64': torch.int64, 'torch.uint8': torch.uint8, 'torch.bool': torch.bool, "<class 'numpy.float16'>": <class 'numpy.float16'>, "<class 'numpy.float32'>": <class 'numpy.float32'>, "<class 'numpy.float64'>": <class 'numpy.float64'>, "<class 'numpy.complex64'>": <class 'numpy.complex64'>, "<class 'numpy.complex128'>": <class 'numpy.complex128'>, "<class 'numpy.int8'>": <class 'numpy.int8'>, "<class 'numpy.int16'>": <class 'numpy.int16'>, "<class 'numpy.int32'>": <class 'numpy.int32'>, "<class 'numpy.int64'>": <class 'numpy.int64'>, "<class 'numpy.longlong'>": <class 'numpy.longlong'>, "<class 'numpy.uint8'>": <class 'numpy.uint8'>, "<class 'numpy.bool'>": <class 'numpy.bool'>, 'float16': <class 'numpy.float16'>, 'float32': <class 'numpy.float32'>, 'float64': <class 'numpy.float64'>, 'complex64': <class 'numpy.complex64'>, 'complex128': <class 'numpy.complex128'>, 'int8': <class 'numpy.int8'>, 'int16': <class 'numpy.int16'>, 'int32': <class 'numpy.int32'>, 'int64': <class 'numpy.int64'>, 'longlong': <class 'numpy.longlong'>, 'uint8': <class 'numpy.uint8'>, 'bool': <class 'numpy.bool'>}
 
 mapping from string representations of types to their type
 
--   TORCH_DTYPE_MAP: dict = {"<class 'bool'>": torch.bool, "<class 'int'>": torch.int64, "<class 'float'>": torch.float64, 'torch.float32': torch.float32, 'torch.float64': torch.float64, 'torch.float16': torch.float16, 'torch.bfloat16': torch.bfloat16, 'torch.complex64': torch.complex64, 'torch.complex128': torch.complex128, 'torch.int32': torch.int32, 'torch.int8': torch.int8, 'torch.int16': torch.int16, 'torch.int64': torch.int64, 'torch.uint8': torch.uint8, 'torch.bool': torch.bool, "<class 'numpy.float16'>": torch.float16, "<class 'numpy.float32'>": torch.float32, "<class 'numpy.float64'>": torch.float64, "<class 'numpy.complex64'>": torch.complex64, "<class 'numpy.complex128'>": torch.complex128, "<class 'numpy.int8'>": torch.int8, "<class 'numpy.int16'>": torch.int16, "<class 'numpy.int32'>": torch.int32, "<class 'numpy.int64'>": torch.int64, "<class 'numpy.longlong'>": torch.int64, "<class 'numpy.uint8'>": torch.uint8, "<class 'numpy.bool_'>": torch.bool, 'float16': torch.float16, 'float32': torch.float32, 'float64': torch.float64, 'complex64': torch.complex64, 'complex128': torch.complex128, 'int8': torch.int8, 'int16': torch.int16, 'int32': torch.int32, 'int64': torch.int64, 'longlong': torch.int64, 'uint8': torch.uint8, 'bool_': torch.bool, 'bool': torch.bool}
+-   TORCH_DTYPE_MAP: dict = {"<class 'bool'>": torch.bool, "<class 'int'>": torch.int64, "<class 'float'>": torch.float64, 'torch.float32': torch.float32, 'torch.float64': torch.float64, 'torch.float16': torch.float16, 'torch.bfloat16': torch.bfloat16, 'torch.complex64': torch.complex64, 'torch.complex128': torch.complex128, 'torch.int32': torch.int32, 'torch.int8': torch.int8, 'torch.int16': torch.int16, 'torch.int64': torch.int64, 'torch.uint8': torch.uint8, 'torch.bool': torch.bool, "<class 'numpy.float16'>": torch.float16, "<class 'numpy.float32'>": torch.float32, "<class 'numpy.float64'>": torch.float64, "<class 'numpy.complex64'>": torch.complex64, "<class 'numpy.complex128'>": torch.complex128, "<class 'numpy.int8'>": torch.int8, "<class 'numpy.int16'>": torch.int16, "<class 'numpy.int32'>": torch.int32, "<class 'numpy.int64'>": torch.int64, "<class 'numpy.longlong'>": torch.int64, "<class 'numpy.uint8'>": torch.uint8, "<class 'numpy.bool'>": torch.bool, 'float16': torch.float16, 'float32': torch.float32, 'float64': torch.float64, 'complex64': torch.complex64, 'complex128': torch.complex128, 'int8': torch.int8, 'int16': torch.int16, 'int32': torch.int32, 'int64': torch.int64, 'longlong': torch.int64, 'uint8': torch.uint8, 'bool': torch.bool}
 
 mapping from string representations of types to specifically torch types
 
@@ -7601,7 +7672,7 @@ Raises:
 -   StateDictShapeError : shapes don’t match (but keys do)
 -   StateDictValueError : values don’t match (but keys and shapes do)
 
-  docs for muutils v0.8.11
+  docs for muutils v0.8.12
 
 Contents
 
@@ -7702,7 +7773,7 @@ FancyTimeitResult, which is a NamedTuple with the following fields:
 -   profile: pstats.Stats|None A pstats.Stats object if do_profiling is
     True, otherwise None.
 
-  docs for muutils v0.8.11
+  docs for muutils v0.8.12
 
 Contents
 
@@ -7815,7 +7886,7 @@ View Source on GitHub
 Get the allowed kwargs for a function, raising an exception if the
 signature cannot be determined.
 
-  docs for muutils v0.8.11
+  docs for muutils v0.8.12
 
 Submodules
 
@@ -7827,7 +7898,7 @@ muutils.web
 
 View Source on GitHub
 
-  docs for muutils v0.8.11
+  docs for muutils v0.8.12
 
 Contents
 
@@ -7863,7 +7934,7 @@ View Source on GitHub
 
 -   AssetExt = typing.Literal['.css', '.js', '.svg', '.png']
 
--   DEFAULT_ALLOWED_EXTENSIONS: Final[set[Literal['.css', '.js', '.svg', '.png']]] = {'.png', '.svg', '.css', '.js'}
+-   DEFAULT_ALLOWED_EXTENSIONS: Final[set[Literal['.css', '.js', '.svg', '.png']]] = {'.svg', '.js', '.css', '.png'}
 
 -   DEFAULT_TAG_ATTR: Final[dict[str, str]] = {'link': 'href', 'script': 'src', 'img': 'src', 'use': 'xlink:href'}
 
@@ -7918,7 +7989,7 @@ def inline_html_assets
     (
         html: str,
         *,
-        base_path: pathlib.Path,
+        base_path: pathlib._local.Path,
         config: muutils.web.bundle_html.InlineConfig | None = None,
         prettify: bool = False
     ) -> str
@@ -7941,12 +8012,12 @@ Returns
 def inline_html_file
 
     (
-        html_path: pathlib.Path,
-        output_path: pathlib.Path,
-        base_path: pathlib.Path | None = None,
+        html_path: pathlib._local.Path,
+        output_path: pathlib._local.Path,
+        base_path: pathlib._local.Path | None = None,
         config: muutils.web.bundle_html.InlineConfig | None = None,
         prettify: bool = False
-    ) -> pathlib.Path
+    ) -> pathlib._local.Path
 
 View Source on GitHub
 

@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="generator" content="pdoc 14.7.0"/>
+    <meta name="generator" content="pdoc 15.0.4"/>
     <title>muutils.validate_type API documentation</title>
 <link rel="stylesheet" href="../resources/css/bootstrap-reboot.min.css"><link rel="stylesheet" href="../resources/css/syntax-highlighting.css"><link rel="stylesheet" href="../resources/css/theme.css"><link rel="stylesheet" href="../resources/css/layout.css"><link rel="stylesheet" href="../resources/css/content.css"><link rel="stylesheet" href="../resources/css/custom.css"><script>
     window.MathJax = {
@@ -34,7 +34,7 @@
     }
 </style>
 <script type="module" defer>
-    import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs";
+    import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs";
 
     /* Re-invoke Mermaid when DOM content changes, for example during search. */
     document.addEventListener("DOMContentLoaded", () => {
@@ -46,7 +46,7 @@
 </script></head>
 <body>
 <div class="package-version">
-    docs for <a href="https://github.com/mivanit/muutils">muutils</a> v0.8.11<br>
+    docs for <a href="https://github.com/mivanit/muutils">muutils</a> v0.8.12<br>
 </div>
     <nav class="pdoc">
         <label id="navtoggle" for="togglestate" class="pdoc-button">
@@ -118,7 +118,7 @@
     </nav>
     <main class="pdoc">
             <section class="module-info">
-                        <a class="pdoc-button git-button" href="https://github.com/mivanit/muutils/blob/0.8.11/validate_type.py">View Source on GitHub</a>
+                        <a class="pdoc-button git-button" href="https://github.com/mivanit/muutils/blob/0.8.12/validate_type.py">View Source on GitHub</a>
                     <h1 class="modulename">
 <a href="./../muutils.html">muutils</a><wbr>.validate_type    </h1>
 
@@ -130,7 +130,7 @@
                         <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="mod-validate_type-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.11/validate_type.py#L0-L236" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/validate_type.py#L0-L236" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -139,12 +139,12 @@
                 <br/>
                         <div class="pdoc-code codehilite"><pre><span></span><span id="L-1"><a href="#L-1"><span class="linenos">  1</span></a><span class="sd">&quot;&quot;&quot;experimental utility for validating types in python, see `validate_type`&quot;&quot;&quot;</span>
 </span><span id="L-2"><a href="#L-2"><span class="linenos">  2</span></a>
-</span><span id="L-3"><a href="#L-3"><span class="linenos">  3</span></a><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+</span><span id="L-3"><a href="#L-3"><span class="linenos">  3</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
 </span><span id="L-4"><a href="#L-4"><span class="linenos">  4</span></a>
-</span><span id="L-5"><a href="#L-5"><span class="linenos">  5</span></a><span class="kn">from</span> <span class="nn">inspect</span> <span class="kn">import</span> <span class="n">signature</span><span class="p">,</span> <span class="n">unwrap</span>
-</span><span id="L-6"><a href="#L-6"><span class="linenos">  6</span></a><span class="kn">import</span> <span class="nn">types</span>
-</span><span id="L-7"><a href="#L-7"><span class="linenos">  7</span></a><span class="kn">import</span> <span class="nn">typing</span>
-</span><span id="L-8"><a href="#L-8"><span class="linenos">  8</span></a><span class="kn">import</span> <span class="nn">functools</span>
+</span><span id="L-5"><a href="#L-5"><span class="linenos">  5</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">inspect</span><span class="w"> </span><span class="kn">import</span> <span class="n">signature</span><span class="p">,</span> <span class="n">unwrap</span>
+</span><span id="L-6"><a href="#L-6"><span class="linenos">  6</span></a><span class="kn">import</span><span class="w"> </span><span class="nn">types</span>
+</span><span id="L-7"><a href="#L-7"><span class="linenos">  7</span></a><span class="kn">import</span><span class="w"> </span><span class="nn">typing</span>
+</span><span id="L-8"><a href="#L-8"><span class="linenos">  8</span></a><span class="kn">import</span><span class="w"> </span><span class="nn">functools</span>
 </span><span id="L-9"><a href="#L-9"><span class="linenos">  9</span></a>
 </span><span id="L-10"><a href="#L-10"><span class="linenos"> 10</span></a><span class="c1"># this is also for python &lt;3.10 compatibility</span>
 </span><span id="L-11"><a href="#L-11"><span class="linenos"> 11</span></a><span class="n">_GenericAliasTypeNames</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
@@ -161,19 +161,19 @@
 </span><span id="L-22"><a href="#L-22"><span class="linenos"> 22</span></a><span class="n">GenericAliasTypes</span><span class="p">:</span> <span class="nb">tuple</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">([</span><span class="n">t</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">_GenericAliasTypesList</span> <span class="k">if</span> <span class="n">t</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">])</span>
 </span><span id="L-23"><a href="#L-23"><span class="linenos"> 23</span></a>
 </span><span id="L-24"><a href="#L-24"><span class="linenos"> 24</span></a>
-</span><span id="L-25"><a href="#L-25"><span class="linenos"> 25</span></a><span class="k">class</span> <span class="nc">IncorrectTypeException</span><span class="p">(</span><span class="ne">TypeError</span><span class="p">):</span>
+</span><span id="L-25"><a href="#L-25"><span class="linenos"> 25</span></a><span class="k">class</span><span class="w"> </span><span class="nc">IncorrectTypeException</span><span class="p">(</span><span class="ne">TypeError</span><span class="p">):</span>
 </span><span id="L-26"><a href="#L-26"><span class="linenos"> 26</span></a>    <span class="k">pass</span>
 </span><span id="L-27"><a href="#L-27"><span class="linenos"> 27</span></a>
 </span><span id="L-28"><a href="#L-28"><span class="linenos"> 28</span></a>
-</span><span id="L-29"><a href="#L-29"><span class="linenos"> 29</span></a><span class="k">class</span> <span class="nc">TypeHintNotImplementedError</span><span class="p">(</span><span class="ne">NotImplementedError</span><span class="p">):</span>
+</span><span id="L-29"><a href="#L-29"><span class="linenos"> 29</span></a><span class="k">class</span><span class="w"> </span><span class="nc">TypeHintNotImplementedError</span><span class="p">(</span><span class="ne">NotImplementedError</span><span class="p">):</span>
 </span><span id="L-30"><a href="#L-30"><span class="linenos"> 30</span></a>    <span class="k">pass</span>
 </span><span id="L-31"><a href="#L-31"><span class="linenos"> 31</span></a>
 </span><span id="L-32"><a href="#L-32"><span class="linenos"> 32</span></a>
-</span><span id="L-33"><a href="#L-33"><span class="linenos"> 33</span></a><span class="k">class</span> <span class="nc">InvalidGenericAliasError</span><span class="p">(</span><span class="ne">TypeError</span><span class="p">):</span>
+</span><span id="L-33"><a href="#L-33"><span class="linenos"> 33</span></a><span class="k">class</span><span class="w"> </span><span class="nc">InvalidGenericAliasError</span><span class="p">(</span><span class="ne">TypeError</span><span class="p">):</span>
 </span><span id="L-34"><a href="#L-34"><span class="linenos"> 34</span></a>    <span class="k">pass</span>
 </span><span id="L-35"><a href="#L-35"><span class="linenos"> 35</span></a>
 </span><span id="L-36"><a href="#L-36"><span class="linenos"> 36</span></a>
-</span><span id="L-37"><a href="#L-37"><span class="linenos"> 37</span></a><span class="k">def</span> <span class="nf">_return_validation_except</span><span class="p">(</span>
+</span><span id="L-37"><a href="#L-37"><span class="linenos"> 37</span></a><span class="k">def</span><span class="w"> </span><span class="nf">_return_validation_except</span><span class="p">(</span>
 </span><span id="L-38"><a href="#L-38"><span class="linenos"> 38</span></a>    <span class="n">return_val</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Any</span><span class="p">,</span> <span class="n">expected_type</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Any</span>
 </span><span id="L-39"><a href="#L-39"><span class="linenos"> 39</span></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 </span><span id="L-40"><a href="#L-40"><span class="linenos"> 40</span></a>    <span class="k">if</span> <span class="n">return_val</span><span class="p">:</span>
@@ -190,11 +190,11 @@
 </span><span id="L-51"><a href="#L-51"><span class="linenos"> 51</span></a>        <span class="k">return</span> <span class="kc">False</span>
 </span><span id="L-52"><a href="#L-52"><span class="linenos"> 52</span></a>
 </span><span id="L-53"><a href="#L-53"><span class="linenos"> 53</span></a>
-</span><span id="L-54"><a href="#L-54"><span class="linenos"> 54</span></a><span class="k">def</span> <span class="nf">_return_validation_bool</span><span class="p">(</span><span class="n">return_val</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</span><span id="L-54"><a href="#L-54"><span class="linenos"> 54</span></a><span class="k">def</span><span class="w"> </span><span class="nf">_return_validation_bool</span><span class="p">(</span><span class="n">return_val</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 </span><span id="L-55"><a href="#L-55"><span class="linenos"> 55</span></a>    <span class="k">return</span> <span class="n">return_val</span>
 </span><span id="L-56"><a href="#L-56"><span class="linenos"> 56</span></a>
 </span><span id="L-57"><a href="#L-57"><span class="linenos"> 57</span></a>
-</span><span id="L-58"><a href="#L-58"><span class="linenos"> 58</span></a><span class="k">def</span> <span class="nf">validate_type</span><span class="p">(</span>
+</span><span id="L-58"><a href="#L-58"><span class="linenos"> 58</span></a><span class="k">def</span><span class="w"> </span><span class="nf">validate_type</span><span class="p">(</span>
 </span><span id="L-59"><a href="#L-59"><span class="linenos"> 59</span></a>    <span class="n">value</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Any</span><span class="p">,</span> <span class="n">expected_type</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Any</span><span class="p">,</span> <span class="n">do_except</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
 </span><span id="L-60"><a href="#L-60"><span class="linenos"> 60</span></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 </span><span id="L-61"><a href="#L-61"><span class="linenos"> 61</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Validate that a `value` is of the `expected_type`</span>
@@ -359,7 +359,7 @@
 </span><span id="L-220"><a href="#L-220"><span class="linenos">220</span></a>        <span class="p">)</span>
 </span><span id="L-221"><a href="#L-221"><span class="linenos">221</span></a>
 </span><span id="L-222"><a href="#L-222"><span class="linenos">222</span></a>
-</span><span id="L-223"><a href="#L-223"><span class="linenos">223</span></a><span class="k">def</span> <span class="nf">get_fn_allowed_kwargs</span><span class="p">(</span><span class="n">fn</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Callable</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">typing</span><span class="o">.</span><span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+</span><span id="L-223"><a href="#L-223"><span class="linenos">223</span></a><span class="k">def</span><span class="w"> </span><span class="nf">get_fn_allowed_kwargs</span><span class="p">(</span><span class="n">fn</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Callable</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">typing</span><span class="o">.</span><span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
 </span><span id="L-224"><a href="#L-224"><span class="linenos">224</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Get the allowed kwargs for a function, raising an exception if the signature cannot be determined.&quot;&quot;&quot;</span>
 </span><span id="L-225"><a href="#L-225"><span class="linenos">225</span></a>    <span class="k">try</span><span class="p">:</span>
 </span><span id="L-226"><a href="#L-226"><span class="linenos">226</span></a>        <span class="n">fn</span> <span class="o">=</span> <span class="n">unwrap</span><span class="p">(</span><span class="n">fn</span><span class="p">)</span>
@@ -367,7 +367,7 @@
 </span><span id="L-228"><a href="#L-228"><span class="linenos">228</span></a>    <span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
 </span><span id="L-229"><a href="#L-229"><span class="linenos">229</span></a>        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
 </span><span id="L-230"><a href="#L-230"><span class="linenos">230</span></a>            <span class="sa">f</span><span class="s2">&quot;Cannot retrieve signature for </span><span class="si">{</span><span class="n">fn</span><span class="o">.</span><span class="vm">__name__</span><span class="w"> </span><span class="si">= }</span><span class="s2"> </span><span class="si">{</span><span class="n">fn</span><span class="w"> </span><span class="si">= }</span><span class="s2">: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
-</span><span id="L-231"><a href="#L-231"><span class="linenos">231</span></a>        <span class="p">)</span> <span class="kn">from</span> <span class="nn">e</span>
+</span><span id="L-231"><a href="#L-231"><span class="linenos">231</span></a>        <span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">e</span>
 </span><span id="L-232"><a href="#L-232"><span class="linenos">232</span></a>
 </span><span id="L-233"><a href="#L-233"><span class="linenos">233</span></a>    <span class="k">return</span> <span class="p">{</span>
 </span><span id="L-234"><a href="#L-234"><span class="linenos">234</span></a>        <span class="n">param</span><span class="o">.</span><span class="n">name</span>
@@ -402,7 +402,7 @@
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="IncorrectTypeException-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.11/validate_type.py#L25-L26" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/validate_type.py#L25-L26" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -410,7 +410,7 @@
 
     </div>
     <a class="headerlink" href="#IncorrectTypeException"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="IncorrectTypeException-26"><a href="#IncorrectTypeException-26"><span class="linenos">26</span></a><span class="k">class</span> <span class="nc">IncorrectTypeException</span><span class="p">(</span><span class="ne">TypeError</span><span class="p">):</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="IncorrectTypeException-26"><a href="#IncorrectTypeException-26"><span class="linenos">26</span></a><span class="k">class</span><span class="w"> </span><span class="nc">IncorrectTypeException</span><span class="p">(</span><span class="ne">TypeError</span><span class="p">):</span>
 </span><span id="IncorrectTypeException-27"><a href="#IncorrectTypeException-27"><span class="linenos">27</span></a>    <span class="k">pass</span>
 </span></pre></div>
 
@@ -445,7 +445,7 @@
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="TypeHintNotImplementedError-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.11/validate_type.py#L29-L30" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/validate_type.py#L29-L30" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -453,7 +453,7 @@
 
     </div>
     <a class="headerlink" href="#TypeHintNotImplementedError"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="TypeHintNotImplementedError-30"><a href="#TypeHintNotImplementedError-30"><span class="linenos">30</span></a><span class="k">class</span> <span class="nc">TypeHintNotImplementedError</span><span class="p">(</span><span class="ne">NotImplementedError</span><span class="p">):</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="TypeHintNotImplementedError-30"><a href="#TypeHintNotImplementedError-30"><span class="linenos">30</span></a><span class="k">class</span><span class="w"> </span><span class="nc">TypeHintNotImplementedError</span><span class="p">(</span><span class="ne">NotImplementedError</span><span class="p">):</span>
 </span><span id="TypeHintNotImplementedError-31"><a href="#TypeHintNotImplementedError-31"><span class="linenos">31</span></a>    <span class="k">pass</span>
 </span></pre></div>
 
@@ -488,7 +488,7 @@
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="InvalidGenericAliasError-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.11/validate_type.py#L33-L34" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/validate_type.py#L33-L34" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -496,7 +496,7 @@
 
     </div>
     <a class="headerlink" href="#InvalidGenericAliasError"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="InvalidGenericAliasError-34"><a href="#InvalidGenericAliasError-34"><span class="linenos">34</span></a><span class="k">class</span> <span class="nc">InvalidGenericAliasError</span><span class="p">(</span><span class="ne">TypeError</span><span class="p">):</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="InvalidGenericAliasError-34"><a href="#InvalidGenericAliasError-34"><span class="linenos">34</span></a><span class="k">class</span><span class="w"> </span><span class="nc">InvalidGenericAliasError</span><span class="p">(</span><span class="ne">TypeError</span><span class="p">):</span>
 </span><span id="InvalidGenericAliasError-35"><a href="#InvalidGenericAliasError-35"><span class="linenos">35</span></a>    <span class="k">pass</span>
 </span></pre></div>
 
@@ -531,7 +531,7 @@
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="validate_type-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.11/validate_type.py#L58-L220" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/validate_type.py#L58-L220" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -539,7 +539,7 @@
 
     </div>
     <a class="headerlink" href="#validate_type"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="validate_type-59"><a href="#validate_type-59"><span class="linenos"> 59</span></a><span class="k">def</span> <span class="nf">validate_type</span><span class="p">(</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="validate_type-59"><a href="#validate_type-59"><span class="linenos"> 59</span></a><span class="k">def</span><span class="w"> </span><span class="nf">validate_type</span><span class="p">(</span>
 </span><span id="validate_type-60"><a href="#validate_type-60"><span class="linenos"> 60</span></a>    <span class="n">value</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Any</span><span class="p">,</span> <span class="n">expected_type</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Any</span><span class="p">,</span> <span class="n">do_except</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
 </span><span id="validate_type-61"><a href="#validate_type-61"><span class="linenos"> 61</span></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 </span><span id="validate_type-62"><a href="#validate_type-62"><span class="linenos"> 62</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Validate that a `value` is of the `expected_type`</span>
@@ -745,7 +745,7 @@
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="get_fn_allowed_kwargs-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.11/validate_type.py#L223-L237" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/validate_type.py#L223-L237" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -753,7 +753,7 @@
 
     </div>
     <a class="headerlink" href="#get_fn_allowed_kwargs"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="get_fn_allowed_kwargs-224"><a href="#get_fn_allowed_kwargs-224"><span class="linenos">224</span></a><span class="k">def</span> <span class="nf">get_fn_allowed_kwargs</span><span class="p">(</span><span class="n">fn</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Callable</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">typing</span><span class="o">.</span><span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="get_fn_allowed_kwargs-224"><a href="#get_fn_allowed_kwargs-224"><span class="linenos">224</span></a><span class="k">def</span><span class="w"> </span><span class="nf">get_fn_allowed_kwargs</span><span class="p">(</span><span class="n">fn</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Callable</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">typing</span><span class="o">.</span><span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
 </span><span id="get_fn_allowed_kwargs-225"><a href="#get_fn_allowed_kwargs-225"><span class="linenos">225</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Get the allowed kwargs for a function, raising an exception if the signature cannot be determined.&quot;&quot;&quot;</span>
 </span><span id="get_fn_allowed_kwargs-226"><a href="#get_fn_allowed_kwargs-226"><span class="linenos">226</span></a>    <span class="k">try</span><span class="p">:</span>
 </span><span id="get_fn_allowed_kwargs-227"><a href="#get_fn_allowed_kwargs-227"><span class="linenos">227</span></a>        <span class="n">fn</span> <span class="o">=</span> <span class="n">unwrap</span><span class="p">(</span><span class="n">fn</span><span class="p">)</span>
@@ -761,7 +761,7 @@
 </span><span id="get_fn_allowed_kwargs-229"><a href="#get_fn_allowed_kwargs-229"><span class="linenos">229</span></a>    <span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
 </span><span id="get_fn_allowed_kwargs-230"><a href="#get_fn_allowed_kwargs-230"><span class="linenos">230</span></a>        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
 </span><span id="get_fn_allowed_kwargs-231"><a href="#get_fn_allowed_kwargs-231"><span class="linenos">231</span></a>            <span class="sa">f</span><span class="s2">&quot;Cannot retrieve signature for </span><span class="si">{</span><span class="n">fn</span><span class="o">.</span><span class="vm">__name__</span><span class="w"> </span><span class="si">= }</span><span class="s2"> </span><span class="si">{</span><span class="n">fn</span><span class="w"> </span><span class="si">= }</span><span class="s2">: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
-</span><span id="get_fn_allowed_kwargs-232"><a href="#get_fn_allowed_kwargs-232"><span class="linenos">232</span></a>        <span class="p">)</span> <span class="kn">from</span> <span class="nn">e</span>
+</span><span id="get_fn_allowed_kwargs-232"><a href="#get_fn_allowed_kwargs-232"><span class="linenos">232</span></a>        <span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">e</span>
 </span><span id="get_fn_allowed_kwargs-233"><a href="#get_fn_allowed_kwargs-233"><span class="linenos">233</span></a>
 </span><span id="get_fn_allowed_kwargs-234"><a href="#get_fn_allowed_kwargs-234"><span class="linenos">234</span></a>    <span class="k">return</span> <span class="p">{</span>
 </span><span id="get_fn_allowed_kwargs-235"><a href="#get_fn_allowed_kwargs-235"><span class="linenos">235</span></a>        <span class="n">param</span><span class="o">.</span><span class="n">name</span>

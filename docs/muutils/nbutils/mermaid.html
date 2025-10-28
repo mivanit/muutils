@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="generator" content="pdoc 14.7.0"/>
+    <meta name="generator" content="pdoc 15.0.4"/>
     <title>muutils.nbutils.mermaid API documentation</title>
 <link rel="stylesheet" href="../../resources/css/bootstrap-reboot.min.css"><link rel="stylesheet" href="../../resources/css/syntax-highlighting.css"><link rel="stylesheet" href="../../resources/css/theme.css"><link rel="stylesheet" href="../../resources/css/layout.css"><link rel="stylesheet" href="../../resources/css/content.css"><link rel="stylesheet" href="../../resources/css/custom.css"><script>
     window.MathJax = {
@@ -34,7 +34,7 @@
     }
 </style>
 <script type="module" defer>
-    import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs";
+    import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs";
 
     /* Re-invoke Mermaid when DOM content changes, for example during search. */
     document.addEventListener("DOMContentLoaded", () => {
@@ -46,7 +46,7 @@
 </script></head>
 <body>
 <div class="package-version">
-    docs for <a href="https://github.com/mivanit/muutils">muutils</a> v0.8.11<br>
+    docs for <a href="https://github.com/mivanit/muutils">muutils</a> v0.8.12<br>
 </div>
     <nav class="pdoc">
         <label id="navtoggle" for="togglestate" class="pdoc-button">
@@ -94,7 +94,7 @@
     </nav>
     <main class="pdoc">
             <section class="module-info">
-                        <a class="pdoc-button git-button" href="https://github.com/mivanit/muutils/blob/0.8.11/nbutils/mermaid.py">View Source on GitHub</a>
+                        <a class="pdoc-button git-button" href="https://github.com/mivanit/muutils/blob/0.8.12/nbutils/mermaid.py">View Source on GitHub</a>
                     <h1 class="modulename">
 <a href="./../../muutils.html">muutils</a><wbr>.<a href="./../nbutils.html">nbutils</a><wbr>.mermaid    </h1>
 
@@ -106,7 +106,7 @@
                         <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="mod-mermaid-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.11/nbutils/mermaid.py#L0-L19" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/nbutils/mermaid.py#L0-L19" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -115,19 +115,19 @@
                 <br/>
                         <div class="pdoc-code codehilite"><pre><span></span><span id="L-1"><a href="#L-1"><span class="linenos"> 1</span></a><span class="sd">&quot;&quot;&quot;display mermaid.js diagrams in jupyter notebooks by the `mermaid.ink/img` service&quot;&quot;&quot;</span>
 </span><span id="L-2"><a href="#L-2"><span class="linenos"> 2</span></a>
-</span><span id="L-3"><a href="#L-3"><span class="linenos"> 3</span></a><span class="kn">import</span> <span class="nn">base64</span>
+</span><span id="L-3"><a href="#L-3"><span class="linenos"> 3</span></a><span class="kn">import</span><span class="w"> </span><span class="nn">base64</span>
 </span><span id="L-4"><a href="#L-4"><span class="linenos"> 4</span></a>
 </span><span id="L-5"><a href="#L-5"><span class="linenos"> 5</span></a><span class="k">try</span><span class="p">:</span>
-</span><span id="L-6"><a href="#L-6"><span class="linenos"> 6</span></a>    <span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">Image</span><span class="p">,</span> <span class="n">display</span>
+</span><span id="L-6"><a href="#L-6"><span class="linenos"> 6</span></a>    <span class="kn">from</span><span class="w"> </span><span class="nn">IPython.display</span><span class="w"> </span><span class="kn">import</span> <span class="n">Image</span><span class="p">,</span> <span class="n">display</span>
 </span><span id="L-7"><a href="#L-7"><span class="linenos"> 7</span></a><span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
-</span><span id="L-8"><a href="#L-8"><span class="linenos"> 8</span></a>    <span class="kn">import</span> <span class="nn">warnings</span>
+</span><span id="L-8"><a href="#L-8"><span class="linenos"> 8</span></a>    <span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
 </span><span id="L-9"><a href="#L-9"><span class="linenos"> 9</span></a>
 </span><span id="L-10"><a href="#L-10"><span class="linenos">10</span></a>    <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
 </span><span id="L-11"><a href="#L-11"><span class="linenos">11</span></a>        <span class="s2">&quot;IPython.display could not be imported, mermaid will not work&quot;</span><span class="p">,</span> <span class="ne">ImportWarning</span>
 </span><span id="L-12"><a href="#L-12"><span class="linenos">12</span></a>    <span class="p">)</span>
 </span><span id="L-13"><a href="#L-13"><span class="linenos">13</span></a>
 </span><span id="L-14"><a href="#L-14"><span class="linenos">14</span></a>
-</span><span id="L-15"><a href="#L-15"><span class="linenos">15</span></a><span class="k">def</span> <span class="nf">mm</span><span class="p">(</span><span class="n">graph</span><span class="p">):</span>
+</span><span id="L-15"><a href="#L-15"><span class="linenos">15</span></a><span class="k">def</span><span class="w"> </span><span class="nf">mm</span><span class="p">(</span><span class="n">graph</span><span class="p">):</span>
 </span><span id="L-16"><a href="#L-16"><span class="linenos">16</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;for plotting mermaid.js diagrams&quot;&quot;&quot;</span>
 </span><span id="L-17"><a href="#L-17"><span class="linenos">17</span></a>    <span class="n">graphbytes</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">&quot;ascii&quot;</span><span class="p">)</span>
 </span><span id="L-18"><a href="#L-18"><span class="linenos">18</span></a>    <span class="n">base64_bytes</span> <span class="o">=</span> <span class="n">base64</span><span class="o">.</span><span class="n">b64encode</span><span class="p">(</span><span class="n">graphbytes</span><span class="p">)</span>
@@ -148,7 +148,7 @@
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="mm-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.11/nbutils/mermaid.py#L15-L20" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/nbutils/mermaid.py#L15-L20" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -156,7 +156,7 @@
 
     </div>
     <a class="headerlink" href="#mm"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="mm-16"><a href="#mm-16"><span class="linenos">16</span></a><span class="k">def</span> <span class="nf">mm</span><span class="p">(</span><span class="n">graph</span><span class="p">):</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="mm-16"><a href="#mm-16"><span class="linenos">16</span></a><span class="k">def</span><span class="w"> </span><span class="nf">mm</span><span class="p">(</span><span class="n">graph</span><span class="p">):</span>
 </span><span id="mm-17"><a href="#mm-17"><span class="linenos">17</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;for plotting mermaid.js diagrams&quot;&quot;&quot;</span>
 </span><span id="mm-18"><a href="#mm-18"><span class="linenos">18</span></a>    <span class="n">graphbytes</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">&quot;ascii&quot;</span><span class="p">)</span>
 </span><span id="mm-19"><a href="#mm-19"><span class="linenos">19</span></a>    <span class="n">base64_bytes</span> <span class="o">=</span> <span class="n">base64</span><span class="o">.</span><span class="n">b64encode</span><span class="p">(</span><span class="n">graphbytes</span><span class="p">)</span>

@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="generator" content="pdoc 14.7.0"/>
+    <meta name="generator" content="pdoc 15.0.4"/>
     <title>muutils.logger.log_util API documentation</title>
 <link rel="stylesheet" href="../../resources/css/bootstrap-reboot.min.css"><link rel="stylesheet" href="../../resources/css/syntax-highlighting.css"><link rel="stylesheet" href="../../resources/css/theme.css"><link rel="stylesheet" href="../../resources/css/layout.css"><link rel="stylesheet" href="../../resources/css/content.css"><link rel="stylesheet" href="../../resources/css/custom.css"><script>
     window.MathJax = {
@@ -34,7 +34,7 @@
     }
 </style>
 <script type="module" defer>
-    import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs";
+    import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs";
 
     /* Re-invoke Mermaid when DOM content changes, for example during search. */
     document.addEventListener("DOMContentLoaded", () => {
@@ -46,7 +46,7 @@
 </script></head>
 <body>
 <div class="package-version">
-    docs for <a href="https://github.com/mivanit/muutils">muutils</a> v0.8.11<br>
+    docs for <a href="https://github.com/mivanit/muutils">muutils</a> v0.8.12<br>
 </div>
     <nav class="pdoc">
         <label id="navtoggle" for="togglestate" class="pdoc-button">
@@ -103,7 +103,7 @@
     </nav>
     <main class="pdoc">
             <section class="module-info">
-                        <a class="pdoc-button git-button" href="https://github.com/mivanit/muutils/blob/0.8.11/logger/log_util.py">View Source on GitHub</a>
+                        <a class="pdoc-button git-button" href="https://github.com/mivanit/muutils/blob/0.8.12/logger/log_util.py">View Source on GitHub</a>
                     <h1 class="modulename">
 <a href="./../../muutils.html">muutils</a><wbr>.<a href="./../logger.html">logger</a><wbr>.log_util    </h1>
 
@@ -113,93 +113,94 @@
                         <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="mod-log_util-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.11/logger/log_util.py#L0-L79" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/logger/log_util.py#L0-L80" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
         </div>
 
                 <br/>
-                        <div class="pdoc-code codehilite"><pre><span></span><span id="L-1"><a href="#L-1"><span class="linenos"> 1</span></a><span class="kn">from</span> <span class="nn">muutils.jsonlines</span> <span class="kn">import</span> <span class="n">jsonl_load_log</span>
-</span><span id="L-2"><a href="#L-2"><span class="linenos"> 2</span></a>
+                        <div class="pdoc-code codehilite"><pre><span></span><span id="L-1"><a href="#L-1"><span class="linenos"> 1</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+</span><span id="L-2"><a href="#L-2"><span class="linenos"> 2</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">muutils.jsonlines</span><span class="w"> </span><span class="kn">import</span> <span class="n">jsonl_load_log</span>
 </span><span id="L-3"><a href="#L-3"><span class="linenos"> 3</span></a>
-</span><span id="L-4"><a href="#L-4"><span class="linenos"> 4</span></a><span class="k">def</span> <span class="nf">get_any_from_stream</span><span class="p">(</span><span class="n">stream</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">],</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="L-5"><a href="#L-5"><span class="linenos"> 5</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;get the first value of a key from a stream. errors if not found&quot;&quot;&quot;</span>
-</span><span id="L-6"><a href="#L-6"><span class="linenos"> 6</span></a>    <span class="k">for</span> <span class="n">msg</span> <span class="ow">in</span> <span class="n">stream</span><span class="p">:</span>
-</span><span id="L-7"><a href="#L-7"><span class="linenos"> 7</span></a>        <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">msg</span><span class="p">:</span>
-</span><span id="L-8"><a href="#L-8"><span class="linenos"> 8</span></a>            <span class="k">return</span> <span class="n">msg</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
-</span><span id="L-9"><a href="#L-9"><span class="linenos"> 9</span></a>
-</span><span id="L-10"><a href="#L-10"><span class="linenos">10</span></a>    <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;key &#39;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">&#39; not found in stream&quot;</span><span class="p">)</span>
-</span><span id="L-11"><a href="#L-11"><span class="linenos">11</span></a>
+</span><span id="L-4"><a href="#L-4"><span class="linenos"> 4</span></a>
+</span><span id="L-5"><a href="#L-5"><span class="linenos"> 5</span></a><span class="k">def</span><span class="w"> </span><span class="nf">get_any_from_stream</span><span class="p">(</span><span class="n">stream</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">],</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="L-6"><a href="#L-6"><span class="linenos"> 6</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;get the first value of a key from a stream. errors if not found&quot;&quot;&quot;</span>
+</span><span id="L-7"><a href="#L-7"><span class="linenos"> 7</span></a>    <span class="k">for</span> <span class="n">msg</span> <span class="ow">in</span> <span class="n">stream</span><span class="p">:</span>
+</span><span id="L-8"><a href="#L-8"><span class="linenos"> 8</span></a>        <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">msg</span><span class="p">:</span>
+</span><span id="L-9"><a href="#L-9"><span class="linenos"> 9</span></a>            <span class="k">return</span> <span class="n">msg</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+</span><span id="L-10"><a href="#L-10"><span class="linenos">10</span></a>
+</span><span id="L-11"><a href="#L-11"><span class="linenos">11</span></a>    <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;key &#39;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">&#39; not found in stream&quot;</span><span class="p">)</span>
 </span><span id="L-12"><a href="#L-12"><span class="linenos">12</span></a>
-</span><span id="L-13"><a href="#L-13"><span class="linenos">13</span></a><span class="k">def</span> <span class="nf">gather_log</span><span class="p">(</span><span class="n">file</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">]]:</span>
-</span><span id="L-14"><a href="#L-14"><span class="linenos">14</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;gathers and sorts all streams from a log&quot;&quot;&quot;</span>
-</span><span id="L-15"><a href="#L-15"><span class="linenos">15</span></a>    <span class="n">data</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="n">jsonl_load_log</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
-</span><span id="L-16"><a href="#L-16"><span class="linenos">16</span></a>    <span class="n">output</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">]]</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
-</span><span id="L-17"><a href="#L-17"><span class="linenos">17</span></a>
-</span><span id="L-18"><a href="#L-18"><span class="linenos">18</span></a>    <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
-</span><span id="L-19"><a href="#L-19"><span class="linenos">19</span></a>        <span class="n">stream</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;_stream&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
-</span><span id="L-20"><a href="#L-20"><span class="linenos">20</span></a>        <span class="k">if</span> <span class="n">stream</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">output</span><span class="p">:</span>
-</span><span id="L-21"><a href="#L-21"><span class="linenos">21</span></a>            <span class="n">output</span><span class="p">[</span><span class="n">stream</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
-</span><span id="L-22"><a href="#L-22"><span class="linenos">22</span></a>        <span class="n">output</span><span class="p">[</span><span class="n">stream</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
-</span><span id="L-23"><a href="#L-23"><span class="linenos">23</span></a>
-</span><span id="L-24"><a href="#L-24"><span class="linenos">24</span></a>    <span class="k">return</span> <span class="n">output</span>
-</span><span id="L-25"><a href="#L-25"><span class="linenos">25</span></a>
+</span><span id="L-13"><a href="#L-13"><span class="linenos">13</span></a>
+</span><span id="L-14"><a href="#L-14"><span class="linenos">14</span></a><span class="k">def</span><span class="w"> </span><span class="nf">gather_log</span><span class="p">(</span><span class="n">file</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">]]:</span>
+</span><span id="L-15"><a href="#L-15"><span class="linenos">15</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;gathers and sorts all streams from a log&quot;&quot;&quot;</span>
+</span><span id="L-16"><a href="#L-16"><span class="linenos">16</span></a>    <span class="n">data</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="n">jsonl_load_log</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+</span><span id="L-17"><a href="#L-17"><span class="linenos">17</span></a>    <span class="n">output</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">]]</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+</span><span id="L-18"><a href="#L-18"><span class="linenos">18</span></a>
+</span><span id="L-19"><a href="#L-19"><span class="linenos">19</span></a>    <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+</span><span id="L-20"><a href="#L-20"><span class="linenos">20</span></a>        <span class="n">stream</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;_stream&quot;</span><span class="p">,</span> <span class="s2">&quot;default&quot;</span><span class="p">)</span>
+</span><span id="L-21"><a href="#L-21"><span class="linenos">21</span></a>        <span class="k">if</span> <span class="n">stream</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">output</span><span class="p">:</span>
+</span><span id="L-22"><a href="#L-22"><span class="linenos">22</span></a>            <span class="n">output</span><span class="p">[</span><span class="n">stream</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+</span><span id="L-23"><a href="#L-23"><span class="linenos">23</span></a>        <span class="n">output</span><span class="p">[</span><span class="n">stream</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+</span><span id="L-24"><a href="#L-24"><span class="linenos">24</span></a>
+</span><span id="L-25"><a href="#L-25"><span class="linenos">25</span></a>    <span class="k">return</span> <span class="n">output</span>
 </span><span id="L-26"><a href="#L-26"><span class="linenos">26</span></a>
-</span><span id="L-27"><a href="#L-27"><span class="linenos">27</span></a><span class="k">def</span> <span class="nf">gather_stream</span><span class="p">(</span>
-</span><span id="L-28"><a href="#L-28"><span class="linenos">28</span></a>    <span class="n">file</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-</span><span id="L-29"><a href="#L-29"><span class="linenos">29</span></a>    <span class="n">stream</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-</span><span id="L-30"><a href="#L-30"><span class="linenos">30</span></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">]:</span>
-</span><span id="L-31"><a href="#L-31"><span class="linenos">31</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;gets all entries from a specific stream in a log file&quot;&quot;&quot;</span>
-</span><span id="L-32"><a href="#L-32"><span class="linenos">32</span></a>    <span class="n">data</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="n">jsonl_load_log</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
-</span><span id="L-33"><a href="#L-33"><span class="linenos">33</span></a>
-</span><span id="L-34"><a href="#L-34"><span class="linenos">34</span></a>    <span class="n">output</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
-</span><span id="L-35"><a href="#L-35"><span class="linenos">35</span></a>
-</span><span id="L-36"><a href="#L-36"><span class="linenos">36</span></a>    <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
-</span><span id="L-37"><a href="#L-37"><span class="linenos">37</span></a>        <span class="c1"># select for the stream</span>
-</span><span id="L-38"><a href="#L-38"><span class="linenos">38</span></a>        <span class="k">if</span> <span class="p">(</span><span class="s2">&quot;_stream&quot;</span> <span class="ow">in</span> <span class="n">item</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">item</span><span class="p">[</span><span class="s2">&quot;_stream&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">stream</span><span class="p">):</span>
-</span><span id="L-39"><a href="#L-39"><span class="linenos">39</span></a>            <span class="n">output</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
-</span><span id="L-40"><a href="#L-40"><span class="linenos">40</span></a>    <span class="k">return</span> <span class="n">output</span>
-</span><span id="L-41"><a href="#L-41"><span class="linenos">41</span></a>
+</span><span id="L-27"><a href="#L-27"><span class="linenos">27</span></a>
+</span><span id="L-28"><a href="#L-28"><span class="linenos">28</span></a><span class="k">def</span><span class="w"> </span><span class="nf">gather_stream</span><span class="p">(</span>
+</span><span id="L-29"><a href="#L-29"><span class="linenos">29</span></a>    <span class="n">file</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+</span><span id="L-30"><a href="#L-30"><span class="linenos">30</span></a>    <span class="n">stream</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+</span><span id="L-31"><a href="#L-31"><span class="linenos">31</span></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">]:</span>
+</span><span id="L-32"><a href="#L-32"><span class="linenos">32</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;gets all entries from a specific stream in a log file&quot;&quot;&quot;</span>
+</span><span id="L-33"><a href="#L-33"><span class="linenos">33</span></a>    <span class="n">data</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="n">jsonl_load_log</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+</span><span id="L-34"><a href="#L-34"><span class="linenos">34</span></a>
+</span><span id="L-35"><a href="#L-35"><span class="linenos">35</span></a>    <span class="n">output</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+</span><span id="L-36"><a href="#L-36"><span class="linenos">36</span></a>
+</span><span id="L-37"><a href="#L-37"><span class="linenos">37</span></a>    <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+</span><span id="L-38"><a href="#L-38"><span class="linenos">38</span></a>        <span class="c1"># select for the stream</span>
+</span><span id="L-39"><a href="#L-39"><span class="linenos">39</span></a>        <span class="k">if</span> <span class="p">(</span><span class="s2">&quot;_stream&quot;</span> <span class="ow">in</span> <span class="n">item</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">item</span><span class="p">[</span><span class="s2">&quot;_stream&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">stream</span><span class="p">):</span>
+</span><span id="L-40"><a href="#L-40"><span class="linenos">40</span></a>            <span class="n">output</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+</span><span id="L-41"><a href="#L-41"><span class="linenos">41</span></a>    <span class="k">return</span> <span class="n">output</span>
 </span><span id="L-42"><a href="#L-42"><span class="linenos">42</span></a>
-</span><span id="L-43"><a href="#L-43"><span class="linenos">43</span></a><span class="k">def</span> <span class="nf">gather_val</span><span class="p">(</span>
-</span><span id="L-44"><a href="#L-44"><span class="linenos">44</span></a>    <span class="n">file</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-</span><span id="L-45"><a href="#L-45"><span class="linenos">45</span></a>    <span class="n">stream</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-</span><span id="L-46"><a href="#L-46"><span class="linenos">46</span></a>    <span class="n">keys</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
-</span><span id="L-47"><a href="#L-47"><span class="linenos">47</span></a>    <span class="n">allow_skip</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
-</span><span id="L-48"><a href="#L-48"><span class="linenos">48</span></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">list</span><span class="p">]:</span>
-</span><span id="L-49"><a href="#L-49"><span class="linenos">49</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;gather specific keys from a specific stream in a log file</span>
-</span><span id="L-50"><a href="#L-50"><span class="linenos">50</span></a>
-</span><span id="L-51"><a href="#L-51"><span class="linenos">51</span></a><span class="sd">    example:</span>
-</span><span id="L-52"><a href="#L-52"><span class="linenos">52</span></a><span class="sd">    if &quot;log.jsonl&quot; has contents:</span>
-</span><span id="L-53"><a href="#L-53"><span class="linenos">53</span></a><span class="sd">    ```jsonl</span>
-</span><span id="L-54"><a href="#L-54"><span class="linenos">54</span></a><span class="sd">    {&quot;a&quot;: 1, &quot;b&quot;: 2, &quot;c&quot;: 3, &quot;_stream&quot;: &quot;s1&quot;}</span>
-</span><span id="L-55"><a href="#L-55"><span class="linenos">55</span></a><span class="sd">    {&quot;a&quot;: 4, &quot;b&quot;: 5, &quot;c&quot;: 6, &quot;_stream&quot;: &quot;s1&quot;}</span>
-</span><span id="L-56"><a href="#L-56"><span class="linenos">56</span></a><span class="sd">    {&quot;a&quot;: 7, &quot;b&quot;: 8, &quot;c&quot;: 9, &quot;_stream&quot;: &quot;s2&quot;}</span>
-</span><span id="L-57"><a href="#L-57"><span class="linenos">57</span></a><span class="sd">    ```</span>
-</span><span id="L-58"><a href="#L-58"><span class="linenos">58</span></a><span class="sd">    then `gather_val(&quot;log.jsonl&quot;, &quot;s1&quot;, (&quot;a&quot;, &quot;b&quot;))` will return</span>
-</span><span id="L-59"><a href="#L-59"><span class="linenos">59</span></a><span class="sd">    ```python</span>
-</span><span id="L-60"><a href="#L-60"><span class="linenos">60</span></a><span class="sd">    [</span>
-</span><span id="L-61"><a href="#L-61"><span class="linenos">61</span></a><span class="sd">        [1, 2],</span>
-</span><span id="L-62"><a href="#L-62"><span class="linenos">62</span></a><span class="sd">        [4, 5]</span>
-</span><span id="L-63"><a href="#L-63"><span class="linenos">63</span></a><span class="sd">    ]</span>
-</span><span id="L-64"><a href="#L-64"><span class="linenos">64</span></a><span class="sd">    ```</span>
-</span><span id="L-65"><a href="#L-65"><span class="linenos">65</span></a>
-</span><span id="L-66"><a href="#L-66"><span class="linenos">66</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="L-67"><a href="#L-67"><span class="linenos">67</span></a>    <span class="n">data</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="n">jsonl_load_log</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
-</span><span id="L-68"><a href="#L-68"><span class="linenos">68</span></a>
-</span><span id="L-69"><a href="#L-69"><span class="linenos">69</span></a>    <span class="n">output</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">list</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
-</span><span id="L-70"><a href="#L-70"><span class="linenos">70</span></a>
-</span><span id="L-71"><a href="#L-71"><span class="linenos">71</span></a>    <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
-</span><span id="L-72"><a href="#L-72"><span class="linenos">72</span></a>        <span class="c1"># select for the stream</span>
-</span><span id="L-73"><a href="#L-73"><span class="linenos">73</span></a>        <span class="k">if</span> <span class="p">(</span><span class="s2">&quot;_stream&quot;</span> <span class="ow">in</span> <span class="n">item</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">item</span><span class="p">[</span><span class="s2">&quot;_stream&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">stream</span><span class="p">):</span>
-</span><span id="L-74"><a href="#L-74"><span class="linenos">74</span></a>            <span class="c1"># select for the keys</span>
-</span><span id="L-75"><a href="#L-75"><span class="linenos">75</span></a>            <span class="k">if</span> <span class="nb">all</span><span class="p">(</span><span class="n">k</span> <span class="ow">in</span> <span class="n">item</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">keys</span><span class="p">):</span>
-</span><span id="L-76"><a href="#L-76"><span class="linenos">76</span></a>                <span class="n">output</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">item</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">keys</span><span class="p">))</span>
-</span><span id="L-77"><a href="#L-77"><span class="linenos">77</span></a>            <span class="k">elif</span> <span class="ow">not</span> <span class="n">allow_skip</span><span class="p">:</span>
-</span><span id="L-78"><a href="#L-78"><span class="linenos">78</span></a>                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;missing keys &#39;</span><span class="si">{</span><span class="n">keys</span><span class="w"> </span><span class="si">= }</span><span class="s2">&#39; in &#39;</span><span class="si">{</span><span class="n">item</span><span class="w"> </span><span class="si">= }</span><span class="s2">&#39;&quot;</span><span class="p">)</span>
-</span><span id="L-79"><a href="#L-79"><span class="linenos">79</span></a>
-</span><span id="L-80"><a href="#L-80"><span class="linenos">80</span></a>    <span class="k">return</span> <span class="n">output</span>
+</span><span id="L-43"><a href="#L-43"><span class="linenos">43</span></a>
+</span><span id="L-44"><a href="#L-44"><span class="linenos">44</span></a><span class="k">def</span><span class="w"> </span><span class="nf">gather_val</span><span class="p">(</span>
+</span><span id="L-45"><a href="#L-45"><span class="linenos">45</span></a>    <span class="n">file</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+</span><span id="L-46"><a href="#L-46"><span class="linenos">46</span></a>    <span class="n">stream</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+</span><span id="L-47"><a href="#L-47"><span class="linenos">47</span></a>    <span class="n">keys</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+</span><span id="L-48"><a href="#L-48"><span class="linenos">48</span></a>    <span class="n">allow_skip</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+</span><span id="L-49"><a href="#L-49"><span class="linenos">49</span></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">list</span><span class="p">]:</span>
+</span><span id="L-50"><a href="#L-50"><span class="linenos">50</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;gather specific keys from a specific stream in a log file</span>
+</span><span id="L-51"><a href="#L-51"><span class="linenos">51</span></a>
+</span><span id="L-52"><a href="#L-52"><span class="linenos">52</span></a><span class="sd">    example:</span>
+</span><span id="L-53"><a href="#L-53"><span class="linenos">53</span></a><span class="sd">    if &quot;log.jsonl&quot; has contents:</span>
+</span><span id="L-54"><a href="#L-54"><span class="linenos">54</span></a><span class="sd">    ```jsonl</span>
+</span><span id="L-55"><a href="#L-55"><span class="linenos">55</span></a><span class="sd">    {&quot;a&quot;: 1, &quot;b&quot;: 2, &quot;c&quot;: 3, &quot;_stream&quot;: &quot;s1&quot;}</span>
+</span><span id="L-56"><a href="#L-56"><span class="linenos">56</span></a><span class="sd">    {&quot;a&quot;: 4, &quot;b&quot;: 5, &quot;c&quot;: 6, &quot;_stream&quot;: &quot;s1&quot;}</span>
+</span><span id="L-57"><a href="#L-57"><span class="linenos">57</span></a><span class="sd">    {&quot;a&quot;: 7, &quot;b&quot;: 8, &quot;c&quot;: 9, &quot;_stream&quot;: &quot;s2&quot;}</span>
+</span><span id="L-58"><a href="#L-58"><span class="linenos">58</span></a><span class="sd">    ```</span>
+</span><span id="L-59"><a href="#L-59"><span class="linenos">59</span></a><span class="sd">    then `gather_val(&quot;log.jsonl&quot;, &quot;s1&quot;, (&quot;a&quot;, &quot;b&quot;))` will return</span>
+</span><span id="L-60"><a href="#L-60"><span class="linenos">60</span></a><span class="sd">    ```python</span>
+</span><span id="L-61"><a href="#L-61"><span class="linenos">61</span></a><span class="sd">    [</span>
+</span><span id="L-62"><a href="#L-62"><span class="linenos">62</span></a><span class="sd">        [1, 2],</span>
+</span><span id="L-63"><a href="#L-63"><span class="linenos">63</span></a><span class="sd">        [4, 5]</span>
+</span><span id="L-64"><a href="#L-64"><span class="linenos">64</span></a><span class="sd">    ]</span>
+</span><span id="L-65"><a href="#L-65"><span class="linenos">65</span></a><span class="sd">    ```</span>
+</span><span id="L-66"><a href="#L-66"><span class="linenos">66</span></a>
+</span><span id="L-67"><a href="#L-67"><span class="linenos">67</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="L-68"><a href="#L-68"><span class="linenos">68</span></a>    <span class="n">data</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="n">jsonl_load_log</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+</span><span id="L-69"><a href="#L-69"><span class="linenos">69</span></a>
+</span><span id="L-70"><a href="#L-70"><span class="linenos">70</span></a>    <span class="n">output</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">list</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+</span><span id="L-71"><a href="#L-71"><span class="linenos">71</span></a>
+</span><span id="L-72"><a href="#L-72"><span class="linenos">72</span></a>    <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+</span><span id="L-73"><a href="#L-73"><span class="linenos">73</span></a>        <span class="c1"># select for the stream</span>
+</span><span id="L-74"><a href="#L-74"><span class="linenos">74</span></a>        <span class="k">if</span> <span class="p">(</span><span class="s2">&quot;_stream&quot;</span> <span class="ow">in</span> <span class="n">item</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">item</span><span class="p">[</span><span class="s2">&quot;_stream&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">stream</span><span class="p">):</span>
+</span><span id="L-75"><a href="#L-75"><span class="linenos">75</span></a>            <span class="c1"># select for the keys</span>
+</span><span id="L-76"><a href="#L-76"><span class="linenos">76</span></a>            <span class="k">if</span> <span class="nb">all</span><span class="p">(</span><span class="n">k</span> <span class="ow">in</span> <span class="n">item</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">keys</span><span class="p">):</span>
+</span><span id="L-77"><a href="#L-77"><span class="linenos">77</span></a>                <span class="n">output</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">item</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">keys</span><span class="p">))</span>
+</span><span id="L-78"><a href="#L-78"><span class="linenos">78</span></a>            <span class="k">elif</span> <span class="ow">not</span> <span class="n">allow_skip</span><span class="p">:</span>
+</span><span id="L-79"><a href="#L-79"><span class="linenos">79</span></a>                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;missing keys &#39;</span><span class="si">{</span><span class="n">keys</span><span class="w"> </span><span class="si">= }</span><span class="s2">&#39; in &#39;</span><span class="si">{</span><span class="n">item</span><span class="w"> </span><span class="si">= }</span><span class="s2">&#39;&quot;</span><span class="p">)</span>
+</span><span id="L-80"><a href="#L-80"><span class="linenos">80</span></a>
+</span><span id="L-81"><a href="#L-81"><span class="linenos">81</span></a>    <span class="k">return</span> <span class="n">output</span>
 </span></pre></div>
 
 
@@ -215,7 +216,7 @@
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="get_any_from_stream-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.11/logger/log_util.py#L4-L10" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/logger/log_util.py#L5-L11" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -223,13 +224,13 @@
 
     </div>
     <a class="headerlink" href="#get_any_from_stream"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="get_any_from_stream-5"><a href="#get_any_from_stream-5"><span class="linenos"> 5</span></a><span class="k">def</span> <span class="nf">get_any_from_stream</span><span class="p">(</span><span class="n">stream</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">],</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="get_any_from_stream-6"><a href="#get_any_from_stream-6"><span class="linenos"> 6</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;get the first value of a key from a stream. errors if not found&quot;&quot;&quot;</span>
-</span><span id="get_any_from_stream-7"><a href="#get_any_from_stream-7"><span class="linenos"> 7</span></a>    <span class="k">for</span> <span class="n">msg</span> <span class="ow">in</span> <span class="n">stream</span><span class="p">:</span>
-</span><span id="get_any_from_stream-8"><a href="#get_any_from_stream-8"><span class="linenos"> 8</span></a>        <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">msg</span><span class="p">:</span>
-</span><span id="get_any_from_stream-9"><a href="#get_any_from_stream-9"><span class="linenos"> 9</span></a>            <span class="k">return</span> <span class="n">msg</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
-</span><span id="get_any_from_stream-10"><a href="#get_any_from_stream-10"><span class="linenos">10</span></a>
-</span><span id="get_any_from_stream-11"><a href="#get_any_from_stream-11"><span class="linenos">11</span></a>    <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;key &#39;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">&#39; not found in stream&quot;</span><span class="p">)</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="get_any_from_stream-6"><a href="#get_any_from_stream-6"><span class="linenos"> 6</span></a><span class="k">def</span><span class="w"> </span><span class="nf">get_any_from_stream</span><span class="p">(</span><span class="n">stream</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">],</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="get_any_from_stream-7"><a href="#get_any_from_stream-7"><span class="linenos"> 7</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;get the first value of a key from a stream. errors if not found&quot;&quot;&quot;</span>
+</span><span id="get_any_from_stream-8"><a href="#get_any_from_stream-8"><span class="linenos"> 8</span></a>    <span class="k">for</span> <span class="n">msg</span> <span class="ow">in</span> <span class="n">stream</span><span class="p">:</span>
+</span><span id="get_any_from_stream-9"><a href="#get_any_from_stream-9"><span class="linenos"> 9</span></a>        <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">msg</span><span class="p">:</span>
+</span><span id="get_any_from_stream-10"><a href="#get_any_from_stream-10"><span class="linenos">10</span></a>            <span class="k">return</span> <span class="n">msg</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+</span><span id="get_any_from_stream-11"><a href="#get_any_from_stream-11"><span class="linenos">11</span></a>
+</span><span id="get_any_from_stream-12"><a href="#get_any_from_stream-12"><span class="linenos">12</span></a>    <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;key &#39;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">&#39; not found in stream&quot;</span><span class="p">)</span>
 </span></pre></div>
 
 
@@ -248,7 +249,7 @@
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="gather_log-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.11/logger/log_util.py#L13-L24" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/logger/log_util.py#L14-L25" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -256,18 +257,18 @@
 
     </div>
     <a class="headerlink" href="#gather_log"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="gather_log-14"><a href="#gather_log-14"><span class="linenos">14</span></a><span class="k">def</span> <span class="nf">gather_log</span><span class="p">(</span><span class="n">file</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">]]:</span>
-</span><span id="gather_log-15"><a href="#gather_log-15"><span class="linenos">15</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;gathers and sorts all streams from a log&quot;&quot;&quot;</span>
-</span><span id="gather_log-16"><a href="#gather_log-16"><span class="linenos">16</span></a>    <span class="n">data</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="n">jsonl_load_log</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
-</span><span id="gather_log-17"><a href="#gather_log-17"><span class="linenos">17</span></a>    <span class="n">output</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">]]</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
-</span><span id="gather_log-18"><a href="#gather_log-18"><span class="linenos">18</span></a>
-</span><span id="gather_log-19"><a href="#gather_log-19"><span class="linenos">19</span></a>    <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
-</span><span id="gather_log-20"><a href="#gather_log-20"><span class="linenos">20</span></a>        <span class="n">stream</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;_stream&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
-</span><span id="gather_log-21"><a href="#gather_log-21"><span class="linenos">21</span></a>        <span class="k">if</span> <span class="n">stream</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">output</span><span class="p">:</span>
-</span><span id="gather_log-22"><a href="#gather_log-22"><span class="linenos">22</span></a>            <span class="n">output</span><span class="p">[</span><span class="n">stream</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
-</span><span id="gather_log-23"><a href="#gather_log-23"><span class="linenos">23</span></a>        <span class="n">output</span><span class="p">[</span><span class="n">stream</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
-</span><span id="gather_log-24"><a href="#gather_log-24"><span class="linenos">24</span></a>
-</span><span id="gather_log-25"><a href="#gather_log-25"><span class="linenos">25</span></a>    <span class="k">return</span> <span class="n">output</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="gather_log-15"><a href="#gather_log-15"><span class="linenos">15</span></a><span class="k">def</span><span class="w"> </span><span class="nf">gather_log</span><span class="p">(</span><span class="n">file</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">]]:</span>
+</span><span id="gather_log-16"><a href="#gather_log-16"><span class="linenos">16</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;gathers and sorts all streams from a log&quot;&quot;&quot;</span>
+</span><span id="gather_log-17"><a href="#gather_log-17"><span class="linenos">17</span></a>    <span class="n">data</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="n">jsonl_load_log</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+</span><span id="gather_log-18"><a href="#gather_log-18"><span class="linenos">18</span></a>    <span class="n">output</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">]]</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+</span><span id="gather_log-19"><a href="#gather_log-19"><span class="linenos">19</span></a>
+</span><span id="gather_log-20"><a href="#gather_log-20"><span class="linenos">20</span></a>    <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+</span><span id="gather_log-21"><a href="#gather_log-21"><span class="linenos">21</span></a>        <span class="n">stream</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;_stream&quot;</span><span class="p">,</span> <span class="s2">&quot;default&quot;</span><span class="p">)</span>
+</span><span id="gather_log-22"><a href="#gather_log-22"><span class="linenos">22</span></a>        <span class="k">if</span> <span class="n">stream</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">output</span><span class="p">:</span>
+</span><span id="gather_log-23"><a href="#gather_log-23"><span class="linenos">23</span></a>            <span class="n">output</span><span class="p">[</span><span class="n">stream</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+</span><span id="gather_log-24"><a href="#gather_log-24"><span class="linenos">24</span></a>        <span class="n">output</span><span class="p">[</span><span class="n">stream</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+</span><span id="gather_log-25"><a href="#gather_log-25"><span class="linenos">25</span></a>
+</span><span id="gather_log-26"><a href="#gather_log-26"><span class="linenos">26</span></a>    <span class="k">return</span> <span class="n">output</span>
 </span></pre></div>
 
 
@@ -286,7 +287,7 @@
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="gather_stream-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.11/logger/log_util.py#L27-L40" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/logger/log_util.py#L28-L41" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -294,20 +295,20 @@
 
     </div>
     <a class="headerlink" href="#gather_stream"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="gather_stream-28"><a href="#gather_stream-28"><span class="linenos">28</span></a><span class="k">def</span> <span class="nf">gather_stream</span><span class="p">(</span>
-</span><span id="gather_stream-29"><a href="#gather_stream-29"><span class="linenos">29</span></a>    <span class="n">file</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-</span><span id="gather_stream-30"><a href="#gather_stream-30"><span class="linenos">30</span></a>    <span class="n">stream</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-</span><span id="gather_stream-31"><a href="#gather_stream-31"><span class="linenos">31</span></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">]:</span>
-</span><span id="gather_stream-32"><a href="#gather_stream-32"><span class="linenos">32</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;gets all entries from a specific stream in a log file&quot;&quot;&quot;</span>
-</span><span id="gather_stream-33"><a href="#gather_stream-33"><span class="linenos">33</span></a>    <span class="n">data</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="n">jsonl_load_log</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
-</span><span id="gather_stream-34"><a href="#gather_stream-34"><span class="linenos">34</span></a>
-</span><span id="gather_stream-35"><a href="#gather_stream-35"><span class="linenos">35</span></a>    <span class="n">output</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
-</span><span id="gather_stream-36"><a href="#gather_stream-36"><span class="linenos">36</span></a>
-</span><span id="gather_stream-37"><a href="#gather_stream-37"><span class="linenos">37</span></a>    <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
-</span><span id="gather_stream-38"><a href="#gather_stream-38"><span class="linenos">38</span></a>        <span class="c1"># select for the stream</span>
-</span><span id="gather_stream-39"><a href="#gather_stream-39"><span class="linenos">39</span></a>        <span class="k">if</span> <span class="p">(</span><span class="s2">&quot;_stream&quot;</span> <span class="ow">in</span> <span class="n">item</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">item</span><span class="p">[</span><span class="s2">&quot;_stream&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">stream</span><span class="p">):</span>
-</span><span id="gather_stream-40"><a href="#gather_stream-40"><span class="linenos">40</span></a>            <span class="n">output</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
-</span><span id="gather_stream-41"><a href="#gather_stream-41"><span class="linenos">41</span></a>    <span class="k">return</span> <span class="n">output</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="gather_stream-29"><a href="#gather_stream-29"><span class="linenos">29</span></a><span class="k">def</span><span class="w"> </span><span class="nf">gather_stream</span><span class="p">(</span>
+</span><span id="gather_stream-30"><a href="#gather_stream-30"><span class="linenos">30</span></a>    <span class="n">file</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+</span><span id="gather_stream-31"><a href="#gather_stream-31"><span class="linenos">31</span></a>    <span class="n">stream</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+</span><span id="gather_stream-32"><a href="#gather_stream-32"><span class="linenos">32</span></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">]:</span>
+</span><span id="gather_stream-33"><a href="#gather_stream-33"><span class="linenos">33</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;gets all entries from a specific stream in a log file&quot;&quot;&quot;</span>
+</span><span id="gather_stream-34"><a href="#gather_stream-34"><span class="linenos">34</span></a>    <span class="n">data</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="n">jsonl_load_log</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+</span><span id="gather_stream-35"><a href="#gather_stream-35"><span class="linenos">35</span></a>
+</span><span id="gather_stream-36"><a href="#gather_stream-36"><span class="linenos">36</span></a>    <span class="n">output</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+</span><span id="gather_stream-37"><a href="#gather_stream-37"><span class="linenos">37</span></a>
+</span><span id="gather_stream-38"><a href="#gather_stream-38"><span class="linenos">38</span></a>    <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+</span><span id="gather_stream-39"><a href="#gather_stream-39"><span class="linenos">39</span></a>        <span class="c1"># select for the stream</span>
+</span><span id="gather_stream-40"><a href="#gather_stream-40"><span class="linenos">40</span></a>        <span class="k">if</span> <span class="p">(</span><span class="s2">&quot;_stream&quot;</span> <span class="ow">in</span> <span class="n">item</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">item</span><span class="p">[</span><span class="s2">&quot;_stream&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">stream</span><span class="p">):</span>
+</span><span id="gather_stream-41"><a href="#gather_stream-41"><span class="linenos">41</span></a>            <span class="n">output</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+</span><span id="gather_stream-42"><a href="#gather_stream-42"><span class="linenos">42</span></a>    <span class="k">return</span> <span class="n">output</span>
 </span></pre></div>
 
 
@@ -326,7 +327,7 @@
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="gather_val-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.11/logger/log_util.py#L43-L80" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/logger/log_util.py#L44-L81" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -334,44 +335,44 @@
 
     </div>
     <a class="headerlink" href="#gather_val"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="gather_val-44"><a href="#gather_val-44"><span class="linenos">44</span></a><span class="k">def</span> <span class="nf">gather_val</span><span class="p">(</span>
-</span><span id="gather_val-45"><a href="#gather_val-45"><span class="linenos">45</span></a>    <span class="n">file</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-</span><span id="gather_val-46"><a href="#gather_val-46"><span class="linenos">46</span></a>    <span class="n">stream</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-</span><span id="gather_val-47"><a href="#gather_val-47"><span class="linenos">47</span></a>    <span class="n">keys</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
-</span><span id="gather_val-48"><a href="#gather_val-48"><span class="linenos">48</span></a>    <span class="n">allow_skip</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
-</span><span id="gather_val-49"><a href="#gather_val-49"><span class="linenos">49</span></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">list</span><span class="p">]:</span>
-</span><span id="gather_val-50"><a href="#gather_val-50"><span class="linenos">50</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;gather specific keys from a specific stream in a log file</span>
-</span><span id="gather_val-51"><a href="#gather_val-51"><span class="linenos">51</span></a>
-</span><span id="gather_val-52"><a href="#gather_val-52"><span class="linenos">52</span></a><span class="sd">    example:</span>
-</span><span id="gather_val-53"><a href="#gather_val-53"><span class="linenos">53</span></a><span class="sd">    if &quot;log.jsonl&quot; has contents:</span>
-</span><span id="gather_val-54"><a href="#gather_val-54"><span class="linenos">54</span></a><span class="sd">    ```jsonl</span>
-</span><span id="gather_val-55"><a href="#gather_val-55"><span class="linenos">55</span></a><span class="sd">    {&quot;a&quot;: 1, &quot;b&quot;: 2, &quot;c&quot;: 3, &quot;_stream&quot;: &quot;s1&quot;}</span>
-</span><span id="gather_val-56"><a href="#gather_val-56"><span class="linenos">56</span></a><span class="sd">    {&quot;a&quot;: 4, &quot;b&quot;: 5, &quot;c&quot;: 6, &quot;_stream&quot;: &quot;s1&quot;}</span>
-</span><span id="gather_val-57"><a href="#gather_val-57"><span class="linenos">57</span></a><span class="sd">    {&quot;a&quot;: 7, &quot;b&quot;: 8, &quot;c&quot;: 9, &quot;_stream&quot;: &quot;s2&quot;}</span>
-</span><span id="gather_val-58"><a href="#gather_val-58"><span class="linenos">58</span></a><span class="sd">    ```</span>
-</span><span id="gather_val-59"><a href="#gather_val-59"><span class="linenos">59</span></a><span class="sd">    then `gather_val(&quot;log.jsonl&quot;, &quot;s1&quot;, (&quot;a&quot;, &quot;b&quot;))` will return</span>
-</span><span id="gather_val-60"><a href="#gather_val-60"><span class="linenos">60</span></a><span class="sd">    ```python</span>
-</span><span id="gather_val-61"><a href="#gather_val-61"><span class="linenos">61</span></a><span class="sd">    [</span>
-</span><span id="gather_val-62"><a href="#gather_val-62"><span class="linenos">62</span></a><span class="sd">        [1, 2],</span>
-</span><span id="gather_val-63"><a href="#gather_val-63"><span class="linenos">63</span></a><span class="sd">        [4, 5]</span>
-</span><span id="gather_val-64"><a href="#gather_val-64"><span class="linenos">64</span></a><span class="sd">    ]</span>
-</span><span id="gather_val-65"><a href="#gather_val-65"><span class="linenos">65</span></a><span class="sd">    ```</span>
-</span><span id="gather_val-66"><a href="#gather_val-66"><span class="linenos">66</span></a>
-</span><span id="gather_val-67"><a href="#gather_val-67"><span class="linenos">67</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="gather_val-68"><a href="#gather_val-68"><span class="linenos">68</span></a>    <span class="n">data</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="n">jsonl_load_log</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
-</span><span id="gather_val-69"><a href="#gather_val-69"><span class="linenos">69</span></a>
-</span><span id="gather_val-70"><a href="#gather_val-70"><span class="linenos">70</span></a>    <span class="n">output</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">list</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
-</span><span id="gather_val-71"><a href="#gather_val-71"><span class="linenos">71</span></a>
-</span><span id="gather_val-72"><a href="#gather_val-72"><span class="linenos">72</span></a>    <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
-</span><span id="gather_val-73"><a href="#gather_val-73"><span class="linenos">73</span></a>        <span class="c1"># select for the stream</span>
-</span><span id="gather_val-74"><a href="#gather_val-74"><span class="linenos">74</span></a>        <span class="k">if</span> <span class="p">(</span><span class="s2">&quot;_stream&quot;</span> <span class="ow">in</span> <span class="n">item</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">item</span><span class="p">[</span><span class="s2">&quot;_stream&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">stream</span><span class="p">):</span>
-</span><span id="gather_val-75"><a href="#gather_val-75"><span class="linenos">75</span></a>            <span class="c1"># select for the keys</span>
-</span><span id="gather_val-76"><a href="#gather_val-76"><span class="linenos">76</span></a>            <span class="k">if</span> <span class="nb">all</span><span class="p">(</span><span class="n">k</span> <span class="ow">in</span> <span class="n">item</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">keys</span><span class="p">):</span>
-</span><span id="gather_val-77"><a href="#gather_val-77"><span class="linenos">77</span></a>                <span class="n">output</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">item</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">keys</span><span class="p">))</span>
-</span><span id="gather_val-78"><a href="#gather_val-78"><span class="linenos">78</span></a>            <span class="k">elif</span> <span class="ow">not</span> <span class="n">allow_skip</span><span class="p">:</span>
-</span><span id="gather_val-79"><a href="#gather_val-79"><span class="linenos">79</span></a>                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;missing keys &#39;</span><span class="si">{</span><span class="n">keys</span><span class="w"> </span><span class="si">= }</span><span class="s2">&#39; in &#39;</span><span class="si">{</span><span class="n">item</span><span class="w"> </span><span class="si">= }</span><span class="s2">&#39;&quot;</span><span class="p">)</span>
-</span><span id="gather_val-80"><a href="#gather_val-80"><span class="linenos">80</span></a>
-</span><span id="gather_val-81"><a href="#gather_val-81"><span class="linenos">81</span></a>    <span class="k">return</span> <span class="n">output</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="gather_val-45"><a href="#gather_val-45"><span class="linenos">45</span></a><span class="k">def</span><span class="w"> </span><span class="nf">gather_val</span><span class="p">(</span>
+</span><span id="gather_val-46"><a href="#gather_val-46"><span class="linenos">46</span></a>    <span class="n">file</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+</span><span id="gather_val-47"><a href="#gather_val-47"><span class="linenos">47</span></a>    <span class="n">stream</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+</span><span id="gather_val-48"><a href="#gather_val-48"><span class="linenos">48</span></a>    <span class="n">keys</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+</span><span id="gather_val-49"><a href="#gather_val-49"><span class="linenos">49</span></a>    <span class="n">allow_skip</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+</span><span id="gather_val-50"><a href="#gather_val-50"><span class="linenos">50</span></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">list</span><span class="p">]:</span>
+</span><span id="gather_val-51"><a href="#gather_val-51"><span class="linenos">51</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;gather specific keys from a specific stream in a log file</span>
+</span><span id="gather_val-52"><a href="#gather_val-52"><span class="linenos">52</span></a>
+</span><span id="gather_val-53"><a href="#gather_val-53"><span class="linenos">53</span></a><span class="sd">    example:</span>
+</span><span id="gather_val-54"><a href="#gather_val-54"><span class="linenos">54</span></a><span class="sd">    if &quot;log.jsonl&quot; has contents:</span>
+</span><span id="gather_val-55"><a href="#gather_val-55"><span class="linenos">55</span></a><span class="sd">    ```jsonl</span>
+</span><span id="gather_val-56"><a href="#gather_val-56"><span class="linenos">56</span></a><span class="sd">    {&quot;a&quot;: 1, &quot;b&quot;: 2, &quot;c&quot;: 3, &quot;_stream&quot;: &quot;s1&quot;}</span>
+</span><span id="gather_val-57"><a href="#gather_val-57"><span class="linenos">57</span></a><span class="sd">    {&quot;a&quot;: 4, &quot;b&quot;: 5, &quot;c&quot;: 6, &quot;_stream&quot;: &quot;s1&quot;}</span>
+</span><span id="gather_val-58"><a href="#gather_val-58"><span class="linenos">58</span></a><span class="sd">    {&quot;a&quot;: 7, &quot;b&quot;: 8, &quot;c&quot;: 9, &quot;_stream&quot;: &quot;s2&quot;}</span>
+</span><span id="gather_val-59"><a href="#gather_val-59"><span class="linenos">59</span></a><span class="sd">    ```</span>
+</span><span id="gather_val-60"><a href="#gather_val-60"><span class="linenos">60</span></a><span class="sd">    then `gather_val(&quot;log.jsonl&quot;, &quot;s1&quot;, (&quot;a&quot;, &quot;b&quot;))` will return</span>
+</span><span id="gather_val-61"><a href="#gather_val-61"><span class="linenos">61</span></a><span class="sd">    ```python</span>
+</span><span id="gather_val-62"><a href="#gather_val-62"><span class="linenos">62</span></a><span class="sd">    [</span>
+</span><span id="gather_val-63"><a href="#gather_val-63"><span class="linenos">63</span></a><span class="sd">        [1, 2],</span>
+</span><span id="gather_val-64"><a href="#gather_val-64"><span class="linenos">64</span></a><span class="sd">        [4, 5]</span>
+</span><span id="gather_val-65"><a href="#gather_val-65"><span class="linenos">65</span></a><span class="sd">    ]</span>
+</span><span id="gather_val-66"><a href="#gather_val-66"><span class="linenos">66</span></a><span class="sd">    ```</span>
+</span><span id="gather_val-67"><a href="#gather_val-67"><span class="linenos">67</span></a>
+</span><span id="gather_val-68"><a href="#gather_val-68"><span class="linenos">68</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="gather_val-69"><a href="#gather_val-69"><span class="linenos">69</span></a>    <span class="n">data</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="n">jsonl_load_log</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+</span><span id="gather_val-70"><a href="#gather_val-70"><span class="linenos">70</span></a>
+</span><span id="gather_val-71"><a href="#gather_val-71"><span class="linenos">71</span></a>    <span class="n">output</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">list</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+</span><span id="gather_val-72"><a href="#gather_val-72"><span class="linenos">72</span></a>
+</span><span id="gather_val-73"><a href="#gather_val-73"><span class="linenos">73</span></a>    <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+</span><span id="gather_val-74"><a href="#gather_val-74"><span class="linenos">74</span></a>        <span class="c1"># select for the stream</span>
+</span><span id="gather_val-75"><a href="#gather_val-75"><span class="linenos">75</span></a>        <span class="k">if</span> <span class="p">(</span><span class="s2">&quot;_stream&quot;</span> <span class="ow">in</span> <span class="n">item</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">item</span><span class="p">[</span><span class="s2">&quot;_stream&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">stream</span><span class="p">):</span>
+</span><span id="gather_val-76"><a href="#gather_val-76"><span class="linenos">76</span></a>            <span class="c1"># select for the keys</span>
+</span><span id="gather_val-77"><a href="#gather_val-77"><span class="linenos">77</span></a>            <span class="k">if</span> <span class="nb">all</span><span class="p">(</span><span class="n">k</span> <span class="ow">in</span> <span class="n">item</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">keys</span><span class="p">):</span>
+</span><span id="gather_val-78"><a href="#gather_val-78"><span class="linenos">78</span></a>                <span class="n">output</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">item</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">keys</span><span class="p">))</span>
+</span><span id="gather_val-79"><a href="#gather_val-79"><span class="linenos">79</span></a>            <span class="k">elif</span> <span class="ow">not</span> <span class="n">allow_skip</span><span class="p">:</span>
+</span><span id="gather_val-80"><a href="#gather_val-80"><span class="linenos">80</span></a>                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;missing keys &#39;</span><span class="si">{</span><span class="n">keys</span><span class="w"> </span><span class="si">= }</span><span class="s2">&#39; in &#39;</span><span class="si">{</span><span class="n">item</span><span class="w"> </span><span class="si">= }</span><span class="s2">&#39;&quot;</span><span class="p">)</span>
+</span><span id="gather_val-81"><a href="#gather_val-81"><span class="linenos">81</span></a>
+</span><span id="gather_val-82"><a href="#gather_val-82"><span class="linenos">82</span></a>    <span class="k">return</span> <span class="n">output</span>
 </span></pre></div>
 
 

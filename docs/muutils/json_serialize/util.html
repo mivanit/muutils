@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="generator" content="pdoc 14.7.0"/>
+    <meta name="generator" content="pdoc 15.0.4"/>
     <title>muutils.json_serialize.util API documentation</title>
 <link rel="stylesheet" href="../../resources/css/bootstrap-reboot.min.css"><link rel="stylesheet" href="../../resources/css/syntax-highlighting.css"><link rel="stylesheet" href="../../resources/css/theme.css"><link rel="stylesheet" href="../../resources/css/layout.css"><link rel="stylesheet" href="../../resources/css/content.css"><link rel="stylesheet" href="../../resources/css/custom.css"><script>
     window.MathJax = {
@@ -34,7 +34,7 @@
     }
 </style>
 <script type="module" defer>
-    import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs";
+    import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs";
 
     /* Re-invoke Mermaid when DOM content changes, for example during search. */
     document.addEventListener("DOMContentLoaded", () => {
@@ -46,7 +46,7 @@
 </script></head>
 <body>
 <div class="package-version">
-    docs for <a href="https://github.com/mivanit/muutils">muutils</a> v0.8.11<br>
+    docs for <a href="https://github.com/mivanit/muutils">muutils</a> v0.8.12<br>
 </div>
     <nav class="pdoc">
         <label id="navtoggle" for="togglestate" class="pdoc-button">
@@ -139,7 +139,7 @@
     </nav>
     <main class="pdoc">
             <section class="module-info">
-                        <a class="pdoc-button git-button" href="https://github.com/mivanit/muutils/blob/0.8.11/json_serialize/util.py">View Source on GitHub</a>
+                        <a class="pdoc-button git-button" href="https://github.com/mivanit/muutils/blob/0.8.12/json_serialize/util.py">View Source on GitHub</a>
                     <h1 class="modulename">
 <a href="./../../muutils.html">muutils</a><wbr>.<a href="./../json_serialize.html">json_serialize</a><wbr>.util    </h1>
 
@@ -151,7 +151,7 @@
                         <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="mod-util-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.11/json_serialize/util.py#L0-L280" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/json_serialize/util.py#L0-L280" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -160,15 +160,15 @@
                 <br/>
                         <div class="pdoc-code codehilite"><pre><span></span><span id="L-1"><a href="#L-1"><span class="linenos">  1</span></a><span class="sd">&quot;&quot;&quot;utilities for json_serialize&quot;&quot;&quot;</span>
 </span><span id="L-2"><a href="#L-2"><span class="linenos">  2</span></a>
-</span><span id="L-3"><a href="#L-3"><span class="linenos">  3</span></a><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+</span><span id="L-3"><a href="#L-3"><span class="linenos">  3</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
 </span><span id="L-4"><a href="#L-4"><span class="linenos">  4</span></a>
-</span><span id="L-5"><a href="#L-5"><span class="linenos">  5</span></a><span class="kn">import</span> <span class="nn">dataclasses</span>
-</span><span id="L-6"><a href="#L-6"><span class="linenos">  6</span></a><span class="kn">import</span> <span class="nn">functools</span>
-</span><span id="L-7"><a href="#L-7"><span class="linenos">  7</span></a><span class="kn">import</span> <span class="nn">inspect</span>
-</span><span id="L-8"><a href="#L-8"><span class="linenos">  8</span></a><span class="kn">import</span> <span class="nn">sys</span>
-</span><span id="L-9"><a href="#L-9"><span class="linenos">  9</span></a><span class="kn">import</span> <span class="nn">typing</span>
-</span><span id="L-10"><a href="#L-10"><span class="linenos"> 10</span></a><span class="kn">import</span> <span class="nn">warnings</span>
-</span><span id="L-11"><a href="#L-11"><span class="linenos"> 11</span></a><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">Union</span>
+</span><span id="L-5"><a href="#L-5"><span class="linenos">  5</span></a><span class="kn">import</span><span class="w"> </span><span class="nn">dataclasses</span>
+</span><span id="L-6"><a href="#L-6"><span class="linenos">  6</span></a><span class="kn">import</span><span class="w"> </span><span class="nn">functools</span>
+</span><span id="L-7"><a href="#L-7"><span class="linenos">  7</span></a><span class="kn">import</span><span class="w"> </span><span class="nn">inspect</span>
+</span><span id="L-8"><a href="#L-8"><span class="linenos">  8</span></a><span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+</span><span id="L-9"><a href="#L-9"><span class="linenos">  9</span></a><span class="kn">import</span><span class="w"> </span><span class="nn">typing</span>
+</span><span id="L-10"><a href="#L-10"><span class="linenos"> 10</span></a><span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
+</span><span id="L-11"><a href="#L-11"><span class="linenos"> 11</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">Union</span>
 </span><span id="L-12"><a href="#L-12"><span class="linenos"> 12</span></a>
 </span><span id="L-13"><a href="#L-13"><span class="linenos"> 13</span></a><span class="n">_NUMPY_WORKING</span><span class="p">:</span> <span class="nb">bool</span>
 </span><span id="L-14"><a href="#L-14"><span class="linenos"> 14</span></a><span class="k">try</span><span class="p">:</span>
@@ -205,20 +205,20 @@
 </span><span id="L-45"><a href="#L-45"><span class="linenos"> 45</span></a>    <span class="n">MonoTuple</span> <span class="o">=</span> <span class="n">typing</span><span class="o">.</span><span class="n">Sequence</span>
 </span><span id="L-46"><a href="#L-46"><span class="linenos"> 46</span></a><span class="k">else</span><span class="p">:</span>
 </span><span id="L-47"><a href="#L-47"><span class="linenos"> 47</span></a>
-</span><span id="L-48"><a href="#L-48"><span class="linenos"> 48</span></a>    <span class="k">class</span> <span class="nc">MonoTuple</span><span class="p">:</span>
+</span><span id="L-48"><a href="#L-48"><span class="linenos"> 48</span></a>    <span class="k">class</span><span class="w"> </span><span class="nc">MonoTuple</span><span class="p">:</span>
 </span><span id="L-49"><a href="#L-49"><span class="linenos"> 49</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;tuple type hint, but for a tuple of any length with all the same type&quot;&quot;&quot;</span>
 </span><span id="L-50"><a href="#L-50"><span class="linenos"> 50</span></a>
 </span><span id="L-51"><a href="#L-51"><span class="linenos"> 51</span></a>        <span class="vm">__slots__</span> <span class="o">=</span> <span class="p">()</span>
 </span><span id="L-52"><a href="#L-52"><span class="linenos"> 52</span></a>
-</span><span id="L-53"><a href="#L-53"><span class="linenos"> 53</span></a>        <span class="k">def</span> <span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+</span><span id="L-53"><a href="#L-53"><span class="linenos"> 53</span></a>        <span class="k">def</span><span class="w"> </span><span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 </span><span id="L-54"><a href="#L-54"><span class="linenos"> 54</span></a>            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Type MonoTuple cannot be instantiated.&quot;</span><span class="p">)</span>
 </span><span id="L-55"><a href="#L-55"><span class="linenos"> 55</span></a>
-</span><span id="L-56"><a href="#L-56"><span class="linenos"> 56</span></a>        <span class="k">def</span> <span class="nf">__init_subclass__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+</span><span id="L-56"><a href="#L-56"><span class="linenos"> 56</span></a>        <span class="k">def</span><span class="w"> </span><span class="nf">__init_subclass__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 </span><span id="L-57"><a href="#L-57"><span class="linenos"> 57</span></a>            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Cannot subclass </span><span class="si">{</span><span class="bp">cls</span><span class="o">.</span><span class="vm">__module__</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 </span><span id="L-58"><a href="#L-58"><span class="linenos"> 58</span></a>
 </span><span id="L-59"><a href="#L-59"><span class="linenos"> 59</span></a>        <span class="c1"># idk why mypy thinks there is no such function in typing</span>
 </span><span id="L-60"><a href="#L-60"><span class="linenos"> 60</span></a>        <span class="nd">@typing</span><span class="o">.</span><span class="n">_tp_cache</span>  <span class="c1"># type: ignore</span>
-</span><span id="L-61"><a href="#L-61"><span class="linenos"> 61</span></a>        <span class="k">def</span> <span class="nf">__class_getitem__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">params</span><span class="p">):</span>
+</span><span id="L-61"><a href="#L-61"><span class="linenos"> 61</span></a>        <span class="k">def</span><span class="w"> </span><span class="nf">__class_getitem__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">params</span><span class="p">):</span>
 </span><span id="L-62"><a href="#L-62"><span class="linenos"> 62</span></a>            <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="s2">&quot;__origin__&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="o">==</span> <span class="n">typing</span><span class="o">.</span><span class="n">Union</span><span class="p">:</span>
 </span><span id="L-63"><a href="#L-63"><span class="linenos"> 63</span></a>                <span class="k">return</span> <span class="n">typing</span><span class="o">.</span><span class="n">GenericAlias</span><span class="p">(</span><span class="nb">tuple</span><span class="p">,</span> <span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="bp">Ellipsis</span><span class="p">))</span>
 </span><span id="L-64"><a href="#L-64"><span class="linenos"> 64</span></a>            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="nb">type</span><span class="p">):</span>
@@ -233,14 +233,14 @@
 </span><span id="L-73"><a href="#L-73"><span class="linenos"> 73</span></a>                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;MonoTuple expects 1 type argument, got </span><span class="si">{</span><span class="n">params</span><span class="w"> </span><span class="si">= }</span><span class="s2">&quot;</span><span class="p">)</span>
 </span><span id="L-74"><a href="#L-74"><span class="linenos"> 74</span></a>
 </span><span id="L-75"><a href="#L-75"><span class="linenos"> 75</span></a>
-</span><span id="L-76"><a href="#L-76"><span class="linenos"> 76</span></a><span class="k">class</span> <span class="nc">UniversalContainer</span><span class="p">:</span>
+</span><span id="L-76"><a href="#L-76"><span class="linenos"> 76</span></a><span class="k">class</span><span class="w"> </span><span class="nc">UniversalContainer</span><span class="p">:</span>
 </span><span id="L-77"><a href="#L-77"><span class="linenos"> 77</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;contains everything -- `x in UniversalContainer()` is always True&quot;&quot;&quot;</span>
 </span><span id="L-78"><a href="#L-78"><span class="linenos"> 78</span></a>
-</span><span id="L-79"><a href="#L-79"><span class="linenos"> 79</span></a>    <span class="k">def</span> <span class="fm">__contains__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</span><span id="L-79"><a href="#L-79"><span class="linenos"> 79</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__contains__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 </span><span id="L-80"><a href="#L-80"><span class="linenos"> 80</span></a>        <span class="k">return</span> <span class="kc">True</span>
 </span><span id="L-81"><a href="#L-81"><span class="linenos"> 81</span></a>
 </span><span id="L-82"><a href="#L-82"><span class="linenos"> 82</span></a>
-</span><span id="L-83"><a href="#L-83"><span class="linenos"> 83</span></a><span class="k">def</span> <span class="nf">isinstance_namedtuple</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</span><span id="L-83"><a href="#L-83"><span class="linenos"> 83</span></a><span class="k">def</span><span class="w"> </span><span class="nf">isinstance_namedtuple</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 </span><span id="L-84"><a href="#L-84"><span class="linenos"> 84</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;checks if `x` is a `namedtuple`</span>
 </span><span id="L-85"><a href="#L-85"><span class="linenos"> 85</span></a>
 </span><span id="L-86"><a href="#L-86"><span class="linenos"> 86</span></a><span class="sd">    credit to https://stackoverflow.com/questions/2166818/how-to-check-if-an-object-is-an-instance-of-a-namedtuple</span>
@@ -255,14 +255,14 @@
 </span><span id="L-95"><a href="#L-95"><span class="linenos"> 95</span></a>    <span class="k">return</span> <span class="nb">all</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">f</span><span class="p">)</span>
 </span><span id="L-96"><a href="#L-96"><span class="linenos"> 96</span></a>
 </span><span id="L-97"><a href="#L-97"><span class="linenos"> 97</span></a>
-</span><span id="L-98"><a href="#L-98"><span class="linenos"> 98</span></a><span class="k">def</span> <span class="nf">try_catch</span><span class="p">(</span><span class="n">func</span><span class="p">:</span> <span class="n">Callable</span><span class="p">):</span>
+</span><span id="L-98"><a href="#L-98"><span class="linenos"> 98</span></a><span class="k">def</span><span class="w"> </span><span class="nf">try_catch</span><span class="p">(</span><span class="n">func</span><span class="p">:</span> <span class="n">Callable</span><span class="p">):</span>
 </span><span id="L-99"><a href="#L-99"><span class="linenos"> 99</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;wraps the function to catch exceptions, returns serialized error message on exception</span>
 </span><span id="L-100"><a href="#L-100"><span class="linenos">100</span></a>
 </span><span id="L-101"><a href="#L-101"><span class="linenos">101</span></a><span class="sd">    returned func will return normal result on success, or error message on exception</span>
 </span><span id="L-102"><a href="#L-102"><span class="linenos">102</span></a><span class="sd">    &quot;&quot;&quot;</span>
 </span><span id="L-103"><a href="#L-103"><span class="linenos">103</span></a>
 </span><span id="L-104"><a href="#L-104"><span class="linenos">104</span></a>    <span class="nd">@functools</span><span class="o">.</span><span class="n">wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
-</span><span id="L-105"><a href="#L-105"><span class="linenos">105</span></a>    <span class="k">def</span> <span class="nf">newfunc</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+</span><span id="L-105"><a href="#L-105"><span class="linenos">105</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">newfunc</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 </span><span id="L-106"><a href="#L-106"><span class="linenos">106</span></a>        <span class="k">try</span><span class="p">:</span>
 </span><span id="L-107"><a href="#L-107"><span class="linenos">107</span></a>            <span class="k">return</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 </span><span id="L-108"><a href="#L-108"><span class="linenos">108</span></a>        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
@@ -271,7 +271,7 @@
 </span><span id="L-111"><a href="#L-111"><span class="linenos">111</span></a>    <span class="k">return</span> <span class="n">newfunc</span>
 </span><span id="L-112"><a href="#L-112"><span class="linenos">112</span></a>
 </span><span id="L-113"><a href="#L-113"><span class="linenos">113</span></a>
-</span><span id="L-114"><a href="#L-114"><span class="linenos">114</span></a><span class="k">def</span> <span class="nf">_recursive_hashify</span><span class="p">(</span><span class="n">obj</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">force</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Hashableitem</span><span class="p">:</span>
+</span><span id="L-114"><a href="#L-114"><span class="linenos">114</span></a><span class="k">def</span><span class="w"> </span><span class="nf">_recursive_hashify</span><span class="p">(</span><span class="n">obj</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">force</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Hashableitem</span><span class="p">:</span>
 </span><span id="L-115"><a href="#L-115"><span class="linenos">115</span></a>    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">typing</span><span class="o">.</span><span class="n">Mapping</span><span class="p">):</span>
 </span><span id="L-116"><a href="#L-116"><span class="linenos">116</span></a>        <span class="k">return</span> <span class="nb">tuple</span><span class="p">((</span><span class="n">k</span><span class="p">,</span> <span class="n">_recursive_hashify</span><span class="p">(</span><span class="n">v</span><span class="p">))</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">obj</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
 </span><span id="L-117"><a href="#L-117"><span class="linenos">117</span></a>    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="p">(</span><span class="nb">tuple</span><span class="p">,</span> <span class="nb">list</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">)):</span>
@@ -285,11 +285,11 @@
 </span><span id="L-125"><a href="#L-125"><span class="linenos">125</span></a>            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;cannot hashify:</span><span class="se">\n</span><span class="si">{</span><span class="n">obj</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 </span><span id="L-126"><a href="#L-126"><span class="linenos">126</span></a>
 </span><span id="L-127"><a href="#L-127"><span class="linenos">127</span></a>
-</span><span id="L-128"><a href="#L-128"><span class="linenos">128</span></a><span class="k">class</span> <span class="nc">SerializationException</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+</span><span id="L-128"><a href="#L-128"><span class="linenos">128</span></a><span class="k">class</span><span class="w"> </span><span class="nc">SerializationException</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
 </span><span id="L-129"><a href="#L-129"><span class="linenos">129</span></a>    <span class="k">pass</span>
 </span><span id="L-130"><a href="#L-130"><span class="linenos">130</span></a>
 </span><span id="L-131"><a href="#L-131"><span class="linenos">131</span></a>
-</span><span id="L-132"><a href="#L-132"><span class="linenos">132</span></a><span class="k">def</span> <span class="nf">string_as_lines</span><span class="p">(</span><span class="n">s</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+</span><span id="L-132"><a href="#L-132"><span class="linenos">132</span></a><span class="k">def</span><span class="w"> </span><span class="nf">string_as_lines</span><span class="p">(</span><span class="n">s</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
 </span><span id="L-133"><a href="#L-133"><span class="linenos">133</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;for easier reading of long strings in json, split up by newlines</span>
 </span><span id="L-134"><a href="#L-134"><span class="linenos">134</span></a>
 </span><span id="L-135"><a href="#L-135"><span class="linenos">135</span></a><span class="sd">    sort of like how jupyter notebooks do it</span>
@@ -300,7 +300,7 @@
 </span><span id="L-140"><a href="#L-140"><span class="linenos">140</span></a>        <span class="k">return</span> <span class="n">s</span><span class="o">.</span><span class="n">splitlines</span><span class="p">(</span><span class="n">keepends</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </span><span id="L-141"><a href="#L-141"><span class="linenos">141</span></a>
 </span><span id="L-142"><a href="#L-142"><span class="linenos">142</span></a>
-</span><span id="L-143"><a href="#L-143"><span class="linenos">143</span></a><span class="k">def</span> <span class="nf">safe_getsource</span><span class="p">(</span><span class="n">func</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+</span><span id="L-143"><a href="#L-143"><span class="linenos">143</span></a><span class="k">def</span><span class="w"> </span><span class="nf">safe_getsource</span><span class="p">(</span><span class="n">func</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
 </span><span id="L-144"><a href="#L-144"><span class="linenos">144</span></a>    <span class="k">try</span><span class="p">:</span>
 </span><span id="L-145"><a href="#L-145"><span class="linenos">145</span></a>        <span class="k">return</span> <span class="n">string_as_lines</span><span class="p">(</span><span class="n">inspect</span><span class="o">.</span><span class="n">getsource</span><span class="p">(</span><span class="n">func</span><span class="p">))</span>
 </span><span id="L-146"><a href="#L-146"><span class="linenos">146</span></a>    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
@@ -308,7 +308,7 @@
 </span><span id="L-148"><a href="#L-148"><span class="linenos">148</span></a>
 </span><span id="L-149"><a href="#L-149"><span class="linenos">149</span></a>
 </span><span id="L-150"><a href="#L-150"><span class="linenos">150</span></a><span class="c1"># credit to https://stackoverflow.com/questions/51743827/how-to-compare-equality-of-dataclasses-holding-numpy-ndarray-boola-b-raises</span>
-</span><span id="L-151"><a href="#L-151"><span class="linenos">151</span></a><span class="k">def</span> <span class="nf">array_safe_eq</span><span class="p">(</span><span class="n">a</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</span><span id="L-151"><a href="#L-151"><span class="linenos">151</span></a><span class="k">def</span><span class="w"> </span><span class="nf">array_safe_eq</span><span class="p">(</span><span class="n">a</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 </span><span id="L-152"><a href="#L-152"><span class="linenos">152</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;check if two objects are equal, account for if numpy arrays or torch tensors&quot;&quot;&quot;</span>
 </span><span id="L-153"><a href="#L-153"><span class="linenos">153</span></a>    <span class="k">if</span> <span class="n">a</span> <span class="ow">is</span> <span class="n">b</span><span class="p">:</span>
 </span><span id="L-154"><a href="#L-154"><span class="linenos">154</span></a>        <span class="k">return</span> <span class="kc">True</span>
@@ -349,7 +349,7 @@
 </span><span id="L-189"><a href="#L-189"><span class="linenos">189</span></a>        <span class="k">return</span> <span class="bp">NotImplemented</span>  <span class="c1"># type: ignore[return-value]</span>
 </span><span id="L-190"><a href="#L-190"><span class="linenos">190</span></a>
 </span><span id="L-191"><a href="#L-191"><span class="linenos">191</span></a>
-</span><span id="L-192"><a href="#L-192"><span class="linenos">192</span></a><span class="k">def</span> <span class="nf">dc_eq</span><span class="p">(</span>
+</span><span id="L-192"><a href="#L-192"><span class="linenos">192</span></a><span class="k">def</span><span class="w"> </span><span class="nf">dc_eq</span><span class="p">(</span>
 </span><span id="L-193"><a href="#L-193"><span class="linenos">193</span></a>    <span class="n">dc1</span><span class="p">,</span>
 </span><span id="L-194"><a href="#L-194"><span class="linenos">194</span></a>    <span class="n">dc2</span><span class="p">,</span>
 </span><span id="L-195"><a href="#L-195"><span class="linenos">195</span></a>    <span class="n">except_when_class_mismatch</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
@@ -504,7 +504,7 @@
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="UniversalContainer-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.11/json_serialize/util.py#L76-L80" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/json_serialize/util.py#L76-L80" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -512,10 +512,10 @@
 
     </div>
     <a class="headerlink" href="#UniversalContainer"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="UniversalContainer-77"><a href="#UniversalContainer-77"><span class="linenos">77</span></a><span class="k">class</span> <span class="nc">UniversalContainer</span><span class="p">:</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="UniversalContainer-77"><a href="#UniversalContainer-77"><span class="linenos">77</span></a><span class="k">class</span><span class="w"> </span><span class="nc">UniversalContainer</span><span class="p">:</span>
 </span><span id="UniversalContainer-78"><a href="#UniversalContainer-78"><span class="linenos">78</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;contains everything -- `x in UniversalContainer()` is always True&quot;&quot;&quot;</span>
 </span><span id="UniversalContainer-79"><a href="#UniversalContainer-79"><span class="linenos">79</span></a>
-</span><span id="UniversalContainer-80"><a href="#UniversalContainer-80"><span class="linenos">80</span></a>    <span class="k">def</span> <span class="fm">__contains__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</span><span id="UniversalContainer-80"><a href="#UniversalContainer-80"><span class="linenos">80</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__contains__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 </span><span id="UniversalContainer-81"><a href="#UniversalContainer-81"><span class="linenos">81</span></a>        <span class="k">return</span> <span class="kc">True</span>
 </span></pre></div>
 
@@ -535,7 +535,7 @@
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="isinstance_namedtuple-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.11/json_serialize/util.py#L83-L95" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/json_serialize/util.py#L83-L95" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -543,7 +543,7 @@
 
     </div>
     <a class="headerlink" href="#isinstance_namedtuple"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="isinstance_namedtuple-84"><a href="#isinstance_namedtuple-84"><span class="linenos">84</span></a><span class="k">def</span> <span class="nf">isinstance_namedtuple</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="isinstance_namedtuple-84"><a href="#isinstance_namedtuple-84"><span class="linenos">84</span></a><span class="k">def</span><span class="w"> </span><span class="nf">isinstance_namedtuple</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 </span><span id="isinstance_namedtuple-85"><a href="#isinstance_namedtuple-85"><span class="linenos">85</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;checks if `x` is a `namedtuple`</span>
 </span><span id="isinstance_namedtuple-86"><a href="#isinstance_namedtuple-86"><span class="linenos">86</span></a>
 </span><span id="isinstance_namedtuple-87"><a href="#isinstance_namedtuple-87"><span class="linenos">87</span></a><span class="sd">    credit to https://stackoverflow.com/questions/2166818/how-to-check-if-an-object-is-an-instance-of-a-namedtuple</span>
@@ -576,7 +576,7 @@
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="try_catch-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.11/json_serialize/util.py#L98-L111" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/json_serialize/util.py#L98-L111" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -584,14 +584,14 @@
 
     </div>
     <a class="headerlink" href="#try_catch"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="try_catch-99"><a href="#try_catch-99"><span class="linenos"> 99</span></a><span class="k">def</span> <span class="nf">try_catch</span><span class="p">(</span><span class="n">func</span><span class="p">:</span> <span class="n">Callable</span><span class="p">):</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="try_catch-99"><a href="#try_catch-99"><span class="linenos"> 99</span></a><span class="k">def</span><span class="w"> </span><span class="nf">try_catch</span><span class="p">(</span><span class="n">func</span><span class="p">:</span> <span class="n">Callable</span><span class="p">):</span>
 </span><span id="try_catch-100"><a href="#try_catch-100"><span class="linenos">100</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;wraps the function to catch exceptions, returns serialized error message on exception</span>
 </span><span id="try_catch-101"><a href="#try_catch-101"><span class="linenos">101</span></a>
 </span><span id="try_catch-102"><a href="#try_catch-102"><span class="linenos">102</span></a><span class="sd">    returned func will return normal result on success, or error message on exception</span>
 </span><span id="try_catch-103"><a href="#try_catch-103"><span class="linenos">103</span></a><span class="sd">    &quot;&quot;&quot;</span>
 </span><span id="try_catch-104"><a href="#try_catch-104"><span class="linenos">104</span></a>
 </span><span id="try_catch-105"><a href="#try_catch-105"><span class="linenos">105</span></a>    <span class="nd">@functools</span><span class="o">.</span><span class="n">wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
-</span><span id="try_catch-106"><a href="#try_catch-106"><span class="linenos">106</span></a>    <span class="k">def</span> <span class="nf">newfunc</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+</span><span id="try_catch-106"><a href="#try_catch-106"><span class="linenos">106</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">newfunc</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 </span><span id="try_catch-107"><a href="#try_catch-107"><span class="linenos">107</span></a>        <span class="k">try</span><span class="p">:</span>
 </span><span id="try_catch-108"><a href="#try_catch-108"><span class="linenos">108</span></a>            <span class="k">return</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 </span><span id="try_catch-109"><a href="#try_catch-109"><span class="linenos">109</span></a>        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
@@ -618,7 +618,7 @@
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="SerializationException-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.11/json_serialize/util.py#L128-L129" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/json_serialize/util.py#L128-L129" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -626,7 +626,7 @@
 
     </div>
     <a class="headerlink" href="#SerializationException"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="SerializationException-129"><a href="#SerializationException-129"><span class="linenos">129</span></a><span class="k">class</span> <span class="nc">SerializationException</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="SerializationException-129"><a href="#SerializationException-129"><span class="linenos">129</span></a><span class="k">class</span><span class="w"> </span><span class="nc">SerializationException</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
 </span><span id="SerializationException-130"><a href="#SerializationException-130"><span class="linenos">130</span></a>    <span class="k">pass</span>
 </span></pre></div>
 
@@ -661,7 +661,7 @@
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="string_as_lines-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.11/json_serialize/util.py#L132-L140" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/json_serialize/util.py#L132-L140" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -669,7 +669,7 @@
 
     </div>
     <a class="headerlink" href="#string_as_lines"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="string_as_lines-133"><a href="#string_as_lines-133"><span class="linenos">133</span></a><span class="k">def</span> <span class="nf">string_as_lines</span><span class="p">(</span><span class="n">s</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="string_as_lines-133"><a href="#string_as_lines-133"><span class="linenos">133</span></a><span class="k">def</span><span class="w"> </span><span class="nf">string_as_lines</span><span class="p">(</span><span class="n">s</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
 </span><span id="string_as_lines-134"><a href="#string_as_lines-134"><span class="linenos">134</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;for easier reading of long strings in json, split up by newlines</span>
 </span><span id="string_as_lines-135"><a href="#string_as_lines-135"><span class="linenos">135</span></a>
 </span><span id="string_as_lines-136"><a href="#string_as_lines-136"><span class="linenos">136</span></a><span class="sd">    sort of like how jupyter notebooks do it</span>
@@ -698,7 +698,7 @@
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="safe_getsource-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.11/json_serialize/util.py#L143-L147" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/json_serialize/util.py#L143-L147" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -706,7 +706,7 @@
 
     </div>
     <a class="headerlink" href="#safe_getsource"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="safe_getsource-144"><a href="#safe_getsource-144"><span class="linenos">144</span></a><span class="k">def</span> <span class="nf">safe_getsource</span><span class="p">(</span><span class="n">func</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="safe_getsource-144"><a href="#safe_getsource-144"><span class="linenos">144</span></a><span class="k">def</span><span class="w"> </span><span class="nf">safe_getsource</span><span class="p">(</span><span class="n">func</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
 </span><span id="safe_getsource-145"><a href="#safe_getsource-145"><span class="linenos">145</span></a>    <span class="k">try</span><span class="p">:</span>
 </span><span id="safe_getsource-146"><a href="#safe_getsource-146"><span class="linenos">146</span></a>        <span class="k">return</span> <span class="n">string_as_lines</span><span class="p">(</span><span class="n">inspect</span><span class="o">.</span><span class="n">getsource</span><span class="p">(</span><span class="n">func</span><span class="p">))</span>
 </span><span id="safe_getsource-147"><a href="#safe_getsource-147"><span class="linenos">147</span></a>    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
@@ -727,7 +727,7 @@
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="array_safe_eq-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.11/json_serialize/util.py#L151-L189" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/json_serialize/util.py#L151-L189" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -735,7 +735,7 @@
 
     </div>
     <a class="headerlink" href="#array_safe_eq"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="array_safe_eq-152"><a href="#array_safe_eq-152"><span class="linenos">152</span></a><span class="k">def</span> <span class="nf">array_safe_eq</span><span class="p">(</span><span class="n">a</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="array_safe_eq-152"><a href="#array_safe_eq-152"><span class="linenos">152</span></a><span class="k">def</span><span class="w"> </span><span class="nf">array_safe_eq</span><span class="p">(</span><span class="n">a</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 </span><span id="array_safe_eq-153"><a href="#array_safe_eq-153"><span class="linenos">153</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;check if two objects are equal, account for if numpy arrays or torch tensors&quot;&quot;&quot;</span>
 </span><span id="array_safe_eq-154"><a href="#array_safe_eq-154"><span class="linenos">154</span></a>    <span class="k">if</span> <span class="n">a</span> <span class="ow">is</span> <span class="n">b</span><span class="p">:</span>
 </span><span id="array_safe_eq-155"><a href="#array_safe_eq-155"><span class="linenos">155</span></a>        <span class="k">return</span> <span class="kc">True</span>
@@ -792,7 +792,7 @@
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="dc_eq-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.11/json_serialize/util.py#L192-L281" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/json_serialize/util.py#L192-L281" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -800,7 +800,7 @@
 
     </div>
     <a class="headerlink" href="#dc_eq"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="dc_eq-193"><a href="#dc_eq-193"><span class="linenos">193</span></a><span class="k">def</span> <span class="nf">dc_eq</span><span class="p">(</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="dc_eq-193"><a href="#dc_eq-193"><span class="linenos">193</span></a><span class="k">def</span><span class="w"> </span><span class="nf">dc_eq</span><span class="p">(</span>
 </span><span id="dc_eq-194"><a href="#dc_eq-194"><span class="linenos">194</span></a>    <span class="n">dc1</span><span class="p">,</span>
 </span><span id="dc_eq-195"><a href="#dc_eq-195"><span class="linenos">195</span></a>    <span class="n">dc2</span><span class="p">,</span>
 </span><span id="dc_eq-196"><a href="#dc_eq-196"><span class="linenos">196</span></a>    <span class="n">except_when_class_mismatch</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
@@ -970,7 +970,7 @@ if <code>True</code>, will throw <code>TypeError</code> if the fields are differ
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="MonoTuple-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.11/json_serialize/util.py#L48-L73" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/json_serialize/util.py#L48-L73" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -978,20 +978,20 @@ if <code>True</code>, will throw <code>TypeError</code> if the fields are differ
 
     </div>
     <a class="headerlink" href="#MonoTuple"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="MonoTuple-49"><a href="#MonoTuple-49"><span class="linenos">49</span></a>    <span class="k">class</span> <span class="nc">MonoTuple</span><span class="p">:</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="MonoTuple-49"><a href="#MonoTuple-49"><span class="linenos">49</span></a>    <span class="k">class</span><span class="w"> </span><span class="nc">MonoTuple</span><span class="p">:</span>
 </span><span id="MonoTuple-50"><a href="#MonoTuple-50"><span class="linenos">50</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;tuple type hint, but for a tuple of any length with all the same type&quot;&quot;&quot;</span>
 </span><span id="MonoTuple-51"><a href="#MonoTuple-51"><span class="linenos">51</span></a>
 </span><span id="MonoTuple-52"><a href="#MonoTuple-52"><span class="linenos">52</span></a>        <span class="vm">__slots__</span> <span class="o">=</span> <span class="p">()</span>
 </span><span id="MonoTuple-53"><a href="#MonoTuple-53"><span class="linenos">53</span></a>
-</span><span id="MonoTuple-54"><a href="#MonoTuple-54"><span class="linenos">54</span></a>        <span class="k">def</span> <span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+</span><span id="MonoTuple-54"><a href="#MonoTuple-54"><span class="linenos">54</span></a>        <span class="k">def</span><span class="w"> </span><span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 </span><span id="MonoTuple-55"><a href="#MonoTuple-55"><span class="linenos">55</span></a>            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Type MonoTuple cannot be instantiated.&quot;</span><span class="p">)</span>
 </span><span id="MonoTuple-56"><a href="#MonoTuple-56"><span class="linenos">56</span></a>
-</span><span id="MonoTuple-57"><a href="#MonoTuple-57"><span class="linenos">57</span></a>        <span class="k">def</span> <span class="nf">__init_subclass__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+</span><span id="MonoTuple-57"><a href="#MonoTuple-57"><span class="linenos">57</span></a>        <span class="k">def</span><span class="w"> </span><span class="nf">__init_subclass__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 </span><span id="MonoTuple-58"><a href="#MonoTuple-58"><span class="linenos">58</span></a>            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Cannot subclass </span><span class="si">{</span><span class="bp">cls</span><span class="o">.</span><span class="vm">__module__</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 </span><span id="MonoTuple-59"><a href="#MonoTuple-59"><span class="linenos">59</span></a>
 </span><span id="MonoTuple-60"><a href="#MonoTuple-60"><span class="linenos">60</span></a>        <span class="c1"># idk why mypy thinks there is no such function in typing</span>
 </span><span id="MonoTuple-61"><a href="#MonoTuple-61"><span class="linenos">61</span></a>        <span class="nd">@typing</span><span class="o">.</span><span class="n">_tp_cache</span>  <span class="c1"># type: ignore</span>
-</span><span id="MonoTuple-62"><a href="#MonoTuple-62"><span class="linenos">62</span></a>        <span class="k">def</span> <span class="nf">__class_getitem__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">params</span><span class="p">):</span>
+</span><span id="MonoTuple-62"><a href="#MonoTuple-62"><span class="linenos">62</span></a>        <span class="k">def</span><span class="w"> </span><span class="nf">__class_getitem__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">params</span><span class="p">):</span>
 </span><span id="MonoTuple-63"><a href="#MonoTuple-63"><span class="linenos">63</span></a>            <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="s2">&quot;__origin__&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="o">==</span> <span class="n">typing</span><span class="o">.</span><span class="n">Union</span><span class="p">:</span>
 </span><span id="MonoTuple-64"><a href="#MonoTuple-64"><span class="linenos">64</span></a>                <span class="k">return</span> <span class="n">typing</span><span class="o">.</span><span class="n">GenericAlias</span><span class="p">(</span><span class="nb">tuple</span><span class="p">,</span> <span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="bp">Ellipsis</span><span class="p">))</span>
 </span><span id="MonoTuple-65"><a href="#MonoTuple-65"><span class="linenos">65</span></a>            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="nb">type</span><span class="p">):</span>

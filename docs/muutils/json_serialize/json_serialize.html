@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="generator" content="pdoc 14.7.0"/>
+    <meta name="generator" content="pdoc 15.0.4"/>
     <title>muutils.json_serialize.json_serialize API documentation</title>
 <link rel="stylesheet" href="../../resources/css/bootstrap-reboot.min.css"><link rel="stylesheet" href="../../resources/css/syntax-highlighting.css"><link rel="stylesheet" href="../../resources/css/theme.css"><link rel="stylesheet" href="../../resources/css/layout.css"><link rel="stylesheet" href="../../resources/css/content.css"><link rel="stylesheet" href="../../resources/css/custom.css"><script>
     window.MathJax = {
@@ -34,7 +34,7 @@
     }
 </style>
 <script type="module" defer>
-    import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs";
+    import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs";
 
     /* Re-invoke Mermaid when DOM content changes, for example during search. */
     document.addEventListener("DOMContentLoaded", () => {
@@ -46,7 +46,7 @@
 </script></head>
 <body>
 <div class="package-version">
-    docs for <a href="https://github.com/mivanit/muutils">muutils</a> v0.8.11<br>
+    docs for <a href="https://github.com/mivanit/muutils">muutils</a> v0.8.12<br>
 </div>
     <nav class="pdoc">
         <label id="navtoggle" for="togglestate" class="pdoc-button">
@@ -166,7 +166,7 @@
     </nav>
     <main class="pdoc">
             <section class="module-info">
-                        <a class="pdoc-button git-button" href="https://github.com/mivanit/muutils/blob/0.8.11/json_serialize/json_serialize.py">View Source on GitHub</a>
+                        <a class="pdoc-button git-button" href="https://github.com/mivanit/muutils/blob/0.8.12/json_serialize/json_serialize.py">View Source on GitHub</a>
                     <h1 class="modulename">
 <a href="./../../muutils.html">muutils</a><wbr>.<a href="./../json_serialize.html">json_serialize</a><wbr>.json_serialize    </h1>
 
@@ -186,7 +186,7 @@
                         <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="mod-json_serialize-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.11/json_serialize/json_serialize.py#L0-L332" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/json_serialize/json_serialize.py#L0-L332" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -203,18 +203,18 @@
 </span><span id="L-8"><a href="#L-8"><span class="linenos">  8</span></a>
 </span><span id="L-9"><a href="#L-9"><span class="linenos">  9</span></a><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="L-10"><a href="#L-10"><span class="linenos"> 10</span></a>
-</span><span id="L-11"><a href="#L-11"><span class="linenos"> 11</span></a><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+</span><span id="L-11"><a href="#L-11"><span class="linenos"> 11</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
 </span><span id="L-12"><a href="#L-12"><span class="linenos"> 12</span></a>
-</span><span id="L-13"><a href="#L-13"><span class="linenos"> 13</span></a><span class="kn">import</span> <span class="nn">inspect</span>
-</span><span id="L-14"><a href="#L-14"><span class="linenos"> 14</span></a><span class="kn">import</span> <span class="nn">warnings</span>
-</span><span id="L-15"><a href="#L-15"><span class="linenos"> 15</span></a><span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">is_dataclass</span>
-</span><span id="L-16"><a href="#L-16"><span class="linenos"> 16</span></a><span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
-</span><span id="L-17"><a href="#L-17"><span class="linenos"> 17</span></a><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">,</span> <span class="n">Set</span><span class="p">,</span> <span class="n">Union</span>
+</span><span id="L-13"><a href="#L-13"><span class="linenos"> 13</span></a><span class="kn">import</span><span class="w"> </span><span class="nn">inspect</span>
+</span><span id="L-14"><a href="#L-14"><span class="linenos"> 14</span></a><span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
+</span><span id="L-15"><a href="#L-15"><span class="linenos"> 15</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">is_dataclass</span>
+</span><span id="L-16"><a href="#L-16"><span class="linenos"> 16</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+</span><span id="L-17"><a href="#L-17"><span class="linenos"> 17</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">,</span> <span class="n">Set</span><span class="p">,</span> <span class="n">Union</span>
 </span><span id="L-18"><a href="#L-18"><span class="linenos"> 18</span></a>
-</span><span id="L-19"><a href="#L-19"><span class="linenos"> 19</span></a><span class="kn">from</span> <span class="nn">muutils.errormode</span> <span class="kn">import</span> <span class="n">ErrorMode</span>
+</span><span id="L-19"><a href="#L-19"><span class="linenos"> 19</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">muutils.errormode</span><span class="w"> </span><span class="kn">import</span> <span class="n">ErrorMode</span>
 </span><span id="L-20"><a href="#L-20"><span class="linenos"> 20</span></a>
 </span><span id="L-21"><a href="#L-21"><span class="linenos"> 21</span></a><span class="k">try</span><span class="p">:</span>
-</span><span id="L-22"><a href="#L-22"><span class="linenos"> 22</span></a>    <span class="kn">from</span> <span class="nn">muutils.json_serialize.array</span> <span class="kn">import</span> <span class="n">ArrayMode</span><span class="p">,</span> <span class="n">serialize_array</span>
+</span><span id="L-22"><a href="#L-22"><span class="linenos"> 22</span></a>    <span class="kn">from</span><span class="w"> </span><span class="nn">muutils.json_serialize.array</span><span class="w"> </span><span class="kn">import</span> <span class="n">ArrayMode</span><span class="p">,</span> <span class="n">serialize_array</span>
 </span><span id="L-23"><a href="#L-23"><span class="linenos"> 23</span></a><span class="k">except</span> <span class="ne">ImportError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
 </span><span id="L-24"><a href="#L-24"><span class="linenos"> 24</span></a>    <span class="n">ArrayMode</span> <span class="o">=</span> <span class="nb">str</span>  <span class="c1"># type: ignore[misc]</span>
 </span><span id="L-25"><a href="#L-25"><span class="linenos"> 25</span></a>    <span class="n">serialize_array</span> <span class="o">=</span> <span class="k">lambda</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="kc">None</span>  <span class="c1"># noqa: E731</span>
@@ -223,7 +223,7 @@
 </span><span id="L-28"><a href="#L-28"><span class="linenos"> 28</span></a>        <span class="ne">ImportWarning</span><span class="p">,</span>
 </span><span id="L-29"><a href="#L-29"><span class="linenos"> 29</span></a>    <span class="p">)</span>
 </span><span id="L-30"><a href="#L-30"><span class="linenos"> 30</span></a>
-</span><span id="L-31"><a href="#L-31"><span class="linenos"> 31</span></a><span class="kn">from</span> <span class="nn">muutils.json_serialize.util</span> <span class="kn">import</span> <span class="p">(</span>
+</span><span id="L-31"><a href="#L-31"><span class="linenos"> 31</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">muutils.json_serialize.util</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
 </span><span id="L-32"><a href="#L-32"><span class="linenos"> 32</span></a>    <span class="n">_FORMAT_KEY</span><span class="p">,</span>
 </span><span id="L-33"><a href="#L-33"><span class="linenos"> 33</span></a>    <span class="n">Hashableitem</span><span class="p">,</span>
 </span><span id="L-34"><a href="#L-34"><span class="linenos"> 34</span></a>    <span class="n">JSONitem</span><span class="p">,</span>
@@ -265,7 +265,7 @@
 </span><span id="L-70"><a href="#L-70"><span class="linenos"> 70</span></a>
 </span><span id="L-71"><a href="#L-71"><span class="linenos"> 71</span></a>
 </span><span id="L-72"><a href="#L-72"><span class="linenos"> 72</span></a><span class="nd">@dataclass</span>
-</span><span id="L-73"><a href="#L-73"><span class="linenos"> 73</span></a><span class="k">class</span> <span class="nc">SerializerHandler</span><span class="p">:</span>
+</span><span id="L-73"><a href="#L-73"><span class="linenos"> 73</span></a><span class="k">class</span><span class="w"> </span><span class="nc">SerializerHandler</span><span class="p">:</span>
 </span><span id="L-74"><a href="#L-74"><span class="linenos"> 74</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;a handler for a specific type of object</span>
 </span><span id="L-75"><a href="#L-75"><span class="linenos"> 75</span></a>
 </span><span id="L-76"><a href="#L-76"><span class="linenos"> 76</span></a><span class="sd">    # Parameters:</span>
@@ -283,7 +283,7 @@
 </span><span id="L-88"><a href="#L-88"><span class="linenos"> 88</span></a>    <span class="c1"># description of this serializer</span>
 </span><span id="L-89"><a href="#L-89"><span class="linenos"> 89</span></a>    <span class="n">desc</span><span class="p">:</span> <span class="nb">str</span>
 </span><span id="L-90"><a href="#L-90"><span class="linenos"> 90</span></a>
-</span><span id="L-91"><a href="#L-91"><span class="linenos"> 91</span></a>    <span class="k">def</span> <span class="nf">serialize</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+</span><span id="L-91"><a href="#L-91"><span class="linenos"> 91</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">serialize</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
 </span><span id="L-92"><a href="#L-92"><span class="linenos"> 92</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;serialize the handler info&quot;&quot;&quot;</span>
 </span><span id="L-93"><a href="#L-93"><span class="linenos"> 93</span></a>        <span class="k">return</span> <span class="p">{</span>
 </span><span id="L-94"><a href="#L-94"><span class="linenos"> 94</span></a>            <span class="c1"># get the code and doc of the check function</span>
@@ -332,7 +332,7 @@
 </span><span id="L-137"><a href="#L-137"><span class="linenos">137</span></a><span class="p">)</span>
 </span><span id="L-138"><a href="#L-138"><span class="linenos">138</span></a>
 </span><span id="L-139"><a href="#L-139"><span class="linenos">139</span></a>
-</span><span id="L-140"><a href="#L-140"><span class="linenos">140</span></a><span class="k">def</span> <span class="nf">_serialize_override_serialize_func</span><span class="p">(</span>
+</span><span id="L-140"><a href="#L-140"><span class="linenos">140</span></a><span class="k">def</span><span class="w"> </span><span class="nf">_serialize_override_serialize_func</span><span class="p">(</span>
 </span><span id="L-141"><a href="#L-141"><span class="linenos">141</span></a>    <span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;JsonSerializer&quot;</span><span class="p">,</span> <span class="n">obj</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="n">ObjectPath</span>
 </span><span id="L-142"><a href="#L-142"><span class="linenos">142</span></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">JSONitem</span><span class="p">:</span>
 </span><span id="L-143"><a href="#L-143"><span class="linenos">143</span></a>    <span class="c1"># obj_cls: type = type(obj)</span>
@@ -427,7 +427,7 @@
 </span><span id="L-232"><a href="#L-232"><span class="linenos">232</span></a><span class="p">)</span>
 </span><span id="L-233"><a href="#L-233"><span class="linenos">233</span></a>
 </span><span id="L-234"><a href="#L-234"><span class="linenos">234</span></a>
-</span><span id="L-235"><a href="#L-235"><span class="linenos">235</span></a><span class="k">class</span> <span class="nc">JsonSerializer</span><span class="p">:</span>
+</span><span id="L-235"><a href="#L-235"><span class="linenos">235</span></a><span class="k">class</span><span class="w"> </span><span class="nc">JsonSerializer</span><span class="p">:</span>
 </span><span id="L-236"><a href="#L-236"><span class="linenos">236</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Json serialization class (holds configs)</span>
 </span><span id="L-237"><a href="#L-237"><span class="linenos">237</span></a>
 </span><span id="L-238"><a href="#L-238"><span class="linenos">238</span></a><span class="sd">    # Parameters:</span>
@@ -453,7 +453,7 @@
 </span><span id="L-258"><a href="#L-258"><span class="linenos">258</span></a>
 </span><span id="L-259"><a href="#L-259"><span class="linenos">259</span></a><span class="sd">    &quot;&quot;&quot;</span>
 </span><span id="L-260"><a href="#L-260"><span class="linenos">260</span></a>
-</span><span id="L-261"><a href="#L-261"><span class="linenos">261</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+</span><span id="L-261"><a href="#L-261"><span class="linenos">261</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
 </span><span id="L-262"><a href="#L-262"><span class="linenos">262</span></a>        <span class="bp">self</span><span class="p">,</span>
 </span><span id="L-263"><a href="#L-263"><span class="linenos">263</span></a>        <span class="o">*</span><span class="n">args</span><span class="p">,</span>
 </span><span id="L-264"><a href="#L-264"><span class="linenos">264</span></a>        <span class="n">array_mode</span><span class="p">:</span> <span class="n">ArrayMode</span> <span class="o">=</span> <span class="s2">&quot;array_list_meta&quot;</span><span class="p">,</span>
@@ -475,7 +475,7 @@
 </span><span id="L-280"><a href="#L-280"><span class="linenos">280</span></a>            <span class="n">handlers_default</span>
 </span><span id="L-281"><a href="#L-281"><span class="linenos">281</span></a>        <span class="p">)</span>
 </span><span id="L-282"><a href="#L-282"><span class="linenos">282</span></a>
-</span><span id="L-283"><a href="#L-283"><span class="linenos">283</span></a>    <span class="k">def</span> <span class="nf">json_serialize</span><span class="p">(</span>
+</span><span id="L-283"><a href="#L-283"><span class="linenos">283</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">json_serialize</span><span class="p">(</span>
 </span><span id="L-284"><a href="#L-284"><span class="linenos">284</span></a>        <span class="bp">self</span><span class="p">,</span>
 </span><span id="L-285"><a href="#L-285"><span class="linenos">285</span></a>        <span class="n">obj</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
 </span><span id="L-286"><a href="#L-286"><span class="linenos">286</span></a>        <span class="n">path</span><span class="p">:</span> <span class="n">ObjectPath</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(),</span>
@@ -499,7 +499,7 @@
 </span><span id="L-304"><a href="#L-304"><span class="linenos">304</span></a>                    <span class="n">obj_str</span> <span class="o">=</span> <span class="n">obj_str</span><span class="p">[:</span><span class="mi">1000</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;...&quot;</span>
 </span><span id="L-305"><a href="#L-305"><span class="linenos">305</span></a>                <span class="k">raise</span> <span class="n">SerializationException</span><span class="p">(</span>
 </span><span id="L-306"><a href="#L-306"><span class="linenos">306</span></a>                    <span class="sa">f</span><span class="s2">&quot;error serializing at </span><span class="si">{</span><span class="n">path</span><span class="w"> </span><span class="si">= }</span><span class="s2"> with last handler: &#39;</span><span class="si">{</span><span class="n">handler</span><span class="o">.</span><span class="n">uid</span><span class="si">}</span><span class="s2">&#39;</span><span class="se">\n</span><span class="s2">from: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="se">\n</span><span class="s2">obj: </span><span class="si">{</span><span class="n">obj_str</span><span class="si">}</span><span class="s2">&quot;</span>
-</span><span id="L-307"><a href="#L-307"><span class="linenos">307</span></a>                <span class="p">)</span> <span class="kn">from</span> <span class="nn">e</span>
+</span><span id="L-307"><a href="#L-307"><span class="linenos">307</span></a>                <span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">e</span>
 </span><span id="L-308"><a href="#L-308"><span class="linenos">308</span></a>            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">error_mode</span> <span class="o">==</span> <span class="s2">&quot;warn&quot;</span><span class="p">:</span>
 </span><span id="L-309"><a href="#L-309"><span class="linenos">309</span></a>                <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
 </span><span id="L-310"><a href="#L-310"><span class="linenos">310</span></a>                    <span class="sa">f</span><span class="s2">&quot;error serializing at </span><span class="si">{</span><span class="n">path</span><span class="w"> </span><span class="si">= }</span><span class="s2">, will return as string</span><span class="se">\n</span><span class="si">{</span><span class="n">obj</span><span class="w"> </span><span class="si">= }</span><span class="se">\n</span><span class="s2">exception = </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span>
@@ -507,7 +507,7 @@
 </span><span id="L-312"><a href="#L-312"><span class="linenos">312</span></a>
 </span><span id="L-313"><a href="#L-313"><span class="linenos">313</span></a>            <span class="k">return</span> <span class="nb">repr</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
 </span><span id="L-314"><a href="#L-314"><span class="linenos">314</span></a>
-</span><span id="L-315"><a href="#L-315"><span class="linenos">315</span></a>    <span class="k">def</span> <span class="nf">hashify</span><span class="p">(</span>
+</span><span id="L-315"><a href="#L-315"><span class="linenos">315</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">hashify</span><span class="p">(</span>
 </span><span id="L-316"><a href="#L-316"><span class="linenos">316</span></a>        <span class="bp">self</span><span class="p">,</span>
 </span><span id="L-317"><a href="#L-317"><span class="linenos">317</span></a>        <span class="n">obj</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
 </span><span id="L-318"><a href="#L-318"><span class="linenos">318</span></a>        <span class="n">path</span><span class="p">:</span> <span class="n">ObjectPath</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(),</span>
@@ -523,7 +523,7 @@
 </span><span id="L-328"><a href="#L-328"><span class="linenos">328</span></a><span class="n">GLOBAL_JSON_SERIALIZER</span><span class="p">:</span> <span class="n">JsonSerializer</span> <span class="o">=</span> <span class="n">JsonSerializer</span><span class="p">()</span>
 </span><span id="L-329"><a href="#L-329"><span class="linenos">329</span></a>
 </span><span id="L-330"><a href="#L-330"><span class="linenos">330</span></a>
-</span><span id="L-331"><a href="#L-331"><span class="linenos">331</span></a><span class="k">def</span> <span class="nf">json_serialize</span><span class="p">(</span><span class="n">obj</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="n">ObjectPath</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">())</span> <span class="o">-&gt;</span> <span class="n">JSONitem</span><span class="p">:</span>
+</span><span id="L-331"><a href="#L-331"><span class="linenos">331</span></a><span class="k">def</span><span class="w"> </span><span class="nf">json_serialize</span><span class="p">(</span><span class="n">obj</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="n">ObjectPath</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">())</span> <span class="o">-&gt;</span> <span class="n">JSONitem</span><span class="p">:</span>
 </span><span id="L-332"><a href="#L-332"><span class="linenos">332</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;serialize object to json-serializable object with default config&quot;&quot;&quot;</span>
 </span><span id="L-333"><a href="#L-333"><span class="linenos">333</span></a>    <span class="k">return</span> <span class="n">GLOBAL_JSON_SERIALIZER</span><span class="o">.</span><span class="n">json_serialize</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="n">path</span><span class="p">)</span>
 </span></pre></div>
@@ -559,7 +559,7 @@
                 <section id="SERIALIZE_DIRECT_AS_STR">
                     <div class="attr variable">
             <span class="name">SERIALIZE_DIRECT_AS_STR</span><span class="annotation">: Set[str]</span>        =
-<span class="default_value">{&#34;&lt;class &#39;torch.dtype&#39;&gt;&#34;, &#34;&lt;class &#39;torch.device&#39;&gt;&#34;}</span>
+<span class="default_value">{&#34;&lt;class &#39;torch.device&#39;&gt;&#34;, &#34;&lt;class &#39;torch.dtype&#39;&gt;&#34;}</span>
 
         
     </div>
@@ -591,7 +591,7 @@
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="SerializerHandler-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.11/json_serialize/json_serialize.py#L72-L109" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/json_serialize/json_serialize.py#L72-L109" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -600,7 +600,7 @@
     </div>
     <a class="headerlink" href="#SerializerHandler"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="SerializerHandler-73"><a href="#SerializerHandler-73"><span class="linenos"> 73</span></a><span class="nd">@dataclass</span>
-</span><span id="SerializerHandler-74"><a href="#SerializerHandler-74"><span class="linenos"> 74</span></a><span class="k">class</span> <span class="nc">SerializerHandler</span><span class="p">:</span>
+</span><span id="SerializerHandler-74"><a href="#SerializerHandler-74"><span class="linenos"> 74</span></a><span class="k">class</span><span class="w"> </span><span class="nc">SerializerHandler</span><span class="p">:</span>
 </span><span id="SerializerHandler-75"><a href="#SerializerHandler-75"><span class="linenos"> 75</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;a handler for a specific type of object</span>
 </span><span id="SerializerHandler-76"><a href="#SerializerHandler-76"><span class="linenos"> 76</span></a>
 </span><span id="SerializerHandler-77"><a href="#SerializerHandler-77"><span class="linenos"> 77</span></a><span class="sd">    # Parameters:</span>
@@ -618,7 +618,7 @@
 </span><span id="SerializerHandler-89"><a href="#SerializerHandler-89"><span class="linenos"> 89</span></a>    <span class="c1"># description of this serializer</span>
 </span><span id="SerializerHandler-90"><a href="#SerializerHandler-90"><span class="linenos"> 90</span></a>    <span class="n">desc</span><span class="p">:</span> <span class="nb">str</span>
 </span><span id="SerializerHandler-91"><a href="#SerializerHandler-91"><span class="linenos"> 91</span></a>
-</span><span id="SerializerHandler-92"><a href="#SerializerHandler-92"><span class="linenos"> 92</span></a>    <span class="k">def</span> <span class="nf">serialize</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+</span><span id="SerializerHandler-92"><a href="#SerializerHandler-92"><span class="linenos"> 92</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">serialize</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
 </span><span id="SerializerHandler-93"><a href="#SerializerHandler-93"><span class="linenos"> 93</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;serialize the handler info&quot;&quot;&quot;</span>
 </span><span id="SerializerHandler-94"><a href="#SerializerHandler-94"><span class="linenos"> 94</span></a>        <span class="k">return</span> <span class="p">{</span>
 </span><span id="SerializerHandler-95"><a href="#SerializerHandler-95"><span class="linenos"> 95</span></a>            <span class="c1"># get the code and doc of the check function</span>
@@ -717,7 +717,7 @@
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="SerializerHandler.serialize-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.11/json_serialize/json_serialize.py#L91-L109" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/json_serialize/json_serialize.py#L91-L109" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -725,7 +725,7 @@
 
     </div>
     <a class="headerlink" href="#SerializerHandler.serialize"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="SerializerHandler.serialize-92"><a href="#SerializerHandler.serialize-92"><span class="linenos"> 92</span></a>    <span class="k">def</span> <span class="nf">serialize</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="SerializerHandler.serialize-92"><a href="#SerializerHandler.serialize-92"><span class="linenos"> 92</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">serialize</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
 </span><span id="SerializerHandler.serialize-93"><a href="#SerializerHandler.serialize-93"><span class="linenos"> 93</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;serialize the handler info&quot;&quot;&quot;</span>
 </span><span id="SerializerHandler.serialize-94"><a href="#SerializerHandler.serialize-94"><span class="linenos"> 94</span></a>        <span class="k">return</span> <span class="p">{</span>
 </span><span id="SerializerHandler.serialize-95"><a href="#SerializerHandler.serialize-95"><span class="linenos"> 95</span></a>            <span class="c1"># get the code and doc of the check function</span>
@@ -789,7 +789,7 @@
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="JsonSerializer-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.11/json_serialize/json_serialize.py#L235-L325" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/json_serialize/json_serialize.py#L235-L325" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -797,7 +797,7 @@
 
     </div>
     <a class="headerlink" href="#JsonSerializer"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="JsonSerializer-236"><a href="#JsonSerializer-236"><span class="linenos">236</span></a><span class="k">class</span> <span class="nc">JsonSerializer</span><span class="p">:</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="JsonSerializer-236"><a href="#JsonSerializer-236"><span class="linenos">236</span></a><span class="k">class</span><span class="w"> </span><span class="nc">JsonSerializer</span><span class="p">:</span>
 </span><span id="JsonSerializer-237"><a href="#JsonSerializer-237"><span class="linenos">237</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Json serialization class (holds configs)</span>
 </span><span id="JsonSerializer-238"><a href="#JsonSerializer-238"><span class="linenos">238</span></a>
 </span><span id="JsonSerializer-239"><a href="#JsonSerializer-239"><span class="linenos">239</span></a><span class="sd">    # Parameters:</span>
@@ -823,7 +823,7 @@
 </span><span id="JsonSerializer-259"><a href="#JsonSerializer-259"><span class="linenos">259</span></a>
 </span><span id="JsonSerializer-260"><a href="#JsonSerializer-260"><span class="linenos">260</span></a><span class="sd">    &quot;&quot;&quot;</span>
 </span><span id="JsonSerializer-261"><a href="#JsonSerializer-261"><span class="linenos">261</span></a>
-</span><span id="JsonSerializer-262"><a href="#JsonSerializer-262"><span class="linenos">262</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+</span><span id="JsonSerializer-262"><a href="#JsonSerializer-262"><span class="linenos">262</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
 </span><span id="JsonSerializer-263"><a href="#JsonSerializer-263"><span class="linenos">263</span></a>        <span class="bp">self</span><span class="p">,</span>
 </span><span id="JsonSerializer-264"><a href="#JsonSerializer-264"><span class="linenos">264</span></a>        <span class="o">*</span><span class="n">args</span><span class="p">,</span>
 </span><span id="JsonSerializer-265"><a href="#JsonSerializer-265"><span class="linenos">265</span></a>        <span class="n">array_mode</span><span class="p">:</span> <span class="n">ArrayMode</span> <span class="o">=</span> <span class="s2">&quot;array_list_meta&quot;</span><span class="p">,</span>
@@ -845,7 +845,7 @@
 </span><span id="JsonSerializer-281"><a href="#JsonSerializer-281"><span class="linenos">281</span></a>            <span class="n">handlers_default</span>
 </span><span id="JsonSerializer-282"><a href="#JsonSerializer-282"><span class="linenos">282</span></a>        <span class="p">)</span>
 </span><span id="JsonSerializer-283"><a href="#JsonSerializer-283"><span class="linenos">283</span></a>
-</span><span id="JsonSerializer-284"><a href="#JsonSerializer-284"><span class="linenos">284</span></a>    <span class="k">def</span> <span class="nf">json_serialize</span><span class="p">(</span>
+</span><span id="JsonSerializer-284"><a href="#JsonSerializer-284"><span class="linenos">284</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">json_serialize</span><span class="p">(</span>
 </span><span id="JsonSerializer-285"><a href="#JsonSerializer-285"><span class="linenos">285</span></a>        <span class="bp">self</span><span class="p">,</span>
 </span><span id="JsonSerializer-286"><a href="#JsonSerializer-286"><span class="linenos">286</span></a>        <span class="n">obj</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
 </span><span id="JsonSerializer-287"><a href="#JsonSerializer-287"><span class="linenos">287</span></a>        <span class="n">path</span><span class="p">:</span> <span class="n">ObjectPath</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(),</span>
@@ -869,7 +869,7 @@
 </span><span id="JsonSerializer-305"><a href="#JsonSerializer-305"><span class="linenos">305</span></a>                    <span class="n">obj_str</span> <span class="o">=</span> <span class="n">obj_str</span><span class="p">[:</span><span class="mi">1000</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;...&quot;</span>
 </span><span id="JsonSerializer-306"><a href="#JsonSerializer-306"><span class="linenos">306</span></a>                <span class="k">raise</span> <span class="n">SerializationException</span><span class="p">(</span>
 </span><span id="JsonSerializer-307"><a href="#JsonSerializer-307"><span class="linenos">307</span></a>                    <span class="sa">f</span><span class="s2">&quot;error serializing at </span><span class="si">{</span><span class="n">path</span><span class="w"> </span><span class="si">= }</span><span class="s2"> with last handler: &#39;</span><span class="si">{</span><span class="n">handler</span><span class="o">.</span><span class="n">uid</span><span class="si">}</span><span class="s2">&#39;</span><span class="se">\n</span><span class="s2">from: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="se">\n</span><span class="s2">obj: </span><span class="si">{</span><span class="n">obj_str</span><span class="si">}</span><span class="s2">&quot;</span>
-</span><span id="JsonSerializer-308"><a href="#JsonSerializer-308"><span class="linenos">308</span></a>                <span class="p">)</span> <span class="kn">from</span> <span class="nn">e</span>
+</span><span id="JsonSerializer-308"><a href="#JsonSerializer-308"><span class="linenos">308</span></a>                <span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">e</span>
 </span><span id="JsonSerializer-309"><a href="#JsonSerializer-309"><span class="linenos">309</span></a>            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">error_mode</span> <span class="o">==</span> <span class="s2">&quot;warn&quot;</span><span class="p">:</span>
 </span><span id="JsonSerializer-310"><a href="#JsonSerializer-310"><span class="linenos">310</span></a>                <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
 </span><span id="JsonSerializer-311"><a href="#JsonSerializer-311"><span class="linenos">311</span></a>                    <span class="sa">f</span><span class="s2">&quot;error serializing at </span><span class="si">{</span><span class="n">path</span><span class="w"> </span><span class="si">= }</span><span class="s2">, will return as string</span><span class="se">\n</span><span class="si">{</span><span class="n">obj</span><span class="w"> </span><span class="si">= }</span><span class="se">\n</span><span class="s2">exception = </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span>
@@ -877,7 +877,7 @@
 </span><span id="JsonSerializer-313"><a href="#JsonSerializer-313"><span class="linenos">313</span></a>
 </span><span id="JsonSerializer-314"><a href="#JsonSerializer-314"><span class="linenos">314</span></a>            <span class="k">return</span> <span class="nb">repr</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
 </span><span id="JsonSerializer-315"><a href="#JsonSerializer-315"><span class="linenos">315</span></a>
-</span><span id="JsonSerializer-316"><a href="#JsonSerializer-316"><span class="linenos">316</span></a>    <span class="k">def</span> <span class="nf">hashify</span><span class="p">(</span>
+</span><span id="JsonSerializer-316"><a href="#JsonSerializer-316"><span class="linenos">316</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">hashify</span><span class="p">(</span>
 </span><span id="JsonSerializer-317"><a href="#JsonSerializer-317"><span class="linenos">317</span></a>        <span class="bp">self</span><span class="p">,</span>
 </span><span id="JsonSerializer-318"><a href="#JsonSerializer-318"><span class="linenos">318</span></a>        <span class="n">obj</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
 </span><span id="JsonSerializer-319"><a href="#JsonSerializer-319"><span class="linenos">319</span></a>        <span class="n">path</span><span class="p">:</span> <span class="n">ObjectPath</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(),</span>
@@ -931,7 +931,7 @@ changes _FORMAT_KEY keys in output to "__write_format__" (when you want to seria
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="JsonSerializer.__init__-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.11/json_serialize/json_serialize.py#L261-L281" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/json_serialize/json_serialize.py#L261-L281" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -939,7 +939,7 @@ changes _FORMAT_KEY keys in output to "__write_format__" (when you want to seria
 
     </div>
     <a class="headerlink" href="#JsonSerializer.__init__"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="JsonSerializer.__init__-262"><a href="#JsonSerializer.__init__-262"><span class="linenos">262</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="JsonSerializer.__init__-262"><a href="#JsonSerializer.__init__-262"><span class="linenos">262</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
 </span><span id="JsonSerializer.__init__-263"><a href="#JsonSerializer.__init__-263"><span class="linenos">263</span></a>        <span class="bp">self</span><span class="p">,</span>
 </span><span id="JsonSerializer.__init__-264"><a href="#JsonSerializer.__init__-264"><span class="linenos">264</span></a>        <span class="o">*</span><span class="n">args</span><span class="p">,</span>
 </span><span id="JsonSerializer.__init__-265"><a href="#JsonSerializer.__init__-265"><span class="linenos">265</span></a>        <span class="n">array_mode</span><span class="p">:</span> <span class="n">ArrayMode</span> <span class="o">=</span> <span class="s2">&quot;array_list_meta&quot;</span><span class="p">,</span>
@@ -1020,7 +1020,7 @@ changes _FORMAT_KEY keys in output to "__write_format__" (when you want to seria
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="JsonSerializer.json_serialize-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.11/json_serialize/json_serialize.py#L283-L313" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/json_serialize/json_serialize.py#L283-L313" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -1028,7 +1028,7 @@ changes _FORMAT_KEY keys in output to "__write_format__" (when you want to seria
 
     </div>
     <a class="headerlink" href="#JsonSerializer.json_serialize"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="JsonSerializer.json_serialize-284"><a href="#JsonSerializer.json_serialize-284"><span class="linenos">284</span></a>    <span class="k">def</span> <span class="nf">json_serialize</span><span class="p">(</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="JsonSerializer.json_serialize-284"><a href="#JsonSerializer.json_serialize-284"><span class="linenos">284</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">json_serialize</span><span class="p">(</span>
 </span><span id="JsonSerializer.json_serialize-285"><a href="#JsonSerializer.json_serialize-285"><span class="linenos">285</span></a>        <span class="bp">self</span><span class="p">,</span>
 </span><span id="JsonSerializer.json_serialize-286"><a href="#JsonSerializer.json_serialize-286"><span class="linenos">286</span></a>        <span class="n">obj</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
 </span><span id="JsonSerializer.json_serialize-287"><a href="#JsonSerializer.json_serialize-287"><span class="linenos">287</span></a>        <span class="n">path</span><span class="p">:</span> <span class="n">ObjectPath</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(),</span>
@@ -1052,7 +1052,7 @@ changes _FORMAT_KEY keys in output to "__write_format__" (when you want to seria
 </span><span id="JsonSerializer.json_serialize-305"><a href="#JsonSerializer.json_serialize-305"><span class="linenos">305</span></a>                    <span class="n">obj_str</span> <span class="o">=</span> <span class="n">obj_str</span><span class="p">[:</span><span class="mi">1000</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;...&quot;</span>
 </span><span id="JsonSerializer.json_serialize-306"><a href="#JsonSerializer.json_serialize-306"><span class="linenos">306</span></a>                <span class="k">raise</span> <span class="n">SerializationException</span><span class="p">(</span>
 </span><span id="JsonSerializer.json_serialize-307"><a href="#JsonSerializer.json_serialize-307"><span class="linenos">307</span></a>                    <span class="sa">f</span><span class="s2">&quot;error serializing at </span><span class="si">{</span><span class="n">path</span><span class="w"> </span><span class="si">= }</span><span class="s2"> with last handler: &#39;</span><span class="si">{</span><span class="n">handler</span><span class="o">.</span><span class="n">uid</span><span class="si">}</span><span class="s2">&#39;</span><span class="se">\n</span><span class="s2">from: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="se">\n</span><span class="s2">obj: </span><span class="si">{</span><span class="n">obj_str</span><span class="si">}</span><span class="s2">&quot;</span>
-</span><span id="JsonSerializer.json_serialize-308"><a href="#JsonSerializer.json_serialize-308"><span class="linenos">308</span></a>                <span class="p">)</span> <span class="kn">from</span> <span class="nn">e</span>
+</span><span id="JsonSerializer.json_serialize-308"><a href="#JsonSerializer.json_serialize-308"><span class="linenos">308</span></a>                <span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">e</span>
 </span><span id="JsonSerializer.json_serialize-309"><a href="#JsonSerializer.json_serialize-309"><span class="linenos">309</span></a>            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">error_mode</span> <span class="o">==</span> <span class="s2">&quot;warn&quot;</span><span class="p">:</span>
 </span><span id="JsonSerializer.json_serialize-310"><a href="#JsonSerializer.json_serialize-310"><span class="linenos">310</span></a>                <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
 </span><span id="JsonSerializer.json_serialize-311"><a href="#JsonSerializer.json_serialize-311"><span class="linenos">311</span></a>                    <span class="sa">f</span><span class="s2">&quot;error serializing at </span><span class="si">{</span><span class="n">path</span><span class="w"> </span><span class="si">= }</span><span class="s2">, will return as string</span><span class="se">\n</span><span class="si">{</span><span class="n">obj</span><span class="w"> </span><span class="si">= }</span><span class="se">\n</span><span class="s2">exception = </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span>
@@ -1075,7 +1075,7 @@ changes _FORMAT_KEY keys in output to "__write_format__" (when you want to seria
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="JsonSerializer.hashify-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.11/json_serialize/json_serialize.py#L315-L325" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/json_serialize/json_serialize.py#L315-L325" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -1083,7 +1083,7 @@ changes _FORMAT_KEY keys in output to "__write_format__" (when you want to seria
 
     </div>
     <a class="headerlink" href="#JsonSerializer.hashify"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="JsonSerializer.hashify-316"><a href="#JsonSerializer.hashify-316"><span class="linenos">316</span></a>    <span class="k">def</span> <span class="nf">hashify</span><span class="p">(</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="JsonSerializer.hashify-316"><a href="#JsonSerializer.hashify-316"><span class="linenos">316</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">hashify</span><span class="p">(</span>
 </span><span id="JsonSerializer.hashify-317"><a href="#JsonSerializer.hashify-317"><span class="linenos">317</span></a>        <span class="bp">self</span><span class="p">,</span>
 </span><span id="JsonSerializer.hashify-318"><a href="#JsonSerializer.hashify-318"><span class="linenos">318</span></a>        <span class="n">obj</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
 </span><span id="JsonSerializer.hashify-319"><a href="#JsonSerializer.hashify-319"><span class="linenos">319</span></a>        <span class="n">path</span><span class="p">:</span> <span class="n">ObjectPath</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(),</span>
@@ -1125,7 +1125,7 @@ changes _FORMAT_KEY keys in output to "__write_format__" (when you want to seria
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="json_serialize-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.11/json_serialize/json_serialize.py#L331-L333" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/json_serialize/json_serialize.py#L331-L333" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -1133,7 +1133,7 @@ changes _FORMAT_KEY keys in output to "__write_format__" (when you want to seria
 
     </div>
     <a class="headerlink" href="#json_serialize"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="json_serialize-332"><a href="#json_serialize-332"><span class="linenos">332</span></a><span class="k">def</span> <span class="nf">json_serialize</span><span class="p">(</span><span class="n">obj</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="n">ObjectPath</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">())</span> <span class="o">-&gt;</span> <span class="n">JSONitem</span><span class="p">:</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="json_serialize-332"><a href="#json_serialize-332"><span class="linenos">332</span></a><span class="k">def</span><span class="w"> </span><span class="nf">json_serialize</span><span class="p">(</span><span class="n">obj</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="n">ObjectPath</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">())</span> <span class="o">-&gt;</span> <span class="n">JSONitem</span><span class="p">:</span>
 </span><span id="json_serialize-333"><a href="#json_serialize-333"><span class="linenos">333</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;serialize object to json-serializable object with default config&quot;&quot;&quot;</span>
 </span><span id="json_serialize-334"><a href="#json_serialize-334"><span class="linenos">334</span></a>    <span class="k">return</span> <span class="n">GLOBAL_JSON_SERIALIZER</span><span class="o">.</span><span class="n">json_serialize</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="n">path</span><span class="p">)</span>
 </span></pre></div>

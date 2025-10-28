@@ -54,7 +54,7 @@
 - this is kind of ugly, but it fixes a lot of issues for when we do recursive loading with ZANJ  
   local link: [`/muutils/json_serialize/serializable_dataclass.py:778`](/muutils/json_serialize/serializable_dataclass.py#L778) 
   | view on GitHub: [muutils/json_serialize/serializable_dataclass.py#L778](https://github.com/mivanit/muutils/blob/main/muutils/json_serialize/serializable_dataclass.py#L778)
-  | [Make Issue](https://github.com/mivanit/muutils/issues/new?title=this%20is%20kind%20of%20ugly%2C%20but%20it%20fixes%20a%20lot%20of%20issues%20for%20when%20we%20do%20recursive%20loading%20with%20ZANJ&body=%23%20source%0A%0A%5B%60muutils%2Fjson_serialize%2Fserializable_dataclass.py%23L778%60%5D%28https%3A%2F%2Fgithub.com%2Fmivanit%2Fmuutils%2Fblob%2Fmain%2Fmuutils%2Fjson_serialize%2Fserializable_dataclass.py%23L778%29%0A%0A%23%20context%0A%60%60%60python%0A%20%20%20%20%20%20%20%20%23%20done%20locally%20since%20it%20depends%20on%20args%20to%20the%20decorator%0A%20%20%20%20%20%20%20%20%23%20%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%0A%20%20%20%20%20%20%20%20%23%20mypy%20thinks%20this%20isnt%20a%20classmethod%0A%20%20%20%20%20%20%20%20%40classmethod%20%20%23%20type%3A%20ignore%5Bmisc%5D%0A%20%20%20%20%20%20%20%20def%20load%28cls%2C%20data%3A%20dict%5Bstr%2C%20Any%5D%20%7C%20T%29%20-%3E%20Type%5BT%5D%3A%0A%20%20%20%20%20%20%20%20%20%20%20%20%23%20HACK%3A%20this%20is%20kind%20of%20ugly%2C%20but%20it%20fixes%20a%20lot%20of%20issues%20for%20when%20we%20do%20recursive%20loading%20with%20ZANJ%0A%20%20%20%20%20%20%20%20%20%20%20%20if%20isinstance%28data%2C%20cls%29%3A%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20return%20data%0A%0A%20%20%20%20%20%20%20%20%20%20%20%20assert%20isinstance%28%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20data%2C%20typing.Mapping%0A%60%60%60&labels=enhancement)
+  | [Make Issue](https://github.com/mivanit/muutils/issues/new?title=this%20is%20kind%20of%20ugly%2C%20but%20it%20fixes%20a%20lot%20of%20issues%20for%20when%20we%20do%20recursive%20loading%20with%20ZANJ&body=%23%20source%0A%0A%5B%60muutils%2Fjson_serialize%2Fserializable_dataclass.py%23L778%60%5D%28https%3A%2F%2Fgithub.com%2Fmivanit%2Fmuutils%2Fblob%2Fmain%2Fmuutils%2Fjson_serialize%2Fserializable_dataclass.py%23L778%29%0A%0A%23%20context%0A%60%60%60python%0A%20%20%20%20%20%20%20%20%23%20done%20locally%20since%20it%20depends%20on%20args%20to%20the%20decorator%0A%20%20%20%20%20%20%20%20%23%20%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%0A%20%20%20%20%20%20%20%20%23%20mypy%20thinks%20this%20isnt%20a%20classmethod%0A%20%20%20%20%20%20%20%20%40classmethod%20%20%23%20type%3A%20ignore%5Bmisc%5D%0A%20%20%20%20%20%20%20%20def%20load%28cls%2C%20data%3A%20dict%5Bstr%2C%20Any%5D%20%7C%20T%29%20-%3E%20Type%5BT%5D%3A%0A%20%20%20%20%20%20%20%20%20%20%20%20%23%20HACK%3A%20this%20is%20kind%20of%20ugly%2C%20but%20it%20fixes%20a%20lot%20of%20issues%20for%20when%20we%20do%20recursive%20loading%20with%20ZANJ%0A%20%20%20%20%20%20%20%20%20%20%20%20if%20isinstance%28data%2C%20cls%29%3A%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20return%20data%0A%0A%20%20%20%20%20%20%20%20%20%20%20%20assert%20isinstance%28data%2C%20typing.Mapping%29%2C%20%28%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20f%22When%20loading%20%7Bcls.__name__%20%3D%20%7D%20expected%20a%20Mapping%2C%20but%20got%20%7Btype%28data%29%20%3D%20%7D%3A%5Cn%7Bdata%20%3D%20%7D%22%0A%60%60%60&labels=enhancement)
 
   ```python
   # done locally since it depends on args to the decorator
@@ -66,8 +66,8 @@
       if isinstance(data, cls):
           return data
 
-      assert isinstance(
-          data, typing.Mapping
+      assert isinstance(data, typing.Mapping), (
+          f"When loading {cls.__name__ = } expected a Mapping, but got {type(data) = }:\n{data = }"
   ```
 
 
@@ -241,16 +241,16 @@
 ## [`muutils/json_serialize/serializable_field.py`](/muutils/json_serialize/serializable_field.py)
 
 - add field for custom comparator (such as serializing)  
-  local link: [`/muutils/json_serialize/serializable_field.py:55`](/muutils/json_serialize/serializable_field.py#L55) 
-  | view on GitHub: [muutils/json_serialize/serializable_field.py#L55](https://github.com/mivanit/muutils/blob/main/muutils/json_serialize/serializable_field.py#L55)
-  | [Make Issue](https://github.com/mivanit/muutils/issues/new?title=add%20field%20for%20custom%20comparator%20%28such%20as%20serializing%29&body=%23%20source%0A%0A%5B%60muutils%2Fjson_serialize%2Fserializable_field.py%23L55%60%5D%28https%3A%2F%2Fgithub.com%2Fmivanit%2Fmuutils%2Fblob%2Fmain%2Fmuutils%2Fjson_serialize%2Fserializable_field.py%23L55%29%0A%0A%23%20context%0A%60%60%60python%0A%20%20%20%20%20%20%20%20%5D%20%3D%20dataclasses.MISSING%2C%0A%20%20%20%20%20%20%20%20init%3A%20bool%20%3D%20True%2C%0A%20%20%20%20%20%20%20%20repr%3A%20bool%20%3D%20True%2C%0A%20%20%20%20%20%20%20%20hash%3A%20Optional%5Bbool%5D%20%3D%20None%2C%0A%20%20%20%20%20%20%20%20compare%3A%20bool%20%3D%20True%2C%0A%20%20%20%20%20%20%20%20%23%20TODO%3A%20add%20field%20for%20custom%20comparator%20%28such%20as%20serializing%29%0A%20%20%20%20%20%20%20%20metadata%3A%20Optional%5Btypes.MappingProxyType%5D%20%3D%20None%2C%0A%20%20%20%20%20%20%20%20kw_only%3A%20Union%5Bbool%2C%20dataclasses._MISSING_TYPE%5D%20%3D%20dataclasses.MISSING%2C%0A%20%20%20%20%20%20%20%20serialize%3A%20bool%20%3D%20True%2C%0A%20%20%20%20%20%20%20%20serialization_fn%3A%20Optional%5BCallable%5B%5BAny%5D%2C%20Any%5D%5D%20%3D%20None%2C%0A%20%20%20%20%20%20%20%20loading_fn%3A%20Optional%5BCallable%5B%5BAny%5D%2C%20Any%5D%5D%20%3D%20None%2C%0A%60%60%60&labels=enhancement)
+  local link: [`/muutils/json_serialize/serializable_field.py:57`](/muutils/json_serialize/serializable_field.py#L57) 
+  | view on GitHub: [muutils/json_serialize/serializable_field.py#L57](https://github.com/mivanit/muutils/blob/main/muutils/json_serialize/serializable_field.py#L57)
+  | [Make Issue](https://github.com/mivanit/muutils/issues/new?title=add%20field%20for%20custom%20comparator%20%28such%20as%20serializing%29&body=%23%20source%0A%0A%5B%60muutils%2Fjson_serialize%2Fserializable_field.py%23L57%60%5D%28https%3A%2F%2Fgithub.com%2Fmivanit%2Fmuutils%2Fblob%2Fmain%2Fmuutils%2Fjson_serialize%2Fserializable_field.py%23L57%29%0A%0A%23%20context%0A%60%60%60python%0A%20%20%20%20%20%20%20%20init%3A%20bool%20%3D%20True%2C%0A%20%20%20%20%20%20%20%20repr%3A%20bool%20%3D%20True%2C%0A%20%20%20%20%20%20%20%20hash%3A%20Optional%5Bbool%5D%20%3D%20None%2C%0A%20%20%20%20%20%20%20%20compare%3A%20bool%20%3D%20True%2C%0A%20%20%20%20%20%20%20%20doc%3A%20str%20%7C%20None%20%3D%20None%2C%0A%20%20%20%20%20%20%20%20%23%20TODO%3A%20add%20field%20for%20custom%20comparator%20%28such%20as%20serializing%29%0A%20%20%20%20%20%20%20%20metadata%3A%20Optional%5Btypes.MappingProxyType%5D%20%3D%20None%2C%0A%20%20%20%20%20%20%20%20kw_only%3A%20Union%5Bbool%2C%20dataclasses._MISSING_TYPE%5D%20%3D%20dataclasses.MISSING%2C%0A%20%20%20%20%20%20%20%20serialize%3A%20bool%20%3D%20True%2C%0A%20%20%20%20%20%20%20%20serialization_fn%3A%20Optional%5BCallable%5B%5BAny%5D%2C%20Any%5D%5D%20%3D%20None%2C%0A%20%20%20%20%20%20%20%20loading_fn%3A%20Optional%5BCallable%5B%5BAny%5D%2C%20Any%5D%5D%20%3D%20None%2C%0A%60%60%60&labels=enhancement)
 
   ```python
-  ] = dataclasses.MISSING,
   init: bool = True,
   repr: bool = True,
   hash: Optional[bool] = None,
   compare: bool = True,
+  doc: str | None = None,
   # TODO: add field for custom comparator (such as serializing)
   metadata: Optional[types.MappingProxyType] = None,
   kw_only: Union[bool, dataclasses._MISSING_TYPE] = dataclasses.MISSING,
@@ -261,9 +261,9 @@
 
 
 - should we do this check, or assume the user knows what they are doing?  
-  local link: [`/muutils/json_serialize/serializable_field.py:65`](/muutils/json_serialize/serializable_field.py#L65) 
-  | view on GitHub: [muutils/json_serialize/serializable_field.py#L65](https://github.com/mivanit/muutils/blob/main/muutils/json_serialize/serializable_field.py#L65)
-  | [Make Issue](https://github.com/mivanit/muutils/issues/new?title=should%20we%20do%20this%20check%2C%20or%20assume%20the%20user%20knows%20what%20they%20are%20doing%3F&body=%23%20source%0A%0A%5B%60muutils%2Fjson_serialize%2Fserializable_field.py%23L65%60%5D%28https%3A%2F%2Fgithub.com%2Fmivanit%2Fmuutils%2Fblob%2Fmain%2Fmuutils%2Fjson_serialize%2Fserializable_field.py%23L65%29%0A%0A%23%20context%0A%60%60%60python%0A%20%20%20%20%20%20%20%20loading_fn%3A%20Optional%5BCallable%5B%5BAny%5D%2C%20Any%5D%5D%20%3D%20None%2C%0A%20%20%20%20%20%20%20%20deserialize_fn%3A%20Optional%5BCallable%5B%5BAny%5D%2C%20Any%5D%5D%20%3D%20None%2C%0A%20%20%20%20%20%20%20%20assert_type%3A%20bool%20%3D%20True%2C%0A%20%20%20%20%20%20%20%20custom_typecheck_fn%3A%20Optional%5BCallable%5B%5Btype%5D%2C%20bool%5D%5D%20%3D%20None%2C%0A%20%20%20%20%29%3A%0A%20%20%20%20%20%20%20%20%23%20TODO%3A%20should%20we%20do%20this%20check%2C%20or%20assume%20the%20user%20knows%20what%20they%20are%20doing%3F%0A%20%20%20%20%20%20%20%20if%20init%20and%20not%20serialize%3A%0A%20%20%20%20%20%20%20%20%20%20%20%20raise%20ValueError%28%22Cannot%20have%20init%3DTrue%20and%20serialize%3DFalse%22%29%0A%0A%20%20%20%20%20%20%20%20%23%20need%20to%20assemble%20kwargs%20in%20this%20hacky%20way%20so%20as%20not%20to%20upset%20type%20checking%0A%20%20%20%20%20%20%20%20super_kwargs%3A%20dict%5Bstr%2C%20Any%5D%20%3D%20dict%28%0A%60%60%60&labels=enhancement)
+  local link: [`/muutils/json_serialize/serializable_field.py:67`](/muutils/json_serialize/serializable_field.py#L67) 
+  | view on GitHub: [muutils/json_serialize/serializable_field.py#L67](https://github.com/mivanit/muutils/blob/main/muutils/json_serialize/serializable_field.py#L67)
+  | [Make Issue](https://github.com/mivanit/muutils/issues/new?title=should%20we%20do%20this%20check%2C%20or%20assume%20the%20user%20knows%20what%20they%20are%20doing%3F&body=%23%20source%0A%0A%5B%60muutils%2Fjson_serialize%2Fserializable_field.py%23L67%60%5D%28https%3A%2F%2Fgithub.com%2Fmivanit%2Fmuutils%2Fblob%2Fmain%2Fmuutils%2Fjson_serialize%2Fserializable_field.py%23L67%29%0A%0A%23%20context%0A%60%60%60python%0A%20%20%20%20%20%20%20%20loading_fn%3A%20Optional%5BCallable%5B%5BAny%5D%2C%20Any%5D%5D%20%3D%20None%2C%0A%20%20%20%20%20%20%20%20deserialize_fn%3A%20Optional%5BCallable%5B%5BAny%5D%2C%20Any%5D%5D%20%3D%20None%2C%0A%20%20%20%20%20%20%20%20assert_type%3A%20bool%20%3D%20True%2C%0A%20%20%20%20%20%20%20%20custom_typecheck_fn%3A%20Optional%5BCallable%5B%5Btype%5D%2C%20bool%5D%5D%20%3D%20None%2C%0A%20%20%20%20%29%3A%0A%20%20%20%20%20%20%20%20%23%20TODO%3A%20should%20we%20do%20this%20check%2C%20or%20assume%20the%20user%20knows%20what%20they%20are%20doing%3F%0A%20%20%20%20%20%20%20%20if%20init%20and%20not%20serialize%3A%0A%20%20%20%20%20%20%20%20%20%20%20%20raise%20ValueError%28%22Cannot%20have%20init%3DTrue%20and%20serialize%3DFalse%22%29%0A%0A%20%20%20%20%20%20%20%20%23%20need%20to%20assemble%20kwargs%20in%20this%20hacky%20way%20so%20as%20not%20to%20upset%20type%20checking%0A%20%20%20%20%20%20%20%20super_kwargs%3A%20dict%5Bstr%2C%20Any%5D%20%3D%20dict%28%0A%60%60%60&labels=enhancement)
 
   ```python
       loading_fn: Optional[Callable[[Any], Any]] = None,
@@ -281,9 +281,9 @@
 
 
 - `custom_value_check_fn`: function taking the value of the field and returning whether the value itself is valid. if not provided, any value is valid as long as it passes the type test  
-  local link: [`/muutils/json_serialize/serializable_field.py:261`](/muutils/json_serialize/serializable_field.py#L261) 
-  | view on GitHub: [muutils/json_serialize/serializable_field.py#L261](https://github.com/mivanit/muutils/blob/main/muutils/json_serialize/serializable_field.py#L261)
-  | [Make Issue](https://github.com/mivanit/muutils/issues/new?title=%60custom_value_check_fn%60%3A%20function%20taking%20the%20value%20of%20the%20field%20and%20returning%20whether%20the%20value%20itself%20is%20valid.%20if%20not%20provided%2C%20any%20value%20is%20valid%20as%20long%20as%20it%20passes%20the%20type%20test&body=%23%20source%0A%0A%5B%60muutils%2Fjson_serialize%2Fserializable_field.py%23L261%60%5D%28https%3A%2F%2Fgithub.com%2Fmivanit%2Fmuutils%2Fblob%2Fmain%2Fmuutils%2Fjson_serialize%2Fserializable_field.py%23L261%29%0A%0A%23%20context%0A%60%60%60python%0A%20%20%20%20note%20that%20if%20not%20using%20ZANJ%2C%20and%20you%20have%20a%20class%20inside%20a%20container%2C%20you%20MUST%20provide%0A%20%20%20%20%60serialization_fn%60%20and%20%60loading_fn%60%20to%20serialize%20and%20load%20the%20container.%0A%20%20%20%20ZANJ%20will%20automatically%20do%20this%20for%20you.%0A%0A%20%20%20%20%23%20TODO%3A%20%60custom_value_check_fn%60%3A%20function%20taking%20the%20value%20of%20the%20field%20and%20returning%20whether%20the%20value%20itself%20is%20valid.%20if%20not%20provided%2C%20any%20value%20is%20valid%20as%20long%20as%20it%20passes%20the%20type%20test%0A%20%20%20%20%22%22%22%0A%20%20%20%20assert%20len%28_args%29%20%3D%3D%200%2C%20f%22unexpected%20positional%20arguments%3A%20%7B_args%7D%22%0A%20%20%20%20return%20SerializableField%28%0A%20%20%20%20%20%20%20%20default%3Ddefault%2C%0A%20%20%20%20%20%20%20%20default_factory%3Ddefault_factory%2C%0A%60%60%60&labels=enhancement)
+  local link: [`/muutils/json_serialize/serializable_field.py:277`](/muutils/json_serialize/serializable_field.py#L277) 
+  | view on GitHub: [muutils/json_serialize/serializable_field.py#L277](https://github.com/mivanit/muutils/blob/main/muutils/json_serialize/serializable_field.py#L277)
+  | [Make Issue](https://github.com/mivanit/muutils/issues/new?title=%60custom_value_check_fn%60%3A%20function%20taking%20the%20value%20of%20the%20field%20and%20returning%20whether%20the%20value%20itself%20is%20valid.%20if%20not%20provided%2C%20any%20value%20is%20valid%20as%20long%20as%20it%20passes%20the%20type%20test&body=%23%20source%0A%0A%5B%60muutils%2Fjson_serialize%2Fserializable_field.py%23L277%60%5D%28https%3A%2F%2Fgithub.com%2Fmivanit%2Fmuutils%2Fblob%2Fmain%2Fmuutils%2Fjson_serialize%2Fserializable_field.py%23L277%29%0A%0A%23%20context%0A%60%60%60python%0A%20%20%20%20note%20that%20if%20not%20using%20ZANJ%2C%20and%20you%20have%20a%20class%20inside%20a%20container%2C%20you%20MUST%20provide%0A%20%20%20%20%60serialization_fn%60%20and%20%60loading_fn%60%20to%20serialize%20and%20load%20the%20container.%0A%20%20%20%20ZANJ%20will%20automatically%20do%20this%20for%20you.%0A%0A%20%20%20%20%23%20TODO%3A%20%60custom_value_check_fn%60%3A%20function%20taking%20the%20value%20of%20the%20field%20and%20returning%20whether%20the%20value%20itself%20is%20valid.%20if%20not%20provided%2C%20any%20value%20is%20valid%20as%20long%20as%20it%20passes%20the%20type%20test%0A%20%20%20%20%22%22%22%0A%20%20%20%20assert%20len%28_args%29%20%3D%3D%200%2C%20f%22unexpected%20positional%20arguments%3A%20%7B_args%7D%22%0A%0A%20%20%20%20if%20%22description%22%20in%20kwargs%3A%0A%20%20%20%20%20%20%20%20import%20warnings%0A%60%60%60&labels=enhancement)
 
   ```python
   note that if not using ZANJ, and you have a class inside a container, you MUST provide
@@ -293,9 +293,9 @@
   # TODO: `custom_value_check_fn`: function taking the value of the field and returning whether the value itself is valid. if not provided, any value is valid as long as it passes the type test
   """
   assert len(_args) == 0, f"unexpected positional arguments: {_args}"
-  return SerializableField(
-      default=default,
-      default_factory=default_factory,
+
+  if "description" in kwargs:
+      import warnings
   ```
 
 
@@ -569,10 +569,30 @@
 
 ## [`muutils/tensor_info.py`](/muutils/tensor_info.py)
 
+- type checks fail on 3.10, see https://github.com/mivanit/muutils/actions/runs/18883100459/job/53891346225  
+  local link: [`/muutils/tensor_info.py:214`](/muutils/tensor_info.py#L214) 
+  | view on GitHub: [muutils/tensor_info.py#L214](https://github.com/mivanit/muutils/blob/main/muutils/tensor_info.py#L214)
+  | [Make Issue](https://github.com/mivanit/muutils/issues/new?title=type%20checks%20fail%20on%203.10%2C%20see%20https%3A%2F%2Fgithub.com%2Fmivanit%2Fmuutils%2Factions%2Fruns%2F18883100459%2Fjob%2F53891346225&body=%23%20source%0A%0A%5B%60muutils%2Ftensor_info.py%23L214%60%5D%28https%3A%2F%2Fgithub.com%2Fmivanit%2Fmuutils%2Fblob%2Fmain%2Fmuutils%2Ftensor_info.py%23L214%29%0A%0A%23%20context%0A%60%60%60python%0A%20%20%20%20if%20result%5B%22size%22%5D%20%3D%3D%200%3A%0A%20%20%20%20%20%20%20%20result%5B%22status%22%5D%20%3D%20%22empty%20array%22%0A%20%20%20%20%20%20%20%20return%20result%0A%0A%20%20%20%20%23%20Flatten%20array%20for%20statistics%20if%20it%27s%20multi-dimensional%0A%20%20%20%20%23%20TODO%3A%20type%20checks%20fail%20on%203.10%2C%20see%20https%3A%2F%2Fgithub.com%2Fmivanit%2Fmuutils%2Factions%2Fruns%2F18883100459%2Fjob%2F53891346225%0A%20%20%20%20try%3A%0A%20%20%20%20%20%20%20%20if%20len%28A_np.shape%29%20%3E%201%3A%0A%20%20%20%20%20%20%20%20%20%20%20%20A_flat%20%3D%20A_np.flatten%28%29%20%20%23%20type%3A%20ignore%5Bassignment%5D%0A%20%20%20%20%20%20%20%20else%3A%0A%20%20%20%20%20%20%20%20%20%20%20%20A_flat%20%3D%20A_np%20%20%23%20type%3A%20ignore%5Bassignment%5D%0A%60%60%60&labels=enhancement)
+
+  ```python
+  if result["size"] == 0:
+      result["status"] = "empty array"
+      return result
+
+  # Flatten array for statistics if it's multi-dimensional
+  # TODO: type checks fail on 3.10, see https://github.com/mivanit/muutils/actions/runs/18883100459/job/53891346225
+  try:
+      if len(A_np.shape) > 1:
+          A_flat = A_np.flatten()  # type: ignore[assignment]
+      else:
+          A_flat = A_np  # type: ignore[assignment]
+  ```
+
+
 - handle bool tensors correctly  
-  local link: [`/muutils/tensor_info.py:262`](/muutils/tensor_info.py#L262) 
-  | view on GitHub: [muutils/tensor_info.py#L262](https://github.com/mivanit/muutils/blob/main/muutils/tensor_info.py#L262)
-  | [Make Issue](https://github.com/mivanit/muutils/issues/new?title=handle%20bool%20tensors%20correctly&body=%23%20source%0A%0A%5B%60muutils%2Ftensor_info.py%23L262%60%5D%28https%3A%2F%2Fgithub.com%2Fmivanit%2Fmuutils%2Fblob%2Fmain%2Fmuutils%2Ftensor_info.py%23L262%29%0A%0A%23%20context%0A%60%60%60python%0A%20%20%20%20%20%20%20%20%20%20%20%20A_hist%20%3D%20A_flat%0A%0A%20%20%20%20%20%20%20%20%23%20Calculate%20histogram%20data%20for%20sparklines%0A%20%20%20%20%20%20%20%20if%20A_hist.size%20%3E%200%3A%0A%20%20%20%20%20%20%20%20%20%20%20%20try%3A%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%23%20TODO%3A%20handle%20bool%20tensors%20correctly%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%23%20muutils%2Ftensor_info.py%3A238%3A%20RuntimeWarning%3A%20Converting%20input%20from%20bool%20to%20%3Cclass%20%27numpy.uint8%27%3E%20for%20compatibility.%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20hist%2C%20bins%20%3D%20np.histogram%28A_hist%2C%20bins%3Dhist_bins%29%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20result%5B%22histogram%22%5D%20%3D%20hist%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20result%5B%22bins%22%5D%20%3D%20bins%0A%20%20%20%20%20%20%20%20%20%20%20%20except%3A%20%20%23%20noqa%3A%20E722%0A%60%60%60&labels=enhancement)
+  local link: [`/muutils/tensor_info.py:263`](/muutils/tensor_info.py#L263) 
+  | view on GitHub: [muutils/tensor_info.py#L263](https://github.com/mivanit/muutils/blob/main/muutils/tensor_info.py#L263)
+  | [Make Issue](https://github.com/mivanit/muutils/issues/new?title=handle%20bool%20tensors%20correctly&body=%23%20source%0A%0A%5B%60muutils%2Ftensor_info.py%23L263%60%5D%28https%3A%2F%2Fgithub.com%2Fmivanit%2Fmuutils%2Fblob%2Fmain%2Fmuutils%2Ftensor_info.py%23L263%29%0A%0A%23%20context%0A%60%60%60python%0A%20%20%20%20%20%20%20%20%20%20%20%20A_hist%20%3D%20A_flat%0A%0A%20%20%20%20%20%20%20%20%23%20Calculate%20histogram%20data%20for%20sparklines%0A%20%20%20%20%20%20%20%20if%20A_hist.size%20%3E%200%3A%0A%20%20%20%20%20%20%20%20%20%20%20%20try%3A%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%23%20TODO%3A%20handle%20bool%20tensors%20correctly%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%23%20muutils%2Ftensor_info.py%3A238%3A%20RuntimeWarning%3A%20Converting%20input%20from%20bool%20to%20%3Cclass%20%27numpy.uint8%27%3E%20for%20compatibility.%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20hist%2C%20bins%20%3D%20np.histogram%28A_hist%2C%20bins%3Dhist_bins%29%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20result%5B%22histogram%22%5D%20%3D%20hist%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20result%5B%22bins%22%5D%20%3D%20bins%0A%20%20%20%20%20%20%20%20%20%20%20%20except%3A%20%20%23%20noqa%3A%20E722%0A%60%60%60&labels=enhancement)
 
   ```python
       A_hist = A_flat
@@ -594,14 +614,14 @@
 ## [`muutils/tensor_utils.py`](/muutils/tensor_utils.py)
 
 - add proper type annotations to this signature  
-  local link: [`/muutils/tensor_utils.py:76`](/muutils/tensor_utils.py#L76) 
-  | view on GitHub: [muutils/tensor_utils.py#L76](https://github.com/mivanit/muutils/blob/main/muutils/tensor_utils.py#L76)
-  | [Make Issue](https://github.com/mivanit/muutils/issues/new?title=add%20proper%20type%20annotations%20to%20this%20signature&body=%23%20source%0A%0A%5B%60muutils%2Ftensor_utils.py%23L76%60%5D%28https%3A%2F%2Fgithub.com%2Fmivanit%2Fmuutils%2Fblob%2Fmain%2Fmuutils%2Ftensor_utils.py%23L76%29%0A%0A%23%20context%0A%60%60%60python%0Aif%20np.version.version%20%3C%20%222.0.0%22%3A%0A%20%20%20%20TYPE_TO_JAX_DTYPE%5Bnp.float_%5D%20%3D%20jaxtyping.Float%0A%20%20%20%20TYPE_TO_JAX_DTYPE%5Bnp.int_%5D%20%3D%20jaxtyping.Int%0A%0A%0A%23%20TODO%3A%20add%20proper%20type%20annotations%20to%20this%20signature%0A%23%20TODO%3A%20maybe%20get%20rid%20of%20this%20altogether%3F%0Adef%20jaxtype_factory%28%0A%20%20%20%20name%3A%20str%2C%0A%20%20%20%20array_type%3A%20type%2C%0A%20%20%20%20default_jax_dtype%3Djaxtyping.Float%2C%0A%60%60%60&labels=enhancement)
+  local link: [`/muutils/tensor_utils.py:77`](/muutils/tensor_utils.py#L77) 
+  | view on GitHub: [muutils/tensor_utils.py#L77](https://github.com/mivanit/muutils/blob/main/muutils/tensor_utils.py#L77)
+  | [Make Issue](https://github.com/mivanit/muutils/issues/new?title=add%20proper%20type%20annotations%20to%20this%20signature&body=%23%20source%0A%0A%5B%60muutils%2Ftensor_utils.py%23L77%60%5D%28https%3A%2F%2Fgithub.com%2Fmivanit%2Fmuutils%2Fblob%2Fmain%2Fmuutils%2Ftensor_utils.py%23L77%29%0A%0A%23%20context%0A%60%60%60python%0Aif%20np.version.version%20%3C%20%222.0.0%22%3A%0A%20%20%20%20TYPE_TO_JAX_DTYPE%5Bnp.float_%5D%20%3D%20jaxtyping.Float%20%20%23%20type%3A%20ignore%5Battr-defined%5D%0A%20%20%20%20TYPE_TO_JAX_DTYPE%5Bnp.int_%5D%20%3D%20jaxtyping.Int%20%20%23%20type%3A%20ignore%5Battr-defined%5D%0A%0A%0A%23%20TODO%3A%20add%20proper%20type%20annotations%20to%20this%20signature%0A%23%20TODO%3A%20maybe%20get%20rid%20of%20this%20altogether%3F%0Adef%20jaxtype_factory%28%0A%20%20%20%20name%3A%20str%2C%0A%20%20%20%20array_type%3A%20type%2C%0A%20%20%20%20default_jax_dtype%3Djaxtyping.Float%2C%0A%60%60%60&labels=enhancement)
 
   ```python
   if np.version.version < "2.0.0":
-      TYPE_TO_JAX_DTYPE[np.float_] = jaxtyping.Float
-      TYPE_TO_JAX_DTYPE[np.int_] = jaxtyping.Int
+      TYPE_TO_JAX_DTYPE[np.float_] = jaxtyping.Float  # type: ignore[attr-defined]
+      TYPE_TO_JAX_DTYPE[np.int_] = jaxtyping.Int  # type: ignore[attr-defined]
 
 
   # TODO: add proper type annotations to this signature
@@ -614,13 +634,13 @@
 
 
 - maybe get rid of this altogether?  
-  local link: [`/muutils/tensor_utils.py:77`](/muutils/tensor_utils.py#L77) 
-  | view on GitHub: [muutils/tensor_utils.py#L77](https://github.com/mivanit/muutils/blob/main/muutils/tensor_utils.py#L77)
-  | [Make Issue](https://github.com/mivanit/muutils/issues/new?title=maybe%20get%20rid%20of%20this%20altogether%3F&body=%23%20source%0A%0A%5B%60muutils%2Ftensor_utils.py%23L77%60%5D%28https%3A%2F%2Fgithub.com%2Fmivanit%2Fmuutils%2Fblob%2Fmain%2Fmuutils%2Ftensor_utils.py%23L77%29%0A%0A%23%20context%0A%60%60%60python%0A%20%20%20%20TYPE_TO_JAX_DTYPE%5Bnp.float_%5D%20%3D%20jaxtyping.Float%0A%20%20%20%20TYPE_TO_JAX_DTYPE%5Bnp.int_%5D%20%3D%20jaxtyping.Int%0A%0A%0A%23%20TODO%3A%20add%20proper%20type%20annotations%20to%20this%20signature%0A%23%20TODO%3A%20maybe%20get%20rid%20of%20this%20altogether%3F%0Adef%20jaxtype_factory%28%0A%20%20%20%20name%3A%20str%2C%0A%20%20%20%20array_type%3A%20type%2C%0A%20%20%20%20default_jax_dtype%3Djaxtyping.Float%2C%0A%20%20%20%20legacy_mode%3A%20typing.Union%5BErrorMode%2C%20str%5D%20%3D%20ErrorMode.WARN%2C%0A%60%60%60&labels=enhancement)
+  local link: [`/muutils/tensor_utils.py:78`](/muutils/tensor_utils.py#L78) 
+  | view on GitHub: [muutils/tensor_utils.py#L78](https://github.com/mivanit/muutils/blob/main/muutils/tensor_utils.py#L78)
+  | [Make Issue](https://github.com/mivanit/muutils/issues/new?title=maybe%20get%20rid%20of%20this%20altogether%3F&body=%23%20source%0A%0A%5B%60muutils%2Ftensor_utils.py%23L78%60%5D%28https%3A%2F%2Fgithub.com%2Fmivanit%2Fmuutils%2Fblob%2Fmain%2Fmuutils%2Ftensor_utils.py%23L78%29%0A%0A%23%20context%0A%60%60%60python%0A%20%20%20%20TYPE_TO_JAX_DTYPE%5Bnp.float_%5D%20%3D%20jaxtyping.Float%20%20%23%20type%3A%20ignore%5Battr-defined%5D%0A%20%20%20%20TYPE_TO_JAX_DTYPE%5Bnp.int_%5D%20%3D%20jaxtyping.Int%20%20%23%20type%3A%20ignore%5Battr-defined%5D%0A%0A%0A%23%20TODO%3A%20add%20proper%20type%20annotations%20to%20this%20signature%0A%23%20TODO%3A%20maybe%20get%20rid%20of%20this%20altogether%3F%0Adef%20jaxtype_factory%28%0A%20%20%20%20name%3A%20str%2C%0A%20%20%20%20array_type%3A%20type%2C%0A%20%20%20%20default_jax_dtype%3Djaxtyping.Float%2C%0A%20%20%20%20legacy_mode%3A%20typing.Union%5BErrorMode%2C%20str%5D%20%3D%20ErrorMode.WARN%2C%0A%60%60%60&labels=enhancement)
 
   ```python
-      TYPE_TO_JAX_DTYPE[np.float_] = jaxtyping.Float
-      TYPE_TO_JAX_DTYPE[np.int_] = jaxtyping.Int
+      TYPE_TO_JAX_DTYPE[np.float_] = jaxtyping.Float  # type: ignore[attr-defined]
+      TYPE_TO_JAX_DTYPE[np.int_] = jaxtyping.Int  # type: ignore[attr-defined]
 
 
   # TODO: add proper type annotations to this signature
@@ -661,12 +681,37 @@
 
 ## [`tests/conftest.py`](/tests/conftest.py)
 
-- get beartype working  
-  local link: [`/tests/conftest.py:1`](/tests/conftest.py#L1) 
-  | view on GitHub: [tests/conftest.py#L1](https://github.com/mivanit/muutils/blob/main/tests/conftest.py#L1)
-  | [Make Issue](https://github.com/mivanit/muutils/issues/new?title=get%20beartype%20working&body=%23%20source%0A%0A%5B%60tests%2Fconftest.py%23L1%60%5D%28https%3A%2F%2Fgithub.com%2Fmivanit%2Fmuutils%2Fblob%2Fmain%2Ftests%2Fconftest.py%23L1%29%0A%0A%23%20context%0A%60%60%60python%0A%23%20TODO%3A%20get%20beartype%20working%0A%23%20from%20beartype.claw%20import%20beartype_all%0A%0A%23%20beartype_all%28%29%0A%60%60%60&labels=enhancement)
+- [torch-python-3.14]: remove when torch supports Python 3.14  
+  local link: [`/tests/conftest.py:12`](/tests/conftest.py#L12) 
+  | view on GitHub: [tests/conftest.py#L12](https://github.com/mivanit/muutils/blob/main/tests/conftest.py#L12)
+  | [Make Issue](https://github.com/mivanit/muutils/issues/new?title=%5Btorch-python-3.14%5D%3A%20remove%20when%20torch%20supports%20Python%203.14&body=%23%20source%0A%0A%5B%60tests%2Fconftest.py%23L12%60%5D%28https%3A%2F%2Fgithub.com%2Fmivanit%2Fmuutils%2Fblob%2Fmain%2Ftests%2Fconftest.py%23L12%29%0A%0A%23%20context%0A%60%60%60python%0A%20%20%20%20%22%22%22ignore%20any%20test%20file%20ending%20with%20%60_torch.py%60%20on%20Python%203.14%2B%0A%0A%20%20%20%20Also%20ignore%20tests%2Funit%2Fvalidate_type%2F%20on%20Python%20%3C%203.11%20%28these%20use%20modern%20type%20syntax%29%0A%20%20%20%20%22%22%22%0A%20%20%20%20path_str%3A%20str%20%3D%20str%28path%29.replace%28%22%5C%5C%22%2C%20%22%2F%22%29%0A%20%20%20%20%23%20TODO%5Btorch-python-3.14%5D%3A%20remove%20when%20torch%20supports%20Python%203.14%0A%20%20%20%20%23%20ignore%20torch%20tests%20on%20Python%203.14%2B%0A%20%20%20%20if%20sys.version_info%20%3E%3D%20%283%2C%2014%29%3A%0A%20%20%20%20%20%20%20%20warnings.warn%28%0A%20%20%20%20%20%20%20%20%20%20%20%20%22Ignoring%20torch%20tests%20on%20Python%203.14%2B%20as%20torch%20does%20not%20yet%20support%20this%20version%22%0A%20%20%20%20%20%20%20%20%29%0A%60%60%60&labels=enhancement)
 
   ```python
+  """ignore any test file ending with `_torch.py` on Python 3.14+
+
+  Also ignore tests/unit/validate_type/ on Python < 3.11 (these use modern type syntax)
+  """
+  path_str: str = str(path).replace("\\", "/")
+  # TODO[torch-python-3.14]: remove when torch supports Python 3.14
+  # ignore torch tests on Python 3.14+
+  if sys.version_info >= (3, 14):
+      warnings.warn(
+          "Ignoring torch tests on Python 3.14+ as torch does not yet support this version"
+      )
+  ```
+
+
+- get beartype working  
+  local link: [`/tests/conftest.py:32`](/tests/conftest.py#L32) 
+  | view on GitHub: [tests/conftest.py#L32](https://github.com/mivanit/muutils/blob/main/tests/conftest.py#L32)
+  | [Make Issue](https://github.com/mivanit/muutils/issues/new?title=get%20beartype%20working&body=%23%20source%0A%0A%5B%60tests%2Fconftest.py%23L32%60%5D%28https%3A%2F%2Fgithub.com%2Fmivanit%2Fmuutils%2Fblob%2Fmain%2Ftests%2Fconftest.py%23L32%29%0A%0A%23%20context%0A%60%60%60python%0A%20%20%20%20%20%20%20%20%20%20%20%20return%20True%0A%0A%20%20%20%20return%20False%0A%0A%0A%23%20TODO%3A%20get%20beartype%20working%0A%23%20from%20beartype.claw%20import%20beartype_all%0A%0A%23%20beartype_all%28%29%0A%60%60%60&labels=enhancement)
+
+  ```python
+              return True
+
+      return False
+
+
   # TODO: get beartype working
   # from beartype.claw import beartype_all
 
@@ -801,12 +846,12 @@
 
 
 
-## [`tests/unit/test_tensor_utils.py`](/tests/unit/test_tensor_utils.py)
+## [`tests/unit/test_tensor_utils_torch.py`](/tests/unit/test_tensor_utils_torch.py)
 
 - type ignores here should not be necessary?  
-  local link: [`/tests/unit/test_tensor_utils.py:41`](/tests/unit/test_tensor_utils.py#L41) 
-  | view on GitHub: [tests/unit/test_tensor_utils.py#L41](https://github.com/mivanit/muutils/blob/main/tests/unit/test_tensor_utils.py#L41)
-  | [Make Issue](https://github.com/mivanit/muutils/issues/new?title=type%20ignores%20here%20should%20not%20be%20necessary%3F&body=%23%20source%0A%0A%5B%60tests%2Funit%2Ftest_tensor_utils.py%23L41%60%5D%28https%3A%2F%2Fgithub.com%2Fmivanit%2Fmuutils%2Fblob%2Fmain%2Ftests%2Funit%2Ftest_tensor_utils.py%23L41%29%0A%0A%23%20context%0A%60%60%60python%0A%20%20%20%20y%20%3D%20ATensor%5B%22dim1%20dim2%22%2C%20np.float32%5D%20%20%23%20type%3A%20ignore%5Bindex%5D%0A%20%20%20%20print%28y%29%0A%0A%0Adef%20test_numpy_to_torch_dtype%28%29%3A%0A%20%20%20%20%23%20TODO%3A%20type%20ignores%20here%20should%20not%20be%20necessary%3F%0A%20%20%20%20assert%20numpy_to_torch_dtype%28np.float32%29%20%3D%3D%20torch.float32%20%20%23%20type%3A%20ignore%5Barg-type%5D%0A%20%20%20%20assert%20numpy_to_torch_dtype%28np.int32%29%20%3D%3D%20torch.int32%20%20%23%20type%3A%20ignore%5Barg-type%5D%0A%20%20%20%20assert%20numpy_to_torch_dtype%28torch.float32%29%20%3D%3D%20torch.float32%0A%60%60%60&labels=enhancement)
+  local link: [`/tests/unit/test_tensor_utils_torch.py:48`](/tests/unit/test_tensor_utils_torch.py#L48) 
+  | view on GitHub: [tests/unit/test_tensor_utils_torch.py#L48](https://github.com/mivanit/muutils/blob/main/tests/unit/test_tensor_utils_torch.py#L48)
+  | [Make Issue](https://github.com/mivanit/muutils/issues/new?title=type%20ignores%20here%20should%20not%20be%20necessary%3F&body=%23%20source%0A%0A%5B%60tests%2Funit%2Ftest_tensor_utils_torch.py%23L48%60%5D%28https%3A%2F%2Fgithub.com%2Fmivanit%2Fmuutils%2Fblob%2Fmain%2Ftests%2Funit%2Ftest_tensor_utils_torch.py%23L48%29%0A%0A%23%20context%0A%60%60%60python%0A%20%20%20%20y%20%3D%20ATensor%5B%22dim1%20dim2%22%2C%20np.float32%5D%20%20%23%20type%3A%20ignore%5Bindex%5D%0A%20%20%20%20print%28y%29%0A%0A%0Adef%20test_numpy_to_torch_dtype%28%29%3A%0A%20%20%20%20%23%20TODO%3A%20type%20ignores%20here%20should%20not%20be%20necessary%3F%0A%20%20%20%20assert%20numpy_to_torch_dtype%28np.float32%29%20%3D%3D%20torch.float32%20%20%23%20type%3A%20ignore%5Barg-type%5D%0A%20%20%20%20assert%20numpy_to_torch_dtype%28np.int32%29%20%3D%3D%20torch.int32%20%20%23%20type%3A%20ignore%5Barg-type%5D%0A%20%20%20%20assert%20numpy_to_torch_dtype%28torch.float32%29%20%3D%3D%20torch.float32%0A%60%60%60&labels=enhancement)
 
   ```python
       y = ATensor["dim1 dim2", np.float32]  # type: ignore[index]

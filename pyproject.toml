@@ -125,7 +125,7 @@
 		"muutils/tensor_info.py" = [
 			"E701", # multiple statements on one line (colon)
 		]
-		"tests/unit/math/test_matrix_powers.py" = [
+		"tests/unit/math/test_matrix_powers_torch.py" = [
 			"F722", # jaxtyping stuff
 		]
 		"muutils/math/matrix_powers.py" = [

@@ -142,7 +142,7 @@ Sfield_T = TypeVar("Sfield_T")
 
 
 @overload
-def serializable_field(
+def serializable_field( # only `default_factory` is provided
     *_args,
     default_factory: Callable[[], Sfield_T],
     default: dataclasses._MISSING_TYPE = dataclasses.MISSING,
@@ -150,6 +150,7 @@ def serializable_field(
     repr: bool = True,
     hash: Optional[bool] = None,
     compare: bool = True,
+    doc: str|None = None,
     metadata: Optional[types.MappingProxyType] = None,
     kw_only: Union[bool, dataclasses._MISSING_TYPE] = dataclasses.MISSING,
     serialize: bool = True,
@@ -160,7 +161,7 @@ def serializable_field(
     **kwargs: Any,
 ) -> Sfield_T: ...
 @overload
-def serializable_field(
+def serializable_field( # only `default` is provided
     *_args,
     default: Sfield_T,
     default_factory: dataclasses._MISSING_TYPE = dataclasses.MISSING,
@@ -168,6 +169,7 @@ def serializable_field(
     repr: bool = True,
     hash: Optional[bool] = None,
     compare: bool = True,
+    doc: str|None = None,
     metadata: Optional[types.MappingProxyType] = None,
     kw_only: Union[bool, dataclasses._MISSING_TYPE] = dataclasses.MISSING,
     serialize: bool = True,
@@ -178,7 +180,7 @@ def serializable_field(
     **kwargs: Any,
 ) -> Sfield_T: ...
 @overload
-def serializable_field(
+def serializable_field( # both `default` and `default_factory` are MISSING
     *_args,
     default: dataclasses._MISSING_TYPE = dataclasses.MISSING,
     default_factory: dataclasses._MISSING_TYPE = dataclasses.MISSING,
@@ -186,6 +188,7 @@ def serializable_field(
     repr: bool = True,
     hash: Optional[bool] = None,
     compare: bool = True,
+    doc: str|None = None,
     metadata: Optional[types.MappingProxyType] = None,
     kw_only: Union[bool, dataclasses._MISSING_TYPE] = dataclasses.MISSING,
     serialize: bool = True,
@@ -195,7 +198,7 @@ def serializable_field(
     custom_typecheck_fn: Optional[Callable[[type], bool]] = None,
     **kwargs: Any,
 ) -> Any: ...
-def serializable_field(
+def serializable_field( # general implementation
     *_args,
     default: Union[Any, dataclasses._MISSING_TYPE] = dataclasses.MISSING,
     default_factory: Union[Any, dataclasses._MISSING_TYPE] = dataclasses.MISSING,
@@ -204,7 +207,6 @@ def serializable_field(
     hash: Optional[bool] = None,
     compare: bool = True,
     doc: str|None = None,
-    description: str|None = None,
     metadata: Optional[types.MappingProxyType] = None,
     kw_only: Union[bool, dataclasses._MISSING_TYPE] = dataclasses.MISSING,
     serialize: bool = True,
@@ -224,6 +226,7 @@ def serializable_field(
     repr: bool = True,
     hash: Optional[bool] = None,
     compare: bool = True,
+    doc: str | None = None, # new in python 3.14. can alternately pass `description` to match pydantic, but this is discouraged
     metadata: types.MappingProxyType | None = None,
     kw_only: bool | dataclasses._MISSING_TYPE = dataclasses.MISSING,
     # ----------------------------------------------------------------------
@@ -274,6 +277,13 @@ def serializable_field(
     # TODO: `custom_value_check_fn`: function taking the value of the field and returning whether the value itself is valid. if not provided, any value is valid as long as it passes the type test
     """
     assert len(_args) == 0, f"unexpected positional arguments: {_args}"
+
+    if "description" in kwargs:
+        if doc is not None:
+            err_msg: str = f"cannot pass both `doc` and `description`: {doc=}, {kwargs['description']=}"
+            raise ValueError(err_msg)
+        doc = kwargs.pop("description")
+
     return SerializableField(
         default=default,
         default_factory=default_factory,

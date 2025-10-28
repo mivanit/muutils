@@ -142,10 +142,9 @@ ifneq ($(WARN_STRICT), 0)
     PYTEST_OPTIONS += -W error
 endif
 
-# Update the PYTEST_OPTIONS to include the conditional ignore option
+# compatibility mode for python <3.10
 ifeq ($(COMPATIBILITY_MODE), 1)
 	JUNK := $(info !!! WARNING !!!: Detected python version less than 3.10, some behavior will be different)
-    PYTEST_OPTIONS += --ignore=tests/unit/validate_type/
 	TYPECHECK_ARGS += --disable-error-code misc --disable-error-code syntax --disable-error-code import-not-found --no-check-untyped-defs
 endif
 

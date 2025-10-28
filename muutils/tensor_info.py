@@ -211,11 +211,12 @@ def array_info(
         return result
 
     # Flatten array for statistics if it's multi-dimensional
+    # TODO: type checks fail on 3.10, see https://github.com/mivanit/muutils/actions/runs/18883100459/job/53891346225
     try:
         if len(A_np.shape) > 1:
-            A_flat = A_np.flatten()
+            A_flat = A_np.flatten()  # type: ignore[assignment]
         else:
-            A_flat = A_np
+            A_flat = A_np  # type: ignore[assignment]
     except:  # noqa: E722
         A_flat = A_np
 

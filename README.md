@@ -105,12 +105,12 @@ contains utilities for working with jupyter notebooks, such as:
 - configuring notebooks, to make it easier to switch between figure output formats, locations, and more
 - shorthand for displaying mermaid diagrams and TeX
 
-## [`json_serialize`](https://github.com/mivanit/muutils/tree/main/muutils/json_serialize.py)
+## [`json_serialize`](https://github.com/mivanit/muutils/tree/main/muutils/json_serialize)
 
 a tool for serializing and loading arbitrary python objects into json. plays nicely with [`ZANJ`](https://github.com/mivanit/ZANJ/)
 
 
-## [`tensor_utils`]
+## [`tensor_utils`](https://github.com/mivanit/muutils/tree/main/muutils/tensor_utils.py)
 
 contains minor utilities for working with pytorch tensors and numpy arrays, mostly for making type conversions easier
 

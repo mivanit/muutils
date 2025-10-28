@@ -30,6 +30,7 @@ class SerializableField(dataclasses.Field):
         "hash",
         "init",
         "compare",
+        "doc",
         "metadata",
         "kw_only",
         "_field_type",  # Private: not to be used by user code.
@@ -52,6 +53,7 @@ class SerializableField(dataclasses.Field):
         repr: bool = True,
         hash: Optional[bool] = None,
         compare: bool = True,
+        doc: str|None = None,
         # TODO: add field for custom comparator (such as serializing)
         metadata: Optional[types.MappingProxyType] = None,
         kw_only: Union[bool, dataclasses._MISSING_TYPE] = dataclasses.MISSING,
@@ -82,6 +84,10 @@ class SerializableField(dataclasses.Field):
         else:
             super_kwargs["metadata"] = types.MappingProxyType({})
 
+        # only pass `doc` to super if python >=3.14
+        if sys.version_info >= (3, 14):
+            super_kwargs["doc"] = doc
+
         # special check, kw_only is not supported in python <3.9 and `dataclasses.MISSING` is truthy
         if sys.version_info < (3, 10):
             if super_kwargs["kw_only"] == True:  # noqa: E712
@@ -91,6 +97,10 @@ class SerializableField(dataclasses.Field):
 
         # actually init the super class
         super().__init__(**super_kwargs)  # type: ignore[call-arg]
+        
+        # init doc if python <3.14
+        if sys.version_info < (3, 14):
+            self.doc: str|None = doc
 
         # now init the new fields
         self.serialize: bool = serialize
@@ -118,6 +128,7 @@ class SerializableField(dataclasses.Field):
             repr=field.repr,
             hash=field.hash,
             compare=field.compare,
+            doc=getattr(field, "doc", None), # `doc` added in python <3.14
             metadata=field.metadata,
             kw_only=getattr(field, "kw_only", dataclasses.MISSING),  # for python <3.9
             serialize=field.repr,  # serialize if it's going to be repr'd
@@ -192,6 +203,8 @@ def serializable_field(
     repr: bool = True,
     hash: Optional[bool] = None,
     compare: bool = True,
+    doc: str|None = None,
+    description: str|None = None,
     metadata: Optional[types.MappingProxyType] = None,
     kw_only: Union[bool, dataclasses._MISSING_TYPE] = dataclasses.MISSING,
     serialize: bool = True,

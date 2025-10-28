@@ -61,6 +61,10 @@
 		"tqdm>=4.67.1",
 	]
 
+	web = [
+		"weasyprint>=60.0",
+	]
+
 [dependency-groups]
 	dev = [
 		# typing

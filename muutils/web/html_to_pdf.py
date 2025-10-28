@@ -1,7 +1,7 @@
 from pathlib import Path
 import subprocess
 
-from weasyprint import HTML as WeasyHTML
+from weasyprint import HTML as WeasyHTML  # type: ignore[import-not-found]
 
 
 def html_to_pdf(src: Path, dst: Path) -> None:

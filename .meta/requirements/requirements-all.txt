@@ -60,6 +60,10 @@ bleach==6.3.0 ; python_full_version >= '3.10'
     # via nbconvert
 bracex==2.6 ; python_full_version >= '3.11'
     # via wcmatch
+brotli==1.1.0 ; platform_python_implementation == 'CPython'
+    # via fonttools
+brotlicffi==1.1.0.0 ; platform_python_implementation != 'CPython'
+    # via fonttools
 certifi==2025.10.5
     # via
     #   httpcore
@@ -68,13 +72,17 @@ certifi==2025.10.5
 cffi==1.17.1 ; python_full_version < '3.9'
     # via
     #   argon2-cffi-bindings
+    #   brotlicffi
     #   cryptography
     #   pyzmq
+    #   weasyprint
 cffi==2.0.0 ; python_full_version >= '3.9'
     # via
     #   argon2-cffi-bindings
+    #   brotlicffi
     #   cryptography
     #   pyzmq
+    #   weasyprint
 charset-normalizer==3.4.4
     # via requests
 cli-exit-tools==1.2.7 ; python_full_version >= '3.11'
@@ -119,6 +127,10 @@ coverage==7.11.0 ; python_full_version >= '3.10'
 coverage-badge==1.1.2
 cryptography==46.0.3 ; platform_machine != 'ppc64le' and platform_machine != 's390x' and sys_platform == 'linux'
     # via secretstorage
+cssselect2==0.7.0 ; python_full_version < '3.9'
+    # via weasyprint
+cssselect2==0.8.0 ; python_full_version >= '3.9'
+    # via weasyprint
 cycler==0.12.1
     # via matplotlib
 debugpy==1.8.17
@@ -151,9 +163,13 @@ filelock==3.19.1 ; python_full_version == '3.9.*'
 filelock==3.20.0 ; python_full_version >= '3.10' and python_full_version < '3.14'
     # via torch
 fonttools==4.57.0 ; python_full_version < '3.9'
-    # via matplotlib
+    # via
+    #   matplotlib
+    #   weasyprint
 fonttools==4.60.1 ; python_full_version >= '3.9'
-    # via matplotlib
+    # via
+    #   matplotlib
+    #   weasyprint
 fqdn==1.5.1
     # via jsonschema
 fsspec==2025.3.0 ; python_full_version < '3.9'
@@ -162,6 +178,8 @@ fsspec==2025.9.0 ; python_full_version >= '3.9' and python_full_version < '3.14'
     # via torch
 h11==0.16.0
     # via httpcore
+html5lib==1.1 ; python_full_version < '3.9'
+    # via weasyprint
 httpcore==1.0.9
     # via httpx
 httpx==0.28.1
@@ -594,11 +612,17 @@ pexpect==4.9.0 ; (python_full_version < '3.10' and sys_platform == 'emscripten')
 pickleshare==0.7.5 ; python_full_version < '3.9'
     # via ipython
 pillow==10.4.0 ; python_full_version < '3.9'
-    # via matplotlib
+    # via
+    #   matplotlib
+    #   weasyprint
 pillow==11.3.0 ; python_full_version == '3.9.*'
-    # via matplotlib
+    # via
+    #   matplotlib
+    #   weasyprint
 pillow==12.0.0 ; python_full_version >= '3.10'
-    # via matplotlib
+    # via
+    #   matplotlib
+    #   weasyprint
 pkgutil-resolve-name==1.3.10 ; python_full_version < '3.9'
     # via jsonschema
 platformdirs==4.3.6 ; python_full_version < '3.9'
@@ -634,6 +658,8 @@ pycln==2.5.0 ; python_full_version < '3.9'
 pycln==2.6.0 ; python_full_version >= '3.9'
 pycparser==2.23 ; python_full_version < '3.9' or implementation_name != 'PyPy'
     # via cffi
+pydyf==0.11.0
+    # via weasyprint
 pygments==2.19.2
     # via
     #   ipython
@@ -648,6 +674,10 @@ pyparsing==3.1.4 ; python_full_version < '3.9'
     # via matplotlib
 pyparsing==3.2.5 ; python_full_version >= '3.9'
     # via matplotlib
+pyphen==0.16.0 ; python_full_version < '3.9'
+    # via weasyprint
+pyphen==0.17.2 ; python_full_version >= '3.9'
+    # via weasyprint
 pytest==8.3.5 ; python_full_version < '3.9'
     # via pytest-cov
 pytest==8.4.2 ; python_full_version >= '3.9'
@@ -777,6 +807,7 @@ six==1.17.0
     # via
     #   astunparse
     #   bleach
+    #   html5lib
     #   python-dateutil
     #   rfc3339-validator
 sniffio==1.3.1
@@ -796,9 +827,17 @@ terminado==0.18.1
     #   jupyter-server
     #   jupyter-server-terminals
 tinycss2==1.2.1 ; python_full_version < '3.9'
-    # via bleach
+    # via
+    #   bleach
+    #   cssselect2
+    #   weasyprint
 tinycss2==1.4.0 ; python_full_version >= '3.9'
-    # via bleach
+    # via
+    #   bleach
+    #   cssselect2
+    #   weasyprint
+tinyhtml5==2.0.0 ; python_full_version >= '3.9'
+    # via weasyprint
 tomli==2.3.0 ; python_full_version <= '3.11'
     # via
     #   coverage
@@ -914,6 +953,10 @@ wcmatch==10.1 ; python_full_version >= '3.11'
     # via igittigitt
 wcwidth==0.2.14
     # via prompt-toolkit
+weasyprint==61.2 ; python_full_version < '3.9'
+    # via muutils
+weasyprint==66.0 ; python_full_version >= '3.9'
+    # via muutils
 webcolors==24.8.0 ; python_full_version < '3.9'
     # via jsonschema
 webcolors==24.11.1 ; python_full_version >= '3.9'
@@ -921,7 +964,10 @@ webcolors==24.11.1 ; python_full_version >= '3.9'
 webencodings==0.5.1
     # via
     #   bleach
+    #   cssselect2
+    #   html5lib
     #   tinycss2
+    #   tinyhtml5
 websocket-client==1.8.0 ; python_full_version < '3.9'
     # via jupyter-server
 websocket-client==1.9.0 ; python_full_version >= '3.9'
@@ -938,3 +984,5 @@ zipp==3.23.0 ; (python_full_version >= '3.9' and python_full_version < '3.12' an
     # via
     #   importlib-metadata
     #   importlib-resources
+zopfli==0.2.3.post1
+    # via fonttools

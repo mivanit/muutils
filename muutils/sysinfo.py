@@ -54,9 +54,11 @@ class SysInfo:
         # in python <= 3.9  `Distribution` has no attribute `name`
         pckgs: list[tuple[str, str]] = [
             (
-                x.metadata.get("Name", "<unknown>")
-                if sys.version_info < (3, 10)
-                else x.name,  # type: ignore[attr-defined]
+                (
+                    x.metadata.get("Name", "<unknown>")
+                    if sys.version_info < (3, 10)
+                    else x.name  # type: ignore[attr-defined]
+                ),
                 x.version,
             )
             for x in distributions()

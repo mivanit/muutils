@@ -97,7 +97,7 @@ jobs:
         run: uv pip install numpy==${{ matrix.pkg.numpy }}
     
       - name: tests
-        run: make test
+        run: make test UV_NOSYNC=1
 
       # - name: tests in strict mode
       #   # TODO: until zanj ported to 3.8 and 3.9
@@ -105,4 +105,4 @@ jobs:
       #   run: make test WARN_STRICT=1
 
       - name: check typing
-        run: make typing
+        run: make typing UV_NOSYNC=1

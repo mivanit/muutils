@@ -112,8 +112,8 @@ class BoolFlagOrValue(argparse.Action):
         **kwargs: bool | set[str] | None,
     ) -> None:
         # Extract custom kwargs before calling super().__init__
-        true_set_opt: set[str] | None = kwargs.pop("true_set", None)  # pyright: ignore[reportAssignmentType]
-        false_set_opt: set[str] | None = kwargs.pop("false_set", None)  # pyright: ignore[reportAssignmentType]
+        true_set_opt: set[str] | None = kwargs.pop("true_set", None)  # type: ignore[assignment,misc]
+        false_set_opt: set[str] | None = kwargs.pop("false_set", None)  # type: ignore[assignment,misc]
         allow_no_opt: bool = bool(kwargs.pop("allow_no", True))
         allow_bare_opt: bool = bool(kwargs.pop("allow_bare", True))
 
@@ -127,7 +127,7 @@ class BoolFlagOrValue(argparse.Action):
             option_strings=option_strings,
             dest=dest,
             nargs="?",
-            **kwargs,  # pyright: ignore[reportArgumentType]
+            **kwargs,  # type: ignore[arg-type]
         )
         # Store normalized config
         self.true_set: set[str] = _normalize_set(true_set_opt, TRUE_SET_DEFAULT)
@@ -151,13 +151,13 @@ class BoolFlagOrValue(argparse.Action):
         if option_string is not None and option_string.startswith("--no-"):
             if not self.allow_no:
                 parser.error(f"{option_string} is not allowed for this option")
-                return  # pyright: ignore[reportUnreachable]
+                return
             if values is not None:
                 dest_flag: str = self.dest.replace("_", "-")
                 parser.error(
                     f"{option_string} does not take a value; use --{dest_flag} true|false"
                 )
-                return  # pyright: ignore[reportUnreachable]
+                return
             setattr(namespace, self.dest, False)
             return
 
@@ -168,7 +168,7 @@ class BoolFlagOrValue(argparse.Action):
                 parser.error(
                     f"option {option_string} requires a value; expected one of {valid}"
                 )
-                return  # pyright: ignore[reportUnreachable]
+                return
             setattr(namespace, self.dest, True)
             return
 
@@ -178,7 +178,7 @@ class BoolFlagOrValue(argparse.Action):
                 parser.error(
                     f"{option_string} expects a single value, got {len(values) = }, {values = }"
                 )
-                return  # pyright: ignore[reportUnreachable]
+                return
             values = values[0]  # type: ignore[assignment]
 
         # Positive flag with explicit value -> parse
@@ -186,7 +186,7 @@ class BoolFlagOrValue(argparse.Action):
             val: bool = self._parse_token(values)
         except argparse.ArgumentTypeError as e:
             parser.error(str(e))
-            return  # pyright: ignore[reportUnreachable]
+            return
         setattr(namespace, self.dest, val)
 
 

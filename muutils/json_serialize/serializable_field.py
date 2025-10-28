@@ -53,7 +53,7 @@ class SerializableField(dataclasses.Field):
         repr: bool = True,
         hash: Optional[bool] = None,
         compare: bool = True,
-        doc: str|None = None,
+        doc: str | None = None,
         # TODO: add field for custom comparator (such as serializing)
         metadata: Optional[types.MappingProxyType] = None,
         kw_only: Union[bool, dataclasses._MISSING_TYPE] = dataclasses.MISSING,
@@ -97,10 +97,10 @@ class SerializableField(dataclasses.Field):
 
         # actually init the super class
         super().__init__(**super_kwargs)  # type: ignore[call-arg]
-        
+
         # init doc if python <3.14
         if sys.version_info < (3, 14):
-            self.doc: str|None = doc
+            self.doc: str | None = doc
 
         # now init the new fields
         self.serialize: bool = serialize
@@ -128,7 +128,7 @@ class SerializableField(dataclasses.Field):
             repr=field.repr,
             hash=field.hash,
             compare=field.compare,
-            doc=getattr(field, "doc", None), # `doc` added in python <3.14
+            doc=getattr(field, "doc", None),  # `doc` added in python <3.14
             metadata=field.metadata,
             kw_only=getattr(field, "kw_only", dataclasses.MISSING),  # for python <3.9
             serialize=field.repr,  # serialize if it's going to be repr'd
@@ -142,7 +142,7 @@ Sfield_T = TypeVar("Sfield_T")
 
 
 @overload
-def serializable_field( # only `default_factory` is provided
+def serializable_field(  # only `default_factory` is provided
     *_args,
     default_factory: Callable[[], Sfield_T],
     default: dataclasses._MISSING_TYPE = dataclasses.MISSING,
@@ -150,7 +150,7 @@ def serializable_field( # only `default_factory` is provided
     repr: bool = True,
     hash: Optional[bool] = None,
     compare: bool = True,
-    doc: str|None = None,
+    doc: str | None = None,
     metadata: Optional[types.MappingProxyType] = None,
     kw_only: Union[bool, dataclasses._MISSING_TYPE] = dataclasses.MISSING,
     serialize: bool = True,
@@ -161,7 +161,7 @@ def serializable_field( # only `default_factory` is provided
     **kwargs: Any,
 ) -> Sfield_T: ...
 @overload
-def serializable_field( # only `default` is provided
+def serializable_field(  # only `default` is provided
     *_args,
     default: Sfield_T,
     default_factory: dataclasses._MISSING_TYPE = dataclasses.MISSING,
@@ -169,7 +169,7 @@ def serializable_field( # only `default` is provided
     repr: bool = True,
     hash: Optional[bool] = None,
     compare: bool = True,
-    doc: str|None = None,
+    doc: str | None = None,
     metadata: Optional[types.MappingProxyType] = None,
     kw_only: Union[bool, dataclasses._MISSING_TYPE] = dataclasses.MISSING,
     serialize: bool = True,
@@ -180,7 +180,7 @@ def serializable_field( # only `default` is provided
     **kwargs: Any,
 ) -> Sfield_T: ...
 @overload
-def serializable_field( # both `default` and `default_factory` are MISSING
+def serializable_field(  # both `default` and `default_factory` are MISSING
     *_args,
     default: dataclasses._MISSING_TYPE = dataclasses.MISSING,
     default_factory: dataclasses._MISSING_TYPE = dataclasses.MISSING,
@@ -188,7 +188,7 @@ def serializable_field( # both `default` and `default_factory` are MISSING
     repr: bool = True,
     hash: Optional[bool] = None,
     compare: bool = True,
-    doc: str|None = None,
+    doc: str | None = None,
     metadata: Optional[types.MappingProxyType] = None,
     kw_only: Union[bool, dataclasses._MISSING_TYPE] = dataclasses.MISSING,
     serialize: bool = True,
@@ -198,7 +198,7 @@ def serializable_field( # both `default` and `default_factory` are MISSING
     custom_typecheck_fn: Optional[Callable[[type], bool]] = None,
     **kwargs: Any,
 ) -> Any: ...
-def serializable_field( # general implementation
+def serializable_field(  # general implementation
     *_args,
     default: Union[Any, dataclasses._MISSING_TYPE] = dataclasses.MISSING,
     default_factory: Union[Any, dataclasses._MISSING_TYPE] = dataclasses.MISSING,
@@ -206,7 +206,7 @@ def serializable_field( # general implementation
     repr: bool = True,
     hash: Optional[bool] = None,
     compare: bool = True,
-    doc: str|None = None,
+    doc: str | None = None,
     metadata: Optional[types.MappingProxyType] = None,
     kw_only: Union[bool, dataclasses._MISSING_TYPE] = dataclasses.MISSING,
     serialize: bool = True,

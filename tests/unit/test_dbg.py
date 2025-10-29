@@ -21,6 +21,8 @@ from muutils.dbg import (
     _compile_pattern,
 )
 
+assert _COUNTER
+
 
 DBG_MODULE_NAME: str = "muutils.dbg"
 
@@ -227,6 +229,7 @@ def test_misc() -> None:
     dbg_auto(d1)
     l1 = [10, 20, 30]
     dbg_auto(l1)
+
 
 # # --- Tests for tensor_info_dict and tensor_info ---
 # def test_tensor_info_dict_with_nan() -> None:

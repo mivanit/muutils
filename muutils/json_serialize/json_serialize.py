@@ -127,6 +127,15 @@ BASE_HANDLERS: MonoTuple[SerializerHandler] = (
         desc="dictionaries",
     ),
     SerializerHandler(
+        check=lambda self, obj, path: isinstance_namedtuple(obj),
+        serialize_func=lambda self, obj, path: {
+            str(k): self.json_serialize(v, tuple(path) + (k,))
+            for k, v in obj._asdict().items()
+        },
+        uid="namedtuple -> dict",
+        desc="namedtuples as dicts",
+    ),
+    SerializerHandler(
         check=lambda self, obj, path: isinstance(obj, (list, tuple)),
         serialize_func=lambda self, obj, path: [
             self.json_serialize(x, tuple(path) + (i,)) for i, x in enumerate(obj)
@@ -156,12 +165,6 @@ DEFAULT_HANDLERS: MonoTuple[SerializerHandler] = tuple(BASE_HANDLERS) + (
         serialize_func=_serialize_override_serialize_func,
         uid=".serialize override",
         desc="objects with .serialize method",
-    ),
-    SerializerHandler(
-        check=lambda self, obj, path: isinstance_namedtuple(obj),
-        serialize_func=lambda self, obj, path: self.json_serialize(dict(obj._asdict())),
-        uid="namedtuple -> dict",
-        desc="namedtuples as dicts",
     ),
     SerializerHandler(
         check=lambda self, obj, path: is_dataclass(obj),
@@ -212,13 +215,24 @@ DEFAULT_HANDLERS: MonoTuple[SerializerHandler] = tuple(BASE_HANDLERS) + (
         desc="pandas DataFrames",
     ),
     SerializerHandler(
-        check=lambda self, obj, path: isinstance(obj, (set, list, tuple))
-        or isinstance(obj, Iterable),
+        check=lambda self, obj, path: isinstance(obj, (set, frozenset)),
+        serialize_func=lambda self, obj, path: {
+            _FORMAT_KEY: "set" if isinstance(obj, set) else "frozenset",
+            "data": [
+                self.json_serialize(x, tuple(path) + (i,)) for i, x in enumerate(obj)
+            ],
+        },
+        uid="set -> dict[_FORMAT_KEY: 'set', data: list(...)]",
+        desc="sets as dicts with format key",
+    ),
+    SerializerHandler(
+        check=lambda self, obj, path: isinstance(obj, Iterable)
+        and not isinstance(obj, (list, tuple, str)),
         serialize_func=lambda self, obj, path: [
             self.json_serialize(x, tuple(path) + (i,)) for i, x in enumerate(obj)
         ],
-        uid="(set, list, tuple, Iterable) -> list",
-        desc="sets, lists, tuples, and Iterables as lists",
+        uid="Iterable -> list",
+        desc="Iterables (not lists/tuples/strings) as lists",
     ),
     SerializerHandler(
         check=lambda self, obj, path: True,
@@ -285,6 +299,7 @@ class JsonSerializer:
         obj: Any,
         path: ObjectPath = tuple(),
     ) -> JSONitem:
+        handler = None
         try:
             for handler in self.handlers:
                 if handler.check(self, obj, path):
@@ -298,14 +313,15 @@ class JsonSerializer:
             raise ValueError(f"no handler found for object with {type(obj) = }")
 
         except Exception as e:
-            if self.error_mode == "except":
+            if self.error_mode == ErrorMode.EXCEPT:
                 obj_str: str = repr(obj)
                 if len(obj_str) > 1000:
                     obj_str = obj_str[:1000] + "..."
+                handler_uid = handler.uid if handler else "no handler matched"
                 raise SerializationException(
-                    f"error serializing at {path = } with last handler: '{handler.uid}'\nfrom: {e}\nobj: {obj_str}"
+                    f"error serializing at {path = } with last handler: '{handler_uid}'\nfrom: {e}\nobj: {obj_str}"
                 ) from e
-            elif self.error_mode == "warn":
+            elif self.error_mode == ErrorMode.WARN:
                 warnings.warn(
                     f"error serializing at {path = }, will return as string\n{obj = }\nexception = {e}"
                 )

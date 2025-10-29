@@ -503,6 +503,7 @@ def test_add_bool_flag_default_help():
             break
 
     assert action is not None
+    assert action.help is not None
     assert "enable/disable my feature" in action.help
 
 

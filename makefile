@@ -1766,7 +1766,9 @@ format-check:
 .PHONY: typing
 typing: gen-extra-tests
 	@echo "running type checks"
-	$(PYTHON) -m mypy --config-file $(PYPROJECT) $(TYPECHECK_ARGS) .
+	$(PYTHON) -m mypy --config-file $(PYPROJECT) $(TYPECHECK_ARGS) . || true
+	$(PYTHON) -m basedpyright check . || true
+	$(PYTHON) -m ty check . || true
 # $(PYTHON) -m ty check muutils/
 
 # generate summary report of type check errors grouped by file

@@ -1,12 +1,12 @@
-#!/usr/bin/env python3
 """Benchmark test comparing run_maybe_parallel with other parallelization techniques.
 
 Run with: python tests/benchmark_parallel.py
 """
 
+from pathlib import Path
 import time
 import multiprocessing
-from typing import List, Callable, Any, Dict, Tuple, Union
+from typing import List, Callable, Any, Dict, Optional, Sequence, Tuple, Union
 import pandas as pd  # type: ignore[import-untyped]
 import numpy as np
 from collections import defaultdict
@@ -308,7 +308,6 @@ def plot_timing_comparison(
 def plot_efficiency_heatmap(df: pd.DataFrame, save_path: str = None):
     """Plot efficiency heatmap (speedup across methods and tasks)."""
     import matplotlib.pyplot as plt  # type: ignore[import-untyped]
-    import seaborn as sns  # type: ignore[import-untyped]
 
     # Create pivot table for heatmap
     pivot_df = df.pivot_table(
@@ -317,15 +316,19 @@ def plot_efficiency_heatmap(df: pd.DataFrame, save_path: str = None):
 
     # Create heatmap
     plt.figure(figsize=(12, 8))
-    sns.heatmap(
-        pivot_df,
-        annot=True,
-        fmt=".2f",
-        cmap="YlOrRd",
-        vmin=0,
-        center=1,
-        cbar_kws={"label": "Speedup"},
-    )
+    # sns.heatmap(
+    #     pivot_df,
+    #     annot=True,
+    #     fmt=".2f",
+    #     cmap="YlOrRd",
+    #     vmin=0,
+    #     center=1,
+    #     cbar_kws={"label": "Speedup"},
+    # )
+    plt.imshow(pivot_df, aspect="auto", cmap="YlOrRd", vmin=0)
+    plt.colorbar(label="Speedup")
+    plt.yticks(range(len(pivot_df.index)), [f"{t[0]}-{t[1]}" for t in pivot_df.index])
+    plt.xticks(range(len(pivot_df.columns)), pivot_df.columns, rotation=45)
     plt.title("Parallelization Efficiency Heatmap")
     plt.tight_layout()
 
@@ -368,17 +371,29 @@ def print_summary_stats(df: pd.DataFrame):
     print(avg_speedup.sort_values("mean", ascending=False))
 
 
-def main():
+_DEFAULT_TASK_FUNCS: dict[str, Callable[[int], int]] = {
+    "cpu_bound": cpu_bound_task,
+    "io_bound": io_bound_task,
+    "light_cpu": light_cpu_task,
+}
+
+
+def main(
+    data_sizes: Sequence[int] = (100, 1000, 5000, 10000),
+    base_path: Path = Path("."),
+    plot: bool = True,
+    task_funcs: Optional[Dict[str, Callable[[int], int]]] = None,
+):
     """Run benchmarks and display results."""
     print("Starting parallelization benchmark...")
 
+    base_path = Path(base_path)
+    base_path.mkdir(parents=True, exist_ok=True)
+
+
     # Configure benchmark parameters
-    data_sizes = [100, 1000, 5000, 10000]
-    task_funcs = {
-        "cpu_bound": cpu_bound_task,
-        "io_bound": io_bound_task,
-        "light_cpu": light_cpu_task,
-    }
+    if task_funcs is None:
+        task_funcs = _DEFAULT_TASK_FUNCS
 
     # Run benchmarks
     runner = BenchmarkRunner()
@@ -391,23 +406,21 @@ def main():
     # Display summary
     print_summary_stats(df)
 
-    # Create visualizations
-    import matplotlib  # type: ignore[import-untyped]
+    if plot:
+        # Create visualizations
+        import matplotlib  # type: ignore[import-untyped]
 
-    matplotlib.use("Agg")  # Use non-interactive backend
+        matplotlib.use("Agg")  # Use non-interactive backend
 
-    # Plot speedup by data size for each task type
-    for task in task_funcs.keys():
-        plot_speedup_by_data_size(df, task, f"speedup_{task}.png")
-        print(f"Saved speedup plot for {task} tasks to speedup_{task}.png")
+        # Plot speedup by data size for each task type
+        for task in task_funcs.keys():
+            plot_speedup_by_data_size(df, task, base_path / f"speedup_{task}.png")
 
-    # Plot timing comparison for largest data size
-    plot_timing_comparison(df, data_sizes[-1], "timing_comparison.png")
-    print("Saved timing comparison to timing_comparison.png")
+        # Plot timing comparison for largest data size
+        plot_timing_comparison(df, data_sizes[-1], base_path / "timing_comparison.png")
 
-    # Plot efficiency heatmap
-    plot_efficiency_heatmap(df, "efficiency_heatmap.png")
-    print("Saved efficiency heatmap to efficiency_heatmap.png")
+        # Plot efficiency heatmap
+        plot_efficiency_heatmap(df, base_path / "efficiency_heatmap.png")
 
     return df
 

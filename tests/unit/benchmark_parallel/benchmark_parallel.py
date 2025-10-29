@@ -390,7 +390,6 @@ def main(
     base_path = Path(base_path)
     base_path.mkdir(parents=True, exist_ok=True)
 
-
     # Configure benchmark parameters
     if task_funcs is None:
         task_funcs = _DEFAULT_TASK_FUNCS
@@ -400,7 +399,7 @@ def main(
     df = runner.run_benchmark_suite(data_sizes, task_funcs, runs_per_method=3)
 
     # Save results
-    df.to_csv("benchmark_results.csv", index=False)
+    df.to_csv(base_path / "benchmark_results.csv", index=False)
     print("\nResults saved to benchmark_results.csv")
 
     # Display summary

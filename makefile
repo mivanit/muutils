@@ -128,7 +128,32 @@ endif
 
 # if you want different behavior for different python versions
 # --------------------------------------------------
-# COMPATIBILITY_MODE := $(shell $(PYTHON) -c "import sys; print(1 if sys.version_info < (3, 10) else 0)")
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# compatibility mode for python <3.10
+
+# loose typing, allow warnings for python <3.10
+# --------------------------------------------------
+TYPECHECK_ARGS ?= 
+# COMPATIBILITY_MODE: whether to run in compatibility mode for python <3.10
+COMPATIBILITY_MODE := $(shell $(PYTHON) -c "import sys; print(1 if sys.version_info < (3, 11) else 0)")
+
+# compatibility mode for python <3.10
+# --------------------------------------------------
+
+# whether to run pytest with warnings as errors
+WARN_STRICT ?= 0
+
+ifneq ($(WARN_STRICT), 0)
+    PYTEST_OPTIONS += -W error
+endif
+
+# compatibility mode for python <3.10
+ifeq ($(COMPATIBILITY_MODE), 1)
+	JUNK := $(info !!! WARNING !!!: Detected python version less than 3.10, some behavior will be different)
+	TYPECHECK_ARGS += --disable-error-code misc --disable-error-code syntax --disable-error-code import-not-found --no-check-untyped-defs
+endif
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # options we might want to pass to pytest
 # --------------------------------------------------
@@ -1704,6 +1729,20 @@ dep-clean:
 # checks (formatting/linting, typing, tests)
 # ==================================================
 
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# added gen-extra-tests and it is required by some other recipes:
+# format-check, typing, test
+
+# extra tests with python >=3.10 type hints
+.PHONY: gen-extra-tests
+gen-extra-tests:
+	if [ $(COMPATIBILITY_MODE) -eq 0 ]; then \
+		echo "converting certain tests to modern format"; \
+		$(PYTHON) tests/util/replace_type_hints.py tests/unit/validate_type/test_validate_type.py "# DO NOT EDIT, GENERATED FILE" > tests/unit/validate_type/test_validate_type_GENERATED.py; \
+	fi; \
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 # format code AND auto-fix linting issues
 # performs TWO operations: reformats code, then auto-fixes safe linting issues
 # configure in pyproject.toml:[tool.ruff]
@@ -1719,17 +1758,22 @@ format-check:
 	@echo "check if the source code is formatted correctly"
 	$(PYTHON) -m ruff check --config $(PYPROJECT) .
 
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # runs type checks with mypy
+# at some point, need to add back --check-untyped-defs to mypy call
+# but it complains when we specify arguments by keyword where positional is fine
+# not sure how to fix this
 .PHONY: typing
-typing: clean
+typing: gen-extra-tests
 	@echo "running type checks"
 	$(PYTHON) -m mypy --config-file $(PYPROJECT) $(TYPECHECK_ARGS) .
+# $(PYTHON) -m ty check muutils/
 
 # generate summary report of type check errors grouped by file
 # outputs TOML format showing error count per file
 # useful for tracking typing progress across large codebases
 .PHONY: typing-report
-typing-report:
+typing-report: clean gen-extra-tests
 	@echo "generate a report of the type check output -- errors per file"
 	$(PYTHON) -m mypy --config-file $(PYPROJECT) $(TYPECHECK_ARGS) . | $(PYTHON) -c "$$SCRIPT_MYPY_REPORT" --mode toml
 
@@ -1743,9 +1787,10 @@ typing-report:
 #   PYTEST_OPTIONS="..."  # pass additional pytest arguments
 # pytest config in pyproject.toml:[tool.pytest.ini_options]
 .PHONY: test
-test: clean
+test: clean gen-extra-tests
 	@echo "running tests"
 	$(PYTHON) -m pytest $(PYTEST_OPTIONS) $(TESTS_DIR)
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .PHONY: check
 check: clean format-check test typing
@@ -1955,6 +2000,8 @@ publish: gen-commit-log check build verify-git version gen-version-info
 # removes $(TESTS_TEMP_DIR) to remove temporary test files
 # recursively removes all `__pycache__` directories and `*.pyc` or `*.pyo` files
 # distinct from `make docs-clean`, which only removes generated documentation files
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# slight modification in last line for extra tests
 .PHONY: clean
 clean:
 	@echo "clean up temporary files"
@@ -1966,7 +2013,9 @@ clean:
 	rm -rf build
 	rm -rf $(PACKAGE_NAME).egg-info
 	rm -rf $(TESTS_TEMP_DIR)
-	$(PYTHON) -Bc "import pathlib; [p.unlink() for path in ['$(PACKAGE_NAME)', '$(TESTS_DIR)', '$(DOCS_DIR)'] for pattern in ['*.py[co]', '__pycache__/*'] for p in pathlib.Path(path).rglob(pattern)]"
+	$(PYTHON_BASE) -Bc "import pathlib; [p.unlink() for path in ['$(PACKAGE_NAME)', '$(TESTS_DIR)', '$(DOCS_DIR)'] for pattern in ['*.py[co]', '__pycache__/*'] for p in pathlib.Path(path).rglob(pattern)]"
+	rm -rf tests/unit/validate_type/test_validate_type_GENERATED.py
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # remove all generated/build files including .venv
 # runs: clean + docs-clean + dep-clean

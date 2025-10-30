@@ -21,7 +21,7 @@ from muutils.dbg import (
     _compile_pattern,
 )
 
-assert _COUNTER
+assert _COUNTER is not None
 
 
 DBG_MODULE_NAME: str = "muutils.dbg"

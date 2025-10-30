@@ -11,7 +11,7 @@ from __future__ import annotations
 import base64
 import typing
 import warnings
-from typing import Any, Iterable, Literal, Optional, Sequence
+from typing import Any, Iterable, Literal, Optional, Sequence, TypedDict
 
 try:
     import numpy as np
@@ -24,6 +24,12 @@ except ImportError as e:
 from muutils.json_serialize.util import _FORMAT_KEY, JSONitem
 
 # pylint: disable=unused-argument
+
+# Recursive type for nested numeric lists (output of arr.tolist())
+NumericList = typing.Union[
+    typing.List[typing.Union[int, float, bool]],
+    typing.List["NumericList"],
+]
 
 ArrayMode = Literal[
     "list",
@@ -45,7 +51,23 @@ def array_n_elements(arr) -> int:  # type: ignore[name-defined]
         raise TypeError(f"invalid type: {type(arr)}")
 
 
-def arr_metadata(arr) -> dict[str, list[int] | str | int]:
+class ArrayMetadata(TypedDict):
+    """Metadata for a numpy/torch array"""
+    shape: list[int]
+    dtype: str
+    n_elements: int
+
+
+class SerializedArrayWithMeta(TypedDict):
+    """Serialized array with metadata (for array_list_meta, array_hex_meta, array_b64_meta, zero_dim modes)"""
+    __muutils_format__: str
+    data: typing.Union[NumericList, str, int, float, bool]  # list, hex str, b64 str, or scalar for zero_dim
+    shape: list[int]
+    dtype: str
+    n_elements: int
+
+
+def arr_metadata(arr) -> ArrayMetadata:
     """get metadata for a numpy array"""
     return {
         "shape": list(arr.shape),
@@ -61,7 +83,7 @@ def serialize_array(
     arr: np.ndarray,
     path: str | Sequence[str | int],
     array_mode: ArrayMode | None = None,
-) -> JSONitem:
+) -> SerializedArrayWithMeta | NumericList:
     """serialize a numpy or pytorch array in one of several modes
 
     if the object is zero-dimensional, simply get the unique item
@@ -101,34 +123,40 @@ def serialize_array(
     arr_type: str = f"{type(arr).__module__}.{type(arr).__name__}"
     arr_np: np.ndarray = arr if isinstance(arr, np.ndarray) else np.array(arr)
 
+    # Handle list mode first (no metadata needed)
+    if array_mode == "list":
+        return arr_np.tolist()
+
+    # For all other modes, compute metadata once
+    metadata: ArrayMetadata = arr_metadata(arr if len(arr.shape) == 0 else arr_np)
+
     # handle zero-dimensional arrays
     if len(arr.shape) == 0:
-        return {
-            _FORMAT_KEY: f"{arr_type}:zero_dim",
-            "data": arr.item(),
-            **arr_metadata(arr),
-        }
+        return SerializedArrayWithMeta(
+            __muutils_format__=f"{arr_type}:zero_dim",
+            data=arr.item(),
+            **metadata,
+        )
 
+    # Handle the metadata modes
     if array_mode == "array_list_meta":
-        return {
-            _FORMAT_KEY: f"{arr_type}:array_list_meta",
-            "data": arr_np.tolist(),
-            **arr_metadata(arr_np),
-        }
-    elif array_mode == "list":
-        return arr_np.tolist()
+        return SerializedArrayWithMeta(
+            __muutils_format__=f"{arr_type}:array_list_meta",
+            data=arr_np.tolist(),
+            **metadata,
+        )
     elif array_mode == "array_hex_meta":
-        return {
-            _FORMAT_KEY: f"{arr_type}:array_hex_meta",
-            "data": arr_np.tobytes().hex(),
-            **arr_metadata(arr_np),
-        }
+        return SerializedArrayWithMeta(
+            __muutils_format__=f"{arr_type}:array_hex_meta",
+            data=arr_np.tobytes().hex(),
+            **metadata,
+        )
     elif array_mode == "array_b64_meta":
-        return {
-            _FORMAT_KEY: f"{arr_type}:array_b64_meta",
-            "data": base64.b64encode(arr_np.tobytes()).decode(),
-            **arr_metadata(arr_np),
-        }
+        return SerializedArrayWithMeta(
+            __muutils_format__=f"{arr_type}:array_b64_meta",
+            data=base64.b64encode(arr_np.tobytes()).decode(),
+            **metadata,
+        )
     else:
         raise KeyError(f"invalid array_mode: {array_mode}")
 

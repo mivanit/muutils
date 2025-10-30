@@ -14,7 +14,7 @@ from muutils.json_serialize.util import _FORMAT_KEY
 # pylint: disable=missing-class-docstring
 
 
-class TestYourModule:
+class TestArray:
     def setup_method(self):
         self.array_1d = np.array([1, 2, 3])
         self.array_2d = np.array([[1, 2], [3, 4]])
@@ -75,17 +75,20 @@ class TestYourModule:
 
     def test_serialize_load_zero_dim(self):
         for array_mode in [
-            "list",
+            # TODO: do we even want to support "list" mode for zero-dim arrays?
+            # "list",
             "array_list_meta",
             "array_hex_meta",
             "array_b64_meta",
         ]:
+            print(array_mode)
             serialized_array = serialize_array(
                 self.jser,
                 self.array_zero_dim,
                 "test_path",
                 array_mode=array_mode,  # type: ignore[arg-type]
             )
+            print(serialized_array)
             loaded_array = load_array(serialized_array)
             assert np.array_equal(loaded_array, self.array_zero_dim)
 

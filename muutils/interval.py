@@ -115,7 +115,9 @@ class Interval:
                     )
 
             # Ensure lower bound is less than upper bound
-            if self.lower > self.upper:
+            # TYPING: ty throws a @Todo here
+            # Operator `>` is not supported for types `Sequence[@Todo]` and `Sequence[@Todo]`, in comparing `@Todo | Sequence[@Todo]` with `@Todo | Sequence[@Todo]`tyunsupported-operator
+            if self.lower > self.upper:  # type: ignore[unsupported-operator]
                 raise ValueError("Lower bound must be less than upper bound")
 
             if math.isnan(self.lower) or math.isnan(self.upper):

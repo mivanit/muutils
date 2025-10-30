@@ -275,9 +275,12 @@ def array_info(
     return result
 
 
+SparklineFormat = Literal["unicode", "latex", "ascii"]
+
+
 def generate_sparkline(
     histogram: np.ndarray,
-    format: Literal["unicode", "latex", "ascii"] = "unicode",
+    format: SparklineFormat = "unicode",
     log_y: Optional[bool] = None,
 ) -> tuple[str, bool]:
     """Generate a sparkline visualization of the histogram.

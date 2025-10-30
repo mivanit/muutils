@@ -230,9 +230,9 @@ def get_fn_allowed_kwargs(fn: typing.Callable) -> typing.Set[str]:
         fn = unwrap(fn)
         params = signature(fn).parameters
     except ValueError as e:
-        raise ValueError(
-            f"Cannot retrieve signature for {fn.__name__ = } {fn = }: {str(e)}"
-        ) from e
+        fn_name: str = getattr(fn, "__name__", str(fn))
+        err_msg = f"Cannot retrieve signature for {fn_name = } {fn = }: {str(e)}"
+        raise ValueError(err_msg) from e
 
     return {
         param.name

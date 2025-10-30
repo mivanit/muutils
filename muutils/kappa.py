@@ -7,14 +7,16 @@ hence the name of this class"""
 
 from __future__ import annotations
 
-from typing import Callable, Mapping, TypeVar
+from typing import Callable, Final, Mapping, TypeVar
 
 _kappa_K = TypeVar("_kappa_K")
 _kappa_V = TypeVar("_kappa_V")
 
 # get the docstring of this file
-_BASE_DOC: str = (
+_BASE_DOC: Final[str] = (
+    # TYPING: type checkers complain here, they have no idea that this module does in fact have a __doc__
     __doc__
+    or "anonymous getitem class"
     + """
 
 source function docstring:

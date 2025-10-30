@@ -153,7 +153,8 @@ def register_method(
                 method_name = method_name_orig
         else:
             method_name = custom_name
-            method.__name__ = custom_name
+            # TYPING: ty complains here
+            method.__name__ = custom_name  # type: ignore[unresolved-attribute]
         assert method_name not in method_dict, (
             f"Method name already exists in method_dict: {method_name = }, {list(method_dict.keys()) = }"
         )

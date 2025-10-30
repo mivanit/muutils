@@ -89,6 +89,10 @@ def validate_type(
         else _return_validation_bool
     )
 
+    # handle None type (used in type hints like tuple[int, None])
+    if expected_type is None:
+        return _return_func(value is None)
+
     # base type without args
     if isinstance(expected_type, type):
         try:

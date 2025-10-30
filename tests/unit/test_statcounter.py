@@ -5,16 +5,17 @@ import numpy as np
 from muutils.statcounter import StatCounter
 
 
-def _compute_err(a: float, b: float, /) -> dict[str, float]:
-    return dict(
+def _compute_err(a: float, b: float | np.floating, /) -> dict[str, int | float]:
+    result: dict[str, int | float] = dict(
         num_a=float(a),
         num_b=float(b),
         diff=float(b - a),
         # frac_err=float((b - a) / a), # this causes division by zero, whatever
     )
+    return result
 
 
-def _compare_np_custom(arr: np.ndarray) -> dict[str, dict]:
+def _compare_np_custom(arr: np.ndarray) -> dict[str, dict[str, float]]:
     counter: StatCounter = StatCounter(arr)
     return dict(
         mean=_compute_err(counter.mean(), np.mean(arr)),

@@ -297,6 +297,7 @@ def serializable_field(  # general implementation
         repr=repr,
         hash=hash,
         compare=compare,
+        doc=doc,
         metadata=metadata,
         kw_only=kw_only,
         serialize=serialize,

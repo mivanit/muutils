@@ -61,6 +61,10 @@
 		"tqdm>=4.67.1",
 	]
 
+	web = [
+		"weasyprint>=60.0",
+	]
+
 [dependency-groups]
 	dev = [
 		# typing
@@ -69,6 +73,7 @@
 		"typing-extensions; python_version < '3.11'",
 		"beartype>=0.14.1",
 		"ty",
+		"basedpyright",
 		# tests & coverage
 		"pytest>=8.2.2",
 		"pytest-cov>=4.1.0",
@@ -136,12 +141,37 @@
 	all = true
 	exclude = ["tests/input_data", "tests/junk_data", "_wip/"]
 
+[tool.basedpyright]
+	include = ["muutils", "tests"]
+	reportConstantRedefinition = false # I always use all caps for globals, not just consts
+	reportDeprecated = false # this library is backwards compatible back to 3.8, so we are using lots of deprecated stuff
+	reportUnsupportedDunderAll = false # we use __all__ a lot for docs stuff
+	exclude = [
+		"tests/input_data",
+		"tests/junk_data",
+		"tests/_temp",
+		"_wip",
+		"docs/resources/make_docs.py",
+		".venv",
+	]
+
+[tool.ty.src]
+	exclude = [
+		"tests/input_data/",
+		"tests/junk_data/",
+		"tests/_temp/",
+		"tests/benchmark_parallel.py",
+		"_wip/",
+		"docs/resources/make_docs.py",
+	]
+
 [tool.mypy]
 	exclude = [
 		# tests
 		"tests/input_data",
 		"tests/junk_data",
 		"tests/_temp/",
+		"tests/benchmark_parallel.py",
 		# wip stuff
 		"_wip/",
 		# not our problem

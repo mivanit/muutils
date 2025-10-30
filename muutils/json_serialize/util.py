@@ -8,7 +8,7 @@ import inspect
 import sys
 import typing
 import warnings
-from typing import Any, Callable, Iterable, Union
+from typing import TYPE_CHECKING, Any, Callable, Final, Iterable, Union
 
 _NUMPY_WORKING: bool
 try:
@@ -26,19 +26,32 @@ BaseType = Union[
     None,
 ]
 
-JSONitem = Union[
-    BaseType,
-    # mypy doesn't like recursive types, so we just go down a few levels manually
-    typing.List[Union[BaseType, typing.List[Any], typing.Dict[str, Any]]],
-    typing.Dict[str, Union[BaseType, typing.List[Any], typing.Dict[str, Any]]],
-]
+# At type-checking time, include array serialization types to avoid nominal type errors
+# This avoids runtime circular imports since array.py imports from util.py
+if TYPE_CHECKING:
+    from muutils.json_serialize.array import NumericList, SerializedArrayWithMeta
+
+    JSONitem = Union[
+        BaseType,
+        typing.Sequence["JSONitem"],
+        typing.Dict[str, "JSONitem"],
+        SerializedArrayWithMeta,
+        NumericList,
+    ]
+else:
+    JSONitem = Union[
+        BaseType,
+        typing.Sequence["JSONitem"],
+        typing.Dict[str, "JSONitem"],
+    ]
+
 JSONdict = typing.Dict[str, JSONitem]
 
 Hashableitem = Union[bool, int, float, str, tuple]
 
 
-_FORMAT_KEY: str = "__muutils_format__"
-_REF_KEY: str = "$ref"
+_FORMAT_KEY: Final[str] = "__muutils_format__"
+_REF_KEY: Final[str] = "$ref"
 
 # or if python version <3.9
 if typing.TYPE_CHECKING or sys.version_info < (3, 9):
@@ -114,10 +127,10 @@ def try_catch(func: Callable):
 def _recursive_hashify(obj: Any, force: bool = True) -> Hashableitem:
     if isinstance(obj, typing.Mapping):
         return tuple((k, _recursive_hashify(v)) for k, v in obj.items())
-    elif isinstance(obj, (tuple, list, Iterable)):
-        return tuple(_recursive_hashify(v) for v in obj)
     elif isinstance(obj, (bool, int, float, str)):
         return obj
+    elif isinstance(obj, (tuple, list, Iterable)):
+        return tuple(_recursive_hashify(v) for v in obj)
     else:
         if force:
             return str(obj)
@@ -264,8 +277,8 @@ def dc_eq(
                 f"Cannot compare dataclasses of different classes: `{dc1.__class__}` and `{dc2.__class__}`"
             )
         if except_when_field_mismatch:
-            dc1_fields: set = set([fld.name for fld in dataclasses.fields(dc1)])
-            dc2_fields: set = set([fld.name for fld in dataclasses.fields(dc2)])
+            dc1_fields: set[str] = set([fld.name for fld in dataclasses.fields(dc1)])
+            dc2_fields: set[str] = set([fld.name for fld in dataclasses.fields(dc2)])
             fields_match: bool = set(dc1_fields) == set(dc2_fields)
             if not fields_match:
                 # if the fields match, keep going

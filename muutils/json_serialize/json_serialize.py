@@ -21,8 +21,9 @@ from muutils.errormode import ErrorMode
 try:
     from muutils.json_serialize.array import ArrayMode, serialize_array
 except ImportError as e:
+    # TYPING: obviously, these types are all wrong if we can't import array.py
     ArrayMode = str  # type: ignore[misc]
-    serialize_array = lambda *args, **kwargs: None  # noqa: E731
+    serialize_array = lambda *args, **kwargs: None  # type: ignore[assignment, invalid-assignment] # noqa: E731 # pyright: ignore[reportUnknownVariableType, reportUnknownLambdaType]
     warnings.warn(
         f"muutils.json_serialize.array could not be imported probably because missing numpy, array serialization will not work: \n{e}",
         ImportWarning,
@@ -127,6 +128,15 @@ BASE_HANDLERS: MonoTuple[SerializerHandler] = (
         desc="dictionaries",
     ),
     SerializerHandler(
+        check=lambda self, obj, path: isinstance_namedtuple(obj),
+        serialize_func=lambda self, obj, path: {
+            str(k): self.json_serialize(v, tuple(path) + (k,))
+            for k, v in obj._asdict().items()
+        },
+        uid="namedtuple -> dict",
+        desc="namedtuples as dicts",
+    ),
+    SerializerHandler(
         check=lambda self, obj, path: isinstance(obj, (list, tuple)),
         serialize_func=lambda self, obj, path: [
             self.json_serialize(x, tuple(path) + (i,)) for i, x in enumerate(obj)
@@ -158,12 +168,6 @@ DEFAULT_HANDLERS: MonoTuple[SerializerHandler] = tuple(BASE_HANDLERS) + (
         desc="objects with .serialize method",
     ),
     SerializerHandler(
-        check=lambda self, obj, path: isinstance_namedtuple(obj),
-        serialize_func=lambda self, obj, path: self.json_serialize(dict(obj._asdict())),
-        uid="namedtuple -> dict",
-        desc="namedtuples as dicts",
-    ),
-    SerializerHandler(
         check=lambda self, obj, path: is_dataclass(obj),
         serialize_func=lambda self, obj, path: {
             k: self.json_serialize(getattr(obj, k), tuple(path) + (k,))
@@ -193,7 +197,9 @@ DEFAULT_HANDLERS: MonoTuple[SerializerHandler] = tuple(BASE_HANDLERS) + (
     SerializerHandler(
         check=lambda self, obj, path: str(type(obj)) == "<class 'torch.Tensor'>",
         serialize_func=lambda self, obj, path: serialize_array(
-            self, obj.detach().cpu(), path=path
+            self,
+            obj.detach().cpu(),
+            path=path,  # pyright: ignore[reportAny]
         ),
         uid="torch.Tensor",
         desc="pytorch tensors",
@@ -202,23 +208,35 @@ DEFAULT_HANDLERS: MonoTuple[SerializerHandler] = tuple(BASE_HANDLERS) + (
         check=lambda self, obj, path: (
             str(type(obj)) == "<class 'pandas.core.frame.DataFrame'>"
         ),
-        serialize_func=lambda self, obj, path: {
-            _FORMAT_KEY: "pandas.DataFrame",
-            "columns": obj.columns.tolist(),
-            "data": obj.to_dict(orient="records"),
-            "path": path,  # type: ignore
+        # TYPING: type checkers have no idea that obj is a DataFrame here
+        serialize_func=lambda self, obj, path: {  # pyright: ignore[reportArgumentType, reportAny]
+            _FORMAT_KEY: "pandas.DataFrame",  # type: ignore[misc]
+            "columns": obj.columns.tolist(),  # pyright: ignore[reportAny]
+            "data": obj.to_dict(orient="records"),  # pyright: ignore[reportAny]
+            "path": path,
         },
         uid="pandas.DataFrame",
         desc="pandas DataFrames",
     ),
     SerializerHandler(
-        check=lambda self, obj, path: isinstance(obj, (set, list, tuple))
-        or isinstance(obj, Iterable),
+        check=lambda self, obj, path: isinstance(obj, (set, frozenset)),
+        serialize_func=lambda self, obj, path: {
+            _FORMAT_KEY: "set" if isinstance(obj, set) else "frozenset",  # type: ignore[misc]
+            "data": [
+                self.json_serialize(x, tuple(path) + (i,)) for i, x in enumerate(obj)
+            ],
+        },
+        uid="set -> dict[_FORMAT_KEY: 'set', data: list(...)]",
+        desc="sets as dicts with format key",
+    ),
+    SerializerHandler(
+        check=lambda self, obj, path: isinstance(obj, Iterable)
+        and not isinstance(obj, (list, tuple, str)),
         serialize_func=lambda self, obj, path: [
             self.json_serialize(x, tuple(path) + (i,)) for i, x in enumerate(obj)
         ],
-        uid="(set, list, tuple, Iterable) -> list",
-        desc="sets, lists, tuples, and Iterables as lists",
+        uid="Iterable -> list",
+        desc="Iterables (not lists/tuples/strings) as lists",
     ),
     SerializerHandler(
         check=lambda self, obj, path: True,
@@ -285,27 +303,30 @@ class JsonSerializer:
         obj: Any,
         path: ObjectPath = tuple(),
     ) -> JSONitem:
+        handler = None
         try:
             for handler in self.handlers:
                 if handler.check(self, obj, path):
                     output: JSONitem = handler.serialize_func(self, obj, path)
                     if self.write_only_format:
                         if isinstance(output, dict) and _FORMAT_KEY in output:
-                            new_fmt: JSONitem = output.pop(_FORMAT_KEY)
-                            output["__write_format__"] = new_fmt
+                            # TYPING: JSONitem has no idea that _FORMAT_KEY is str
+                            new_fmt: str = output.pop(_FORMAT_KEY)  # type: ignore
+                            output["__write_format__"] = new_fmt  # type: ignore
                     return output
 
             raise ValueError(f"no handler found for object with {type(obj) = }")
 
         except Exception as e:
-            if self.error_mode == "except":
+            if self.error_mode == ErrorMode.EXCEPT:
                 obj_str: str = repr(obj)
                 if len(obj_str) > 1000:
                     obj_str = obj_str[:1000] + "..."
+                handler_uid = handler.uid if handler else "no handler matched"
                 raise SerializationException(
-                    f"error serializing at {path = } with last handler: '{handler.uid}'\nfrom: {e}\nobj: {obj_str}"
+                    f"error serializing at {path = } with last handler: '{handler_uid}'\nfrom: {e}\nobj: {obj_str}"
                 ) from e
-            elif self.error_mode == "warn":
+            elif self.error_mode == ErrorMode.WARN:
                 warnings.warn(
                     f"error serializing at {path = }, will return as string\n{obj = }\nexception = {e}"
                 )

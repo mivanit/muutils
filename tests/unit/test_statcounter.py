@@ -5,7 +5,7 @@ import numpy as np
 from muutils.statcounter import StatCounter
 
 
-def _compute_err(a: float, b: float, /) -> dict[str, float]:
+def _compute_err(a: float, b: float | np.floating, /) -> dict[str, float]:
     return dict(
         num_a=float(a),
         num_b=float(b),
@@ -14,7 +14,7 @@ def _compute_err(a: float, b: float, /) -> dict[str, float]:
     )
 
 
-def _compare_np_custom(arr: np.ndarray) -> dict[str, dict]:
+def _compare_np_custom(arr: np.ndarray) -> dict[str, dict[str, float]]:
     counter: StatCounter = StatCounter(arr)
     return dict(
         mean=_compute_err(counter.mean(), np.mean(arr)),

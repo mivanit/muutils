@@ -1,8 +1,11 @@
 from __future__ import annotations
+from typing import TypeVar
 from muutils.jsonlines import jsonl_load_log
 
+T_StreamValue = TypeVar("T_StreamValue")
 
-def get_any_from_stream(stream: list[dict], key: str) -> None:
+
+def get_any_from_stream(stream: list[dict[str, T_StreamValue]], key: str) -> T_StreamValue:
     """get the first value of a key from a stream. errors if not found"""
     for msg in stream:
         if key in msg:
@@ -44,7 +47,7 @@ def gather_stream(
 def gather_val(
     file: str,
     stream: str,
-    keys: tuple[str],
+    keys: tuple[str, ...],
     allow_skip: bool = True,
 ) -> list[list]:
     """gather specific keys from a specific stream in a log file

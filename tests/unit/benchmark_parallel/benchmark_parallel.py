@@ -194,7 +194,7 @@ def benchmark_sequential(func: Callable, data: List[int]) -> Tuple[List[Any], fl
 
 
 def benchmark_pool_map(
-    func: Callable, data: List[int], processes: int = None
+    func: Callable, data: List[int], processes: int | None = None
 ) -> Tuple[List[Any], float]:
     """Benchmark using multiprocessing.Pool.map."""
     start = time.perf_counter()
@@ -205,7 +205,7 @@ def benchmark_pool_map(
 
 
 def benchmark_pool_imap(
-    func: Callable, data: List[int], processes: int = None, chunksize: int = 1
+    func: Callable, data: List[int], processes: int | None = None, chunksize: int = 1
 ) -> Tuple[List[Any], float]:
     """Benchmark using multiprocessing.Pool.imap."""
     start = time.perf_counter()
@@ -216,7 +216,7 @@ def benchmark_pool_imap(
 
 
 def benchmark_pool_imap_unordered(
-    func: Callable, data: List[int], processes: int = None, chunksize: int = 1
+    func: Callable, data: List[int], processes: int | None = None, chunksize: int = 1
 ) -> Tuple[List[Any], float]:
     """Benchmark using multiprocessing.Pool.imap_unordered."""
     start = time.perf_counter()
@@ -231,7 +231,7 @@ def benchmark_run_maybe_parallel(
     data: List[int],
     parallel: Union[bool, int],
     keep_ordered: bool = True,
-    chunksize: int = None,
+    chunksize: int | None = None,
 ) -> Tuple[List[Any], float]:
     """Benchmark using run_maybe_parallel."""
     start = time.perf_counter()
@@ -248,7 +248,7 @@ def benchmark_run_maybe_parallel(
 
 
 def plot_speedup_by_data_size(
-    df: pd.DataFrame, task_type: str = None, save_path: str = None
+    df: pd.DataFrame, task_type: str | None = None, save_path: str | None = None
 ):
     """Plot speedup vs data size for different methods."""
     import matplotlib.pyplot as plt  # type: ignore[import-untyped]
@@ -280,7 +280,7 @@ def plot_speedup_by_data_size(
 
 
 def plot_timing_comparison(
-    df: pd.DataFrame, data_size: int = None, save_path: str = None
+    df: pd.DataFrame, data_size: int | None = None, save_path: str | None = None
 ):
     """Plot timing comparison as bar chart."""
     import matplotlib.pyplot as plt  # type: ignore[import-untyped]
@@ -305,7 +305,7 @@ def plot_timing_comparison(
         plt.show()
 
 
-def plot_efficiency_heatmap(df: pd.DataFrame, save_path: str = None):
+def plot_efficiency_heatmap(df: pd.DataFrame, save_path: str | None = None):
     """Plot efficiency heatmap (speedup across methods and tasks)."""
     import matplotlib.pyplot as plt  # type: ignore[import-untyped]
 

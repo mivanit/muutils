@@ -215,18 +215,18 @@ def tensor_info(tensor: typing.Any) -> str:
     return array_summary(tensor, as_list=False, **DBG_TENSOR_ARRAY_SUMMARY_DEFAULTS)
 
 
-DBG_DICT_DEFAULTS: typing.Dict[str, typing.Union[bool, int, str]] = dict(
-    key_types=True,
-    val_types=True,
-    max_len=32,
-    indent="  ",
-    max_depth=3,
-)
+DBG_DICT_DEFAULTS: typing.Dict[str, typing.Union[bool, int, str]] = {
+    "key_types": True,
+    "val_types": True,
+    "max_len": 32,
+    "indent": "  ",
+    "max_depth": 3,
+}
 
-DBG_LIST_DEFAULTS: typing.Dict[str, typing.Union[bool, int, str]] = dict(
-    max_len=16,
-    summary_show_types=True,
-)
+DBG_LIST_DEFAULTS: typing.Dict[str, typing.Union[bool, int, str]] = {
+    "max_len": 16,
+    "summary_show_types": True,
+}
 
 
 def list_info(

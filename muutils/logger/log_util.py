@@ -5,7 +5,9 @@ from muutils.jsonlines import jsonl_load_log
 T_StreamValue = TypeVar("T_StreamValue")
 
 
-def get_any_from_stream(stream: list[dict[str, T_StreamValue]], key: str) -> T_StreamValue:
+def get_any_from_stream(
+    stream: list[dict[str, T_StreamValue]], key: str
+) -> T_StreamValue:
     """get the first value of a key from a stream. errors if not found"""
     for msg in stream:
         if key in msg:

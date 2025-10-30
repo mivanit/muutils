@@ -53,6 +53,7 @@ def array_n_elements(arr) -> int:  # type: ignore[name-defined]
 
 class ArrayMetadata(TypedDict):
     """Metadata for a numpy/torch array"""
+
     shape: list[int]
     dtype: str
     n_elements: int
@@ -60,8 +61,11 @@ class ArrayMetadata(TypedDict):
 
 class SerializedArrayWithMeta(TypedDict):
     """Serialized array with metadata (for array_list_meta, array_hex_meta, array_b64_meta, zero_dim modes)"""
+
     __muutils_format__: str
-    data: typing.Union[NumericList, str, int, float, bool]  # list, hex str, b64 str, or scalar for zero_dim
+    data: typing.Union[
+        NumericList, str, int, float, bool
+    ]  # list, hex str, b64 str, or scalar for zero_dim
     shape: list[int]
     dtype: str
     n_elements: int

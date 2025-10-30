@@ -18,6 +18,9 @@ except ImportError:
     _NUMPY_WORKING = False
 
 
+# pyright: reportExplicitAny=false
+
+
 BaseType = Union[
     bool,
     int,
@@ -47,18 +50,20 @@ else:
 
 JSONdict = typing.Dict[str, JSONitem]
 
-Hashableitem = Union[bool, int, float, str, tuple]
+Hashableitem = Union[bool, int, float, str, tuple]  # pyright: ignore[reportMissingTypeArgument]
 
 
 _FORMAT_KEY: Final[str] = "__muutils_format__"
 _REF_KEY: Final[str] = "$ref"
 
+
+# TODO: this bit is very broken
 # or if python version <3.9
 if typing.TYPE_CHECKING or sys.version_info < (3, 9):
     MonoTuple = typing.Sequence
 else:
 
-    class MonoTuple:
+    class MonoTuple:  # pyright: ignore[reportUnreachable]
         """tuple type hint, but for a tuple of any length with all the same type"""
 
         __slots__ = ()
@@ -86,20 +91,21 @@ else:
                 raise TypeError(f"MonoTuple expects 1 type argument, got {params = }")
 
 
+# TYPING: we allow `Any` here because the container is... universal
 class UniversalContainer:
     """contains everything -- `x in UniversalContainer()` is always True"""
 
-    def __contains__(self, x: Any) -> bool:
+    def __contains__(self, x: Any) -> bool:  # pyright: ignore[reportAny]
         return True
 
 
-def isinstance_namedtuple(x: Any) -> bool:
+def isinstance_namedtuple(x: Any) -> bool:  # pyright: ignore[reportAny]
     """checks if `x` is a `namedtuple`
 
     credit to https://stackoverflow.com/questions/2166818/how-to-check-if-an-object-is-an-instance-of-a-namedtuple
     """
-    t: type = type(x)
-    b: tuple = t.__bases__
+    t: type = type(x)  # pyright: ignore[reportUnknownVariableType, reportAny]
+    b: tuple[type, ...] = t.__bases__
     if len(b) != 1 or (b[0] is not tuple):
         return False
     f: Any = getattr(t, "_fields", None)
@@ -108,7 +114,7 @@ def isinstance_namedtuple(x: Any) -> bool:
     return all(isinstance(n, str) for n in f)
 
 
-def try_catch(func: Callable):
+def try_catch(func: Callable[[Any], Any]):
     """wraps the function to catch exceptions, returns serialized error message on exception
 
     returned func will return normal result on success, or error message on exception
@@ -270,15 +276,15 @@ def dc_eq(
     if dc1 is dc2:
         return True
 
-    if dc1.__class__ is not dc2.__class__:
+    if dc1.__class__ is not dc2.__class__:  # pyright: ignore[reportUnknownMemberType]
         if except_when_class_mismatch:
             # if the classes don't match, raise an error
             raise TypeError(
-                f"Cannot compare dataclasses of different classes: `{dc1.__class__}` and `{dc2.__class__}`"
+                f"Cannot compare dataclasses of different classes: `{dc1.__class__}` and `{dc2.__class__}`"  # pyright: ignore[reportUnknownMemberType]
             )
         if except_when_field_mismatch:
-            dc1_fields: set[str] = set([fld.name for fld in dataclasses.fields(dc1)])
-            dc2_fields: set[str] = set([fld.name for fld in dataclasses.fields(dc2)])
+            dc1_fields: set[str] = set([fld.name for fld in dataclasses.fields(dc1)])  # pyright: ignore[reportUnknownArgumentType]
+            dc2_fields: set[str] = set([fld.name for fld in dataclasses.fields(dc2)])  # pyright: ignore[reportUnknownArgumentType]
             fields_match: bool = set(dc1_fields) == set(dc2_fields)
             if not fields_match:
                 # if the fields match, keep going

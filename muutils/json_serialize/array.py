@@ -1,4 +1,4 @@
-"""this utilities module handles serialization and loading of numpy and torch arrays as json
+"""this utilities module handles serialization and loading of numpy and torch arrays as json 
 
 - `array_list_meta` is less efficient (arrays are stored as nested lists), but preserves both metadata and human readability.
 - `array_b64_meta` is the most efficient, but is not human readable.
@@ -11,7 +11,7 @@ from __future__ import annotations
 import base64
 import typing
 import warnings
-from typing import Any, Iterable, Literal, Optional, Sequence, TypedDict
+from typing import TYPE_CHECKING, Any, Iterable, Literal, Optional, Sequence, TypedDict
 
 try:
     import numpy as np
@@ -21,9 +21,13 @@ except ImportError as e:
         ImportWarning,
     )
 
+if TYPE_CHECKING:
+    import numpy as np
+
 from muutils.json_serialize.util import _FORMAT_KEY, JSONitem
 
-# pylint: disable=unused-argument
+# TYPING: pyright complains way too much here
+# pyright: reportCallIssue=false,reportArgumentType=false,reportUnknownVariableType=false,reportUnknownMemberType=false
 
 # Recursive type for nested numeric lists (output of arr.tolist())
 NumericList = typing.Union[
@@ -181,7 +185,8 @@ def infer_array_mode(arr: JSONitem) -> ArrayMode:
     assumes the array was serialized via `serialize_array()`
     """
     if isinstance(arr, typing.Mapping):
-        fmt: str = arr.get(_FORMAT_KEY, "")  # type: ignore
+        # _FORMAT_KEY always maps to a string
+        fmt: str = arr.get(_FORMAT_KEY, "")  # type: ignore  # pyright: ignore[reportAssignmentType]
         if fmt.endswith(":array_list_meta"):
             if not isinstance(arr["data"], Iterable):
                 raise ValueError(f"invalid list format: {type(arr['data']) = }\t{arr}")
@@ -206,7 +211,7 @@ def infer_array_mode(arr: JSONitem) -> ArrayMode:
         raise ValueError(f"cannot infer array_mode from\t{type(arr) = }\n{arr = }")
 
 
-def load_array(arr: JSONitem, array_mode: Optional[ArrayMode] = None) -> Any:
+def load_array(arr: JSONitem, array_mode: Optional[ArrayMode] = None) -> Any:  # pyright: ignore[reportExplicitAny, reportAny]
     """load a json-serialized array, infer the mode if not specified"""
     # return arr if its already a numpy array
     if isinstance(arr, np.ndarray) and array_mode is None:
@@ -226,24 +231,24 @@ def load_array(arr: JSONitem, array_mode: Optional[ArrayMode] = None) -> Any:
         assert isinstance(arr, typing.Mapping), (
             f"invalid list format: {type(arr) = }\n{arr = }"
         )
-        data = np.array(arr["data"], dtype=arr["dtype"])  # type: ignore
-        if tuple(arr["shape"]) != tuple(data.shape):  # type: ignore
+        data = np.array(arr["data"], dtype=arr["dtype"])  # type: ignore  
+        if tuple(arr["shape"]) != tuple(data.shape):  # type: ignore 
             raise ValueError(f"invalid shape: {arr}")
-        return data
+        return data 
 
     elif array_mode == "array_hex_meta":
         assert isinstance(arr, typing.Mapping), (
             f"invalid list format: {type(arr) = }\n{arr = }"
         )
-        data = np.frombuffer(bytes.fromhex(arr["data"]), dtype=arr["dtype"])  # type: ignore
-        return data.reshape(arr["shape"])  # type: ignore
+        data = np.frombuffer(bytes.fromhex(arr["data"]), dtype=arr["dtype"])  # type: ignore  
+        return data.reshape(arr["shape"])  # type: ignore  
 
     elif array_mode == "array_b64_meta":
         assert isinstance(arr, typing.Mapping), (
             f"invalid list format: {type(arr) = }\n{arr = }"
         )
-        data = np.frombuffer(base64.b64decode(arr["data"]), dtype=arr["dtype"])  # type: ignore
-        return data.reshape(arr["shape"])  # type: ignore
+        data = np.frombuffer(base64.b64decode(arr["data"]), dtype=arr["dtype"])  # type: ignore  
+        return data.reshape(arr["shape"])  # type: ignore  
 
     elif array_mode == "list":
         assert isinstance(arr, typing.Sequence), (
@@ -265,4 +270,4 @@ def load_array(arr: JSONitem, array_mode: Optional[ArrayMode] = None) -> Any:
             raise ValueError(f"invalid shape: {arr}")
         return data
     else:
-        raise ValueError(f"invalid array_mode: {array_mode}")
+        raise ValueError(f"invalid array_mode: {array_mode}")  # pyright: ignore[reportUnreachable]

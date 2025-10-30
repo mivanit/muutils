@@ -28,9 +28,8 @@ BaseType = Union[
 
 JSONitem = Union[
     BaseType,
-    # mypy doesn't like recursive types, so we just go down a few levels manually
-    typing.List[Union[BaseType, typing.List[Any], typing.Dict[str, Any]]],
-    typing.Dict[str, Union[BaseType, typing.List[Any], typing.Dict[str, Any]]],
+    typing.List["JSONitem"],
+    typing.Dict[str, "JSONitem"],
 ]
 JSONdict = typing.Dict[str, JSONitem]
 

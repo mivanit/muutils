@@ -115,14 +115,12 @@ class BoolFlagOrValue(argparse.Action):
         option_strings: Sequence[str],
         dest: str,
         nargs: int | str | None = None,
-        **kwargs: bool | set[str] | None,
+        true_set: set[str] | None = None,
+        false_set: set[str] | None = None,
+        allow_no: bool = True,
+        allow_bare: bool = True,
+        **kwargs: Any,
     ) -> None:
-        # Extract custom kwargs before calling super().__init__
-        true_set_opt: set[str] | None = kwargs.pop("true_set", None)  # type: ignore[assignment,misc]
-        false_set_opt: set[str] | None = kwargs.pop("false_set", None)  # type: ignore[assignment,misc]
-        allow_no_opt: bool = bool(kwargs.pop("allow_no", True))
-        allow_bare_opt: bool = bool(kwargs.pop("allow_bare", True))
-
         if "type" in kwargs and kwargs["type"] is not None:
             raise ValueError("BoolFlagOrValue does not accept type=. Remove it.")
 
@@ -133,13 +131,13 @@ class BoolFlagOrValue(argparse.Action):
             option_strings=option_strings,
             dest=dest,
             nargs="?",
-            **kwargs,  # type: ignore[arg-type]
+            **kwargs,
         )
         # Store normalized config
-        self.true_set: set[str] = _normalize_set(true_set_opt, TRUE_SET_DEFAULT)
-        self.false_set: set[str] = _normalize_set(false_set_opt, FALSE_SET_DEFAULT)
-        self.allow_no: bool = allow_no_opt
-        self.allow_bare: bool = allow_bare_opt
+        self.true_set: set[str] = _normalize_set(true_set, TRUE_SET_DEFAULT)
+        self.false_set: set[str] = _normalize_set(false_set, FALSE_SET_DEFAULT)
+        self.allow_no: bool = allow_no
+        self.allow_bare: bool = allow_bare
 
     def _parse_token(self, token: str) -> bool:
         """Parse a boolean token using this action's configured sets."""

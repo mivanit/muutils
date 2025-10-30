@@ -263,8 +263,8 @@ def dc_eq(
                 f"Cannot compare dataclasses of different classes: `{dc1.__class__}` and `{dc2.__class__}`"
             )
         if except_when_field_mismatch:
-            dc1_fields: set = set([fld.name for fld in dataclasses.fields(dc1)])
-            dc2_fields: set = set([fld.name for fld in dataclasses.fields(dc2)])
+            dc1_fields: set[str] = set([fld.name for fld in dataclasses.fields(dc1)])
+            dc2_fields: set[str] = set([fld.name for fld in dataclasses.fields(dc2)])
             fields_match: bool = set(dc1_fields) == set(dc2_fields)
             if not fields_match:
                 # if the fields match, keep going

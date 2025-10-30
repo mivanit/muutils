@@ -134,12 +134,16 @@ def serialize_array(
     # For all other modes, compute metadata once
     metadata: ArrayMetadata = arr_metadata(arr if len(arr.shape) == 0 else arr_np)
 
+    # TYPING: ty<=0.0.1a24 does not appear to support unpacking TypedDicts, so we do things manually. change it back later maybe?
+
     # handle zero-dimensional arrays
     if len(arr.shape) == 0:
         return SerializedArrayWithMeta(
             __muutils_format__=f"{arr_type}:zero_dim",
             data=arr.item(),
-            **metadata,
+            shape=metadata["shape"],
+            dtype=metadata["dtype"],
+            n_elements=metadata["n_elements"],
         )
 
     # Handle the metadata modes
@@ -147,19 +151,25 @@ def serialize_array(
         return SerializedArrayWithMeta(
             __muutils_format__=f"{arr_type}:array_list_meta",
             data=arr_np.tolist(),
-            **metadata,
+            shape=metadata["shape"],
+            dtype=metadata["dtype"],
+            n_elements=metadata["n_elements"],
         )
     elif array_mode == "array_hex_meta":
         return SerializedArrayWithMeta(
             __muutils_format__=f"{arr_type}:array_hex_meta",
             data=arr_np.tobytes().hex(),
-            **metadata,
+            shape=metadata["shape"],
+            dtype=metadata["dtype"],
+            n_elements=metadata["n_elements"],
         )
     elif array_mode == "array_b64_meta":
         return SerializedArrayWithMeta(
             __muutils_format__=f"{arr_type}:array_b64_meta",
             data=base64.b64encode(arr_np.tobytes()).decode(),
-            **metadata,
+            shape=metadata["shape"],
+            dtype=metadata["dtype"],
+            n_elements=metadata["n_elements"],
         )
     else:
         raise KeyError(f"invalid array_mode: {array_mode}")

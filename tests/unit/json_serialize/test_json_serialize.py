@@ -123,6 +123,7 @@ def test_json_serialize_serialize_method():
 
     obj = ClassWithSerialize(value=5)
     result = serializer.json_serialize(obj)
+    assert isinstance(result, dict)
 
     # Should use the custom serialize method
     assert result == {"custom_value": 10, "custom_name": "TEST"}
@@ -145,6 +146,7 @@ def test_serialize_method_priority():
 
     obj = DataclassWithSerialize(x=3, y=7)
     result = serializer.json_serialize(obj)
+    assert isinstance(result, dict)
 
     # Should use custom serialize, not dataclass handler
     assert result == {"sum": 10}
@@ -263,6 +265,7 @@ def test_DEFAULT_HANDLERS():
     result = serializer.json_serialize({1, 2, 3})
     assert isinstance(result, dict)
     assert result[_FORMAT_KEY] == "set"
+    assert isinstance(result["data"], list)
     assert set(result["data"]) == {1, 2, 3}
 
     # Test tuple (should become list)
@@ -493,12 +496,14 @@ def test_write_only_format():
     # Without write_only_format
     serializer1 = JsonSerializer(handlers_pre=(format_handler,))
     result1 = serializer1.json_serialize("FORMAT:test")
+    assert isinstance(result1, dict)
     assert _FORMAT_KEY in result1
     assert result1[_FORMAT_KEY] == "custom_format"
 
     # With write_only_format
     serializer2 = JsonSerializer(handlers_pre=(format_handler,), write_only_format=True)
     result2 = serializer2.json_serialize("FORMAT:test")
+    assert isinstance(result2, dict)
     assert _FORMAT_KEY not in result2
     assert "__write_format__" in result2
     assert result2["__write_format__"] == "custom_format"
@@ -653,7 +658,7 @@ def test_JsonSerializer_init_custom_values():
 
     serializer = JsonSerializer(
         array_mode="list",
-        error_mode="warn",
+        error_mode=ErrorMode.WARN,
         handlers_pre=(custom_handler,),
         handlers_default=BASE_HANDLERS,
         write_only_format=True,
@@ -706,6 +711,7 @@ def test_large_nested_structure():
     # Create large nested list
     large = [[i, i * 2, i * 3] for i in range(100)]
     result = serializer.json_serialize(large)
+    assert isinstance(result, list)
     assert len(result) == 100
     assert result[0] == [0, 0, 0]
     assert result[99] == [99, 198, 297]
@@ -720,6 +726,7 @@ def test_mixed_container_types():
     assert isinstance(result, dict)
     assert _FORMAT_KEY in result
     assert result[_FORMAT_KEY] == "set"
+    assert isinstance(result["data"], list)
     assert set(result["data"]) == {1, 2, 3}
 
     # Frozenset - serialized with format key
@@ -727,6 +734,7 @@ def test_mixed_container_types():
     assert isinstance(result, dict)
     assert _FORMAT_KEY in result
     assert result[_FORMAT_KEY] == "frozenset"
+    assert isinstance(result["data"], list)
     assert set(result["data"]) == {4, 5, 6}
 
     # Generator (Iterable) - serialized as list
@@ -741,5 +749,6 @@ def test_string_keys_in_dict():
 
     # Integer keys should be converted to strings
     result = serializer.json_serialize({1: "a", 2: "b", 3: "c"})
+    assert isinstance(result, dict)
     assert result == {"1": "a", "2": "b", "3": "c"}
     assert all(isinstance(k, str) for k in result.keys())

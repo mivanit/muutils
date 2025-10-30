@@ -21,8 +21,9 @@ from muutils.errormode import ErrorMode
 try:
     from muutils.json_serialize.array import ArrayMode, serialize_array
 except ImportError as e:
+    # TYPING: obviously, these types are all wrong if we can't import array.py
     ArrayMode = str  # type: ignore[misc]
-    serialize_array = lambda *args, **kwargs: None  # noqa: E731
+    serialize_array = lambda *args, **kwargs: None  # type: ignore[assignment, invalid-assignment] # noqa: E731 # pyright: ignore[reportUnknownVariableType, reportUnknownLambdaType]
     warnings.warn(
         f"muutils.json_serialize.array could not be imported probably because missing numpy, array serialization will not work: \n{e}",
         ImportWarning,
@@ -196,7 +197,9 @@ DEFAULT_HANDLERS: MonoTuple[SerializerHandler] = tuple(BASE_HANDLERS) + (
     SerializerHandler(
         check=lambda self, obj, path: str(type(obj)) == "<class 'torch.Tensor'>",
         serialize_func=lambda self, obj, path: serialize_array(
-            self, obj.detach().cpu(), path=path
+            self,
+            obj.detach().cpu(),
+            path=path,  # pyright: ignore[reportAny]
         ),
         uid="torch.Tensor",
         desc="pytorch tensors",
@@ -205,11 +208,12 @@ DEFAULT_HANDLERS: MonoTuple[SerializerHandler] = tuple(BASE_HANDLERS) + (
         check=lambda self, obj, path: (
             str(type(obj)) == "<class 'pandas.core.frame.DataFrame'>"
         ),
-        serialize_func=lambda self, obj, path: {
-            _FORMAT_KEY: "pandas.DataFrame",
-            "columns": obj.columns.tolist(),
-            "data": obj.to_dict(orient="records"),
-            "path": path,  # type: ignore
+        # TYPING: type checkers have no idea that obj is a DataFrame here
+        serialize_func=lambda self, obj, path: {  # pyright: ignore[reportArgumentType, reportAny]
+            _FORMAT_KEY: "pandas.DataFrame",  # type: ignore[misc]
+            "columns": obj.columns.tolist(),  # pyright: ignore[reportAny]
+            "data": obj.to_dict(orient="records"),  # pyright: ignore[reportAny]
+            "path": path,
         },
         uid="pandas.DataFrame",
         desc="pandas DataFrames",
@@ -217,7 +221,7 @@ DEFAULT_HANDLERS: MonoTuple[SerializerHandler] = tuple(BASE_HANDLERS) + (
     SerializerHandler(
         check=lambda self, obj, path: isinstance(obj, (set, frozenset)),
         serialize_func=lambda self, obj, path: {
-            _FORMAT_KEY: "set" if isinstance(obj, set) else "frozenset",
+            _FORMAT_KEY: "set" if isinstance(obj, set) else "frozenset",  # type: ignore[misc]
             "data": [
                 self.json_serialize(x, tuple(path) + (i,)) for i, x in enumerate(obj)
             ],
@@ -306,8 +310,9 @@ class JsonSerializer:
                     output: JSONitem = handler.serialize_func(self, obj, path)
                     if self.write_only_format:
                         if isinstance(output, dict) and _FORMAT_KEY in output:
-                            new_fmt: JSONitem = output.pop(_FORMAT_KEY)
-                            output["__write_format__"] = new_fmt
+                            # TYPING: JSONitem has no idea that _FORMAT_KEY is str
+                            new_fmt: str = output.pop(_FORMAT_KEY)  # type: ignore
+                            output["__write_format__"] = new_fmt  # type: ignore
                     return output
 
             raise ValueError(f"no handler found for object with {type(obj) = }")

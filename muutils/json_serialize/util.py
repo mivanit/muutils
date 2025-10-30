@@ -8,7 +8,7 @@ import inspect
 import sys
 import typing
 import warnings
-from typing import Any, Callable, Iterable, Union
+from typing import TYPE_CHECKING, Any, Callable, Final, Iterable, Union
 
 _NUMPY_WORKING: bool
 try:
@@ -26,18 +26,32 @@ BaseType = Union[
     None,
 ]
 
-JSONitem = Union[
-    BaseType,
-    typing.List["JSONitem"],
-    typing.Dict[str, "JSONitem"],
-]
+# At type-checking time, include array serialization types to avoid nominal type errors
+# This avoids runtime circular imports since array.py imports from util.py
+if TYPE_CHECKING:
+    from muutils.json_serialize.array import NumericList, SerializedArrayWithMeta
+
+    JSONitem = Union[
+        BaseType,
+        typing.Sequence["JSONitem"],
+        typing.Dict[str, "JSONitem"],
+        SerializedArrayWithMeta,
+        NumericList,
+    ]
+else:
+    JSONitem = Union[
+        BaseType,
+        typing.Sequence["JSONitem"],
+        typing.Dict[str, "JSONitem"],
+    ]
+
 JSONdict = typing.Dict[str, JSONitem]
 
 Hashableitem = Union[bool, int, float, str, tuple]
 
 
-_FORMAT_KEY: str = "__muutils_format__"
-_REF_KEY: str = "$ref"
+_FORMAT_KEY: Final[str] = "__muutils_format__"
+_REF_KEY: Final[str] = "$ref"
 
 # or if python version <3.9
 if typing.TYPE_CHECKING or sys.version_info < (3, 9):

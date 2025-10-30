@@ -141,6 +141,29 @@
 	all = true
 	exclude = ["tests/input_data", "tests/junk_data", "_wip/"]
 
+[tool.basedpyright]
+	include = ["muutils", "tests"]
+	reportConstantRedefinition = false # I always use all caps for globals, not just consts
+	reportDeprecated = false # this library is backwards compatible back to 3.8, so we are using lots of deprecated stuff
+	exclude = [
+		"tests/input_data",
+		"tests/junk_data",
+		"tests/_temp",
+		"_wip",
+		"docs/resources/make_docs.py",
+		".venv",
+	]
+
+[tool.ty.src]
+	exclude = [
+		"tests/input_data/",
+		"tests/junk_data/",
+		"tests/_temp/",
+		"tests/benchmark_parallel.py",
+		"_wip/",
+		"docs/resources/make_docs.py",
+	]
+
 [tool.mypy]
 	exclude = [
 		# tests

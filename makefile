@@ -1775,9 +1775,9 @@ typing: gen-extra-tests
 typing-summary: gen-extra-tests
 	@echo "running type checks and saving to .meta/.type-errors/"
 	@mkdir -p .meta/.type-errors
-	@$(PYTHON) -m mypy --config-file $(PYPROJECT) $(TYPECHECK_ARGS) . > .meta/.type-errors/mypy.txt 2>&1 || true
-	@$(PYTHON) -m basedpyright . > .meta/.type-errors/basedpyright.txt 2>&1 || true
-	@$(PYTHON) -m ty check . > .meta/.type-errors/ty.txt 2>&1 || true
+	$(PYTHON) -m mypy --config-file $(PYPROJECT) $(TYPECHECK_ARGS) . > .meta/.type-errors/mypy.txt 2>&1 || true
+	$(PYTHON) -m basedpyright . > .meta/.type-errors/basedpyright.txt 2>&1 || true
+	$(PYTHON) -m ty check . > .meta/.type-errors/ty.txt 2>&1 || true
 	@echo "mypy: $$(tail -n 1 .meta/.type-errors/mypy.txt)"
 	@echo "basedpyright: $$(tail -n 1 .meta/.type-errors/basedpyright.txt)"
 	@echo "ty: $$(tail -n 1 .meta/.type-errors/ty.txt)"

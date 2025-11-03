@@ -33,7 +33,7 @@ except ImportError as e:
 if TYPE_CHECKING:
     import numpy as np
 
-from muutils.json_serialize.util import _FORMAT_KEY
+from muutils.json_serialize.types import _FORMAT_KEY
 
 # TYPING: pyright complains way too much here
 # pyright: reportCallIssue=false,reportArgumentType=false,reportUnknownVariableType=false,reportUnknownMemberType=false

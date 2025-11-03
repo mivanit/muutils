@@ -8,7 +8,9 @@ import inspect
 import sys
 import typing
 import warnings
-from typing import TYPE_CHECKING, Any, Callable, Final, Iterable, TypeVar, Union
+from typing import TYPE_CHECKING, Any, Callable, Iterable, TypeVar, Union
+
+from muutils.json_serialize.types import BaseType, Hashableitem
 
 _NUMPY_WORKING: bool
 try:
@@ -20,17 +22,8 @@ except ImportError:
 
 # pyright: reportExplicitAny=false
 
-
-BaseType = Union[
-    bool,
-    int,
-    float,
-    str,
-    None,
-]
-
 # At type-checking time, include array serialization types to avoid nominal type errors
-# This avoids runtime circular imports since array.py imports from util.py
+# This avoids superfluous imports at runtime
 if TYPE_CHECKING:
     from muutils.json_serialize.array import NumericList, SerializedArrayWithMeta
 
@@ -49,12 +42,6 @@ else:
     ]
 
 JSONdict = typing.Dict[str, JSONitem]
-
-Hashableitem = Union[bool, int, float, str, tuple]  # pyright: ignore[reportMissingTypeArgument]
-
-
-_FORMAT_KEY: Final[str] = "__muutils_format__"
-_REF_KEY: Final[str] = "$ref"
 
 
 # TODO: this bit is very broken

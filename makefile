@@ -1778,9 +1778,8 @@ typing-summary: gen-extra-tests
 	$(PYTHON) -m mypy --config-file $(PYPROJECT) $(TYPECHECK_ARGS) . > .meta/.type-errors/mypy.txt 2>&1 || true
 	$(PYTHON) -m basedpyright . > .meta/.type-errors/basedpyright.txt 2>&1 || true
 	$(PYTHON) -m ty check . > .meta/.type-errors/ty.txt 2>&1 || true
-	@echo "mypy: $$(tail -n 1 .meta/.type-errors/mypy.txt)"
-	@echo "basedpyright: $$(tail -n 1 .meta/.type-errors/basedpyright.txt)"
-	@echo "ty: $$(tail -n 1 .meta/.type-errors/ty.txt)"
+	@echo "generating typing summary and breakdown..."
+	$(PYTHON) -m muutils.misc.typing_breakdown --error-dir .meta/.type-errors --output .meta/typing-summary.txt
 
 # generate summary report of type check errors grouped by file
 # outputs TOML format showing error count per file

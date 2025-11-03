@@ -1,0 +1,80 @@
+# Showing top 10 errors per category
+
+# mypy: Found 127 errors in 8 files (checked 115 source files)
+# basedpyright: 803 errors, 3864 warnings, 0 notes
+# ty: Found 216 diagnostics
+
+[type_errors.mypy]
+total_errors = 127
+
+[type_errors.mypy.by_type]
+"index" = 31
+"typeddict-item" = 26
+"arg-type" = 23
+"call-overload" = 21
+"attr-defined" = 11
+"literal-required" = 10
+"var-annotated" = 2
+"operator" = 2
+"no-redef" = 1
+
+[type_errors.mypy.by_file]
+"tests/unit/json_serialize/test_array_torch.py" = 58
+"tests/unit/json_serialize/test_array.py" = 22
+"tests/unit/test_jsonlines.py" = 21
+"tests/unit/json_serialize/test_serializable_field.py" = 11
+"tests/unit/json_serialize/test_json_serialize.py" = 7
+"tests/unit/benchmark_parallel/benchmark_parallel.py" = 4
+"tests/unit/logger/test_log_util.py" = 3
+"muutils/misc/typing_breakdown.py" = 1
+
+[type_errors.basedpyright]
+total_errors_by_type = 2521
+total_errors_by_file = 1148
+
+[type_errors.basedpyright.by_type]
+"reportUnknownParameterType" = 452
+"reportMissingParameterType" = 397
+"reportAny" = 385
+"reportUnusedCallResult" = 295
+"reportUnknownVariableType" = 232
+"reportMissingTypeArgument" = 201
+"reportExplicitAny" = 183
+"reportUnknownMemberType" = 145
+"reportUnknownLambdaType" = 131
+"reportUnusedParameter" = 100
+
+[type_errors.basedpyright.by_file]
+"/home/miv/projects/tools/muutils/tests/unit/json_serialize/test_json_serialize.py" = 167
+"/home/miv/projects/tools/muutils/tests/unit/test_dbg.py" = 156
+"/home/miv/projects/tools/muutils/tests/unit/test_parallel.py" = 134
+"/home/miv/projects/tools/muutils/tests/unit/json_serialize/serializable_dataclass/test_serializable_dataclass.py" = 125
+"/home/miv/projects/tools/muutils/tests/unit/json_serialize/test_array_torch.py" = 107
+"/home/miv/projects/tools/muutils/muutils/json_serialize/serializable_dataclass.py" = 98
+"/home/miv/projects/tools/muutils/tests/unit/misc/test_func.py" = 98
+"/home/miv/projects/tools/muutils/muutils/dictmagic.py" = 88
+"/home/miv/projects/tools/muutils/muutils/json_serialize/serializable_field.py" = 88
+"/home/miv/projects/tools/muutils/tests/unit/validate_type/test_get_kwargs.py" = 87
+
+[type_errors.ty]
+total_errors = 216
+
+[type_errors.ty.by_type]
+"unknown-argument" = 164
+"unresolved-attribute" = 33
+"invalid-argument-type" = 8
+"invalid-assignment" = 6
+"too-many-positional-arguments" = 3
+"invalid-return-type" = 1
+"unresolved-import" = 1
+
+[type_errors.ty.by_file]
+"tests/unit/json_serialize/serializable_dataclass/test_serializable_dataclass.py" = 134
+"tests/unit/json_serialize/test_serializable_field.py" = 29
+"tests/unit/json_serialize/serializable_dataclass/test_methods_no_override.py" = 26
+"tests/unit/json_serialize/serializable_dataclass/test_sdc_properties_nested.py" = 9
+"tests/unit/test_dictmagic.py" = 8
+"tests/unit/benchmark_parallel/benchmark_parallel.py" = 6
+"tests/unit/json_serialize/test_array_torch.py" = 2
+"tests/unit/benchmark_parallel/test_benchmark_demo.py" = 1
+"tests/unit/test_statcounter.py" = 1

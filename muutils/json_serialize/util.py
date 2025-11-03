@@ -8,7 +8,7 @@ import inspect
 import sys
 import typing
 import warnings
-from typing import TYPE_CHECKING, Any, Callable, Final, Iterable, Union
+from typing import TYPE_CHECKING, Any, Callable, Final, Iterable, TypeVar, Union
 
 _NUMPY_WORKING: bool
 try:
@@ -114,14 +114,16 @@ def isinstance_namedtuple(x: Any) -> bool:  # pyright: ignore[reportAny]
     return all(isinstance(n, str) for n in f)
 
 
-def try_catch(func: Callable[[Any], Any]):
+T_FuncTryCatchReturn = TypeVar("T_FuncTryCatchReturn")
+
+def try_catch(func: Callable[..., T_FuncTryCatchReturn]) -> Callable[..., Union[T_FuncTryCatchReturn, str]]:
     """wraps the function to catch exceptions, returns serialized error message on exception
 
     returned func will return normal result on success, or error message on exception
     """
 
     @functools.wraps(func)
-    def newfunc(*args, **kwargs):
+    def newfunc(*args: Any, **kwargs: Any) -> Union[T_FuncTryCatchReturn, str]:
         try:
             return func(*args, **kwargs)
         except Exception as e:

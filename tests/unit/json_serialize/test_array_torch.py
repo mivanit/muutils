@@ -9,7 +9,7 @@ from muutils.json_serialize.array import (
     load_array,
     serialize_array,
 )
-from muutils.json_serialize.util import _FORMAT_KEY
+from muutils.json_serialize.types import _FORMAT_KEY
 
 # pylint: disable=missing-class-docstring
 
@@ -186,6 +186,7 @@ def test_torch_serialization_integration():
     }
 
     serialized = jser.json_serialize(data)
+    assert isinstance(serialized, dict)
 
     # Check structure is preserved
     assert isinstance(serialized["model_weights"], dict)
@@ -216,6 +217,7 @@ def test_mixed_numpy_torch():
     }
 
     serialized = jser.json_serialize(data)
+    assert isinstance(serialized, dict)
 
     # Both should be serialized as dicts with metadata
     assert isinstance(serialized["numpy_array"], dict)

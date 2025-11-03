@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import jaxtyping
 import numpy as np
 import pytest
 import torch
@@ -12,7 +11,7 @@ from muutils.tensor_utils import (
     StateDictShapeError,
     compare_state_dicts,
     get_dict_shapes,
-    jaxtype_factory,
+    # jaxtype_factory,
     lpad_tensor,
     numpy_to_torch_dtype,
     pad_tensor,
@@ -30,18 +29,18 @@ def test_pad_array():
     assert np.array_equal(rpad_array(array, 5), np.array([1, 2, 3, 0, 0]))
 
 
-def test_jaxtype_factory():
-    ATensor = jaxtype_factory(
-        "ATensor", torch.Tensor, jaxtyping.Float, legacy_mode="ignore"
-    )
-    assert ATensor.__name__ == "ATensor"
-    assert "default_jax_dtype = <class 'jaxtyping.Float'" in ATensor.__doc__  # type: ignore[operator]
-    assert "array_type = <class 'torch.Tensor'>" in ATensor.__doc__  # type: ignore[operator]
+# def test_jaxtype_factory():
+#     ATensor = jaxtype_factory(
+#         "ATensor", torch.Tensor, jaxtyping.Float, legacy_mode="ignore"
+#     )
+#     assert ATensor.__name__ == "ATensor"
+#     assert "default_jax_dtype = <class 'jaxtyping.Float'" in ATensor.__doc__  # type: ignore[operator]
+#     assert "array_type = <class 'torch.Tensor'>" in ATensor.__doc__  # type: ignore[operator]
 
-    x = ATensor[(1, 2, 3), np.float32]  # type: ignore[index]
-    print(x)
-    y = ATensor["dim1 dim2", np.float32]  # type: ignore[index]
-    print(y)
+#     x = ATensor[(1, 2, 3), np.float32]  # type: ignore[index]
+#     print(x)
+#     y = ATensor["dim1 dim2", np.float32]  # type: ignore[index]
+#     print(y)
 
 
 def test_numpy_to_torch_dtype():

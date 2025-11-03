@@ -6,6 +6,7 @@ from inspect import signature, unwrap
 import types
 import typing
 import functools
+from typing import Any
 
 # this is also for python <3.10 compatibility
 _GenericAliasTypeNames: typing.List[str] = [
@@ -15,11 +16,13 @@ _GenericAliasTypeNames: typing.List[str] = [
     "_BaseGenericAlias",
 ]
 
-_GenericAliasTypesList: list = [
+_GenericAliasTypesList: list[Any] = [
     getattr(typing, name, None) for name in _GenericAliasTypeNames
 ]
 
-GenericAliasTypes: tuple = tuple([t for t in _GenericAliasTypesList if t is not None])
+GenericAliasTypes: tuple[Any, ...] = tuple(
+    [t for t in _GenericAliasTypesList if t is not None]
+)
 
 
 class IncorrectTypeException(TypeError):
@@ -103,7 +106,7 @@ def validate_type(
                 raise e
 
     origin: typing.Any = typing.get_origin(expected_type)
-    args: tuple = typing.get_args(expected_type)
+    args: tuple[Any, ...] = typing.get_args(expected_type)
 
     # useful for debugging
     # print(f"{value = },   {expected_type = },   {origin = },   {args = }")
@@ -224,7 +227,7 @@ def validate_type(
         )
 
 
-def get_fn_allowed_kwargs(fn: typing.Callable) -> typing.Set[str]:
+def get_fn_allowed_kwargs(fn: typing.Callable[..., Any]) -> typing.Set[str]:
     """Get the allowed kwargs for a function, raising an exception if the signature cannot be determined."""
     try:
         fn = unwrap(fn)

@@ -98,7 +98,8 @@ def isinstance_namedtuple(x: Any) -> bool:  # pyright: ignore[reportAny]
     f: Any = getattr(t, "_fields", None)
     if not isinstance(f, tuple):
         return False
-    return all(isinstance(n, str) for n in f)
+    # fine that the type is unknown -- that's what we want to check
+    return all(isinstance(n, str) for n in f)  # pyright: ignore[reportUnknownVariableType]
 
 
 T_FuncTryCatchReturn = TypeVar("T_FuncTryCatchReturn")
@@ -113,7 +114,7 @@ def try_catch(
     """
 
     @functools.wraps(func)
-    def newfunc(*args: Any, **kwargs: Any) -> Union[T_FuncTryCatchReturn, str]:
+    def newfunc(*args: Any, **kwargs: Any) -> Union[T_FuncTryCatchReturn, str]:  # pyright: ignore[reportAny]
         try:
             return func(*args, **kwargs)
         except Exception as e:
@@ -122,16 +123,17 @@ def try_catch(
     return newfunc
 
 
-def _recursive_hashify(obj: Any, force: bool = True) -> Hashableitem:
+# TYPING: can we get rid of any of these?
+def _recursive_hashify(obj: Any, force: bool = True) -> Hashableitem:  # pyright: ignore[reportUnknownParameterType, reportAny]
     if isinstance(obj, typing.Mapping):
-        return tuple((k, _recursive_hashify(v)) for k, v in obj.items())
+        return tuple((k, _recursive_hashify(v)) for k, v in obj.items())  # pyright: ignore[reportUnknownVariableType, reportUnknownArgumentType]
     elif isinstance(obj, (bool, int, float, str)):
         return obj
     elif isinstance(obj, (tuple, list, Iterable)):
-        return tuple(_recursive_hashify(v) for v in obj)
+        return tuple(_recursive_hashify(v) for v in obj)  # pyright: ignore[reportUnknownVariableType, reportUnknownArgumentType]
     else:
         if force:
-            return str(obj)
+            return str(obj)  # pyright: ignore[reportAny]
         else:
             raise ValueError(f"cannot hashify:\n{obj}")
 
@@ -151,7 +153,7 @@ def string_as_lines(s: str | None) -> list[str]:
         return s.splitlines(keepends=False)
 
 
-def safe_getsource(func) -> list[str]:
+def safe_getsource(func: Callable[..., Any]) -> list[str]:
     try:
         return string_as_lines(inspect.getsource(func))
     except Exception as e:
@@ -159,28 +161,28 @@ def safe_getsource(func) -> list[str]:
 
 
 # credit to https://stackoverflow.com/questions/51743827/how-to-compare-equality-of-dataclasses-holding-numpy-ndarray-boola-b-raises
-def array_safe_eq(a: Any, b: Any) -> bool:
+def array_safe_eq(a: Any, b: Any) -> bool:  # pyright: ignore[reportAny]
     """check if two objects are equal, account for if numpy arrays or torch tensors"""
     if a is b:
         return True
 
-    if type(a) is not type(b):
+    if type(a) is not type(b):  # pyright: ignore[reportAny]
         return False
 
     if (
-        str(type(a)) == "<class 'numpy.ndarray'>"
-        and str(type(b)) == "<class 'numpy.ndarray'>"
+        str(type(a)) == "<class 'numpy.ndarray'>"  # pyright: ignore[reportAny, reportUnknownArgumentType]
+        and str(type(b)) == "<class 'numpy.ndarray'>"  # pyright: ignore[reportAny, reportUnknownArgumentType]
     ) or (
-        str(type(a)) == "<class 'torch.Tensor'>"
-        and str(type(b)) == "<class 'torch.Tensor'>"
+        str(type(a)) == "<class 'torch.Tensor'>"  # pyright: ignore[reportAny, reportUnknownArgumentType]
+        and str(type(b)) == "<class 'torch.Tensor'>"  # pyright: ignore[reportAny, reportUnknownArgumentType]
     ):
-        return (a == b).all()
+        return (a == b).all()  # pyright: ignore[reportAny]
 
     if (
-        str(type(a)) == "<class 'pandas.core.frame.DataFrame'>"
-        and str(type(b)) == "<class 'pandas.core.frame.DataFrame'>"
+        str(type(a)) == "<class 'pandas.core.frame.DataFrame'>"  # pyright: ignore[reportUnknownArgumentType, reportAny]
+        and str(type(b)) == "<class 'pandas.core.frame.DataFrame'>"  # pyright: ignore[reportUnknownArgumentType, reportAny]
     ):
-        return a.equals(b)
+        return a.equals(b)  # pyright: ignore[reportAny]
 
     if isinstance(a, typing.Sequence) and isinstance(b, typing.Sequence):
         if len(a) == 0 and len(b) == 0:
@@ -188,22 +190,24 @@ def array_safe_eq(a: Any, b: Any) -> bool:
         return len(a) == len(b) and all(array_safe_eq(a1, b1) for a1, b1 in zip(a, b))
 
     if isinstance(a, (dict, typing.Mapping)) and isinstance(b, (dict, typing.Mapping)):
-        return len(a) == len(b) and all(
+        return len(a) == len(b) and all(  # pyright: ignore[reportUnknownArgumentType]
             array_safe_eq(k1, k2) and array_safe_eq(a[k1], b[k2])
-            for k1, k2 in zip(a.keys(), b.keys())
+            for k1, k2 in zip(a.keys(), b.keys())  # pyright: ignore[reportUnknownArgumentType, reportUnknownVariableType]
         )
 
     try:
-        return bool(a == b)
+        return bool(a == b)  # pyright: ignore[reportAny]
     except (TypeError, ValueError) as e:
         warnings.warn(f"Cannot compare {a} and {b} for equality\n{e}")
         return NotImplemented  # type: ignore[return-value]
 
 
+# TYPING: see what can be done about so many `Any`s here
 def dc_eq(
-    dc1,
-    dc2,
+    dc1: Any,  # pyright: ignore[reportAny]
+    dc2: Any,  # pyright: ignore[reportAny]
     except_when_class_mismatch: bool = False,
+    # TODO: why is this unused?
     false_when_class_mismatch: bool = True,
     except_when_field_mismatch: bool = False,
 ) -> bool:
@@ -268,15 +272,15 @@ def dc_eq(
     if dc1 is dc2:
         return True
 
-    if dc1.__class__ is not dc2.__class__:  # pyright: ignore[reportUnknownMemberType]
+    if dc1.__class__ is not dc2.__class__:  # pyright: ignore[reportAny]
         if except_when_class_mismatch:
             # if the classes don't match, raise an error
             raise TypeError(
-                f"Cannot compare dataclasses of different classes: `{dc1.__class__}` and `{dc2.__class__}`"  # pyright: ignore[reportUnknownMemberType]
+                f"Cannot compare dataclasses of different classes: `{dc1.__class__}` and `{dc2.__class__}`"  # pyright: ignore[reportAny]
             )
         if except_when_field_mismatch:
-            dc1_fields: set[str] = set([fld.name for fld in dataclasses.fields(dc1)])  # pyright: ignore[reportUnknownArgumentType]
-            dc2_fields: set[str] = set([fld.name for fld in dataclasses.fields(dc2)])  # pyright: ignore[reportUnknownArgumentType]
+            dc1_fields: set[str] = set([fld.name for fld in dataclasses.fields(dc1)])  # pyright: ignore[reportAny]
+            dc2_fields: set[str] = set([fld.name for fld in dataclasses.fields(dc2)])  # pyright: ignore[reportAny]
             fields_match: bool = set(dc1_fields) == set(dc2_fields)
             if not fields_match:
                 # if the fields match, keep going
@@ -286,7 +290,7 @@ def dc_eq(
         return False
 
     return all(
-        array_safe_eq(getattr(dc1, fld.name), getattr(dc2, fld.name))
-        for fld in dataclasses.fields(dc1)
+        array_safe_eq(getattr(dc1, fld.name), getattr(dc2, fld.name))  # pyright: ignore[reportAny]
+        for fld in dataclasses.fields(dc1)  # pyright: ignore[reportAny]
         if fld.compare
     )

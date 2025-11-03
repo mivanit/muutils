@@ -66,8 +66,8 @@ from muutils.json_serialize.serializable_field import (
     SerializableField,
     serializable_field,
 )
+from muutils.json_serialize.types import _FORMAT_KEY
 from muutils.json_serialize.util import (
-    _FORMAT_KEY,
     JSONdict,
     array_safe_eq,
     dc_eq,

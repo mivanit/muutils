@@ -14,28 +14,33 @@ import inspect
 import warnings
 from dataclasses import dataclass, is_dataclass
 from pathlib import Path
-from typing import Any, Callable, Iterable, Mapping, Set, Union
+from typing import TYPE_CHECKING, Any, Callable, Iterable, Mapping, Set, Union
 
 from muutils.errormode import ErrorMode
 
-try:
+if TYPE_CHECKING:
+    # always need array.py for type checking
     from muutils.json_serialize.array import ArrayMode, serialize_array
-except ImportError as e:
-    # TYPING: obviously, these types are all wrong if we can't import array.py
-    ArrayMode = str  # type: ignore[misc]
-    serialize_array = lambda *args, **kwargs: None  # type: ignore[assignment, invalid-assignment] # noqa: E731 # pyright: ignore[reportUnknownVariableType, reportUnknownLambdaType]
-    warnings.warn(
-        f"muutils.json_serialize.array could not be imported probably because missing numpy, array serialization will not work: \n{e}",
-        ImportWarning,
-    )
+else:
+    try:
+        from muutils.json_serialize.array import ArrayMode, serialize_array
+    except ImportError as e:
+        # TYPING: obviously, these types are all wrong if we can't import array.py
+        ArrayMode = str  # type: ignore[misc]
+        serialize_array = lambda *args, **kwargs: None  # type: ignore[assignment, invalid-assignment] # noqa: E731 # pyright: ignore[reportUnknownVariableType, reportUnknownLambdaType]
+        warnings.warn(
+            f"muutils.json_serialize.array could not be imported probably because missing numpy, array serialization will not work: \n{e}",
+            ImportWarning,
+        )
+
+from muutils.json_serialize.types import _FORMAT_KEY, Hashableitem  # pyright: ignore[reportPrivateUsage]
 
 from muutils.json_serialize.util import (
-    _FORMAT_KEY,
-    Hashableitem,
+    JSONdict,
     JSONitem,
     MonoTuple,
     SerializationException,
-    _recursive_hashify,
+    _recursive_hashify,  # pyright: ignore[reportPrivateUsage, reportUnknownVariableType]
     isinstance_namedtuple,
     safe_getsource,
     string_as_lines,
@@ -53,13 +58,13 @@ SERIALIZER_SPECIAL_KEYS: MonoTuple[str] = (
     "__annotations__",
 )
 
-SERIALIZER_SPECIAL_FUNCS: dict[str, Callable] = {
+SERIALIZER_SPECIAL_FUNCS: dict[str, Callable[..., str | list[str]]] = {
     "str": str,
     "dir": dir,
-    "type": try_catch(lambda x: str(type(x).__name__)),
-    "repr": try_catch(lambda x: repr(x)),
-    "code": try_catch(lambda x: inspect.getsource(x)),
-    "sourcefile": try_catch(lambda x: inspect.getsourcefile(x)),
+    "type": try_catch(lambda x: str(type(x).__name__)),  # pyright: ignore[reportUnknownArgumentType, reportUnknownLambdaType]
+    "repr": try_catch(lambda x: repr(x)),  # pyright: ignore[reportUnknownArgumentType, reportUnknownLambdaType]
+    "code": try_catch(lambda x: inspect.getsource(x)),  # pyright: ignore[reportUnknownArgumentType, reportUnknownLambdaType]
+    "sourcefile": try_catch(lambda x: str(inspect.getsourcefile(x))),  # pyright: ignore[reportUnknownArgumentType, reportUnknownLambdaType]
 }
 
 SERIALIZE_DIRECT_AS_STR: Set[str] = {
@@ -89,7 +94,7 @@ class SerializerHandler:
     # description of this serializer
     desc: str
 
-    def serialize(self) -> dict:
+    def serialize(self) -> JSONdict:
         """serialize the handler info"""
         return {
             # get the code and doc of the check function
@@ -241,7 +246,7 @@ DEFAULT_HANDLERS: MonoTuple[SerializerHandler] = tuple(BASE_HANDLERS) + (
     SerializerHandler(
         check=lambda self, obj, path: True,
         serialize_func=lambda self, obj, path: {
-            **{k: str(getattr(obj, k, None)) for k in SERIALIZER_SPECIAL_KEYS},
+            **{k: str(getattr(obj, k, None)) for k in SERIALIZER_SPECIAL_KEYS},  # type: ignore[typeddict-item]
             **{k: f(obj) for k, f in SERIALIZER_SPECIAL_FUNCS.items()},
         },
         uid="fallback",
@@ -279,7 +284,7 @@ class JsonSerializer:
     def __init__(
         self,
         *args,
-        array_mode: ArrayMode = "array_list_meta",
+        array_mode: "ArrayMode" = "array_list_meta",
         error_mode: ErrorMode = ErrorMode.EXCEPT,
         handlers_pre: MonoTuple[SerializerHandler] = tuple(),
         handlers_default: MonoTuple[SerializerHandler] = DEFAULT_HANDLERS,
@@ -290,7 +295,7 @@ class JsonSerializer:
                 f"JsonSerializer takes no positional arguments!\n{args = }"
             )
 
-        self.array_mode: ArrayMode = array_mode
+        self.array_mode: "ArrayMode" = array_mode
         self.error_mode: ErrorMode = ErrorMode.from_any(error_mode)
         self.write_only_format: bool = write_only_format
         # join up the handlers

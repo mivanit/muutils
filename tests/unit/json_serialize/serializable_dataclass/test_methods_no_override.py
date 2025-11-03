@@ -9,7 +9,7 @@ from muutils.json_serialize import (
     serializable_dataclass,
     SerializableDataclass,
 )
-from muutils.json_serialize.util import _FORMAT_KEY
+from muutils.json_serialize.types import _FORMAT_KEY
 
 
 @serializable_dataclass

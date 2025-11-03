@@ -4,10 +4,12 @@ from typing import NamedTuple
 
 import pytest
 
+# pyright: reportPrivateUsage=false
+
 # Module code assumed to be imported from my_module
+from muutils.json_serialize.types import _FORMAT_KEY
 from muutils.json_serialize.util import (
     UniversalContainer,
-    _FORMAT_KEY,
     _recursive_hashify,
     array_safe_eq,
     dc_eq,

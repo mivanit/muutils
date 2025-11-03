@@ -6,6 +6,7 @@ from pathlib import Path
 
 import pytest
 
+from muutils.json_serialize import JSONitem
 from muutils.jsonlines import jsonl_load, jsonl_load_log, jsonl_write
 
 TEMP_PATH: Path = Path("tests/_temp/jsonl")
@@ -49,7 +50,7 @@ def test_jsonl_write():
     test_file = TEMP_PATH / "test_write.jsonl"
 
     # Test data
-    test_data = [
+    test_data: list[JSONitem] = [
         {"id": 1, "status": "active"},
         {"id": 2, "status": "inactive"},
         {"id": 3, "status": "pending", "metadata": {"priority": "high"}},
@@ -85,7 +86,7 @@ def test_gzip_support():
     test_file_gzip = TEMP_PATH / "test_gzip2.jsonl.gzip"
 
     # Test data
-    test_data = [
+    test_data: list[JSONitem] = [
         {"compressed": True, "value": 123},
         {"compressed": True, "value": 456},
     ]
@@ -127,7 +128,7 @@ def test_jsonl_load_log():
 
     # Test with valid dict data
     test_file_valid = TEMP_PATH / "test_log_valid.jsonl"
-    valid_data = [
+    valid_data: list[JSONitem] = [
         {"level": "INFO", "message": "Starting process"},
         {"level": "WARNING", "message": "Low memory"},
         {"level": "ERROR", "message": "Connection failed"},
@@ -141,7 +142,7 @@ def test_jsonl_load_log():
 
     # Test with non-dict items - should raise AssertionError
     test_file_invalid = TEMP_PATH / "test_log_invalid.jsonl"
-    invalid_data = [
+    invalid_data: list[JSONitem] = [
         {"level": "INFO", "message": "Valid entry"},
         "not a dict",  # This is invalid
         {"level": "ERROR", "message": "Another valid entry"},
@@ -159,7 +160,7 @@ def test_jsonl_load_log():
 
     # Test with list item
     test_file_list = TEMP_PATH / "test_log_list.jsonl"
-    list_data = [
+    list_data: list[JSONitem] = [
         {"level": "INFO"},
         [1, 2, 3],  # List instead of dict
     ]
@@ -182,7 +183,7 @@ def test_gzip_compresslevel():
     test_file = TEMP_PATH / "test_compresslevel.jsonl.gz"
 
     # Create test data
-    test_data = [{"value": i, "data": "content"} for i in range(10)]
+    test_data: list[JSONitem] = [{"value": i, "data": "content"} for i in range(10)]
 
     # Write with different compression levels - should not error
     jsonl_write(str(test_file), test_data, gzip_compresslevel=1)

@@ -5,6 +5,7 @@ from pathlib import Path
 
 import pytest
 
+from muutils.json_serialize import JSONitem
 from muutils.jsonlines import jsonl_write
 from muutils.logger.log_util import (
     gather_log,
@@ -23,7 +24,7 @@ def test_gather_log():
     log_file = TEMP_PATH / "test_gather_log.jsonl"
 
     # Create test data with multiple streams
-    test_data = [
+    test_data: list[JSONitem] = [
         {"msg": "stream1_msg1", "value": 1, "_stream": "stream1"},
         {"msg": "stream2_msg1", "value": 10, "_stream": "stream2"},
         {"msg": "stream1_msg2", "value": 2, "_stream": "stream1"},
@@ -65,7 +66,7 @@ def test_gather_stream():
     log_file = TEMP_PATH / "test_gather_stream.jsonl"
 
     # Create test data with multiple streams
-    test_data = [
+    test_data: list[JSONitem] = [
         {"msg": "stream1_msg1", "idx": 1, "_stream": "target"},
         {"msg": "stream2_msg1", "idx": 2, "_stream": "other"},
         {"msg": "stream1_msg2", "idx": 3, "_stream": "target"},
@@ -105,7 +106,7 @@ def test_gather_val():
     log_file = TEMP_PATH / "test_gather_val.jsonl"
 
     # Create test data matching the example from the docstring
-    test_data = [
+    test_data: list[JSONitem] = [
         {"a": 1, "b": 2, "c": 3, "_stream": "s1"},
         {"a": 4, "b": 5, "c": 6, "_stream": "s1"},
         {"a": 7, "b": 8, "c": 9, "_stream": "s2"},

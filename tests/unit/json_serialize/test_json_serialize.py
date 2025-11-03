@@ -22,7 +22,8 @@ from muutils.json_serialize.json_serialize import (
     SerializerHandler,
     json_serialize,
 )
-from muutils.json_serialize.util import SerializationException, _FORMAT_KEY
+from muutils.json_serialize.types import _FORMAT_KEY
+from muutils.json_serialize.util import SerializationException
 
 
 # ============================================================================

@@ -1,27 +1,30 @@
-# Showing top 10 errors per category
+# Showing all errors
 
-# mypy: Found 127 errors in 8 files (checked 115 source files)
-# basedpyright: 803 errors, 3864 warnings, 0 notes
-# ty: Found 216 diagnostics
+# mypy: Found 159 errors in 9 files (checked 116 source files)
+# basedpyright: 796 errors, 3811 warnings, 0 notes
+# ty: Found 219 diagnostics
 
 [type_errors.mypy]
-total_errors = 127
+total_errors = 159
 
 [type_errors.mypy.by_type]
-"index" = 31
+"dict-item" = 35
+"index" = 33
 "typeddict-item" = 26
-"arg-type" = 23
-"call-overload" = 21
+"call-overload" = 23
+"arg-type" = 14
 "attr-defined" = 11
 "literal-required" = 10
 "var-annotated" = 2
 "operator" = 2
+"assignment" = 2
 "no-redef" = 1
 
 [type_errors.mypy.by_file]
 "tests/unit/json_serialize/test_array_torch.py" = 58
-"tests/unit/json_serialize/test_array.py" = 22
-"tests/unit/test_jsonlines.py" = 21
+"muutils/tensor_utils.py" = 39
+"tests/unit/json_serialize/test_array.py" = 24
+"tests/unit/test_jsonlines.py" = 12
 "tests/unit/json_serialize/test_serializable_field.py" = 11
 "tests/unit/json_serialize/test_json_serialize.py" = 7
 "tests/unit/benchmark_parallel/benchmark_parallel.py" = 4
@@ -29,42 +32,161 @@ total_errors = 127
 "muutils/misc/typing_breakdown.py" = 1
 
 [type_errors.basedpyright]
-total_errors_by_type = 2521
-total_errors_by_file = 1148
+total_errors = 3075
 
 [type_errors.basedpyright.by_type]
 "reportUnknownParameterType" = 452
 "reportMissingParameterType" = 397
-"reportAny" = 385
+"reportAny" = 364
 "reportUnusedCallResult" = 295
-"reportUnknownVariableType" = 232
-"reportMissingTypeArgument" = 201
-"reportExplicitAny" = 183
-"reportUnknownMemberType" = 145
+"reportUnknownVariableType" = 226
+"reportMissingTypeArgument" = 195
+"reportExplicitAny" = 187
+"reportUnknownMemberType" = 141
 "reportUnknownLambdaType" = 131
 "reportUnusedParameter" = 100
+"reportIndexIssue" = 93
+"reportCallIssue" = 59
+"reportImplicitOverride" = 53
+"reportInvalidTypeForm" = 51
+"reportPrivateUsage" = 41
+"reportUnannotatedClassAttribute" = 41
+"reportPossiblyUnboundVariable" = 34
+"reportUnreachable" = 32
+"reportOptionalSubscript" = 27
+"reportUnnecessaryIsInstance" = 21
+"reportUntypedClassDecorator" = 17
+"reportMissingSuperCall" = 14
+"reportUntypedFunctionDecorator" = 13
+"reportUnusedVariable" = 11
+"reportInvalidTypeArguments" = 9
+"reportUnnecessaryComparison" = 8
+"reportCallInDefaultInitializer" = 8
+"reportUndefinedVariable" = 7
+"reportOptionalMemberAccess" = 7
+"reportAttributeAccessIssue" = 5
+"reportUninitializedInstanceVariable" = 5
+"reportUnusedClass" = 4
+"reportUnnecessaryTypeIgnoreComment" = 3
+"reportImplicitStringConcatenation" = 3
+"reportUnusedImport" = 3
+"reportMissingTypeStubs" = 3
+"reportMissingImports" = 3
+"reportUnusedExpression" = 3
+"reportOperatorIssue" = 2
+"reportArgumentType" = 2
+"reportUntypedNamedTuple" = 2
+"reportRedeclaration" = 1
+"reportUnusedFunction" = 1
+"reportGeneralTypeIssues" = 1
 
 [type_errors.basedpyright.by_file]
 "/home/miv/projects/tools/muutils/tests/unit/json_serialize/test_json_serialize.py" = 167
 "/home/miv/projects/tools/muutils/tests/unit/test_dbg.py" = 156
 "/home/miv/projects/tools/muutils/tests/unit/test_parallel.py" = 134
 "/home/miv/projects/tools/muutils/tests/unit/json_serialize/serializable_dataclass/test_serializable_dataclass.py" = 125
-"/home/miv/projects/tools/muutils/tests/unit/json_serialize/test_array_torch.py" = 107
-"/home/miv/projects/tools/muutils/muutils/json_serialize/serializable_dataclass.py" = 98
 "/home/miv/projects/tools/muutils/tests/unit/misc/test_func.py" = 98
+"/home/miv/projects/tools/muutils/muutils/json_serialize/serializable_dataclass.py" = 97
+"/home/miv/projects/tools/muutils/tests/unit/json_serialize/test_array_torch.py" = 95
 "/home/miv/projects/tools/muutils/muutils/dictmagic.py" = 88
 "/home/miv/projects/tools/muutils/muutils/json_serialize/serializable_field.py" = 88
 "/home/miv/projects/tools/muutils/tests/unit/validate_type/test_get_kwargs.py" = 87
+"/home/miv/projects/tools/muutils/tests/unit/validate_type/test_validate_type.py" = 86
+"/home/miv/projects/tools/muutils/tests/unit/validate_type/test_validate_type_GENERATED.py" = 86
+"/home/miv/projects/tools/muutils/muutils/json_serialize/json_serialize.py" = 81
+"/home/miv/projects/tools/muutils/muutils/misc/func.py" = 77
+"/home/miv/projects/tools/muutils/tests/unit/test_interval.py" = 75
+"/home/miv/projects/tools/muutils/muutils/misc/freezing.py" = 67
+"/home/miv/projects/tools/muutils/tests/unit/cli/test_arg_bool.py" = 66
+"/home/miv/projects/tools/muutils/muutils/spinner.py" = 63
+"/home/miv/projects/tools/muutils/muutils/tensor_utils.py" = 63
+"/home/miv/projects/tools/muutils/tests/unit/benchmark_parallel/benchmark_parallel.py" = 56
+"/home/miv/projects/tools/muutils/tests/unit/web/test_bundle_html.py" = 55
+"/home/miv/projects/tools/muutils/muutils/tensor_info.py" = 52
+"/home/miv/projects/tools/muutils/tests/unit/errormode/test_errormode_init.py" = 46
+"/home/miv/projects/tools/muutils/tests/unit/json_serialize/test_serializable_field.py" = 46
+"/home/miv/projects/tools/muutils/muutils/parallel.py" = 45
+"/home/miv/projects/tools/muutils/muutils/statcounter.py" = 41
+"/home/miv/projects/tools/muutils/muutils/sysinfo.py" = 39
+"/home/miv/projects/tools/muutils/tests/unit/json_serialize/test_array.py" = 38
+"/home/miv/projects/tools/muutils/muutils/web/bundle_html.py" = 37
+"/home/miv/projects/tools/muutils/tests/unit/test_dictmagic.py" = 37
+"/home/miv/projects/tools/muutils/tests/unit/errormode/test_errormode_functionality.py" = 36
+"/home/miv/projects/tools/muutils/muutils/nbutils/convert_ipynb_to_script.py" = 34
+"/home/miv/projects/tools/muutils/muutils/nbutils/configure_notebook.py" = 33
+"/home/miv/projects/tools/muutils/tests/unit/test_spinner.py" = 33
+"/home/miv/projects/tools/muutils/tests/unit/misc/test_freeze.py" = 31
+"/home/miv/projects/tools/muutils/muutils/json_serialize/util.py" = 27
+"/home/miv/projects/tools/muutils/muutils/misc/sequence.py" = 27
+"/home/miv/projects/tools/muutils/tests/unit/misc/test_numerical_conversions.py" = 27
+"/home/miv/projects/tools/muutils/tests/unit/json_serialize/serializable_dataclass/test_methods_no_override.py" = 25
+"/home/miv/projects/tools/muutils/muutils/mlutils.py" = 24
+"/home/miv/projects/tools/muutils/muutils/validate_type.py" = 24
+"/home/miv/projects/tools/muutils/muutils/interval.py" = 20
+"/home/miv/projects/tools/muutils/tests/unit/json_serialize/test_util.py" = 20
+"/home/miv/projects/tools/muutils/tests/unit/validate_type/test_validate_type_special.py" = 20
+"/home/miv/projects/tools/muutils/muutils/logger/logger.py" = 19
+"/home/miv/projects/tools/muutils/tests/unit/test_jsonlines.py" = 19
+"/home/miv/projects/tools/muutils/muutils/math/matrix_powers.py" = 18
+"/home/miv/projects/tools/muutils/muutils/misc/string.py" = 18
+"/home/miv/projects/tools/muutils/tests/unit/test_kappa.py" = 17
+"/home/miv/projects/tools/muutils/muutils/logger/log_util.py" = 16
+"/home/miv/projects/tools/muutils/tests/unit/test_tensor_info_torch.py" = 15
+"/home/miv/projects/tools/muutils/tests/unit/nbutils/test_configure_notebook.py" = 14
+"/home/miv/projects/tools/muutils/muutils/jsonlines.py" = 13
+"/home/miv/projects/tools/muutils/muutils/misc/typing_breakdown.py" = 13
+"/home/miv/projects/tools/muutils/tests/unit/misc/test_misc.py" = 13
+"/home/miv/projects/tools/muutils/muutils/nbutils/run_notebook_tests.py" = 12
+"/home/miv/projects/tools/muutils/muutils/cli/arg_bool.py" = 11
+"/home/miv/projects/tools/muutils/muutils/errormode.py" = 11
+"/home/miv/projects/tools/muutils/muutils/json_serialize/dataclass_transform_mock.py" = 11
+"/home/miv/projects/tools/muutils/muutils/dbg.py" = 10
+"/home/miv/projects/tools/muutils/muutils/json_serialize/array.py" = 10
+"/home/miv/projects/tools/muutils/muutils/logger/exception_context.py" = 10
+"/home/miv/projects/tools/muutils/muutils/logger/headerfuncs.py" = 10
+"/home/miv/projects/tools/muutils/tests/unit/test_collect_warnings.py" = 10
+"/home/miv/projects/tools/muutils/muutils/kappa.py" = 9
+"/home/miv/projects/tools/muutils/muutils/collect_warnings.py" = 8
+"/home/miv/projects/tools/muutils/tests/unit/test_console_unicode.py" = 8
+"/home/miv/projects/tools/muutils/tests/util/test_fire.py" = 8
+"/home/miv/projects/tools/muutils/muutils/cli/command.py" = 7
+"/home/miv/projects/tools/muutils/muutils/misc/classes.py" = 7
+"/home/miv/projects/tools/muutils/muutils/nbutils/mermaid.py" = 7
+"/home/miv/projects/tools/muutils/tests/unit/cli/test_command.py" = 7
+"/home/miv/projects/tools/muutils/muutils/logger/timing.py" = 6
+"/home/miv/projects/tools/muutils/tests/unit/nbutils/test_conversion.py" = 6
+"/home/miv/projects/tools/muutils/tests/conftest.py" = 5
+"/home/miv/projects/tools/muutils/tests/unit/json_serialize/serializable_dataclass/test_sdc_defaults.py" = 5
+"/home/miv/projects/tools/muutils/tests/unit/json_serialize/serializable_dataclass/test_sdc_properties_nested.py" = 5
+"/home/miv/projects/tools/muutils/muutils/logger/simplelogger.py" = 4
+"/home/miv/projects/tools/muutils/muutils/web/html_to_pdf.py" = 4
+"/home/miv/projects/tools/muutils/tests/unit/math/test_matrix_powers_torch.py" = 4
+"/home/miv/projects/tools/muutils/tests/unit/misc/test_sequence.py" = 4
+"/home/miv/projects/tools/muutils/tests/unit/test_mlutils.py" = 4
+"/home/miv/projects/tools/muutils/tests/unit/test_tensor_utils_torch.py" = 4
+"/home/miv/projects/tools/muutils/muutils/misc/hashing.py" = 3
+"/home/miv/projects/tools/muutils/tests/unit/test_tensor_info.py" = 3
+"/home/miv/projects/tools/muutils/muutils/logger/loggingstream.py" = 2
+"/home/miv/projects/tools/muutils/muutils/misc/numerical.py" = 2
+"/home/miv/projects/tools/muutils/tests/unit/logger/test_log_util.py" = 2
+"/home/miv/projects/tools/muutils/tests/unit/test_chunks.py" = 2
+"/home/miv/projects/tools/muutils/tests/unit/test_timeit_fancy.py" = 2
+"/home/miv/projects/tools/muutils/muutils/console_unicode.py" = 1
+"/home/miv/projects/tools/muutils/muutils/math/bins.py" = 1
+"/home/miv/projects/tools/muutils/muutils/misc/__init__.py" = 1
+"/home/miv/projects/tools/muutils/muutils/misc/b64_decode.py" = 1
+"/home/miv/projects/tools/muutils/tests/unit/benchmark_parallel/test_benchmark_demo.py" = 1
 
 [type_errors.ty]
-total_errors = 216
+total_errors = 219
 
 [type_errors.ty.by_type]
 "unknown-argument" = 164
 "unresolved-attribute" = 33
 "invalid-argument-type" = 8
-"invalid-assignment" = 6
+"invalid-assignment" = 7
 "too-many-positional-arguments" = 3
+"non-subscriptable" = 2
 "invalid-return-type" = 1
 "unresolved-import" = 1
 
@@ -75,6 +197,7 @@ total_errors = 216
 "tests/unit/json_serialize/serializable_dataclass/test_sdc_properties_nested.py" = 9
 "tests/unit/test_dictmagic.py" = 8
 "tests/unit/benchmark_parallel/benchmark_parallel.py" = 6
+"muutils/tensor_utils.py" = 3
 "tests/unit/json_serialize/test_array_torch.py" = 2
 "tests/unit/benchmark_parallel/test_benchmark_demo.py" = 1
 "tests/unit/test_statcounter.py" = 1

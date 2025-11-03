@@ -1779,7 +1779,7 @@ typing-summary: gen-extra-tests
 	$(PYTHON) -m basedpyright . > .meta/.type-errors/basedpyright.txt 2>&1 || true
 	$(PYTHON) -m ty check . > .meta/.type-errors/ty.txt 2>&1 || true
 	@echo "generating typing summary and breakdown..."
-	$(PYTHON) -m muutils.misc.typing_breakdown --error-dir .meta/.type-errors --output .meta/typing-summary.txt
+	$(PYTHON) -m muutils.misc.typing_breakdown --error-dir .meta/.type-errors --top-n -1 --output .meta/typing-summary.txt
 
 # generate summary report of type check errors grouped by file
 # outputs TOML format showing error count per file

@@ -66,7 +66,7 @@ from muutils.json_serialize.serializable_field import (
     SerializableField,
     serializable_field,
 )
-from muutils.json_serialize.util import _FORMAT_KEY, array_safe_eq, dc_eq
+from muutils.json_serialize.util import _FORMAT_KEY, JSONdict, JSONitem, array_safe_eq, dc_eq
 
 # pylint: disable=bad-mcs-classmethod-argument, too-many-arguments, protected-access
 
@@ -424,11 +424,11 @@ class SerializableDataclass(abc.ABC):
 
         # if we are working with serialized data, serialize the instances
         if of_serialized:
-            ser_self: dict = self.serialize()
-            ser_other: dict = other.serialize()
+            ser_self: JSONdict = self.serialize()
+            ser_other: JSONdict = other.serialize()
 
         # for each field in the class
-        for field in dataclasses.fields(self):  # type: ignore[arg-type]
+        for field in dataclasses.fields(self):  # type: ignore[arg-type]  # pyright: ignore[reportArgumentType]
             # skip fields that are not for comparison
             if not field.compare:
                 continue
@@ -454,8 +454,12 @@ class SerializableDataclass(abc.ABC):
                 raise ValueError("Non-serializable dataclass is not supported")
             else:
                 # get the values of either the serialized or the actual values
-                self_value_s = ser_self[field_name] if of_serialized else self_value
-                other_value_s = ser_other[field_name] if of_serialized else other_value
+                if of_serialized:
+                    self_value_s = ser_self[field_name]  # pyright: ignore[reportPossiblyUnboundVariable, reportUnknownVariableType]
+                    other_value_s = ser_other[field_name]  # pyright: ignore[reportPossiblyUnboundVariable, reportUnknownVariableType]
+                else:
+                    self_value_s = self_value
+                    other_value_s = other_value
                 # compare the values
                 if not array_safe_eq(self_value_s, other_value_s):
                     diff_result[field_name] = {"self": self_value, "other": other_value}

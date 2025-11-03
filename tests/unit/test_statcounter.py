@@ -6,7 +6,7 @@ from muutils.statcounter import StatCounter
 
 
 def _compute_err(a: float, b: float | np.floating, /) -> dict[str, int | float]:
-    result: dict[str, int | float] = dict(
+    result: dict[str, int | float] = dict(  # type: ignore[invalid-assignment]
         num_a=float(a),
         num_b=float(b),
         diff=float(b - a),
@@ -20,11 +20,11 @@ def _compare_np_custom(arr: np.ndarray) -> dict[str, dict[str, float]]:
     return dict(
         mean=_compute_err(counter.mean(), np.mean(arr)),
         std=_compute_err(counter.std(), np.std(arr)),
-        min=_compute_err(counter.min(), np.min(arr)),
+        min=_compute_err(counter.min(), np.min(arr)),  # pyright: ignore[reportUnknownArgumentType, reportAny]
         q1=_compute_err(counter.percentile(0.25), np.percentile(arr, 25)),
         median=_compute_err(counter.median(), np.median(arr)),
         q3=_compute_err(counter.percentile(0.75), np.percentile(arr, 75)),
-        max=_compute_err(counter.max(), np.max(arr)),
+        max=_compute_err(counter.max(), np.max(arr)),  # pyright: ignore[reportUnknownArgumentType, reportAny]
     )
 
 

@@ -1,41 +1,46 @@
 # Showing all errors
 
-# mypy: Found 117 errors in 7 files (checked 116 source files)
-# basedpyright: 778 errors, 3791 warnings, 0 notes
-# ty: Found 216 diagnostics
+# mypy: Found 126 errors in 13 files (checked 116 source files)
+# basedpyright: 787 errors, 3772 warnings, 0 notes
+# ty: Found 226 diagnostics
 
 [type_errors.mypy]
-total_errors = 117
+total_errors = 126
 
 [type_errors.mypy.by_type]
 "index" = 31
 "typeddict-item" = 26
 "call-overload" = 23
+"attr-defined" = 21
 "arg-type" = 11
-"attr-defined" = 11
 "literal-required" = 10
 "var-annotated" = 2
 "operator" = 2
-"no-redef" = 1
 
 [type_errors.mypy.by_file]
-"tests/unit/json_serialize/test_array_torch.py" = 58
-"tests/unit/json_serialize/test_array.py" = 24
+"tests/unit/json_serialize/test_array_torch.py" = 59
+"tests/unit/json_serialize/test_array.py" = 25
 "tests/unit/test_jsonlines.py" = 12
 "tests/unit/json_serialize/test_serializable_field.py" = 11
-"tests/unit/json_serialize/test_json_serialize.py" = 7
+"tests/unit/json_serialize/test_json_serialize.py" = 8
 "tests/unit/benchmark_parallel/benchmark_parallel.py" = 4
-"muutils/misc/typing_breakdown.py" = 1
+"muutils/json_serialize/serializable_dataclass.py" = 1
+"muutils/json_serialize/json_serialize.py" = 1
+"tests/unit/json_serialize/serializable_dataclass/test_serializable_dataclass.py" = 1
+"tests/unit/json_serialize/serializable_dataclass/test_sdc_properties_nested.py" = 1
+"tests/unit/json_serialize/serializable_dataclass/test_sdc_defaults.py" = 1
+"tests/unit/json_serialize/serializable_dataclass/test_methods_no_override.py" = 1
+"tests/unit/json_serialize/test_util.py" = 1
 
 [type_errors.basedpyright]
-total_errors = 3066
+total_errors = 3059
 
 [type_errors.basedpyright.by_type]
 "reportUnknownParameterType" = 452
 "reportMissingParameterType" = 397
-"reportAny" = 374
-"reportUnusedCallResult" = 295
-"reportUnknownVariableType" = 214
+"reportAny" = 369
+"reportUnusedCallResult" = 291
+"reportUnknownVariableType" = 224
 "reportExplicitAny" = 194
 "reportMissingTypeArgument" = 185
 "reportUnknownMemberType" = 141
@@ -45,50 +50,49 @@ total_errors = 3066
 "reportCallIssue" = 59
 "reportImplicitOverride" = 53
 "reportInvalidTypeForm" = 51
-"reportPrivateUsage" = 41
 "reportUnannotatedClassAttribute" = 41
 "reportPossiblyUnboundVariable" = 34
 "reportUnreachable" = 32
+"reportPrivateUsage" = 29
 "reportOptionalSubscript" = 27
 "reportUnnecessaryIsInstance" = 21
 "reportUntypedClassDecorator" = 17
+"reportAttributeAccessIssue" = 15
 "reportMissingSuperCall" = 14
 "reportUntypedFunctionDecorator" = 13
-"reportUnusedVariable" = 11
+"reportUnusedVariable" = 9
 "reportInvalidTypeArguments" = 9
 "reportUnnecessaryComparison" = 8
 "reportCallInDefaultInitializer" = 8
 "reportUndefinedVariable" = 7
 "reportOptionalMemberAccess" = 7
-"reportAttributeAccessIssue" = 5
 "reportUninitializedInstanceVariable" = 5
 "reportUnusedClass" = 4
 "reportUnnecessaryTypeIgnoreComment" = 3
-"reportImplicitStringConcatenation" = 3
-"reportUnusedImport" = 3
 "reportMissingTypeStubs" = 3
 "reportMissingImports" = 3
 "reportUnusedExpression" = 3
+"reportImplicitStringConcatenation" = 2
 "reportOperatorIssue" = 2
 "reportUntypedNamedTuple" = 2
-"reportRedeclaration" = 1
+"reportUnusedImport" = 1
 "reportUnusedFunction" = 1
 "reportGeneralTypeIssues" = 1
 
 [type_errors.basedpyright.by_file]
-"/home/miv/projects/tools/muutils/tests/unit/json_serialize/test_json_serialize.py" = 167
+"/home/miv/projects/tools/muutils/tests/unit/json_serialize/test_json_serialize.py" = 168
 "/home/miv/projects/tools/muutils/tests/unit/test_dbg.py" = 156
 "/home/miv/projects/tools/muutils/tests/unit/test_parallel.py" = 134
-"/home/miv/projects/tools/muutils/tests/unit/json_serialize/serializable_dataclass/test_serializable_dataclass.py" = 125
+"/home/miv/projects/tools/muutils/tests/unit/json_serialize/serializable_dataclass/test_serializable_dataclass.py" = 126
+"/home/miv/projects/tools/muutils/muutils/json_serialize/serializable_dataclass.py" = 98
 "/home/miv/projects/tools/muutils/tests/unit/misc/test_func.py" = 98
-"/home/miv/projects/tools/muutils/muutils/json_serialize/serializable_dataclass.py" = 97
-"/home/miv/projects/tools/muutils/tests/unit/json_serialize/test_array_torch.py" = 95
+"/home/miv/projects/tools/muutils/tests/unit/json_serialize/test_array_torch.py" = 96
 "/home/miv/projects/tools/muutils/muutils/dictmagic.py" = 88
 "/home/miv/projects/tools/muutils/muutils/json_serialize/serializable_field.py" = 88
 "/home/miv/projects/tools/muutils/tests/unit/validate_type/test_get_kwargs.py" = 87
 "/home/miv/projects/tools/muutils/tests/unit/validate_type/test_validate_type.py" = 86
 "/home/miv/projects/tools/muutils/tests/unit/validate_type/test_validate_type_GENERATED.py" = 86
-"/home/miv/projects/tools/muutils/muutils/json_serialize/json_serialize.py" = 81
+"/home/miv/projects/tools/muutils/muutils/json_serialize/json_serialize.py" = 82
 "/home/miv/projects/tools/muutils/muutils/misc/func.py" = 77
 "/home/miv/projects/tools/muutils/tests/unit/test_interval.py" = 75
 "/home/miv/projects/tools/muutils/muutils/misc/freezing.py" = 67
@@ -103,7 +107,7 @@ total_errors = 3066
 "/home/miv/projects/tools/muutils/muutils/parallel.py" = 45
 "/home/miv/projects/tools/muutils/muutils/statcounter.py" = 41
 "/home/miv/projects/tools/muutils/muutils/sysinfo.py" = 39
-"/home/miv/projects/tools/muutils/tests/unit/json_serialize/test_array.py" = 38
+"/home/miv/projects/tools/muutils/tests/unit/json_serialize/test_array.py" = 39
 "/home/miv/projects/tools/muutils/muutils/web/bundle_html.py" = 37
 "/home/miv/projects/tools/muutils/tests/unit/test_dictmagic.py" = 37
 "/home/miv/projects/tools/muutils/tests/unit/errormode/test_errormode_functionality.py" = 36
@@ -111,14 +115,14 @@ total_errors = 3066
 "/home/miv/projects/tools/muutils/muutils/nbutils/configure_notebook.py" = 33
 "/home/miv/projects/tools/muutils/tests/unit/test_spinner.py" = 33
 "/home/miv/projects/tools/muutils/tests/unit/misc/test_freeze.py" = 31
-"/home/miv/projects/tools/muutils/muutils/json_serialize/util.py" = 27
 "/home/miv/projects/tools/muutils/muutils/misc/sequence.py" = 27
 "/home/miv/projects/tools/muutils/tests/unit/misc/test_numerical_conversions.py" = 27
-"/home/miv/projects/tools/muutils/tests/unit/json_serialize/serializable_dataclass/test_methods_no_override.py" = 25
+"/home/miv/projects/tools/muutils/tests/unit/json_serialize/serializable_dataclass/test_methods_no_override.py" = 26
 "/home/miv/projects/tools/muutils/muutils/mlutils.py" = 24
 "/home/miv/projects/tools/muutils/muutils/validate_type.py" = 24
+"/home/miv/projects/tools/muutils/muutils/json_serialize/util.py" = 23
+"/home/miv/projects/tools/muutils/tests/unit/json_serialize/test_util.py" = 21
 "/home/miv/projects/tools/muutils/muutils/interval.py" = 20
-"/home/miv/projects/tools/muutils/tests/unit/json_serialize/test_util.py" = 20
 "/home/miv/projects/tools/muutils/tests/unit/validate_type/test_validate_type_special.py" = 20
 "/home/miv/projects/tools/muutils/muutils/logger/logger.py" = 19
 "/home/miv/projects/tools/muutils/tests/unit/test_jsonlines.py" = 19
@@ -129,7 +133,6 @@ total_errors = 3066
 "/home/miv/projects/tools/muutils/tests/unit/test_tensor_info_torch.py" = 15
 "/home/miv/projects/tools/muutils/tests/unit/nbutils/test_configure_notebook.py" = 14
 "/home/miv/projects/tools/muutils/muutils/jsonlines.py" = 13
-"/home/miv/projects/tools/muutils/muutils/misc/typing_breakdown.py" = 13
 "/home/miv/projects/tools/muutils/tests/unit/misc/test_misc.py" = 13
 "/home/miv/projects/tools/muutils/muutils/nbutils/run_notebook_tests.py" = 12
 "/home/miv/projects/tools/muutils/muutils/cli/arg_bool.py" = 11
@@ -149,10 +152,10 @@ total_errors = 3066
 "/home/miv/projects/tools/muutils/muutils/nbutils/mermaid.py" = 7
 "/home/miv/projects/tools/muutils/tests/unit/cli/test_command.py" = 7
 "/home/miv/projects/tools/muutils/muutils/logger/timing.py" = 6
+"/home/miv/projects/tools/muutils/tests/unit/json_serialize/serializable_dataclass/test_sdc_defaults.py" = 6
+"/home/miv/projects/tools/muutils/tests/unit/json_serialize/serializable_dataclass/test_sdc_properties_nested.py" = 6
 "/home/miv/projects/tools/muutils/tests/unit/nbutils/test_conversion.py" = 6
 "/home/miv/projects/tools/muutils/tests/conftest.py" = 5
-"/home/miv/projects/tools/muutils/tests/unit/json_serialize/serializable_dataclass/test_sdc_defaults.py" = 5
-"/home/miv/projects/tools/muutils/tests/unit/json_serialize/serializable_dataclass/test_sdc_properties_nested.py" = 5
 "/home/miv/projects/tools/muutils/muutils/logger/simplelogger.py" = 4
 "/home/miv/projects/tools/muutils/muutils/web/html_to_pdf.py" = 4
 "/home/miv/projects/tools/muutils/tests/unit/math/test_matrix_powers_torch.py" = 4
@@ -173,24 +176,30 @@ total_errors = 3066
 "/home/miv/projects/tools/muutils/tests/unit/benchmark_parallel/test_benchmark_demo.py" = 1
 
 [type_errors.ty]
-total_errors = 216
+total_errors = 226
 
 [type_errors.ty.by_type]
 "unknown-argument" = 164
 "unresolved-attribute" = 33
+"unresolved-import" = 11
 "invalid-argument-type" = 8
 "invalid-assignment" = 6
 "too-many-positional-arguments" = 3
 "invalid-return-type" = 1
-"unresolved-import" = 1
 
 [type_errors.ty.by_file]
-"tests/unit/json_serialize/serializable_dataclass/test_serializable_dataclass.py" = 134
+"tests/unit/json_serialize/serializable_dataclass/test_serializable_dataclass.py" = 135
 "tests/unit/json_serialize/test_serializable_field.py" = 29
-"tests/unit/json_serialize/serializable_dataclass/test_methods_no_override.py" = 26
-"tests/unit/json_serialize/serializable_dataclass/test_sdc_properties_nested.py" = 9
+"tests/unit/json_serialize/serializable_dataclass/test_methods_no_override.py" = 27
+"tests/unit/json_serialize/serializable_dataclass/test_sdc_properties_nested.py" = 10
 "tests/unit/test_dictmagic.py" = 8
 "tests/unit/benchmark_parallel/benchmark_parallel.py" = 6
-"tests/unit/json_serialize/test_array_torch.py" = 2
+"tests/unit/json_serialize/test_array_torch.py" = 3
+"muutils/json_serialize/json_serialize.py" = 1
+"muutils/json_serialize/serializable_dataclass.py" = 1
 "tests/unit/benchmark_parallel/test_benchmark_demo.py" = 1
+"tests/unit/json_serialize/serializable_dataclass/test_sdc_defaults.py" = 1
+"tests/unit/json_serialize/test_array.py" = 1
+"tests/unit/json_serialize/test_json_serialize.py" = 1
+"tests/unit/json_serialize/test_util.py" = 1
 "tests/unit/test_statcounter.py" = 1

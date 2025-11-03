@@ -13,7 +13,7 @@ BaseType = Union[
     None,
 ]
 
-Hashableitem = Union[bool, int, float, str, tuple]  # pyright: ignore[reportMissingTypeArgument]
+Hashableitem = Union[BaseType, tuple["Hashableitem", ...]]
 
 
 _FORMAT_KEY: Final[str] = "__muutils_format__"

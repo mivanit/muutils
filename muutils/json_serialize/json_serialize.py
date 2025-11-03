@@ -283,10 +283,10 @@ class JsonSerializer:
 
     def __init__(
         self,
-        *args,
+        *args: None,
         array_mode: "ArrayMode" = "array_list_meta",
         error_mode: ErrorMode = ErrorMode.EXCEPT,
-        handlers_pre: MonoTuple[SerializerHandler] = tuple(),
+        handlers_pre: MonoTuple[SerializerHandler] = (),
         handlers_default: MonoTuple[SerializerHandler] = DEFAULT_HANDLERS,
         write_only_format: bool = False,
     ):
@@ -305,8 +305,8 @@ class JsonSerializer:
 
     def json_serialize(
         self,
-        obj: Any,
-        path: ObjectPath = tuple(),
+        obj: Any,  # pyright: ignore[reportAny]
+        path: ObjectPath = (),
     ) -> JSONitem:
         handler = None
         try:
@@ -317,14 +317,14 @@ class JsonSerializer:
                         if isinstance(output, dict) and _FORMAT_KEY in output:
                             # TYPING: JSONitem has no idea that _FORMAT_KEY is str
                             new_fmt: str = output.pop(_FORMAT_KEY)  # type: ignore  # pyright: ignore[reportAssignmentType]
-                            output["__write_format__"] = new_fmt  # type: ignore  # pyright: ignore[reportGeneralTypeIssues]
+                            output["__write_format__"] = new_fmt  # type: ignore
                     return output
 
-            raise ValueError(f"no handler found for object with {type(obj) = }")
+            raise ValueError(f"no handler found for object with {type(obj) = }")  # pyright: ignore[reportAny]
 
         except Exception as e:
             if self.error_mode == ErrorMode.EXCEPT:
-                obj_str: str = repr(obj)
+                obj_str: str = repr(obj)  # pyright: ignore[reportAny]
                 if len(obj_str) > 1000:
                     obj_str = obj_str[:1000] + "..."
                 handler_uid = handler.uid if handler else "no handler matched"
@@ -336,12 +336,12 @@ class JsonSerializer:
                     f"error serializing at {path = }, will return as string\n{obj = }\nexception = {e}"
                 )
 
-            return repr(obj)
+            return repr(obj)  # pyright: ignore[reportAny]
 
     def hashify(
         self,
-        obj: Any,
-        path: ObjectPath = tuple(),
+        obj: Any,  # pyright: ignore[reportAny]
+        path: ObjectPath = (),
         force: bool = True,
     ) -> Hashableitem:
         """try to turn any object into something hashable"""
@@ -354,6 +354,6 @@ class JsonSerializer:
 GLOBAL_JSON_SERIALIZER: JsonSerializer = JsonSerializer()
 
 
-def json_serialize(obj: Any, path: ObjectPath = tuple()) -> JSONitem:
+def json_serialize(obj: Any, path: ObjectPath = ()) -> JSONitem:  # pyright: ignore[reportAny]
     """serialize object to json-serializable object with default config"""
     return GLOBAL_JSON_SERIALIZER.json_serialize(obj, path=path)

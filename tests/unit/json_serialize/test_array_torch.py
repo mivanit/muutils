@@ -15,7 +15,11 @@ from muutils.json_serialize.types import _FORMAT_KEY  # pyright: ignore[reportPr
 # pylint: disable=missing-class-docstring
 
 
-_WITH_META_ARRAY_MODES: list[ArrayMode] = ["array_list_meta", "array_hex_meta", "array_b64_meta"]
+_WITH_META_ARRAY_MODES: list[ArrayMode] = [
+    "array_list_meta",
+    "array_hex_meta",
+    "array_b64_meta",
+]
 
 
 def test_arr_metadata_torch():
@@ -120,6 +124,7 @@ def test_torch_zero_dim_tensor():
         assert loaded.shape == tensor_0d.shape
         assert np.array_equal(loaded, tensor_0d.cpu().numpy())
 
+
 def test_torch_edge_cases():
     """Test edge cases with torch tensors."""
     jser = JsonSerializer(array_mode="array_list_meta")
@@ -139,9 +144,9 @@ def test_torch_edge_cases():
         loaded = load_array(serialized)
 
         # Check special values
-        assert np.isinf(loaded[0]) and loaded[0] > 0
-        assert np.isinf(loaded[1]) and loaded[1] < 0
-        assert np.isnan(loaded[2])
+        assert np.isinf(loaded[0]) and loaded[0] > 0  # pyright: ignore[reportAny]
+        assert np.isinf(loaded[1]) and loaded[1] < 0  # pyright: ignore[reportAny]
+        assert np.isnan(loaded[2])  # pyright: ignore[reportAny]
 
     # Large tensor
     large_tensor = torch.randn(100, 100)
@@ -199,11 +204,11 @@ def test_torch_serialization_integration():
     assert isinstance(serialized["biases"], dict)
     assert serialized["biases"]["shape"] == [5]
 
-    assert serialized["metadata"]["epochs"] == 10
+    assert serialized["metadata"]["epochs"] == 10  # pyright: ignore[reportArgumentType, reportCallIssue, reportIndexIssue, reportOptionalSubscript]
 
     # Check nested tensors
-    assert isinstance(serialized["history"][0]["loss"], dict)
-    assert _FORMAT_KEY in serialized["history"][0]["loss"]
+    assert isinstance(serialized["history"][0]["loss"], dict)  # pyright: ignore[reportArgumentType, reportCallIssue, reportIndexIssue, reportOptionalSubscript]
+    assert _FORMAT_KEY in serialized["history"][0]["loss"]  # pyright: ignore[reportArgumentType, reportCallIssue, reportIndexIssue, reportOptionalSubscript, reportOperatorIssue]
 
 
 def test_mixed_numpy_torch():
@@ -229,5 +234,5 @@ def test_mixed_numpy_torch():
     assert _FORMAT_KEY in serialized["torch_tensor"]
 
     # Check format strings identify the type
-    assert "numpy" in serialized["numpy_array"][_FORMAT_KEY]
-    assert "torch" in serialized["torch_tensor"][_FORMAT_KEY]
+    assert "numpy" in serialized["numpy_array"][_FORMAT_KEY]  # pyright: ignore[reportOperatorIssue]
+    assert "torch" in serialized["torch_tensor"][_FORMAT_KEY]  # pyright: ignore[reportOperatorIssue]

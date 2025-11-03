@@ -8,7 +8,7 @@ import inspect
 import sys
 import typing
 import warnings
-from typing import TYPE_CHECKING, Any, Callable, Iterable, TypeVar, Union
+from typing import Any, Callable, Iterable, TypeVar, Union
 
 from muutils.json_serialize.types import BaseType, Hashableitem
 
@@ -125,13 +125,13 @@ def try_catch(
 
 
 # TYPING: can we get rid of any of these?
-def _recursive_hashify(obj: Any, force: bool = True) -> Hashableitem:  # pyright: ignore[reportUnknownParameterType, reportAny]
+def _recursive_hashify(obj: Any, force: bool = True) -> Hashableitem:  # pyright: ignore[reportAny]
     if isinstance(obj, typing.Mapping):
         return tuple((k, _recursive_hashify(v)) for k, v in obj.items())  # pyright: ignore[reportUnknownVariableType, reportUnknownArgumentType]
     elif isinstance(obj, (bool, int, float, str)):
         return obj
     elif isinstance(obj, (tuple, list, Iterable)):
-        return tuple(_recursive_hashify(v) for v in obj)  # pyright: ignore[reportUnknownVariableType, reportUnknownArgumentType]
+        return tuple(_recursive_hashify(v) for v in obj)  # pyright: ignore[reportUnknownVariableType]
     else:
         if force:
             return str(obj)  # pyright: ignore[reportAny]

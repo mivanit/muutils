@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import time
 from dataclasses import dataclass, field
-from typing import Any, Callable
+from typing import Any, Callable, override
 
 from muutils.logger.simplelogger import AnyIO, NullIO
 from muutils.misc import sanitize_fname
@@ -91,5 +91,6 @@ class LoggingStream:
             self.handler.flush()
             self.handler.close()
 
+    @override
     def __str__(self):
         return f"LoggingStream(name={self.name}, aliases={self.aliases}, file={self.file}, default_level={self.default_level}, default_contents={self.default_contents})"

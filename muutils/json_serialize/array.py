@@ -62,8 +62,10 @@ def array_n_elements(arr: Any) -> int:  # type: ignore[name-defined]  # pyright:
     if isinstance(arr, np.ndarray):
         return arr.size
     elif str(type(arr)) == "<class 'torch.Tensor'>":  # pyright: ignore[reportUnknownArgumentType, reportAny]
-        assert hasattr(arr, "nelement"), "torch Tensor does not have nelement() method? this should not happen"  # pyright: ignore[reportAny]
-        return arr.nelement() # pyright: ignore[reportAny]
+        assert hasattr(arr, "nelement"), (
+            "torch Tensor does not have nelement() method? this should not happen"
+        )  # pyright: ignore[reportAny]
+        return arr.nelement()  # pyright: ignore[reportAny]
     else:
         raise TypeError(f"invalid type: {type(arr)}")  # pyright: ignore[reportAny]
 

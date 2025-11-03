@@ -1,17 +1,17 @@
 # Showing all errors
 
-# mypy: Found 59 errors in 7 files (checked 116 source files)
-# basedpyright: 598 errors, 3416 warnings, 0 notes
-# ty: Found 209 diagnostics
+# mypy: Found 61 errors in 7 files (checked 116 source files)
+# basedpyright: 565 errors, 3341 warnings, 0 notes
+# ty: Found 212 diagnostics
 
 [type_errors.mypy]
-total_errors = 59
+total_errors = 61
 
 [type_errors.mypy.by_type]
 "index" = 20
 "attr-defined" = 11
+"arg-type" = 10
 "call-overload" = 10
-"arg-type" = 8
 "operator" = 6
 "return-value" = 2
 "var-annotated" = 2
@@ -21,52 +21,52 @@ total_errors = 59
 "tests/unit/json_serialize/test_array_torch.py" = 13
 "tests/unit/json_serialize/test_serializable_field.py" = 11
 "tests/unit/test_jsonlines.py" = 7
+"tests/unit/json_serialize/test_json_serialize.py" = 6
 "muutils/json_serialize/json_serialize.py" = 4
-"tests/unit/json_serialize/test_json_serialize.py" = 4
 "tests/unit/benchmark_parallel/benchmark_parallel.py" = 1
 
 [type_errors.basedpyright]
-total_errors = 2705
+total_errors = 2649
 
 [type_errors.basedpyright.by_type]
-"reportUnknownParameterType" = 434
-"reportMissingParameterType" = 384
-"reportAny" = 357
-"reportUnusedCallResult" = 292
-"reportUnknownVariableType" = 201
-"reportMissingTypeArgument" = 181
-"reportUnknownMemberType" = 136
+"reportUnknownParameterType" = 426
+"reportMissingParameterType" = 379
+"reportAny" = 354
+"reportUnusedCallResult" = 291
+"reportUnknownVariableType" = 195
+"reportMissingTypeArgument" = 180
+"reportUnknownMemberType" = 133
 "reportUnknownLambdaType" = 127
 "reportUnusedParameter" = 99
-"reportImplicitOverride" = 53
+"reportImplicitOverride" = 52
 "reportInvalidTypeForm" = 49
-"reportIndexIssue" = 46
-"reportCallIssue" = 45
+"reportCallIssue" = 42
 "reportUnannotatedClassAttribute" = 41
 "reportPossiblyUnboundVariable" = 34
-"reportPrivateUsage" = 33
+"reportPrivateUsage" = 32
 "reportUnreachable" = 31
+"reportIndexIssue" = 31
 "reportUnnecessaryIsInstance" = 19
 "reportUntypedClassDecorator" = 17
 "reportMissingSuperCall" = 14
-"reportOptionalSubscript" = 13
-"reportUnnecessaryTypeIgnoreComment" = 12
+"reportUnnecessaryTypeIgnoreComment" = 13
 "reportUntypedFunctionDecorator" = 12
 "reportInvalidTypeArguments" = 9
 "reportUnnecessaryComparison" = 8
-"reportCallInDefaultInitializer" = 8
 "reportUnusedVariable" = 8
+"reportOptionalSubscript" = 8
 "reportUndefinedVariable" = 7
 "reportOptionalMemberAccess" = 7
 "reportUninitializedInstanceVariable" = 5
+"reportCallInDefaultInitializer" = 4
 "reportUnusedClass" = 4
 "reportMissingTypeStubs" = 3
 "reportMissingImports" = 3
 "reportUnusedExpression" = 3
 "reportImplicitStringConcatenation" = 2
-"reportUnusedImport" = 2
 "reportOperatorIssue" = 2
 "reportUntypedNamedTuple" = 2
+"reportUnusedImport" = 1
 "reportUnusedFunction" = 1
 "reportGeneralTypeIssues" = 1
 
@@ -84,9 +84,9 @@ total_errors = 2705
 "muutils/misc/func.py" = 70
 "tests/unit/cli/test_arg_bool.py" = 66
 "muutils/misc/freezing.py" = 65
-"muutils/json_serialize/json_serialize.py" = 63
 "muutils/dictmagic.py" = 62
 "tests/unit/web/test_bundle_html.py" = 55
+"muutils/json_serialize/json_serialize.py" = 52
 "muutils/spinner.py" = 51
 "muutils/json_serialize/serializable_field.py" = 49
 "tests/unit/benchmark_parallel/benchmark_parallel.py" = 49
@@ -105,7 +105,6 @@ total_errors = 2705
 "tests/unit/test_spinner.py" = 32
 "tests/unit/misc/test_freeze.py" = 31
 "tests/unit/misc/test_numerical_conversions.py" = 27
-"tests/unit/json_serialize/test_array_torch.py" = 23
 "muutils/misc/sequence.py" = 22
 "muutils/mlutils.py" = 22
 "muutils/validate_type.py" = 20
@@ -113,7 +112,6 @@ total_errors = 2705
 "tests/unit/test_jsonlines.py" = 19
 "muutils/logger/logger.py" = 18
 "muutils/math/matrix_powers.py" = 18
-"muutils/misc/string.py" = 18
 "tests/unit/json_serialize/test_util.py" = 18
 "muutils/interval.py" = 17
 "tests/unit/test_kappa.py" = 17
@@ -149,10 +147,9 @@ total_errors = 2705
 "tests/unit/misc/test_sequence.py" = 4
 "tests/unit/test_mlutils.py" = 4
 "muutils/cli/command.py" = 3
+"muutils/json_serialize/array.py" = 3
 "muutils/logger/simplelogger.py" = 3
 "muutils/misc/hashing.py" = 3
-"muutils/json_serialize/array.py" = 2
-"muutils/json_serialize/util.py" = 2
 "muutils/misc/numerical.py" = 2
 "muutils/timeit_fancy.py" = 2
 "tests/unit/logger/test_log_util.py" = 2
@@ -160,22 +157,19 @@ total_errors = 2705
 "tests/unit/test_tensor_info.py" = 2
 "tests/unit/test_timeit_fancy.py" = 2
 "muutils/console_unicode.py" = 1
-"muutils/logger/loggingstream.py" = 1
-"muutils/math/bins.py" = 1
-"muutils/misc/__init__.py" = 1
-"muutils/misc/b64_decode.py" = 1
+"muutils/json_serialize/util.py" = 1
 "tests/unit/benchmark_parallel/test_benchmark_demo.py" = 1
 
 [type_errors.ty]
-total_errors = 209
+total_errors = 212
 
 [type_errors.ty.by_type]
 "unknown-argument" = 164
 "unresolved-attribute" = 33
+"invalid-argument-type" = 5
 "invalid-assignment" = 5
-"invalid-argument-type" = 3
 "too-many-positional-arguments" = 3
-"unresolved-import" = 1
+"unresolved-import" = 2
 
 [type_errors.ty.by_file]
 "tests/unit/json_serialize/serializable_dataclass/test_serializable_dataclass.py" = 134
@@ -184,4 +178,6 @@ total_errors = 209
 "tests/unit/json_serialize/serializable_dataclass/test_sdc_properties_nested.py" = 9
 "tests/unit/test_dictmagic.py" = 8
 "tests/unit/benchmark_parallel/benchmark_parallel.py" = 2
+"tests/unit/json_serialize/test_json_serialize.py" = 2
+"muutils/logger/loggingstream.py" = 1
 "tests/unit/benchmark_parallel/test_benchmark_demo.py" = 1

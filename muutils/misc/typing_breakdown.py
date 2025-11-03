@@ -34,10 +34,8 @@ class TypeCheckResult:
         total_by_file: int = sum(self.by_file.values())
 
         if total_by_type != total_by_file:
-            raise ValueError(
-                f"Error count mismatch for {self.type_checker}: "
-                f"by_type={total_by_type}, by_file={total_by_file}"
-            )
+            err_msg: str = f"Error count mismatch for {self.type_checker}: by_type={total_by_type}, by_file={total_by_file}"
+            raise ValueError(err_msg)
 
         return total_by_type
 
@@ -164,9 +162,8 @@ def parse_ty(content: str) -> TypeCheckResult:
     locations: List[re.Match[str]] = list(location_pattern.finditer(content))
 
     # Match errors with locations (they should be in order)
-    i: int
     error_match: re.Match[str]
-    for i, error_match in enumerate(errors):
+    for error_match in errors:
         error_code: str = error_match.group(2)
         result.by_type[error_code] += 1
 
@@ -228,8 +225,8 @@ def main(error_dir: str, output_file: str, top_n: int | None = 10) -> None:
 
     parser_fn: Callable[[str], TypeCheckResult]
     for name, filename, parser_fn in checkers:
-        file_path: Path = error_path / filename
-        content: str = file_path.read_text(encoding="utf-8")
+        file_path_: Path = error_path / filename
+        content: str = file_path_.read_text(encoding="utf-8")
         result: TypeCheckResult = parser_fn(content)
         # Filter and sort the result
         filtered_result: TypeCheckResult = result.filter_by(top_n)
@@ -241,7 +238,7 @@ def main(error_dir: str, output_file: str, top_n: int | None = 10) -> None:
     # Write to output file
     final_output: str = "\n".join(output_lines)
     output_path.parent.mkdir(parents=True, exist_ok=True)
-    output_path.write_text(final_output, encoding="utf-8")
+    _ = output_path.write_text(final_output, encoding="utf-8")
 
     # Also print to stdout
     print(final_output)
@@ -252,20 +249,20 @@ if __name__ == "__main__":
         description="Parse type checker outputs and generate detailed breakdown of errors by type and file",
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
-    parser.add_argument(
+    _ = parser.add_argument(
         "--error-dir",
         type=str,
         default=".meta/.type-errors",
         help="Directory containing type checker output files (default: .meta/.type-errors)",
     )
-    parser.add_argument(
+    _ = parser.add_argument(
         "--output",
         "-o",
         type=str,
         default=".meta/typing-summary.txt",
         help="Output file to write summary to (default: .meta/typing-summary.txt)",
     )
-    parser.add_argument(
+    _ = parser.add_argument(
         "--top-n",
         "-n",
         type=str,
@@ -276,6 +273,7 @@ if __name__ == "__main__":
     args: argparse.Namespace = parser.parse_args()
 
     # Parse top_n value
+    assert isinstance(args.top_n, str)  # pyright: ignore[reportAny]
     top_n_value: int | None
     if args.top_n.lower() == "all":
         top_n_value = None
@@ -283,4 +281,4 @@ if __name__ == "__main__":
         top_n_int: int = int(args.top_n)
         top_n_value = None if top_n_int < 0 else top_n_int
 
-    main(args.error_dir, args.output, top_n_value)
+    main(error_dir=args.error_dir, output_file=args.output, top_n=top_n_value)  # pyright: ignore[reportAny]

@@ -12,11 +12,37 @@ Examples:
 from __future__ import annotations
 
 import argparse
+import os
 import re
 from collections import defaultdict
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Callable, Dict, List, Literal, Tuple
+
+
+def strip_cwd(path: str) -> str:
+    """Strip the current working directory from a file path to make it relative.
+
+    Args:
+        path: File path (absolute or relative)
+
+    Returns:
+        Relative path with CWD stripped, or original path if not under CWD
+    """
+    cwd: str = os.getcwd()
+    # Normalize both paths to handle different separators and resolve symlinks
+    abs_path: str = os.path.abspath(path)
+    abs_cwd: str = os.path.abspath(cwd)
+
+    # Ensure CWD ends with separator for proper prefix matching
+    if not abs_cwd.endswith(os.sep):
+        abs_cwd += os.sep
+
+    # Strip CWD prefix if present
+    if abs_path.startswith(abs_cwd):
+        return abs_path[len(abs_cwd):]
+
+    return path
 
 
 @dataclass
@@ -127,7 +153,7 @@ def parse_basedpyright(content: str) -> TypeCheckResult:
     for line in content.splitlines():
         # Check if this is a file path line
         if line and not line.startswith(" ") and line.startswith("/"):
-            current_file = line.strip()
+            current_file = strip_cwd(line.strip())
         # Check if this is an error/warning line
         elif line.strip() and current_file:
             # Match pattern like: "  path:line:col - warning: message (reportCode)"

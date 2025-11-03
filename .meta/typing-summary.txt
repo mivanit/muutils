@@ -1,28 +1,28 @@
 # Showing all errors
 
-# mypy: Found 94 errors in 6 files (checked 116 source files)
-# basedpyright: 637 errors, 3416 warnings, 0 notes
+# mypy: Found 59 errors in 7 files (checked 116 source files)
+# basedpyright: 598 errors, 3416 warnings, 0 notes
 # ty: Found 209 diagnostics
 
 [type_errors.mypy]
-total_errors = 94
+total_errors = 59
 
 [type_errors.mypy.by_type]
-"typeddict-item" = 26
-"index" = 19
-"attr-defined" = 13
-"call-overload" = 12
-"literal-required" = 10
-"arg-type" = 6
+"index" = 20
+"attr-defined" = 11
+"call-overload" = 10
+"arg-type" = 8
 "operator" = 6
+"return-value" = 2
 "var-annotated" = 2
 
 [type_errors.mypy.by_file]
-"tests/unit/json_serialize/test_array_torch.py" = 35
-"tests/unit/json_serialize/test_array.py" = 24
-"tests/unit/test_jsonlines.py" = 12
-"tests/unit/json_serialize/test_json_serialize.py" = 11
+"tests/unit/json_serialize/test_array.py" = 19
+"tests/unit/json_serialize/test_array_torch.py" = 13
 "tests/unit/json_serialize/test_serializable_field.py" = 11
+"tests/unit/test_jsonlines.py" = 7
+"muutils/json_serialize/json_serialize.py" = 4
+"tests/unit/json_serialize/test_json_serialize.py" = 4
 "tests/unit/benchmark_parallel/benchmark_parallel.py" = 1
 
 [type_errors.basedpyright]
@@ -49,8 +49,8 @@ total_errors = 2705
 "reportUnnecessaryIsInstance" = 19
 "reportUntypedClassDecorator" = 17
 "reportMissingSuperCall" = 14
-"reportUnnecessaryTypeIgnoreComment" = 13
 "reportOptionalSubscript" = 13
+"reportUnnecessaryTypeIgnoreComment" = 12
 "reportUntypedFunctionDecorator" = 12
 "reportInvalidTypeArguments" = 9
 "reportUnnecessaryComparison" = 8
@@ -64,9 +64,9 @@ total_errors = 2705
 "reportMissingImports" = 3
 "reportUnusedExpression" = 3
 "reportImplicitStringConcatenation" = 2
+"reportUnusedImport" = 2
 "reportOperatorIssue" = 2
 "reportUntypedNamedTuple" = 2
-"reportUnusedImport" = 1
 "reportUnusedFunction" = 1
 "reportGeneralTypeIssues" = 1
 
@@ -84,7 +84,7 @@ total_errors = 2705
 "muutils/misc/func.py" = 70
 "tests/unit/cli/test_arg_bool.py" = 66
 "muutils/misc/freezing.py" = 65
-"muutils/json_serialize/json_serialize.py" = 64
+"muutils/json_serialize/json_serialize.py" = 63
 "muutils/dictmagic.py" = 62
 "tests/unit/web/test_bundle_html.py" = 55
 "muutils/spinner.py" = 51
@@ -152,6 +152,7 @@ total_errors = 2705
 "muutils/logger/simplelogger.py" = 3
 "muutils/misc/hashing.py" = 3
 "muutils/json_serialize/array.py" = 2
+"muutils/json_serialize/util.py" = 2
 "muutils/misc/numerical.py" = 2
 "muutils/timeit_fancy.py" = 2
 "tests/unit/logger/test_log_util.py" = 2
@@ -159,7 +160,6 @@ total_errors = 2705
 "tests/unit/test_tensor_info.py" = 2
 "tests/unit/test_timeit_fancy.py" = 2
 "muutils/console_unicode.py" = 1
-"muutils/json_serialize/util.py" = 1
 "muutils/logger/loggingstream.py" = 1
 "muutils/math/bins.py" = 1
 "muutils/misc/__init__.py" = 1

@@ -1,19 +1,19 @@
 # Showing all errors
 
-# mypy: Found 97 errors in 6 files (checked 116 source files)
-# basedpyright: 651 errors, 3446 warnings, 0 notes
-# ty: Found 214 diagnostics
+# mypy: Found 94 errors in 6 files (checked 116 source files)
+# basedpyright: 637 errors, 3416 warnings, 0 notes
+# ty: Found 209 diagnostics
 
 [type_errors.mypy]
-total_errors = 97
+total_errors = 94
 
 [type_errors.mypy.by_type]
 "typeddict-item" = 26
 "index" = 19
+"attr-defined" = 13
 "call-overload" = 12
-"arg-type" = 11
-"attr-defined" = 11
 "literal-required" = 10
+"arg-type" = 6
 "operator" = 6
 "var-annotated" = 2
 
@@ -23,39 +23,39 @@ total_errors = 97
 "tests/unit/test_jsonlines.py" = 12
 "tests/unit/json_serialize/test_json_serialize.py" = 11
 "tests/unit/json_serialize/test_serializable_field.py" = 11
-"tests/unit/benchmark_parallel/benchmark_parallel.py" = 4
+"tests/unit/benchmark_parallel/benchmark_parallel.py" = 1
 
 [type_errors.basedpyright]
-total_errors = 2715
+total_errors = 2705
 
 [type_errors.basedpyright.by_type]
-"reportUnknownParameterType" = 437
-"reportMissingParameterType" = 386
-"reportAny" = 358
-"reportUnusedCallResult" = 291
+"reportUnknownParameterType" = 434
+"reportMissingParameterType" = 384
+"reportAny" = 357
+"reportUnusedCallResult" = 292
 "reportUnknownVariableType" = 201
-"reportMissingTypeArgument" = 182
+"reportMissingTypeArgument" = 181
 "reportUnknownMemberType" = 136
 "reportUnknownLambdaType" = 127
-"reportUnusedParameter" = 100
+"reportUnusedParameter" = 99
 "reportImplicitOverride" = 53
 "reportInvalidTypeForm" = 49
 "reportIndexIssue" = 46
 "reportCallIssue" = 45
 "reportUnannotatedClassAttribute" = 41
-"reportPrivateUsage" = 35
 "reportPossiblyUnboundVariable" = 34
+"reportPrivateUsage" = 33
 "reportUnreachable" = 31
-"reportUnnecessaryIsInstance" = 20
+"reportUnnecessaryIsInstance" = 19
 "reportUntypedClassDecorator" = 17
 "reportMissingSuperCall" = 14
+"reportUnnecessaryTypeIgnoreComment" = 13
 "reportOptionalSubscript" = 13
-"reportUnnecessaryTypeIgnoreComment" = 12
 "reportUntypedFunctionDecorator" = 12
-"reportUnusedVariable" = 9
 "reportInvalidTypeArguments" = 9
 "reportUnnecessaryComparison" = 8
 "reportCallInDefaultInitializer" = 8
+"reportUnusedVariable" = 8
 "reportUndefinedVariable" = 7
 "reportOptionalMemberAccess" = 7
 "reportUninitializedInstanceVariable" = 5
@@ -105,7 +105,7 @@ total_errors = 2715
 "tests/unit/test_spinner.py" = 32
 "tests/unit/misc/test_freeze.py" = 31
 "tests/unit/misc/test_numerical_conversions.py" = 27
-"tests/unit/json_serialize/test_array_torch.py" = 25
+"tests/unit/json_serialize/test_array_torch.py" = 23
 "muutils/misc/sequence.py" = 22
 "muutils/mlutils.py" = 22
 "muutils/validate_type.py" = 20
@@ -127,7 +127,6 @@ total_errors = 2715
 "tests/unit/misc/test_misc.py" = 11
 "tests/unit/test_tensor_info_torch.py" = 11
 "muutils/dbg.py" = 10
-"muutils/json_serialize/array.py" = 10
 "muutils/logger/exception_context.py" = 10
 "tests/unit/test_collect_warnings.py" = 10
 "muutils/kappa.py" = 9
@@ -152,6 +151,7 @@ total_errors = 2715
 "muutils/cli/command.py" = 3
 "muutils/logger/simplelogger.py" = 3
 "muutils/misc/hashing.py" = 3
+"muutils/json_serialize/array.py" = 2
 "muutils/misc/numerical.py" = 2
 "muutils/timeit_fancy.py" = 2
 "tests/unit/logger/test_log_util.py" = 2
@@ -167,13 +167,13 @@ total_errors = 2715
 "tests/unit/benchmark_parallel/test_benchmark_demo.py" = 1
 
 [type_errors.ty]
-total_errors = 214
+total_errors = 209
 
 [type_errors.ty.by_type]
 "unknown-argument" = 164
 "unresolved-attribute" = 33
-"invalid-argument-type" = 8
 "invalid-assignment" = 5
+"invalid-argument-type" = 3
 "too-many-positional-arguments" = 3
 "unresolved-import" = 1
 
@@ -183,6 +183,5 @@ total_errors = 214
 "tests/unit/json_serialize/serializable_dataclass/test_methods_no_override.py" = 26
 "tests/unit/json_serialize/serializable_dataclass/test_sdc_properties_nested.py" = 9
 "tests/unit/test_dictmagic.py" = 8
-"tests/unit/benchmark_parallel/benchmark_parallel.py" = 5
-"tests/unit/json_serialize/test_array_torch.py" = 2
+"tests/unit/benchmark_parallel/benchmark_parallel.py" = 2
 "tests/unit/benchmark_parallel/test_benchmark_demo.py" = 1

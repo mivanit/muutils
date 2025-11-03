@@ -24,22 +24,23 @@ except ImportError:
 
 # At type-checking time, include array serialization types to avoid nominal type errors
 # This avoids superfluous imports at runtime
-if TYPE_CHECKING:
-    from muutils.json_serialize.array import NumericList, SerializedArrayWithMeta
+# if TYPE_CHECKING:
+#     from muutils.json_serialize.array import NumericList, SerializedArrayWithMeta
 
-    JSONitem = Union[
-        BaseType,
-        typing.Sequence["JSONitem"],
-        typing.Dict[str, "JSONitem"],
-        SerializedArrayWithMeta,
-        NumericList,
-    ]
-else:
-    JSONitem = Union[
-        BaseType,
-        typing.Sequence["JSONitem"],
-        typing.Dict[str, "JSONitem"],
-    ]
+#     JSONitem = Union[
+#         BaseType,
+#         typing.Sequence["JSONitem"],
+#         typing.Dict[str, "JSONitem"],
+#         SerializedArrayWithMeta,
+#         NumericList,
+#     ]
+# else:
+
+JSONitem = Union[
+    BaseType,
+    typing.Sequence["JSONitem"],
+    typing.Dict[str, "JSONitem"],
+]
 
 JSONdict = typing.Dict[str, JSONitem]
 

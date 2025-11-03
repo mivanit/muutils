@@ -4,14 +4,18 @@ import torch
 
 from muutils.json_serialize import JsonSerializer
 from muutils.json_serialize.array import (
+    ArrayMode,
     arr_metadata,
     array_n_elements,
     load_array,
     serialize_array,
 )
-from muutils.json_serialize.types import _FORMAT_KEY
+from muutils.json_serialize.types import _FORMAT_KEY  # pyright: ignore[reportPrivateUsage]
 
 # pylint: disable=missing-class-docstring
+
+
+_WITH_META_ARRAY_MODES: list[ArrayMode] = ["array_list_meta", "array_hex_meta", "array_b64_meta"]
 
 
 def test_arr_metadata_torch():
@@ -65,7 +69,7 @@ def test_serialize_load_torch_tensors():
     ]
 
     for tensor in tensors:
-        for mode in ["array_list_meta", "array_hex_meta", "array_b64_meta"]:
+        for mode in _WITH_META_ARRAY_MODES:
             serialized = serialize_array(jser, tensor, "test", array_mode=mode)  # type: ignore[arg-type]
             loaded = load_array(serialized)
 
@@ -91,8 +95,8 @@ def test_torch_shape_dtype_preservation():
         (torch.tensor([True, False, True], dtype=torch.bool), torch.bool),
     ]
 
-    for tensor, expected_dtype in dtype_tests:
-        for mode in ["array_list_meta", "array_hex_meta", "array_b64_meta"]:
+    for tensor, _expected_dtype in dtype_tests:
+        for mode in _WITH_META_ARRAY_MODES:
             serialized = serialize_array(jser, tensor, "test", array_mode=mode)  # type: ignore[arg-type]
             loaded = load_array(serialized)
 
@@ -108,14 +112,13 @@ def test_torch_zero_dim_tensor():
 
     tensor_0d = torch.tensor(42)
 
-    for mode in ["array_list_meta", "array_hex_meta", "array_b64_meta"]:
+    for mode in _WITH_META_ARRAY_MODES:
         serialized = serialize_array(jser, tensor_0d, "test", array_mode=mode)  # type: ignore[arg-type]
         loaded = load_array(serialized)
 
         # Zero-dim tensors have special handling
         assert loaded.shape == tensor_0d.shape
         assert np.array_equal(loaded, tensor_0d.cpu().numpy())
-
 
 def test_torch_edge_cases():
     """Test edge cases with torch tensors."""
@@ -131,7 +134,7 @@ def test_torch_edge_cases():
     special_tensor = torch.tensor(
         [float("inf"), float("-inf"), float("nan"), 0.0, -0.0]
     )
-    for mode in ["array_list_meta", "array_hex_meta", "array_b64_meta"]:
+    for mode in _WITH_META_ARRAY_MODES:
         serialized = serialize_array(jser, special_tensor, "test", array_mode=mode)  # type: ignore[arg-type]
         loaded = load_array(serialized)
 
@@ -159,7 +162,7 @@ def test_torch_gpu_tensors():
     # Create GPU tensor
     tensor_gpu = torch.tensor([1, 2, 3, 4], dtype=torch.float32, device="cuda")
 
-    for mode in ["array_list_meta", "array_hex_meta", "array_b64_meta"]:
+    for mode in _WITH_META_ARRAY_MODES:
         # Need to move to CPU first for numpy conversion
         tensor_cpu_torch = tensor_gpu.cpu()
         serialized = serialize_array(jser, tensor_cpu_torch, "test", array_mode=mode)  # type: ignore[arg-type]

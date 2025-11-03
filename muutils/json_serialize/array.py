@@ -13,6 +13,7 @@ import typing
 import warnings
 from typing import (
     TYPE_CHECKING,
+    Any,
     Iterable,
     Literal,
     Optional,
@@ -32,8 +33,10 @@ except ImportError as e:
 
 if TYPE_CHECKING:
     import numpy as np
+    import torch
+    from muutils.json_serialize.json_serialize import JsonSerializer
 
-from muutils.json_serialize.types import _FORMAT_KEY
+from muutils.json_serialize.types import _FORMAT_KEY  # pyright: ignore[reportPrivateUsage]
 
 # TYPING: pyright complains way too much here
 # pyright: reportCallIssue=false,reportArgumentType=false,reportUnknownVariableType=false,reportUnknownMemberType=false
@@ -54,14 +57,15 @@ ArrayMode = Literal[
 ]
 
 
-def array_n_elements(arr) -> int:  # type: ignore[name-defined]
+def array_n_elements(arr: Any) -> int:  # type: ignore[name-defined]  # pyright: ignore[reportAny]
     """get the number of elements in an array"""
     if isinstance(arr, np.ndarray):
         return arr.size
-    elif str(type(arr)) == "<class 'torch.Tensor'>":
-        return arr.nelement()
+    elif str(type(arr)) == "<class 'torch.Tensor'>":  # pyright: ignore[reportUnknownArgumentType, reportAny]
+        assert hasattr(arr, "nelement"), "torch Tensor does not have nelement() method? this should not happen"  # pyright: ignore[reportAny]
+        return arr.nelement() # pyright: ignore[reportAny]
     else:
-        raise TypeError(f"invalid type: {type(arr)}")
+        raise TypeError(f"invalid type: {type(arr)}")  # pyright: ignore[reportAny]
 
 
 class ArrayMetadata(TypedDict):
@@ -84,21 +88,21 @@ class SerializedArrayWithMeta(TypedDict):
     n_elements: int
 
 
-def arr_metadata(arr) -> ArrayMetadata:
+def arr_metadata(arr: Any) -> ArrayMetadata:  # pyright: ignore[reportAny]
     """get metadata for a numpy array"""
     return {
-        "shape": list(arr.shape),
+        "shape": list(arr.shape),  # pyright: ignore[reportAny]
         "dtype": (
-            arr.dtype.__name__ if hasattr(arr.dtype, "__name__") else str(arr.dtype)
+            arr.dtype.__name__ if hasattr(arr.dtype, "__name__") else str(arr.dtype)  # pyright: ignore[reportAny]
         ),
         "n_elements": array_n_elements(arr),
     }
 
 
 def serialize_array(
-    jser: "JsonSerializer",  # type: ignore[name-defined] # noqa: F821  # pyright: ignore[reportUndefinedVariable]
-    arr: np.ndarray,
-    path: str | Sequence[str | int],
+    jser: "JsonSerializer",  # type: ignore[name-defined] # noqa: F821
+    arr: "Union[np.ndarray, torch.Tensor]",
+    path: str | Sequence[str | int],  # pyright: ignore[reportUnusedParameter]
     array_mode: ArrayMode | None = None,
 ) -> SerializedArrayWithMeta | NumericList:
     """serialize a numpy or pytorch array in one of several modes
@@ -138,11 +142,11 @@ def serialize_array(
         array_mode = jser.array_mode
 
     arr_type: str = f"{type(arr).__module__}.{type(arr).__name__}"
-    arr_np: np.ndarray = arr if isinstance(arr, np.ndarray) else np.array(arr)
+    arr_np: np.ndarray = arr if isinstance(arr, np.ndarray) else np.array(arr)  # pyright: ignore[reportUnnecessaryIsInstance]
 
     # Handle list mode first (no metadata needed)
     if array_mode == "list":
-        return arr_np.tolist()
+        return arr_np.tolist()  # pyright: ignore[reportAny]
 
     # For all other modes, compute metadata once
     metadata: ArrayMetadata = arr_metadata(arr if len(arr.shape) == 0 else arr_np)
@@ -153,7 +157,7 @@ def serialize_array(
     if len(arr.shape) == 0:
         return SerializedArrayWithMeta(
             __muutils_format__=f"{arr_type}:zero_dim",
-            data=arr.item(),
+            data=arr.item(),  # pyright: ignore[reportAny]
             shape=metadata["shape"],
             dtype=metadata["dtype"],
             n_elements=metadata["n_elements"],
@@ -163,7 +167,7 @@ def serialize_array(
     if array_mode == "array_list_meta":
         return SerializedArrayWithMeta(
             __muutils_format__=f"{arr_type}:array_list_meta",
-            data=arr_np.tolist(),
+            data=arr_np.tolist(),  # pyright: ignore[reportAny]
             shape=metadata["shape"],
             dtype=metadata["dtype"],
             n_elements=metadata["n_elements"],
@@ -210,7 +214,7 @@ def infer_array_mode(
     return_mode: ArrayMode
     if isinstance(arr, typing.Mapping):
         # _FORMAT_KEY always maps to a string
-        fmt: str = arr.get(_FORMAT_KEY, "")  # type: ignore  # pyright: ignore[reportAssignmentType]
+        fmt: str = arr.get(_FORMAT_KEY, "")  # type: ignore
         if fmt.endswith(":array_list_meta"):
             if not isinstance(arr["data"], Iterable):
                 raise ValueError(f"invalid list format: {type(arr['data']) = }\t{arr}")

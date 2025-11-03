@@ -27,7 +27,7 @@ else:
     except ImportError as e:
         # TYPING: obviously, these types are all wrong if we can't import array.py
         ArrayMode = str  # type: ignore[misc]
-        serialize_array = lambda *args, **kwargs: None  # type: ignore[assignment, invalid-assignment] # noqa: E731 # pyright: ignore[reportUnknownVariableType, reportUnknownLambdaType]
+        serialize_array = lambda *args, **kwargs: None  # type: ignore[assignment, invalid-assignment] # noqa: E731
         warnings.warn(
             f"muutils.json_serialize.array could not be imported probably because missing numpy, array serialization will not work: \n{e}",
             ImportWarning,
@@ -316,8 +316,8 @@ class JsonSerializer:
                     if self.write_only_format:
                         if isinstance(output, dict) and _FORMAT_KEY in output:
                             # TYPING: JSONitem has no idea that _FORMAT_KEY is str
-                            new_fmt: str = output.pop(_FORMAT_KEY)  # type: ignore
-                            output["__write_format__"] = new_fmt  # type: ignore
+                            new_fmt: str = output.pop(_FORMAT_KEY)  # type: ignore  # pyright: ignore[reportAssignmentType]
+                            output["__write_format__"] = new_fmt  # type: ignore  # pyright: ignore[reportGeneralTypeIssues]
                     return output
 
             raise ValueError(f"no handler found for object with {type(obj) = }")

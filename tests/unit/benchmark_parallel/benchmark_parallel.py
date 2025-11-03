@@ -7,7 +7,7 @@ from pathlib import Path
 import time
 import multiprocessing
 from typing import List, Callable, Any, Dict, Optional, Sequence, Tuple, Union
-import pandas as pd  # type: ignore[import-untyped]
+import pandas as pd  # type: ignore[import-untyped]  # pyright: ignore[reportMissingTypeStubs]
 import numpy as np
 from collections import defaultdict
 
@@ -41,7 +41,7 @@ class BenchmarkRunner:
         self.results = defaultdict(list)
         self.cpu_count = multiprocessing.cpu_count()
 
-    def time_execution(self, func: Callable, *args, **kwargs) -> float:
+    def time_execution(self, func: Callable[..., float], *args, **kwargs) -> float:
         """Time a single execution."""
         start = time.perf_counter()
         func(*args, **kwargs)
@@ -62,17 +62,17 @@ class BenchmarkRunner:
             times.append(duration)
 
         return {
-            "mean": np.mean(times),
-            "std": np.std(times),
-            "min": np.min(times),
-            "max": np.max(times),
-            "median": np.median(times),
+            "mean": float(np.mean(times)),
+            "std": float(np.std(times)),
+            "min": float(np.min(times)),
+            "max": float(np.max(times)),
+            "median": float(np.median(times)),
         }
 
     def run_benchmark_suite(
         self,
-        data_sizes: List[int],
-        task_funcs: Dict[str, Callable],
+        data_sizes: Sequence[int],
+        task_funcs: Dict[str, Callable[[int], int]],
         runs_per_method: int = 3,
     ) -> pd.DataFrame:
         """Run complete benchmark suite and return results as DataFrame."""
@@ -280,7 +280,7 @@ def plot_speedup_by_data_size(
 
 
 def plot_timing_comparison(
-    df: pd.DataFrame, data_size: int | None = None, save_path: str | None = None
+    df: pd.DataFrame, data_size: int | None = None, save_path: str | Path | None = None
 ):
     """Plot timing comparison as bar chart."""
     import matplotlib.pyplot as plt  # type: ignore[import-untyped]
@@ -305,7 +305,7 @@ def plot_timing_comparison(
         plt.show()
 
 
-def plot_efficiency_heatmap(df: pd.DataFrame, save_path: str | None = None):
+def plot_efficiency_heatmap(df: pd.DataFrame, save_path: str | Path | None = None):
     """Plot efficiency heatmap (speedup across methods and tasks)."""
     import matplotlib.pyplot as plt  # type: ignore[import-untyped]
 

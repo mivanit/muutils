@@ -1,8 +1,8 @@
 # Showing all errors
 
 # mypy: Found 97 errors in 6 files (checked 116 source files)
-# basedpyright: 653 errors, 3639 warnings, 0 notes
-# ty: Found 215 diagnostics
+# basedpyright: 651 errors, 3446 warnings, 0 notes
+# ty: Found 214 diagnostics
 
 [type_errors.mypy]
 total_errors = 97
@@ -26,16 +26,15 @@ total_errors = 97
 "tests/unit/benchmark_parallel/benchmark_parallel.py" = 4
 
 [type_errors.basedpyright]
-total_errors = 2908
+total_errors = 2715
 
 [type_errors.basedpyright.by_type]
 "reportUnknownParameterType" = 437
 "reportMissingParameterType" = 386
 "reportAny" = 358
 "reportUnusedCallResult" = 291
-"reportUnknownVariableType" = 202
-"reportExplicitAny" = 195
-"reportMissingTypeArgument" = 183
+"reportUnknownVariableType" = 201
+"reportMissingTypeArgument" = 182
 "reportUnknownMemberType" = 136
 "reportUnknownLambdaType" = 127
 "reportUnusedParameter" = 100
@@ -51,11 +50,11 @@ total_errors = 2908
 "reportUntypedClassDecorator" = 17
 "reportMissingSuperCall" = 14
 "reportOptionalSubscript" = 13
+"reportUnnecessaryTypeIgnoreComment" = 12
 "reportUntypedFunctionDecorator" = 12
 "reportUnusedVariable" = 9
 "reportInvalidTypeArguments" = 9
 "reportUnnecessaryComparison" = 8
-"reportUnnecessaryTypeIgnoreComment" = 8
 "reportCallInDefaultInitializer" = 8
 "reportUndefinedVariable" = 7
 "reportOptionalMemberAccess" = 7
@@ -72,29 +71,29 @@ total_errors = 2908
 "reportGeneralTypeIssues" = 1
 
 [type_errors.basedpyright.by_file]
-"tests/unit/json_serialize/test_json_serialize.py" = 165
-"tests/unit/test_dbg.py" = 156
-"tests/unit/test_parallel.py" = 134
-"tests/unit/json_serialize/serializable_dataclass/test_serializable_dataclass.py" = 125
+"tests/unit/json_serialize/test_json_serialize.py" = 164
+"tests/unit/test_dbg.py" = 150
+"tests/unit/test_parallel.py" = 131
+"tests/unit/json_serialize/serializable_dataclass/test_serializable_dataclass.py" = 121
 "tests/unit/misc/test_func.py" = 98
-"muutils/json_serialize/serializable_dataclass.py" = 97
-"muutils/dictmagic.py" = 88
-"muutils/json_serialize/serializable_field.py" = 88
 "tests/unit/validate_type/test_get_kwargs.py" = 87
 "tests/unit/validate_type/test_validate_type.py" = 86
 "tests/unit/validate_type/test_validate_type_GENERATED.py" = 86
-"muutils/misc/func.py" = 77
+"muutils/json_serialize/serializable_dataclass.py" = 80
 "tests/unit/test_interval.py" = 75
-"muutils/json_serialize/json_serialize.py" = 70
-"muutils/misc/freezing.py" = 67
+"muutils/misc/func.py" = 70
 "tests/unit/cli/test_arg_bool.py" = 66
-"muutils/spinner.py" = 63
-"tests/unit/benchmark_parallel/benchmark_parallel.py" = 56
+"muutils/misc/freezing.py" = 65
+"muutils/json_serialize/json_serialize.py" = 64
+"muutils/dictmagic.py" = 62
 "tests/unit/web/test_bundle_html.py" = 55
-"muutils/tensor_info.py" = 52
+"muutils/spinner.py" = 51
+"muutils/json_serialize/serializable_field.py" = 49
+"tests/unit/benchmark_parallel/benchmark_parallel.py" = 49
 "tests/unit/errormode/test_errormode_init.py" = 46
-"tests/unit/json_serialize/test_serializable_field.py" = 46
-"muutils/parallel.py" = 45
+"muutils/tensor_info.py" = 45
+"tests/unit/json_serialize/test_serializable_field.py" = 45
+"muutils/parallel.py" = 42
 "muutils/statcounter.py" = 41
 "muutils/sysinfo.py" = 39
 "tests/unit/json_serialize/test_array.py" = 38
@@ -103,43 +102,42 @@ total_errors = 2908
 "tests/unit/errormode/test_errormode_functionality.py" = 36
 "muutils/nbutils/convert_ipynb_to_script.py" = 34
 "muutils/nbutils/configure_notebook.py" = 33
-"tests/unit/test_spinner.py" = 33
+"tests/unit/test_spinner.py" = 32
 "tests/unit/misc/test_freeze.py" = 31
-"muutils/misc/sequence.py" = 27
 "tests/unit/misc/test_numerical_conversions.py" = 27
-"tests/unit/json_serialize/serializable_dataclass/test_methods_no_override.py" = 25
 "tests/unit/json_serialize/test_array_torch.py" = 25
-"muutils/mlutils.py" = 24
-"muutils/tensor_utils.py" = 24
-"muutils/validate_type.py" = 24
-"muutils/interval.py" = 20
+"muutils/misc/sequence.py" = 22
+"muutils/mlutils.py" = 22
+"muutils/validate_type.py" = 20
 "tests/unit/validate_type/test_validate_type_special.py" = 20
-"muutils/logger/logger.py" = 19
 "tests/unit/test_jsonlines.py" = 19
+"muutils/logger/logger.py" = 18
 "muutils/math/matrix_powers.py" = 18
 "muutils/misc/string.py" = 18
 "tests/unit/json_serialize/test_util.py" = 18
+"muutils/interval.py" = 17
 "tests/unit/test_kappa.py" = 17
 "muutils/logger/log_util.py" = 16
-"tests/unit/test_tensor_info_torch.py" = 15
+"muutils/tensor_utils.py" = 16
+"tests/unit/json_serialize/serializable_dataclass/test_methods_no_override.py" = 15
 "tests/unit/nbutils/test_configure_notebook.py" = 14
 "muutils/jsonlines.py" = 13
-"tests/unit/misc/test_misc.py" = 13
 "muutils/nbutils/run_notebook_tests.py" = 12
-"muutils/cli/arg_bool.py" = 11
 "muutils/errormode.py" = 11
-"muutils/json_serialize/dataclass_transform_mock.py" = 11
+"tests/unit/misc/test_misc.py" = 11
+"tests/unit/test_tensor_info_torch.py" = 11
 "muutils/dbg.py" = 10
 "muutils/json_serialize/array.py" = 10
 "muutils/logger/exception_context.py" = 10
-"muutils/logger/headerfuncs.py" = 10
 "tests/unit/test_collect_warnings.py" = 10
 "muutils/kappa.py" = 9
-"muutils/collect_warnings.py" = 8
+"muutils/misc/classes.py" = 9
+"muutils/cli/arg_bool.py" = 8
+"muutils/json_serialize/dataclass_transform_mock.py" = 8
+"muutils/logger/headerfuncs.py" = 8
 "tests/unit/test_console_unicode.py" = 8
 "tests/util/test_fire.py" = 8
-"muutils/cli/command.py" = 7
-"muutils/misc/classes.py" = 7
+"muutils/collect_warnings.py" = 7
 "muutils/nbutils/mermaid.py" = 7
 "tests/unit/cli/test_command.py" = 7
 "muutils/logger/timing.py" = 6
@@ -147,27 +145,29 @@ total_errors = 2908
 "tests/conftest.py" = 5
 "tests/unit/json_serialize/serializable_dataclass/test_sdc_defaults.py" = 5
 "tests/unit/json_serialize/serializable_dataclass/test_sdc_properties_nested.py" = 5
-"muutils/logger/simplelogger.py" = 4
 "muutils/web/html_to_pdf.py" = 4
 "tests/unit/math/test_matrix_powers_torch.py" = 4
 "tests/unit/misc/test_sequence.py" = 4
 "tests/unit/test_mlutils.py" = 4
+"muutils/cli/command.py" = 3
+"muutils/logger/simplelogger.py" = 3
 "muutils/misc/hashing.py" = 3
-"tests/unit/test_tensor_info.py" = 3
-"muutils/logger/loggingstream.py" = 2
 "muutils/misc/numerical.py" = 2
+"muutils/timeit_fancy.py" = 2
 "tests/unit/logger/test_log_util.py" = 2
 "tests/unit/test_chunks.py" = 2
+"tests/unit/test_tensor_info.py" = 2
 "tests/unit/test_timeit_fancy.py" = 2
 "muutils/console_unicode.py" = 1
 "muutils/json_serialize/util.py" = 1
+"muutils/logger/loggingstream.py" = 1
 "muutils/math/bins.py" = 1
 "muutils/misc/__init__.py" = 1
 "muutils/misc/b64_decode.py" = 1
 "tests/unit/benchmark_parallel/test_benchmark_demo.py" = 1
 
 [type_errors.ty]
-total_errors = 215
+total_errors = 214
 
 [type_errors.ty.by_type]
 "unknown-argument" = 164
@@ -175,7 +175,6 @@ total_errors = 215
 "invalid-argument-type" = 8
 "invalid-assignment" = 5
 "too-many-positional-arguments" = 3
-"invalid-return-type" = 1
 "unresolved-import" = 1
 
 [type_errors.ty.by_file]
@@ -184,6 +183,6 @@ total_errors = 215
 "tests/unit/json_serialize/serializable_dataclass/test_methods_no_override.py" = 26
 "tests/unit/json_serialize/serializable_dataclass/test_sdc_properties_nested.py" = 9
 "tests/unit/test_dictmagic.py" = 8
-"tests/unit/benchmark_parallel/benchmark_parallel.py" = 6
+"tests/unit/benchmark_parallel/benchmark_parallel.py" = 5
 "tests/unit/json_serialize/test_array_torch.py" = 2
 "tests/unit/benchmark_parallel/test_benchmark_demo.py" = 1

@@ -156,7 +156,7 @@
 	reportConstantRedefinition = false # I always use all caps for globals, not just consts
 	reportDeprecated = false # this library is backwards compatible back to 3.8, so we are using lots of deprecated stuff
 	reportUnsupportedDunderAll = false # we use __all__ a lot for docs stuff
-	# reportExplicitAny = false # we allow Any in many places. if it's there, it's intentional
+	reportExplicitAny = false # we allow Any in many places. if it's there, it's intentional
 
 [tool.ty.src]
 	exclude = [

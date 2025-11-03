@@ -40,7 +40,7 @@ def strip_cwd(path: str) -> str:
 
     # Strip CWD prefix if present
     if abs_path.startswith(abs_cwd):
-        return abs_path[len(abs_cwd):]
+        return abs_path[len(abs_cwd) :]
 
     return path
 

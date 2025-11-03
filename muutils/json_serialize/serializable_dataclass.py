@@ -66,7 +66,12 @@ from muutils.json_serialize.serializable_field import (
     SerializableField,
     serializable_field,
 )
-from muutils.json_serialize.util import _FORMAT_KEY, JSONdict, JSONitem, array_safe_eq, dc_eq
+from muutils.json_serialize.util import (
+    _FORMAT_KEY,
+    JSONdict,
+    array_safe_eq,
+    dc_eq,
+)
 
 # pylint: disable=bad-mcs-classmethod-argument, too-many-arguments, protected-access
 

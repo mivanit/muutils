@@ -116,7 +116,10 @@ def isinstance_namedtuple(x: Any) -> bool:  # pyright: ignore[reportAny]
 
 T_FuncTryCatchReturn = TypeVar("T_FuncTryCatchReturn")
 
-def try_catch(func: Callable[..., T_FuncTryCatchReturn]) -> Callable[..., Union[T_FuncTryCatchReturn, str]]:
+
+def try_catch(
+    func: Callable[..., T_FuncTryCatchReturn],
+) -> Callable[..., Union[T_FuncTryCatchReturn, str]]:
     """wraps the function to catch exceptions, returns serialized error message on exception
 
     returned func will return normal result on success, or error message on exception

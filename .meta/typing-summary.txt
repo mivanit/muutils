@@ -1,51 +1,47 @@
 # Showing all errors
 
-# mypy: Found 159 errors in 9 files (checked 116 source files)
-# basedpyright: 796 errors, 3811 warnings, 0 notes
-# ty: Found 219 diagnostics
+# mypy: Found 117 errors in 7 files (checked 116 source files)
+# basedpyright: 778 errors, 3791 warnings, 0 notes
+# ty: Found 216 diagnostics
 
 [type_errors.mypy]
-total_errors = 159
+total_errors = 117
 
 [type_errors.mypy.by_type]
-"dict-item" = 35
-"index" = 33
+"index" = 31
 "typeddict-item" = 26
 "call-overload" = 23
-"arg-type" = 14
+"arg-type" = 11
 "attr-defined" = 11
 "literal-required" = 10
 "var-annotated" = 2
 "operator" = 2
-"assignment" = 2
 "no-redef" = 1
 
 [type_errors.mypy.by_file]
 "tests/unit/json_serialize/test_array_torch.py" = 58
-"muutils/tensor_utils.py" = 39
 "tests/unit/json_serialize/test_array.py" = 24
 "tests/unit/test_jsonlines.py" = 12
 "tests/unit/json_serialize/test_serializable_field.py" = 11
 "tests/unit/json_serialize/test_json_serialize.py" = 7
 "tests/unit/benchmark_parallel/benchmark_parallel.py" = 4
-"tests/unit/logger/test_log_util.py" = 3
 "muutils/misc/typing_breakdown.py" = 1
 
 [type_errors.basedpyright]
-total_errors = 3075
+total_errors = 3066
 
 [type_errors.basedpyright.by_type]
 "reportUnknownParameterType" = 452
 "reportMissingParameterType" = 397
-"reportAny" = 364
+"reportAny" = 374
 "reportUnusedCallResult" = 295
-"reportUnknownVariableType" = 226
-"reportMissingTypeArgument" = 195
-"reportExplicitAny" = 187
+"reportUnknownVariableType" = 214
+"reportExplicitAny" = 194
+"reportMissingTypeArgument" = 185
 "reportUnknownMemberType" = 141
 "reportUnknownLambdaType" = 131
 "reportUnusedParameter" = 100
-"reportIndexIssue" = 93
+"reportIndexIssue" = 91
 "reportCallIssue" = 59
 "reportImplicitOverride" = 53
 "reportInvalidTypeForm" = 51
@@ -74,7 +70,6 @@ total_errors = 3075
 "reportMissingImports" = 3
 "reportUnusedExpression" = 3
 "reportOperatorIssue" = 2
-"reportArgumentType" = 2
 "reportUntypedNamedTuple" = 2
 "reportRedeclaration" = 1
 "reportUnusedFunction" = 1
@@ -99,9 +94,9 @@ total_errors = 3075
 "/home/miv/projects/tools/muutils/muutils/misc/freezing.py" = 67
 "/home/miv/projects/tools/muutils/tests/unit/cli/test_arg_bool.py" = 66
 "/home/miv/projects/tools/muutils/muutils/spinner.py" = 63
-"/home/miv/projects/tools/muutils/muutils/tensor_utils.py" = 63
 "/home/miv/projects/tools/muutils/tests/unit/benchmark_parallel/benchmark_parallel.py" = 56
 "/home/miv/projects/tools/muutils/tests/unit/web/test_bundle_html.py" = 55
+"/home/miv/projects/tools/muutils/muutils/tensor_utils.py" = 54
 "/home/miv/projects/tools/muutils/muutils/tensor_info.py" = 52
 "/home/miv/projects/tools/muutils/tests/unit/errormode/test_errormode_init.py" = 46
 "/home/miv/projects/tools/muutils/tests/unit/json_serialize/test_serializable_field.py" = 46
@@ -178,15 +173,14 @@ total_errors = 3075
 "/home/miv/projects/tools/muutils/tests/unit/benchmark_parallel/test_benchmark_demo.py" = 1
 
 [type_errors.ty]
-total_errors = 219
+total_errors = 216
 
 [type_errors.ty.by_type]
 "unknown-argument" = 164
 "unresolved-attribute" = 33
 "invalid-argument-type" = 8
-"invalid-assignment" = 7
+"invalid-assignment" = 6
 "too-many-positional-arguments" = 3
-"non-subscriptable" = 2
 "invalid-return-type" = 1
 "unresolved-import" = 1
 
@@ -197,7 +191,6 @@ total_errors = 219
 "tests/unit/json_serialize/serializable_dataclass/test_sdc_properties_nested.py" = 9
 "tests/unit/test_dictmagic.py" = 8
 "tests/unit/benchmark_parallel/benchmark_parallel.py" = 6
-"muutils/tensor_utils.py" = 3
 "tests/unit/json_serialize/test_array_torch.py" = 2
 "tests/unit/benchmark_parallel/test_benchmark_demo.py" = 1
 "tests/unit/test_statcounter.py" = 1

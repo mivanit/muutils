@@ -13,8 +13,8 @@
 
 3. Decide on a good fix to make. For example, you might pick:
    - the fix with the best **"number of errors / complexity of change" ratio**
-   - a fix that gets us closer to having no errors in a specific file (or group of files)
    - a fix that gets us closer to removing an entire category of errors
+   - a fix that gets us closer to having no errors in a specific file (**FOCUS ON THIS!**)
 
 4. Implement that fix
 

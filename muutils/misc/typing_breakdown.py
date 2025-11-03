@@ -137,7 +137,8 @@ def parse_basedpyright(content: str) -> TypeCheckResult:
                 r"\s+.+:\d+:\d+ - (error|warning): .+ \((\w+)\)", line
             )
             if match:
-                error_type: str = match.group(1)
+                # TODO: handle warnings vs errors
+                _error_type: str = match.group(1)
                 error_code: str = match.group(2)
                 result.by_type[error_code] += 1
                 result.by_file[current_file] += 1

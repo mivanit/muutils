@@ -1,4 +1,5 @@
 from __future__ import annotations
+from typing import Any, Callable, TypeVar
 
 
 from muutils.misc.hashing import stable_hash
@@ -55,34 +56,54 @@ def sanitize_name(
     return sanitized
 
 
-def sanitize_fname(fname: str | None, **kwargs) -> str:
+def sanitize_fname(
+    fname: str | None,
+    replace_invalid: str = "",
+    when_none: str | None = "_None_",
+    leading_digit_prefix: str = "",
+) -> str:
     """sanitize a filename to posix standards
 
     - leave only alphanumerics, `_` (underscore), '-' (dash) and `.` (period)
     """
-    return sanitize_name(fname, additional_allowed_chars="._-", **kwargs)
+    return sanitize_name(
+        name=fname,
+        additional_allowed_chars="._-",
+        replace_invalid=replace_invalid,
+        when_none=when_none,
+        leading_digit_prefix=leading_digit_prefix,
+    )
 
 
-def sanitize_identifier(fname: str | None, **kwargs) -> str:
+def sanitize_identifier(
+    fname: str | None,
+    replace_invalid: str = "",
+    when_none: str | None = "_None_",
+) -> str:
     """sanitize an identifier (variable or function name)
 
     - leave only alphanumerics and `_` (underscore)
     - prefix with `_` if it starts with a digit
     """
     return sanitize_name(
-        fname, additional_allowed_chars="_", leading_digit_prefix="_", **kwargs
+        name=fname,
+        additional_allowed_chars="_",
+        replace_invalid=replace_invalid,
+        when_none=when_none,
+        leading_digit_prefix="_",
     )
 
 
 def dict_to_filename(
-    data: dict,
+    data: dict[str, Any],
     format_str: str = "{key}_{val}",
     separator: str = ".",
     max_length: int = 255,
 ):
     # Convert the dictionary items to a list of strings using the format string
     formatted_items: list[str] = [
-        format_str.format(key=k, val=v) for k, v in data.items()
+        format_str.format(key=k, val=v)
+        for k, v in data.items()  # pyright: ignore[reportAny]
     ]
 
     # Join the formatted items using the separator
@@ -99,10 +120,13 @@ def dict_to_filename(
     return f"h_{stable_hash(sanitized_str)}"
 
 
-def dynamic_docstring(**doc_params):
-    def decorator(func):
+T_Callable = TypeVar("T_Callable", bound=Callable[..., Any])
+
+
+def dynamic_docstring(**doc_params: str) -> Callable[[T_Callable], T_Callable]:
+    def decorator(func: T_Callable) -> T_Callable:
         if func.__doc__:
-            func.__doc__ = func.__doc__.format(**doc_params)
+            func.__doc__ = getattr(func, "__doc__", "").format(**doc_params)
         return func
 
     return decorator

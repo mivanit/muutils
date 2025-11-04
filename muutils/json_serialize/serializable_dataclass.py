@@ -66,20 +66,24 @@ from muutils.json_serialize.serializable_field import (
     SerializableField,
     serializable_field,
 )
-from muutils.json_serialize.util import _FORMAT_KEY, array_safe_eq, dc_eq
+from muutils.json_serialize.types import _FORMAT_KEY
+from muutils.json_serialize.util import (
+    JSONdict,
+    array_safe_eq,
+    dc_eq,
+)
 
 # pylint: disable=bad-mcs-classmethod-argument, too-many-arguments, protected-access
 
 # this is quite horrible, but unfortunately mypy fails if we try to assign to `dataclass_transform` directly
 # and every time we try to init a serializable dataclass it says the argument doesnt exist
-try:
-    try:
-        # type ignore here for legacy versions
-        from typing import dataclass_transform  # type: ignore[attr-defined]
-    except Exception:
+if sys.version_info >= (3, 11):
+    from typing import dataclass_transform
+else:
+    try:  # pyright: ignore[reportUnreachable]
         from typing_extensions import dataclass_transform
-except Exception:
-    from muutils.json_serialize.dataclass_transform_mock import dataclass_transform
+    except Exception:
+        from muutils.json_serialize.dataclass_transform_mock import dataclass_transform
 
 T = TypeVar("T")
 
@@ -112,9 +116,9 @@ def zanj_register_loader_serializable_dataclass(cls: typing.Type[T]):
 
     if _zanj_loading_needs_import:
         try:
-            from zanj.loading import (  # type: ignore[import]
-                LoaderHandler,
-                register_loader_handler,
+            from zanj.loading import (  # type: ignore[import]  # pyright: ignore[reportMissingImports]
+                LoaderHandler,  # pyright: ignore[reportUnknownVariableType]
+                register_loader_handler,  # pyright: ignore[reportUnknownVariableType]
             )
         except ImportError:
             # NOTE: if ZANJ is not installed, then failing to register the loader handler doesnt matter
@@ -425,11 +429,11 @@ class SerializableDataclass(abc.ABC):
 
         # if we are working with serialized data, serialize the instances
         if of_serialized:
-            ser_self: dict = self.serialize()
-            ser_other: dict = other.serialize()
+            ser_self: JSONdict = self.serialize()
+            ser_other: JSONdict = other.serialize()
 
         # for each field in the class
-        for field in dataclasses.fields(self):  # type: ignore[arg-type]
+        for field in dataclasses.fields(self):  # type: ignore[arg-type]  # pyright: ignore[reportArgumentType]
             # skip fields that are not for comparison
             if not field.compare:
                 continue
@@ -455,8 +459,12 @@ class SerializableDataclass(abc.ABC):
                 raise ValueError("Non-serializable dataclass is not supported")
             else:
                 # get the values of either the serialized or the actual values
-                self_value_s = ser_self[field_name] if of_serialized else self_value
-                other_value_s = ser_other[field_name] if of_serialized else other_value
+                if of_serialized:
+                    self_value_s = ser_self[field_name]  # pyright: ignore[reportPossiblyUnboundVariable, reportUnknownVariableType]
+                    other_value_s = ser_other[field_name]  # pyright: ignore[reportPossiblyUnboundVariable, reportUnknownVariableType]
+                else:
+                    self_value_s = self_value
+                    other_value_s = other_value
                 # compare the values
                 if not array_safe_eq(self_value_s, other_value_s):
                     diff_result[field_name] = {"self": self_value, "other": other_value}

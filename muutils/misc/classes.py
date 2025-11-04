@@ -17,7 +17,7 @@ def is_abstract(cls: type) -> bool:
     """
     if not hasattr(cls, "__abstractmethods__"):
         return False  # an ordinary class
-    elif len(cls.__abstractmethods__) == 0:
+    elif len(cls.__abstractmethods__) == 0:  # type: ignore[invalid-argument-type] # pyright: ignore[reportUnknownMemberType, reportUnknownArgumentType]
         return False  # a concrete implementation of an abstract class
     else:
         return True  # an abstract class
@@ -69,18 +69,22 @@ def isinstance_by_type_name(o: object, type_name: str):
 class IsDataclass(Protocol):
     # Generic type for any dataclass instance
     # https://stackoverflow.com/questions/54668000/type-hint-for-an-instance-of-a-non-specific-dataclass
-    __dataclass_fields__: ClassVar[dict[str, Any]]
+    __dataclass_fields__: ClassVar[dict[str, Any]]  # pyright: ignore[reportExplicitAny]
 
 
-def get_hashable_eq_attrs(dc: IsDataclass) -> tuple[Any]:
+def get_hashable_eq_attrs(dc: IsDataclass) -> tuple[Any]:  # pyright: ignore[reportExplicitAny]
     """Returns a tuple of all fields used for equality comparison, including the type of the dataclass itself.
     The type is included to preserve the unequal equality behavior of instances of different dataclasses whose fields are identical.
     Essentially used to generate a hashable dataclass representation for equality comparison even if it's not frozen.
     """
-    return *(
-        getattr(dc, fld.name)
-        for fld in filter(lambda x: x.compare, dc.__dataclass_fields__.values())
-    ), type(dc)
+    # TYPING: ty gives @Todo here
+    return (  # type: ignore[invalid-return-type]
+        *(
+            getattr(dc, fld.name)
+            for fld in filter(lambda x: x.compare, dc.__dataclass_fields__.values())
+        ),
+        type(dc),
+    )
 
 
 def dataclass_set_equals(

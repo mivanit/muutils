@@ -13,7 +13,7 @@ import json
 import time
 import typing
 from functools import partial
-from typing import Callable, Sequence
+from typing import Any, Callable, Sequence
 
 from muutils.json_serialize import JSONitem, json_serialize
 from muutils.logger.exception_context import ExceptionContext
@@ -220,11 +220,11 @@ class Logger(SimpleLogger):
         # convert and add data
         # ========================================
         # converting to dict
-        msg_dict: typing.Mapping
+        msg_dict: dict[str, Any]
         if not isinstance(msg, typing.Mapping):
             msg_dict = {"_msg": msg}
         else:
-            msg_dict = msg
+            msg_dict = dict(msg)
 
         # level+stream metadata
         if lvl is not None:

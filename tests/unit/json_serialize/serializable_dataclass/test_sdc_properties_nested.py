@@ -5,7 +5,7 @@ import sys
 import pytest
 
 from muutils.json_serialize import SerializableDataclass, serializable_dataclass
-from muutils.json_serialize.util import _FORMAT_KEY
+from muutils.json_serialize.types import _FORMAT_KEY
 
 SUPPORTS_KW_ONLY: bool = sys.version_info >= (3, 10)
 

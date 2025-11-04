@@ -17,7 +17,7 @@ from muutils.json_serialize.serializable_dataclass import (
     FieldIsNotInitOrSerializeWarning,
     FieldTypeMismatchError,
 )
-from muutils.json_serialize.util import _FORMAT_KEY
+from muutils.json_serialize.types import _FORMAT_KEY
 
 # pylint: disable=missing-class-docstring, unused-variable
 

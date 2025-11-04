@@ -8,7 +8,9 @@ import inspect
 import sys
 import typing
 import warnings
-from typing import Any, Callable, Iterable, Union
+from typing import Any, Callable, Iterable, TypeVar, Union
+
+from muutils.json_serialize.types import BaseType, Hashableitem
 
 _NUMPY_WORKING: bool
 try:
@@ -18,34 +20,38 @@ except ImportError:
     _NUMPY_WORKING = False
 
 
-BaseType = Union[
-    bool,
-    int,
-    float,
-    str,
-    None,
-]
+# pyright: reportExplicitAny=false
+
+# At type-checking time, include array serialization types to avoid nominal type errors
+# This avoids superfluous imports at runtime
+# if TYPE_CHECKING:
+#     from muutils.json_serialize.array import NumericList, SerializedArrayWithMeta
+
+#     JSONitem = Union[
+#         BaseType,
+#         typing.Sequence["JSONitem"],
+#         typing.Dict[str, "JSONitem"],
+#         SerializedArrayWithMeta,
+#         NumericList,
+#     ]
+# else:
 
 JSONitem = Union[
     BaseType,
-    # mypy doesn't like recursive types, so we just go down a few levels manually
-    typing.List[Union[BaseType, typing.List[Any], typing.Dict[str, Any]]],
-    typing.Dict[str, Union[BaseType, typing.List[Any], typing.Dict[str, Any]]],
+    typing.Sequence["JSONitem"],
+    typing.Dict[str, "JSONitem"],
 ]
+
 JSONdict = typing.Dict[str, JSONitem]
 
-Hashableitem = Union[bool, int, float, str, tuple]
 
-
-_FORMAT_KEY: str = "__muutils_format__"
-_REF_KEY: str = "$ref"
-
+# TODO: this bit is very broken
 # or if python version <3.9
 if typing.TYPE_CHECKING or sys.version_info < (3, 9):
     MonoTuple = typing.Sequence
 else:
 
-    class MonoTuple:
+    class MonoTuple:  # pyright: ignore[reportUnreachable]
         """tuple type hint, but for a tuple of any length with all the same type"""
 
         __slots__ = ()
@@ -73,36 +79,43 @@ else:
                 raise TypeError(f"MonoTuple expects 1 type argument, got {params = }")
 
 
+# TYPING: we allow `Any` here because the container is... universal
 class UniversalContainer:
     """contains everything -- `x in UniversalContainer()` is always True"""
 
-    def __contains__(self, x: Any) -> bool:
+    def __contains__(self, x: Any) -> bool:  # pyright: ignore[reportAny]
         return True
 
 
-def isinstance_namedtuple(x: Any) -> bool:
+def isinstance_namedtuple(x: Any) -> bool:  # pyright: ignore[reportAny]
     """checks if `x` is a `namedtuple`
 
     credit to https://stackoverflow.com/questions/2166818/how-to-check-if-an-object-is-an-instance-of-a-namedtuple
     """
-    t: type = type(x)
-    b: tuple = t.__bases__
+    t: type = type(x)  # pyright: ignore[reportUnknownVariableType, reportAny]
+    b: tuple[type, ...] = t.__bases__
     if len(b) != 1 or (b[0] is not tuple):
         return False
     f: Any = getattr(t, "_fields", None)
     if not isinstance(f, tuple):
         return False
-    return all(isinstance(n, str) for n in f)
+    # fine that the type is unknown -- that's what we want to check
+    return all(isinstance(n, str) for n in f)  # pyright: ignore[reportUnknownVariableType]
 
 
-def try_catch(func: Callable):
+T_FuncTryCatchReturn = TypeVar("T_FuncTryCatchReturn")
+
+
+def try_catch(
+    func: Callable[..., T_FuncTryCatchReturn],
+) -> Callable[..., Union[T_FuncTryCatchReturn, str]]:
     """wraps the function to catch exceptions, returns serialized error message on exception
 
     returned func will return normal result on success, or error message on exception
     """
 
     @functools.wraps(func)
-    def newfunc(*args, **kwargs):
+    def newfunc(*args: Any, **kwargs: Any) -> Union[T_FuncTryCatchReturn, str]:  # pyright: ignore[reportAny]
         try:
             return func(*args, **kwargs)
         except Exception as e:
@@ -111,16 +124,17 @@ def try_catch(func: Callable):
     return newfunc
 
 
-def _recursive_hashify(obj: Any, force: bool = True) -> Hashableitem:
+# TYPING: can we get rid of any of these?
+def _recursive_hashify(obj: Any, force: bool = True) -> Hashableitem:  # pyright: ignore[reportAny]
     if isinstance(obj, typing.Mapping):
-        return tuple((k, _recursive_hashify(v)) for k, v in obj.items())
-    elif isinstance(obj, (tuple, list, Iterable)):
-        return tuple(_recursive_hashify(v) for v in obj)
+        return tuple((k, _recursive_hashify(v)) for k, v in obj.items())  # pyright: ignore[reportUnknownVariableType, reportUnknownArgumentType]
     elif isinstance(obj, (bool, int, float, str)):
         return obj
+    elif isinstance(obj, (tuple, list, Iterable)):
+        return tuple(_recursive_hashify(v) for v in obj)  # pyright: ignore[reportUnknownVariableType]
     else:
         if force:
-            return str(obj)
+            return str(obj)  # pyright: ignore[reportAny]
         else:
             raise ValueError(f"cannot hashify:\n{obj}")
 
@@ -140,7 +154,7 @@ def string_as_lines(s: str | None) -> list[str]:
         return s.splitlines(keepends=False)
 
 
-def safe_getsource(func) -> list[str]:
+def safe_getsource(func: Callable[..., Any]) -> list[str]:
     try:
         return string_as_lines(inspect.getsource(func))
     except Exception as e:
@@ -148,28 +162,28 @@ def safe_getsource(func) -> list[str]:
 
 
 # credit to https://stackoverflow.com/questions/51743827/how-to-compare-equality-of-dataclasses-holding-numpy-ndarray-boola-b-raises
-def array_safe_eq(a: Any, b: Any) -> bool:
+def array_safe_eq(a: Any, b: Any) -> bool:  # pyright: ignore[reportAny]
     """check if two objects are equal, account for if numpy arrays or torch tensors"""
     if a is b:
         return True
 
-    if type(a) is not type(b):
+    if type(a) is not type(b):  # pyright: ignore[reportAny]
         return False
 
     if (
-        str(type(a)) == "<class 'numpy.ndarray'>"
-        and str(type(b)) == "<class 'numpy.ndarray'>"
+        str(type(a)) == "<class 'numpy.ndarray'>"  # pyright: ignore[reportAny, reportUnknownArgumentType]
+        and str(type(b)) == "<class 'numpy.ndarray'>"  # pyright: ignore[reportAny, reportUnknownArgumentType]
     ) or (
-        str(type(a)) == "<class 'torch.Tensor'>"
-        and str(type(b)) == "<class 'torch.Tensor'>"
+        str(type(a)) == "<class 'torch.Tensor'>"  # pyright: ignore[reportAny, reportUnknownArgumentType]
+        and str(type(b)) == "<class 'torch.Tensor'>"  # pyright: ignore[reportAny, reportUnknownArgumentType]
     ):
-        return (a == b).all()
+        return (a == b).all()  # pyright: ignore[reportAny]
 
     if (
-        str(type(a)) == "<class 'pandas.core.frame.DataFrame'>"
-        and str(type(b)) == "<class 'pandas.core.frame.DataFrame'>"
+        str(type(a)) == "<class 'pandas.core.frame.DataFrame'>"  # pyright: ignore[reportUnknownArgumentType, reportAny]
+        and str(type(b)) == "<class 'pandas.core.frame.DataFrame'>"  # pyright: ignore[reportUnknownArgumentType, reportAny]
     ):
-        return a.equals(b)
+        return a.equals(b)  # pyright: ignore[reportAny]
 
     if isinstance(a, typing.Sequence) and isinstance(b, typing.Sequence):
         if len(a) == 0 and len(b) == 0:
@@ -177,22 +191,24 @@ def array_safe_eq(a: Any, b: Any) -> bool:
         return len(a) == len(b) and all(array_safe_eq(a1, b1) for a1, b1 in zip(a, b))
 
     if isinstance(a, (dict, typing.Mapping)) and isinstance(b, (dict, typing.Mapping)):
-        return len(a) == len(b) and all(
+        return len(a) == len(b) and all(  # pyright: ignore[reportUnknownArgumentType]
             array_safe_eq(k1, k2) and array_safe_eq(a[k1], b[k2])
-            for k1, k2 in zip(a.keys(), b.keys())
+            for k1, k2 in zip(a.keys(), b.keys())  # pyright: ignore[reportUnknownArgumentType, reportUnknownVariableType]
         )
 
     try:
-        return bool(a == b)
+        return bool(a == b)  # pyright: ignore[reportAny]
     except (TypeError, ValueError) as e:
         warnings.warn(f"Cannot compare {a} and {b} for equality\n{e}")
         return NotImplemented  # type: ignore[return-value]
 
 
+# TYPING: see what can be done about so many `Any`s here
 def dc_eq(
-    dc1,
-    dc2,
+    dc1: Any,  # pyright: ignore[reportAny]
+    dc2: Any,  # pyright: ignore[reportAny]
     except_when_class_mismatch: bool = False,
+    # TODO: why is this unused?
     false_when_class_mismatch: bool = True,
     except_when_field_mismatch: bool = False,
 ) -> bool:
@@ -257,15 +273,15 @@ def dc_eq(
     if dc1 is dc2:
         return True
 
-    if dc1.__class__ is not dc2.__class__:
+    if dc1.__class__ is not dc2.__class__:  # pyright: ignore[reportAny]
         if except_when_class_mismatch:
             # if the classes don't match, raise an error
             raise TypeError(
-                f"Cannot compare dataclasses of different classes: `{dc1.__class__}` and `{dc2.__class__}`"
+                f"Cannot compare dataclasses of different classes: `{dc1.__class__}` and `{dc2.__class__}`"  # pyright: ignore[reportAny]
             )
         if except_when_field_mismatch:
-            dc1_fields: set = set([fld.name for fld in dataclasses.fields(dc1)])
-            dc2_fields: set = set([fld.name for fld in dataclasses.fields(dc2)])
+            dc1_fields: set[str] = set([fld.name for fld in dataclasses.fields(dc1)])  # pyright: ignore[reportAny]
+            dc2_fields: set[str] = set([fld.name for fld in dataclasses.fields(dc2)])  # pyright: ignore[reportAny]
             fields_match: bool = set(dc1_fields) == set(dc2_fields)
             if not fields_match:
                 # if the fields match, keep going
@@ -275,7 +291,7 @@ def dc_eq(
         return False
 
     return all(
-        array_safe_eq(getattr(dc1, fld.name), getattr(dc2, fld.name))
-        for fld in dataclasses.fields(dc1)
+        array_safe_eq(getattr(dc1, fld.name), getattr(dc2, fld.name))  # pyright: ignore[reportAny]
+        for fld in dataclasses.fields(dc1)  # pyright: ignore[reportAny]
         if fld.compare
     )

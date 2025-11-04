@@ -238,7 +238,8 @@ def run_maybe_parallel(
     ]
     if parallel:
         # use `mp.Pool` since we might want to use `multiprocess` instead of `multiprocessing`
-        pool = mp.Pool(num_processes)
+        # TYPING: messy here
+        pool = mp.Pool(num_processes)  # type: ignore[possibly-missing-attribute] # pyright: ignore[reportAttributeAccessIssue, reportUnknownMemberType, reportUnknownVariableType]
 
         # use `imap` if we want to keep the order, otherwise use `imap_unordered`
         if keep_ordered:

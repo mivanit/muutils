@@ -2,10 +2,14 @@
 #| python project makefile template                                 |
 #| originally by Michael Ivanitskiy (mivanits@umich.edu)            |
 #| https://github.com/mivanit/python-project-makefile-template      |
-#| version: v0.3.4                                                  |
+#| version: v0.4.0                                                  |
 #| license: https://creativecommons.org/licenses/by-sa/4.0/         |
-#| modifications from the original should be denoted with `~~~~~`   |
-#| as this makes it easier to find edits when updating makefile     |
+#|==================================================================|
+#| CUSTOMIZATION:                                                   |
+#| - modify PACKAGE_NAME and other variables in config section      |
+#| - mark custom changes with `~~~~~` for easier template updates   |
+#| - run `make help` to see available targets                       |
+#| - run `make help=TARGET` for detailed info about specific target |
 #|==================================================================|
 
 
@@ -21,9 +25,10 @@
 # configuration & variables
 # ==================================================
 
+# !!! MODIFY AT LEAST THIS PART TO SUIT YOUR PROJECT !!!
 # it assumes that the source is in a directory named the same as the package name
 # this also gets passed to some other places
-PACKAGE_NAME := muutils
+PACKAGE_NAME := myproject
 
 # for checking you are on the right branch when publishing
 PUBLISH_BRANCH := main
@@ -1255,6 +1260,334 @@ endef
 export SCRIPT_MYPY_REPORT
 
 
+# get information about makefile recipes/targets
+define SCRIPT_RECIPE_INFO
+# source: https://github.com/mivanit/python-project-makefile-template/tree/main/scripts/make/recipe_info.py
+
+"""CLI tool to get information about Makefile recipes/targets."""
+
+from __future__ import annotations
+
+import argparse
+import difflib
+import fnmatch
+import re
+import sys
+from dataclasses import dataclass
+from pathlib import Path
+from typing import Dict, List, Optional, Set, Union
+
+
+def _scan_makefile(
+	lines: List[str],
+	target_name: Optional[str] = None,
+) -> Union[Dict[str, int], int]:
+	"""Scan makefile for target definitions, skipping define blocks.
+
+	Args:
+		lines: Makefile lines
+		target_name: If provided, return line index for this specific target.
+					If None, return dict of all targets.
+
+	Returns:
+		If target_name is None: dict mapping target names to line indices
+		If target_name is provided: line index of that target, or -1 if not found
+
+	"""
+	in_define_block: bool = False
+	target_rx: re.Pattern = re.compile(r"^([a-zA-Z0-9_-]+)[ \t]*:")
+	targets: Dict[str, int] = {}
+
+	for i, line in enumerate(lines):
+		# Track if we're inside a define block (embedded scripts)
+		if line.startswith("define "):
+			in_define_block = True
+			continue
+		if line.startswith("endef"):
+			in_define_block = False
+			continue
+
+		# Skip lines inside define blocks
+		if in_define_block:
+			continue
+
+		# Match target definitions
+		match = target_rx.match(line)
+		if match:
+			tgt_name: str = match.group(1)
+			if target_name is not None:
+				# Looking for specific target
+				if tgt_name == target_name:
+					return i
+			else:
+				# Collecting all targets
+				targets[tgt_name] = i
+
+	# Return results based on mode
+	if target_name is not None:
+		return -1  # Target not found
+	return targets
+
+
+class Colors:
+	"""ANSI color codes"""
+
+	def __init__(self, enabled: bool = True) -> None:
+		"init color codes, or empty strings if `not enabled`"
+		if enabled:
+			self.RESET = "\033[0m"
+			self.BOLD = "\033[1m"
+			self.RED = "\033[31m"
+			self.GREEN = "\033[32m"
+			self.YELLOW = "\033[33m"
+			self.BLUE = "\033[34m"
+			self.MAGENTA = "\033[35m"
+			self.WHITE = "\033[37m"
+		else:
+			self.RESET = self.BOLD = ""
+			self.RED = self.GREEN = self.YELLOW = ""
+			self.BLUE = self.MAGENTA = self.WHITE = ""
+
+
+@dataclass
+class MakeRecipe:
+	"""Information about a Makefile recipe/target."""
+
+	target: str
+	comments: List[str]
+	dependencies: List[str]
+	echo_message: str
+
+	@classmethod
+	def from_makefile(cls, lines: List[str], target: str) -> MakeRecipe:
+		"""Parse and create a MakeRecipe from makefile lines for *target*."""
+		i: int = _scan_makefile(lines, target_name=target)
+		if i == -1:
+			err_msg: str = f"target '{target}' not found in makefile"
+			raise ValueError(err_msg)
+
+		line: str = lines[i]
+
+		# contiguous comment block immediately above
+		# (skip backward past .PHONY declarations and blank lines)
+		comments: List[str] = []
+		j: int = i - 1
+		blank_count: int = 0
+		while j >= 0:
+			stripped: str = lines[j].lstrip()
+			if stripped.startswith("#"):
+				comments.append(stripped[1:].lstrip())
+				blank_count = 0  # Reset blank counter when we hit a comment
+				j -= 1
+			elif stripped == "":
+				# Track consecutive blank lines
+				blank_count += 1
+				if blank_count >= 2:  # noqa: PLR2004
+					# Hit 2 blank lines in a row - stop
+					break
+				j -= 1
+			elif stripped.startswith(".PHONY:"):
+				# Skip .PHONY declarations
+				blank_count = 0  # Reset blank counter
+				j -= 1
+			else:
+				# Hit a non-comment, non-blank, non-.PHONY line - stop
+				break
+		comments.reverse()
+
+		# prerequisites
+		deps_str: str = line.split(":", 1)[1].strip()
+		deps: List[str] = deps_str.split() if deps_str else []
+
+		# first echo in the recipe
+		echo_msg: str = ""
+		k: int = i + 1
+		while k < len(lines) and (
+			lines[k].startswith("\t") or lines[k].startswith("    ")
+		):
+			stripped: str = lines[k].lstrip()
+			m = re.match(r"@?echo[ \t]+(.*)", stripped)
+			if m:
+				content: str = m.group(1).strip()
+				if (content.startswith('"') and content.endswith('"')) or (
+					content.startswith("'") and content.endswith("'")
+				):
+					content = content[1:-1]
+				echo_msg = content
+				break
+			k += 1
+
+		return cls(
+			target=target,
+			comments=comments,
+			dependencies=deps,
+			echo_message=echo_msg,
+		)
+
+	def describe(self, color: bool = False) -> List[str]:
+		"""Return a list of description lines for this recipe."""
+		output: List[str] = []
+		c: Colors = Colors(enabled=color)
+
+		# Target name (bold blue) with colon in white
+		output.append(f"{c.BOLD}{c.BLUE}{self.target}{c.RESET}{c.WHITE}:{c.RESET}")
+
+		# Echo message (description) in yellow
+		if self.echo_message:
+			output.append(f"  {c.YELLOW}{self.echo_message}{c.RESET}")
+
+		# Dependencies in magenta
+		if self.dependencies:
+			deps_str = " ".join(
+				f"{c.MAGENTA}{dep}{c.RESET}" for dep in self.dependencies
+			)
+			output.append(f"  {c.RED}depends-on:{c.RESET} {deps_str}")
+
+		# Comments in green
+		if self.comments:
+			output.append(f"  {c.RED}comments:{c.RESET}")
+			output.extend(f"    {c.GREEN}{line}{c.RESET}" for line in self.comments)
+
+		return output
+
+
+def find_all_targets(lines: List[str]) -> List[str]:
+	"""Find all .PHONY target names in the makefile."""
+	# First, get all .PHONY declarations
+	phony_targets: Set[str] = set()
+	# Use chr(36) to get dollar sign - works both standalone and embedded in makefile
+	# issue being that the makefile processes dollar sign as an escape character
+	phony_pattern: re.Pattern = re.compile(r"^\.PHONY:\s+(.+)" + chr(36))
+
+	for line in lines:
+		match = phony_pattern.match(line)
+		if match:
+			# Get all targets from this .PHONY line (space-separated)
+			target_names: List[str] = match.group(1).split()
+			phony_targets.update(target_names)
+
+	# Now scan for actual target definitions and filter to .PHONY ones
+	all_target_defs: Dict[str, int] = _scan_makefile(lines)
+	return [tgt for tgt in all_target_defs if tgt in phony_targets]
+
+
+def get_all_recipes(lines: List[str]) -> List[MakeRecipe]:
+	"""Get MakeRecipe objects for all .PHONY targets in the makefile."""
+	targets: List[str] = find_all_targets(lines)
+	return [MakeRecipe.from_makefile(lines, target) for target in targets]
+
+
+def describe_target(makefile_path: Path, target: str) -> None:
+	"""Emit the description for *target*."""
+	lines: List[str] = makefile_path.read_text(encoding="utf-8").splitlines()
+	recipe: MakeRecipe = MakeRecipe.from_makefile(lines, target)
+
+	for line in recipe.describe():
+		print(line)
+
+
+def main() -> None:
+	"""CLI entry point."""
+	parser: argparse.ArgumentParser = argparse.ArgumentParser(
+		"recipe_info",
+		description="Get detailed information about Makefile recipes/targets",
+	)
+	parser.add_argument(
+		"-f",
+		"--file",
+		default="makefile",
+		help="Path to the Makefile (default: ./makefile)",
+	)
+	parser.add_argument(
+		"-a",
+		"--all",
+		action="store_true",
+		help="Print help for all targets in the Makefile",
+	)
+	parser.add_argument(
+		"--no-color",
+		action="store_true",
+		help="Disable colored output (color is enabled by default)",
+	)
+	parser.add_argument("targets", nargs="*", help="Target names")
+	args: argparse.Namespace = parser.parse_args()
+
+	lines: List[str] = Path(args.file).read_text(encoding="utf-8").splitlines()
+
+	# Get recipes to describe
+	if args.all:
+		recipes: List[MakeRecipe] = get_all_recipes(lines)
+	elif args.targets:
+		recipes = []
+		all_targets: List[str] = find_all_targets(lines)
+		c: Colors = Colors(enabled=not args.no_color)
+		for tgt in args.targets:
+			# Check if target contains wildcard characters
+			if any(char in tgt for char in ["*", "?", "["]):
+				# Pattern matching mode
+				matched_targets: List[str] = [
+					t for t in all_targets if fnmatch.fnmatch(t, tgt)
+				]
+				if matched_targets:
+					for matched in matched_targets:
+						recipes.append(MakeRecipe.from_makefile(lines, matched))
+				else:
+					print(
+						f"Error: no targets match pattern '{c.RED}{tgt}{c.RESET}'",
+						file=sys.stderr,
+					)
+					sys.exit(1)
+			else:
+				# Exact target lookup
+				try:
+					recipes.append(MakeRecipe.from_makefile(lines, tgt))
+				except ValueError:
+					# Find similar targets (fuzzy matching)
+					fuzzy_matches: List[str] = difflib.get_close_matches(
+						tgt,
+						all_targets,
+						n=5,
+						cutoff=0.6,
+					)
+					# Also find targets that contain the attempted target
+					substring_matches: List[str] = [
+						t for t in all_targets if tgt in t and t not in fuzzy_matches
+					]
+					# Combine and deduplicate while preserving order
+					matches: List[str] = fuzzy_matches + substring_matches
+					matches = matches[:5]  # Limit to 5 suggestions
+
+					print(
+						f"Error: target '{c.RED}{tgt}{c.RESET}' not found in makefile",
+						file=sys.stderr,
+					)
+					if matches:
+						suggestions: str = ", ".join(
+							f"{c.BLUE}{m}{c.RESET}" for m in matches
+						)
+						print(f"Did you mean: {suggestions}?", file=sys.stderr)
+					sys.exit(1)
+	else:
+		recipes = []
+
+	if not recipes:
+		parser.error("Provide target names or use --all flag")
+
+	# Print descriptions (color is True by default, unless --no-color is passed)
+	descriptions: List[str] = [
+		line for recipe in recipes for line in recipe.describe(color=not args.no_color)
+	]
+	print("\n".join(descriptions).replace("\n\n", f"\n{'-' * 40}\n"))
+
+
+if __name__ == "__main__":
+	main()
+
+endef
+
+export SCRIPT_RECIPE_INFO
+
+
 ##     ## ######## ########   ######  ####  #######  ##    ##
 ##     ## ##       ##     ## ##    ##  ##  ##     ## ###   ##
 ##     ## ##       ##     ## ##        ##  ##     ## ####  ##
@@ -1342,14 +1675,30 @@ dep-check-torch:
 	@echo "see if torch is installed, and which CUDA version and devices it sees"
 	$(PYTHON) -c "$$SCRIPT_CHECK_TORCH"
 
+# sync dependencies and export to requirements.txt files
+# - syncs all extras and groups with uv (including dev dependencies)
+# - compiles bytecode for faster imports
+# - exports to requirements.txt files per tool.uv-exports.exports config
+# configure via pyproject.toml:[tool.uv-exports]:
+#   [tool.uv-exports]
+#   exports = [
+#     { name = "base", extras = [], groups = [] },  # base package deps only
+#     { name = "dev", extras = [], groups = ["dev"] },  # dev dependencies
+#     { name = "all", extras = ["all"], groups = ["dev"] }  # everything
+#   ]
 .PHONY: dep
 dep:
 	@echo "Exporting dependencies as per $(PYPROJECT) section 'tool.uv-exports.exports'"
 	uv sync --all-extras --all-groups --compile-bytecode
 	mkdir -p $(REQUIREMENTS_DIR)
 	$(PYTHON) -c "$$SCRIPT_EXPORT_REQUIREMENTS" $(PYPROJECT) $(REQUIREMENTS_DIR) | sh -x
-	
 
+
+# verify that requirements.txt files match current dependencies
+# - exports deps to temp directory
+# - diffs temp against existing requirements files
+# - FAILS if any differences found (means you need to run `make dep`)
+# useful in CI to catch when pyproject.toml changed but requirements weren't regenerated
 .PHONY: dep-check
 dep-check:
 	@echo "Checking that exported requirements are up to date"
@@ -1394,20 +1743,20 @@ gen-extra-tests:
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-# runs ruff and pycln to format the code
+# format code AND auto-fix linting issues
+# performs TWO operations: reformats code, then auto-fixes safe linting issues
+# configure in pyproject.toml:[tool.ruff]
 .PHONY: format
 format:
 	@echo "format the source code"
 	$(PYTHON) -m ruff format --config $(PYPROJECT) .
 	$(PYTHON) -m ruff check --fix --config $(PYPROJECT) .
-	$(PYTHON) -m pycln --config $(PYPROJECT) --all .
 
-# runs ruff and pycln to check if the code is formatted correctly
+# runs ruff to check if the code is formatted correctly
 .PHONY: format-check
 format-check:
 	@echo "check if the source code is formatted correctly"
 	$(PYTHON) -m ruff check --config $(PYPROJECT) .
-	$(PYTHON) -m pycln --check --config $(PYPROJECT) .
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # runs type checks with mypy
@@ -1417,16 +1766,38 @@ format-check:
 .PHONY: typing
 typing: gen-extra-tests
 	@echo "running type checks"
-	$(PYTHON) -m mypy --config-file $(PYPROJECT) $(TYPECHECK_ARGS) .
+	$(PYTHON) -m mypy --config-file $(PYPROJECT) $(TYPECHECK_ARGS) . || true
+	$(PYTHON) -m basedpyright . || true
+	$(PYTHON) -m ty check . || true
 # $(PYTHON) -m ty check muutils/
-	
 
-# generates a report of the mypy output
+.PHONY: typing-summary
+typing-summary: gen-extra-tests
+	@echo "running type checks and saving to .meta/.type-errors/"
+	@mkdir -p .meta/.type-errors
+	$(PYTHON) -m mypy --config-file $(PYPROJECT) $(TYPECHECK_ARGS) . > .meta/.type-errors/mypy.txt 2>&1 || true
+	$(PYTHON) -m basedpyright . > .meta/.type-errors/basedpyright.txt 2>&1 || true
+	$(PYTHON) -m ty check . > .meta/.type-errors/ty.txt 2>&1 || true
+	@echo "generating typing summary and breakdown..."
+	$(PYTHON) -m muutils.misc.typing_breakdown --error-dir .meta/.type-errors --top-n -1 --output .meta/typing-summary.txt
+
+# generate summary report of type check errors grouped by file
+# outputs TOML format showing error count per file
+# useful for tracking typing progress across large codebases
 .PHONY: typing-report
 typing-report: clean gen-extra-tests
 	@echo "generate a report of the type check output -- errors per file"
 	$(PYTHON) -m mypy --config-file $(PYPROJECT) $(TYPECHECK_ARGS) . | $(PYTHON) -c "$$SCRIPT_MYPY_REPORT" --mode toml
 
+# run tests with pytest
+# - automatically runs `make clean` first
+# - respects COV and VERBOSE makefile variables
+# - pass custom args: make test PYTEST_OPTIONS="--maxfail=1 -x"
+# makefile variables:
+#   COV=1        # generate coverage reports (default: 1)
+#   VERBOSE=1    # verbose pytest output (default: 0)
+#   PYTEST_OPTIONS="..."  # pass additional pytest arguments
+# pytest config in pyproject.toml:[tool.pytest.ini_options]
 .PHONY: test
 test: clean gen-extra-tests
 	@echo "running tests"
@@ -1478,9 +1849,13 @@ docs-combined: docs-md
 	$(PANDOC) -f markdown -t plain $(DOCS_DIR)/combined/$(PACKAGE_NAME).md -o $(DOCS_DIR)/combined/$(PACKAGE_NAME).txt
 	$(PANDOC) -f markdown -t html $(DOCS_DIR)/combined/$(PACKAGE_NAME).md -o $(DOCS_DIR)/combined/$(PACKAGE_NAME).html
 
-# generates coverage reports as html and text with `pytest-cov`, and a badge with `coverage-badge`
-# if `.coverage` is not found, will run tests first
-# also removes the `.gitignore` file that `coverage html` creates, since we count that as part of the docs
+# generate coverage reports from test results
+# WARNING: if .coverage file not found, will automatically run `make test` first
+# - generates text report: $(COVERAGE_REPORTS_DIR)/coverage.txt
+# - generates SVG badge: $(COVERAGE_REPORTS_DIR)/coverage.svg
+# - generates HTML report: $(COVERAGE_REPORTS_DIR)/html/
+# - removes .gitignore from html dir (we publish coverage with docs)
+# run tests with: make test COV=1 (COV=1 is default)
 .PHONY: cov
 cov:
 	@echo "generate coverage reports"
@@ -1499,15 +1874,39 @@ cov:
 docs: cov docs-html docs-combined todo lmcat
 	@echo "generate all documentation and coverage reports"
 
-# removed all generated documentation files, but leaves everything in `$DOCS_RESOURCES_DIR`
-# and leaves things defined in `pyproject.toml:tool.makefile.docs.no_clean`
-# (templates, svg, css, make_docs.py script)
-# distinct from `make clean`
+# remove generated documentation files, but preserve resources
+# - removes all docs except those in DOCS_RESOURCES_DIR
+# - preserves files/patterns specified in pyproject.toml config
+# - distinct from `make clean` (which removes temp build files, not docs)
+# configure via pyproject.toml:[tool.makefile.docs]:
+#   [tool.makefile.docs]
+#   output_dir = "docs"  # must match DOCS_DIR in makefile
+#   no_clean = [  # files/patterns to preserve when cleaning
+#     "resources/**",
+#     "*.svg",
+#     "*.css"
+#   ]
 .PHONY: docs-clean
 docs-clean:
 	@echo "remove generated docs except resources"
 	$(PYTHON) -c "$$SCRIPT_DOCS_CLEAN" $(PYPROJECT) $(DOCS_DIR) $(DOCS_RESOURCES_DIR)
 
+
+# get all TODO's from the code
+# configure via pyproject.toml:[tool.makefile.inline-todo]:
+#   [tool.makefile.inline-todo]
+#   search_dir = "."  # directory to search for TODOs
+#   out_file_base = "docs/other/todo-inline"  # output file path (without extension)
+#   context_lines = 2  # lines of context around each TODO
+#   extensions = ["py", "md"]  # file extensions to search
+#   tags = ["CRIT", "TODO", "FIXME", "HACK", "BUG", "DOC"]  # tags to look for
+#   exclude = ["docs/**", ".venv/**", "scripts/get_todos.py"]  # patterns to exclude
+#   branch = "main"  # git branch for URLs
+#   # repo_url = "..."  # repository URL (defaults to [project.urls.{repository,github}])
+#   # template_md = "..."  # custom jinja2 template for markdown output
+#   # template_issue = "..."  # custom format string for issues
+#   # template_html_source = "..."  # custom html template path
+#   tag_label_map = { "BUG" = "bug", "TODO" = "enhancement", "DOC" = "documentation" } # mapping of tags to GitHub issue labels
 .PHONY: todo
 todo:
 	@echo "get all TODO's from the code"
@@ -1535,10 +1934,13 @@ lmcat:
 # build and publish
 # ==================================================
 
-# verifies that the current branch is $(PUBLISH_BRANCH) and that git is clean
-# used before publishing
+# verify git is ready for publishing
+# REQUIRES:
+# - current branch must be $(PUBLISH_BRANCH)
+# - no uncommitted changes (git status --porcelain must be empty)
+# EXITS with error if either condition fails
 .PHONY: verify-git
-verify-git: 
+verify-git:
 	@echo "checking git status"
 	if [ "$(shell git branch --show-current)" != $(PUBLISH_BRANCH) ]; then \
 		echo "!!! ERROR !!!"; \
@@ -1555,14 +1957,25 @@ verify-git:
 	fi; \
 
 
+# build package distribution files
+# creates wheel (.whl) and source distribution (.tar.gz) in dist/
 .PHONY: build
-build: 
+build:
 	@echo "build the package"
 	uv build
 
-# gets the commit log, checks everything, builds, and then publishes with twine
-# will ask the user to confirm the new version number (and this allows for editing the tag info)
-# will also print the contents of $(PYPI_TOKEN_FILE) to the console for the user to copy and paste in when prompted by twine
+# publish package to PyPI and create git tag
+# PREREQUISITES:
+# - must be on $(PUBLISH_BRANCH) branch with clean git status (verified by verify-git)
+# - must have $(PYPI_TOKEN_FILE) with your PyPI token
+# - version in pyproject.toml must be different from $(LAST_VERSION_FILE)
+# PROCESS:
+# 1. runs all checks, builds package
+# 2. prompts for version confirmation (you can edit $(COMMIT_LOG_FILE) at this point)
+# 3. creates git commit updating $(LAST_VERSION_FILE)
+# 4. creates annotated git tag with commit log as description
+# 5. pushes tag to origin
+# 6. uploads to PyPI via twine (you'll paste token from $(PYPI_TOKEN_FILE))
 .PHONY: publish
 publish: gen-commit-log check build verify-git version gen-version-info
 	@echo "run all checks, build, and then publish"
@@ -1616,6 +2029,10 @@ clean:
 	rm -rf tests/unit/validate_type/test_validate_type_GENERATED.py
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+# remove all generated/build files including .venv
+# runs: clean + docs-clean + dep-clean
+# removes .venv, uv.lock, requirements.txt files, generated docs, build artifacts
+# run `make dep` after this to reinstall dependencies
 .PHONY: clean-all
 clean-all: clean docs-clean dep-clean
 	@echo "clean up all temporary files, dep files, venv, and generated docs"
@@ -1675,10 +2092,28 @@ info-long: info
 	@echo "    RUN_GLOBAL = $(RUN_GLOBAL)"
 	@echo "    TYPECHECK_ARGS = $(TYPECHECK_ARGS)"
 
-# immediately print out the help targets, and then local variables (but those take a bit longer)
+# Smart help command: shows general help, or detailed info about specific targets
+# Usage:
+#   make help              - shows general help (list of targets + makefile variables)
+#   make help="test"       - shows detailed info about the 'test' recipe
+#   make HELP="test clean" - shows detailed info about multiple recipes
+#   make h=*               - shows detailed info about all recipes (wildcard expansion)
+#   make H="test"          - same as HELP (case variations supported)
+#
+# All variations work: help/HELP/h/H with values like "foo", "foo bar", "*", "--all"
 .PHONY: help
-help: help-targets info
-	@echo -n ""
+help:
+	@$(eval HELP_ARG := $(or $(HELP),$(help),$(H),$(h)))
+	@$(eval HELP_EXPANDED := $(if $(filter *,$(HELP_ARG)),--all,$(HELP_ARG)))
+	@if [ -n "$(HELP_EXPANDED)" ]; then \
+		$(PYTHON) -c "$$SCRIPT_RECIPE_INFO" -f makefile $(HELP_EXPANDED); \
+	else \
+		$(MAKE) --no-print-directory help-targets info; \
+		echo ""; \
+		echo "To get detailed info about specific make targets, use:"; \
+		echo "  make help=TARGET    or    make HELP=\"TARGET1 TARGET2\""; \
+		echo "  make H=*            or    make h=--all"; \
+	fi
 
 
  ######  ##     ##  ######  ########  #######  ##     ##

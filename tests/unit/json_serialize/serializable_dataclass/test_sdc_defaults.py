@@ -7,7 +7,7 @@ from muutils.json_serialize import (
     serializable_dataclass,
     serializable_field,
 )
-from muutils.json_serialize.util import _FORMAT_KEY
+from muutils.json_serialize.types import _FORMAT_KEY
 
 # pylint: disable=missing-class-docstring
 

@@ -6,6 +6,7 @@ from inspect import signature, unwrap
 import types
 import typing
 import functools
+from typing import Any
 
 # this is also for python <3.10 compatibility
 _GenericAliasTypeNames: typing.List[str] = [
@@ -15,11 +16,13 @@ _GenericAliasTypeNames: typing.List[str] = [
     "_BaseGenericAlias",
 ]
 
-_GenericAliasTypesList: list = [
+_GenericAliasTypesList: list[Any] = [
     getattr(typing, name, None) for name in _GenericAliasTypeNames
 ]
 
-GenericAliasTypes: tuple = tuple([t for t in _GenericAliasTypesList if t is not None])
+GenericAliasTypes: tuple[Any, ...] = tuple(
+    [t for t in _GenericAliasTypesList if t is not None]
+)
 
 
 class IncorrectTypeException(TypeError):
@@ -89,6 +92,10 @@ def validate_type(
         else _return_validation_bool
     )
 
+    # handle None type (used in type hints like tuple[int, None])
+    if expected_type is None:
+        return _return_func(value is None)
+
     # base type without args
     if isinstance(expected_type, type):
         try:
@@ -99,7 +106,7 @@ def validate_type(
                 raise e
 
     origin: typing.Any = typing.get_origin(expected_type)
-    args: tuple = typing.get_args(expected_type)
+    args: tuple[Any, ...] = typing.get_args(expected_type)
 
     # useful for debugging
     # print(f"{value = },   {expected_type = },   {origin = },   {args = }")
@@ -220,15 +227,15 @@ def validate_type(
         )
 
 
-def get_fn_allowed_kwargs(fn: typing.Callable) -> typing.Set[str]:
+def get_fn_allowed_kwargs(fn: typing.Callable[..., Any]) -> typing.Set[str]:
     """Get the allowed kwargs for a function, raising an exception if the signature cannot be determined."""
     try:
         fn = unwrap(fn)
         params = signature(fn).parameters
     except ValueError as e:
-        raise ValueError(
-            f"Cannot retrieve signature for {fn.__name__ = } {fn = }: {str(e)}"
-        ) from e
+        fn_name: str = getattr(fn, "__name__", str(fn))
+        err_msg = f"Cannot retrieve signature for {fn_name = } {fn = }: {str(e)}"
+        raise ValueError(err_msg) from e
 
     return {
         param.name

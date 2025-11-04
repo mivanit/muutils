@@ -17,7 +17,7 @@ class FancyTimeitResult(NamedTuple):
     """return type of `timeit_fancy`"""
 
     timings: StatCounter
-    return_value: T_return  # type: ignore[valid-type]
+    return_value: T_return  # type: ignore[valid-type]  # pyright: ignore[reportGeneralTypeIssues]
     profile: Union[pstats.Stats, None]
 
 
@@ -75,14 +75,16 @@ def timeit_fancy(
     return_value: T_return | None = None
     if (get_return or do_profiling) and isinstance(cmd, str):
         warnings.warn(
-            "Can't do profiling or get return value from `cmd` because it is a string."
-            " If you want to get the return value, pass a callable instead.",
+            (
+                "Can't do profiling or get return value from `cmd` because it is a string."
+                + " If you want to get the return value, pass a callable instead."
+            ),
             UserWarning,
         )
     if (get_return or do_profiling) and not isinstance(cmd, str):
         # Optionally perform profiling
         if do_profiling:
-            profiler = cProfile.Profile()
+            profiler: cProfile.Profile = cProfile.Profile()
             profiler.enable()
 
         try:
@@ -93,6 +95,8 @@ def timeit_fancy(
             )
 
         if do_profiling:
+            # profiler is def bound here
+            assert isinstance(profiler, cProfile.Profile)  # pyright: ignore[reportPossiblyUnboundVariable]
             profiler.disable()
             profile = pstats.Stats(profiler).strip_dirs().sort_stats("cumulative")
 
@@ -102,6 +106,8 @@ def timeit_fancy(
 
     return FancyTimeitResult(
         timings=StatCounter(times),
-        return_value=return_value,
+        # TYPING: Argument is incorrect: Expected `typing.TypeVar`, found `None | @Todo`tyinvalid-argument-type
+        # no idea how to fix
+        return_value=return_value,  # type: ignore[invalid-argument-type]
         profile=profile,
     )

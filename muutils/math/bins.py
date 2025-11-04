@@ -29,25 +29,31 @@ class Bins:
                 )
             if self.start == 0:
                 return np.concatenate(
-                    [
+                    [  # pyright: ignore[reportUnknownArgumentType]
                         np.array([0]),
                         np.logspace(
-                            np.log10(self._log_min), np.log10(self.stop), self.n_bins
+                            np.log10(self._log_min),  # pyright: ignore[reportAny]
+                            np.log10(self.stop),  # pyright: ignore[reportAny]
+                            self.n_bins,
                         ),
                     ]
                 )
             elif self.start < self._log_min and self._zero_in_small_start_log:
                 return np.concatenate(
-                    [
+                    [  # pyright: ignore[reportUnknownArgumentType]
                         np.array([0]),
                         np.logspace(
-                            np.log10(self.start), np.log10(self.stop), self.n_bins
+                            np.log10(self.start),  # pyright: ignore[reportAny]
+                            np.log10(self.stop),  # pyright: ignore[reportAny]
+                            self.n_bins,
                         ),
                     ]
                 )
             else:
-                return np.logspace(
-                    np.log10(self.start), np.log10(self.stop), self.n_bins + 1
+                return np.logspace(  # pyright: ignore[reportUnknownVariableType]
+                    np.log10(self.start),  # pyright: ignore[reportAny]
+                    np.log10(self.stop),  # pyright: ignore[reportAny]
+                    self.n_bins + 1,
                 )
         else:
             raise ValueError(f"Invalid scale {self.scale}, expected lin or log")

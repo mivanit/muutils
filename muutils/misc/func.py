@@ -254,7 +254,8 @@ def typed_lambda(
     # Raises:
      - `ValueError` if the number of input types doesn't match the lambda's parameters.
     """
-    code: CodeType = fn.__code__
+    # it will just error here if fn.__code__ doesn't exist
+    code: CodeType = fn.__code__  # type: ignore[unresolved-attribute]
     n_params: int = code.co_argcount
 
     if len(in_types) != n_params:

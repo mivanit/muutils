@@ -2,7 +2,9 @@ from __future__ import annotations
 
 import time
 from dataclasses import dataclass, field
-from typing import Any, Callable, override
+
+# TYPING: ty fails to resolve this??
+from typing import Any, Callable, override  # type: ignore[unresolved-import]
 
 from muutils.logger.simplelogger import AnyIO, NullIO
 from muutils.misc import sanitize_fname

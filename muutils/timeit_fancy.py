@@ -23,9 +23,9 @@ class FancyTimeitResult(NamedTuple):
 
 def timeit_fancy(
     cmd: Union[Callable[[], T_return], str],
-    setup: Union[str, Callable[[], Any]] = lambda: None,  # pyright: ignore[reportExplicitAny]
+    setup: Union[str, Callable[[], Any]] = lambda: None,
     repeats: int = 5,
-    namespace: Union[dict[str, Any], None] = None,  # pyright: ignore[reportExplicitAny]
+    namespace: Union[dict[str, Any], None] = None,
     get_return: bool = True,
     do_profiling: bool = False,
 ) -> FancyTimeitResult:

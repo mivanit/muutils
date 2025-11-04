@@ -3,6 +3,7 @@ from __future__ import annotations
 import base64
 import hashlib
 import json
+from typing import Any
 
 
 def stable_hash(s: str | bytes) -> int:
@@ -13,12 +14,12 @@ def stable_hash(s: str | bytes) -> int:
         s_bytes = s.encode("utf-8")
     else:
         s_bytes = s
-    hash_obj: hashlib._Hash = hashlib.md5(s_bytes)
+    hash_obj: hashlib._Hash = hashlib.md5(s_bytes)  # pyright: ignore[reportPrivateUsage]
     # get digest and convert to int
     return int.from_bytes(hash_obj.digest(), "big")
 
 
-def stable_json_dumps(d) -> str:
+def stable_json_dumps(d: Any) -> str:  # pyright: ignore[reportAny]
     return json.dumps(
         d,
         sort_keys=True,

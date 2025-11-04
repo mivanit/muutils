@@ -1,7 +1,7 @@
 # Showing all errors
 
 # mypy: Found 61 errors in 7 files (checked 116 source files)
-# basedpyright: 565 errors, 3341 warnings, 0 notes
+# basedpyright: 564 errors, 3333 warnings, 0 notes
 # ty: Found 212 diagnostics
 
 [type_errors.mypy]
@@ -26,13 +26,13 @@ total_errors = 61
 "tests/unit/benchmark_parallel/benchmark_parallel.py" = 1
 
 [type_errors.basedpyright]
-total_errors = 2649
+total_errors = 2641
 
 [type_errors.basedpyright.by_type]
-"reportUnknownParameterType" = 426
-"reportMissingParameterType" = 379
+"reportUnknownParameterType" = 425
+"reportMissingParameterType" = 378
 "reportAny" = 354
-"reportUnusedCallResult" = 291
+"reportUnusedCallResult" = 290
 "reportUnknownVariableType" = 195
 "reportMissingTypeArgument" = 180
 "reportUnknownMemberType" = 133
@@ -43,14 +43,14 @@ total_errors = 2649
 "reportCallIssue" = 42
 "reportUnannotatedClassAttribute" = 41
 "reportPossiblyUnboundVariable" = 34
-"reportPrivateUsage" = 32
-"reportUnreachable" = 31
+"reportPrivateUsage" = 31
 "reportIndexIssue" = 31
-"reportUnnecessaryIsInstance" = 19
+"reportUnreachable" = 30
+"reportUnnecessaryIsInstance" = 18
 "reportUntypedClassDecorator" = 17
 "reportMissingSuperCall" = 14
-"reportUnnecessaryTypeIgnoreComment" = 13
 "reportUntypedFunctionDecorator" = 12
+"reportUnnecessaryTypeIgnoreComment" = 11
 "reportInvalidTypeArguments" = 9
 "reportUnnecessaryComparison" = 8
 "reportUnusedVariable" = 8
@@ -149,14 +149,10 @@ total_errors = 2649
 "muutils/cli/command.py" = 3
 "muutils/json_serialize/array.py" = 3
 "muutils/logger/simplelogger.py" = 3
-"muutils/misc/hashing.py" = 3
-"muutils/misc/numerical.py" = 2
-"muutils/timeit_fancy.py" = 2
 "tests/unit/logger/test_log_util.py" = 2
 "tests/unit/test_chunks.py" = 2
 "tests/unit/test_tensor_info.py" = 2
 "tests/unit/test_timeit_fancy.py" = 2
-"muutils/console_unicode.py" = 1
 "muutils/json_serialize/util.py" = 1
 "tests/unit/benchmark_parallel/test_benchmark_demo.py" = 1
 

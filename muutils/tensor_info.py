@@ -3,7 +3,33 @@
 from __future__ import annotations
 
 import numpy as np
-from typing import Union, Any, Literal, List, Dict, overload, Optional
+from typing import Union, Any, Literal, List, Dict, overload, Optional, TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from typing import TypedDict
+else:
+    try:
+        from typing import TypedDict
+    except ImportError:
+        from typing_extensions import TypedDict
+
+
+class ArraySummarySettings(TypedDict):
+    """Type definition for array_summary default settings."""
+
+    fmt: OutputFormat
+    precision: int
+    stats: bool
+    shape: bool
+    dtype: bool
+    device: bool
+    requires_grad: bool
+    sparkline: bool
+    sparkline_bins: int
+    sparkline_logy: Optional[bool]
+    colored: bool
+    as_list: bool
+    eq_char: str
 
 # Global color definitions
 COLORS: Dict[str, Dict[str, str]] = {

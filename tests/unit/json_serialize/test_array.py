@@ -132,7 +132,7 @@ class TestArray:
 def test_array_shape_dtype_preservation(mode: ArrayModeWithMeta):
     """Test that various shapes and dtypes are preserved through serialization."""
     # Test different shapes
-    shapes_and_arrays = [
+    shapes_and_arrays: list[tuple[np.ndarray, str]] = [
         (np.array([1, 2, 3], dtype=np.int32), "1D int32"),
         (np.array([[1.5, 2.5], [3.5, 4.5]], dtype=np.float32), "2D float32"),
         (np.array([[[1]], [[2]]], dtype=np.int8), "3D int8"),
@@ -140,7 +140,7 @@ def test_array_shape_dtype_preservation(mode: ArrayModeWithMeta):
     ]
 
     # Test different dtypes
-    dtype_tests = [
+    dtype_tests: list[tuple[np.ndarray, type[np.generic]]] = [
         (np.array([1, 2, 3], dtype=np.int8), np.int8),
         (np.array([1, 2, 3], dtype=np.int16), np.int16),
         (np.array([1, 2, 3], dtype=np.int32), np.int32),
@@ -222,11 +222,13 @@ def test_array_edge_cases(mode: ArrayModeWithMeta):
     jser = JsonSerializer(array_mode="array_list_meta")
 
     # Empty arrays with different shapes
-    empty_1d = np.array([], dtype=np.int32)
-    empty_2d = np.array([[], []], dtype=np.float32).reshape(2, 0)
-    empty_3d = np.array([[]], dtype=np.int64).reshape(1, 1, 0)
+    empty_arrays: list[np.ndarray] = [
+        np.array([], dtype=np.int32),
+        np.array([[], []], dtype=np.float32).reshape(2, 0),
+        np.array([[]], dtype=np.int64).reshape(1, 1, 0),
+    ]
 
-    for empty_arr in [empty_1d, empty_2d, empty_3d]:
+    for empty_arr in empty_arrays:
         serialized = serialize_array(jser, empty_arr, "test", array_mode=mode)
         loaded = load_array(serialized)
         assert loaded.shape == empty_arr.shape

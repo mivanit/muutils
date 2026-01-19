@@ -10,7 +10,7 @@ from muutils.json_serialize import json_serialize
 class WritableStream(Protocol):
     """Protocol for objects that support write operations."""
 
-    def write(self, msg: str) -> int: ...
+    def write(self, __s: str) -> int: ...
 
 
 class ExceptionContext:

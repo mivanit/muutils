@@ -1,36 +1,31 @@
 # Showing all errors
 
-# mypy: Found 22 errors in 5 files (checked 117 source files)
-# basedpyright: 474 errors, 3219 warnings, 0 notes
-# ty: Found 23 diagnostics
+# mypy: Found 10 errors in 3 files (checked 117 source files)
+# basedpyright: 471 errors, 3193 warnings, 0 notes
+# ty: Found 17 diagnostics
 
 [type_errors.mypy]
-total_errors = 22
+total_errors = 10
 
 [type_errors.mypy.by_type]
-"arg-type" = 8
 "operator" = 6
-"attr-defined" = 4
-"call-overload" = 3
-"assignment" = 1
+"arg-type" = 4
 
 [type_errors.mypy.by_file]
-"tests/unit/json_serialize/test_array.py" = 10
 "tests/unit/json_serialize/test_json_serialize.py" = 6
-"tests/unit/json_serialize/test_array_torch.py" = 3
 "tests/unit/json_serialize/test_serializable_field.py" = 2
-"muutils/logger/logger.py" = 1
+"tests/unit/json_serialize/test_array_torch.py" = 2
 
 [type_errors.basedpyright]
-total_errors = 2532
+total_errors = 2520
 
 [type_errors.basedpyright.by_type]
-"reportUnknownParameterType" = 393
-"reportAny" = 371
-"reportMissingParameterType" = 349
+"reportUnknownParameterType" = 385
+"reportAny" = 376
+"reportMissingParameterType" = 341
 "reportUnusedCallResult" = 290
 "reportUnknownVariableType" = 191
-"reportMissingTypeArgument" = 168
+"reportMissingTypeArgument" = 167
 "reportUnknownLambdaType" = 127
 "reportUnknownMemberType" = 125
 "reportUnusedParameter" = 98
@@ -81,7 +76,6 @@ total_errors = 2532
 "muutils/dictmagic.py" = 62
 "tests/unit/web/test_bundle_html.py" = 55
 "muutils/json_serialize/json_serialize.py" = 52
-"muutils/spinner.py" = 51
 "tests/unit/benchmark_parallel/benchmark_parallel.py" = 49
 "muutils/json_serialize/serializable_field.py" = 48
 "muutils/misc/freezing.py" = 46
@@ -89,6 +83,7 @@ total_errors = 2532
 "muutils/tensor_info.py" = 45
 "muutils/parallel.py" = 42
 "muutils/statcounter.py" = 41
+"muutils/spinner.py" = 39
 "muutils/sysinfo.py" = 39
 "tests/unit/json_serialize/test_serializable_field.py" = 38
 "muutils/web/bundle_html.py" = 37
@@ -149,10 +144,10 @@ total_errors = 2532
 "muutils/logger/log_util.py" = 1
 
 [type_errors.ty]
-total_errors = 23
+total_errors = 17
 
 [type_errors.ty.by_type]
-"invalid-argument-type" = 10
+"invalid-argument-type" = 4
 "invalid-assignment" = 4
 "unsupported-operator" = 4
 "no-matching-overload" = 2
@@ -160,12 +155,11 @@ total_errors = 23
 "invalid-type-form" = 1
 
 [type_errors.ty.by_file]
-"muutils/spinner.py" = 5
 "tests/unit/json_serialize/test_json_serialize.py" = 4
 "muutils/interval.py" = 3
 "muutils/misc/func.py" = 3
-"muutils/logger/logger.py" = 2
 "muutils/sysinfo.py" = 2
 "tests/unit/web/test_bundle_html.py" = 2
+"muutils/logger/logger.py" = 1
 "muutils/logger/simplelogger.py" = 1
 "tests/unit/validate_type/test_validate_type.py" = 1

@@ -3,12 +3,15 @@
 using the base `Spinner` class while some code is running.
 """
 
+from __future__ import annotations
+
 import os
 import time
 from dataclasses import dataclass, field
 import threading
 import sys
 from functools import wraps
+from types import TracebackType
 from typing import (
     List,
     Dict,
@@ -66,21 +69,22 @@ class SpinnerConfig:
 
     @classmethod
     def from_any(cls, arg: "SpinnerConfigArg") -> "SpinnerConfig":
-        if isinstance(arg, str):
+        # check SpinnerConfig first to help type narrowing
+        if isinstance(arg, SpinnerConfig):
+            return arg
+        elif isinstance(arg, str):
             return SPINNERS[arg]
         elif isinstance(arg, list):
             return SpinnerConfig(working=arg)
         elif isinstance(arg, dict):
             return SpinnerConfig(**arg)
-        elif isinstance(arg, SpinnerConfig):
-            return arg
         else:
             raise TypeError(
                 f"to create a SpinnerConfig, you must pass a string (key), list (working seq), dict (kwargs to SpinnerConfig), or SpinnerConfig, but got {type(arg) = }, {arg = }"
             )
 
 
-SpinnerConfigArg = Union[str, List[str], SpinnerConfig, dict]
+SpinnerConfigArg = Union[str, List[str], SpinnerConfig, Dict[str, Any]]
 
 SPINNERS: Dict[str, SpinnerConfig] = dict(
     default=SpinnerConfig(working=["|", "/", "-", "\\"], success="#", fail="X"),
@@ -262,7 +266,7 @@ class Spinner:
     def __init__(
         self,
         # no positional args
-        *args,
+        *args: Any,
         config: SpinnerConfigArg = "default",
         update_interval: float = 0.1,
         initial_value: str = "",
@@ -410,16 +414,21 @@ class Spinner:
         self.state = "fail" if failed else "success"
 
 
-class NoOpContextManager(ContextManager):
+class NoOpContextManager(ContextManager):  # type: ignore[type-arg]
     """A context manager that does nothing."""
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
         pass
 
-    def __enter__(self):
+    def __enter__(self) -> NoOpContextManager:
         return self
 
-    def __exit__(self, exc_type, exc_value, traceback):
+    def __exit__(
+        self,
+        exc_type: type[BaseException] | None,
+        exc_value: BaseException | None,
+        traceback: TracebackType | None,
+    ) -> None:
         pass
 
 
@@ -439,7 +448,7 @@ SpinnerContext.__doc__ = Spinner.__doc__
 
 # TODO: type hint that the `update_status` kwarg is not needed when calling the function we just decorated
 def spinner_decorator(
-    *args,
+    *args: Any,
     # passed to `Spinner.__init__`
     config: SpinnerConfigArg = "default",
     update_interval: float = 0.1,
@@ -452,7 +461,7 @@ def spinner_decorator(
     # deprecated
     spinner_chars: Union[str, Sequence[str], None] = None,
     spinner_complete: Optional[str] = None,
-    **kwargs,
+    **kwargs: Any,
 ) -> Callable[[DecoratedFunction], DecoratedFunction]:
     """see `Spinner` for parameters. Also takes `mutable_kwarg_key`
 

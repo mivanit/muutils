@@ -143,7 +143,7 @@ Sfield_T = TypeVar("Sfield_T")
 
 @overload
 def serializable_field(  # only `default_factory` is provided
-    *_args,
+    *_args: Any,
     default_factory: Callable[[], Sfield_T],
     default: dataclasses._MISSING_TYPE = dataclasses.MISSING,
     init: bool = True,
@@ -162,7 +162,7 @@ def serializable_field(  # only `default_factory` is provided
 ) -> Sfield_T: ...
 @overload
 def serializable_field(  # only `default` is provided
-    *_args,
+    *_args: Any,
     default: Sfield_T,
     default_factory: dataclasses._MISSING_TYPE = dataclasses.MISSING,
     init: bool = True,
@@ -181,7 +181,7 @@ def serializable_field(  # only `default` is provided
 ) -> Sfield_T: ...
 @overload
 def serializable_field(  # both `default` and `default_factory` are MISSING
-    *_args,
+    *_args: Any,
     default: dataclasses._MISSING_TYPE = dataclasses.MISSING,
     default_factory: dataclasses._MISSING_TYPE = dataclasses.MISSING,
     init: bool = True,
@@ -199,7 +199,7 @@ def serializable_field(  # both `default` and `default_factory` are MISSING
     **kwargs: Any,
 ) -> Any: ...
 def serializable_field(  # general implementation
-    *_args,
+    *_args: Any,
     default: Union[Any, dataclasses._MISSING_TYPE] = dataclasses.MISSING,
     default_factory: Union[Any, dataclasses._MISSING_TYPE] = dataclasses.MISSING,
     init: bool = True,

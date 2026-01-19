@@ -71,9 +71,13 @@ class Interval:
                 ) = _EMPTY_INTERVAL_ARGS
                 return
             # Handle different types of input arguments
-            if len(args) == 1 and isinstance(
-                args[0], (list, tuple, Sequence, Iterable)
-            ):
+            # Check for numeric types first to allow proper type narrowing
+            if len(args) == 1 and isinstance(args[0], (int, float)):
+                # a singleton, but this will be handled later
+                self.lower = args[0]
+                self.upper = args[0]
+                default_closed = False
+            elif len(args) == 1 and isinstance(args[0], (list, tuple)):
                 assert len(args[0]) == 2, (
                     "if arg is a list or tuple, it must have length 2"
                 )
@@ -81,13 +85,6 @@ class Interval:
                 self.upper = args[0][1]
                 # Determine closure type based on the container type
                 default_closed = isinstance(args[0], list)
-            elif len(args) == 1 and isinstance(
-                args[0], (int, float, typing.SupportsFloat, typing.SupportsInt)
-            ):
-                # a singleton, but this will be handled later
-                self.lower = args[0]
-                self.upper = args[0]
-                default_closed = False
             elif len(args) == 2:
                 self.lower, self.upper = args  # type: ignore[assignment]
                 default_closed = False  # Default to open interval if two args

@@ -239,7 +239,7 @@ DBG_TENSOR_VAL_JOINER: str = ": "
 def tensor_info(tensor: typing.Any) -> str:
     from muutils.tensor_info import array_summary
 
-    # mypy can't match overloads with **TypedDict spread
+    # TODO: explicitly pass args to avoid type: ignore (mypy can't match overloads with **TypedDict spread)
     return array_summary(tensor, as_list=False, **DBG_TENSOR_ARRAY_SUMMARY_DEFAULTS)  # type: ignore[call-overload]
 
 

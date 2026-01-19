@@ -1,17 +1,15 @@
 # Showing all errors
 
-# mypy: Found 1 error in 1 file (checked 117 source files)
-# basedpyright: 435 errors, 3172 warnings, 0 notes
-# ty: Found 6 diagnostics
+# mypy: Success: no issues found in 117 source files
+# basedpyright: 435 errors, 3174 warnings, 0 notes
+# ty: Found 3 diagnostics
 
 [type_errors.mypy]
-total_errors = 1
+total_errors = 0
 
 [type_errors.mypy.by_type]
-"arg-type" = 1
 
 [type_errors.mypy.by_file]
-"tests/unit/json_serialize/test_serializable_field.py" = 1
 
 [type_errors.basedpyright]
 total_errors = 434
@@ -90,7 +88,7 @@ total_errors = 434
 "tests/util/test_fire.py" = 1
 
 [type_warnings.basedpyright]
-total_warnings = 3172
+total_warnings = 3174
 
 [type_warnings.basedpyright.by_type]
 "reportAny" = 758
@@ -112,6 +110,7 @@ total_warnings = 3172
 "reportUnnecessaryComparison" = 8
 "reportUnusedVariable" = 8
 "reportCallInDefaultInitializer" = 4
+"reportUnusedImport" = 3
 "reportPrivateLocalImportUsage" = 3
 "reportMissingTypeStubs" = 3
 "reportUnusedClass" = 3
@@ -120,7 +119,6 @@ total_warnings = 3172
 "reportUntypedNamedTuple" = 2
 "reportInvalidTypeVarUse" = 1
 "reportPrivateImportUsage" = 1
-"reportUnusedImport" = 1
 "reportUnusedFunction" = 1
 
 [type_warnings.basedpyright.by_file]
@@ -168,8 +166,8 @@ total_warnings = 3172
 "muutils/validate_type.py" = 25
 "muutils/math/matrix_powers.py" = 24
 "muutils/tensor_utils.py" = 23
+"muutils/interval.py" = 20
 "tests/unit/json_serialize/test_util.py" = 19
-"muutils/interval.py" = 18
 "muutils/cli/arg_bool.py" = 16
 "tests/unit/misc/test_misc.py" = 16
 "tests/unit/test_mlutils.py" = 16
@@ -214,12 +212,11 @@ total_warnings = 3172
 "tests/unit/test_tensor_utils_torch.py" = 1
 
 [type_errors.ty]
-total_errors = 6
+total_errors = 3
 
 [type_errors.ty.by_type]
-"invalid-assignment" = 4
-"invalid-argument-type" = 2
+"invalid-assignment" = 2
+"invalid-argument-type" = 1
 
 [type_errors.ty.by_file]
-"muutils/interval.py" = 3
 "muutils/misc/func.py" = 3

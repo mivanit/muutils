@@ -140,8 +140,12 @@ def test_from_Field():
     assert sf.deserialize_fn is None
 
     # Test with default_factory and init=False to avoid init=True, serialize=False error
+    # Note: field() is typed to return _T (the field value type), not Field[_T], to help
+    # type checkers with normal @dataclass usage. Assigning to Field[T] is technically
+    # correct at runtime but confuses mypy's overload resolution for default_factory.
+    # Possibly related (closed) issue: https://github.com/python/mypy/issues/5738
     dc_field2: dataclasses.Field[list[Any]] = field(  # type: ignore[assignment]
-        default_factory=list,
+        default_factory=list,  # type: ignore[arg-type]
         repr=True,
         init=True,  # type: ignore[arg-type]
     )

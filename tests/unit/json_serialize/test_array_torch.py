@@ -201,14 +201,22 @@ def test_torch_serialization_integration():
     assert _FORMAT_KEY in serialized["model_weights"]
     assert serialized["model_weights"]["shape"] == [10, 5]
 
-    assert isinstance(serialized["biases"], dict)
-    assert serialized["biases"]["shape"] == [5]
+    serialized_biases = serialized["biases"]
+    assert isinstance(serialized_biases, dict)
+    assert serialized_biases["shape"] == [5]
 
-    assert serialized["metadata"]["epochs"] == 10  # pyright: ignore[reportArgumentType, reportCallIssue, reportIndexIssue, reportOptionalSubscript]
+    serialized_metadata = serialized["metadata"]
+    assert isinstance(serialized_metadata, dict)
+    assert serialized_metadata["epochs"] == 10
 
     # Check nested tensors
-    assert isinstance(serialized["history"][0]["loss"], dict)  # pyright: ignore[reportArgumentType, reportCallIssue, reportIndexIssue, reportOptionalSubscript]
-    assert _FORMAT_KEY in serialized["history"][0]["loss"]  # pyright: ignore[reportArgumentType, reportCallIssue, reportIndexIssue, reportOptionalSubscript, reportOperatorIssue]
+    serialized_history = serialized["history"]
+    assert isinstance(serialized_history, list)
+    history_item_0 = serialized_history[0]
+    assert isinstance(history_item_0, dict)
+    history_item_0_loss = history_item_0["loss"]
+    assert isinstance(history_item_0_loss, dict)
+    assert _FORMAT_KEY in history_item_0_loss
 
 
 def test_mixed_numpy_torch():

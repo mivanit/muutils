@@ -18,7 +18,7 @@
 
 4. Implement that fix
 
-run type checking only on the specific file you are changing to verify that the errors are fixed.
+5. run type checking only on the specific file you are changing to verify that the errors are fixed. use `uv run <thing>`, not `python -m`
 
 
 # Guidelines:

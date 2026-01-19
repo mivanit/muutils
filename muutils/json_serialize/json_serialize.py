@@ -14,7 +14,7 @@ import inspect
 import warnings
 from dataclasses import dataclass, is_dataclass
 from pathlib import Path
-from typing import TYPE_CHECKING, Any, Callable, Iterable, Mapping, Set, Union
+from typing import TYPE_CHECKING, Any, Callable, Iterable, Mapping, Set, Union, cast
 
 from muutils.errormode import ErrorMode
 
@@ -195,16 +195,19 @@ DEFAULT_HANDLERS: MonoTuple[SerializerHandler] = tuple(BASE_HANDLERS) + (
     ),
     SerializerHandler(
         check=lambda self, obj, path: str(type(obj)) == "<class 'numpy.ndarray'>",
-        serialize_func=lambda self, obj, path: serialize_array(self, obj, path=path),
+        serialize_func=lambda self, obj, path: cast(JSONitem, serialize_array(self, obj, path=path)),
         uid="numpy.ndarray",
         desc="numpy arrays",
     ),
     SerializerHandler(
         check=lambda self, obj, path: str(type(obj)) == "<class 'torch.Tensor'>",
-        serialize_func=lambda self, obj, path: serialize_array(
-            self,
-            obj.detach().cpu(),
-            path=path,  # pyright: ignore[reportAny]
+        serialize_func=lambda self, obj, path: cast(
+            JSONitem,
+            serialize_array(
+                self,
+                obj.detach().cpu(),
+                path=path,  # pyright: ignore[reportAny]
+            ),
         ),
         uid="torch.Tensor",
         desc="pytorch tensors",

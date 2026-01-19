@@ -1,31 +1,28 @@
 # Showing all errors
 
-# mypy: Found 52 errors in 7 files (checked 116 source files)
-# basedpyright: 550 errors, 3319 warnings, 0 notes
-# ty: Found 204 diagnostics
+# mypy: Found 20 errors in 5 files (checked 116 source files)
+# basedpyright: 493 errors, 3319 warnings, 0 notes
+# ty: Found 198 diagnostics
 
 [type_errors.mypy]
-total_errors = 52
+total_errors = 20
 
 [type_errors.mypy.by_type]
-"index" = 20
-"arg-type" = 10
-"call-overload" = 10
+"arg-type" = 7
 "operator" = 6
 "attr-defined" = 4
-"return-value" = 2
+"call-overload" = 2
+"import-not-found" = 1
 
 [type_errors.mypy.by_file]
-"tests/unit/json_serialize/test_array.py" = 19
-"tests/unit/json_serialize/test_array_torch.py" = 13
-"tests/unit/test_jsonlines.py" = 7
+"tests/unit/json_serialize/test_array.py" = 9
 "tests/unit/json_serialize/test_json_serialize.py" = 6
-"muutils/json_serialize/json_serialize.py" = 4
 "tests/unit/json_serialize/test_serializable_field.py" = 2
-"tests/unit/benchmark_parallel/benchmark_parallel.py" = 1
+"tests/unit/json_serialize/test_array_torch.py" = 2
+"tests/unit/benchmark_parallel/test_benchmark_demo.py" = 1
 
 [type_errors.basedpyright]
-total_errors = 2631
+total_errors = 2593
 
 [type_errors.basedpyright.by_type]
 "reportUnknownParameterType" = 425
@@ -39,11 +36,10 @@ total_errors = 2631
 "reportUnusedParameter" = 99
 "reportImplicitOverride" = 52
 "reportInvalidTypeForm" = 49
-"reportCallIssue" = 42
 "reportUnannotatedClassAttribute" = 41
+"reportCallIssue" = 36
 "reportPossiblyUnboundVariable" = 34
 "reportPrivateUsage" = 31
-"reportIndexIssue" = 31
 "reportUnreachable" = 30
 "reportUnnecessaryIsInstance" = 18
 "reportUntypedClassDecorator" = 17
@@ -53,8 +49,8 @@ total_errors = 2631
 "reportInvalidTypeArguments" = 9
 "reportUnnecessaryComparison" = 8
 "reportUnusedVariable" = 8
-"reportOptionalSubscript" = 8
 "reportUndefinedVariable" = 7
+"reportIndexIssue" = 7
 "reportOptionalMemberAccess" = 6
 "reportUninitializedInstanceVariable" = 5
 "reportCallInDefaultInitializer" = 4
@@ -94,7 +90,6 @@ total_errors = 2631
 "muutils/parallel.py" = 42
 "muutils/statcounter.py" = 41
 "muutils/sysinfo.py" = 39
-"tests/unit/json_serialize/test_array.py" = 38
 "tests/unit/json_serialize/test_serializable_field.py" = 38
 "muutils/web/bundle_html.py" = 37
 "tests/unit/test_dictmagic.py" = 37
@@ -108,7 +103,6 @@ total_errors = 2631
 "muutils/mlutils.py" = 22
 "muutils/validate_type.py" = 20
 "tests/unit/validate_type/test_validate_type_special.py" = 20
-"tests/unit/test_jsonlines.py" = 19
 "muutils/logger/logger.py" = 18
 "muutils/math/matrix_powers.py" = 18
 "tests/unit/json_serialize/test_util.py" = 18
@@ -117,6 +111,7 @@ total_errors = 2631
 "muutils/logger/log_util.py" = 16
 "muutils/tensor_utils.py" = 16
 "tests/unit/json_serialize/serializable_dataclass/test_methods_no_override.py" = 15
+"tests/unit/json_serialize/test_array.py" = 15
 "tests/unit/nbutils/test_configure_notebook.py" = 14
 "muutils/jsonlines.py" = 13
 "muutils/nbutils/run_notebook_tests.py" = 12
@@ -144,6 +139,7 @@ total_errors = 2631
 "muutils/web/html_to_pdf.py" = 4
 "tests/unit/math/test_matrix_powers_torch.py" = 4
 "tests/unit/misc/test_sequence.py" = 4
+"tests/unit/test_jsonlines.py" = 4
 "tests/unit/test_mlutils.py" = 4
 "muutils/cli/command.py" = 3
 "muutils/json_serialize/array.py" = 3
@@ -156,22 +152,17 @@ total_errors = 2631
 "tests/unit/benchmark_parallel/test_benchmark_demo.py" = 1
 
 [type_errors.ty]
-total_errors = 204
+total_errors = 198
 
 [type_errors.ty.by_type]
 "unknown-argument" = 164
 "unresolved-attribute" = 27
 "invalid-assignment" = 5
-"invalid-argument-type" = 4
-"too-many-positional-arguments" = 3
-"unresolved-import" = 1
+"too-many-positional-arguments" = 2
 
 [type_errors.ty.by_file]
 "tests/unit/json_serialize/serializable_dataclass/test_serializable_dataclass.py" = 134
 "tests/unit/json_serialize/serializable_dataclass/test_methods_no_override.py" = 26
 "tests/unit/json_serialize/test_serializable_field.py" = 22
-"tests/unit/json_serialize/serializable_dataclass/test_sdc_properties_nested.py" = 9
+"tests/unit/json_serialize/serializable_dataclass/test_sdc_properties_nested.py" = 8
 "tests/unit/test_dictmagic.py" = 8
-"tests/unit/benchmark_parallel/benchmark_parallel.py" = 2
-"tests/unit/json_serialize/test_json_serialize.py" = 2
-"tests/unit/benchmark_parallel/test_benchmark_demo.py" = 1

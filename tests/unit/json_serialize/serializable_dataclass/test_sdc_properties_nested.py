@@ -76,7 +76,7 @@ def test_serialize_titled_person():
 
     if SUPPORTS_KW_ONLY:
         with pytest.raises(TypeError):
-            TitledPerson("Jane", "Smith", "Dr.")
+            TitledPerson("Jane", "Smith", "Dr.")  # type: ignore[too-many-positional-arguments]
 
     serialized = instance.serialize()
 

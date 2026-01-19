@@ -248,7 +248,7 @@ def benchmark_run_maybe_parallel(
 
 
 def plot_speedup_by_data_size(
-    df: pd.DataFrame, task_type: str | None = None, save_path: str | None = None
+    df: pd.DataFrame, task_type: str | None = None, save_path: str | Path | None = None
 ):
     """Plot speedup vs data size for different methods."""
     import matplotlib.pyplot as plt  # type: ignore[import-untyped]
@@ -328,7 +328,7 @@ def plot_efficiency_heatmap(df: pd.DataFrame, save_path: str | Path | None = Non
     plt.imshow(pivot_df, aspect="auto", cmap="YlOrRd", vmin=0)
     plt.colorbar(label="Speedup")
     plt.yticks(range(len(pivot_df.index)), [f"{t[0]}-{t[1]}" for t in pivot_df.index])
-    plt.xticks(range(len(pivot_df.columns)), pivot_df.columns, rotation=45)
+    plt.xticks(range(len(pivot_df.columns)), list(pivot_df.columns), rotation=45)
     plt.title("Parallelization Efficiency Heatmap")
     plt.tight_layout()
 

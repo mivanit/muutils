@@ -154,9 +154,11 @@ def test_array_serialization_handlers():
     }
 
     serialized = jser.json_serialize(data_dict)
-    assert isinstance(serialized["array"], dict)
-    assert _FORMAT_KEY in serialized["array"]
-    assert serialized["array"]["shape"] == [4]
+    assert isinstance(serialized, dict)
+    serialized_array = serialized["array"]
+    assert isinstance(serialized_array, dict)
+    assert _FORMAT_KEY in serialized_array
+    assert serialized_array["shape"] == [4]
 
     # Array in a list
     data_list = [
@@ -166,8 +168,10 @@ def test_array_serialization_handlers():
     ]
 
     serialized_list = jser.json_serialize(data_list)
-    assert isinstance(serialized_list[1], dict)
-    assert _FORMAT_KEY in serialized_list[1]
+    assert isinstance(serialized_list, list)
+    serialized_list_item = serialized_list[1]
+    assert isinstance(serialized_list_item, dict)
+    assert _FORMAT_KEY in serialized_list_item
 
     # Test different array modes
     for mode in ["list", "array_list_meta", "array_hex_meta", "array_b64_meta"]:

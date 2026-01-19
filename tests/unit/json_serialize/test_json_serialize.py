@@ -631,7 +631,7 @@ def test_path_tracking():
 def test_JsonSerializer_init_no_positional_args():
     """Test that JsonSerializer raises ValueError on positional arguments."""
     with pytest.raises(ValueError, match="no positional arguments"):
-        JsonSerializer("invalid", "args")
+        JsonSerializer("invalid", "args")  # type: ignore[invalid-argument-type]
 
     # Should work with keyword args
     serializer = JsonSerializer(error_mode=ErrorMode.WARN)

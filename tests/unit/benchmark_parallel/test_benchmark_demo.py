@@ -2,7 +2,7 @@
 
 from pathlib import Path
 
-from benchmark_parallel import io_bound_task, light_cpu_task, main
+from .benchmark_parallel import io_bound_task, light_cpu_task, main
 
 
 def test_main():

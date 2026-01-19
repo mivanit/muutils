@@ -38,8 +38,14 @@ def test_jsonl_load():
     # Verify the data matches
     assert loaded_data == test_data
     assert len(loaded_data) == 4
-    assert loaded_data[0]["name"] == "Alice"
-    assert loaded_data[3]["nested"]["b"] == 2
+    loaded_item_0 = loaded_data[0]
+    assert isinstance(loaded_item_0, dict)
+    assert loaded_item_0["name"] == "Alice"
+    loaded_item_3 = loaded_data[3]
+    assert isinstance(loaded_item_3, dict)
+    loaded_item_3_nested = loaded_item_3["nested"]
+    assert isinstance(loaded_item_3_nested, dict)
+    assert loaded_item_3_nested["b"] == 2
 
 
 def test_jsonl_write():

@@ -4,7 +4,6 @@ import torch
 
 from muutils.json_serialize import JsonSerializer
 from muutils.json_serialize.array import (
-    ArrayMode,
     ArrayModeWithMeta,
     arr_metadata,
     array_n_elements,

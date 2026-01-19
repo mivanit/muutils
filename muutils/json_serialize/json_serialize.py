@@ -195,7 +195,9 @@ DEFAULT_HANDLERS: MonoTuple[SerializerHandler] = tuple(BASE_HANDLERS) + (
     ),
     SerializerHandler(
         check=lambda self, obj, path: str(type(obj)) == "<class 'numpy.ndarray'>",
-        serialize_func=lambda self, obj, path: cast(JSONitem, serialize_array(self, obj, path=path)),
+        serialize_func=lambda self, obj, path: cast(
+            JSONitem, serialize_array(self, obj, path=path)
+        ),
         uid="numpy.ndarray",
         desc="numpy arrays",
     ),

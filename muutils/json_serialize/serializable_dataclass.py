@@ -86,7 +86,10 @@ else:
         try:
             from typing_extensions import dataclass_transform, Self
         except Exception:
-            from muutils.json_serialize.dataclass_transform_mock import dataclass_transform
+            from muutils.json_serialize.dataclass_transform_mock import (
+                dataclass_transform,
+            )
+
             Self = TypeVar("Self")
 
 T = TypeVar("T")

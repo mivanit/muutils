@@ -126,7 +126,9 @@ class TestArray:
         assert np.array_equal(loaded_array, self.array_zero_dim)
 
 
-@pytest.mark.parametrize("mode", ["array_list_meta", "array_hex_meta", "array_b64_meta"])
+@pytest.mark.parametrize(
+    "mode", ["array_list_meta", "array_hex_meta", "array_b64_meta"]
+)
 def test_array_shape_dtype_preservation(mode: ArrayModeWithMeta):
     """Test that various shapes and dtypes are preserved through serialization."""
     # Test different shapes
@@ -155,15 +157,9 @@ def test_array_shape_dtype_preservation(mode: ArrayModeWithMeta):
     for arr, description in shapes_and_arrays:
         serialized = serialize_array(jser, arr, "test", array_mode=mode)
         loaded = load_array(serialized)
-        assert loaded.shape == arr.shape, (
-            f"Shape mismatch for {description} in {mode}"
-        )
-        assert loaded.dtype == arr.dtype, (
-            f"Dtype mismatch for {description} in {mode}"
-        )
-        assert np.array_equal(loaded, arr), (
-            f"Data mismatch for {description} in {mode}"
-        )
+        assert loaded.shape == arr.shape, f"Shape mismatch for {description} in {mode}"
+        assert loaded.dtype == arr.dtype, f"Dtype mismatch for {description} in {mode}"
+        assert np.array_equal(loaded, arr), f"Data mismatch for {description} in {mode}"
 
     # Test dtypes preservation
     for arr, expected_dtype in dtype_tests:
@@ -218,7 +214,9 @@ def test_array_serialization_handlers():
             assert _FORMAT_KEY in result
 
 
-@pytest.mark.parametrize("mode", ["array_list_meta", "array_hex_meta", "array_b64_meta"])
+@pytest.mark.parametrize(
+    "mode", ["array_list_meta", "array_hex_meta", "array_b64_meta"]
+)
 def test_array_edge_cases(mode: ArrayModeWithMeta):
     """Test edge cases: empty arrays, unusual dtypes, and boundary conditions."""
     jser = JsonSerializer(array_mode="array_list_meta")

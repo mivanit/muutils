@@ -242,5 +242,10 @@ def test_mixed_numpy_torch():
     assert _FORMAT_KEY in serialized["torch_tensor"]
 
     # Check format strings identify the type
-    assert "numpy" in serialized["numpy_array"][_FORMAT_KEY]  # pyright: ignore[reportOperatorIssue]
-    assert "torch" in serialized["torch_tensor"][_FORMAT_KEY]  # pyright: ignore[reportOperatorIssue]
+    numpy_format = serialized["numpy_array"][_FORMAT_KEY]
+    assert isinstance(numpy_format, str)
+    assert "numpy" in numpy_format
+
+    torch_format = serialized["torch_tensor"][_FORMAT_KEY]
+    assert isinstance(torch_format, str)
+    assert "torch" in torch_format

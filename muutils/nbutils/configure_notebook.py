@@ -190,7 +190,7 @@ def setup_plots(
 
 
 def configure_notebook(
-    *args,
+    *args: typing.Any,
     seed: int = 42,
     device: typing.Any = None,  # this can be a string, torch.device, or None
     dark_mode: bool = True,

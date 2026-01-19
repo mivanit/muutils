@@ -12,7 +12,7 @@ except ImportError:
     )
 
 
-def mm(graph):
+def mm(graph: str) -> None:
     """for plotting mermaid.js diagrams"""
     graphbytes = graph.encode("ascii")
     base64_bytes = base64.b64encode(graphbytes)

@@ -25,3 +25,4 @@
 
 - make sure all type hints are python>=3.8 compatible
 - always err on the side of STRICTER type hints!
+- try to avoid breaking changes. check with the user before making breaking changes. if breaking changes are necessary, and the user agrees, make sure to document them properly and add them to CHANGELOG.md

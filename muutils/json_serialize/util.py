@@ -228,8 +228,8 @@ def dc_eq(
         if `False`, will attempt to compare the fields.
     - `except_when_field_mismatch: bool`
         only relevant if `except_when_class_mismatch` is `False` and `false_when_class_mismatch` is `False`.
-        if `True`, will throw `TypeError` if the fields are different.
-        (default: `True`)
+        if `True`, will throw `AttributeError` if the fields are different.
+        (default: `False`)
 
     # Returns:
     - `bool`: True if the dataclasses are equal, False otherwise
@@ -238,34 +238,40 @@ def dc_eq(
     - `TypeError`: if the dataclasses are of different classes
     - `AttributeError`: if the dataclasses have different fields
 
-    # TODO: after "except when class mismatch" is False, shouldn't we then go to "field keys match"?
     ```
-              [START]
-                 ▼
-           ┌───────────┐  ┌─────────┐
-           │dc1 is dc2?├─►│ classes │
-           └──┬────────┘No│ match?  │
-      ────    │           ├─────────┤
-     (True)◄──┘Yes        │No       │Yes
-      ────                ▼         ▼
-          ┌────────────────┐ ┌────────────┐
-          │ except when    │ │ fields keys│
-          │ class mismatch?│ │ match?     │
-          ├───────────┬────┘ ├───────┬────┘
-          │Yes        │No    │No     │Yes
-          ▼           ▼      ▼       ▼
-     ───────────  ┌──────────┐  ┌────────┐
-    { raise     } │ except   │  │ field  │
-    { TypeError } │ when     │  │ values │
-     ───────────  │ field    │  │ match? │
-                  │ mismatch?│  ├────┬───┘
-                  ├───────┬──┘  │    │Yes
-                  │Yes    │No   │No  ▼
-                  ▼       ▼     │   ────
-     ───────────────     ─────  │  (True)
-    { raise         }   (False)◄┘   ────
-    { AttributeError}    ─────
-     ───────────────
+    [START]
+       ▼
+    ┌─────────────┐
+    │ dc1 is dc2? │───Yes───► (True)
+    └──────┬──────┘
+           │No
+           ▼
+    ┌───────────────┐
+    │ classes match?│───Yes───► [compare field values] ───► (True/False)
+    └──────┬────────┘
+           │No
+           ▼
+    ┌────────────────────────────┐
+    │ except_when_class_mismatch?│───Yes───► { raise TypeError }
+    └─────────────┬──────────────┘
+                  │No
+                  ▼
+    ┌────────────────────────────┐
+    │ false_when_class_mismatch? │───Yes───► (False)
+    └─────────────┬──────────────┘
+                  │No
+                  ▼
+    ┌────────────────────────────┐
+    │ except_when_field_mismatch?│───No────► [compare field values]
+    └─────────────┬──────────────┘
+                  │Yes
+                  ▼
+    ┌───────────────┐
+    │ fields match? │───Yes───► [compare field values]
+    └──────┬────────┘
+           │No
+           ▼
+    { raise AttributeError }
     ```
 
     """

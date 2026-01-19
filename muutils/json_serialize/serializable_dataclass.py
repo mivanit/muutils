@@ -92,7 +92,7 @@ else:
 
             Self = TypeVar("Self")
 
-T = TypeVar("T")
+T_SerializeableDataclass = TypeVar("T_SerializeableDataclass", bound="SerializableDataclass")
 
 
 class CantGetTypeHintsWarning(UserWarning):
@@ -111,7 +111,7 @@ _zanj_loading_needs_import: bool = True
 "flag to keep track of if we have successfully imported ZANJ"
 
 
-def zanj_register_loader_serializable_dataclass(cls: typing.Type[T]):
+def zanj_register_loader_serializable_dataclass(cls: typing.Type[T_SerializeableDataclass]):
     """Register a serializable dataclass with the ZANJ import
 
     this allows `ZANJ().read()` to load the class and not just return plain dicts
@@ -516,12 +516,12 @@ class SerializableDataclass(abc.ABC):
 # cache this so we don't have to keep getting it
 # TODO: are the types hashable? does this even make sense?
 @functools.lru_cache(typed=True)
-def get_cls_type_hints_cached(cls: Type[T]) -> dict[str, Any]:
+def get_cls_type_hints_cached(cls: Type[T_SerializeableDataclass]) -> dict[str, Any]:
     "cached typing.get_type_hints for a class"
     return typing.get_type_hints(cls)
 
 
-def get_cls_type_hints(cls: Type[T]) -> dict[str, Any]:
+def get_cls_type_hints(cls: Type[T_SerializeableDataclass]) -> dict[str, Any]:
     "helper function to get type hints for a class"
     cls_type_hints: dict[str, Any]
     try:
@@ -596,8 +596,8 @@ def serializable_dataclass(
     on_typecheck_error: ErrorMode = _DEFAULT_ON_TYPECHECK_ERROR,
     on_typecheck_mismatch: ErrorMode = _DEFAULT_ON_TYPECHECK_MISMATCH,
     methods_no_override: list[str] | None = None,
-    **kwargs,
-):
+    **kwargs: Any,
+) -> Any:
     """decorator to make a dataclass serializable. **must also make it inherit from `SerializableDataclass`!!**
 
     types will be validated (like pydantic) unless `on_typecheck_mismatch` is set to `ErrorMode.IGNORE`
@@ -691,7 +691,7 @@ def serializable_dataclass(
     else:
         _properties_to_serialize = properties_to_serialize
 
-    def wrap(cls: Type[T]) -> Type[T]:
+    def wrap(cls: Type[T_SerializeableDataclass]) -> Type[T_SerializeableDataclass]:
         # Modify the __annotations__ dictionary to replace regular fields with SerializableField
         for field_name, field_type in cls.__annotations__.items():
             field_value = getattr(cls, field_name, None)
@@ -733,7 +733,7 @@ def serializable_dataclass(
         # define `serialize` func
         # done locally since it depends on args to the decorator
         # ======================================================================
-        def serialize(self) -> dict[str, Any]:
+        def serialize(self: Any) -> dict[str, Any]:
             result: dict[str, Any] = {
                 _FORMAT_KEY: f"{self.__class__.__name__}(SerializableDataclass)"
             }
@@ -797,7 +797,7 @@ def serializable_dataclass(
         # ======================================================================
         # mypy thinks this isnt a classmethod
         @classmethod  # type: ignore[misc]
-        def load(cls, data: dict[str, Any] | T) -> T:
+        def load(cls: type[T_SerializeableDataclass], data: dict[str, Any] | T_SerializeableDataclass) -> T_SerializeableDataclass:
             # HACK: this is kind of ugly, but it fixes a lot of issues for when we do recursive loading with ZANJ
             if isinstance(data, cls):
                 return data
@@ -812,7 +812,9 @@ def serializable_dataclass(
             ctor_kwargs: dict[str, Any] = dict()
 
             # iterate over the fields of the class
-            for field in dataclasses.fields(cls):
+            # mypy doesn't recognize @dataclass_transform for dataclasses.fields()
+            # https://github.com/python/mypy/issues/16241
+            for field in dataclasses.fields(cls):  # type: ignore[arg-type]
                 # check if the field is a SerializableField
                 assert isinstance(field, SerializableField), (
                     f"Field '{field.name}' on class {cls.__name__} is not a SerializableField, but a {type(field)}. this state should be inaccessible, please report this bug!\nhttps://github.com/mivanit/muutils/issues/new"
@@ -853,7 +855,7 @@ def serializable_dataclass(
                     ctor_kwargs[field.name] = value
 
             # create a new instance of the class with the constructor kwargs
-            output: cls = cls(**ctor_kwargs)
+            output: T_SerializeableDataclass = cls(**ctor_kwargs)
 
             # validate the types of the fields if needed
             if on_typecheck_mismatch != ErrorMode.IGNORE:
@@ -903,14 +905,14 @@ def serializable_dataclass(
         # mypy says "Type cannot be declared in assignment to non-self attribute" so thats why I've left the hints in the comments
         if "serialize" not in _methods_no_override:
             # type is `Callable[[T], dict]`
-            cls.serialize = serialize  # type: ignore[attr-defined]
+            cls.serialize = serialize  # type: ignore[attr-defined, method-assign]
         if "load" not in _methods_no_override:
             # type is `Callable[[dict], T]`
-            cls.load = load  # type: ignore[attr-defined]
+            cls.load = load  # type: ignore[attr-defined, method-assign, assignment]
 
         if "validate_field_type" not in _methods_no_override:
             # type is `Callable[[T, ErrorMode], bool]`
-            cls.validate_fields_types = SerializableDataclass__validate_fields_types  # type: ignore[attr-defined]
+            cls.validate_fields_types = SerializableDataclass__validate_fields_types  # type: ignore[attr-defined, method-assign]
 
         if "__eq__" not in _methods_no_override:
             # type is `Callable[[T, T], bool]`

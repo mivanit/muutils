@@ -546,10 +546,15 @@ def test_SerializerHandler_serialize():
     assert metadata["desc"] == "Test handler description"
 
     # Check that code and doc are included
-    assert "code" in metadata["check"]
-    assert "doc" in metadata["check"]
-    assert "code" in metadata["serialize_func"]
-    assert "doc" in metadata["serialize_func"]
+    check_data = metadata["check"]
+    assert isinstance(check_data, dict)
+    assert "code" in check_data
+    assert "doc" in check_data
+
+    serialize_func_data = metadata["serialize_func"]
+    assert isinstance(serialize_func_data, dict)
+    assert "code" in serialize_func_data
+    assert "doc" in serialize_func_data
 
 
 # ============================================================================
@@ -631,7 +636,7 @@ def test_path_tracking():
 def test_JsonSerializer_init_no_positional_args():
     """Test that JsonSerializer raises ValueError on positional arguments."""
     with pytest.raises(ValueError, match="no positional arguments"):
-        JsonSerializer("invalid", "args")  # type: ignore[invalid-argument-type]
+        JsonSerializer("invalid", "args")  # type: ignore[arg-type]
 
     # Should work with keyword args
     serializer = JsonSerializer(error_mode=ErrorMode.WARN)

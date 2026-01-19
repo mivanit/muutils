@@ -52,6 +52,9 @@ class TypeCheckResult:
     type_checker: Literal["mypy", "basedpyright", "ty"]
     by_type: Dict[str, int] = field(default_factory=lambda: defaultdict(int))
     by_file: Dict[str, int] = field(default_factory=lambda: defaultdict(int))
+    # Separate tracking for warnings (used by basedpyright)
+    warnings_by_type: Dict[str, int] = field(default_factory=lambda: defaultdict(int))
+    warnings_by_file: Dict[str, int] = field(default_factory=lambda: defaultdict(int))
 
     @property
     def total_errors(self) -> int:
@@ -78,18 +81,44 @@ class TypeCheckResult:
             key=lambda x: x[1],
             reverse=True,
         )
+        sorted_warnings_by_type: List[Tuple[str, int]] = sorted(
+            self.warnings_by_type.items(),
+            key=lambda x: x[1],
+            reverse=True,
+        )
+        sorted_warnings_by_file: List[Tuple[str, int]] = sorted(
+            self.warnings_by_file.items(),
+            key=lambda x: x[1],
+            reverse=True,
+        )
 
         # Apply top_n limit if specified
         if top_n is not None:
             sorted_by_type = sorted_by_type[:top_n]
             sorted_by_file = sorted_by_file[:top_n]
+            sorted_warnings_by_type = sorted_warnings_by_type[:top_n]
+            sorted_warnings_by_file = sorted_warnings_by_file[:top_n]
 
         # Create new instance with filtered data (dicts maintain insertion order in Python 3.7+)
         result: TypeCheckResult = TypeCheckResult(type_checker=self.type_checker)
         result.by_type = dict(sorted_by_type)
         result.by_file = dict(sorted_by_file)
+        result.warnings_by_type = dict(sorted_warnings_by_type)
+        result.warnings_by_file = dict(sorted_warnings_by_file)
 
         return result
+
+    @property
+    def total_warnings(self) -> int:
+        "total number of warnings across all types"
+        total_by_type: int = sum(self.warnings_by_type.values())
+        total_by_file: int = sum(self.warnings_by_file.values())
+
+        if total_by_type != total_by_file:
+            err_msg: str = f"Warning count mismatch for {self.type_checker}: by_type={total_by_type}, by_file={total_by_file}"
+            raise ValueError(err_msg)
+
+        return total_by_type
 
     def to_toml(self) -> str:
         "format as TOML-like output"
@@ -121,6 +150,30 @@ class TypeCheckResult:
             # Always quote file paths
             lines.append(f'"{file_path}" = {count}')
 
+        # Add warnings sections if there are any warnings
+        if self.warnings_by_type or self.warnings_by_file:
+            lines.append("")
+            lines.append(f"[type_warnings.{self.type_checker}]")
+            try:
+                lines.append(f"total_warnings = {self.total_warnings}")
+            except ValueError:
+                lines.append(f"total_warnings_by_type = {sum(self.warnings_by_type.values())}")
+                lines.append(f"total_warnings_by_file = {sum(self.warnings_by_file.values())}")
+            lines.append("")
+
+            # warnings by_type section
+            lines.append(f"[type_warnings.{self.type_checker}.by_type]")
+            warning_type: str
+            for warning_type, count in self.warnings_by_type.items():
+                lines.append(f'"{warning_type}" = {count}')
+
+            lines.append("")
+
+            # warnings by_file section
+            lines.append(f"[type_warnings.{self.type_checker}.by_file]")
+            for file_path, count in self.warnings_by_file.items():
+                lines.append(f'"{file_path}" = {count}')
+
         return "\n".join(lines)
 
 
@@ -147,25 +200,53 @@ def parse_basedpyright(content: str) -> TypeCheckResult:
 
     # Pattern for file paths (lines that start with /)
     # Pattern for errors: indented line with - error/warning: message (code)
+    # Some diagnostics span multiple lines with (reportCode) on a continuation line
     current_file: str = ""
+    pending_diagnostic_type: str | None = None  # "error" or "warning" waiting for code
 
     line: str
     for line in content.splitlines():
-        # Check if this is a file path line
+        # Check if this is a file path line (starts with / and no leading space)
         if line and not line.startswith(" ") and line.startswith("/"):
             current_file = strip_cwd(line.strip())
-        # Check if this is an error/warning line
+            pending_diagnostic_type = None
+
         elif line.strip() and current_file:
-            # Match pattern like: "  path:line:col - warning: message (reportCode)"
+            # Try to match single-line format: "  path:line:col - warning: message (reportCode)"
             match: re.Match[str] | None = re.search(
                 r"\s+.+:\d+:\d+ - (error|warning): .+ \((\w+)\)", line
             )
             if match:
-                # TODO: handle warnings vs errors
-                _error_type: str = match.group(1)
+                diagnostic_type: str = match.group(1)
                 error_code: str = match.group(2)
-                result.by_type[error_code] += 1
-                result.by_file[current_file] += 1
+                if diagnostic_type == "warning":
+                    result.warnings_by_type[error_code] += 1
+                    result.warnings_by_file[current_file] += 1
+                else:
+                    result.by_type[error_code] += 1
+                    result.by_file[current_file] += 1
+                pending_diagnostic_type = None
+            else:
+                # Check if this is a diagnostic line without code (multi-line format start)
+                diag_match: re.Match[str] | None = re.search(
+                    r"\s+.+:\d+:\d+ - (error|warning): ", line
+                )
+                if diag_match:
+                    pending_diagnostic_type = diag_match.group(1)
+                # Check if this is a continuation line with the code
+                elif pending_diagnostic_type:
+                    code_match: re.Match[str] | None = re.search(
+                        r"\((\w+)\)\s*$", line
+                    )
+                    if code_match:
+                        error_code = code_match.group(1)
+                        if pending_diagnostic_type == "warning":
+                            result.warnings_by_type[error_code] += 1
+                            result.warnings_by_file[current_file] += 1
+                        else:
+                            result.by_type[error_code] += 1
+                            result.by_file[current_file] += 1
+                        pending_diagnostic_type = None
 
     return result
 

@@ -228,7 +228,7 @@ class Logger(SimpleLogger):
         if not isinstance(msg, typing.Mapping):
             msg_dict = {"_msg": msg}
         else:
-            msg_dict = dict(msg)
+            msg_dict = dict(typing.cast(typing.Mapping[str, Any], msg))
 
         # level+stream metadata
         if lvl is not None:

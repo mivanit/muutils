@@ -1,5 +1,5 @@
 from collections import namedtuple
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import NamedTuple
 
 import pytest
@@ -248,15 +248,72 @@ def test_dc_eq():
     assert dc_eq(c1, c2) is True
     assert dc_eq(c1, c3) is False
 
-    # Test except_when_field_mismatch with different classes but same fields
+    # Test except_when_field_mismatch with different classes and different fields
+    # Must set false_when_class_mismatch=False to reach the field check
+    with pytest.raises(AttributeError, match="different fields"):
+        dc_eq(p1, p3d, except_when_field_mismatch=True, false_when_class_mismatch=False)
+
+    # Test except_when_field_mismatch with different classes but SAME fields - should NOT raise
     @dataclass
     class Point2D:
         x: int
         y: int
 
-    # Different classes but same fields - should raise with except_when_field_mismatch
-    with pytest.raises(AttributeError):
-        dc_eq(p1, p3d, except_when_field_mismatch=True)
+    p2d = Point2D(1, 2)
+    # Same fields, different classes, same values - should return True
+    result = dc_eq(
+        p1, p2d, except_when_field_mismatch=True, false_when_class_mismatch=False
+    )
+    assert result is True
+
+    # Different classes, same fields, different values - should return False
+    p2d_diff = Point2D(1, 99)
+    assert (
+        dc_eq(p2d_diff, p1, false_when_class_mismatch=False, except_when_field_mismatch=True)
+        is False
+    )
+
+    # Test parameter precedence: except_when_class_mismatch takes precedence over false_when_class_mismatch
+    with pytest.raises(TypeError, match="Cannot compare dataclasses of different classes"):
+        dc_eq(p1, p3d, except_when_class_mismatch=True, false_when_class_mismatch=True)
+
+    # Test parameter precedence: except_when_class_mismatch takes precedence over except_when_field_mismatch
+    with pytest.raises(TypeError, match="Cannot compare dataclasses of different classes"):
+        dc_eq(p1, p3d, except_when_class_mismatch=True, except_when_field_mismatch=True)
+
+    # Test with empty dataclasses
+    @dataclass
+    class Empty:
+        pass
+
+    @dataclass
+    class AlsoEmpty:
+        pass
+
+    e1, e2 = Empty(), Empty()
+    assert dc_eq(e1, e2) is True
+
+    # Different empty classes - same fields (none), should be equal when allowing cross-class comparison
+    ae = AlsoEmpty()
+    assert dc_eq(e1, ae, false_when_class_mismatch=False) is True
+
+    # Test with compare=False fields - these should be ignored in comparison
+    @dataclass
+    class WithIgnored:
+        x: int
+        ignored: int = field(compare=False)
+
+    w1 = WithIgnored(1, 100)
+    w2 = WithIgnored(1, 999)  # ignored field differs
+    assert dc_eq(w1, w2) is True  # Should still be equal since ignored field is not compared
+
+    # Test with non-dataclass objects - should raise TypeError
+    class NotADataclass:
+        def __init__(self, x: int):
+            self.x = x
+
+    with pytest.raises(TypeError):
+        dc_eq(NotADataclass(1), NotADataclass(1))
 
 
 def test_FORMAT_KEY():

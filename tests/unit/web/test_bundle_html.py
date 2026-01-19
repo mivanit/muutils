@@ -232,6 +232,7 @@ def test_tag_attr_override(site: dict[str, Path]) -> None:
 def test_cli_smoke(tmp_path: Path, site: dict[str, Path]) -> None:
     html_copy = tmp_path / "page.html"
     html_copy.write_text(site["html"].read_text())
+    assert bundle_html.__file__ is not None
     exe = Path(bundle_html.__file__).resolve()
     subprocess.check_call(
         [sys.executable, str(exe), str(html_copy), "--output", str(html_copy)]
@@ -470,6 +471,7 @@ def test_fragment_in_src_kept(tiny_site: dict[str, Path]) -> None:
 def test_cli_overwrite(tmp_path: Path, tiny_site: dict[str, Path]) -> None:
     copy = tmp_path / "page.html"
     copy.write_text(tiny_site["html"].read_text())
+    assert bundle_html.__file__ is not None
     exe = Path(bundle_html.__file__).resolve()
     subprocess.check_call([sys.executable, str(exe), str(copy), "--output", str(copy)])
     res = copy.read_text()

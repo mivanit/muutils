@@ -31,7 +31,7 @@ OutputType = TypeVar("OutputType")
 class ProgressBarFunction(Protocol):
     "a protocol for a progress bar function"
 
-    def __call__(self, iterable: Iterable, **kwargs: Any) -> Iterable: ...
+    def __call__(self, iterable: Iterable[Any], **kwargs: Any) -> Iterable[Any]: ...
 
 
 ProgressBarOption = Literal["tqdm", "spinner", "none", None]
@@ -52,7 +52,7 @@ except ImportError:
     DEFAULT_PBAR_FN = "spinner"
 
 
-def spinner_fn_wrap(x: Iterable, **kwargs) -> List:
+def spinner_fn_wrap(x: Iterable[Any], **kwargs: Any) -> List[Any]:
     "spinner wrapper"
     spinnercontext_allowed_kwargs: set[str] = get_fn_allowed_kwargs(
         SpinnerContext.__init__
@@ -72,7 +72,7 @@ def spinner_fn_wrap(x: Iterable, **kwargs) -> List:
     return output
 
 
-def map_kwargs_for_tqdm(kwargs: dict) -> dict:
+def map_kwargs_for_tqdm(kwargs: Dict[str, Any]) -> Dict[str, Any]:
     "map kwargs for tqdm, cant wrap because the pbar dissapears?"
     tqdm_allowed_kwargs: set[str] = get_fn_allowed_kwargs(tqdm.tqdm.__init__)
     mapped_kwargs: dict = {k: v for k, v in kwargs.items() if k in tqdm_allowed_kwargs}
@@ -86,7 +86,7 @@ def map_kwargs_for_tqdm(kwargs: dict) -> dict:
     return mapped_kwargs
 
 
-def no_progress_fn_wrap(x: Iterable, **kwargs) -> Iterable:
+def no_progress_fn_wrap(x: Iterable[Any], **kwargs: Any) -> Iterable[Any]:
     "fallback to no progress bar"
     return x
 
@@ -94,8 +94,8 @@ def no_progress_fn_wrap(x: Iterable, **kwargs) -> Iterable:
 def set_up_progress_bar_fn(
     pbar: Union[ProgressBarFunction, ProgressBarOption],
     pbar_kwargs: Optional[Dict[str, Any]] = None,
-    **extra_kwargs,
-) -> Tuple[ProgressBarFunction, dict]:
+    **extra_kwargs: Any,
+) -> Tuple[ProgressBarFunction, Dict[str, Any]]:
     """set up the progress bar function and its kwargs
 
     # Parameters:

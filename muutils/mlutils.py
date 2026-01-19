@@ -9,7 +9,7 @@ import typing
 import warnings
 from itertools import islice
 from pathlib import Path
-from typing import Any, Callable, Optional, TypeVar, Union
+from typing import Any, Callable, Generator, Iterable, Optional, TypeVar, Union
 
 ARRAY_IMPORTS: bool
 try:
@@ -97,7 +97,10 @@ def set_reproducibility(seed: int = DEFAULT_SEED):
         os.environ["CUBLAS_WORKSPACE_CONFIG"] = ":4096:8"
 
 
-def chunks(it, chunk_size):
+T = TypeVar("T")
+
+
+def chunks(it: Iterable[T], chunk_size: int) -> Generator[list[T], Any, None]:
     """Yield successive chunks from an iterator."""
     # https://stackoverflow.com/a/61435714
     iterator = iter(it)

@@ -73,7 +73,7 @@ class SimpleLogger:
         if not isinstance(msg, typing.Mapping):
             msg_dict = {"_msg": msg}
         else:
-            msg_dict = dict(msg)
+            msg_dict = dict(typing.cast(typing.Mapping[str, Any], msg))
 
         if self._timestamp:
             msg_dict["_timestamp"] = time.time()

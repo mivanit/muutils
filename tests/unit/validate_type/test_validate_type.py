@@ -82,7 +82,7 @@ def test_validate_type_any(value):
         ("hello", Union[int, str], True),
         (3.14, Union[int, float], True),
         (True, Union[int, str], True),
-        (None, Union[int, type(None)], True),
+        (None, Union[int, None], True),
         (None, Union[int, str], False),
         (5, Union[int, str], True),
         (5.0, Union[int, str], False),

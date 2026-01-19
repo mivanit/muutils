@@ -59,7 +59,7 @@ class DBGListDefaultsType(typing.TypedDict):
 
 
 class DBGTensorArraySummaryDefaultsType(typing.TypedDict):
-    fmt: str
+    fmt: typing.Literal["unicode", "latex", "ascii"]
     precision: int
     stats: bool
     shape: bool
@@ -239,7 +239,8 @@ DBG_TENSOR_VAL_JOINER: str = ": "
 def tensor_info(tensor: typing.Any) -> str:
     from muutils.tensor_info import array_summary
 
-    return array_summary(tensor, as_list=False, **DBG_TENSOR_ARRAY_SUMMARY_DEFAULTS)
+    # mypy can't match overloads with **TypedDict spread
+    return array_summary(tensor, as_list=False, **DBG_TENSOR_ARRAY_SUMMARY_DEFAULTS)  # type: ignore[call-overload]
 
 
 DBG_DICT_DEFAULTS: DBGDictDefaultsType = {

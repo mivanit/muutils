@@ -116,7 +116,7 @@ def test_from_Field():
     """Test converting a dataclasses.Field to SerializableField."""
     # Create a standard dataclasses.Field
     dc_field: dataclasses.Field[int] = field(  # type: ignore[assignment]
-        default=42,
+        default=42,  # type: ignore[arg-type]
         init=True,
         repr=True,
         hash=None,
@@ -140,9 +140,9 @@ def test_from_Field():
     assert sf.deserialize_fn is None
 
     # Test with default_factory and init=False to avoid init=True, serialize=False error
-    dc_field2: dataclasses.Field[list[Any]] = field(
-        default_factory=list, repr=True, init=True
-    )  # type: ignore[assignment]
+    dc_field2: dataclasses.Field[list[Any]] = field(  # type: ignore[assignment]
+        default_factory=list, repr=True, init=True  # type: ignore[arg-type]
+    )
     sf2 = SerializableField.from_Field(dc_field2)
     assert sf2.default_factory == list  # noqa: E721
     assert sf2.default is dataclasses.MISSING

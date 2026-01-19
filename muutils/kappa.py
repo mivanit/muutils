@@ -34,15 +34,15 @@ class Kappa(Mapping[_kappa_K, _kappa_V]):
             )
         )
 
-    def __getitem__(self, x) -> _kappa_V:
+    def __getitem__(self, x: _kappa_K) -> _kappa_V:
         return self.func_getitem(x)
 
-    def __iter__(self):
+    def __iter__(self) -> None:  # type: ignore[override]
         raise NotImplementedError(
             "This method is not implemented for Kappa, we don't know the valid inputs"
         )
 
-    def __len__(self):
+    def __len__(self) -> int:
         raise NotImplementedError(
             "This method is not implemented for Kappa, no idea how many valid inputs there are"
         )

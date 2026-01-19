@@ -119,7 +119,7 @@ def validate_kwarg(
         func: Callable[FuncParams, ReturnType],
     ) -> Callable[FuncParams, ReturnType]:
         @functools.wraps(func)
-        def wrapper(*args: FuncParams.args, **kwargs: FuncParams.kwargs) -> ReturnType:
+        def wrapper(*args: FuncParams.args, **kwargs: FuncParams.kwargs) -> ReturnType:  # pyright: ignore[reportUnknownParameterType]
             if kwarg_name in kwargs:
                 value: Any = kwargs[kwarg_name]
                 if not validator(value):
@@ -179,7 +179,7 @@ def replace_kwarg(
         func: Callable[FuncParams, ReturnType],
     ) -> Callable[FuncParams, ReturnType]:
         @functools.wraps(func)
-        def wrapper(*args: FuncParams.args, **kwargs: FuncParams.kwargs) -> ReturnType:
+        def wrapper(*args: FuncParams.args, **kwargs: FuncParams.kwargs) -> ReturnType:  # pyright: ignore[reportUnknownParameterType]
             if kwarg_name in kwargs:
                 # TODO: no way to type hint this, I think
                 if check(kwargs[kwarg_name]):  # type: ignore[arg-type]
@@ -225,7 +225,7 @@ LambdaArgs = TypeVarTuple("LambdaArgs")
 LambdaArgsTypes = TypeVar("LambdaArgsTypes", bound=Tuple[type, ...])
 
 
-def typed_lambda(
+def typed_lambda(  # pyright: ignore[reportUnknownParameterType]
     fn: Callable[[Unpack[LambdaArgs]], ReturnType],
     in_types: LambdaArgsTypes,
     out_type: type[ReturnType],
@@ -271,7 +271,7 @@ def typed_lambda(
     annotations["return"] = out_type
 
     @functools.wraps(fn)
-    def wrapped(*args: Unpack[LambdaArgs]) -> ReturnType:
+    def wrapped(*args: Unpack[LambdaArgs]) -> ReturnType:  # pyright: ignore[reportUnknownParameterType]
         return fn(*args)
 
     wrapped.__annotations__ = annotations

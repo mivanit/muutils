@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import TypeVar
+from typing import Any, TypeVar
 from muutils.jsonlines import jsonl_load_log
 
 T_StreamValue = TypeVar("T_StreamValue")
@@ -16,10 +16,10 @@ def get_any_from_stream(
     raise KeyError(f"key '{key}' not found in stream")
 
 
-def gather_log(file: str) -> dict[str, list[dict]]:
+def gather_log(file: str) -> dict[str, list[dict[str, Any]]]:
     """gathers and sorts all streams from a log"""
-    data: list[dict] = jsonl_load_log(file)
-    output: dict[str, list[dict]] = dict()
+    data: list[dict[str, Any]] = jsonl_load_log(file)
+    output: dict[str, list[dict[str, Any]]] = dict()
 
     for item in data:
         stream: str = item.get("_stream", "default")
@@ -33,11 +33,11 @@ def gather_log(file: str) -> dict[str, list[dict]]:
 def gather_stream(
     file: str,
     stream: str,
-) -> list[dict]:
+) -> list[dict[str, Any]]:
     """gets all entries from a specific stream in a log file"""
-    data: list[dict] = jsonl_load_log(file)
+    data: list[dict[str, Any]] = jsonl_load_log(file)
 
-    output: list[dict] = list()
+    output: list[dict[str, Any]] = list()
 
     for item in data:
         # select for the stream
@@ -51,7 +51,7 @@ def gather_val(
     stream: str,
     keys: tuple[str, ...],
     allow_skip: bool = True,
-) -> list[list]:
+) -> list[list[Any]]:
     """gather specific keys from a specific stream in a log file
 
     example:
@@ -70,9 +70,9 @@ def gather_val(
     ```
 
     """
-    data: list[dict] = jsonl_load_log(file)
+    data: list[dict[str, Any]] = jsonl_load_log(file)
 
-    output: list[list] = list()
+    output: list[list[Any]] = list()
 
     for item in data:
         # select for the stream

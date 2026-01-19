@@ -64,7 +64,7 @@ class SimpleLogger:
                 assert log_path is not None
                 self._log_file_handle = open(log_path, "w", encoding="utf-8")
 
-    def log(self, msg: JSONitem, console_print: bool = False, **kwargs):
+    def log(self, msg: JSONitem, *, console_print: bool = False, **kwargs: Any) -> None:
         """log a message to the log file, and optionally to the console"""
         if console_print:
             print(msg)

@@ -5,6 +5,7 @@ import torch
 from muutils.json_serialize import JsonSerializer
 from muutils.json_serialize.array import (
     ArrayMode,
+    ArrayModeWithMeta,
     arr_metadata,
     array_n_elements,
     load_array,
@@ -15,7 +16,7 @@ from muutils.json_serialize.types import _FORMAT_KEY  # pyright: ignore[reportPr
 # pylint: disable=missing-class-docstring
 
 
-_WITH_META_ARRAY_MODES: list[ArrayMode] = [
+_WITH_META_ARRAY_MODES: list[ArrayModeWithMeta] = [
     "array_list_meta",
     "array_hex_meta",
     "array_b64_meta",

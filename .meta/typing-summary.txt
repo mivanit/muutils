@@ -1,7 +1,7 @@
 # Showing all errors
 
 # mypy: Found 22 errors in 5 files (checked 117 source files)
-# basedpyright: 485 errors, 3280 warnings, 0 notes
+# basedpyright: 474 errors, 3219 warnings, 0 notes
 # ty: Found 23 diagnostics
 
 [type_errors.mypy]
@@ -22,15 +22,15 @@ total_errors = 22
 "muutils/logger/logger.py" = 1
 
 [type_errors.basedpyright]
-total_errors = 2557
+total_errors = 2532
 
 [type_errors.basedpyright.by_type]
-"reportUnknownParameterType" = 405
-"reportAny" = 362
-"reportMissingParameterType" = 357
+"reportUnknownParameterType" = 393
+"reportAny" = 371
+"reportMissingParameterType" = 349
 "reportUnusedCallResult" = 290
-"reportUnknownVariableType" = 195
-"reportMissingTypeArgument" = 178
+"reportUnknownVariableType" = 191
+"reportMissingTypeArgument" = 168
 "reportUnknownLambdaType" = 127
 "reportUnknownMemberType" = 125
 "reportUnusedParameter" = 98
@@ -103,12 +103,10 @@ total_errors = 2557
 "muutils/mlutils.py" = 22
 "muutils/validate_type.py" = 20
 "tests/unit/validate_type/test_validate_type_special.py" = 20
-"muutils/logger/logger.py" = 18
 "muutils/math/matrix_powers.py" = 18
 "tests/unit/json_serialize/test_util.py" = 18
 "muutils/interval.py" = 17
 "tests/unit/test_kappa.py" = 17
-"muutils/logger/log_util.py" = 16
 "muutils/tensor_utils.py" = 16
 "tests/unit/json_serialize/serializable_dataclass/test_methods_no_override.py" = 15
 "tests/unit/nbutils/test_configure_notebook.py" = 14
@@ -116,6 +114,7 @@ total_errors = 2557
 "tests/unit/json_serialize/test_array.py" = 13
 "muutils/nbutils/run_notebook_tests.py" = 12
 "muutils/errormode.py" = 11
+"muutils/logger/logger.py" = 11
 "tests/unit/misc/test_misc.py" = 11
 "tests/unit/test_tensor_info_torch.py" = 11
 "muutils/dbg.py" = 10
@@ -124,13 +123,13 @@ total_errors = 2557
 "muutils/misc/classes.py" = 9
 "muutils/cli/arg_bool.py" = 8
 "muutils/json_serialize/dataclass_transform_mock.py" = 8
-"muutils/logger/headerfuncs.py" = 8
 "tests/unit/test_console_unicode.py" = 8
 "tests/util/test_fire.py" = 8
 "muutils/collect_warnings.py" = 7
 "muutils/nbutils/mermaid.py" = 7
 "tests/unit/cli/test_command.py" = 7
 "tests/unit/json_serialize/serializable_dataclass/test_sdc_defaults.py" = 7
+"muutils/logger/headerfuncs.py" = 6
 "tests/unit/nbutils/test_conversion.py" = 6
 "tests/conftest.py" = 5
 "tests/unit/json_serialize/serializable_dataclass/test_sdc_properties_nested.py" = 5
@@ -141,12 +140,13 @@ total_errors = 2557
 "tests/unit/test_mlutils.py" = 4
 "muutils/cli/command.py" = 3
 "muutils/json_serialize/array.py" = 3
-"muutils/logger/simplelogger.py" = 3
+"muutils/logger/simplelogger.py" = 2
 "tests/unit/logger/test_log_util.py" = 2
 "tests/unit/test_chunks.py" = 2
 "tests/unit/test_tensor_info.py" = 2
 "tests/unit/test_timeit_fancy.py" = 2
 "muutils/logger/exception_context.py" = 1
+"muutils/logger/log_util.py" = 1
 
 [type_errors.ty]
 total_errors = 23

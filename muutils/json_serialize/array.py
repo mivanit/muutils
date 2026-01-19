@@ -56,6 +56,15 @@ ArrayMode = Literal[
     "zero_dim",
 ]
 
+# Modes that produce SerializedArrayWithMeta (dict with metadata)
+ArrayModeWithMeta = Literal[
+    "array_list_meta",
+    "array_hex_meta",
+    "array_b64_meta",
+    "zero_dim",
+    "external",
+]
+
 
 def array_n_elements(arr: Any) -> int:  # type: ignore[name-defined]  # pyright: ignore[reportAny]
     """get the number of elements in an array"""
@@ -113,9 +122,7 @@ def serialize_array(
     jser: "JsonSerializer",
     arr: "Union[np.ndarray, torch.Tensor]",
     path: str | Sequence[str | int],
-    array_mode: Literal[
-        "array_list_meta", "array_hex_meta", "array_b64_meta", "zero_dim", "external"
-    ],
+    array_mode: ArrayModeWithMeta,
 ) -> SerializedArrayWithMeta: ...
 @overload
 def serialize_array(
@@ -220,13 +227,7 @@ def serialize_array(
 @overload
 def infer_array_mode(
     arr: SerializedArrayWithMeta,
-) -> Literal[
-    "array_list_meta",
-    "array_hex_meta",
-    "array_b64_meta",
-    "external",
-    "zero_dim",
-]: ...
+) -> ArrayModeWithMeta: ...
 @overload
 def infer_array_mode(arr: NumericList) -> Literal["list"]: ...
 def infer_array_mode(
@@ -269,15 +270,7 @@ def infer_array_mode(
 @overload
 def load_array(
     arr: SerializedArrayWithMeta,
-    array_mode: Optional[
-        Literal[
-            "array_list_meta",
-            "array_hex_meta",
-            "array_b64_meta",
-            "external",
-            "zero_dim",
-        ]
-    ] = None,
+    array_mode: Optional[ArrayModeWithMeta] = None,
 ) -> np.ndarray: ...
 @overload
 def load_array(

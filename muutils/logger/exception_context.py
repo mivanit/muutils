@@ -2,9 +2,15 @@ from __future__ import annotations
 
 import json
 from types import TracebackType
-from typing import IO
+from typing import Protocol
 
 from muutils.json_serialize import json_serialize
+
+
+class WritableStream(Protocol):
+    """Protocol for objects that support write operations."""
+
+    def write(self, msg: str) -> int: ...
 
 
 class ExceptionContext:
@@ -24,8 +30,8 @@ class ExceptionContext:
 
     """
 
-    def __init__(self, stream: IO[str]) -> None:
-        self.stream: IO[str] = stream
+    def __init__(self, stream: WritableStream) -> None:
+        self.stream: WritableStream = stream
 
     def __enter__(self) -> ExceptionContext:
         return self

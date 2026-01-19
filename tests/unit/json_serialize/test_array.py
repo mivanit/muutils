@@ -4,6 +4,7 @@ import pytest
 from muutils.json_serialize import JsonSerializer
 from muutils.json_serialize.array import (
     ArrayMode,
+    ArrayModeWithMeta,
     arr_metadata,
     array_n_elements,
     load_array,
@@ -73,12 +74,48 @@ class TestArray:
             loaded_array = load_array(serialized_array, array_mode=array_mode)  # type: ignore[call-overload, arg-type]
             assert np.array_equal(loaded_array, array)
 
+    def test_serialize_load_list(self):
+        """Test serialize/load with 'list' mode - separate function for type safety."""
+        for array in [self.array_1d, self.array_2d, self.array_3d]:
+            serialized_array = serialize_array(
+                self.jser, array, "test_path", array_mode="list"
+            )
+            loaded_array = load_array(serialized_array, array_mode="list")
+            assert np.array_equal(loaded_array, array)
+
+    def test_serialize_load_array_list_meta(self):
+        """Test serialize/load with 'array_list_meta' mode - separate function for type safety."""
+        for array in [self.array_1d, self.array_2d, self.array_3d]:
+            serialized_array = serialize_array(
+                self.jser, array, "test_path", array_mode="array_list_meta"
+            )
+            loaded_array = load_array(serialized_array, array_mode="array_list_meta")
+            assert np.array_equal(loaded_array, array)
+
+    def test_serialize_load_array_hex_meta(self):
+        """Test serialize/load with 'array_hex_meta' mode - separate function for type safety."""
+        for array in [self.array_1d, self.array_2d, self.array_3d]:
+            serialized_array = serialize_array(
+                self.jser, array, "test_path", array_mode="array_hex_meta"
+            )
+            loaded_array = load_array(serialized_array, array_mode="array_hex_meta")
+            assert np.array_equal(loaded_array, array)
+
+    def test_serialize_load_array_b64_meta(self):
+        """Test serialize/load with 'array_b64_meta' mode - separate function for type safety."""
+        for array in [self.array_1d, self.array_2d, self.array_3d]:
+            serialized_array = serialize_array(
+                self.jser, array, "test_path", array_mode="array_b64_meta"
+            )
+            loaded_array = load_array(serialized_array, array_mode="array_b64_meta")
+            assert np.array_equal(loaded_array, array)
+
     # TODO: do we even want to support "list" mode for zero-dim arrays?
     @pytest.mark.parametrize(
         "array_mode",
         ["array_list_meta", "array_hex_meta", "array_b64_meta"],
     )
-    def test_serialize_load_zero_dim(self, array_mode: ArrayMode):
+    def test_serialize_load_zero_dim(self, array_mode: ArrayModeWithMeta):
         serialized_array = serialize_array(
             self.jser,
             self.array_zero_dim,
@@ -90,7 +127,7 @@ class TestArray:
 
 
 @pytest.mark.parametrize("mode", ["array_list_meta", "array_hex_meta", "array_b64_meta"])
-def test_array_shape_dtype_preservation(mode: ArrayMode):
+def test_array_shape_dtype_preservation(mode: ArrayModeWithMeta):
     """Test that various shapes and dtypes are preserved through serialization."""
     # Test different shapes
     shapes_and_arrays = [
@@ -182,7 +219,7 @@ def test_array_serialization_handlers():
 
 
 @pytest.mark.parametrize("mode", ["array_list_meta", "array_hex_meta", "array_b64_meta"])
-def test_array_edge_cases(mode: ArrayMode):
+def test_array_edge_cases(mode: ArrayModeWithMeta):
     """Test edge cases: empty arrays, unusual dtypes, and boundary conditions."""
     jser = JsonSerializer(array_mode="array_list_meta")
 

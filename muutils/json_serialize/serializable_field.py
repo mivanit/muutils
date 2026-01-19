@@ -119,7 +119,7 @@ class SerializableField(dataclasses.Field):
         self.custom_typecheck_fn: Optional[Callable[[type], bool]] = custom_typecheck_fn
 
     @classmethod
-    def from_Field(cls, field: dataclasses.Field) -> "SerializableField":
+    def from_Field(cls, field: "dataclasses.Field[Any]") -> "SerializableField":
         """copy all values from a `dataclasses.Field` to new `SerializableField`"""
         return cls(
             default=field.default,

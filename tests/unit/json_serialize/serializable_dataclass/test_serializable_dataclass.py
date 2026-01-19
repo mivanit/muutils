@@ -31,7 +31,7 @@ class BasicAutofields(SerializableDataclass):
 
 def test_basic_auto_fields():
     data = dict(a="hello", b=42, c=[1, 2, 3])
-    instance = BasicAutofields(**data)  # type: ignore[arg-type]
+    instance = BasicAutofields(**data)  # type: ignore[arg-type]  # pyright: ignore[reportArgumentType]
     data_with_format = data.copy()
     data_with_format[_FORMAT_KEY] = "BasicAutofields(SerializableDataclass)"
     assert instance.serialize() == data_with_format
@@ -212,7 +212,7 @@ def test_with_printing():
         age: int = serializable_field(
             serialization_fn=lambda x: x + 1, loading_fn=lambda x: x["age"] - 1
         )
-        items: list = serializable_field(default_factory=list)
+        items: List[Any] = serializable_field(default_factory=list)
 
         @property
         def full_name(self) -> str:
@@ -590,7 +590,7 @@ def test_dict_type_validation():
     # Invalid int_dict
     with pytest.raises(FieldTypeMismatchError):
         StrictDictContainer(
-            int_dict={"a": "not an int"},  # type: ignore[dict-item]
+            int_dict={"a": "not an int"},  # type: ignore[dict-item]  # pyright: ignore[reportArgumentType]
             str_dict={"x": "hello"},
             float_dict={"m": 1.0},
         )
@@ -599,7 +599,7 @@ def test_dict_type_validation():
     with pytest.raises(FieldTypeMismatchError):
         StrictDictContainer(
             int_dict={"a": 1},
-            str_dict={"x": 123},  # type: ignore[dict-item]
+            str_dict={"x": 123},  # type: ignore[dict-item]  # pyright: ignore[reportArgumentType]
             float_dict={"m": 1.0},
         )
 
@@ -1017,7 +1017,7 @@ def test_error_handling():
     with pytest.raises(TypeError):
         BaseClass.load({})
 
-    x = BaseClass(base_field=42, shared_field="invalid")  # type: ignore[arg-type]
+    x = BaseClass(base_field=42, shared_field="invalid")  # type: ignore[arg-type]  # pyright: ignore[reportArgumentType]
     assert not x.validate_fields_types()
 
     with pytest.raises(FieldTypeMismatchError):
@@ -1059,4 +1059,4 @@ def test_cyclic_references():
     loaded = Node.load(serialized)
     assert loaded.value == "one"
     # TODO: idk why we type ignore here
-    assert loaded.next.value == "two"  # type: ignore[union-attr]
+    assert loaded.next.value == "two"  # type: ignore[union-attr]  # pyright: ignore[reportOptionalMemberAccess]

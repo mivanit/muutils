@@ -1,32 +1,31 @@
 # Showing all errors
 
-# mypy: Found 61 errors in 7 files (checked 116 source files)
-# basedpyright: 564 errors, 3333 warnings, 0 notes
-# ty: Found 212 diagnostics
+# mypy: Found 52 errors in 7 files (checked 116 source files)
+# basedpyright: 550 errors, 3319 warnings, 0 notes
+# ty: Found 204 diagnostics
 
 [type_errors.mypy]
-total_errors = 61
+total_errors = 52
 
 [type_errors.mypy.by_type]
 "index" = 20
-"attr-defined" = 11
 "arg-type" = 10
 "call-overload" = 10
 "operator" = 6
+"attr-defined" = 4
 "return-value" = 2
-"var-annotated" = 2
 
 [type_errors.mypy.by_file]
 "tests/unit/json_serialize/test_array.py" = 19
 "tests/unit/json_serialize/test_array_torch.py" = 13
-"tests/unit/json_serialize/test_serializable_field.py" = 11
 "tests/unit/test_jsonlines.py" = 7
 "tests/unit/json_serialize/test_json_serialize.py" = 6
 "muutils/json_serialize/json_serialize.py" = 4
+"tests/unit/json_serialize/test_serializable_field.py" = 2
 "tests/unit/benchmark_parallel/benchmark_parallel.py" = 1
 
 [type_errors.basedpyright]
-total_errors = 2641
+total_errors = 2631
 
 [type_errors.basedpyright.by_type]
 "reportUnknownParameterType" = 425
@@ -34,9 +33,9 @@ total_errors = 2641
 "reportAny" = 354
 "reportUnusedCallResult" = 290
 "reportUnknownVariableType" = 195
-"reportMissingTypeArgument" = 180
-"reportUnknownMemberType" = 133
+"reportMissingTypeArgument" = 178
 "reportUnknownLambdaType" = 127
+"reportUnknownMemberType" = 126
 "reportUnusedParameter" = 99
 "reportImplicitOverride" = 52
 "reportInvalidTypeForm" = 49
@@ -56,7 +55,7 @@ total_errors = 2641
 "reportUnusedVariable" = 8
 "reportOptionalSubscript" = 8
 "reportUndefinedVariable" = 7
-"reportOptionalMemberAccess" = 7
+"reportOptionalMemberAccess" = 6
 "reportUninitializedInstanceVariable" = 5
 "reportCallInDefaultInitializer" = 4
 "reportUnusedClass" = 4
@@ -74,7 +73,7 @@ total_errors = 2641
 "tests/unit/json_serialize/test_json_serialize.py" = 164
 "tests/unit/test_dbg.py" = 150
 "tests/unit/test_parallel.py" = 131
-"tests/unit/json_serialize/serializable_dataclass/test_serializable_dataclass.py" = 121
+"tests/unit/json_serialize/serializable_dataclass/test_serializable_dataclass.py" = 119
 "tests/unit/misc/test_func.py" = 98
 "tests/unit/validate_type/test_get_kwargs.py" = 87
 "tests/unit/validate_type/test_validate_type.py" = 86
@@ -88,15 +87,15 @@ total_errors = 2641
 "tests/unit/web/test_bundle_html.py" = 55
 "muutils/json_serialize/json_serialize.py" = 52
 "muutils/spinner.py" = 51
-"muutils/json_serialize/serializable_field.py" = 49
 "tests/unit/benchmark_parallel/benchmark_parallel.py" = 49
+"muutils/json_serialize/serializable_field.py" = 48
 "tests/unit/errormode/test_errormode_init.py" = 46
 "muutils/tensor_info.py" = 45
-"tests/unit/json_serialize/test_serializable_field.py" = 45
 "muutils/parallel.py" = 42
 "muutils/statcounter.py" = 41
 "muutils/sysinfo.py" = 39
 "tests/unit/json_serialize/test_array.py" = 38
+"tests/unit/json_serialize/test_serializable_field.py" = 38
 "muutils/web/bundle_html.py" = 37
 "tests/unit/test_dictmagic.py" = 37
 "tests/unit/errormode/test_errormode_functionality.py" = 36
@@ -157,23 +156,22 @@ total_errors = 2641
 "tests/unit/benchmark_parallel/test_benchmark_demo.py" = 1
 
 [type_errors.ty]
-total_errors = 212
+total_errors = 204
 
 [type_errors.ty.by_type]
 "unknown-argument" = 164
-"unresolved-attribute" = 33
-"invalid-argument-type" = 5
+"unresolved-attribute" = 27
 "invalid-assignment" = 5
+"invalid-argument-type" = 4
 "too-many-positional-arguments" = 3
-"unresolved-import" = 2
+"unresolved-import" = 1
 
 [type_errors.ty.by_file]
 "tests/unit/json_serialize/serializable_dataclass/test_serializable_dataclass.py" = 134
-"tests/unit/json_serialize/test_serializable_field.py" = 29
 "tests/unit/json_serialize/serializable_dataclass/test_methods_no_override.py" = 26
+"tests/unit/json_serialize/test_serializable_field.py" = 22
 "tests/unit/json_serialize/serializable_dataclass/test_sdc_properties_nested.py" = 9
 "tests/unit/test_dictmagic.py" = 8
 "tests/unit/benchmark_parallel/benchmark_parallel.py" = 2
 "tests/unit/json_serialize/test_json_serialize.py" = 2
-"muutils/logger/loggingstream.py" = 1
 "tests/unit/benchmark_parallel/test_benchmark_demo.py" = 1

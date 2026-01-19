@@ -141,7 +141,9 @@ def test_from_Field():
 
     # Test with default_factory and init=False to avoid init=True, serialize=False error
     dc_field2: dataclasses.Field[list[Any]] = field(  # type: ignore[assignment]
-        default_factory=list, repr=True, init=True  # type: ignore[arg-type]
+        default_factory=list,
+        repr=True,
+        init=True,  # type: ignore[arg-type]
     )
     sf2 = SerializableField.from_Field(dc_field2)
     assert sf2.default_factory == list  # noqa: E721

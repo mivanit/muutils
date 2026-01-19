@@ -92,7 +92,9 @@ else:
 
             Self = TypeVar("Self")
 
-T_SerializeableDataclass = TypeVar("T_SerializeableDataclass", bound="SerializableDataclass")
+T_SerializeableDataclass = TypeVar(
+    "T_SerializeableDataclass", bound="SerializableDataclass"
+)
 
 
 class CantGetTypeHintsWarning(UserWarning):
@@ -111,7 +113,9 @@ _zanj_loading_needs_import: bool = True
 "flag to keep track of if we have successfully imported ZANJ"
 
 
-def zanj_register_loader_serializable_dataclass(cls: typing.Type[T_SerializeableDataclass]):
+def zanj_register_loader_serializable_dataclass(
+    cls: typing.Type[T_SerializeableDataclass],
+):
     """Register a serializable dataclass with the ZANJ import
 
     this allows `ZANJ().read()` to load the class and not just return plain dicts
@@ -797,7 +801,10 @@ def serializable_dataclass(
         # ======================================================================
         # mypy thinks this isnt a classmethod
         @classmethod  # type: ignore[misc]
-        def load(cls: type[T_SerializeableDataclass], data: dict[str, Any] | T_SerializeableDataclass) -> T_SerializeableDataclass:
+        def load(
+            cls: type[T_SerializeableDataclass],
+            data: dict[str, Any] | T_SerializeableDataclass,
+        ) -> T_SerializeableDataclass:
             # HACK: this is kind of ugly, but it fixes a lot of issues for when we do recursive loading with ZANJ
             if isinstance(data, cls):
                 return data

@@ -269,16 +269,25 @@ def test_dc_eq():
     # Different classes, same fields, different values - should return False
     p2d_diff = Point2D(1, 99)
     assert (
-        dc_eq(p2d_diff, p1, false_when_class_mismatch=False, except_when_field_mismatch=True)
+        dc_eq(
+            p2d_diff,
+            p1,
+            false_when_class_mismatch=False,
+            except_when_field_mismatch=True,
+        )
         is False
     )
 
     # Test parameter precedence: except_when_class_mismatch takes precedence over false_when_class_mismatch
-    with pytest.raises(TypeError, match="Cannot compare dataclasses of different classes"):
+    with pytest.raises(
+        TypeError, match="Cannot compare dataclasses of different classes"
+    ):
         dc_eq(p1, p3d, except_when_class_mismatch=True, false_when_class_mismatch=True)
 
     # Test parameter precedence: except_when_class_mismatch takes precedence over except_when_field_mismatch
-    with pytest.raises(TypeError, match="Cannot compare dataclasses of different classes"):
+    with pytest.raises(
+        TypeError, match="Cannot compare dataclasses of different classes"
+    ):
         dc_eq(p1, p3d, except_when_class_mismatch=True, except_when_field_mismatch=True)
 
     # Test with empty dataclasses
@@ -305,7 +314,9 @@ def test_dc_eq():
 
     w1 = WithIgnored(1, 100)
     w2 = WithIgnored(1, 999)  # ignored field differs
-    assert dc_eq(w1, w2) is True  # Should still be equal since ignored field is not compared
+    assert (
+        dc_eq(w1, w2) is True
+    )  # Should still be equal since ignored field is not compared
 
     # Test with non-dataclass objects - should raise TypeError
     class NotADataclass:

@@ -157,8 +157,12 @@ class TypeCheckResult:
             try:
                 lines.append(f"total_warnings = {self.total_warnings}")
             except ValueError:
-                lines.append(f"total_warnings_by_type = {sum(self.warnings_by_type.values())}")
-                lines.append(f"total_warnings_by_file = {sum(self.warnings_by_file.values())}")
+                lines.append(
+                    f"total_warnings_by_type = {sum(self.warnings_by_type.values())}"
+                )
+                lines.append(
+                    f"total_warnings_by_file = {sum(self.warnings_by_file.values())}"
+                )
             lines.append("")
 
             # warnings by_type section
@@ -235,9 +239,7 @@ def parse_basedpyright(content: str) -> TypeCheckResult:
                     pending_diagnostic_type = diag_match.group(1)
                 # Check if this is a continuation line with the code
                 elif pending_diagnostic_type:
-                    code_match: re.Match[str] | None = re.search(
-                        r"\((\w+)\)\s*$", line
-                    )
+                    code_match: re.Match[str] | None = re.search(r"\((\w+)\)\s*$", line)
                     if code_match:
                         error_code = code_match.group(1)
                         if pending_diagnostic_type == "warning":

@@ -425,7 +425,9 @@ def colorize_dtype(dtype_str: str, colors: Dict[str, str], using_tex: bool) -> s
         return type_colored
 
 
-def format_shape_colored(shape_val: Any, colors: Dict[str, str], using_tex: bool) -> str:
+def format_shape_colored(
+    shape_val: Any, colors: Dict[str, str], using_tex: bool
+) -> str:
     """Format shape with proper coloring for both 1D and multi-D arrays."""
 
     def apply_color(text: str, color_key: str) -> str:

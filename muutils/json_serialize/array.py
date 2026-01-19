@@ -101,6 +101,29 @@ def arr_metadata(arr: Any) -> ArrayMetadata:  # pyright: ignore[reportAny]
     }
 
 
+@overload
+def serialize_array(
+    jser: "JsonSerializer",
+    arr: "Union[np.ndarray, torch.Tensor]",
+    path: str | Sequence[str | int],
+    array_mode: Literal["list"],
+) -> NumericList: ...
+@overload
+def serialize_array(
+    jser: "JsonSerializer",
+    arr: "Union[np.ndarray, torch.Tensor]",
+    path: str | Sequence[str | int],
+    array_mode: Literal[
+        "array_list_meta", "array_hex_meta", "array_b64_meta", "zero_dim", "external"
+    ],
+) -> SerializedArrayWithMeta: ...
+@overload
+def serialize_array(
+    jser: "JsonSerializer",
+    arr: "Union[np.ndarray, torch.Tensor]",
+    path: str | Sequence[str | int],
+    array_mode: None = None,
+) -> SerializedArrayWithMeta | NumericList: ...
 def serialize_array(
     jser: "JsonSerializer",  # type: ignore[name-defined] # noqa: F821
     arr: "Union[np.ndarray, torch.Tensor]",

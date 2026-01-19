@@ -724,7 +724,7 @@ traitlets==5.14.3
     #   nbformat
 twine==6.1.0 ; python_full_version < '3.9'
 twine==6.2.0 ; python_full_version >= '3.9'
-ty==0.0.1a24
+ty==0.0.12
 typer==0.20.0
     # via pycln
 typing-extensions==4.13.2 ; python_full_version < '3.9'

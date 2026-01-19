@@ -56,44 +56,41 @@ class TestArray:
         loaded_array = load_array(serialized_array, array_mode="array_list_meta")
         assert np.array_equal(loaded_array, self.array_3d)
 
-    def test_serialize_load_integration(self):
-        for array_mode in [
-            "list",
-            "array_list_meta",
-            "array_hex_meta",
-            "array_b64_meta",
-        ]:
-            for array in [self.array_1d, self.array_2d, self.array_3d]:
-                serialized_array = serialize_array(
-                    self.jser,
-                    array,
-                    "test_path",
-                    array_mode=array_mode,  # type: ignore[arg-type]
-                )
-                loaded_array = load_array(serialized_array, array_mode=array_mode)  # type: ignore[arg-type]
-                assert np.array_equal(loaded_array, array)
-
-    def test_serialize_load_zero_dim(self):
-        for array_mode in [
-            # TODO: do we even want to support "list" mode for zero-dim arrays?
-            # "list",
-            "array_list_meta",
-            "array_hex_meta",
-            "array_b64_meta",
-        ]:
-            print(array_mode)
+    @pytest.mark.parametrize(
+        "array_mode",
+        ["list", "array_list_meta", "array_hex_meta", "array_b64_meta"],
+    )
+    def test_serialize_load_integration(self, array_mode: ArrayMode):
+        for array in [self.array_1d, self.array_2d, self.array_3d]:
             serialized_array = serialize_array(
                 self.jser,
-                self.array_zero_dim,
+                array,
                 "test_path",
-                array_mode=array_mode,  # type: ignore[arg-type]
+                array_mode=array_mode,
             )
-            print(serialized_array)
-            loaded_array = load_array(serialized_array)
-            assert np.array_equal(loaded_array, self.array_zero_dim)
+            # The overload combinations for serialize_array -> load_array are complex
+            # since array_mode determines both the serialized type and load method
+            loaded_array = load_array(serialized_array, array_mode=array_mode)  # type: ignore[call-overload, arg-type]
+            assert np.array_equal(loaded_array, array)
+
+    # TODO: do we even want to support "list" mode for zero-dim arrays?
+    @pytest.mark.parametrize(
+        "array_mode",
+        ["array_list_meta", "array_hex_meta", "array_b64_meta"],
+    )
+    def test_serialize_load_zero_dim(self, array_mode: ArrayMode):
+        serialized_array = serialize_array(
+            self.jser,
+            self.array_zero_dim,
+            "test_path",
+            array_mode=array_mode,
+        )
+        loaded_array = load_array(serialized_array)
+        assert np.array_equal(loaded_array, self.array_zero_dim)
 
 
-def test_array_shape_dtype_preservation():
+@pytest.mark.parametrize("mode", ["array_list_meta", "array_hex_meta", "array_b64_meta"])
+def test_array_shape_dtype_preservation(mode: ArrayMode):
     """Test that various shapes and dtypes are preserved through serialization."""
     # Test different shapes
     shapes_and_arrays = [
@@ -119,26 +116,24 @@ def test_array_shape_dtype_preservation():
 
     # Test shapes preservation
     for arr, description in shapes_and_arrays:
-        for mode in ["array_list_meta", "array_hex_meta", "array_b64_meta"]:
-            serialized = serialize_array(jser, arr, "test", array_mode=mode)  # type: ignore[arg-type]
-            loaded = load_array(serialized)
-            assert loaded.shape == arr.shape, (
-                f"Shape mismatch for {description} in {mode}"
-            )
-            assert loaded.dtype == arr.dtype, (
-                f"Dtype mismatch for {description} in {mode}"
-            )
-            assert np.array_equal(loaded, arr), (
-                f"Data mismatch for {description} in {mode}"
-            )
+        serialized = serialize_array(jser, arr, "test", array_mode=mode)
+        loaded = load_array(serialized)
+        assert loaded.shape == arr.shape, (
+            f"Shape mismatch for {description} in {mode}"
+        )
+        assert loaded.dtype == arr.dtype, (
+            f"Dtype mismatch for {description} in {mode}"
+        )
+        assert np.array_equal(loaded, arr), (
+            f"Data mismatch for {description} in {mode}"
+        )
 
     # Test dtypes preservation
     for arr, expected_dtype in dtype_tests:
-        for mode in ["array_list_meta", "array_hex_meta", "array_b64_meta"]:
-            serialized = serialize_array(jser, arr, "test", array_mode=mode)  # type: ignore[arg-type]
-            loaded = load_array(serialized)
-            assert loaded.dtype == expected_dtype, f"Dtype not preserved: {mode}"
-            assert np.array_equal(loaded, arr), f"Data not preserved: {mode}"
+        serialized = serialize_array(jser, arr, "test", array_mode=mode)
+        loaded = load_array(serialized)
+        assert loaded.dtype == expected_dtype, f"Dtype not preserved: {mode}"
+        assert np.array_equal(loaded, arr), f"Data not preserved: {mode}"
 
 
 def test_array_serialization_handlers():
@@ -186,7 +181,8 @@ def test_array_serialization_handlers():
             assert _FORMAT_KEY in result
 
 
-def test_array_edge_cases():
+@pytest.mark.parametrize("mode", ["array_list_meta", "array_hex_meta", "array_b64_meta"])
+def test_array_edge_cases(mode: ArrayMode):
     """Test edge cases: empty arrays, unusual dtypes, and boundary conditions."""
     jser = JsonSerializer(array_mode="array_list_meta")
 
@@ -196,12 +192,11 @@ def test_array_edge_cases():
     empty_3d = np.array([[]], dtype=np.int64).reshape(1, 1, 0)
 
     for empty_arr in [empty_1d, empty_2d, empty_3d]:
-        for mode in ["array_list_meta", "array_hex_meta", "array_b64_meta"]:
-            serialized = serialize_array(jser, empty_arr, "test", array_mode=mode)  # type: ignore[arg-type]
-            loaded = load_array(serialized)
-            assert loaded.shape == empty_arr.shape
-            assert loaded.dtype == empty_arr.dtype
-            assert np.array_equal(loaded, empty_arr)
+        serialized = serialize_array(jser, empty_arr, "test", array_mode=mode)
+        loaded = load_array(serialized)
+        assert loaded.shape == empty_arr.shape
+        assert loaded.dtype == empty_arr.dtype
+        assert np.array_equal(loaded, empty_arr)
 
     # Complex dtypes
     complex_arr = np.array([1 + 2j, 3 + 4j, 5 + 6j], dtype=np.complex64)
@@ -214,17 +209,15 @@ def test_array_edge_cases():
 
     # Large arrays (test that serialization doesn't break)
     large_arr = np.random.rand(100, 100)
-    for mode in ["array_list_meta", "array_hex_meta", "array_b64_meta"]:
-        serialized = serialize_array(jser, large_arr, "test", array_mode=mode)  # type: ignore[arg-type]
-        loaded = load_array(serialized)
-        assert np.allclose(loaded, large_arr)
+    serialized = serialize_array(jser, large_arr, "test", array_mode=mode)
+    loaded = load_array(serialized)
+    assert np.allclose(loaded, large_arr)
 
     # Arrays with special values
     special_arr = np.array([np.inf, -np.inf, np.nan, 0.0, -0.0], dtype=np.float64)
-    for mode in ["array_list_meta", "array_hex_meta", "array_b64_meta"]:
-        serialized = serialize_array(jser, special_arr, "test", array_mode=mode)  # type: ignore[arg-type]
-        loaded = load_array(serialized)
-        # Use special comparison for NaN
-        assert np.isnan(loaded[2]) and np.isnan(special_arr[2])
-        assert np.array_equal(loaded[:2], special_arr[:2])  # inf values
-        assert np.array_equal(loaded[3:], special_arr[3:])  # zeros
+    serialized = serialize_array(jser, special_arr, "test", array_mode=mode)
+    loaded = load_array(serialized)
+    # Use special comparison for NaN
+    assert np.isnan(loaded[2]) and np.isnan(special_arr[2])
+    assert np.array_equal(loaded[:2], special_arr[:2])  # inf values
+    assert np.array_equal(loaded[3:], special_arr[3:])  # zeros

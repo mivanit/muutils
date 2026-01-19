@@ -58,7 +58,7 @@ import json
 import sys
 import typing
 import warnings
-from typing import Any, Optional, Type, TypeVar
+from typing import Any, Optional, Type, TypeVar, overload, TYPE_CHECKING
 
 from muutils.errormode import ErrorMode
 from muutils.validate_type import validate_type
@@ -75,15 +75,19 @@ from muutils.json_serialize.util import (
 
 # pylint: disable=bad-mcs-classmethod-argument, too-many-arguments, protected-access
 
-# this is quite horrible, but unfortunately mypy fails if we try to assign to `dataclass_transform` directly
-# and every time we try to init a serializable dataclass it says the argument doesnt exist
-if sys.version_info >= (3, 11):
-    from typing import dataclass_transform
+# For type checkers: always use typing_extensions which they can resolve
+# At runtime: use stdlib if available (3.11+), else typing_extensions, else mock
+if TYPE_CHECKING:
+    from typing_extensions import dataclass_transform, Self
 else:
-    try:  # pyright: ignore[reportUnreachable]
-        from typing_extensions import dataclass_transform
-    except Exception:
-        from muutils.json_serialize.dataclass_transform_mock import dataclass_transform
+    if sys.version_info >= (3, 11):
+        from typing import dataclass_transform, Self
+    else:
+        try:
+            from typing_extensions import dataclass_transform, Self
+        except Exception:
+            from muutils.json_serialize.dataclass_transform_mock import dataclass_transform
+            Self = TypeVar("Self")
 
 T = TypeVar("T")
 
@@ -354,8 +358,16 @@ class SerializableDataclass(abc.ABC):
             f"decorate {self.__class__ = } with `@serializable_dataclass`"
         )
 
+    @overload
     @classmethod
-    def load(cls: Type[T], data: dict[str, Any] | T) -> T:
+    def load(cls, data: dict[str, Any]) -> Self: ...
+
+    @overload
+    @classmethod
+    def load(cls, data: Self) -> Self: ...
+
+    @classmethod
+    def load(cls, data: dict[str, Any] | Self) -> Self:
         "takes in an appropriately structured dict and returns an instance of the class, implemented by using `@serializable_dataclass` decorator"
         raise NotImplementedError(f"decorate {cls = } with `@serializable_dataclass`")
 
@@ -782,7 +794,7 @@ def serializable_dataclass(
         # ======================================================================
         # mypy thinks this isnt a classmethod
         @classmethod  # type: ignore[misc]
-        def load(cls, data: dict[str, Any] | T) -> Type[T]:
+        def load(cls, data: dict[str, Any] | T) -> T:
             # HACK: this is kind of ugly, but it fixes a lot of issues for when we do recursive loading with ZANJ
             if isinstance(data, cls):
                 return data

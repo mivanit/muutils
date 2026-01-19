@@ -1049,8 +1049,8 @@ def test_cyclic_references():
         next: Optional["Node"] = serializable_field(default=None)
 
     # Create a cycle
-    node1 = Node("one")
-    node2 = Node("two")
+    node1 = Node(value="one")
+    node2 = Node(value="two")
     node1.next = node2
     node2.next = node1
 

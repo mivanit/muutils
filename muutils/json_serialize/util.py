@@ -208,7 +208,6 @@ def dc_eq(
     dc1: Any,  # pyright: ignore[reportAny]
     dc2: Any,  # pyright: ignore[reportAny]
     except_when_class_mismatch: bool = False,
-    # TODO: why is this unused?
     false_when_class_mismatch: bool = True,
     except_when_field_mismatch: bool = False,
 ) -> bool:
@@ -279,16 +278,19 @@ def dc_eq(
             raise TypeError(
                 f"Cannot compare dataclasses of different classes: `{dc1.__class__}` and `{dc2.__class__}`"  # pyright: ignore[reportAny]
             )
+        if false_when_class_mismatch:
+            # return False immediately without attempting field comparison
+            return False
+        # classes don't match but we'll try to compare fields anyway
         if except_when_field_mismatch:
             dc1_fields: set[str] = set([fld.name for fld in dataclasses.fields(dc1)])  # pyright: ignore[reportAny]
             dc2_fields: set[str] = set([fld.name for fld in dataclasses.fields(dc2)])  # pyright: ignore[reportAny]
             fields_match: bool = set(dc1_fields) == set(dc2_fields)
             if not fields_match:
-                # if the fields match, keep going
+                # if the fields don't match, raise an error
                 raise AttributeError(
                     f"dataclasses {dc1} and {dc2} have different fields: `{dc1_fields}` and `{dc2_fields}`"
                 )
-        return False
 
     return all(
         array_safe_eq(getattr(dc1, fld.name), getattr(dc2, fld.name))  # pyright: ignore[reportAny]

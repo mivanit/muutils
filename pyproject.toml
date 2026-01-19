@@ -72,7 +72,7 @@
 		"mypy>=1.15; python_version >= '3.9'",
 		"typing-extensions; python_version < '3.11'",
 		"beartype>=0.14.1",
-		"ty",
+		"ty>=0.0.12",
 		"basedpyright",
 		# tests & coverage
 		"pytest>=8.2.2",
@@ -167,6 +167,11 @@
 		"_wip/",
 		"docs/resources/make_docs.py",
 	]
+
+# TODO: remove this once we clean up the `# type: ignore` comments that are needed
+# for mypy/pyright but not for ty. See https://docs.astral.sh/ty/configuration/
+[tool.ty.rules]
+	unused-ignore-comment = "ignore"
 
 [tool.mypy]
 	exclude = [

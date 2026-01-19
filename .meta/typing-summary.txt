@@ -1,42 +1,42 @@
 # Showing all errors
 
-# mypy: Found 20 errors in 5 files (checked 116 source files)
-# basedpyright: 493 errors, 3319 warnings, 0 notes
-# ty: Found 198 diagnostics
+# mypy: Found 22 errors in 5 files (checked 117 source files)
+# basedpyright: 485 errors, 3280 warnings, 0 notes
+# ty: Found 23 diagnostics
 
 [type_errors.mypy]
-total_errors = 20
+total_errors = 22
 
 [type_errors.mypy.by_type]
-"arg-type" = 7
+"arg-type" = 8
 "operator" = 6
 "attr-defined" = 4
-"call-overload" = 2
-"import-not-found" = 1
+"call-overload" = 3
+"assignment" = 1
 
 [type_errors.mypy.by_file]
-"tests/unit/json_serialize/test_array.py" = 9
+"tests/unit/json_serialize/test_array.py" = 10
 "tests/unit/json_serialize/test_json_serialize.py" = 6
+"tests/unit/json_serialize/test_array_torch.py" = 3
 "tests/unit/json_serialize/test_serializable_field.py" = 2
-"tests/unit/json_serialize/test_array_torch.py" = 2
-"tests/unit/benchmark_parallel/test_benchmark_demo.py" = 1
+"muutils/logger/logger.py" = 1
 
 [type_errors.basedpyright]
-total_errors = 2593
+total_errors = 2557
 
 [type_errors.basedpyright.by_type]
-"reportUnknownParameterType" = 425
-"reportMissingParameterType" = 378
-"reportAny" = 354
+"reportUnknownParameterType" = 405
+"reportAny" = 362
+"reportMissingParameterType" = 357
 "reportUnusedCallResult" = 290
 "reportUnknownVariableType" = 195
 "reportMissingTypeArgument" = 178
 "reportUnknownLambdaType" = 127
-"reportUnknownMemberType" = 126
-"reportUnusedParameter" = 99
+"reportUnknownMemberType" = 125
+"reportUnusedParameter" = 98
 "reportImplicitOverride" = 52
 "reportInvalidTypeForm" = 49
-"reportUnannotatedClassAttribute" = 41
+"reportUnannotatedClassAttribute" = 40
 "reportCallIssue" = 36
 "reportPossiblyUnboundVariable" = 34
 "reportPrivateUsage" = 31
@@ -78,13 +78,13 @@ total_errors = 2593
 "tests/unit/test_interval.py" = 75
 "muutils/misc/func.py" = 70
 "tests/unit/cli/test_arg_bool.py" = 66
-"muutils/misc/freezing.py" = 65
 "muutils/dictmagic.py" = 62
 "tests/unit/web/test_bundle_html.py" = 55
 "muutils/json_serialize/json_serialize.py" = 52
 "muutils/spinner.py" = 51
 "tests/unit/benchmark_parallel/benchmark_parallel.py" = 49
 "muutils/json_serialize/serializable_field.py" = 48
+"muutils/misc/freezing.py" = 46
 "tests/unit/errormode/test_errormode_init.py" = 46
 "muutils/tensor_info.py" = 45
 "muutils/parallel.py" = 42
@@ -111,15 +111,14 @@ total_errors = 2593
 "muutils/logger/log_util.py" = 16
 "muutils/tensor_utils.py" = 16
 "tests/unit/json_serialize/serializable_dataclass/test_methods_no_override.py" = 15
-"tests/unit/json_serialize/test_array.py" = 15
 "tests/unit/nbutils/test_configure_notebook.py" = 14
 "muutils/jsonlines.py" = 13
+"tests/unit/json_serialize/test_array.py" = 13
 "muutils/nbutils/run_notebook_tests.py" = 12
 "muutils/errormode.py" = 11
 "tests/unit/misc/test_misc.py" = 11
 "tests/unit/test_tensor_info_torch.py" = 11
 "muutils/dbg.py" = 10
-"muutils/logger/exception_context.py" = 10
 "tests/unit/test_collect_warnings.py" = 10
 "muutils/kappa.py" = 9
 "muutils/misc/classes.py" = 9
@@ -131,10 +130,9 @@ total_errors = 2593
 "muutils/collect_warnings.py" = 7
 "muutils/nbutils/mermaid.py" = 7
 "tests/unit/cli/test_command.py" = 7
-"muutils/logger/timing.py" = 6
+"tests/unit/json_serialize/serializable_dataclass/test_sdc_defaults.py" = 7
 "tests/unit/nbutils/test_conversion.py" = 6
 "tests/conftest.py" = 5
-"tests/unit/json_serialize/serializable_dataclass/test_sdc_defaults.py" = 5
 "tests/unit/json_serialize/serializable_dataclass/test_sdc_properties_nested.py" = 5
 "muutils/web/html_to_pdf.py" = 4
 "tests/unit/math/test_matrix_powers_torch.py" = 4
@@ -148,21 +146,26 @@ total_errors = 2593
 "tests/unit/test_chunks.py" = 2
 "tests/unit/test_tensor_info.py" = 2
 "tests/unit/test_timeit_fancy.py" = 2
-"muutils/json_serialize/util.py" = 1
-"tests/unit/benchmark_parallel/test_benchmark_demo.py" = 1
+"muutils/logger/exception_context.py" = 1
 
 [type_errors.ty]
-total_errors = 198
+total_errors = 23
 
 [type_errors.ty.by_type]
-"unknown-argument" = 164
-"unresolved-attribute" = 27
-"invalid-assignment" = 5
-"too-many-positional-arguments" = 2
+"invalid-argument-type" = 10
+"invalid-assignment" = 4
+"unsupported-operator" = 4
+"no-matching-overload" = 2
+"unresolved-attribute" = 2
+"invalid-type-form" = 1
 
 [type_errors.ty.by_file]
-"tests/unit/json_serialize/serializable_dataclass/test_serializable_dataclass.py" = 134
-"tests/unit/json_serialize/serializable_dataclass/test_methods_no_override.py" = 26
-"tests/unit/json_serialize/test_serializable_field.py" = 22
-"tests/unit/json_serialize/serializable_dataclass/test_sdc_properties_nested.py" = 8
-"tests/unit/test_dictmagic.py" = 8
+"muutils/spinner.py" = 5
+"tests/unit/json_serialize/test_json_serialize.py" = 4
+"muutils/interval.py" = 3
+"muutils/misc/func.py" = 3
+"muutils/logger/logger.py" = 2
+"muutils/sysinfo.py" = 2
+"tests/unit/web/test_bundle_html.py" = 2
+"muutils/logger/simplelogger.py" = 1
+"tests/unit/validate_type/test_validate_type.py" = 1

@@ -1,38 +1,38 @@
 from __future__ import annotations
-from typing import Any, TypeVar, overload
+from typing import Any, Iterable, NoReturn, SupportsIndex, TypeVar, overload
 
 
-class FrozenDict(dict):
-    def __setitem__(self, key, value):
+class FrozenDict(dict):  # type: ignore[type-arg]
+    def __setitem__(self, key: Any, value: Any) -> NoReturn:
         raise AttributeError("dict is frozen")
 
-    def __delitem__(self, key):
+    def __delitem__(self, key: Any) -> NoReturn:
         raise AttributeError("dict is frozen")
 
 
-class FrozenList(list):
-    def __setitem__(self, index, value):
+class FrozenList(list):  # type: ignore[type-arg]
+    def __setitem__(self, index: SupportsIndex | slice, value: Any) -> NoReturn:
         raise AttributeError("list is frozen")
 
-    def __delitem__(self, index):
+    def __delitem__(self, index: SupportsIndex | slice) -> NoReturn:
         raise AttributeError("list is frozen")
 
-    def append(self, value):
+    def append(self, value: Any) -> NoReturn:
         raise AttributeError("list is frozen")
 
-    def extend(self, iterable):
+    def extend(self, iterable: Iterable[Any]) -> NoReturn:
         raise AttributeError("list is frozen")
 
-    def insert(self, index, value):
+    def insert(self, index: SupportsIndex, value: Any) -> NoReturn:
         raise AttributeError("list is frozen")
 
-    def remove(self, value):
+    def remove(self, value: Any) -> NoReturn:
         raise AttributeError("list is frozen")
 
-    def pop(self, index=-1):
+    def pop(self, index: SupportsIndex = -1) -> NoReturn:
         raise AttributeError("list is frozen")
 
-    def clear(self):
+    def clear(self) -> NoReturn:
         raise AttributeError("list is frozen")
 
 
@@ -103,7 +103,7 @@ def freeze(instance: Any) -> Any:
 
         # create a new class which inherits from the original class
         class FrozenClass(instance.__class__):  # type: ignore[name-defined]
-            def __setattr__(self, name, value):
+            def __setattr__(self, name: str, value: Any) -> NoReturn:
                 raise AttributeError("class is frozen")
 
         FrozenClass.__name__ = f"FrozenClass__{instance.__class__.__name__}"

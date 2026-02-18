@@ -5,6 +5,9 @@ from types import CodeType
 import warnings
 from typing import Any, Callable, Tuple, cast, TypeVar
 
+# TODO: we do a lot of type weirdness here that basedpyright doesn't like
+# pyright: reportInvalidTypeForm=false
+
 try:
     if sys.version_info >= (3, 11):
         # 3.11+

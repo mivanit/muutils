@@ -1,5 +1,7 @@
 """quickly print a sympy expression in latex"""
 
+from __future__ import annotations
+
 import sympy as sp  # type: ignore  # pyright: ignore[reportMissingTypeStubs]
 from IPython.display import Math, display  # type: ignore  # pyright: ignore[reportUnknownVariableType]
 

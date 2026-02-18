@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, List, Literal, Union
+from typing import TYPE_CHECKING, List, Literal, Union, Tuple
 
 if TYPE_CHECKING:
     from muutils.json_serialize.util import JSONitem
@@ -16,7 +16,7 @@ BaseType = Union[
     None,
 ]
 
-Hashableitem = Union[BaseType, tuple["Hashableitem", ...]]
+Hashableitem = Union[BaseType, Tuple["Hashableitem", ...]]
 
 
 _FORMAT_KEY: Literal["__muutils_format__"] = "__muutils_format__"

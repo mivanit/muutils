@@ -19,8 +19,8 @@ BaseType = Union[
 Hashableitem = Union[BaseType, tuple["Hashableitem", ...]]
 
 
-_FORMAT_KEY: Final[str] = "__muutils_format__"
-_REF_KEY: Final[str] = "$ref"
+_FORMAT_KEY: Literal["__muutils_format__"] = "__muutils_format__"
+_REF_KEY: Literal["$ref"] = "$ref"
 
 
 # TypedDicts for serialized set/frozenset - using Total=False workaround for 3.8 compat

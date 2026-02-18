@@ -137,11 +137,9 @@
 			"F722", # jaxtyping stuff
 		]
 
-[tool.pycln]
-	all = true
-	exclude = ["tests/input_data", "tests/junk_data", "_wip/"]
-
 [tool.basedpyright]
+	# TODO: change this to strict eventually
+	typeCheckingMode = "standard"
 	# file include/exclude
 	include = ["muutils", "tests"]
 	exclude = [
@@ -149,7 +147,7 @@
 		"tests/junk_data",
 		"tests/_temp",
 		"_wip",
-		"docs/resources/make_docs.py",
+		".meta/scripts/",
 		".venv",
 	]
 	# rules
@@ -165,15 +163,16 @@
 		"tests/_temp/",
 		"tests/benchmark_parallel.py",
 		"_wip/",
-		"docs/resources/make_docs.py",
+		".meta/scripts/",
 	]
 
 # TODO: remove this once we clean up the `# type: ignore` comments that are needed
 # for mypy/pyright but not for ty. See https://docs.astral.sh/ty/configuration/
 [tool.ty.rules]
-	unused-ignore-comment = "ignore"
+	unused-type-ignore-comment = "ignore"
 
 [tool.mypy]
+	files = ["muutils", "tests"]
 	exclude = [
 		# tests
 		"tests/input_data",
@@ -183,7 +182,7 @@
 		# wip stuff
 		"_wip/",
 		# not our problem
-		"docs/resources/make_docs.py",
+		".meta/scripts/",
 	]
 	show_error_codes = true
 	# we disable this in the makefile for old versions

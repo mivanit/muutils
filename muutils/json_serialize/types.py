@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Final, List, Literal, Union
+from typing import TYPE_CHECKING, List, Literal, Union
 
 if TYPE_CHECKING:
     from muutils.json_serialize.util import JSONitem

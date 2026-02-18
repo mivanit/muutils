@@ -126,7 +126,7 @@ def set_up_progress_bar_fn(
     # if `pbar` is a different string, figure out which progress bar to use
     elif isinstance(pbar, str):
         if pbar == "tqdm":
-            pbar_fn = tqdm.tqdm # pyright: ignore[reportPossiblyUnboundVariable]
+            pbar_fn = tqdm.tqdm  # pyright: ignore[reportPossiblyUnboundVariable]
             pbar_kwargs = map_kwargs_for_tqdm(pbar_kwargs)
         elif pbar == "spinner":
             pbar_fn = functools.partial(spinner_fn_wrap, **pbar_kwargs)
@@ -273,8 +273,8 @@ def run_maybe_parallel(
 
     # close the pool if we used one
     if parallel:
-        pool.close() # pyright: ignore[reportPossiblyUnboundVariable]
-        pool.join() # pyright: ignore[reportPossiblyUnboundVariable]
+        pool.close()  # pyright: ignore[reportPossiblyUnboundVariable]
+        pool.join()  # pyright: ignore[reportPossiblyUnboundVariable]
 
     # return the output as a list
     return output

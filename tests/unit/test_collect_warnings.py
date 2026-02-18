@@ -317,7 +317,7 @@ def test_exception_propagation():
             raise ValueError("test exception")
 
     # Counts should still be populated even though an exception was raised
-    assert len(cw.counts) == 1
+    assert len(cw.counts) == 1  # pyright: ignore[reportPossiblyUnboundVariable]
 
 
 def test_warning_with_special_characters():

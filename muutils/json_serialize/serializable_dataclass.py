@@ -753,6 +753,7 @@ def serializable_dataclass(
 
                 # try to save it
                 if field.serialize:
+                    value: Any = None  # init before try in case getattr raises
                     try:
                         # get the val
                         value = getattr(self, field.name)

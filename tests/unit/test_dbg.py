@@ -139,7 +139,7 @@ def test_dbg_custom_formatter(capsys: pytest.CaptureFixture) -> None:
 
 def test_dbg_complex_expression(capsys: pytest.CaptureFixture) -> None:
     # Test a complex expression (lambda invocation)
-    result: int = dbg((lambda x: x * x)(5))
+    result: int = dbg((lambda x: x * x)(5))  # pyright: ignore[reportCallIssue, reportArgumentType]
     captured: str = capsys.readouterr().err
     assert (
         "lambda" in captured

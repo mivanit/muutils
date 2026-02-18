@@ -107,7 +107,7 @@ def test_try_catch_exception_handling():
     assert raises_runtime_error() == "RuntimeError: runtime error message"
     assert raises_key_error() == "KeyError: 'missing key'"
     result = raises_zero_division()
-    assert "ZeroDivisionError" in result
+    assert "ZeroDivisionError" in result  # pyright: ignore[reportOperatorIssue]
 
     # Test with arguments
     @try_catch

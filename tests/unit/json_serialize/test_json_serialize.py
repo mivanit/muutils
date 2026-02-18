@@ -265,9 +265,9 @@ def test_DEFAULT_HANDLERS():
     # Test set (should become dict with _FORMAT_KEY)
     result = serializer.json_serialize({1, 2, 3})
     assert isinstance(result, dict)
-    assert result[_FORMAT_KEY] == "set"
-    assert isinstance(result["data"], list)
-    assert set(result["data"]) == {1, 2, 3}
+    assert result[_FORMAT_KEY] == "set"  # ty: ignore[invalid-argument-type]
+    assert isinstance(result["data"], list)  # ty: ignore[invalid-argument-type]
+    assert set(result["data"]) == {1, 2, 3}  # ty: ignore[invalid-argument-type]
 
     # Test tuple (should become list)
     result = serializer.json_serialize((1, 2, 3))
@@ -731,17 +731,17 @@ def test_mixed_container_types():
     result = serializer.json_serialize({3, 1, 2})
     assert isinstance(result, dict)
     assert _FORMAT_KEY in result
-    assert result[_FORMAT_KEY] == "set"
-    assert isinstance(result["data"], list)
-    assert set(result["data"]) == {1, 2, 3}
+    assert result[_FORMAT_KEY] == "set"  # ty: ignore[invalid-argument-type]
+    assert isinstance(result["data"], list)  # ty: ignore[invalid-argument-type]
+    assert set(result["data"]) == {1, 2, 3}  # ty: ignore[invalid-argument-type]
 
     # Frozenset - serialized with format key
     result = serializer.json_serialize(frozenset([4, 5, 6]))
     assert isinstance(result, dict)
     assert _FORMAT_KEY in result
-    assert result[_FORMAT_KEY] == "frozenset"
-    assert isinstance(result["data"], list)
-    assert set(result["data"]) == {4, 5, 6}
+    assert result[_FORMAT_KEY] == "frozenset"  # ty: ignore[invalid-argument-type]
+    assert isinstance(result["data"], list)  # ty: ignore[invalid-argument-type]
+    assert set(result["data"]) == {4, 5, 6}  # ty: ignore[invalid-argument-type]
 
     # Generator (Iterable) - serialized as list
     gen = (x * 2 for x in range(3))

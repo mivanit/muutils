@@ -294,7 +294,7 @@ def test_interval_with_non_numeric_types():
     with pytest.raises(TypeError):
         Interval("a", "b")  # type: ignore[arg-type]
     with pytest.raises(TypeError):
-        "a" in Interval(1, 2)
+        "a" in Interval(1, 2)  # pyright: ignore[reportUnusedExpression]
 
 
 def test_interval_initialization_with_iterables():
@@ -1447,7 +1447,7 @@ def test_potential_bug_nan_handling():
 
     i = Interval(0, 1)
     with pytest.raises(ValueError):
-        float("nan") in i
+        float("nan") in i  # pyright: ignore[reportUnusedExpression]
 
 
 # Potential bug: Intersection of adjacent intervals

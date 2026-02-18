@@ -46,8 +46,6 @@ else:
 from muutils.json_serialize.types import (
     _FORMAT_KEY,
     Hashableitem,
-    _SerializedFrozenset,
-    _SerializedSet,
 )  # pyright: ignore[reportPrivateUsage]
 
 from muutils.json_serialize.util import (
@@ -331,19 +329,19 @@ class JsonSerializer:
     ) -> JSONdict: ...
     @overload
     def json_serialize(self, obj: list, path: ObjectPath = ()) -> list: ...
-    @overload
-    def json_serialize(self, obj: set, path: ObjectPath = ()) -> _SerializedSet: ...
-    @overload
-    def json_serialize(
-        self, obj: frozenset, path: ObjectPath = ()
-    ) -> _SerializedFrozenset: ...
+    # @overload  # pyright: ignore[reportOverlappingOverload]
+    # def json_serialize(self, obj: set, path: ObjectPath = ()) -> _SerializedSet: ...
+    # @overload
+    # def json_serialize(
+    #     self, obj: frozenset, path: ObjectPath = ()
+    # ) -> _SerializedFrozenset: ...
     @overload
     def json_serialize(self, obj: Any, path: ObjectPath = ()) -> JSONitem: ...
     def json_serialize(
         self,
         obj: Any,  # pyright: ignore[reportAny]
         path: ObjectPath = (),
-    ) -> JSONitem | _SerializedSet | _SerializedFrozenset:
+    ) -> JSONitem:
         handler = None
         try:
             for handler in self.handlers:
@@ -394,14 +392,12 @@ GLOBAL_JSON_SERIALIZER: JsonSerializer = JsonSerializer()
 def json_serialize(obj: Mapping[str, Any], path: ObjectPath = ()) -> JSONdict: ...
 @overload
 def json_serialize(obj: list, path: ObjectPath = ()) -> list: ...
-@overload
-def json_serialize(obj: set, path: ObjectPath = ()) -> _SerializedSet: ...
-@overload
-def json_serialize(obj: frozenset, path: ObjectPath = ()) -> _SerializedFrozenset: ...
+@overload  # pyright: ignore[reportOverlappingOverload]
+# def json_serialize(obj: set, path: ObjectPath = ()) -> _SerializedSet: ...
+# @overload
+# def json_serialize(obj: frozenset, path: ObjectPath = ()) -> _SerializedFrozenset: ...
 @overload
 def json_serialize(obj: Any, path: ObjectPath = ()) -> JSONitem: ...
-def json_serialize(
-    obj: Any, path: ObjectPath = ()
-) -> JSONitem | _SerializedSet | _SerializedFrozenset:  # pyright: ignore[reportAny]
+def json_serialize(obj: Any, path: ObjectPath = ()) -> JSONitem:  # pyright: ignore[reportAny]
     """serialize object to json-serializable object with default config"""
     return GLOBAL_JSON_SERIALIZER.json_serialize(obj, path=path)

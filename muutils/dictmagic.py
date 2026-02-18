@@ -486,7 +486,7 @@ def condense_tensor_dict(
     )
 
     # get shapes
-    data_shapes: dict[str, Union[str, tuple[int, ...]]] = {
+    data_shapes: dict[str, Union[str, tuple[int, ...]]] = {  # pyright: ignore[reportAssignmentType]
         k: shapes_convert(
             tuple_dims_replace(
                 tuple(v.shape)[drop_batch_dims:],

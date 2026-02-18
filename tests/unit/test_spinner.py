@@ -434,7 +434,7 @@ def test_spinner_state_handling():
             raise ValueError("Test error")
     except ValueError:
         error_caught = True
-        assert sp.state == "fail"
+        assert sp.state == "fail"  # pyright: ignore[reportPossiblyUnboundVariable]
 
     assert error_caught, "Context manager should propagate errors"
 

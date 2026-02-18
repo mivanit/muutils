@@ -1,6 +1,6 @@
 # ty: All checks passed!
-# basedpyright: 23 errors, 2 warnings, 0 notes
-# mypy: Found 4 errors in 1 file (checked 117 source files)
+# basedpyright: 0 errors, 0 warnings, 0 notes
+# mypy: Found 2 errors in 1 file (checked 117 source files)
 
 [type_errors.ty]
 total_errors = 0
@@ -10,46 +10,17 @@ total_errors = 0
 [type_errors.ty.by_file]
 
 [type_errors.basedpyright]
-total_errors = 23
+total_errors = 0
 
 [type_errors.basedpyright.by_type]
-"reportPossiblyUnboundVariable" = 13
-"reportArgumentType" = 3
-"reportOverlappingOverload" = 2
-"reportOperatorIssue" = 2
-"reportAssignmentType" = 1
-"reportCallIssue" = 1
-"reportGeneralTypeIssues" = 1
 
 [type_errors.basedpyright.by_file]
-"muutils/parallel.py" = 4
-"muutils/tensor_info.py" = 4
-"muutils/json_serialize/json_serialize.py" = 2
-"muutils/nbutils/mermaid.py" = 2
-"tests/unit/test_dbg.py" = 2
-"tests/unit/test_parallel.py" = 2
-"muutils/dictmagic.py" = 1
-"muutils/json_serialize/serializable_dataclass.py" = 1
-"muutils/nbutils/run_notebook_tests.py" = 1
-"tests/unit/json_serialize/test_util.py" = 1
-"tests/unit/test_collect_warnings.py" = 1
-"tests/unit/test_spinner.py" = 1
-"tests/unit/test_timeit_fancy.py" = 1
-
-[type_warnings.basedpyright]
-total_warnings = 2
-
-[type_warnings.basedpyright.by_type]
-"reportUnusedExpression" = 2
-
-[type_warnings.basedpyright.by_file]
-"tests/unit/test_interval.py" = 2
 
 [type_errors.mypy]
-total_errors = 4
+total_errors = 2
 
 [type_errors.mypy.by_type]
-"assignment" = 4
+"assignment" = 2
 
 [type_errors.mypy.by_file]
-"tests/unit/json_serialize/test_json_serialize.py" = 4
+"tests/unit/json_serialize/test_json_serialize.py" = 2

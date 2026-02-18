@@ -1,7 +1,9 @@
+from __future__ import annotations
+
 import argparse
 import sys
-from collections.abc import Callable, Iterable, Sequence
-from typing import Any, Final, TypeVar
+from collections.abc import Iterable, Sequence
+from typing import Any, Callable, Final, TypeVar
 
 if sys.version_info >= (3, 12):
     from typing import override

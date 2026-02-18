@@ -1,10 +1,14 @@
 from __future__ import annotations
 
+import sys
 import time
 from dataclasses import dataclass, field
+from typing import Any, Callable
 
-# TYPING: ty fails to resolve this??
-from typing import Any, Callable, override  # type: ignore[unresolved-import]
+if sys.version_info >= (3, 12):
+    from typing import override
+else:
+    from typing_extensions import override
 
 from muutils.logger.simplelogger import AnyIO, NullIO
 from muutils.misc import sanitize_fname

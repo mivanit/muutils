@@ -3,6 +3,8 @@
 Run with: python tests/benchmark_parallel.py
 """
 
+from __future__ import annotations
+
 from pathlib import Path
 import time
 import multiprocessing

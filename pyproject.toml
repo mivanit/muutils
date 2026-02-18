@@ -125,7 +125,7 @@
 
 [tool.ruff]
 	# Exclude the directories specified in the global excludes
-	exclude = ["tests/input_data", "tests/junk_data", "_wip/"]
+	exclude = ["tests/input_data", "tests/junk_data", "_wip/", ".meta/scripts/"]
 	[tool.ruff.lint.per-file-ignores]
 		"muutils/tensor_info.py" = [
 			"E701", # multiple statements on one line (colon)

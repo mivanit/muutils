@@ -69,4 +69,8 @@ pip install muutils[web]      # weasyprint -- for web/html_to_pdf
 | [`tensor_info`](https://miv.name/muutils/muutils/tensor_info.html) | Tensor metadata extraction and formatting *(requires `array`)* |
 | [`ml`](https://miv.name/muutils/muutils/ml.html) | CUDA memory monitoring *(requires `array`)* |
 
+# [`ZANJ`](https://github.com/mivanit/ZANJ/)
+
+ZANJ is a human-readable and simple format for ML models, datasets, and arbitrary objects. It's built around having a zip file with `json` and `npy` files, and has been spun off into its [own project](https://github.com/mivanit/ZANJ/).
+
 There are a couple work-in-progress utilities in [`_wip`](https://github.com/mivanit/muutils/tree/main/muutils/_wip/) that aren't ready for anything, but nothing in this repo is suitable for production. Use at your own risk!

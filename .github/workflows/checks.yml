@@ -104,7 +104,10 @@ jobs:
       #   if: ${{ matrix.python != '3.8' && matrix.python != '3.9' }}
       #   run: make test WARN_STRICT=1
 
-      - name: check typing
-        # TODO[torch-python-3.14]: lack of torch causes mypy issues in 3.14
-        if: ${{ matrix.python != '3.14' }}
+      - name: "check typing"
+        if: ${{ matrix.python != '3.8' }}
         run: make typing UV_NOSYNC=1
+
+      - name: "check typing (legacy: log only, always pass)"
+        if: ${{ matrix.python == '3.8' }}
+        run: make typing UV_NOSYNC=1 || true

@@ -403,15 +403,17 @@ format-check:
 # set TYPE_CHECKERS to customize which checkers run (e.g., TYPE_CHECKERS=mypy,basedpyright)
 # set TYPING_OUTPUT_DIR to save outputs to files (used by typing-summary)
 # returns exit code 1 if any checker fails
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# special casing mypy
 .PHONY: typing
 typing: gen-extra-tests
 	@echo "running type checks"
 	@div="--------------------------------------------------"; \
 	failed=0; \
 	for c in $$(echo "$(TYPE_CHECKERS)" | tr ',' ' '); do \
-		case "$$c" in ty) subcmd="check";; *) subcmd="";; esac; \
+		case "$$c" in ty) subcmd="check"; args="";; mypy) subcmd=""; args="$(TYPECHECK_ARGS)";; *) subcmd=""; args="";; esac; \
 		printf "\033[36m$$div\n[$$c]\n$$div\033[0m\n"; \
-		$(PYTHON) -m $$c $$subcmd $(TYPECHECK_ARGS) $(TYPECHECK_PATH) $(if $(TYPING_OUTPUT_DIR),> $(TYPING_OUTPUT_DIR)/$$c.txt 2>&1) || failed=1; \
+		$(PYTHON) -m $$c $$subcmd $$args $(TYPECHECK_PATH) $(if $(TYPING_OUTPUT_DIR),> $(TYPING_OUTPUT_DIR)/$$c.txt 2>&1) || failed=1; \
 	done; \
 	if [ $$failed -eq 1 ]; then \
 		printf "\033[31m$$div\nnot all type checks passed\n$$div\033[0m\n"; \
@@ -419,6 +421,7 @@ typing: gen-extra-tests
 	else \
 		printf "\033[32m$$div\nall type checks passed\n$$div\033[0m\n"; \
 	fi
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # save type check outputs and generate detailed breakdown
 # outputs are saved to $(TYPE_ERRORS_DIR)/*.txt

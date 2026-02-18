@@ -157,7 +157,20 @@ endif
 
 # if you want different behavior for different python versions
 # --------------------------------------------------
-# COMPATIBILITY_MODE := $(shell $(PYTHON) -c "import sys; print(1 if sys.version_info < (3, 10) else 0)")
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# compatibility mode for python <3.10
+# loose typing, allow warnings for python <3.10
+
+TYPECHECK_ARGS ?=
+
+# COMPATIBILITY_MODE: whether to run in compatibility mode for python <3.11
+COMPATIBILITY_MODE := $(shell $(PYTHON) -c "import sys; print(1 if sys.version_info < (3, 11) else 0)")
+
+ifeq ($(COMPATIBILITY_MODE), 1)
+	JUNK := $(info !!! WARNING !!!: Detected python version less than 3.11, some behavior will be different)
+	TYPECHECK_ARGS += --disable-error-code misc --disable-error-code syntax --disable-error-code import-not-found --no-check-untyped-defs
+endif
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # options we might want to pass to pytest
 # --------------------------------------------------
@@ -698,6 +711,7 @@ info-long: info
 	@echo "    TYPECHECK_ARGS = $(TYPECHECK_ARGS)"
 	@echo "    TYPECHECK_PATH = $(TYPECHECK_PATH)"
 	@echo "    TYPE_CHECKERS = $(TYPE_CHECKERS)"
+	@echo "    COMPATIBILITY_MODE = $(COMPATIBILITY_MODE)"
 
 # Smart help command: shows general help, or detailed info about specific targets
 # Usage:

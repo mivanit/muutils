@@ -163,7 +163,7 @@ def test_torch_gpu_tensors():
     """Test serialization of GPU tensors (if CUDA is available)."""
     if not torch.cuda.is_available():
         # TYPING: ty bug on python <= 3.9
-        pytest.skip("CUDA not available")  # ty: ignore[arg-type,invalid-argument-type]
+        pytest.skip("CUDA not available")  # ty: ignore[arg-type,invalid-argument-type,too-many-positional-arguments]
 
     jser = JsonSerializer(array_mode="array_list_meta")
 

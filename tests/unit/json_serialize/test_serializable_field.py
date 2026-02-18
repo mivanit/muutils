@@ -8,7 +8,7 @@ from __future__ import annotations
 
 import dataclasses
 from dataclasses import field
-from typing import Any
+from typing import Any, Tuple
 
 import pytest
 
@@ -187,7 +187,7 @@ def test_serialization_fn_with_complex_type():
     @serializable_dataclass
     class ComplexSerialize(SerializableDataclass):
         # Store a tuple as a list
-        coords: tuple[int, int] = serializable_field(
+        coords: Tuple[int, int] = serializable_field(
             default=(0, 0),
             serialization_fn=lambda x: list(x),
             deserialize_fn=lambda x: tuple(x),

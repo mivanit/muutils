@@ -2,7 +2,7 @@
 
 # mypy: Success: no issues found in 117 source files
 # basedpyright: 435 errors, 3174 warnings, 0 notes
-# ty: Found 3 diagnostics
+# ty: All checks passed!
 
 [type_errors.mypy]
 total_errors = 0
@@ -212,11 +212,8 @@ total_warnings = 3174
 "tests/unit/test_tensor_utils_torch.py" = 1
 
 [type_errors.ty]
-total_errors = 3
+total_errors = 0
 
 [type_errors.ty.by_type]
-"invalid-assignment" = 2
-"invalid-argument-type" = 1
 
 [type_errors.ty.by_file]
-"muutils/misc/func.py" = 3

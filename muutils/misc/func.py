@@ -122,7 +122,7 @@ def validate_kwarg(
         def wrapper(*args: FuncParams.args, **kwargs: FuncParams.kwargs) -> ReturnType:  # pyright: ignore[reportUnknownParameterType]
             if kwarg_name in kwargs:
                 value: Any = kwargs[kwarg_name]
-                if not validator(value):
+                if not validator(value):  # ty: ignore[invalid-argument-type]
                     msg: str = (
                         description.format(kwarg_name=kwarg_name, value=value)
                         if description
@@ -183,9 +183,9 @@ def replace_kwarg(
             if kwarg_name in kwargs:
                 # TODO: no way to type hint this, I think
                 if check(kwargs[kwarg_name]):  # type: ignore[arg-type]
-                    kwargs[kwarg_name] = replacement_value
+                    kwargs[kwarg_name] = replacement_value  # ty: ignore[invalid-assignment]
             elif replace_if_missing and kwarg_name not in kwargs:
-                kwargs[kwarg_name] = replacement_value
+                kwargs[kwarg_name] = replacement_value  # ty: ignore[invalid-assignment]
             return func(*args, **kwargs)
 
         return cast(Callable[FuncParams, ReturnType], wrapper)

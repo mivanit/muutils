@@ -975,6 +975,12 @@ types-pytz==2024.2.0.20241221 ; python_full_version < '3.9'
     # via pandas-stubs
 types-pytz==2025.2.0.20251108 ; python_full_version >= '3.9' and python_full_version < '3.11'
     # via pandas-stubs
+types-requests==2.32.0.20241016 ; python_full_version < '3.9'
+    # via types-tqdm
+types-requests==2.32.4.20260107 ; python_full_version >= '3.9'
+    # via types-tqdm
+types-tqdm==4.67.0.20241221 ; python_full_version < '3.9'
+types-tqdm==4.67.3.20260205 ; python_full_version >= '3.9'
 typing-extensions==4.13.2 ; python_full_version < '3.9'
     # via
     #   anyio
@@ -1019,11 +1025,13 @@ urllib3==2.2.3 ; python_full_version < '3.9'
     # via
     #   requests
     #   twine
+    #   types-requests
 urllib3==2.6.3 ; python_full_version >= '3.9'
     # via
     #   id
     #   requests
     #   twine
+    #   types-requests
 wadler-lindig==0.1.7 ; python_full_version >= '3.10'
     # via jaxtyping
 wcmatch==10.1 ; python_full_version >= '3.11'

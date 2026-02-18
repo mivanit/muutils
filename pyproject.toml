@@ -75,6 +75,7 @@
 		"ty>=0.0.12",
 		"basedpyright",
 		"pandas-stubs>=2.0.0",
+		"types-tqdm",
 		# tests & coverage
 		"pytest>=8.2.2",
 		"pytest-cov>=4.1.0",

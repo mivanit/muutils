@@ -1,5 +1,5 @@
 # ty: All checks passed!
-# basedpyright: 25 errors, 2 warnings, 0 notes
+# basedpyright: 23 errors, 2 warnings, 0 notes
 # mypy: Found 4 errors in 1 file (checked 117 source files)
 
 [type_errors.ty]
@@ -10,15 +10,15 @@ total_errors = 0
 [type_errors.ty.by_file]
 
 [type_errors.basedpyright]
-total_errors = 25
+total_errors = 23
 
 [type_errors.basedpyright.by_type]
 "reportPossiblyUnboundVariable" = 13
-"reportArgumentType" = 4
+"reportArgumentType" = 3
 "reportOverlappingOverload" = 2
 "reportOperatorIssue" = 2
-"reportCallIssue" = 2
 "reportAssignmentType" = 1
+"reportCallIssue" = 1
 "reportGeneralTypeIssues" = 1
 
 [type_errors.basedpyright.by_file]
@@ -26,7 +26,6 @@ total_errors = 25
 "muutils/tensor_info.py" = 4
 "muutils/json_serialize/json_serialize.py" = 2
 "muutils/nbutils/mermaid.py" = 2
-"tests/unit/benchmark_parallel/benchmark_parallel.py" = 2
 "tests/unit/test_dbg.py" = 2
 "tests/unit/test_parallel.py" = 2
 "muutils/dictmagic.py" = 1

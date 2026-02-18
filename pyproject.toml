@@ -175,6 +175,7 @@
 # for mypy/pyright but not for ty. See https://docs.astral.sh/ty/configuration/
 [tool.ty.rules]
 	unused-type-ignore-comment = "ignore"
+	ignore-comment-unknown-rule = "ignore" # versions of ty for python 3.11 don't know about this?
 
 # [[tool.ty.overrides]]
 # 	include = ["tests/unit/json_serialize/test_json_serialize.py", "tests/unit/test_jsonlines.py"]

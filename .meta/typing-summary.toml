@@ -1,42 +1,41 @@
-# ty: Found 20 diagnostics
-# basedpyright: 36 errors, 2 warnings, 0 notes
-# mypy: Found 11 errors in 2 files (checked 117 source files)
+# ty: Found 10 diagnostics
+# basedpyright: 38 errors, 2 warnings, 0 notes
+# mypy: Found 21 errors in 4 files (checked 117 source files)
 
 [type_errors.ty]
-total_errors = 20
+total_errors = 10
 
 [type_errors.ty.by_type]
-"invalid-argument-type" = 17
-"invalid-key" = 3
+"invalid-key" = 10
 
 [type_errors.ty.by_file]
-"tests/unit/json_serialize/test_json_serialize.py" = 16
+"tests/unit/json_serialize/test_json_serialize.py" = 6
 "tests/unit/test_jsonlines.py" = 4
 
 [type_errors.basedpyright]
-total_errors = 36
+total_errors = 38
 
 [type_errors.basedpyright.by_type]
-"reportPossiblyUnboundVariable" = 15
-"reportInconsistentOverload" = 4
-"reportAttributeAccessIssue" = 4
+"reportPossiblyUnboundVariable" = 13
+"reportGeneralTypeIssues" = 13
 "reportArgumentType" = 4
 "reportCallIssue" = 3
-"reportOverlappingOverload" = 2
 "reportOperatorIssue" = 2
+"reportAttributeAccessIssue" = 2
 "reportAssignmentType" = 1
-"reportGeneralTypeIssues" = 1
 
 [type_errors.basedpyright.by_file]
-"muutils/json_serialize/json_serialize.py" = 6
-"muutils/json_serialize/serializable_dataclass.py" = 5
+"tests/unit/test_jsonlines.py" = 6
 "tests/unit/benchmark_parallel/benchmark_parallel.py" = 5
 "muutils/parallel.py" = 4
 "muutils/tensor_info.py" = 4
+"tests/unit/json_serialize/test_json_serialize.py" = 4
 "muutils/nbutils/mermaid.py" = 2
+"tests/unit/json_serialize/test_array.py" = 2
 "tests/unit/test_dbg.py" = 2
 "tests/unit/test_parallel.py" = 2
 "muutils/dictmagic.py" = 1
+"muutils/json_serialize/serializable_dataclass.py" = 1
 "muutils/nbutils/run_notebook_tests.py" = 1
 "tests/unit/json_serialize/test_util.py" = 1
 "tests/unit/test_collect_warnings.py" = 1
@@ -53,13 +52,14 @@ total_warnings = 2
 "tests/unit/test_interval.py" = 2
 
 [type_errors.mypy]
-total_errors = 11
+total_errors = 21
 
 [type_errors.mypy.by_type]
-"assignment" = 5
-"misc" = 4
-"literal-required" = 2
+"typeddict-item" = 18
+"assignment" = 3
 
 [type_errors.mypy.by_file]
 "tests/unit/json_serialize/test_json_serialize.py" = 7
-"muutils/json_serialize/json_serialize.py" = 4
+"tests/unit/test_jsonlines.py" = 6
+"tests/unit/json_serialize/test_array_torch.py" = 6
+"tests/unit/json_serialize/test_array.py" = 2

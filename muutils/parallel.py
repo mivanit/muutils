@@ -43,7 +43,7 @@ DEFAULT_PBAR_FN: ProgressBarOption
 
 try:
     # use tqdm if it's available
-    import tqdm  # type: ignore[import-untyped]
+    import tqdm
 
     DEFAULT_PBAR_FN = "tqdm"
 
@@ -74,7 +74,7 @@ def spinner_fn_wrap(x: Iterable[Any], **kwargs: Any) -> List[Any]:
 
 def map_kwargs_for_tqdm(kwargs: Dict[str, Any]) -> Dict[str, Any]:
     "map kwargs for tqdm, cant wrap because the pbar dissapears?"
-    tqdm_allowed_kwargs: set[str] = get_fn_allowed_kwargs(tqdm.tqdm.__init__)
+    tqdm_allowed_kwargs: set[str] = get_fn_allowed_kwargs(tqdm.tqdm.__init__)  # pyright: ignore[reportPossiblyUnboundVariable]
     mapped_kwargs: dict = {k: v for k, v in kwargs.items() if k in tqdm_allowed_kwargs}
 
     if "desc" not in kwargs:
@@ -126,7 +126,7 @@ def set_up_progress_bar_fn(
     # if `pbar` is a different string, figure out which progress bar to use
     elif isinstance(pbar, str):
         if pbar == "tqdm":
-            pbar_fn = tqdm.tqdm
+            pbar_fn = tqdm.tqdm # pyright: ignore[reportPossiblyUnboundVariable]
             pbar_kwargs = map_kwargs_for_tqdm(pbar_kwargs)
         elif pbar == "spinner":
             pbar_fn = functools.partial(spinner_fn_wrap, **pbar_kwargs)
@@ -273,8 +273,8 @@ def run_maybe_parallel(
 
     # close the pool if we used one
     if parallel:
-        pool.close()
-        pool.join()
+        pool.close() # pyright: ignore[reportPossiblyUnboundVariable]
+        pool.join() # pyright: ignore[reportPossiblyUnboundVariable]
 
     # return the output as a list
     return output

@@ -133,7 +133,8 @@ class TestMatrixPowers:
                 expected = np.linalg.matrix_power(A, power)
                 np.testing.assert_allclose(result[i], expected)
         except Exception as e:
-            pytest.skip(f"Negative powers not supported: {e}")
+            # TYPING: ty bug on python <= 3.9
+            pytest.skip(f"Negative powers not supported: {e}")  # ty: ignore[arg-type]
 
     def test_large_powers(self) -> None:
         """Test with large powers to verify binary exponentiation efficiency."""

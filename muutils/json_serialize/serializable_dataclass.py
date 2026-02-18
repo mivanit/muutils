@@ -140,7 +140,7 @@ def zanj_register_loader_serializable_dataclass(
             return
 
     _format: str = f"{cls.__name__}(SerializableDataclass)"
-    lh: LoaderHandler = LoaderHandler(
+    lh: LoaderHandler = LoaderHandler(  # pyright: ignore[reportPossiblyUnboundVariable]
         check=lambda json_item, path=None, z=None: (  # type: ignore
             isinstance(json_item, dict)
             and _FORMAT_KEY in json_item
@@ -152,7 +152,7 @@ def zanj_register_loader_serializable_dataclass(
         desc=f"{_format} loader via muutils.json_serialize.serializable_dataclass",
     )
 
-    register_loader_handler(lh)
+    register_loader_handler(lh)  # pyright: ignore[reportPossiblyUnboundVariable]
 
     return lh
 
@@ -760,8 +760,8 @@ def serializable_dataclass(
                         if isinstance(value, SerializableDataclass):
                             value = value.serialize()
                         # if the value has a serialization function, use that
-                        if hasattr(value, "serialize") and callable(value.serialize):
-                            value = value.serialize()
+                        if hasattr(value, "serialize") and callable(value.serialize):  # pyright: ignore[reportAttributeAccessIssue]
+                            value = value.serialize()  # pyright: ignore[reportAttributeAccessIssue]
                         # if the field has a serialization function, use that
                         # it would be nice to be able to override a class's `.serialize()`, but that could lead to some inconsistencies!
                         elif field.serialization_fn:
@@ -775,7 +775,7 @@ def serializable_dataclass(
                                 [
                                     f"Error serializing field '{field.name}' on class {self.__class__.__module__}.{self.__class__.__name__}",
                                     f"{field = }",
-                                    f"{value = }",
+                                    f"{value or '<unavailable>' = }",
                                     f"{self = }",
                                 ]
                             )

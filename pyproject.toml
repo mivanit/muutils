@@ -74,6 +74,7 @@
 		"beartype>=0.14.1",
 		"ty>=0.0.12",
 		"basedpyright",
+		"pandas-stubs>=2.0.0",
 		# tests & coverage
 		"pytest>=8.2.2",
 		"pytest-cov>=4.1.0",

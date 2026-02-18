@@ -3,12 +3,12 @@ from pathlib import Path
 import warnings
 
 
-def pytest_ignore_collect(path: Path, config) -> bool:
+def pytest_ignore_collect(collection_path: Path, config) -> bool:
     """ignore any test file ending with `_torch.py` on Python 3.14+
 
     Also ignore tests/unit/validate_type/ on Python < 3.11 (these use modern type syntax)
     """
-    path_str: str = str(path).replace("\\", "/")
+    path_str: str = str(collection_path).replace("\\", "/")
     # TODO[torch-python-3.14]: remove when torch supports Python 3.14
     # ignore torch tests on Python 3.14+
     if sys.version_info >= (3, 14):

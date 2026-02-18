@@ -85,14 +85,14 @@ def test_json_serialize_basic_types():
     assert serializer.json_serialize(None) is None
 
     # Test list
-    result = serializer.json_serialize([1, 2, 3])
-    assert result == [1, 2, 3]
-    assert isinstance(result, list)
+    list_result = serializer.json_serialize([1, 2, 3])
+    assert list_result == [1, 2, 3]
+    assert isinstance(list_result, list)
 
     # Test dict
-    result = serializer.json_serialize({"a": 1, "b": 2})
-    assert result == {"a": 1, "b": 2}
-    assert isinstance(result, dict)
+    dict_result = serializer.json_serialize({"a": 1, "b": 2})
+    assert dict_result == {"a": 1, "b": 2}
+    assert isinstance(dict_result, dict)
 
     # Test empty containers
     assert serializer.json_serialize([]) == []
@@ -317,13 +317,13 @@ def test_nested_structures():
 
     # Nested dicts and lists
     nested = {"outer": {"inner": [1, 2, {"deep": "value"}]}}
-    result = serializer.json_serialize(nested)
-    assert result == {"outer": {"inner": [1, 2, {"deep": "value"}]}}
+    nested_result = serializer.json_serialize(nested)
+    assert nested_result == {"outer": {"inner": [1, 2, {"deep": "value"}]}}
 
     # List of dicts
     list_of_dicts = [{"a": 1}, {"b": 2}, {"c": 3}]
-    result = serializer.json_serialize(list_of_dicts)
-    assert result == [{"a": 1}, {"b": 2}, {"c": 3}]
+    list_result = serializer.json_serialize(list_of_dicts)
+    assert list_result == [{"a": 1}, {"b": 2}, {"c": 3}]
 
     # Dict of lists
     dict_of_lists = {"nums": [1, 2, 3], "strs": ["a", "b", "c"]}

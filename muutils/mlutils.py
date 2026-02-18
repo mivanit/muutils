@@ -35,6 +35,7 @@ def get_device(device: "Union[str,torch.device,None]" = None) -> "torch.device":
         )
     try:
         # if device is given
+        assert torch, "Torch is not available, cannot get device" # pyright: ignore[reportPossiblyUnboundVariable]
         if device is not None:
             device = torch.device(device)
             if any(
@@ -71,7 +72,7 @@ def get_device(device: "Union[str,torch.device,None]" = None) -> "torch.device":
             f"Error while getting device, falling back to CPU. Error: {e}",
             RuntimeWarning,
         )
-        return torch.device("cpu")
+        return torch.device("cpu") # pyright: ignore[reportPossiblyUnboundVariable]
 
 
 def set_reproducibility(seed: int = DEFAULT_SEED):
@@ -88,10 +89,20 @@ def set_reproducibility(seed: int = DEFAULT_SEED):
     random.seed(seed)
 
     if ARRAY_IMPORTS:
-        np.random.seed(seed)
-        torch.manual_seed(seed)
+        try:
+            assert np, "Numpy is not available, cannot set seed for numpy" # pyright: ignore[reportPossiblyUnboundVariable]
+            np.random.seed(seed)
+        except Exception as e:
+            warnings.warn(f"Error while setting seed for numpy: {e}", RuntimeWarning)
 
-        torch.use_deterministic_algorithms(True)
+        try:
+            assert torch, "Torch is not available, cannot set seed for torch" # pyright: ignore[reportPossiblyUnboundVariable]
+            torch.manual_seed(seed)
+
+            torch.use_deterministic_algorithms(True)
+        except Exception as e:
+            warnings.warn(f"Error while setting seed for torch: {e}", RuntimeWarning)
+        
         # Ensure reproducibility for concurrent CUDA streams
         # see https://docs.nvidia.com/cuda/cublas/index.html#cublasApi_reproducibility.
         os.environ["CUBLAS_WORKSPACE_CONFIG"] = ":4096:8"

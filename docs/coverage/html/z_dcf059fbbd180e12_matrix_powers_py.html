@@ -3,21 +3,21 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>Coverage for muutils/math/matrix_powers.py: 97%</title>
-    <link rel="icon" sizes="32x32" href="favicon_32_cb_58284776.png">
-    <link rel="stylesheet" href="style_cb_6b508a39.css" type="text/css">
-    <script src="coverage_html_cb_6fb7b396.js" defer></script>
+    <link rel="icon" sizes="32x32" href="favicon_32_cb_c827f16f.png">
+    <link rel="stylesheet" href="style_cb_9ff733b0.css" type="text/css">
+    <script src="coverage_html_cb_dd2e7eb5.js" defer></script>
 </head>
 <body class="pyfile">
 <header>
     <div class="content">
         <h1>
-            <span class="text">Coverage for </span><b>muutils/math/matrix_powers.py</b>:
+            <span class="text">Coverage for </span><b>muutils&#8201;/&#8201;math&#8201;/&#8201;matrix_powers.py</b>:
             <span class="pc_cov">97%</span>
         </h1>
         <aside id="help_panel_wrapper">
             <input id="help_panel_state" type="checkbox">
             <label for="help_panel_state">
-                <img id="keyboard_icon" src="keybd_closed_cb_ce680311.png" alt="Show/hide keyboard shortcuts">
+                <img id="keyboard_icon" src="keybd_closed_cb_900cfef5.png" alt="Show/hide keyboard shortcuts">
             </label>
             <div id="help_panel">
                 <p class="legend">Shortcuts on this page</p>
@@ -64,8 +64,8 @@
             <a id="indexLink" class="nav" href="index.html">&Hat; index</a> &nbsp; &nbsp;
             <a id="nextFileLink" class="nav" href="z_e86309373f8f378d___init___py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
-            <a class="nav" href="https://coverage.readthedocs.io/en/7.11.0">coverage.py v7.11.0</a>,
-            created at 2025-10-28 17:24 +0000
+            <a class="nav" href="https://coverage.readthedocs.io/en/7.13.4">coverage.py v7.13.4</a>,
+            created at 2026-02-18 02:51 -0700
         </p>
         <aside class="hidden">
             <button type="button" class="button_next_chunk" data-shortcut="j"></button>
@@ -82,7 +82,7 @@
 <main id="source">
     <p class="run"><span class="n"><a id="t1" href="#t1">1</a></span><span class="t"><span class="key">from</span> <span class="nam">__future__</span> <span class="key">import</span> <span class="nam">annotations</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t2" href="#t2">2</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t3" href="#t3">3</a></span><span class="t"><span class="key">from</span> <span class="nam">typing</span> <span class="key">import</span> <span class="nam">List</span><span class="op">,</span> <span class="nam">Sequence</span><span class="op">,</span> <span class="nam">TYPE_CHECKING</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t3" href="#t3">3</a></span><span class="t"><span class="key">from</span> <span class="nam">typing</span> <span class="key">import</span> <span class="nam">Any</span><span class="op">,</span> <span class="nam">List</span><span class="op">,</span> <span class="nam">Sequence</span><span class="op">,</span> <span class="nam">TYPE_CHECKING</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t4" href="#t4">4</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t5" href="#t5">5</a></span><span class="t"><span class="key">import</span> <span class="nam">numpy</span> <span class="key">as</span> <span class="nam">np</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t6" href="#t6">6</a></span><span class="t"><span class="key">from</span> <span class="nam">jaxtyping</span> <span class="key">import</span> <span class="nam">Float</span><span class="op">,</span> <span class="nam">Int</span>&nbsp;</span><span class="r"></span></p>
@@ -112,14 +112,14 @@
     <p class="pln"><span class="n"><a id="t30" href="#t30">30</a></span><span class="t"><span class="str">            Dictionary mapping each requested power to the corresponding matrix power</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t31" href="#t31">31</a></span><span class="t"><span class="str">    """</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t32" href="#t32">32</a></span><span class="t">    <span class="nam">dim_n</span><span class="op">:</span> <span class="nam">int</span> <span class="op">=</span> <span class="nam">A</span><span class="op">.</span><span class="nam">shape</span><span class="op">[</span><span class="num">0</span><span class="op">]</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t33" href="#t33">33</a></span><span class="t">    <span class="key">assert</span> <span class="nam">A</span><span class="op">.</span><span class="nam">shape</span><span class="op">[</span><span class="num">0</span><span class="op">]</span> <span class="op">==</span> <span class="nam">A</span><span class="op">.</span><span class="nam">shape</span><span class="op">[</span><span class="num">1</span><span class="op">]</span><span class="op">,</span> <span class="str">f"Matrix must be square, but got {A.shape = }"</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t33" href="#t33">33</a></span><span class="t">    <span class="key">assert</span> <span class="nam">A</span><span class="op">.</span><span class="nam">shape</span><span class="op">[</span><span class="num">0</span><span class="op">]</span> <span class="op">==</span> <span class="nam">A</span><span class="op">.</span><span class="nam">shape</span><span class="op">[</span><span class="num">1</span><span class="op">]</span><span class="op">,</span> <span class="fst">f"</span><span class="fst">Matrix must be square, but got </span><span class="op">{</span><span class="nam">A</span><span class="op">.</span><span class="nam">shape</span> <span class="op">=</span> <span class="op">}</span><span class="fst">"</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t34" href="#t34">34</a></span><span class="t">    <span class="nam">powers_np</span><span class="op">:</span> <span class="nam">Int</span><span class="op">[</span><span class="nam">np</span><span class="op">.</span><span class="nam">ndarray</span><span class="op">,</span> <span class="str">"n_powers_unique"</span><span class="op">]</span> <span class="op">=</span> <span class="nam">np</span><span class="op">.</span><span class="nam">array</span><span class="op">(</span>&nbsp;</span><span class="r"></span></p>
     <p class="run run2"><span class="n"><a id="t35" href="#t35">35</a></span><span class="t">        <span class="nam">sorted</span><span class="op">(</span><span class="nam">set</span><span class="op">(</span><span class="nam">powers</span><span class="op">)</span><span class="op">)</span><span class="op">,</span> <span class="nam">dtype</span><span class="op">=</span><span class="nam">int</span>&nbsp;</span><span class="r"></span></p>
     <p class="run run2"><span class="n"><a id="t36" href="#t36">36</a></span><span class="t">    <span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t37" href="#t37">37</a></span><span class="t">    <span class="nam">n_powers_unique</span><span class="op">:</span> <span class="nam">int</span> <span class="op">=</span> <span class="nam">len</span><span class="op">(</span><span class="nam">powers_np</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t38" href="#t38">38</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t39" href="#t39">39</a></span><span class="t">    <span class="key">if</span> <span class="nam">n_powers_unique</span> <span class="op">&lt;</span> <span class="num">1</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t40" href="#t40">40</a></span><span class="t">        <span class="key">raise</span> <span class="nam">ValueError</span><span class="op">(</span><span class="str">f"No powers requested: {powers = }"</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t40" href="#t40">40</a></span><span class="t">        <span class="key">raise</span> <span class="nam">ValueError</span><span class="op">(</span><span class="fst">f"</span><span class="fst">No powers requested: </span><span class="op">{</span><span class="nam">powers</span> <span class="op">=</span> <span class="op">}</span><span class="fst">"</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t41" href="#t41">41</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t42" href="#t42">42</a></span><span class="t">    <span class="nam">output</span><span class="op">:</span> <span class="nam">Float</span><span class="op">[</span><span class="nam">np</span><span class="op">.</span><span class="nam">ndarray</span><span class="op">,</span> <span class="str">"n_powers_unique n n"</span><span class="op">]</span> <span class="op">=</span> <span class="nam">np</span><span class="op">.</span><span class="nam">full</span><span class="op">(</span>&nbsp;</span><span class="r"></span></p>
     <p class="run run2"><span class="n"><a id="t43" href="#t43">43</a></span><span class="t">        <span class="op">(</span><span class="nam">n_powers_unique</span><span class="op">,</span> <span class="nam">dim_n</span><span class="op">,</span> <span class="nam">dim_n</span><span class="op">)</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
@@ -165,9 +165,9 @@
     <p class="pln"><span class="n"><a id="t83" href="#t83">83</a></span><span class="t"><span class="com"># BUG: breaks with integer matrices???</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t84" href="#t84">84</a></span><span class="t"><span class="com"># TYPING: jaxtyping hints not working here, separate file for torch implementation?</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t85" href="#t85">85</a></span><span class="t"><span class="key">def</span> <span class="nam">matrix_powers_torch</span><span class="op">(</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run run2"><span class="n"><a id="t86" href="#t86">86</a></span><span class="t">    <span class="nam">A</span><span class="op">,</span>  <span class="com"># : Float["torch.Tensor", "n n"],</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run run2"><span class="n"><a id="t86" href="#t86">86</a></span><span class="t">    <span class="nam">A</span><span class="op">:</span> <span class="nam">Any</span><span class="op">,</span>  <span class="com"># : Float["torch.Tensor", "n n"],</span>&nbsp;</span><span class="r"></span></p>
     <p class="run run2"><span class="n"><a id="t87" href="#t87">87</a></span><span class="t">    <span class="nam">powers</span><span class="op">:</span> <span class="nam">Sequence</span><span class="op">[</span><span class="nam">int</span><span class="op">]</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run run2"><span class="n"><a id="t88" href="#t88">88</a></span><span class="t"><span class="op">)</span><span class="op">:</span>  <span class="com"># Float["torch.Tensor", "n_powers n n"]:</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run run2"><span class="n"><a id="t88" href="#t88">88</a></span><span class="t"><span class="op">)</span> <span class="op">-></span> <span class="nam">Any</span><span class="op">:</span>  <span class="com"># Float["torch.Tensor", "n_powers n n"]:</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t89" href="#t89">89</a></span><span class="t">    <span class="str">"""Compute multiple powers of a matrix efficiently.</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t90" href="#t90">90</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t91" href="#t91">91</a></span><span class="t"><span class="str">    Uses binary exponentiation to compute powers in O(log max(powers))</span>&nbsp;</span><span class="r"></span></p>
@@ -191,7 +191,7 @@
     <p class="run"><span class="n"><a id="t109" href="#t109">109</a></span><span class="t">    <span class="key">import</span> <span class="nam">torch</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t110" href="#t110">110</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t111" href="#t111">111</a></span><span class="t">    <span class="key">if</span> <span class="nam">len</span><span class="op">(</span><span class="nam">A</span><span class="op">.</span><span class="nam">shape</span><span class="op">)</span> <span class="op">!=</span> <span class="num">2</span> <span class="key">or</span> <span class="nam">A</span><span class="op">.</span><span class="nam">shape</span><span class="op">[</span><span class="num">0</span><span class="op">]</span> <span class="op">!=</span> <span class="nam">A</span><span class="op">.</span><span class="nam">shape</span><span class="op">[</span><span class="num">1</span><span class="op">]</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t112" href="#t112">112</a></span><span class="t">        <span class="key">raise</span> <span class="nam">ValueError</span><span class="op">(</span><span class="str">f"Matrix must be square, but got {A.shape = }"</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t112" href="#t112">112</a></span><span class="t">        <span class="key">raise</span> <span class="nam">ValueError</span><span class="op">(</span><span class="fst">f"</span><span class="fst">Matrix must be square, but got </span><span class="op">{</span><span class="nam">A</span><span class="op">.</span><span class="nam">shape</span> <span class="op">=</span> <span class="op">}</span><span class="fst">"</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t113" href="#t113">113</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t114" href="#t114">114</a></span><span class="t">    <span class="nam">dim_n</span><span class="op">:</span> <span class="nam">int</span> <span class="op">=</span> <span class="nam">A</span><span class="op">.</span><span class="nam">shape</span><span class="op">[</span><span class="num">0</span><span class="op">]</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t115" href="#t115">115</a></span><span class="t">    <span class="com"># Get unique powers and sort them</span>&nbsp;</span><span class="r"></span></p>
@@ -202,7 +202,7 @@
     <p class="run run2"><span class="n"><a id="t120" href="#t120">120</a></span><span class="t">    <span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t121" href="#t121">121</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t122" href="#t122">122</a></span><span class="t">    <span class="key">if</span> <span class="nam">n_powers_unique</span> <span class="op">&lt;</span> <span class="num">1</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t123" href="#t123">123</a></span><span class="t">        <span class="key">raise</span> <span class="nam">ValueError</span><span class="op">(</span><span class="str">f"No powers requested: {powers = }"</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t123" href="#t123">123</a></span><span class="t">        <span class="key">raise</span> <span class="nam">ValueError</span><span class="op">(</span><span class="fst">f"</span><span class="fst">No powers requested: </span><span class="op">{</span><span class="nam">powers</span> <span class="op">=</span> <span class="op">}</span><span class="fst">"</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t124" href="#t124">124</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t125" href="#t125">125</a></span><span class="t">    <span class="nam">output</span><span class="op">:</span> <span class="nam">Float</span><span class="op">[</span><span class="nam">torch</span><span class="op">.</span><span class="nam">Tensor</span><span class="op">,</span> <span class="str">"n_powers_unique n n"</span><span class="op">]</span> <span class="op">=</span> <span class="nam">torch</span><span class="op">.</span><span class="nam">full</span><span class="op">(</span>&nbsp;</span><span class="r"></span></p>
     <p class="run run2"><span class="n"><a id="t126" href="#t126">126</a></span><span class="t">        <span class="op">(</span><span class="nam">n_powers_unique</span><span class="op">,</span> <span class="nam">dim_n</span><span class="op">,</span> <span class="nam">dim_n</span><span class="op">)</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
@@ -252,8 +252,8 @@
             <a class="nav" href="index.html">&Hat; index</a> &nbsp; &nbsp;
             <a class="nav" href="z_e86309373f8f378d___init___py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
-            <a class="nav" href="https://coverage.readthedocs.io/en/7.11.0">coverage.py v7.11.0</a>,
-            created at 2025-10-28 17:24 +0000
+            <a class="nav" href="https://coverage.readthedocs.io/en/7.13.4">coverage.py v7.13.4</a>,
+            created at 2026-02-18 02:51 -0700
         </p>
     </div>
 </footer>

@@ -12,10 +12,10 @@ def dataclass_transform(
     frozen_default: bool = False,
     field_specifiers: tuple[Union[type[Any], typing.Callable[..., Any]], ...] = (),
     **kwargs: Any,
-) -> typing.Callable:
+) -> typing.Callable[[Any], Any]:
     "mock `typing.dataclass_transform` for python <3.11"
 
-    def decorator(cls_or_fn):
+    def decorator(cls_or_fn: Any) -> Any:
         cls_or_fn.__dataclass_transform__ = {
             "eq_default": eq_default,
             "order_default": order_default,

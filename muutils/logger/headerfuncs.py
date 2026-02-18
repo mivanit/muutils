@@ -10,7 +10,7 @@ from muutils.json_serialize import json_serialize
 
 
 class HeaderFunction(Protocol):
-    def __call__(self, msg: Any, lvl: int, **kwargs) -> str: ...
+    def __call__(self, msg: Any, lvl: int, **kwargs: Any) -> str: ...
 
 
 def md_header_function(
@@ -19,7 +19,7 @@ def md_header_function(
     stream: str | None = None,
     indent_lvl: str = "  ",
     extra_indent: str = "",
-    **kwargs,
+    **kwargs: Any,
 ) -> str:
     """standard header function. will output
 

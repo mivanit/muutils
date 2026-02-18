@@ -115,8 +115,8 @@ def setup_plots(
 
     if PLOT_MODE == "inline":
         if IN_JUPYTER:
-            ipython = get_ipython()
-            ipython.magic("matplotlib inline")
+            ipython = get_ipython()  # pyright: ignore[reportPossiblyUnboundVariable]
+            ipython.magic("matplotlib inline")  # pyright: ignore[reportAttributeAccessIssue, reportOptionalMemberAccess]
         else:
             raise RuntimeError(
                 f"Cannot use inline plotting outside of Jupyter\n{PLOT_MODE = }\t{CONVERSION_PLOTMODE_OVERRIDE = }"
@@ -124,8 +124,8 @@ def setup_plots(
         return
     elif PLOT_MODE == "widget":
         if IN_JUPYTER:
-            ipython = get_ipython()
-            ipython.magic("matplotlib widget")
+            ipython = get_ipython()  # pyright: ignore[reportPossiblyUnboundVariable]
+            ipython.magic("matplotlib widget")  # pyright: ignore[reportAttributeAccessIssue, reportOptionalMemberAccess]
         else:
             # matplotlib outside of jupyter will bring up a new window by default
             pass
@@ -190,7 +190,7 @@ def setup_plots(
 
 
 def configure_notebook(
-    *args,
+    *args: typing.Any,
     seed: int = 42,
     device: typing.Any = None,  # this can be a string, torch.device, or None
     dark_mode: bool = True,
@@ -262,17 +262,17 @@ def configure_notebook(
 
     # Reload modules before executing user code
     if IN_JUPYTER:
-        ipython = get_ipython()
-        if "IPython.extensions.autoreload" not in ipython.extension_manager.loaded:
-            ipython.magic("load_ext autoreload")
-            ipython.magic("autoreload 2")
+        ipython = get_ipython()  # pyright: ignore[reportPossiblyUnboundVariable]
+        if "IPython.extensions.autoreload" not in ipython.extension_manager.loaded:  # pyright: ignore[reportOptionalMemberAccess]
+            ipython.magic("load_ext autoreload")  # pyright: ignore[reportAttributeAccessIssue, reportOptionalMemberAccess]
+            ipython.magic("autoreload 2")  # pyright: ignore[reportAttributeAccessIssue, reportOptionalMemberAccess]
 
         # Specify plotly renderer for vscode
         if PLOTLY_IMPORTED:
-            pio.renderers.default = "notebook_connected"
+            pio.renderers.default = "notebook_connected"  # pyright: ignore[reportPossiblyUnboundVariable]
 
             if dark_mode:
-                pio.templates.default = "plotly_dark"
+                pio.templates.default = "plotly_dark"  # pyright: ignore[reportPossiblyUnboundVariable]
                 plt.style.use("dark_background")
 
     try:

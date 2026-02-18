@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import time
+from types import TracebackType
 from typing import Literal
 
 
@@ -16,7 +17,12 @@ class TimerContext:
         self.start_time = time.time()
         return self
 
-    def __exit__(self, exc_type, exc_val, exc_tb) -> Literal[False]:
+    def __exit__(
+        self,
+        exc_type: type[BaseException] | None,
+        exc_val: BaseException | None,
+        exc_tb: TracebackType | None,
+    ) -> Literal[False]:
         self.end_time = time.time()
         self.elapsed_time = self.end_time - self.start_time
         return False

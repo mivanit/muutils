@@ -7,14 +7,16 @@ hence the name of this class"""
 
 from __future__ import annotations
 
-from typing import Callable, Mapping, TypeVar
+from typing import Callable, Final, Mapping, TypeVar
 
 _kappa_K = TypeVar("_kappa_K")
 _kappa_V = TypeVar("_kappa_V")
 
 # get the docstring of this file
-_BASE_DOC: str = (
+_BASE_DOC: Final[str] = (
+    # TYPING: type checkers complain here, they have no idea that this module does in fact have a __doc__
     __doc__
+    or "anonymous getitem class"
     + """
 
 source function docstring:
@@ -32,15 +34,15 @@ class Kappa(Mapping[_kappa_K, _kappa_V]):
             )
         )
 
-    def __getitem__(self, x) -> _kappa_V:
+    def __getitem__(self, x: _kappa_K) -> _kappa_V:
         return self.func_getitem(x)
 
-    def __iter__(self):
+    def __iter__(self) -> None:  # type: ignore[override]
         raise NotImplementedError(
             "This method is not implemented for Kappa, we don't know the valid inputs"
         )
 
-    def __len__(self):
+    def __len__(self) -> int:
         raise NotImplementedError(
             "This method is not implemented for Kappa, no idea how many valid inputs there are"
         )

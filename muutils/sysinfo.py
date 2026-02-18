@@ -9,7 +9,7 @@ from importlib.metadata import distributions
 
 
 def _popen(cmd: list[str], split_out: bool = False) -> dict[str, typing.Any]:
-    p: subprocess.Popen = subprocess.Popen(
+    p: subprocess.Popen[bytes] = subprocess.Popen(
         cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE
     )
 

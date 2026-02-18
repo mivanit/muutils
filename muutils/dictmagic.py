@@ -33,7 +33,9 @@ _VT = TypeVar("_VT")
 class DefaulterDict(typing.Dict[_KT, _VT], Generic[_KT, _VT]):
     """like a defaultdict, but default_factory is passed the key as an argument"""
 
-    def __init__(self, default_factory: Callable[[_KT], _VT], *args, **kwargs):
+    def __init__(
+        self, default_factory: Callable[[_KT], _VT], *args: Any, **kwargs: Any
+    ) -> None:
         if args:
             raise TypeError(
                 f"DefaulterDict does not support positional arguments: *args = {args}"
@@ -380,8 +382,10 @@ def _default_shapes_convert(x: tuple) -> str:
 def condense_tensor_dict(
     data: TensorDict | TensorIterable,
     fmt: TensorDictFormats = "dict",
-    *args,
-    shapes_convert: Callable[[tuple], Any] = _default_shapes_convert,
+    *args: Any,
+    shapes_convert: Callable[
+        [tuple[Union[int, str], ...]], Any
+    ] = _default_shapes_convert,
     drop_batch_dims: int = 0,
     sep: str = ".",
     dims_names_map: Optional[dict[int, str]] = None,
@@ -482,7 +486,7 @@ def condense_tensor_dict(
     )
 
     # get shapes
-    data_shapes: dict[str, Union[str, tuple[int, ...]]] = {
+    data_shapes: dict[str, Union[str, tuple[int, ...]]] = {  # pyright: ignore[reportAssignmentType]
         k: shapes_convert(
             tuple_dims_replace(
                 tuple(v.shape)[drop_batch_dims:],

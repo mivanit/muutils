@@ -107,10 +107,14 @@ def test_progress_bar_types_and_disable(input_range, expected, pbar_type, disabl
     pbar_kwargs = {"disable": disable_flag}
     if pbar_type == "invalid" and not disable_flag:
         with pytest.raises(ValueError):
-            run_maybe_parallel(square, input_range, False, pbar_kwargs, pbar=pbar_type)
+            run_maybe_parallel(square, input_range, False, pbar_kwargs, pbar=pbar_type)  # pyright: ignore[reportArgumentType]
     else:
         results = run_maybe_parallel(
-            square, input_range, False, pbar_kwargs, pbar=pbar_type
+            square,
+            input_range,
+            False,
+            pbar_kwargs,
+            pbar=pbar_type,  # pyright: ignore[reportArgumentType]
         )
         assert results == expected
 

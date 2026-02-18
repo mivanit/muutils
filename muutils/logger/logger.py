@@ -13,7 +13,7 @@ import json
 import time
 import typing
 from functools import partial
-from typing import Callable, Sequence
+from typing import Any, Callable, Sequence
 
 from muutils.json_serialize import JSONitem, json_serialize
 from muutils.logger.exception_context import ExceptionContext
@@ -79,8 +79,8 @@ class Logger(SimpleLogger):
         keep_last_msg_time: bool = True,
         # junk args
         timestamp: bool = True,
-        **kwargs,
-    ):
+        **kwargs: Any,
+    ) -> None:
         # junk arg checking
         # ==================================================
         if len(kwargs) > 0:
@@ -152,18 +152,22 @@ class Logger(SimpleLogger):
         # level: int = -256,
         # **kwargs,
     ) -> ExceptionContext:
-        s: LoggingStream = self._streams[stream]
-        return ExceptionContext(stream=s)
+        import sys
 
-    def log(  # type: ignore # yes, the signatures are different here.
+        s: LoggingStream = self._streams[stream]
+        handler = s.handler if s.handler is not None else sys.stderr
+        return ExceptionContext(stream=handler)
+
+    def log(
         self,
         msg: JSONitem = None,
+        *,
         lvl: int | None = None,
         stream: str | None = None,
         console_print: bool = False,
         extra_indent: str = "",
-        **kwargs,
-    ):
+        **kwargs: Any,
+    ) -> None:
         """logging function
 
         ### Parameters:
@@ -220,11 +224,11 @@ class Logger(SimpleLogger):
         # convert and add data
         # ========================================
         # converting to dict
-        msg_dict: typing.Mapping
+        msg_dict: dict[str, Any]
         if not isinstance(msg, typing.Mapping):
             msg_dict = {"_msg": msg}
         else:
-            msg_dict = msg
+            msg_dict = dict(typing.cast(typing.Mapping[str, Any], msg))
 
         # level+stream metadata
         if lvl is not None:
@@ -271,13 +275,13 @@ class Logger(SimpleLogger):
         lvl: int | None = None,
         stream: str | None = None,
         console_print: bool = True,
-        **kwargs,
-    ) -> float:
+        **kwargs: Any,
+    ) -> None:
         """logs the time elapsed since the last message was printed to the console (in any stream)"""
         if self._last_msg_time is None:
             raise ValueError("no last message time!")
         else:
-            return self.log(
+            self.log(
                 {"elapsed_time": round(time.time() - self._last_msg_time, 6)},
                 lvl=(lvl if lvl is not None else self._console_print_threshold),
                 stream=stream,
@@ -294,13 +298,13 @@ class Logger(SimpleLogger):
             if stream.handler is not None:
                 stream.handler.flush()
 
-    def __getattr__(self, stream: str) -> Callable:
+    def __getattr__(self, stream: str) -> Callable[..., Any]:
         if stream.startswith("_"):
             raise AttributeError(f"invalid stream name {stream} (no underscores)")
         return partial(self.log, stream=stream)
 
-    def __getitem__(self, stream: str):
+    def __getitem__(self, stream: str) -> Callable[..., Any]:
         return partial(self.log, stream=stream)
 
-    def __call__(self, *args, **kwargs):
-        return self.log(*args, **kwargs)
+    def __call__(self, *args: Any, **kwargs: Any) -> None:
+        self.log(*args, **kwargs)

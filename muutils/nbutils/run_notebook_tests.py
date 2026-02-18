@@ -153,7 +153,7 @@ def run_notebook_tests(
                 )
             converted_notebooks.append(converted_file)
 
-        del converted_file
+        del converted_file  # pyright: ignore[reportPossiblyUnboundVariable]
 
         # the location of this line is important
         os.chdir(notebooks_dir)

@@ -9,7 +9,7 @@ import math
 from collections import Counter
 from functools import cached_property
 from itertools import chain
-from typing import Callable, Optional, Sequence, Union
+from typing import Any, Callable, Optional, Sequence, Union
 
 
 # _GeneralArray = Union[np.ndarray, "torch.Tensor"]
@@ -224,8 +224,8 @@ class StatCounter(Counter):
     @classmethod
     def from_list_arrays(
         cls,
-        arr,
-        map_func: Callable = float,
+        arr: Any,
+        map_func: Callable[[Any], float] = float,
     ) -> "StatCounter":
         """calls `map_func` on each element of `universal_flatten(arr)`"""
         return cls([map_func(x) for x in universal_flatten(arr)])

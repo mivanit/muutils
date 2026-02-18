@@ -13,7 +13,7 @@ def test_logger():
     logger.mystream("hello mystream")
     logger.mystream("hello mystream, again")
 
-    logger.log("something is wrong!", -10)
-    logger.log("something is very wrong!", -30)
+    logger.log("something is wrong!", lvl=-10)
+    logger.log("something is very wrong!", lvl=-30)
 
-    logger.log("not very important", 50)
+    logger.log("not very important", lvl=50)

@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="generator" content="pdoc 15.0.4"/>
+    <meta name="generator" content="pdoc 16.0.0"/>
     <title>muutils.logger.simplelogger API documentation</title>
 <link rel="stylesheet" href="../../resources/css/bootstrap-reboot.min.css"><link rel="stylesheet" href="../../resources/css/syntax-highlighting.css"><link rel="stylesheet" href="../../resources/css/theme.css"><link rel="stylesheet" href="../../resources/css/layout.css"><link rel="stylesheet" href="../../resources/css/content.css"><link rel="stylesheet" href="../../resources/css/custom.css"><script>
     window.MathJax = {
@@ -46,7 +46,7 @@
 </script></head>
 <body>
 <div class="package-version">
-    docs for <a href="https://github.com/mivanit/muutils">muutils</a> v0.8.12<br>
+    docs for <a href="https://github.com/mivanit/muutils">muutils</a> v0.9.0<br>
 </div>
     <nav class="pdoc">
         <label id="navtoggle" for="togglestate" class="pdoc-button">
@@ -121,7 +121,7 @@
     </nav>
     <main class="pdoc">
             <section class="module-info">
-                        <a class="pdoc-button git-button" href="https://github.com/mivanit/muutils/blob/0.8.12/logger/simplelogger.py">View Source on GitHub</a>
+                        <a class="pdoc-button git-button" href="https://github.com/mivanit/muutils/blob/0.9.0logger/simplelogger.py">View Source on GitHub</a>
                     <h1 class="modulename">
 <a href="./../../muutils.html">muutils</a><wbr>.<a href="./../logger.html">logger</a><wbr>.simplelogger    </h1>
 
@@ -131,7 +131,7 @@
                         <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="mod-simplelogger-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/logger/simplelogger.py#L0-L80" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.9.0logger/simplelogger.py#L0-L83" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -144,7 +144,7 @@
 </span><span id="L-4"><a href="#L-4"><span class="linenos"> 4</span></a><span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
 </span><span id="L-5"><a href="#L-5"><span class="linenos"> 5</span></a><span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
 </span><span id="L-6"><a href="#L-6"><span class="linenos"> 6</span></a><span class="kn">import</span><span class="w"> </span><span class="nn">typing</span>
-</span><span id="L-7"><a href="#L-7"><span class="linenos"> 7</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">TextIO</span><span class="p">,</span> <span class="n">Union</span>
+</span><span id="L-7"><a href="#L-7"><span class="linenos"> 7</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">TextIO</span><span class="p">,</span> <span class="n">Union</span>
 </span><span id="L-8"><a href="#L-8"><span class="linenos"> 8</span></a>
 </span><span id="L-9"><a href="#L-9"><span class="linenos"> 9</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">muutils.json_serialize</span><span class="w"> </span><span class="kn">import</span> <span class="n">JSONitem</span><span class="p">,</span> <span class="n">json_serialize</span>
 </span><span id="L-10"><a href="#L-10"><span class="linenos">10</span></a>
@@ -204,21 +204,24 @@
 </span><span id="L-64"><a href="#L-64"><span class="linenos">64</span></a>                <span class="k">assert</span> <span class="n">log_path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
 </span><span id="L-65"><a href="#L-65"><span class="linenos">65</span></a>                <span class="bp">self</span><span class="o">.</span><span class="n">_log_file_handle</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">log_path</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span>
 </span><span id="L-66"><a href="#L-66"><span class="linenos">66</span></a>
-</span><span id="L-67"><a href="#L-67"><span class="linenos">67</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">log</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">msg</span><span class="p">:</span> <span class="n">JSONitem</span><span class="p">,</span> <span class="n">console_print</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+</span><span id="L-67"><a href="#L-67"><span class="linenos">67</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">log</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">msg</span><span class="p">:</span> <span class="n">JSONitem</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">console_print</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 </span><span id="L-68"><a href="#L-68"><span class="linenos">68</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;log a message to the log file, and optionally to the console&quot;&quot;&quot;</span>
 </span><span id="L-69"><a href="#L-69"><span class="linenos">69</span></a>        <span class="k">if</span> <span class="n">console_print</span><span class="p">:</span>
 </span><span id="L-70"><a href="#L-70"><span class="linenos">70</span></a>            <span class="nb">print</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
 </span><span id="L-71"><a href="#L-71"><span class="linenos">71</span></a>
-</span><span id="L-72"><a href="#L-72"><span class="linenos">72</span></a>        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="n">typing</span><span class="o">.</span><span class="n">Mapping</span><span class="p">):</span>
-</span><span id="L-73"><a href="#L-73"><span class="linenos">73</span></a>            <span class="n">msg</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;_msg&quot;</span><span class="p">:</span> <span class="n">msg</span><span class="p">}</span>
-</span><span id="L-74"><a href="#L-74"><span class="linenos">74</span></a>
-</span><span id="L-75"><a href="#L-75"><span class="linenos">75</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_timestamp</span><span class="p">:</span>
-</span><span id="L-76"><a href="#L-76"><span class="linenos">76</span></a>            <span class="n">msg</span><span class="p">[</span><span class="s2">&quot;_timestamp&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+</span><span id="L-72"><a href="#L-72"><span class="linenos">72</span></a>        <span class="n">msg_dict</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span>
+</span><span id="L-73"><a href="#L-73"><span class="linenos">73</span></a>        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="n">typing</span><span class="o">.</span><span class="n">Mapping</span><span class="p">):</span>
+</span><span id="L-74"><a href="#L-74"><span class="linenos">74</span></a>            <span class="n">msg_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;_msg&quot;</span><span class="p">:</span> <span class="n">msg</span><span class="p">}</span>
+</span><span id="L-75"><a href="#L-75"><span class="linenos">75</span></a>        <span class="k">else</span><span class="p">:</span>
+</span><span id="L-76"><a href="#L-76"><span class="linenos">76</span></a>            <span class="n">msg_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">typing</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">typing</span><span class="o">.</span><span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">msg</span><span class="p">))</span>
 </span><span id="L-77"><a href="#L-77"><span class="linenos">77</span></a>
-</span><span id="L-78"><a href="#L-78"><span class="linenos">78</span></a>        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-</span><span id="L-79"><a href="#L-79"><span class="linenos">79</span></a>            <span class="n">msg</span><span class="p">[</span><span class="s2">&quot;_kwargs&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">kwargs</span>
+</span><span id="L-78"><a href="#L-78"><span class="linenos">78</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_timestamp</span><span class="p">:</span>
+</span><span id="L-79"><a href="#L-79"><span class="linenos">79</span></a>            <span class="n">msg_dict</span><span class="p">[</span><span class="s2">&quot;_timestamp&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
 </span><span id="L-80"><a href="#L-80"><span class="linenos">80</span></a>
-</span><span id="L-81"><a href="#L-81"><span class="linenos">81</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_log_file_handle</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">json_serialize</span><span class="p">(</span><span class="n">msg</span><span class="p">))</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+</span><span id="L-81"><a href="#L-81"><span class="linenos">81</span></a>        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+</span><span id="L-82"><a href="#L-82"><span class="linenos">82</span></a>            <span class="n">msg_dict</span><span class="p">[</span><span class="s2">&quot;_kwargs&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">kwargs</span>
+</span><span id="L-83"><a href="#L-83"><span class="linenos">83</span></a>
+</span><span id="L-84"><a href="#L-84"><span class="linenos">84</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_log_file_handle</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">json_serialize</span><span class="p">(</span><span class="n">msg_dict</span><span class="p">))</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
 </span></pre></div>
 
 
@@ -234,7 +237,7 @@
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="NullIO-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/logger/simplelogger.py#L12-L28" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.9.0logger/simplelogger.py#L12-L28" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -276,7 +279,7 @@
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="NullIO.write-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/logger/simplelogger.py#L18-L20" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.9.0logger/simplelogger.py#L18-L20" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -305,7 +308,7 @@
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="NullIO.flush-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/logger/simplelogger.py#L22-L24" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.9.0logger/simplelogger.py#L22-L24" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -334,7 +337,7 @@
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="NullIO.close-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/logger/simplelogger.py#L26-L28" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.9.0logger/simplelogger.py#L26-L28" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -376,7 +379,7 @@
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="SimpleLogger-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/logger/simplelogger.py#L34-L81" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.9.0logger/simplelogger.py#L34-L84" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -417,21 +420,24 @@
 </span><span id="SimpleLogger-65"><a href="#SimpleLogger-65"><span class="linenos">65</span></a>                <span class="k">assert</span> <span class="n">log_path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
 </span><span id="SimpleLogger-66"><a href="#SimpleLogger-66"><span class="linenos">66</span></a>                <span class="bp">self</span><span class="o">.</span><span class="n">_log_file_handle</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">log_path</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span>
 </span><span id="SimpleLogger-67"><a href="#SimpleLogger-67"><span class="linenos">67</span></a>
-</span><span id="SimpleLogger-68"><a href="#SimpleLogger-68"><span class="linenos">68</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">log</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">msg</span><span class="p">:</span> <span class="n">JSONitem</span><span class="p">,</span> <span class="n">console_print</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+</span><span id="SimpleLogger-68"><a href="#SimpleLogger-68"><span class="linenos">68</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">log</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">msg</span><span class="p">:</span> <span class="n">JSONitem</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">console_print</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 </span><span id="SimpleLogger-69"><a href="#SimpleLogger-69"><span class="linenos">69</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;log a message to the log file, and optionally to the console&quot;&quot;&quot;</span>
 </span><span id="SimpleLogger-70"><a href="#SimpleLogger-70"><span class="linenos">70</span></a>        <span class="k">if</span> <span class="n">console_print</span><span class="p">:</span>
 </span><span id="SimpleLogger-71"><a href="#SimpleLogger-71"><span class="linenos">71</span></a>            <span class="nb">print</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
 </span><span id="SimpleLogger-72"><a href="#SimpleLogger-72"><span class="linenos">72</span></a>
-</span><span id="SimpleLogger-73"><a href="#SimpleLogger-73"><span class="linenos">73</span></a>        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="n">typing</span><span class="o">.</span><span class="n">Mapping</span><span class="p">):</span>
-</span><span id="SimpleLogger-74"><a href="#SimpleLogger-74"><span class="linenos">74</span></a>            <span class="n">msg</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;_msg&quot;</span><span class="p">:</span> <span class="n">msg</span><span class="p">}</span>
-</span><span id="SimpleLogger-75"><a href="#SimpleLogger-75"><span class="linenos">75</span></a>
-</span><span id="SimpleLogger-76"><a href="#SimpleLogger-76"><span class="linenos">76</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_timestamp</span><span class="p">:</span>
-</span><span id="SimpleLogger-77"><a href="#SimpleLogger-77"><span class="linenos">77</span></a>            <span class="n">msg</span><span class="p">[</span><span class="s2">&quot;_timestamp&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+</span><span id="SimpleLogger-73"><a href="#SimpleLogger-73"><span class="linenos">73</span></a>        <span class="n">msg_dict</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span>
+</span><span id="SimpleLogger-74"><a href="#SimpleLogger-74"><span class="linenos">74</span></a>        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="n">typing</span><span class="o">.</span><span class="n">Mapping</span><span class="p">):</span>
+</span><span id="SimpleLogger-75"><a href="#SimpleLogger-75"><span class="linenos">75</span></a>            <span class="n">msg_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;_msg&quot;</span><span class="p">:</span> <span class="n">msg</span><span class="p">}</span>
+</span><span id="SimpleLogger-76"><a href="#SimpleLogger-76"><span class="linenos">76</span></a>        <span class="k">else</span><span class="p">:</span>
+</span><span id="SimpleLogger-77"><a href="#SimpleLogger-77"><span class="linenos">77</span></a>            <span class="n">msg_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">typing</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">typing</span><span class="o">.</span><span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">msg</span><span class="p">))</span>
 </span><span id="SimpleLogger-78"><a href="#SimpleLogger-78"><span class="linenos">78</span></a>
-</span><span id="SimpleLogger-79"><a href="#SimpleLogger-79"><span class="linenos">79</span></a>        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-</span><span id="SimpleLogger-80"><a href="#SimpleLogger-80"><span class="linenos">80</span></a>            <span class="n">msg</span><span class="p">[</span><span class="s2">&quot;_kwargs&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">kwargs</span>
+</span><span id="SimpleLogger-79"><a href="#SimpleLogger-79"><span class="linenos">79</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_timestamp</span><span class="p">:</span>
+</span><span id="SimpleLogger-80"><a href="#SimpleLogger-80"><span class="linenos">80</span></a>            <span class="n">msg_dict</span><span class="p">[</span><span class="s2">&quot;_timestamp&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
 </span><span id="SimpleLogger-81"><a href="#SimpleLogger-81"><span class="linenos">81</span></a>
-</span><span id="SimpleLogger-82"><a href="#SimpleLogger-82"><span class="linenos">82</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_log_file_handle</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">json_serialize</span><span class="p">(</span><span class="n">msg</span><span class="p">))</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+</span><span id="SimpleLogger-82"><a href="#SimpleLogger-82"><span class="linenos">82</span></a>        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+</span><span id="SimpleLogger-83"><a href="#SimpleLogger-83"><span class="linenos">83</span></a>            <span class="n">msg_dict</span><span class="p">[</span><span class="s2">&quot;_kwargs&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">kwargs</span>
+</span><span id="SimpleLogger-84"><a href="#SimpleLogger-84"><span class="linenos">84</span></a>
+</span><span id="SimpleLogger-85"><a href="#SimpleLogger-85"><span class="linenos">85</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_log_file_handle</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">json_serialize</span><span class="p">(</span><span class="n">msg_dict</span><span class="p">))</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
 </span></pre></div>
 
 
@@ -448,7 +454,7 @@
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="SimpleLogger.__init__-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/logger/simplelogger.py#L37-L65" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.9.0logger/simplelogger.py#L37-L65" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -496,12 +502,12 @@
 <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">log</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="bp">self</span>,</span><span class="param">	<span class="n">msg</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">bool</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="n">NoneType</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">bool</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="n">NoneType</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">Any</span><span class="p">],</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]],</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Union</span><span class="p">[</span><span class="nb">bool</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="n">NoneType</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">Any</span><span class="p">],</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]]]</span>,</span><span class="param">	<span class="n">console_print</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>,</span><span class="param">	<span class="o">**</span><span class="n">kwargs</span></span><span class="return-annotation">):</span></span>
+        <span class="name">log</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="bp">self</span>,</span><span class="param">	<span class="n">msg</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">bool</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="n">NoneType</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">ForwardRef</span><span class="p">(</span><span class="s1">&#39;JSONitem&#39;</span><span class="p">)],</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">ForwardRef</span><span class="p">(</span><span class="s1">&#39;JSONitem&#39;</span><span class="p">)]]</span>,</span><span class="param">	<span class="o">*</span>,</span><span class="param">	<span class="n">console_print</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>,</span><span class="param">	<span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span></span><span class="return-annotation">) -> <span class="kc">None</span>:</span></span>
 
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="SimpleLogger.log-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/logger/simplelogger.py#L67-L81" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.9.0logger/simplelogger.py#L67-L84" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -509,21 +515,24 @@
 
     </div>
     <a class="headerlink" href="#SimpleLogger.log"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="SimpleLogger.log-68"><a href="#SimpleLogger.log-68"><span class="linenos">68</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">log</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">msg</span><span class="p">:</span> <span class="n">JSONitem</span><span class="p">,</span> <span class="n">console_print</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="SimpleLogger.log-68"><a href="#SimpleLogger.log-68"><span class="linenos">68</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">log</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">msg</span><span class="p">:</span> <span class="n">JSONitem</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">console_print</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 </span><span id="SimpleLogger.log-69"><a href="#SimpleLogger.log-69"><span class="linenos">69</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;log a message to the log file, and optionally to the console&quot;&quot;&quot;</span>
 </span><span id="SimpleLogger.log-70"><a href="#SimpleLogger.log-70"><span class="linenos">70</span></a>        <span class="k">if</span> <span class="n">console_print</span><span class="p">:</span>
 </span><span id="SimpleLogger.log-71"><a href="#SimpleLogger.log-71"><span class="linenos">71</span></a>            <span class="nb">print</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
 </span><span id="SimpleLogger.log-72"><a href="#SimpleLogger.log-72"><span class="linenos">72</span></a>
-</span><span id="SimpleLogger.log-73"><a href="#SimpleLogger.log-73"><span class="linenos">73</span></a>        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="n">typing</span><span class="o">.</span><span class="n">Mapping</span><span class="p">):</span>
-</span><span id="SimpleLogger.log-74"><a href="#SimpleLogger.log-74"><span class="linenos">74</span></a>            <span class="n">msg</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;_msg&quot;</span><span class="p">:</span> <span class="n">msg</span><span class="p">}</span>
-</span><span id="SimpleLogger.log-75"><a href="#SimpleLogger.log-75"><span class="linenos">75</span></a>
-</span><span id="SimpleLogger.log-76"><a href="#SimpleLogger.log-76"><span class="linenos">76</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_timestamp</span><span class="p">:</span>
-</span><span id="SimpleLogger.log-77"><a href="#SimpleLogger.log-77"><span class="linenos">77</span></a>            <span class="n">msg</span><span class="p">[</span><span class="s2">&quot;_timestamp&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+</span><span id="SimpleLogger.log-73"><a href="#SimpleLogger.log-73"><span class="linenos">73</span></a>        <span class="n">msg_dict</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span>
+</span><span id="SimpleLogger.log-74"><a href="#SimpleLogger.log-74"><span class="linenos">74</span></a>        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="n">typing</span><span class="o">.</span><span class="n">Mapping</span><span class="p">):</span>
+</span><span id="SimpleLogger.log-75"><a href="#SimpleLogger.log-75"><span class="linenos">75</span></a>            <span class="n">msg_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;_msg&quot;</span><span class="p">:</span> <span class="n">msg</span><span class="p">}</span>
+</span><span id="SimpleLogger.log-76"><a href="#SimpleLogger.log-76"><span class="linenos">76</span></a>        <span class="k">else</span><span class="p">:</span>
+</span><span id="SimpleLogger.log-77"><a href="#SimpleLogger.log-77"><span class="linenos">77</span></a>            <span class="n">msg_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">typing</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">typing</span><span class="o">.</span><span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">msg</span><span class="p">))</span>
 </span><span id="SimpleLogger.log-78"><a href="#SimpleLogger.log-78"><span class="linenos">78</span></a>
-</span><span id="SimpleLogger.log-79"><a href="#SimpleLogger.log-79"><span class="linenos">79</span></a>        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-</span><span id="SimpleLogger.log-80"><a href="#SimpleLogger.log-80"><span class="linenos">80</span></a>            <span class="n">msg</span><span class="p">[</span><span class="s2">&quot;_kwargs&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">kwargs</span>
+</span><span id="SimpleLogger.log-79"><a href="#SimpleLogger.log-79"><span class="linenos">79</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_timestamp</span><span class="p">:</span>
+</span><span id="SimpleLogger.log-80"><a href="#SimpleLogger.log-80"><span class="linenos">80</span></a>            <span class="n">msg_dict</span><span class="p">[</span><span class="s2">&quot;_timestamp&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
 </span><span id="SimpleLogger.log-81"><a href="#SimpleLogger.log-81"><span class="linenos">81</span></a>
-</span><span id="SimpleLogger.log-82"><a href="#SimpleLogger.log-82"><span class="linenos">82</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_log_file_handle</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">json_serialize</span><span class="p">(</span><span class="n">msg</span><span class="p">))</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+</span><span id="SimpleLogger.log-82"><a href="#SimpleLogger.log-82"><span class="linenos">82</span></a>        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+</span><span id="SimpleLogger.log-83"><a href="#SimpleLogger.log-83"><span class="linenos">83</span></a>            <span class="n">msg_dict</span><span class="p">[</span><span class="s2">&quot;_kwargs&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">kwargs</span>
+</span><span id="SimpleLogger.log-84"><a href="#SimpleLogger.log-84"><span class="linenos">84</span></a>
+</span><span id="SimpleLogger.log-85"><a href="#SimpleLogger.log-85"><span class="linenos">85</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_log_file_handle</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">json_serialize</span><span class="p">(</span><span class="n">msg_dict</span><span class="p">))</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
 </span></pre></div>
 
 

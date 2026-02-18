@@ -44,6 +44,35 @@ _ExpType_dict = typing.TypeVar(
 _ExpType_list = typing.TypeVar("_ExpType_list", bound=typing.List[typing.Any])
 
 
+# TypedDict definitions for configuration dictionaries
+class DBGDictDefaultsType(typing.TypedDict):
+    key_types: bool
+    val_types: bool
+    max_len: int
+    indent: str
+    max_depth: int
+
+
+class DBGListDefaultsType(typing.TypedDict):
+    max_len: int
+    summary_show_types: bool
+
+
+class DBGTensorArraySummaryDefaultsType(typing.TypedDict):
+    fmt: typing.Literal["unicode", "latex", "ascii"]
+    precision: int
+    stats: bool
+    shape: bool
+    dtype: bool
+    device: bool
+    requires_grad: bool
+    sparkline: bool
+    sparkline_bins: int
+    sparkline_logy: typing.Union[None, bool]
+    colored: bool
+    eq_char: str
+
+
 # Sentinel type for no expression passed
 class _NoExpPassedSentinel:
     """Unique sentinel type used to indicate that no expression was passed."""
@@ -188,22 +217,20 @@ def dbg(
 
 # formatted `dbg_*` functions with their helpers
 
-DBG_TENSOR_ARRAY_SUMMARY_DEFAULTS: typing.Dict[
-    str, typing.Union[None, bool, int, str]
-] = dict(
-    fmt="unicode",
-    precision=2,
-    stats=True,
-    shape=True,
-    dtype=True,
-    device=True,
-    requires_grad=True,
-    sparkline=True,
-    sparkline_bins=7,
-    sparkline_logy=None,  # None means auto-detect
-    colored=True,
-    eq_char="=",
-)
+DBG_TENSOR_ARRAY_SUMMARY_DEFAULTS: DBGTensorArraySummaryDefaultsType = {
+    "fmt": "unicode",
+    "precision": 2,
+    "stats": True,
+    "shape": True,
+    "dtype": True,
+    "device": True,
+    "requires_grad": True,
+    "sparkline": True,
+    "sparkline_bins": 7,
+    "sparkline_logy": None,  # None means auto-detect
+    "colored": True,
+    "eq_char": "=",
+}
 
 
 DBG_TENSOR_VAL_JOINER: str = ": "
@@ -212,21 +239,22 @@ DBG_TENSOR_VAL_JOINER: str = ": "
 def tensor_info(tensor: typing.Any) -> str:
     from muutils.tensor_info import array_summary
 
-    return array_summary(tensor, as_list=False, **DBG_TENSOR_ARRAY_SUMMARY_DEFAULTS)
+    # TODO: explicitly pass args to avoid type: ignore (mypy can't match overloads with **TypedDict spread)
+    return array_summary(tensor, as_list=False, **DBG_TENSOR_ARRAY_SUMMARY_DEFAULTS)  # type: ignore[call-overload]
 
 
-DBG_DICT_DEFAULTS: typing.Dict[str, typing.Union[bool, int, str]] = dict(
-    key_types=True,
-    val_types=True,
-    max_len=32,
-    indent="  ",
-    max_depth=3,
-)
+DBG_DICT_DEFAULTS: DBGDictDefaultsType = {
+    "key_types": True,
+    "val_types": True,
+    "max_len": 32,
+    "indent": "  ",
+    "max_depth": 3,
+}
 
-DBG_LIST_DEFAULTS: typing.Dict[str, typing.Union[bool, int, str]] = dict(
-    max_len=16,
-    summary_show_types=True,
-)
+DBG_LIST_DEFAULTS: DBGListDefaultsType = {
+    "max_len": 16,
+    "summary_show_types": True,
+}
 
 
 def list_info(
@@ -234,8 +262,7 @@ def list_info(
 ) -> str:
     len_l: int = len(lst)
     output: str
-    # TYPING: make `DBG_LIST_DEFAULTS` and the others typed dicts
-    if len_l > DBG_LIST_DEFAULTS["max_len"]:  # type: ignore[operator]
+    if len_l > DBG_LIST_DEFAULTS["max_len"]:
         output = f"<list of len()={len_l}"
         if DBG_LIST_DEFAULTS["summary_show_types"]:
             val_types: typing.Set[str] = set(type(x).__name__ for x in lst)
@@ -258,7 +285,7 @@ def dict_info(
     depth: int = 0,
 ) -> str:
     len_d: int = len(d)
-    indent: str = DBG_DICT_DEFAULTS["indent"]  # type: ignore[assignment]
+    indent: str = DBG_DICT_DEFAULTS["indent"]
 
     # summary line
     output: str = f"{indent * depth}<dict of len()={len_d}"
@@ -276,8 +303,8 @@ def dict_info(
     output += ">"
 
     # keys/values if not to deep and not too many
-    if depth < DBG_DICT_DEFAULTS["max_depth"]:  # type: ignore[operator]
-        if len_d > 0 and len_d < DBG_DICT_DEFAULTS["max_len"]:  # type: ignore[operator]
+    if depth < DBG_DICT_DEFAULTS["max_depth"]:
+        if len_d > 0 and len_d < DBG_DICT_DEFAULTS["max_len"]:
             for k, v in d.items():
                 key_str: str = repr(k) if not isinstance(k, str) else k
 

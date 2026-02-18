@@ -8,7 +8,7 @@ from types import TracebackType
 from typing import Any, Literal
 
 
-class CollateWarnings(AbstractContextManager["CollateWarnings"]):
+class CollateWarnings(AbstractContextManager):  # type: ignore[type-arg]
     """Capture every warning issued inside a `with` block and print a collated
     summary when the block exits.
 

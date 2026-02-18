@@ -82,7 +82,7 @@ def test_validate_type_any(value):
         ("hello", Union[int, str], True),
         (3.14, Union[int, float], True),
         (True, Union[int, str], True),
-        (None, Union[int, type(None)], True),
+        (None, Union[int, None], True),
         (None, Union[int, str], False),
         (5, Union[int, str], True),
         (5.0, Union[int, str], False),
@@ -224,7 +224,7 @@ def test_validate_type_set(value, expected_type, expected_result):
             (1, "a", 3.14, "b", True, None, (1, 2, 3)),
             # no idea why this throws type error, only locally, and only for the generated modern types
             typing.Tuple[  # type: ignore[misc]
-                int, str, float, str, bool, type(None), typing.Tuple[int, int, int]
+                int, str, float, str, bool, None, typing.Tuple[int, int, int]
             ],
             True,
         ),

@@ -11,7 +11,17 @@ from __future__ import annotations
 import base64
 import typing
 import warnings
-from typing import Any, Iterable, Literal, Optional, Sequence
+from typing import (
+    TYPE_CHECKING,
+    Any,
+    Iterable,
+    Literal,
+    Optional,
+    Sequence,
+    TypedDict,
+    Union,
+    overload,
+)
 
 try:
     import numpy as np
@@ -21,9 +31,21 @@ except ImportError as e:
         ImportWarning,
     )
 
-from muutils.json_serialize.util import _FORMAT_KEY, JSONitem
+if TYPE_CHECKING:
+    import numpy as np
+    import torch
+    from muutils.json_serialize.json_serialize import JsonSerializer
 
-# pylint: disable=unused-argument
+from muutils.json_serialize.types import _FORMAT_KEY  # pyright: ignore[reportPrivateUsage]
+
+# TYPING: pyright complains way too much here
+# pyright: reportCallIssue=false,reportArgumentType=false,reportUnknownVariableType=false,reportUnknownMemberType=false
+
+# Recursive type for nested numeric lists (output of arr.tolist())
+NumericList = typing.Union[
+    typing.List[typing.Union[int, float, bool]],
+    typing.List["NumericList"],
+]
 
 ArrayMode = Literal[
     "list",
@@ -34,34 +56,87 @@ ArrayMode = Literal[
     "zero_dim",
 ]
 
+# Modes that produce SerializedArrayWithMeta (dict with metadata)
+ArrayModeWithMeta = Literal[
+    "array_list_meta",
+    "array_hex_meta",
+    "array_b64_meta",
+    "zero_dim",
+    "external",
+]
 
-def array_n_elements(arr) -> int:  # type: ignore[name-defined]
+
+def array_n_elements(arr: Any) -> int:  # type: ignore[name-defined]  # pyright: ignore[reportAny]
     """get the number of elements in an array"""
     if isinstance(arr, np.ndarray):
         return arr.size
-    elif str(type(arr)) == "<class 'torch.Tensor'>":
-        return arr.nelement()
+    elif str(type(arr)) == "<class 'torch.Tensor'>":  # pyright: ignore[reportUnknownArgumentType, reportAny]
+        assert hasattr(arr, "nelement"), (
+            "torch Tensor does not have nelement() method? this should not happen"
+        )  # pyright: ignore[reportAny]
+        return arr.nelement()  # pyright: ignore[reportAny]
     else:
-        raise TypeError(f"invalid type: {type(arr)}")
+        raise TypeError(f"invalid type: {type(arr)}")  # pyright: ignore[reportAny]
 
 
-def arr_metadata(arr) -> dict[str, list[int] | str | int]:
+class ArrayMetadata(TypedDict):
+    """Metadata for a numpy/torch array"""
+
+    shape: list[int]
+    dtype: str
+    n_elements: int
+
+
+class SerializedArrayWithMeta(TypedDict):
+    """Serialized array with metadata (for array_list_meta, array_hex_meta, array_b64_meta, zero_dim modes)"""
+
+    __muutils_format__: str
+    data: typing.Union[
+        NumericList, str, int, float, bool
+    ]  # list, hex str, b64 str, or scalar for zero_dim
+    shape: list[int]
+    dtype: str
+    n_elements: int
+
+
+def arr_metadata(arr: Any) -> ArrayMetadata:  # pyright: ignore[reportAny]
     """get metadata for a numpy array"""
     return {
-        "shape": list(arr.shape),
+        "shape": list(arr.shape),  # pyright: ignore[reportAny]
         "dtype": (
-            arr.dtype.__name__ if hasattr(arr.dtype, "__name__") else str(arr.dtype)
+            arr.dtype.__name__ if hasattr(arr.dtype, "__name__") else str(arr.dtype)  # pyright: ignore[reportAny]
         ),
         "n_elements": array_n_elements(arr),
     }
 
 
+@overload
+def serialize_array(
+    jser: "JsonSerializer",
+    arr: "Union[np.ndarray, torch.Tensor]",
+    path: str | Sequence[str | int],
+    array_mode: Literal["list"],
+) -> NumericList: ...
+@overload
+def serialize_array(
+    jser: "JsonSerializer",
+    arr: "Union[np.ndarray, torch.Tensor]",
+    path: str | Sequence[str | int],
+    array_mode: ArrayModeWithMeta,
+) -> SerializedArrayWithMeta: ...
+@overload
+def serialize_array(
+    jser: "JsonSerializer",
+    arr: "Union[np.ndarray, torch.Tensor]",
+    path: str | Sequence[str | int],
+    array_mode: None = None,
+) -> SerializedArrayWithMeta | NumericList: ...
 def serialize_array(
     jser: "JsonSerializer",  # type: ignore[name-defined] # noqa: F821
-    arr: np.ndarray,
-    path: str | Sequence[str | int],
+    arr: "Union[np.ndarray, torch.Tensor]",
+    path: str | Sequence[str | int],  # pyright: ignore[reportUnusedParameter]
     array_mode: ArrayMode | None = None,
-) -> JSONitem:
+) -> SerializedArrayWithMeta | NumericList:
     """serialize a numpy or pytorch array in one of several modes
 
     if the object is zero-dimensional, simply get the unique item
@@ -99,75 +174,127 @@ def serialize_array(
         array_mode = jser.array_mode
 
     arr_type: str = f"{type(arr).__module__}.{type(arr).__name__}"
-    arr_np: np.ndarray = arr if isinstance(arr, np.ndarray) else np.array(arr)
+    arr_np: np.ndarray = arr if isinstance(arr, np.ndarray) else np.array(arr)  # pyright: ignore[reportUnnecessaryIsInstance]
+
+    # Handle list mode first (no metadata needed)
+    if array_mode == "list":
+        return arr_np.tolist()  # pyright: ignore[reportAny]
+
+    # For all other modes, compute metadata once
+    metadata: ArrayMetadata = arr_metadata(arr if len(arr.shape) == 0 else arr_np)
+
+    # TYPING: ty<=0.0.1a24 does not appear to support unpacking TypedDicts, so we do things manually. change it back later maybe?
 
     # handle zero-dimensional arrays
     if len(arr.shape) == 0:
-        return {
-            _FORMAT_KEY: f"{arr_type}:zero_dim",
-            "data": arr.item(),
-            **arr_metadata(arr),
-        }
+        return SerializedArrayWithMeta(
+            __muutils_format__=f"{arr_type}:zero_dim",
+            data=arr.item(),  # pyright: ignore[reportAny]
+            shape=metadata["shape"],
+            dtype=metadata["dtype"],
+            n_elements=metadata["n_elements"],
+        )
 
+    # Handle the metadata modes
     if array_mode == "array_list_meta":
-        return {
-            _FORMAT_KEY: f"{arr_type}:array_list_meta",
-            "data": arr_np.tolist(),
-            **arr_metadata(arr_np),
-        }
-    elif array_mode == "list":
-        return arr_np.tolist()
+        return SerializedArrayWithMeta(
+            __muutils_format__=f"{arr_type}:array_list_meta",
+            data=arr_np.tolist(),  # pyright: ignore[reportAny]
+            shape=metadata["shape"],
+            dtype=metadata["dtype"],
+            n_elements=metadata["n_elements"],
+        )
     elif array_mode == "array_hex_meta":
-        return {
-            _FORMAT_KEY: f"{arr_type}:array_hex_meta",
-            "data": arr_np.tobytes().hex(),
-            **arr_metadata(arr_np),
-        }
+        return SerializedArrayWithMeta(
+            __muutils_format__=f"{arr_type}:array_hex_meta",
+            data=arr_np.tobytes().hex(),
+            shape=metadata["shape"],
+            dtype=metadata["dtype"],
+            n_elements=metadata["n_elements"],
+        )
     elif array_mode == "array_b64_meta":
-        return {
-            _FORMAT_KEY: f"{arr_type}:array_b64_meta",
-            "data": base64.b64encode(arr_np.tobytes()).decode(),
-            **arr_metadata(arr_np),
-        }
+        return SerializedArrayWithMeta(
+            __muutils_format__=f"{arr_type}:array_b64_meta",
+            data=base64.b64encode(arr_np.tobytes()).decode(),
+            shape=metadata["shape"],
+            dtype=metadata["dtype"],
+            n_elements=metadata["n_elements"],
+        )
     else:
         raise KeyError(f"invalid array_mode: {array_mode}")
 
 
-def infer_array_mode(arr: JSONitem) -> ArrayMode:
+@overload
+def infer_array_mode(
+    arr: SerializedArrayWithMeta,
+) -> ArrayModeWithMeta: ...
+@overload
+def infer_array_mode(arr: NumericList) -> Literal["list"]: ...
+def infer_array_mode(
+    arr: Union[SerializedArrayWithMeta, NumericList],
+) -> ArrayMode:
     """given a serialized array, infer the mode
 
     assumes the array was serialized via `serialize_array()`
     """
+    return_mode: ArrayMode
     if isinstance(arr, typing.Mapping):
+        # _FORMAT_KEY always maps to a string
         fmt: str = arr.get(_FORMAT_KEY, "")  # type: ignore
         if fmt.endswith(":array_list_meta"):
-            if not isinstance(arr["data"], Iterable):
-                raise ValueError(f"invalid list format: {type(arr['data']) = }\t{arr}")
-            return "array_list_meta"
+            arr_data = arr["data"]  # ty: ignore[invalid-argument-type]
+            if not isinstance(arr_data, Iterable):
+                raise ValueError(f"invalid list format: {type(arr_data) = }\t{arr}")
+            return_mode = "array_list_meta"
         elif fmt.endswith(":array_hex_meta"):
-            if not isinstance(arr["data"], str):
-                raise ValueError(f"invalid hex format: {type(arr['data']) = }\t{arr}")
-            return "array_hex_meta"
+            arr_data = arr["data"]  # ty: ignore[invalid-argument-type]
+            if not isinstance(arr_data, str):
+                raise ValueError(f"invalid hex format: {type(arr_data) = }\t{arr}")
+            return_mode = "array_hex_meta"
         elif fmt.endswith(":array_b64_meta"):
-            if not isinstance(arr["data"], str):
-                raise ValueError(f"invalid b64 format: {type(arr['data']) = }\t{arr}")
-            return "array_b64_meta"
+            arr_data = arr["data"]  # ty: ignore[invalid-argument-type]
+            if not isinstance(arr_data, str):
+                raise ValueError(f"invalid b64 format: {type(arr_data) = }\t{arr}")
+            return_mode = "array_b64_meta"
         elif fmt.endswith(":external"):
-            return "external"
+            return_mode = "external"
         elif fmt.endswith(":zero_dim"):
-            return "zero_dim"
+            return_mode = "zero_dim"
         else:
             raise ValueError(f"invalid format: {arr}")
-    elif isinstance(arr, list):
-        return "list"
+    elif isinstance(arr, list):  # pyright: ignore[reportUnnecessaryIsInstance]
+        return_mode = "list"
     else:
-        raise ValueError(f"cannot infer array_mode from\t{type(arr) = }\n{arr = }")
+        raise ValueError(f"cannot infer array_mode from\t{type(arr) = }\n{arr = }")  # pyright: ignore[reportUnreachable]
+
+    return return_mode
 
 
-def load_array(arr: JSONitem, array_mode: Optional[ArrayMode] = None) -> Any:
+@overload
+def load_array(
+    arr: SerializedArrayWithMeta,
+    array_mode: Optional[ArrayModeWithMeta] = None,
+) -> np.ndarray: ...
+@overload
+def load_array(
+    arr: NumericList,
+    array_mode: Optional[Literal["list"]] = None,
+) -> np.ndarray: ...
+@overload
+def load_array(
+    arr: np.ndarray,
+    array_mode: None = None,
+) -> np.ndarray: ...
+def load_array(
+    arr: Union[SerializedArrayWithMeta, np.ndarray, NumericList],
+    array_mode: Optional[ArrayMode] = None,
+) -> np.ndarray:
     """load a json-serialized array, infer the mode if not specified"""
     # return arr if its already a numpy array
-    if isinstance(arr, np.ndarray) and array_mode is None:
+    if isinstance(arr, np.ndarray):
+        assert array_mode is None, (
+            "array_mode should not be specified when loading a numpy array, since that is a no-op"
+        )
         return arr
 
     # try to infer the array_mode
@@ -209,18 +336,18 @@ def load_array(arr: JSONitem, array_mode: Optional[ArrayMode] = None) -> Any:
         )
         return np.array(arr)  # type: ignore
     elif array_mode == "external":
-        # assume ZANJ has taken care of it
         assert isinstance(arr, typing.Mapping)
         if "data" not in arr:
-            raise KeyError(
+            raise KeyError(  # pyright: ignore[reportUnreachable]
                 f"invalid external array, expected key 'data', got keys: '{list(arr.keys())}' and arr: {arr}"
             )
-        return arr["data"]
+        # we can ignore here since we assume ZANJ has taken care of it
+        return arr["data"]  # type: ignore[return-value] # pyright: ignore[reportReturnType]
     elif array_mode == "zero_dim":
         assert isinstance(arr, typing.Mapping)
-        data = np.array(arr["data"])
+        data = np.array(arr["data"])  # ty: ignore[invalid-argument-type]
         if tuple(arr["shape"]) != tuple(data.shape):  # type: ignore
             raise ValueError(f"invalid shape: {arr}")
         return data
     else:
-        raise ValueError(f"invalid array_mode: {array_mode}")
+        raise ValueError(f"invalid array_mode: {array_mode}")  # pyright: ignore[reportUnreachable]

@@ -14,27 +14,46 @@ import inspect
 import warnings
 from dataclasses import dataclass, is_dataclass
 from pathlib import Path
-from typing import Any, Callable, Iterable, Mapping, Set, Union
+from typing import (
+    TYPE_CHECKING,
+    Any,
+    Callable,
+    Iterable,
+    Mapping,
+    Set,
+    Union,
+    cast,
+    overload,
+)
 
 from muutils.errormode import ErrorMode
 
-try:
+if TYPE_CHECKING:
+    # always need array.py for type checking
     from muutils.json_serialize.array import ArrayMode, serialize_array
-except ImportError as e:
-    ArrayMode = str  # type: ignore[misc]
-    serialize_array = lambda *args, **kwargs: None  # noqa: E731
-    warnings.warn(
-        f"muutils.json_serialize.array could not be imported probably because missing numpy, array serialization will not work: \n{e}",
-        ImportWarning,
-    )
+else:
+    try:
+        from muutils.json_serialize.array import ArrayMode, serialize_array
+    except ImportError as e:
+        # TYPING: obviously, these types are all wrong if we can't import array.py
+        ArrayMode = str  # type: ignore[misc]
+        serialize_array = lambda *args, **kwargs: None  # type: ignore[assignment, invalid-assignment] # noqa: E731
+        warnings.warn(
+            f"muutils.json_serialize.array could not be imported probably because missing numpy, array serialization will not work: \n{e}",
+            ImportWarning,
+        )
 
-from muutils.json_serialize.util import (
+from muutils.json_serialize.types import (
     _FORMAT_KEY,
     Hashableitem,
+)  # pyright: ignore[reportPrivateUsage]
+
+from muutils.json_serialize.util import (
+    JSONdict,
     JSONitem,
     MonoTuple,
     SerializationException,
-    _recursive_hashify,
+    _recursive_hashify,  # pyright: ignore[reportPrivateUsage, reportUnknownVariableType]
     isinstance_namedtuple,
     safe_getsource,
     string_as_lines,
@@ -52,13 +71,13 @@ SERIALIZER_SPECIAL_KEYS: MonoTuple[str] = (
     "__annotations__",
 )
 
-SERIALIZER_SPECIAL_FUNCS: dict[str, Callable] = {
+SERIALIZER_SPECIAL_FUNCS: dict[str, Callable[..., str | list[str]]] = {
     "str": str,
     "dir": dir,
-    "type": try_catch(lambda x: str(type(x).__name__)),
-    "repr": try_catch(lambda x: repr(x)),
-    "code": try_catch(lambda x: inspect.getsource(x)),
-    "sourcefile": try_catch(lambda x: inspect.getsourcefile(x)),
+    "type": try_catch(lambda x: str(type(x).__name__)),  # pyright: ignore[reportUnknownArgumentType, reportUnknownLambdaType]
+    "repr": try_catch(lambda x: repr(x)),  # pyright: ignore[reportUnknownArgumentType, reportUnknownLambdaType]
+    "code": try_catch(lambda x: inspect.getsource(x)),  # pyright: ignore[reportUnknownArgumentType, reportUnknownLambdaType]
+    "sourcefile": try_catch(lambda x: str(inspect.getsourcefile(x))),  # pyright: ignore[reportUnknownArgumentType, reportUnknownLambdaType]
 }
 
 SERIALIZE_DIRECT_AS_STR: Set[str] = {
@@ -88,7 +107,7 @@ class SerializerHandler:
     # description of this serializer
     desc: str
 
-    def serialize(self) -> dict:
+    def serialize(self) -> JSONdict:
         """serialize the handler info"""
         return {
             # get the code and doc of the check function
@@ -127,6 +146,15 @@ BASE_HANDLERS: MonoTuple[SerializerHandler] = (
         desc="dictionaries",
     ),
     SerializerHandler(
+        check=lambda self, obj, path: isinstance_namedtuple(obj),
+        serialize_func=lambda self, obj, path: {
+            str(k): self.json_serialize(v, tuple(path) + (k,))
+            for k, v in obj._asdict().items()
+        },
+        uid="namedtuple -> dict",
+        desc="namedtuples as dicts",
+    ),
+    SerializerHandler(
         check=lambda self, obj, path: isinstance(obj, (list, tuple)),
         serialize_func=lambda self, obj, path: [
             self.json_serialize(x, tuple(path) + (i,)) for i, x in enumerate(obj)
@@ -151,17 +179,12 @@ def _serialize_override_serialize_func(
 DEFAULT_HANDLERS: MonoTuple[SerializerHandler] = tuple(BASE_HANDLERS) + (
     SerializerHandler(
         # TODO: allow for custom serialization handler name
-        check=lambda self, obj, path: hasattr(obj, "serialize")
-        and callable(obj.serialize),
+        check=lambda self, obj, path: (
+            hasattr(obj, "serialize") and callable(obj.serialize)
+        ),
         serialize_func=_serialize_override_serialize_func,
         uid=".serialize override",
         desc="objects with .serialize method",
-    ),
-    SerializerHandler(
-        check=lambda self, obj, path: isinstance_namedtuple(obj),
-        serialize_func=lambda self, obj, path: self.json_serialize(dict(obj._asdict())),
-        uid="namedtuple -> dict",
-        desc="namedtuples as dicts",
     ),
     SerializerHandler(
         check=lambda self, obj, path: is_dataclass(obj),
@@ -186,14 +209,21 @@ DEFAULT_HANDLERS: MonoTuple[SerializerHandler] = tuple(BASE_HANDLERS) + (
     ),
     SerializerHandler(
         check=lambda self, obj, path: str(type(obj)) == "<class 'numpy.ndarray'>",
-        serialize_func=lambda self, obj, path: serialize_array(self, obj, path=path),
+        serialize_func=lambda self, obj, path: cast(
+            JSONitem, serialize_array(self, obj, path=path)
+        ),
         uid="numpy.ndarray",
         desc="numpy arrays",
     ),
     SerializerHandler(
         check=lambda self, obj, path: str(type(obj)) == "<class 'torch.Tensor'>",
-        serialize_func=lambda self, obj, path: serialize_array(
-            self, obj.detach().cpu(), path=path
+        serialize_func=lambda self, obj, path: cast(
+            JSONitem,
+            serialize_array(
+                self,
+                obj.detach().cpu(),
+                path=path,  # pyright: ignore[reportAny]
+            ),
         ),
         uid="torch.Tensor",
         desc="pytorch tensors",
@@ -202,28 +232,41 @@ DEFAULT_HANDLERS: MonoTuple[SerializerHandler] = tuple(BASE_HANDLERS) + (
         check=lambda self, obj, path: (
             str(type(obj)) == "<class 'pandas.core.frame.DataFrame'>"
         ),
-        serialize_func=lambda self, obj, path: {
-            _FORMAT_KEY: "pandas.DataFrame",
-            "columns": obj.columns.tolist(),
-            "data": obj.to_dict(orient="records"),
-            "path": path,  # type: ignore
+        # TYPING: type checkers have no idea that obj is a DataFrame here
+        serialize_func=lambda self, obj, path: {  # pyright: ignore[reportArgumentType, reportAny]
+            _FORMAT_KEY: "pandas.DataFrame",  # type: ignore[misc]
+            "columns": obj.columns.tolist(),  # pyright: ignore[reportAny]
+            "data": obj.to_dict(orient="records"),  # pyright: ignore[reportAny]
+            "path": path,
         },
         uid="pandas.DataFrame",
         desc="pandas DataFrames",
     ),
     SerializerHandler(
-        check=lambda self, obj, path: isinstance(obj, (set, list, tuple))
-        or isinstance(obj, Iterable),
+        check=lambda self, obj, path: isinstance(obj, (set, frozenset)),
+        serialize_func=lambda self, obj, path: {
+            _FORMAT_KEY: "set" if isinstance(obj, set) else "frozenset",  # type: ignore[misc]
+            "data": [
+                self.json_serialize(x, tuple(path) + (i,)) for i, x in enumerate(obj)
+            ],
+        },
+        uid="set -> dict[_FORMAT_KEY: 'set', data: list(...)]",
+        desc="sets as dicts with format key",
+    ),
+    SerializerHandler(
+        check=lambda self, obj, path: (
+            isinstance(obj, Iterable) and not isinstance(obj, (list, tuple, str))
+        ),
         serialize_func=lambda self, obj, path: [
             self.json_serialize(x, tuple(path) + (i,)) for i, x in enumerate(obj)
         ],
-        uid="(set, list, tuple, Iterable) -> list",
-        desc="sets, lists, tuples, and Iterables as lists",
+        uid="Iterable -> list",
+        desc="Iterables (not lists/tuples/strings) as lists",
     ),
     SerializerHandler(
         check=lambda self, obj, path: True,
         serialize_func=lambda self, obj, path: {
-            **{k: str(getattr(obj, k, None)) for k in SERIALIZER_SPECIAL_KEYS},
+            **{k: str(getattr(obj, k, None)) for k in SERIALIZER_SPECIAL_KEYS},  # type: ignore[typeddict-item]
             **{k: f(obj) for k, f in SERIALIZER_SPECIAL_FUNCS.items()},
         },
         uid="fallback",
@@ -260,10 +303,10 @@ class JsonSerializer:
 
     def __init__(
         self,
-        *args,
-        array_mode: ArrayMode = "array_list_meta",
+        *args: None,
+        array_mode: "ArrayMode" = "array_list_meta",
         error_mode: ErrorMode = ErrorMode.EXCEPT,
-        handlers_pre: MonoTuple[SerializerHandler] = tuple(),
+        handlers_pre: MonoTuple[SerializerHandler] = (),
         handlers_default: MonoTuple[SerializerHandler] = DEFAULT_HANDLERS,
         write_only_format: bool = False,
     ):
@@ -272,7 +315,7 @@ class JsonSerializer:
                 f"JsonSerializer takes no positional arguments!\n{args = }"
             )
 
-        self.array_mode: ArrayMode = array_mode
+        self.array_mode: "ArrayMode" = array_mode
         self.error_mode: ErrorMode = ErrorMode.from_any(error_mode)
         self.write_only_format: bool = write_only_format
         # join up the handlers
@@ -280,42 +323,59 @@ class JsonSerializer:
             handlers_default
         )
 
+    @overload
+    def json_serialize(
+        self, obj: Mapping[str, Any], path: ObjectPath = ()
+    ) -> JSONdict: ...
+    @overload
+    def json_serialize(self, obj: list, path: ObjectPath = ()) -> list: ...
+    # @overload  # pyright: ignore[reportOverlappingOverload]
+    # def json_serialize(self, obj: set, path: ObjectPath = ()) -> _SerializedSet: ...
+    # @overload
+    # def json_serialize(
+    #     self, obj: frozenset, path: ObjectPath = ()
+    # ) -> _SerializedFrozenset: ...
+    @overload
+    def json_serialize(self, obj: Any, path: ObjectPath = ()) -> JSONitem: ...
     def json_serialize(
         self,
-        obj: Any,
-        path: ObjectPath = tuple(),
+        obj: Any,  # pyright: ignore[reportAny]
+        path: ObjectPath = (),
     ) -> JSONitem:
+        handler = None
         try:
             for handler in self.handlers:
                 if handler.check(self, obj, path):
                     output: JSONitem = handler.serialize_func(self, obj, path)
                     if self.write_only_format:
                         if isinstance(output, dict) and _FORMAT_KEY in output:
-                            new_fmt: JSONitem = output.pop(_FORMAT_KEY)
-                            output["__write_format__"] = new_fmt
+                            # TYPING: JSONitem has no idea that _FORMAT_KEY is str
+                            new_fmt: str = output.pop(_FORMAT_KEY)  # type: ignore  # pyright: ignore[reportAssignmentType]
+                            output["__write_format__"] = new_fmt  # type: ignore
                     return output
 
-            raise ValueError(f"no handler found for object with {type(obj) = }")
+            raise ValueError(f"no handler found for object with {type(obj) = }")  # pyright: ignore[reportAny]
 
         except Exception as e:
-            if self.error_mode == "except":
-                obj_str: str = repr(obj)
+            if self.error_mode == ErrorMode.EXCEPT:
+                obj_str: str = repr(obj)  # pyright: ignore[reportAny]
                 if len(obj_str) > 1000:
                     obj_str = obj_str[:1000] + "..."
+                handler_uid = handler.uid if handler else "no handler matched"
                 raise SerializationException(
-                    f"error serializing at {path = } with last handler: '{handler.uid}'\nfrom: {e}\nobj: {obj_str}"
+                    f"error serializing at {path = } with last handler: '{handler_uid}'\nfrom: {e}\nobj: {obj_str}"
                 ) from e
-            elif self.error_mode == "warn":
+            elif self.error_mode == ErrorMode.WARN:
                 warnings.warn(
                     f"error serializing at {path = }, will return as string\n{obj = }\nexception = {e}"
                 )
 
-            return repr(obj)
+            return repr(obj)  # pyright: ignore[reportAny]
 
     def hashify(
         self,
-        obj: Any,
-        path: ObjectPath = tuple(),
+        obj: Any,  # pyright: ignore[reportAny]
+        path: ObjectPath = (),
         force: bool = True,
     ) -> Hashableitem:
         """try to turn any object into something hashable"""
@@ -328,6 +388,16 @@ class JsonSerializer:
 GLOBAL_JSON_SERIALIZER: JsonSerializer = JsonSerializer()
 
 
-def json_serialize(obj: Any, path: ObjectPath = tuple()) -> JSONitem:
+@overload
+def json_serialize(obj: Mapping[str, Any], path: ObjectPath = ()) -> JSONdict: ...
+@overload
+def json_serialize(obj: list, path: ObjectPath = ()) -> list: ...
+@overload  # pyright: ignore[reportOverlappingOverload]
+# def json_serialize(obj: set, path: ObjectPath = ()) -> _SerializedSet: ...
+# @overload
+# def json_serialize(obj: frozenset, path: ObjectPath = ()) -> _SerializedFrozenset: ...
+@overload
+def json_serialize(obj: Any, path: ObjectPath = ()) -> JSONitem: ...
+def json_serialize(obj: Any, path: ObjectPath = ()) -> JSONitem:  # pyright: ignore[reportAny]
     """serialize object to json-serializable object with default config"""
     return GLOBAL_JSON_SERIALIZER.json_serialize(obj, path=path)

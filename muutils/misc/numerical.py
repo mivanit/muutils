@@ -73,8 +73,8 @@ def str_to_numeric(
     """
 
     # check is string
-    if not isinstance(quantity, str):
-        raise TypeError(
+    if not isinstance(quantity, str):  # pyright: ignore[reportUnnecessaryIsInstance]
+        raise TypeError(  # pyright: ignore[reportUnreachable]
             f"quantity must be a string, got '{type(quantity) = }' '{quantity = }'"
         )
 
@@ -97,7 +97,7 @@ def str_to_numeric(
     if mapping is True or mapping is None:
         _mapping = _REVERSE_SHORTEN_MAP
     else:
-        _mapping = mapping  # type: ignore[assignment]
+        _mapping = mapping  # type: ignore[assignment]  # pyright: ignore[reportAssignmentType]
 
     quantity_original: str = quantity
 

@@ -5,6 +5,9 @@ from types import CodeType
 import warnings
 from typing import Any, Callable, Tuple, cast, TypeVar
 
+# TODO: we do a lot of type weirdness here that basedpyright doesn't like
+# pyright: reportInvalidTypeForm=false
+
 try:
     if sys.version_info >= (3, 11):
         # 3.11+
@@ -74,7 +77,11 @@ def process_kwarg(
     return decorator
 
 
-@process_kwarg("action", ErrorMode.from_any)
+# TYPING: error: Argument of type "(kwarg_name: str, validator: (T_kwarg@validate_kwarg) -> bool, description: str | None = None, action: ErrorMode = ErrorMode.EXCEPT) -> (((() -> ReturnType@validate_kwarg)) -> (() -> ReturnType@validate_kwarg))" cannot be assigned to parameter of type "() -> ReturnType@process_kwarg"
+# Type "(kwarg_name: str, validator: (T_kwarg@validate_kwarg) -> bool, description: str | None = None, action: ErrorMode = ErrorMode.EXCEPT) -> (((() -> ReturnType@validate_kwarg)) -> (() -> ReturnType@validate_kwarg))" is not assignable to type "() -> ReturnType@process_kwarg"
+#   Extra parameter "kwarg_name"
+#   Extra parameter "validator" (reportArgumentType)
+@process_kwarg("action", ErrorMode.from_any)  # pyright: ignore[reportArgumentType]
 def validate_kwarg(
     kwarg_name: str,
     validator: Callable[[T_kwarg], bool],
@@ -119,10 +126,10 @@ def validate_kwarg(
         func: Callable[FuncParams, ReturnType],
     ) -> Callable[FuncParams, ReturnType]:
         @functools.wraps(func)
-        def wrapper(*args: FuncParams.args, **kwargs: FuncParams.kwargs) -> ReturnType:
+        def wrapper(*args: FuncParams.args, **kwargs: FuncParams.kwargs) -> ReturnType:  # pyright: ignore[reportUnknownParameterType]
             if kwarg_name in kwargs:
                 value: Any = kwargs[kwarg_name]
-                if not validator(value):
+                if not validator(value):  # ty: ignore[invalid-argument-type]
                     msg: str = (
                         description.format(kwarg_name=kwarg_name, value=value)
                         if description
@@ -179,13 +186,13 @@ def replace_kwarg(
         func: Callable[FuncParams, ReturnType],
     ) -> Callable[FuncParams, ReturnType]:
         @functools.wraps(func)
-        def wrapper(*args: FuncParams.args, **kwargs: FuncParams.kwargs) -> ReturnType:
+        def wrapper(*args: FuncParams.args, **kwargs: FuncParams.kwargs) -> ReturnType:  # pyright: ignore[reportUnknownParameterType]
             if kwarg_name in kwargs:
                 # TODO: no way to type hint this, I think
                 if check(kwargs[kwarg_name]):  # type: ignore[arg-type]
-                    kwargs[kwarg_name] = replacement_value
+                    kwargs[kwarg_name] = replacement_value  # ty: ignore[invalid-assignment]
             elif replace_if_missing and kwarg_name not in kwargs:
-                kwargs[kwarg_name] = replacement_value
+                kwargs[kwarg_name] = replacement_value  # ty: ignore[invalid-assignment]
             return func(*args, **kwargs)
 
         return cast(Callable[FuncParams, ReturnType], wrapper)
@@ -225,9 +232,9 @@ LambdaArgs = TypeVarTuple("LambdaArgs")
 LambdaArgsTypes = TypeVar("LambdaArgsTypes", bound=Tuple[type, ...])
 
 
-def typed_lambda(
+def typed_lambda(  # pyright: ignore[reportUnknownParameterType]
     fn: Callable[[Unpack[LambdaArgs]], ReturnType],
-    in_types: LambdaArgsTypes,
+    in_types: LambdaArgsTypes,  # pyright: ignore[reportInvalidTypeVarUse]
     out_type: type[ReturnType],
 ) -> Callable[[Unpack[LambdaArgs]], ReturnType]:
     """Wraps a lambda function with type hints.
@@ -254,7 +261,8 @@ def typed_lambda(
     # Raises:
      - `ValueError` if the number of input types doesn't match the lambda's parameters.
     """
-    code: CodeType = fn.__code__
+    # it will just error here if fn.__code__ doesn't exist
+    code: CodeType = fn.__code__  # type: ignore[unresolved-attribute]
     n_params: int = code.co_argcount
 
     if len(in_types) != n_params:
@@ -270,7 +278,7 @@ def typed_lambda(
     annotations["return"] = out_type
 
     @functools.wraps(fn)
-    def wrapped(*args: Unpack[LambdaArgs]) -> ReturnType:
+    def wrapped(*args: Unpack[LambdaArgs]) -> ReturnType:  # pyright: ignore[reportUnknownParameterType]
         return fn(*args)
 
     wrapped.__annotations__ = annotations

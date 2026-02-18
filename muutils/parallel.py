@@ -31,7 +31,7 @@ OutputType = TypeVar("OutputType")
 class ProgressBarFunction(Protocol):
     "a protocol for a progress bar function"
 
-    def __call__(self, iterable: Iterable, **kwargs: Any) -> Iterable: ...
+    def __call__(self, iterable: Iterable[Any], **kwargs: Any) -> Iterable[Any]: ...
 
 
 ProgressBarOption = Literal["tqdm", "spinner", "none", None]
@@ -43,7 +43,7 @@ DEFAULT_PBAR_FN: ProgressBarOption
 
 try:
     # use tqdm if it's available
-    import tqdm  # type: ignore[import-untyped]
+    import tqdm
 
     DEFAULT_PBAR_FN = "tqdm"
 
@@ -52,7 +52,7 @@ except ImportError:
     DEFAULT_PBAR_FN = "spinner"
 
 
-def spinner_fn_wrap(x: Iterable, **kwargs) -> List:
+def spinner_fn_wrap(x: Iterable[Any], **kwargs: Any) -> List[Any]:
     "spinner wrapper"
     spinnercontext_allowed_kwargs: set[str] = get_fn_allowed_kwargs(
         SpinnerContext.__init__
@@ -72,9 +72,9 @@ def spinner_fn_wrap(x: Iterable, **kwargs) -> List:
     return output
 
 
-def map_kwargs_for_tqdm(kwargs: dict) -> dict:
+def map_kwargs_for_tqdm(kwargs: Dict[str, Any]) -> Dict[str, Any]:
     "map kwargs for tqdm, cant wrap because the pbar dissapears?"
-    tqdm_allowed_kwargs: set[str] = get_fn_allowed_kwargs(tqdm.tqdm.__init__)
+    tqdm_allowed_kwargs: set[str] = get_fn_allowed_kwargs(tqdm.tqdm.__init__)  # pyright: ignore[reportPossiblyUnboundVariable]
     mapped_kwargs: dict = {k: v for k, v in kwargs.items() if k in tqdm_allowed_kwargs}
 
     if "desc" not in kwargs:
@@ -86,7 +86,7 @@ def map_kwargs_for_tqdm(kwargs: dict) -> dict:
     return mapped_kwargs
 
 
-def no_progress_fn_wrap(x: Iterable, **kwargs) -> Iterable:
+def no_progress_fn_wrap(x: Iterable[Any], **kwargs: Any) -> Iterable[Any]:
     "fallback to no progress bar"
     return x
 
@@ -94,8 +94,8 @@ def no_progress_fn_wrap(x: Iterable, **kwargs) -> Iterable:
 def set_up_progress_bar_fn(
     pbar: Union[ProgressBarFunction, ProgressBarOption],
     pbar_kwargs: Optional[Dict[str, Any]] = None,
-    **extra_kwargs,
-) -> Tuple[ProgressBarFunction, dict]:
+    **extra_kwargs: Any,
+) -> Tuple[ProgressBarFunction, Dict[str, Any]]:
     """set up the progress bar function and its kwargs
 
     # Parameters:
@@ -126,7 +126,7 @@ def set_up_progress_bar_fn(
     # if `pbar` is a different string, figure out which progress bar to use
     elif isinstance(pbar, str):
         if pbar == "tqdm":
-            pbar_fn = tqdm.tqdm
+            pbar_fn = tqdm.tqdm  # pyright: ignore[reportPossiblyUnboundVariable]
             pbar_kwargs = map_kwargs_for_tqdm(pbar_kwargs)
         elif pbar == "spinner":
             pbar_fn = functools.partial(spinner_fn_wrap, **pbar_kwargs)
@@ -238,7 +238,8 @@ def run_maybe_parallel(
     ]
     if parallel:
         # use `mp.Pool` since we might want to use `multiprocess` instead of `multiprocessing`
-        pool = mp.Pool(num_processes)
+        # TYPING: messy here
+        pool = mp.Pool(num_processes)  # type: ignore[possibly-missing-attribute] # pyright: ignore[reportAttributeAccessIssue, reportUnknownMemberType, reportUnknownVariableType]
 
         # use `imap` if we want to keep the order, otherwise use `imap_unordered`
         if keep_ordered:
@@ -272,8 +273,8 @@ def run_maybe_parallel(
 
     # close the pool if we used one
     if parallel:
-        pool.close()
-        pool.join()
+        pool.close()  # pyright: ignore[reportPossiblyUnboundVariable]
+        pool.join()  # pyright: ignore[reportPossiblyUnboundVariable]
 
     # return the output as a list
     return output

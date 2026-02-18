@@ -3,21 +3,21 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>Coverage for muutils/statcounter.py: 64%</title>
-    <link rel="icon" sizes="32x32" href="favicon_32_cb_58284776.png">
-    <link rel="stylesheet" href="style_cb_6b508a39.css" type="text/css">
-    <script src="coverage_html_cb_6fb7b396.js" defer></script>
+    <link rel="icon" sizes="32x32" href="favicon_32_cb_c827f16f.png">
+    <link rel="stylesheet" href="style_cb_9ff733b0.css" type="text/css">
+    <script src="coverage_html_cb_dd2e7eb5.js" defer></script>
 </head>
 <body class="pyfile">
 <header>
     <div class="content">
         <h1>
-            <span class="text">Coverage for </span><b>muutils/statcounter.py</b>:
+            <span class="text">Coverage for </span><b>muutils&#8201;/&#8201;statcounter.py</b>:
             <span class="pc_cov">64%</span>
         </h1>
         <aside id="help_panel_wrapper">
             <input id="help_panel_state" type="checkbox">
             <label for="help_panel_state">
-                <img id="keyboard_icon" src="keybd_closed_cb_ce680311.png" alt="Show/hide keyboard shortcuts">
+                <img id="keyboard_icon" src="keybd_closed_cb_900cfef5.png" alt="Show/hide keyboard shortcuts">
             </label>
             <div id="help_panel">
                 <p class="legend">Shortcuts on this page</p>
@@ -64,8 +64,8 @@
             <a id="indexLink" class="nav" href="index.html">&Hat; index</a> &nbsp; &nbsp;
             <a id="nextFileLink" class="nav" href="z_6c5f9b70fbd6dea2_sysinfo_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
-            <a class="nav" href="https://coverage.readthedocs.io/en/7.11.0">coverage.py v7.11.0</a>,
-            created at 2025-10-28 17:24 +0000
+            <a class="nav" href="https://coverage.readthedocs.io/en/7.13.4">coverage.py v7.13.4</a>,
+            created at 2026-02-18 02:51 -0700
         </p>
         <aside class="hidden">
             <button type="button" class="button_next_chunk" data-shortcut="j"></button>
@@ -91,7 +91,7 @@
     <p class="run"><span class="n"><a id="t9" href="#t9">9</a></span><span class="t"><span class="key">from</span> <span class="nam">collections</span> <span class="key">import</span> <span class="nam">Counter</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t10" href="#t10">10</a></span><span class="t"><span class="key">from</span> <span class="nam">functools</span> <span class="key">import</span> <span class="nam">cached_property</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t11" href="#t11">11</a></span><span class="t"><span class="key">from</span> <span class="nam">itertools</span> <span class="key">import</span> <span class="nam">chain</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t12" href="#t12">12</a></span><span class="t"><span class="key">from</span> <span class="nam">typing</span> <span class="key">import</span> <span class="nam">Callable</span><span class="op">,</span> <span class="nam">Optional</span><span class="op">,</span> <span class="nam">Sequence</span><span class="op">,</span> <span class="nam">Union</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t12" href="#t12">12</a></span><span class="t"><span class="key">from</span> <span class="nam">typing</span> <span class="key">import</span> <span class="nam">Any</span><span class="op">,</span> <span class="nam">Callable</span><span class="op">,</span> <span class="nam">Optional</span><span class="op">,</span> <span class="nam">Sequence</span><span class="op">,</span> <span class="nam">Union</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t13" href="#t13">13</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t14" href="#t14">14</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t15" href="#t15">15</a></span><span class="t"><span class="com"># _GeneralArray = Union[np.ndarray, "torch.Tensor"]</span>&nbsp;</span><span class="r"></span></p>
@@ -161,7 +161,7 @@
     <p class="pln"><span class="n"><a id="t79" href="#t79">79</a></span><span class="t"><span class="str">        """</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t80" href="#t80">80</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t81" href="#t81">81</a></span><span class="t">        <span class="key">if</span> <span class="nam">p</span> <span class="op">&lt;</span> <span class="num">0</span> <span class="key">or</span> <span class="nam">p</span> <span class="op">></span> <span class="num">1</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t82" href="#t82">82</a></span><span class="t">            <span class="key">raise</span> <span class="nam">ValueError</span><span class="op">(</span><span class="str">f"percentile must be between 0 and 1: {p}"</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t82" href="#t82">82</a></span><span class="t">            <span class="key">raise</span> <span class="nam">ValueError</span><span class="op">(</span><span class="fst">f"</span><span class="fst">percentile must be between 0 and 1: </span><span class="op">{</span><span class="nam">p</span><span class="op">}</span><span class="fst">"</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t83" href="#t83">83</a></span><span class="t">        <span class="com"># flip for speed</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t84" href="#t84">84</a></span><span class="t">        <span class="nam">sorted_keys</span><span class="op">:</span> <span class="nam">list</span><span class="op">[</span><span class="nam">float</span><span class="op">]</span> <span class="op">=</span> <span class="op">[</span><span class="nam">float</span><span class="op">(</span><span class="nam">x</span><span class="op">)</span> <span class="key">for</span> <span class="nam">x</span> <span class="key">in</span> <span class="nam">self</span><span class="op">.</span><span class="nam">keys_sorted</span><span class="op">]</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t85" href="#t85">85</a></span><span class="t">        <span class="nam">sort</span><span class="op">:</span> <span class="nam">int</span> <span class="op">=</span> <span class="num">1</span>&nbsp;</span><span class="r"></span></p>
@@ -201,7 +201,7 @@
     <p class="pln"><span class="n"><a id="t119" href="#t119">119</a></span><span class="t">            <span class="key">else</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t120" href="#t120">120</a></span><span class="t">                <span class="key">continue</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t121" href="#t121">121</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t122" href="#t122">122</a></span><span class="t">        <span class="key">raise</span> <span class="nam">ValueError</span><span class="op">(</span><span class="str">f"percentile {p} not found???"</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t122" href="#t122">122</a></span><span class="t">        <span class="key">raise</span> <span class="nam">ValueError</span><span class="op">(</span><span class="fst">f"</span><span class="fst">percentile </span><span class="op">{</span><span class="nam">p</span><span class="op">}</span><span class="fst"> not found???</span><span class="fst">"</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t123" href="#t123">123</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t124" href="#t124">124</a></span><span class="t">    <span class="key">def</span> <span class="nam">median</span><span class="op">(</span><span class="nam">self</span><span class="op">)</span> <span class="op">-></span> <span class="nam">float</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t125" href="#t125">125</a></span><span class="t">        <span class="key">return</span> <span class="nam">self</span><span class="op">.</span><span class="nam">percentile</span><span class="op">(</span><span class="num">0.5</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
@@ -252,7 +252,7 @@
     <p class="pln"><span class="n"><a id="t170" href="#t170">170</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="mis show_mis"><span class="n"><a id="t171" href="#t171">171</a></span><span class="t">                <span class="key">if</span> <span class="nam">extra_percentiles</span> <span class="key">is</span> <span class="key">not</span> <span class="key">None</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="mis show_mis"><span class="n"><a id="t172" href="#t172">172</a></span><span class="t">                    <span class="key">for</span> <span class="nam">p</span> <span class="key">in</span> <span class="nam">extra_percentiles</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t173" href="#t173">173</a></span><span class="t">                        <span class="nam">output</span><span class="op">[</span><span class="str">f"percentile_{p}"</span><span class="op">]</span> <span class="op">=</span> <span class="nam">typecast</span><span class="op">(</span><span class="nam">self</span><span class="op">.</span><span class="nam">percentile</span><span class="op">(</span><span class="nam">p</span><span class="op">)</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t173" href="#t173">173</a></span><span class="t">                        <span class="nam">output</span><span class="op">[</span><span class="fst">f"</span><span class="fst">percentile_</span><span class="op">{</span><span class="nam">p</span><span class="op">}</span><span class="fst">"</span><span class="op">]</span> <span class="op">=</span> <span class="nam">typecast</span><span class="op">(</span><span class="nam">self</span><span class="op">.</span><span class="nam">percentile</span><span class="op">(</span><span class="nam">p</span><span class="op">)</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t174" href="#t174">174</a></span><span class="t">            <span class="key">else</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t175" href="#t175">175</a></span><span class="t">                <span class="com"># if its not, we can only do the simpler things</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t176" href="#t176">176</a></span><span class="t">                <span class="com"># mean mode and total are done in the initial declaration of `output`</span>&nbsp;</span><span class="r"></span></p>
@@ -306,8 +306,8 @@
     <p class="run"><span class="n"><a id="t224" href="#t224">224</a></span><span class="t">    <span class="op">@</span><span class="nam">classmethod</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t225" href="#t225">225</a></span><span class="t">    <span class="key">def</span> <span class="nam">from_list_arrays</span><span class="op">(</span>&nbsp;</span><span class="r"></span></p>
     <p class="run run2"><span class="n"><a id="t226" href="#t226">226</a></span><span class="t">        <span class="nam">cls</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run run2"><span class="n"><a id="t227" href="#t227">227</a></span><span class="t">        <span class="nam">arr</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run run2"><span class="n"><a id="t228" href="#t228">228</a></span><span class="t">        <span class="nam">map_func</span><span class="op">:</span> <span class="nam">Callable</span> <span class="op">=</span> <span class="nam">float</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run run2"><span class="n"><a id="t227" href="#t227">227</a></span><span class="t">        <span class="nam">arr</span><span class="op">:</span> <span class="nam">Any</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run run2"><span class="n"><a id="t228" href="#t228">228</a></span><span class="t">        <span class="nam">map_func</span><span class="op">:</span> <span class="nam">Callable</span><span class="op">[</span><span class="op">[</span><span class="nam">Any</span><span class="op">]</span><span class="op">,</span> <span class="nam">float</span><span class="op">]</span> <span class="op">=</span> <span class="nam">float</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
     <p class="run run2"><span class="n"><a id="t229" href="#t229">229</a></span><span class="t">    <span class="op">)</span> <span class="op">-></span> <span class="str">"StatCounter"</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t230" href="#t230">230</a></span><span class="t">        <span class="str">"""calls `map_func` on each element of `universal_flatten(arr)`"""</span>&nbsp;</span><span class="r"></span></p>
     <p class="mis show_mis"><span class="n"><a id="t231" href="#t231">231</a></span><span class="t">        <span class="key">return</span> <span class="nam">cls</span><span class="op">(</span><span class="op">[</span><span class="nam">map_func</span><span class="op">(</span><span class="nam">x</span><span class="op">)</span> <span class="key">for</span> <span class="nam">x</span> <span class="key">in</span> <span class="nam">universal_flatten</span><span class="op">(</span><span class="nam">arr</span><span class="op">)</span><span class="op">]</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
@@ -319,8 +319,8 @@
             <a class="nav" href="index.html">&Hat; index</a> &nbsp; &nbsp;
             <a class="nav" href="z_6c5f9b70fbd6dea2_sysinfo_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
-            <a class="nav" href="https://coverage.readthedocs.io/en/7.11.0">coverage.py v7.11.0</a>,
-            created at 2025-10-28 17:24 +0000
+            <a class="nav" href="https://coverage.readthedocs.io/en/7.13.4">coverage.py v7.13.4</a>,
+            created at 2026-02-18 02:51 -0700
         </p>
     </div>
 </footer>

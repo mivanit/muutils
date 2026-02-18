@@ -4,7 +4,7 @@ import json
 import sys
 import time
 import typing
-from typing import TextIO, Union
+from typing import Any, TextIO, Union
 
 from muutils.json_serialize import JSONitem, json_serialize
 
@@ -64,18 +64,21 @@ class SimpleLogger:
                 assert log_path is not None
                 self._log_file_handle = open(log_path, "w", encoding="utf-8")
 
-    def log(self, msg: JSONitem, console_print: bool = False, **kwargs):
+    def log(self, msg: JSONitem, *, console_print: bool = False, **kwargs: Any) -> None:
         """log a message to the log file, and optionally to the console"""
         if console_print:
             print(msg)
 
+        msg_dict: dict[str, Any]
         if not isinstance(msg, typing.Mapping):
-            msg = {"_msg": msg}
+            msg_dict = {"_msg": msg}
+        else:
+            msg_dict = dict(typing.cast(typing.Mapping[str, Any], msg))
 
         if self._timestamp:
-            msg["_timestamp"] = time.time()
+            msg_dict["_timestamp"] = time.time()
 
         if len(kwargs) > 0:
-            msg["_kwargs"] = kwargs
+            msg_dict["_kwargs"] = kwargs
 
-        self._log_file_handle.write(json.dumps(json_serialize(msg)) + "\n")
+        self._log_file_handle.write(json.dumps(json_serialize(msg_dict)) + "\n")

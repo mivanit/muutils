@@ -28,7 +28,7 @@ def get_console_safe_str(
     ```
     """
     try:
-        default.encode(locale.getpreferredencoding())
+        _ = default.encode(locale.getpreferredencoding())
         return default
     except UnicodeEncodeError:
         return fallback

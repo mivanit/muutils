@@ -58,7 +58,7 @@ import json
 import sys
 import typing
 import warnings
-from typing import Any, Optional, Type, TypeVar
+from typing import Any, Optional, Type, TypeVar, overload, TYPE_CHECKING
 
 from muutils.errormode import ErrorMode
 from muutils.validate_type import validate_type
@@ -66,22 +66,35 @@ from muutils.json_serialize.serializable_field import (
     SerializableField,
     serializable_field,
 )
-from muutils.json_serialize.util import _FORMAT_KEY, array_safe_eq, dc_eq
+from muutils.json_serialize.types import _FORMAT_KEY
+from muutils.json_serialize.util import (
+    JSONdict,
+    array_safe_eq,
+    dc_eq,
+)
 
 # pylint: disable=bad-mcs-classmethod-argument, too-many-arguments, protected-access
 
-# this is quite horrible, but unfortunately mypy fails if we try to assign to `dataclass_transform` directly
-# and every time we try to init a serializable dataclass it says the argument doesnt exist
-try:
-    try:
-        # type ignore here for legacy versions
-        from typing import dataclass_transform  # type: ignore[attr-defined]
-    except Exception:
-        from typing_extensions import dataclass_transform
-except Exception:
-    from muutils.json_serialize.dataclass_transform_mock import dataclass_transform
+# For type checkers: always use typing_extensions which they can resolve
+# At runtime: use stdlib if available (3.11+), else typing_extensions, else mock
+if TYPE_CHECKING:
+    from typing_extensions import dataclass_transform, Self
+else:
+    if sys.version_info >= (3, 11):
+        from typing import dataclass_transform, Self
+    else:
+        try:
+            from typing_extensions import dataclass_transform, Self
+        except Exception:
+            from muutils.json_serialize.dataclass_transform_mock import (
+                dataclass_transform,
+            )
 
-T = TypeVar("T")
+            Self = TypeVar("Self")
+
+T_SerializeableDataclass = TypeVar(
+    "T_SerializeableDataclass", bound="SerializableDataclass"
+)
 
 
 class CantGetTypeHintsWarning(UserWarning):
@@ -100,7 +113,9 @@ _zanj_loading_needs_import: bool = True
 "flag to keep track of if we have successfully imported ZANJ"
 
 
-def zanj_register_loader_serializable_dataclass(cls: typing.Type[T]):
+def zanj_register_loader_serializable_dataclass(
+    cls: typing.Type[T_SerializeableDataclass],
+):
     """Register a serializable dataclass with the ZANJ import
 
     this allows `ZANJ().read()` to load the class and not just return plain dicts
@@ -112,9 +127,9 @@ def zanj_register_loader_serializable_dataclass(cls: typing.Type[T]):
 
     if _zanj_loading_needs_import:
         try:
-            from zanj.loading import (  # type: ignore[import]
-                LoaderHandler,
-                register_loader_handler,
+            from zanj.loading import (  # type: ignore[import]  # pyright: ignore[reportMissingImports]
+                LoaderHandler,  # pyright: ignore[reportUnknownVariableType]
+                register_loader_handler,  # pyright: ignore[reportUnknownVariableType]
             )
         except ImportError:
             # NOTE: if ZANJ is not installed, then failing to register the loader handler doesnt matter
@@ -125,7 +140,7 @@ def zanj_register_loader_serializable_dataclass(cls: typing.Type[T]):
             return
 
     _format: str = f"{cls.__name__}(SerializableDataclass)"
-    lh: LoaderHandler = LoaderHandler(
+    lh: LoaderHandler = LoaderHandler(  # pyright: ignore[reportPossiblyUnboundVariable]
         check=lambda json_item, path=None, z=None: (  # type: ignore
             isinstance(json_item, dict)
             and _FORMAT_KEY in json_item
@@ -137,7 +152,7 @@ def zanj_register_loader_serializable_dataclass(cls: typing.Type[T]):
         desc=f"{_format} loader via muutils.json_serialize.serializable_dataclass",
     )
 
-    register_loader_handler(lh)
+    register_loader_handler(lh)  # pyright: ignore[reportPossiblyUnboundVariable]
 
     return lh
 
@@ -350,8 +365,16 @@ class SerializableDataclass(abc.ABC):
             f"decorate {self.__class__ = } with `@serializable_dataclass`"
         )
 
+    @overload
     @classmethod
-    def load(cls: Type[T], data: dict[str, Any] | T) -> T:
+    def load(cls, data: dict[str, Any]) -> Self: ...
+
+    @overload
+    @classmethod
+    def load(cls, data: Self) -> Self: ...
+
+    @classmethod
+    def load(cls, data: dict[str, Any] | Self) -> Self:
         "takes in an appropriately structured dict and returns an instance of the class, implemented by using `@serializable_dataclass` decorator"
         raise NotImplementedError(f"decorate {cls = } with `@serializable_dataclass`")
 
@@ -425,11 +448,11 @@ class SerializableDataclass(abc.ABC):
 
         # if we are working with serialized data, serialize the instances
         if of_serialized:
-            ser_self: dict = self.serialize()
-            ser_other: dict = other.serialize()
+            ser_self: JSONdict = self.serialize()
+            ser_other: JSONdict = other.serialize()
 
         # for each field in the class
-        for field in dataclasses.fields(self):  # type: ignore[arg-type]
+        for field in dataclasses.fields(self):  # type: ignore[arg-type]  # pyright: ignore[reportArgumentType]
             # skip fields that are not for comparison
             if not field.compare:
                 continue
@@ -455,8 +478,12 @@ class SerializableDataclass(abc.ABC):
                 raise ValueError("Non-serializable dataclass is not supported")
             else:
                 # get the values of either the serialized or the actual values
-                self_value_s = ser_self[field_name] if of_serialized else self_value
-                other_value_s = ser_other[field_name] if of_serialized else other_value
+                if of_serialized:
+                    self_value_s = ser_self[field_name]  # pyright: ignore[reportPossiblyUnboundVariable, reportUnknownVariableType]
+                    other_value_s = ser_other[field_name]  # pyright: ignore[reportPossiblyUnboundVariable, reportUnknownVariableType]
+                else:
+                    self_value_s = self_value
+                    other_value_s = other_value
                 # compare the values
                 if not array_safe_eq(self_value_s, other_value_s):
                     diff_result[field_name] = {"self": self_value, "other": other_value}
@@ -493,12 +520,12 @@ class SerializableDataclass(abc.ABC):
 # cache this so we don't have to keep getting it
 # TODO: are the types hashable? does this even make sense?
 @functools.lru_cache(typed=True)
-def get_cls_type_hints_cached(cls: Type[T]) -> dict[str, Any]:
+def get_cls_type_hints_cached(cls: Type[T_SerializeableDataclass]) -> dict[str, Any]:
     "cached typing.get_type_hints for a class"
     return typing.get_type_hints(cls)
 
 
-def get_cls_type_hints(cls: Type[T]) -> dict[str, Any]:
+def get_cls_type_hints(cls: Type[T_SerializeableDataclass]) -> dict[str, Any]:
     "helper function to get type hints for a class"
     cls_type_hints: dict[str, Any]
     try:
@@ -573,8 +600,8 @@ def serializable_dataclass(
     on_typecheck_error: ErrorMode = _DEFAULT_ON_TYPECHECK_ERROR,
     on_typecheck_mismatch: ErrorMode = _DEFAULT_ON_TYPECHECK_MISMATCH,
     methods_no_override: list[str] | None = None,
-    **kwargs,
-):
+    **kwargs: Any,
+) -> Any:
     """decorator to make a dataclass serializable. **must also make it inherit from `SerializableDataclass`!!**
 
     types will be validated (like pydantic) unless `on_typecheck_mismatch` is set to `ErrorMode.IGNORE`
@@ -668,7 +695,7 @@ def serializable_dataclass(
     else:
         _properties_to_serialize = properties_to_serialize
 
-    def wrap(cls: Type[T]) -> Type[T]:
+    def wrap(cls: Type[T_SerializeableDataclass]) -> Type[T_SerializeableDataclass]:
         # Modify the __annotations__ dictionary to replace regular fields with SerializableField
         for field_name, field_type in cls.__annotations__.items():
             field_value = getattr(cls, field_name, None)
@@ -710,7 +737,7 @@ def serializable_dataclass(
         # define `serialize` func
         # done locally since it depends on args to the decorator
         # ======================================================================
-        def serialize(self) -> dict[str, Any]:
+        def serialize(self: Any) -> dict[str, Any]:
             result: dict[str, Any] = {
                 _FORMAT_KEY: f"{self.__class__.__name__}(SerializableDataclass)"
             }
@@ -726,6 +753,7 @@ def serializable_dataclass(
 
                 # try to save it
                 if field.serialize:
+                    value: Any = None  # init before try in case getattr raises
                     try:
                         # get the val
                         value = getattr(self, field.name)
@@ -733,8 +761,8 @@ def serializable_dataclass(
                         if isinstance(value, SerializableDataclass):
                             value = value.serialize()
                         # if the value has a serialization function, use that
-                        if hasattr(value, "serialize") and callable(value.serialize):
-                            value = value.serialize()
+                        if hasattr(value, "serialize") and callable(value.serialize):  # pyright: ignore[reportAttributeAccessIssue]
+                            value = value.serialize()  # pyright: ignore[reportAttributeAccessIssue]
                         # if the field has a serialization function, use that
                         # it would be nice to be able to override a class's `.serialize()`, but that could lead to some inconsistencies!
                         elif field.serialization_fn:
@@ -748,7 +776,7 @@ def serializable_dataclass(
                                 [
                                     f"Error serializing field '{field.name}' on class {self.__class__.__module__}.{self.__class__.__name__}",
                                     f"{field = }",
-                                    f"{value = }",
+                                    f"{value or '<unavailable>' = }",
                                     f"{self = }",
                                 ]
                             )
@@ -774,7 +802,10 @@ def serializable_dataclass(
         # ======================================================================
         # mypy thinks this isnt a classmethod
         @classmethod  # type: ignore[misc]
-        def load(cls, data: dict[str, Any] | T) -> Type[T]:
+        def load(
+            cls: type[T_SerializeableDataclass],
+            data: dict[str, Any] | T_SerializeableDataclass,
+        ) -> T_SerializeableDataclass:
             # HACK: this is kind of ugly, but it fixes a lot of issues for when we do recursive loading with ZANJ
             if isinstance(data, cls):
                 return data
@@ -789,7 +820,9 @@ def serializable_dataclass(
             ctor_kwargs: dict[str, Any] = dict()
 
             # iterate over the fields of the class
-            for field in dataclasses.fields(cls):
+            # mypy doesn't recognize @dataclass_transform for dataclasses.fields()
+            # https://github.com/python/mypy/issues/16241
+            for field in dataclasses.fields(cls):  # type: ignore[arg-type]
                 # check if the field is a SerializableField
                 assert isinstance(field, SerializableField), (
                     f"Field '{field.name}' on class {cls.__name__} is not a SerializableField, but a {type(field)}. this state should be inaccessible, please report this bug!\nhttps://github.com/mivanit/muutils/issues/new"
@@ -830,7 +863,7 @@ def serializable_dataclass(
                     ctor_kwargs[field.name] = value
 
             # create a new instance of the class with the constructor kwargs
-            output: cls = cls(**ctor_kwargs)
+            output: T_SerializeableDataclass = cls(**ctor_kwargs)
 
             # validate the types of the fields if needed
             if on_typecheck_mismatch != ErrorMode.IGNORE:
@@ -880,14 +913,14 @@ def serializable_dataclass(
         # mypy says "Type cannot be declared in assignment to non-self attribute" so thats why I've left the hints in the comments
         if "serialize" not in _methods_no_override:
             # type is `Callable[[T], dict]`
-            cls.serialize = serialize  # type: ignore[attr-defined]
+            cls.serialize = serialize  # type: ignore[attr-defined, method-assign]
         if "load" not in _methods_no_override:
             # type is `Callable[[dict], T]`
-            cls.load = load  # type: ignore[attr-defined]
+            cls.load = load  # type: ignore[attr-defined, method-assign, assignment]
 
         if "validate_field_type" not in _methods_no_override:
             # type is `Callable[[T, ErrorMode], bool]`
-            cls.validate_fields_types = SerializableDataclass__validate_fields_types  # type: ignore[attr-defined]
+            cls.validate_fields_types = SerializableDataclass__validate_fields_types  # type: ignore[attr-defined, method-assign]
 
         if "__eq__" not in _methods_no_override:
             # type is `Callable[[T, T], bool]`

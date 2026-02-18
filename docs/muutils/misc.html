@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="generator" content="pdoc 15.0.4"/>
+    <meta name="generator" content="pdoc 16.0.0"/>
     <title>muutils.misc API documentation</title>
 <link rel="stylesheet" href="../resources/css/bootstrap-reboot.min.css"><link rel="stylesheet" href="../resources/css/syntax-highlighting.css"><link rel="stylesheet" href="../resources/css/theme.css"><link rel="stylesheet" href="../resources/css/layout.css"><link rel="stylesheet" href="../resources/css/content.css"><link rel="stylesheet" href="../resources/css/custom.css"><script>
     window.MathJax = {
@@ -46,7 +46,7 @@
 </script></head>
 <body>
 <div class="package-version">
-    docs for <a href="https://github.com/mivanit/muutils">muutils</a> v0.8.12<br>
+    docs for <a href="https://github.com/mivanit/muutils">muutils</a> v0.9.0<br>
 </div>
     <nav class="pdoc">
         <label id="navtoggle" for="togglestate" class="pdoc-button">
@@ -206,7 +206,7 @@
     </nav>
     <main class="pdoc">
             <section class="module-info">
-                        <a class="pdoc-button git-button" href="https://github.com/mivanit/muutils/blob/0.8.12/misc/__init__.py">View Source on GitHub</a>
+                        <a class="pdoc-button git-button" href="https://github.com/mivanit/muutils/blob/0.9.0misc/__init__.py">View Source on GitHub</a>
                     <h1 class="modulename">
 <a href="./../muutils.html">muutils</a><wbr>.misc    </h1>
 
@@ -227,7 +227,7 @@
                         <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="mod-misc-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/misc/__init__.py#L0-L82" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.9.0misc/__init__.py#L0-L84" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -244,79 +244,81 @@
 </span><span id="L-8"><a href="#L-8"><span class="linenos"> 8</span></a><span class="sd">- `muutils.misc.classes` for some weird class utilities</span>
 </span><span id="L-9"><a href="#L-9"><span class="linenos"> 9</span></a><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="L-10"><a href="#L-10"><span class="linenos">10</span></a>
-</span><span id="L-11"><a href="#L-11"><span class="linenos">11</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">muutils.misc.hashing</span><span class="w"> </span><span class="kn">import</span> <span class="n">stable_hash</span>
-</span><span id="L-12"><a href="#L-12"><span class="linenos">12</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">muutils.misc.sequence</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
-</span><span id="L-13"><a href="#L-13"><span class="linenos">13</span></a>    <span class="n">WhenMissing</span><span class="p">,</span>
-</span><span id="L-14"><a href="#L-14"><span class="linenos">14</span></a>    <span class="n">empty_sequence_if_attr_false</span><span class="p">,</span>
-</span><span id="L-15"><a href="#L-15"><span class="linenos">15</span></a>    <span class="n">flatten</span><span class="p">,</span>
-</span><span id="L-16"><a href="#L-16"><span class="linenos">16</span></a>    <span class="n">list_split</span><span class="p">,</span>
-</span><span id="L-17"><a href="#L-17"><span class="linenos">17</span></a>    <span class="n">list_join</span><span class="p">,</span>
-</span><span id="L-18"><a href="#L-18"><span class="linenos">18</span></a>    <span class="n">apply_mapping</span><span class="p">,</span>
-</span><span id="L-19"><a href="#L-19"><span class="linenos">19</span></a>    <span class="n">apply_mapping_chain</span><span class="p">,</span>
-</span><span id="L-20"><a href="#L-20"><span class="linenos">20</span></a><span class="p">)</span>
-</span><span id="L-21"><a href="#L-21"><span class="linenos">21</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">muutils.misc.string</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
-</span><span id="L-22"><a href="#L-22"><span class="linenos">22</span></a>    <span class="n">sanitize_name</span><span class="p">,</span>
-</span><span id="L-23"><a href="#L-23"><span class="linenos">23</span></a>    <span class="n">sanitize_fname</span><span class="p">,</span>
-</span><span id="L-24"><a href="#L-24"><span class="linenos">24</span></a>    <span class="n">sanitize_identifier</span><span class="p">,</span>
-</span><span id="L-25"><a href="#L-25"><span class="linenos">25</span></a>    <span class="n">dict_to_filename</span><span class="p">,</span>
-</span><span id="L-26"><a href="#L-26"><span class="linenos">26</span></a>    <span class="n">dynamic_docstring</span><span class="p">,</span>
-</span><span id="L-27"><a href="#L-27"><span class="linenos">27</span></a><span class="p">)</span>
-</span><span id="L-28"><a href="#L-28"><span class="linenos">28</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">muutils.misc.numerical</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
-</span><span id="L-29"><a href="#L-29"><span class="linenos">29</span></a>    <span class="n">shorten_numerical_to_str</span><span class="p">,</span>
-</span><span id="L-30"><a href="#L-30"><span class="linenos">30</span></a>    <span class="n">str_to_numeric</span><span class="p">,</span>
-</span><span id="L-31"><a href="#L-31"><span class="linenos">31</span></a>    <span class="n">_SHORTEN_MAP</span><span class="p">,</span>
-</span><span id="L-32"><a href="#L-32"><span class="linenos">32</span></a><span class="p">)</span>
-</span><span id="L-33"><a href="#L-33"><span class="linenos">33</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">muutils.misc.freezing</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
-</span><span id="L-34"><a href="#L-34"><span class="linenos">34</span></a>    <span class="n">FrozenDict</span><span class="p">,</span>
-</span><span id="L-35"><a href="#L-35"><span class="linenos">35</span></a>    <span class="n">FrozenList</span><span class="p">,</span>
-</span><span id="L-36"><a href="#L-36"><span class="linenos">36</span></a>    <span class="n">freeze</span><span class="p">,</span>
-</span><span id="L-37"><a href="#L-37"><span class="linenos">37</span></a><span class="p">)</span>
-</span><span id="L-38"><a href="#L-38"><span class="linenos">38</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">muutils.misc.classes</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
-</span><span id="L-39"><a href="#L-39"><span class="linenos">39</span></a>    <span class="n">is_abstract</span><span class="p">,</span>
-</span><span id="L-40"><a href="#L-40"><span class="linenos">40</span></a>    <span class="n">get_all_subclasses</span><span class="p">,</span>
-</span><span id="L-41"><a href="#L-41"><span class="linenos">41</span></a>    <span class="n">isinstance_by_type_name</span><span class="p">,</span>
-</span><span id="L-42"><a href="#L-42"><span class="linenos">42</span></a>    <span class="n">IsDataclass</span><span class="p">,</span>
-</span><span id="L-43"><a href="#L-43"><span class="linenos">43</span></a>    <span class="n">get_hashable_eq_attrs</span><span class="p">,</span>
-</span><span id="L-44"><a href="#L-44"><span class="linenos">44</span></a>    <span class="n">dataclass_set_equals</span><span class="p">,</span>
-</span><span id="L-45"><a href="#L-45"><span class="linenos">45</span></a><span class="p">)</span>
-</span><span id="L-46"><a href="#L-46"><span class="linenos">46</span></a>
-</span><span id="L-47"><a href="#L-47"><span class="linenos">47</span></a>
-</span><span id="L-48"><a href="#L-48"><span class="linenos">48</span></a><span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
-</span><span id="L-49"><a href="#L-49"><span class="linenos">49</span></a>    <span class="c1"># submodules</span>
-</span><span id="L-50"><a href="#L-50"><span class="linenos">50</span></a>    <span class="s2">&quot;classes&quot;</span><span class="p">,</span>
-</span><span id="L-51"><a href="#L-51"><span class="linenos">51</span></a>    <span class="s2">&quot;freezing&quot;</span><span class="p">,</span>
-</span><span id="L-52"><a href="#L-52"><span class="linenos">52</span></a>    <span class="s2">&quot;func&quot;</span><span class="p">,</span>
-</span><span id="L-53"><a href="#L-53"><span class="linenos">53</span></a>    <span class="s2">&quot;hashing&quot;</span><span class="p">,</span>
-</span><span id="L-54"><a href="#L-54"><span class="linenos">54</span></a>    <span class="s2">&quot;numerical&quot;</span><span class="p">,</span>
-</span><span id="L-55"><a href="#L-55"><span class="linenos">55</span></a>    <span class="s2">&quot;sequence&quot;</span><span class="p">,</span>
-</span><span id="L-56"><a href="#L-56"><span class="linenos">56</span></a>    <span class="s2">&quot;string&quot;</span><span class="p">,</span>
-</span><span id="L-57"><a href="#L-57"><span class="linenos">57</span></a>    <span class="c1"># imports</span>
-</span><span id="L-58"><a href="#L-58"><span class="linenos">58</span></a>    <span class="s2">&quot;stable_hash&quot;</span><span class="p">,</span>
-</span><span id="L-59"><a href="#L-59"><span class="linenos">59</span></a>    <span class="s2">&quot;WhenMissing&quot;</span><span class="p">,</span>
-</span><span id="L-60"><a href="#L-60"><span class="linenos">60</span></a>    <span class="s2">&quot;empty_sequence_if_attr_false&quot;</span><span class="p">,</span>
-</span><span id="L-61"><a href="#L-61"><span class="linenos">61</span></a>    <span class="s2">&quot;flatten&quot;</span><span class="p">,</span>
-</span><span id="L-62"><a href="#L-62"><span class="linenos">62</span></a>    <span class="s2">&quot;list_split&quot;</span><span class="p">,</span>
-</span><span id="L-63"><a href="#L-63"><span class="linenos">63</span></a>    <span class="s2">&quot;list_join&quot;</span><span class="p">,</span>
-</span><span id="L-64"><a href="#L-64"><span class="linenos">64</span></a>    <span class="s2">&quot;apply_mapping&quot;</span><span class="p">,</span>
-</span><span id="L-65"><a href="#L-65"><span class="linenos">65</span></a>    <span class="s2">&quot;apply_mapping_chain&quot;</span><span class="p">,</span>
-</span><span id="L-66"><a href="#L-66"><span class="linenos">66</span></a>    <span class="s2">&quot;sanitize_name&quot;</span><span class="p">,</span>
-</span><span id="L-67"><a href="#L-67"><span class="linenos">67</span></a>    <span class="s2">&quot;sanitize_fname&quot;</span><span class="p">,</span>
-</span><span id="L-68"><a href="#L-68"><span class="linenos">68</span></a>    <span class="s2">&quot;sanitize_identifier&quot;</span><span class="p">,</span>
-</span><span id="L-69"><a href="#L-69"><span class="linenos">69</span></a>    <span class="s2">&quot;dict_to_filename&quot;</span><span class="p">,</span>
-</span><span id="L-70"><a href="#L-70"><span class="linenos">70</span></a>    <span class="s2">&quot;dynamic_docstring&quot;</span><span class="p">,</span>
-</span><span id="L-71"><a href="#L-71"><span class="linenos">71</span></a>    <span class="s2">&quot;shorten_numerical_to_str&quot;</span><span class="p">,</span>
-</span><span id="L-72"><a href="#L-72"><span class="linenos">72</span></a>    <span class="s2">&quot;str_to_numeric&quot;</span><span class="p">,</span>
-</span><span id="L-73"><a href="#L-73"><span class="linenos">73</span></a>    <span class="s2">&quot;_SHORTEN_MAP&quot;</span><span class="p">,</span>
-</span><span id="L-74"><a href="#L-74"><span class="linenos">74</span></a>    <span class="s2">&quot;FrozenDict&quot;</span><span class="p">,</span>
-</span><span id="L-75"><a href="#L-75"><span class="linenos">75</span></a>    <span class="s2">&quot;FrozenList&quot;</span><span class="p">,</span>
-</span><span id="L-76"><a href="#L-76"><span class="linenos">76</span></a>    <span class="s2">&quot;freeze&quot;</span><span class="p">,</span>
-</span><span id="L-77"><a href="#L-77"><span class="linenos">77</span></a>    <span class="s2">&quot;is_abstract&quot;</span><span class="p">,</span>
-</span><span id="L-78"><a href="#L-78"><span class="linenos">78</span></a>    <span class="s2">&quot;get_all_subclasses&quot;</span><span class="p">,</span>
-</span><span id="L-79"><a href="#L-79"><span class="linenos">79</span></a>    <span class="s2">&quot;isinstance_by_type_name&quot;</span><span class="p">,</span>
-</span><span id="L-80"><a href="#L-80"><span class="linenos">80</span></a>    <span class="s2">&quot;IsDataclass&quot;</span><span class="p">,</span>
-</span><span id="L-81"><a href="#L-81"><span class="linenos">81</span></a>    <span class="s2">&quot;get_hashable_eq_attrs&quot;</span><span class="p">,</span>
-</span><span id="L-82"><a href="#L-82"><span class="linenos">82</span></a>    <span class="s2">&quot;dataclass_set_equals&quot;</span><span class="p">,</span>
-</span><span id="L-83"><a href="#L-83"><span class="linenos">83</span></a><span class="p">]</span>
+</span><span id="L-11"><a href="#L-11"><span class="linenos">11</span></a><span class="c1"># pyright: reportPrivateUsage=false</span>
+</span><span id="L-12"><a href="#L-12"><span class="linenos">12</span></a>
+</span><span id="L-13"><a href="#L-13"><span class="linenos">13</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">muutils.misc.hashing</span><span class="w"> </span><span class="kn">import</span> <span class="n">stable_hash</span>
+</span><span id="L-14"><a href="#L-14"><span class="linenos">14</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">muutils.misc.sequence</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+</span><span id="L-15"><a href="#L-15"><span class="linenos">15</span></a>    <span class="n">WhenMissing</span><span class="p">,</span>
+</span><span id="L-16"><a href="#L-16"><span class="linenos">16</span></a>    <span class="n">empty_sequence_if_attr_false</span><span class="p">,</span>
+</span><span id="L-17"><a href="#L-17"><span class="linenos">17</span></a>    <span class="n">flatten</span><span class="p">,</span>
+</span><span id="L-18"><a href="#L-18"><span class="linenos">18</span></a>    <span class="n">list_split</span><span class="p">,</span>
+</span><span id="L-19"><a href="#L-19"><span class="linenos">19</span></a>    <span class="n">list_join</span><span class="p">,</span>
+</span><span id="L-20"><a href="#L-20"><span class="linenos">20</span></a>    <span class="n">apply_mapping</span><span class="p">,</span>
+</span><span id="L-21"><a href="#L-21"><span class="linenos">21</span></a>    <span class="n">apply_mapping_chain</span><span class="p">,</span>
+</span><span id="L-22"><a href="#L-22"><span class="linenos">22</span></a><span class="p">)</span>
+</span><span id="L-23"><a href="#L-23"><span class="linenos">23</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">muutils.misc.string</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+</span><span id="L-24"><a href="#L-24"><span class="linenos">24</span></a>    <span class="n">sanitize_name</span><span class="p">,</span>
+</span><span id="L-25"><a href="#L-25"><span class="linenos">25</span></a>    <span class="n">sanitize_fname</span><span class="p">,</span>
+</span><span id="L-26"><a href="#L-26"><span class="linenos">26</span></a>    <span class="n">sanitize_identifier</span><span class="p">,</span>
+</span><span id="L-27"><a href="#L-27"><span class="linenos">27</span></a>    <span class="n">dict_to_filename</span><span class="p">,</span>
+</span><span id="L-28"><a href="#L-28"><span class="linenos">28</span></a>    <span class="n">dynamic_docstring</span><span class="p">,</span>
+</span><span id="L-29"><a href="#L-29"><span class="linenos">29</span></a><span class="p">)</span>
+</span><span id="L-30"><a href="#L-30"><span class="linenos">30</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">muutils.misc.numerical</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+</span><span id="L-31"><a href="#L-31"><span class="linenos">31</span></a>    <span class="n">shorten_numerical_to_str</span><span class="p">,</span>
+</span><span id="L-32"><a href="#L-32"><span class="linenos">32</span></a>    <span class="n">str_to_numeric</span><span class="p">,</span>
+</span><span id="L-33"><a href="#L-33"><span class="linenos">33</span></a>    <span class="n">_SHORTEN_MAP</span><span class="p">,</span>
+</span><span id="L-34"><a href="#L-34"><span class="linenos">34</span></a><span class="p">)</span>
+</span><span id="L-35"><a href="#L-35"><span class="linenos">35</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">muutils.misc.freezing</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+</span><span id="L-36"><a href="#L-36"><span class="linenos">36</span></a>    <span class="n">FrozenDict</span><span class="p">,</span>
+</span><span id="L-37"><a href="#L-37"><span class="linenos">37</span></a>    <span class="n">FrozenList</span><span class="p">,</span>
+</span><span id="L-38"><a href="#L-38"><span class="linenos">38</span></a>    <span class="n">freeze</span><span class="p">,</span>
+</span><span id="L-39"><a href="#L-39"><span class="linenos">39</span></a><span class="p">)</span>
+</span><span id="L-40"><a href="#L-40"><span class="linenos">40</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">muutils.misc.classes</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+</span><span id="L-41"><a href="#L-41"><span class="linenos">41</span></a>    <span class="n">is_abstract</span><span class="p">,</span>
+</span><span id="L-42"><a href="#L-42"><span class="linenos">42</span></a>    <span class="n">get_all_subclasses</span><span class="p">,</span>
+</span><span id="L-43"><a href="#L-43"><span class="linenos">43</span></a>    <span class="n">isinstance_by_type_name</span><span class="p">,</span>
+</span><span id="L-44"><a href="#L-44"><span class="linenos">44</span></a>    <span class="n">IsDataclass</span><span class="p">,</span>
+</span><span id="L-45"><a href="#L-45"><span class="linenos">45</span></a>    <span class="n">get_hashable_eq_attrs</span><span class="p">,</span>
+</span><span id="L-46"><a href="#L-46"><span class="linenos">46</span></a>    <span class="n">dataclass_set_equals</span><span class="p">,</span>
+</span><span id="L-47"><a href="#L-47"><span class="linenos">47</span></a><span class="p">)</span>
+</span><span id="L-48"><a href="#L-48"><span class="linenos">48</span></a>
+</span><span id="L-49"><a href="#L-49"><span class="linenos">49</span></a>
+</span><span id="L-50"><a href="#L-50"><span class="linenos">50</span></a><span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
+</span><span id="L-51"><a href="#L-51"><span class="linenos">51</span></a>    <span class="c1"># submodules</span>
+</span><span id="L-52"><a href="#L-52"><span class="linenos">52</span></a>    <span class="s2">&quot;classes&quot;</span><span class="p">,</span>
+</span><span id="L-53"><a href="#L-53"><span class="linenos">53</span></a>    <span class="s2">&quot;freezing&quot;</span><span class="p">,</span>
+</span><span id="L-54"><a href="#L-54"><span class="linenos">54</span></a>    <span class="s2">&quot;func&quot;</span><span class="p">,</span>
+</span><span id="L-55"><a href="#L-55"><span class="linenos">55</span></a>    <span class="s2">&quot;hashing&quot;</span><span class="p">,</span>
+</span><span id="L-56"><a href="#L-56"><span class="linenos">56</span></a>    <span class="s2">&quot;numerical&quot;</span><span class="p">,</span>
+</span><span id="L-57"><a href="#L-57"><span class="linenos">57</span></a>    <span class="s2">&quot;sequence&quot;</span><span class="p">,</span>
+</span><span id="L-58"><a href="#L-58"><span class="linenos">58</span></a>    <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+</span><span id="L-59"><a href="#L-59"><span class="linenos">59</span></a>    <span class="c1"># imports</span>
+</span><span id="L-60"><a href="#L-60"><span class="linenos">60</span></a>    <span class="s2">&quot;stable_hash&quot;</span><span class="p">,</span>
+</span><span id="L-61"><a href="#L-61"><span class="linenos">61</span></a>    <span class="s2">&quot;WhenMissing&quot;</span><span class="p">,</span>
+</span><span id="L-62"><a href="#L-62"><span class="linenos">62</span></a>    <span class="s2">&quot;empty_sequence_if_attr_false&quot;</span><span class="p">,</span>
+</span><span id="L-63"><a href="#L-63"><span class="linenos">63</span></a>    <span class="s2">&quot;flatten&quot;</span><span class="p">,</span>
+</span><span id="L-64"><a href="#L-64"><span class="linenos">64</span></a>    <span class="s2">&quot;list_split&quot;</span><span class="p">,</span>
+</span><span id="L-65"><a href="#L-65"><span class="linenos">65</span></a>    <span class="s2">&quot;list_join&quot;</span><span class="p">,</span>
+</span><span id="L-66"><a href="#L-66"><span class="linenos">66</span></a>    <span class="s2">&quot;apply_mapping&quot;</span><span class="p">,</span>
+</span><span id="L-67"><a href="#L-67"><span class="linenos">67</span></a>    <span class="s2">&quot;apply_mapping_chain&quot;</span><span class="p">,</span>
+</span><span id="L-68"><a href="#L-68"><span class="linenos">68</span></a>    <span class="s2">&quot;sanitize_name&quot;</span><span class="p">,</span>
+</span><span id="L-69"><a href="#L-69"><span class="linenos">69</span></a>    <span class="s2">&quot;sanitize_fname&quot;</span><span class="p">,</span>
+</span><span id="L-70"><a href="#L-70"><span class="linenos">70</span></a>    <span class="s2">&quot;sanitize_identifier&quot;</span><span class="p">,</span>
+</span><span id="L-71"><a href="#L-71"><span class="linenos">71</span></a>    <span class="s2">&quot;dict_to_filename&quot;</span><span class="p">,</span>
+</span><span id="L-72"><a href="#L-72"><span class="linenos">72</span></a>    <span class="s2">&quot;dynamic_docstring&quot;</span><span class="p">,</span>
+</span><span id="L-73"><a href="#L-73"><span class="linenos">73</span></a>    <span class="s2">&quot;shorten_numerical_to_str&quot;</span><span class="p">,</span>
+</span><span id="L-74"><a href="#L-74"><span class="linenos">74</span></a>    <span class="s2">&quot;str_to_numeric&quot;</span><span class="p">,</span>
+</span><span id="L-75"><a href="#L-75"><span class="linenos">75</span></a>    <span class="s2">&quot;_SHORTEN_MAP&quot;</span><span class="p">,</span>
+</span><span id="L-76"><a href="#L-76"><span class="linenos">76</span></a>    <span class="s2">&quot;FrozenDict&quot;</span><span class="p">,</span>
+</span><span id="L-77"><a href="#L-77"><span class="linenos">77</span></a>    <span class="s2">&quot;FrozenList&quot;</span><span class="p">,</span>
+</span><span id="L-78"><a href="#L-78"><span class="linenos">78</span></a>    <span class="s2">&quot;freeze&quot;</span><span class="p">,</span>
+</span><span id="L-79"><a href="#L-79"><span class="linenos">79</span></a>    <span class="s2">&quot;is_abstract&quot;</span><span class="p">,</span>
+</span><span id="L-80"><a href="#L-80"><span class="linenos">80</span></a>    <span class="s2">&quot;get_all_subclasses&quot;</span><span class="p">,</span>
+</span><span id="L-81"><a href="#L-81"><span class="linenos">81</span></a>    <span class="s2">&quot;isinstance_by_type_name&quot;</span><span class="p">,</span>
+</span><span id="L-82"><a href="#L-82"><span class="linenos">82</span></a>    <span class="s2">&quot;IsDataclass&quot;</span><span class="p">,</span>
+</span><span id="L-83"><a href="#L-83"><span class="linenos">83</span></a>    <span class="s2">&quot;get_hashable_eq_attrs&quot;</span><span class="p">,</span>
+</span><span id="L-84"><a href="#L-84"><span class="linenos">84</span></a>    <span class="s2">&quot;dataclass_set_equals&quot;</span><span class="p">,</span>
+</span><span id="L-85"><a href="#L-85"><span class="linenos">85</span></a><span class="p">]</span>
 </span></pre></div>
 
 
@@ -332,7 +334,7 @@
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="stable_hash-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/misc/__init__.py#L8-L18" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.9.0misc/__init__.py#L9-L19" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -340,17 +342,17 @@
 
     </div>
     <a class="headerlink" href="#stable_hash"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="stable_hash-9"><a href="#stable_hash-9"><span class="linenos"> 9</span></a><span class="k">def</span><span class="w"> </span><span class="nf">stable_hash</span><span class="p">(</span><span class="n">s</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="nb">bytes</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-</span><span id="stable_hash-10"><a href="#stable_hash-10"><span class="linenos">10</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns a stable hash of the given string. not cryptographically secure, but stable between runs&quot;&quot;&quot;</span>
-</span><span id="stable_hash-11"><a href="#stable_hash-11"><span class="linenos">11</span></a>    <span class="c1"># init hash object and update with string</span>
-</span><span id="stable_hash-12"><a href="#stable_hash-12"><span class="linenos">12</span></a>    <span class="n">s_bytes</span><span class="p">:</span> <span class="nb">bytes</span>
-</span><span id="stable_hash-13"><a href="#stable_hash-13"><span class="linenos">13</span></a>    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
-</span><span id="stable_hash-14"><a href="#stable_hash-14"><span class="linenos">14</span></a>        <span class="n">s_bytes</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span>
-</span><span id="stable_hash-15"><a href="#stable_hash-15"><span class="linenos">15</span></a>    <span class="k">else</span><span class="p">:</span>
-</span><span id="stable_hash-16"><a href="#stable_hash-16"><span class="linenos">16</span></a>        <span class="n">s_bytes</span> <span class="o">=</span> <span class="n">s</span>
-</span><span id="stable_hash-17"><a href="#stable_hash-17"><span class="linenos">17</span></a>    <span class="n">hash_obj</span><span class="p">:</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">_Hash</span> <span class="o">=</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">md5</span><span class="p">(</span><span class="n">s_bytes</span><span class="p">)</span>
-</span><span id="stable_hash-18"><a href="#stable_hash-18"><span class="linenos">18</span></a>    <span class="c1"># get digest and convert to int</span>
-</span><span id="stable_hash-19"><a href="#stable_hash-19"><span class="linenos">19</span></a>    <span class="k">return</span> <span class="nb">int</span><span class="o">.</span><span class="n">from_bytes</span><span class="p">(</span><span class="n">hash_obj</span><span class="o">.</span><span class="n">digest</span><span class="p">(),</span> <span class="s2">&quot;big&quot;</span><span class="p">)</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="stable_hash-10"><a href="#stable_hash-10"><span class="linenos">10</span></a><span class="k">def</span><span class="w"> </span><span class="nf">stable_hash</span><span class="p">(</span><span class="n">s</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="nb">bytes</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+</span><span id="stable_hash-11"><a href="#stable_hash-11"><span class="linenos">11</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns a stable hash of the given string. not cryptographically secure, but stable between runs&quot;&quot;&quot;</span>
+</span><span id="stable_hash-12"><a href="#stable_hash-12"><span class="linenos">12</span></a>    <span class="c1"># init hash object and update with string</span>
+</span><span id="stable_hash-13"><a href="#stable_hash-13"><span class="linenos">13</span></a>    <span class="n">s_bytes</span><span class="p">:</span> <span class="nb">bytes</span>
+</span><span id="stable_hash-14"><a href="#stable_hash-14"><span class="linenos">14</span></a>    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+</span><span id="stable_hash-15"><a href="#stable_hash-15"><span class="linenos">15</span></a>        <span class="n">s_bytes</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span>
+</span><span id="stable_hash-16"><a href="#stable_hash-16"><span class="linenos">16</span></a>    <span class="k">else</span><span class="p">:</span>
+</span><span id="stable_hash-17"><a href="#stable_hash-17"><span class="linenos">17</span></a>        <span class="n">s_bytes</span> <span class="o">=</span> <span class="n">s</span>
+</span><span id="stable_hash-18"><a href="#stable_hash-18"><span class="linenos">18</span></a>    <span class="n">hash_obj</span><span class="p">:</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">_Hash</span> <span class="o">=</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">md5</span><span class="p">(</span><span class="n">s_bytes</span><span class="p">)</span>  <span class="c1"># pyright: ignore[reportPrivateUsage]</span>
+</span><span id="stable_hash-19"><a href="#stable_hash-19"><span class="linenos">19</span></a>    <span class="c1"># get digest and convert to int</span>
+</span><span id="stable_hash-20"><a href="#stable_hash-20"><span class="linenos">20</span></a>    <span class="k">return</span> <span class="nb">int</span><span class="o">.</span><span class="n">from_bytes</span><span class="p">(</span><span class="n">hash_obj</span><span class="o">.</span><span class="n">digest</span><span class="p">(),</span> <span class="s2">&quot;big&quot;</span><span class="p">)</span>
 </span></pre></div>
 
 
@@ -381,7 +383,7 @@
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="empty_sequence_if_attr_false-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/misc/__init__.py#L21-L42" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.9.0misc/__init__.py#L21-L42" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -449,7 +451,7 @@ The name of the attribute to check.</li>
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="flatten-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/misc/__init__.py#L45-L68" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.9.0misc/__init__.py#L45-L68" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -511,7 +513,7 @@ Flattens all iterable data types except for <code>str</code> and <code>bytes</co
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="list_split-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/misc/__init__.py#L75-L103" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.9.0misc/__init__.py#L75-L103" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -578,7 +580,7 @@ Flattens all iterable data types except for <code>str</code> and <code>bytes</co
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="list_join-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/misc/__init__.py#L106-L128" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.9.0misc/__init__.py#L106-L128" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -635,7 +637,7 @@ Flattens all iterable data types except for <code>str</code> and <code>bytes</co
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="apply_mapping-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/misc/__init__.py#L138-L184" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.9.0misc/__init__.py#L138-L184" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -741,7 +743,7 @@ the iterable to apply the mapping to</li>
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="apply_mapping_chain-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/misc/__init__.py#L187-L234" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.9.0misc/__init__.py#L187-L234" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -848,7 +850,7 @@ you can choose from <code>"skip"</code>, <code>"include"</code> (without convert
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="sanitize_name-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/misc/__init__.py#L7-L55" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.9.0misc/__init__.py#L8-L56" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -856,55 +858,55 @@ you can choose from <code>"skip"</code>, <code>"include"</code> (without convert
 
     </div>
     <a class="headerlink" href="#sanitize_name"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="sanitize_name-8"><a href="#sanitize_name-8"><span class="linenos"> 8</span></a><span class="k">def</span><span class="w"> </span><span class="nf">sanitize_name</span><span class="p">(</span>
-</span><span id="sanitize_name-9"><a href="#sanitize_name-9"><span class="linenos"> 9</span></a>    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span>
-</span><span id="sanitize_name-10"><a href="#sanitize_name-10"><span class="linenos">10</span></a>    <span class="n">additional_allowed_chars</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
-</span><span id="sanitize_name-11"><a href="#sanitize_name-11"><span class="linenos">11</span></a>    <span class="n">replace_invalid</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
-</span><span id="sanitize_name-12"><a href="#sanitize_name-12"><span class="linenos">12</span></a>    <span class="n">when_none</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="s2">&quot;_None_&quot;</span><span class="p">,</span>
-</span><span id="sanitize_name-13"><a href="#sanitize_name-13"><span class="linenos">13</span></a>    <span class="n">leading_digit_prefix</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
-</span><span id="sanitize_name-14"><a href="#sanitize_name-14"><span class="linenos">14</span></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-</span><span id="sanitize_name-15"><a href="#sanitize_name-15"><span class="linenos">15</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;sanitize a string, leaving only alphanumerics and `additional_allowed_chars`</span>
-</span><span id="sanitize_name-16"><a href="#sanitize_name-16"><span class="linenos">16</span></a>
-</span><span id="sanitize_name-17"><a href="#sanitize_name-17"><span class="linenos">17</span></a><span class="sd">    # Parameters:</span>
-</span><span id="sanitize_name-18"><a href="#sanitize_name-18"><span class="linenos">18</span></a><span class="sd">     - `name : str | None`</span>
-</span><span id="sanitize_name-19"><a href="#sanitize_name-19"><span class="linenos">19</span></a><span class="sd">       input string</span>
-</span><span id="sanitize_name-20"><a href="#sanitize_name-20"><span class="linenos">20</span></a><span class="sd">     - `additional_allowed_chars : str`</span>
-</span><span id="sanitize_name-21"><a href="#sanitize_name-21"><span class="linenos">21</span></a><span class="sd">       additional characters to allow, none by default</span>
-</span><span id="sanitize_name-22"><a href="#sanitize_name-22"><span class="linenos">22</span></a><span class="sd">       (defaults to `&quot;&quot;`)</span>
-</span><span id="sanitize_name-23"><a href="#sanitize_name-23"><span class="linenos">23</span></a><span class="sd">     - `replace_invalid : str`</span>
-</span><span id="sanitize_name-24"><a href="#sanitize_name-24"><span class="linenos">24</span></a><span class="sd">        character to replace invalid characters with</span>
-</span><span id="sanitize_name-25"><a href="#sanitize_name-25"><span class="linenos">25</span></a><span class="sd">       (defaults to `&quot;&quot;`)</span>
-</span><span id="sanitize_name-26"><a href="#sanitize_name-26"><span class="linenos">26</span></a><span class="sd">     - `when_none : str | None`</span>
-</span><span id="sanitize_name-27"><a href="#sanitize_name-27"><span class="linenos">27</span></a><span class="sd">        string to return if `name` is `None`. if `None`, raises an exception</span>
-</span><span id="sanitize_name-28"><a href="#sanitize_name-28"><span class="linenos">28</span></a><span class="sd">       (defaults to `&quot;_None_&quot;`)</span>
-</span><span id="sanitize_name-29"><a href="#sanitize_name-29"><span class="linenos">29</span></a><span class="sd">     - `leading_digit_prefix : str`</span>
-</span><span id="sanitize_name-30"><a href="#sanitize_name-30"><span class="linenos">30</span></a><span class="sd">        character to prefix the string with if it starts with a digit</span>
-</span><span id="sanitize_name-31"><a href="#sanitize_name-31"><span class="linenos">31</span></a><span class="sd">       (defaults to `&quot;&quot;`)</span>
-</span><span id="sanitize_name-32"><a href="#sanitize_name-32"><span class="linenos">32</span></a>
-</span><span id="sanitize_name-33"><a href="#sanitize_name-33"><span class="linenos">33</span></a><span class="sd">    # Returns:</span>
-</span><span id="sanitize_name-34"><a href="#sanitize_name-34"><span class="linenos">34</span></a><span class="sd">     - `str`</span>
-</span><span id="sanitize_name-35"><a href="#sanitize_name-35"><span class="linenos">35</span></a><span class="sd">        sanitized string</span>
-</span><span id="sanitize_name-36"><a href="#sanitize_name-36"><span class="linenos">36</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="sanitize_name-37"><a href="#sanitize_name-37"><span class="linenos">37</span></a>
-</span><span id="sanitize_name-38"><a href="#sanitize_name-38"><span class="linenos">38</span></a>    <span class="k">if</span> <span class="n">name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="sanitize_name-39"><a href="#sanitize_name-39"><span class="linenos">39</span></a>        <span class="k">if</span> <span class="n">when_none</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="sanitize_name-40"><a href="#sanitize_name-40"><span class="linenos">40</span></a>            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;name is None&quot;</span><span class="p">)</span>
-</span><span id="sanitize_name-41"><a href="#sanitize_name-41"><span class="linenos">41</span></a>        <span class="k">else</span><span class="p">:</span>
-</span><span id="sanitize_name-42"><a href="#sanitize_name-42"><span class="linenos">42</span></a>            <span class="k">return</span> <span class="n">when_none</span>
-</span><span id="sanitize_name-43"><a href="#sanitize_name-43"><span class="linenos">43</span></a>
-</span><span id="sanitize_name-44"><a href="#sanitize_name-44"><span class="linenos">44</span></a>    <span class="n">sanitized</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
-</span><span id="sanitize_name-45"><a href="#sanitize_name-45"><span class="linenos">45</span></a>    <span class="k">for</span> <span class="n">char</span> <span class="ow">in</span> <span class="n">name</span><span class="p">:</span>
-</span><span id="sanitize_name-46"><a href="#sanitize_name-46"><span class="linenos">46</span></a>        <span class="k">if</span> <span class="n">char</span><span class="o">.</span><span class="n">isalnum</span><span class="p">():</span>
-</span><span id="sanitize_name-47"><a href="#sanitize_name-47"><span class="linenos">47</span></a>            <span class="n">sanitized</span> <span class="o">+=</span> <span class="n">char</span>
-</span><span id="sanitize_name-48"><a href="#sanitize_name-48"><span class="linenos">48</span></a>        <span class="k">elif</span> <span class="n">char</span> <span class="ow">in</span> <span class="n">additional_allowed_chars</span><span class="p">:</span>
-</span><span id="sanitize_name-49"><a href="#sanitize_name-49"><span class="linenos">49</span></a>            <span class="n">sanitized</span> <span class="o">+=</span> <span class="n">char</span>
-</span><span id="sanitize_name-50"><a href="#sanitize_name-50"><span class="linenos">50</span></a>        <span class="k">else</span><span class="p">:</span>
-</span><span id="sanitize_name-51"><a href="#sanitize_name-51"><span class="linenos">51</span></a>            <span class="n">sanitized</span> <span class="o">+=</span> <span class="n">replace_invalid</span>
-</span><span id="sanitize_name-52"><a href="#sanitize_name-52"><span class="linenos">52</span></a>
-</span><span id="sanitize_name-53"><a href="#sanitize_name-53"><span class="linenos">53</span></a>    <span class="k">if</span> <span class="n">sanitized</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">isdigit</span><span class="p">():</span>
-</span><span id="sanitize_name-54"><a href="#sanitize_name-54"><span class="linenos">54</span></a>        <span class="n">sanitized</span> <span class="o">=</span> <span class="n">leading_digit_prefix</span> <span class="o">+</span> <span class="n">sanitized</span>
-</span><span id="sanitize_name-55"><a href="#sanitize_name-55"><span class="linenos">55</span></a>
-</span><span id="sanitize_name-56"><a href="#sanitize_name-56"><span class="linenos">56</span></a>    <span class="k">return</span> <span class="n">sanitized</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="sanitize_name-9"><a href="#sanitize_name-9"><span class="linenos"> 9</span></a><span class="k">def</span><span class="w"> </span><span class="nf">sanitize_name</span><span class="p">(</span>
+</span><span id="sanitize_name-10"><a href="#sanitize_name-10"><span class="linenos">10</span></a>    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span>
+</span><span id="sanitize_name-11"><a href="#sanitize_name-11"><span class="linenos">11</span></a>    <span class="n">additional_allowed_chars</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+</span><span id="sanitize_name-12"><a href="#sanitize_name-12"><span class="linenos">12</span></a>    <span class="n">replace_invalid</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+</span><span id="sanitize_name-13"><a href="#sanitize_name-13"><span class="linenos">13</span></a>    <span class="n">when_none</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="s2">&quot;_None_&quot;</span><span class="p">,</span>
+</span><span id="sanitize_name-14"><a href="#sanitize_name-14"><span class="linenos">14</span></a>    <span class="n">leading_digit_prefix</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+</span><span id="sanitize_name-15"><a href="#sanitize_name-15"><span class="linenos">15</span></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+</span><span id="sanitize_name-16"><a href="#sanitize_name-16"><span class="linenos">16</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;sanitize a string, leaving only alphanumerics and `additional_allowed_chars`</span>
+</span><span id="sanitize_name-17"><a href="#sanitize_name-17"><span class="linenos">17</span></a>
+</span><span id="sanitize_name-18"><a href="#sanitize_name-18"><span class="linenos">18</span></a><span class="sd">    # Parameters:</span>
+</span><span id="sanitize_name-19"><a href="#sanitize_name-19"><span class="linenos">19</span></a><span class="sd">     - `name : str | None`</span>
+</span><span id="sanitize_name-20"><a href="#sanitize_name-20"><span class="linenos">20</span></a><span class="sd">       input string</span>
+</span><span id="sanitize_name-21"><a href="#sanitize_name-21"><span class="linenos">21</span></a><span class="sd">     - `additional_allowed_chars : str`</span>
+</span><span id="sanitize_name-22"><a href="#sanitize_name-22"><span class="linenos">22</span></a><span class="sd">       additional characters to allow, none by default</span>
+</span><span id="sanitize_name-23"><a href="#sanitize_name-23"><span class="linenos">23</span></a><span class="sd">       (defaults to `&quot;&quot;`)</span>
+</span><span id="sanitize_name-24"><a href="#sanitize_name-24"><span class="linenos">24</span></a><span class="sd">     - `replace_invalid : str`</span>
+</span><span id="sanitize_name-25"><a href="#sanitize_name-25"><span class="linenos">25</span></a><span class="sd">        character to replace invalid characters with</span>
+</span><span id="sanitize_name-26"><a href="#sanitize_name-26"><span class="linenos">26</span></a><span class="sd">       (defaults to `&quot;&quot;`)</span>
+</span><span id="sanitize_name-27"><a href="#sanitize_name-27"><span class="linenos">27</span></a><span class="sd">     - `when_none : str | None`</span>
+</span><span id="sanitize_name-28"><a href="#sanitize_name-28"><span class="linenos">28</span></a><span class="sd">        string to return if `name` is `None`. if `None`, raises an exception</span>
+</span><span id="sanitize_name-29"><a href="#sanitize_name-29"><span class="linenos">29</span></a><span class="sd">       (defaults to `&quot;_None_&quot;`)</span>
+</span><span id="sanitize_name-30"><a href="#sanitize_name-30"><span class="linenos">30</span></a><span class="sd">     - `leading_digit_prefix : str`</span>
+</span><span id="sanitize_name-31"><a href="#sanitize_name-31"><span class="linenos">31</span></a><span class="sd">        character to prefix the string with if it starts with a digit</span>
+</span><span id="sanitize_name-32"><a href="#sanitize_name-32"><span class="linenos">32</span></a><span class="sd">       (defaults to `&quot;&quot;`)</span>
+</span><span id="sanitize_name-33"><a href="#sanitize_name-33"><span class="linenos">33</span></a>
+</span><span id="sanitize_name-34"><a href="#sanitize_name-34"><span class="linenos">34</span></a><span class="sd">    # Returns:</span>
+</span><span id="sanitize_name-35"><a href="#sanitize_name-35"><span class="linenos">35</span></a><span class="sd">     - `str`</span>
+</span><span id="sanitize_name-36"><a href="#sanitize_name-36"><span class="linenos">36</span></a><span class="sd">        sanitized string</span>
+</span><span id="sanitize_name-37"><a href="#sanitize_name-37"><span class="linenos">37</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="sanitize_name-38"><a href="#sanitize_name-38"><span class="linenos">38</span></a>
+</span><span id="sanitize_name-39"><a href="#sanitize_name-39"><span class="linenos">39</span></a>    <span class="k">if</span> <span class="n">name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="sanitize_name-40"><a href="#sanitize_name-40"><span class="linenos">40</span></a>        <span class="k">if</span> <span class="n">when_none</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="sanitize_name-41"><a href="#sanitize_name-41"><span class="linenos">41</span></a>            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;name is None&quot;</span><span class="p">)</span>
+</span><span id="sanitize_name-42"><a href="#sanitize_name-42"><span class="linenos">42</span></a>        <span class="k">else</span><span class="p">:</span>
+</span><span id="sanitize_name-43"><a href="#sanitize_name-43"><span class="linenos">43</span></a>            <span class="k">return</span> <span class="n">when_none</span>
+</span><span id="sanitize_name-44"><a href="#sanitize_name-44"><span class="linenos">44</span></a>
+</span><span id="sanitize_name-45"><a href="#sanitize_name-45"><span class="linenos">45</span></a>    <span class="n">sanitized</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+</span><span id="sanitize_name-46"><a href="#sanitize_name-46"><span class="linenos">46</span></a>    <span class="k">for</span> <span class="n">char</span> <span class="ow">in</span> <span class="n">name</span><span class="p">:</span>
+</span><span id="sanitize_name-47"><a href="#sanitize_name-47"><span class="linenos">47</span></a>        <span class="k">if</span> <span class="n">char</span><span class="o">.</span><span class="n">isalnum</span><span class="p">():</span>
+</span><span id="sanitize_name-48"><a href="#sanitize_name-48"><span class="linenos">48</span></a>            <span class="n">sanitized</span> <span class="o">+=</span> <span class="n">char</span>
+</span><span id="sanitize_name-49"><a href="#sanitize_name-49"><span class="linenos">49</span></a>        <span class="k">elif</span> <span class="n">char</span> <span class="ow">in</span> <span class="n">additional_allowed_chars</span><span class="p">:</span>
+</span><span id="sanitize_name-50"><a href="#sanitize_name-50"><span class="linenos">50</span></a>            <span class="n">sanitized</span> <span class="o">+=</span> <span class="n">char</span>
+</span><span id="sanitize_name-51"><a href="#sanitize_name-51"><span class="linenos">51</span></a>        <span class="k">else</span><span class="p">:</span>
+</span><span id="sanitize_name-52"><a href="#sanitize_name-52"><span class="linenos">52</span></a>            <span class="n">sanitized</span> <span class="o">+=</span> <span class="n">replace_invalid</span>
+</span><span id="sanitize_name-53"><a href="#sanitize_name-53"><span class="linenos">53</span></a>
+</span><span id="sanitize_name-54"><a href="#sanitize_name-54"><span class="linenos">54</span></a>    <span class="k">if</span> <span class="n">sanitized</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">isdigit</span><span class="p">():</span>
+</span><span id="sanitize_name-55"><a href="#sanitize_name-55"><span class="linenos">55</span></a>        <span class="n">sanitized</span> <span class="o">=</span> <span class="n">leading_digit_prefix</span> <span class="o">+</span> <span class="n">sanitized</span>
+</span><span id="sanitize_name-56"><a href="#sanitize_name-56"><span class="linenos">56</span></a>
+</span><span id="sanitize_name-57"><a href="#sanitize_name-57"><span class="linenos">57</span></a>    <span class="k">return</span> <span class="n">sanitized</span>
 </span></pre></div>
 
 
@@ -944,12 +946,12 @@ sanitized string</li>
 <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">sanitize_fname</span><span class="signature pdoc-code condensed">(<span class="param"><span class="n">fname</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span>, </span><span class="param"><span class="o">**</span><span class="n">kwargs</span></span><span class="return-annotation">) -> <span class="nb">str</span>:</span></span>
+        <span class="name">sanitize_fname</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">fname</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">replace_invalid</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>,</span><span class="param">	<span class="n">when_none</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="s1">&#39;_None_&#39;</span>,</span><span class="param">	<span class="n">leading_digit_prefix</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span></span><span class="return-annotation">) -> <span class="nb">str</span>:</span></span>
 
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="sanitize_fname-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/misc/__init__.py#L58-L63" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.9.0misc/__init__.py#L59-L75" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -957,12 +959,23 @@ sanitized string</li>
 
     </div>
     <a class="headerlink" href="#sanitize_fname"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="sanitize_fname-59"><a href="#sanitize_fname-59"><span class="linenos">59</span></a><span class="k">def</span><span class="w"> </span><span class="nf">sanitize_fname</span><span class="p">(</span><span class="n">fname</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-</span><span id="sanitize_fname-60"><a href="#sanitize_fname-60"><span class="linenos">60</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;sanitize a filename to posix standards</span>
-</span><span id="sanitize_fname-61"><a href="#sanitize_fname-61"><span class="linenos">61</span></a>
-</span><span id="sanitize_fname-62"><a href="#sanitize_fname-62"><span class="linenos">62</span></a><span class="sd">    - leave only alphanumerics, `_` (underscore), &#39;-&#39; (dash) and `.` (period)</span>
-</span><span id="sanitize_fname-63"><a href="#sanitize_fname-63"><span class="linenos">63</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="sanitize_fname-64"><a href="#sanitize_fname-64"><span class="linenos">64</span></a>    <span class="k">return</span> <span class="n">sanitize_name</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">additional_allowed_chars</span><span class="o">=</span><span class="s2">&quot;._-&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="sanitize_fname-60"><a href="#sanitize_fname-60"><span class="linenos">60</span></a><span class="k">def</span><span class="w"> </span><span class="nf">sanitize_fname</span><span class="p">(</span>
+</span><span id="sanitize_fname-61"><a href="#sanitize_fname-61"><span class="linenos">61</span></a>    <span class="n">fname</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span>
+</span><span id="sanitize_fname-62"><a href="#sanitize_fname-62"><span class="linenos">62</span></a>    <span class="n">replace_invalid</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+</span><span id="sanitize_fname-63"><a href="#sanitize_fname-63"><span class="linenos">63</span></a>    <span class="n">when_none</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="s2">&quot;_None_&quot;</span><span class="p">,</span>
+</span><span id="sanitize_fname-64"><a href="#sanitize_fname-64"><span class="linenos">64</span></a>    <span class="n">leading_digit_prefix</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+</span><span id="sanitize_fname-65"><a href="#sanitize_fname-65"><span class="linenos">65</span></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+</span><span id="sanitize_fname-66"><a href="#sanitize_fname-66"><span class="linenos">66</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;sanitize a filename to posix standards</span>
+</span><span id="sanitize_fname-67"><a href="#sanitize_fname-67"><span class="linenos">67</span></a>
+</span><span id="sanitize_fname-68"><a href="#sanitize_fname-68"><span class="linenos">68</span></a><span class="sd">    - leave only alphanumerics, `_` (underscore), &#39;-&#39; (dash) and `.` (period)</span>
+</span><span id="sanitize_fname-69"><a href="#sanitize_fname-69"><span class="linenos">69</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="sanitize_fname-70"><a href="#sanitize_fname-70"><span class="linenos">70</span></a>    <span class="k">return</span> <span class="n">sanitize_name</span><span class="p">(</span>
+</span><span id="sanitize_fname-71"><a href="#sanitize_fname-71"><span class="linenos">71</span></a>        <span class="n">name</span><span class="o">=</span><span class="n">fname</span><span class="p">,</span>
+</span><span id="sanitize_fname-72"><a href="#sanitize_fname-72"><span class="linenos">72</span></a>        <span class="n">additional_allowed_chars</span><span class="o">=</span><span class="s2">&quot;._-&quot;</span><span class="p">,</span>
+</span><span id="sanitize_fname-73"><a href="#sanitize_fname-73"><span class="linenos">73</span></a>        <span class="n">replace_invalid</span><span class="o">=</span><span class="n">replace_invalid</span><span class="p">,</span>
+</span><span id="sanitize_fname-74"><a href="#sanitize_fname-74"><span class="linenos">74</span></a>        <span class="n">when_none</span><span class="o">=</span><span class="n">when_none</span><span class="p">,</span>
+</span><span id="sanitize_fname-75"><a href="#sanitize_fname-75"><span class="linenos">75</span></a>        <span class="n">leading_digit_prefix</span><span class="o">=</span><span class="n">leading_digit_prefix</span><span class="p">,</span>
+</span><span id="sanitize_fname-76"><a href="#sanitize_fname-76"><span class="linenos">76</span></a>    <span class="p">)</span>
 </span></pre></div>
 
 
@@ -980,12 +993,12 @@ sanitized string</li>
 <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">sanitize_identifier</span><span class="signature pdoc-code condensed">(<span class="param"><span class="n">fname</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span>, </span><span class="param"><span class="o">**</span><span class="n">kwargs</span></span><span class="return-annotation">) -> <span class="nb">str</span>:</span></span>
+        <span class="name">sanitize_identifier</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">fname</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">replace_invalid</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>,</span><span class="param">	<span class="n">when_none</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="s1">&#39;_None_&#39;</span></span><span class="return-annotation">) -> <span class="nb">str</span>:</span></span>
 
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="sanitize_identifier-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/misc/__init__.py#L66-L74" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.9.0misc/__init__.py#L78-L94" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -993,15 +1006,23 @@ sanitized string</li>
 
     </div>
     <a class="headerlink" href="#sanitize_identifier"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="sanitize_identifier-67"><a href="#sanitize_identifier-67"><span class="linenos">67</span></a><span class="k">def</span><span class="w"> </span><span class="nf">sanitize_identifier</span><span class="p">(</span><span class="n">fname</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-</span><span id="sanitize_identifier-68"><a href="#sanitize_identifier-68"><span class="linenos">68</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;sanitize an identifier (variable or function name)</span>
-</span><span id="sanitize_identifier-69"><a href="#sanitize_identifier-69"><span class="linenos">69</span></a>
-</span><span id="sanitize_identifier-70"><a href="#sanitize_identifier-70"><span class="linenos">70</span></a><span class="sd">    - leave only alphanumerics and `_` (underscore)</span>
-</span><span id="sanitize_identifier-71"><a href="#sanitize_identifier-71"><span class="linenos">71</span></a><span class="sd">    - prefix with `_` if it starts with a digit</span>
-</span><span id="sanitize_identifier-72"><a href="#sanitize_identifier-72"><span class="linenos">72</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="sanitize_identifier-73"><a href="#sanitize_identifier-73"><span class="linenos">73</span></a>    <span class="k">return</span> <span class="n">sanitize_name</span><span class="p">(</span>
-</span><span id="sanitize_identifier-74"><a href="#sanitize_identifier-74"><span class="linenos">74</span></a>        <span class="n">fname</span><span class="p">,</span> <span class="n">additional_allowed_chars</span><span class="o">=</span><span class="s2">&quot;_&quot;</span><span class="p">,</span> <span class="n">leading_digit_prefix</span><span class="o">=</span><span class="s2">&quot;_&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
-</span><span id="sanitize_identifier-75"><a href="#sanitize_identifier-75"><span class="linenos">75</span></a>    <span class="p">)</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="sanitize_identifier-79"><a href="#sanitize_identifier-79"><span class="linenos">79</span></a><span class="k">def</span><span class="w"> </span><span class="nf">sanitize_identifier</span><span class="p">(</span>
+</span><span id="sanitize_identifier-80"><a href="#sanitize_identifier-80"><span class="linenos">80</span></a>    <span class="n">fname</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span>
+</span><span id="sanitize_identifier-81"><a href="#sanitize_identifier-81"><span class="linenos">81</span></a>    <span class="n">replace_invalid</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+</span><span id="sanitize_identifier-82"><a href="#sanitize_identifier-82"><span class="linenos">82</span></a>    <span class="n">when_none</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="s2">&quot;_None_&quot;</span><span class="p">,</span>
+</span><span id="sanitize_identifier-83"><a href="#sanitize_identifier-83"><span class="linenos">83</span></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+</span><span id="sanitize_identifier-84"><a href="#sanitize_identifier-84"><span class="linenos">84</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;sanitize an identifier (variable or function name)</span>
+</span><span id="sanitize_identifier-85"><a href="#sanitize_identifier-85"><span class="linenos">85</span></a>
+</span><span id="sanitize_identifier-86"><a href="#sanitize_identifier-86"><span class="linenos">86</span></a><span class="sd">    - leave only alphanumerics and `_` (underscore)</span>
+</span><span id="sanitize_identifier-87"><a href="#sanitize_identifier-87"><span class="linenos">87</span></a><span class="sd">    - prefix with `_` if it starts with a digit</span>
+</span><span id="sanitize_identifier-88"><a href="#sanitize_identifier-88"><span class="linenos">88</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="sanitize_identifier-89"><a href="#sanitize_identifier-89"><span class="linenos">89</span></a>    <span class="k">return</span> <span class="n">sanitize_name</span><span class="p">(</span>
+</span><span id="sanitize_identifier-90"><a href="#sanitize_identifier-90"><span class="linenos">90</span></a>        <span class="n">name</span><span class="o">=</span><span class="n">fname</span><span class="p">,</span>
+</span><span id="sanitize_identifier-91"><a href="#sanitize_identifier-91"><span class="linenos">91</span></a>        <span class="n">additional_allowed_chars</span><span class="o">=</span><span class="s2">&quot;_&quot;</span><span class="p">,</span>
+</span><span id="sanitize_identifier-92"><a href="#sanitize_identifier-92"><span class="linenos">92</span></a>        <span class="n">replace_invalid</span><span class="o">=</span><span class="n">replace_invalid</span><span class="p">,</span>
+</span><span id="sanitize_identifier-93"><a href="#sanitize_identifier-93"><span class="linenos">93</span></a>        <span class="n">when_none</span><span class="o">=</span><span class="n">when_none</span><span class="p">,</span>
+</span><span id="sanitize_identifier-94"><a href="#sanitize_identifier-94"><span class="linenos">94</span></a>        <span class="n">leading_digit_prefix</span><span class="o">=</span><span class="s2">&quot;_&quot;</span><span class="p">,</span>
+</span><span id="sanitize_identifier-95"><a href="#sanitize_identifier-95"><span class="linenos">95</span></a>    <span class="p">)</span>
 </span></pre></div>
 
 
@@ -1020,12 +1041,12 @@ sanitized string</li>
 <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">dict_to_filename</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">data</span><span class="p">:</span> <span class="nb">dict</span>,</span><span class="param">	<span class="n">format_str</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{key}</span><span class="s1">_</span><span class="si">{val}</span><span class="s1">&#39;</span>,</span><span class="param">	<span class="n">separator</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;.&#39;</span>,</span><span class="param">	<span class="n">max_length</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">255</span></span><span class="return-annotation">):</span></span>
+        <span class="name">dict_to_filename</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">typing</span><span class="o">.</span><span class="n">Any</span><span class="p">]</span>,</span><span class="param">	<span class="n">format_str</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{key}</span><span class="s1">_</span><span class="si">{val}</span><span class="s1">&#39;</span>,</span><span class="param">	<span class="n">separator</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;.&#39;</span>,</span><span class="param">	<span class="n">max_length</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">255</span></span><span class="return-annotation">):</span></span>
 
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="dict_to_filename-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/misc/__init__.py#L77-L99" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.9.0misc/__init__.py#L97-L120" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -1033,29 +1054,30 @@ sanitized string</li>
 
     </div>
     <a class="headerlink" href="#dict_to_filename"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="dict_to_filename-78"><a href="#dict_to_filename-78"><span class="linenos"> 78</span></a><span class="k">def</span><span class="w"> </span><span class="nf">dict_to_filename</span><span class="p">(</span>
-</span><span id="dict_to_filename-79"><a href="#dict_to_filename-79"><span class="linenos"> 79</span></a>    <span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span>
-</span><span id="dict_to_filename-80"><a href="#dict_to_filename-80"><span class="linenos"> 80</span></a>    <span class="n">format_str</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{key}</span><span class="s2">_</span><span class="si">{val}</span><span class="s2">&quot;</span><span class="p">,</span>
-</span><span id="dict_to_filename-81"><a href="#dict_to_filename-81"><span class="linenos"> 81</span></a>    <span class="n">separator</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;.&quot;</span><span class="p">,</span>
-</span><span id="dict_to_filename-82"><a href="#dict_to_filename-82"><span class="linenos"> 82</span></a>    <span class="n">max_length</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">255</span><span class="p">,</span>
-</span><span id="dict_to_filename-83"><a href="#dict_to_filename-83"><span class="linenos"> 83</span></a><span class="p">):</span>
-</span><span id="dict_to_filename-84"><a href="#dict_to_filename-84"><span class="linenos"> 84</span></a>    <span class="c1"># Convert the dictionary items to a list of strings using the format string</span>
-</span><span id="dict_to_filename-85"><a href="#dict_to_filename-85"><span class="linenos"> 85</span></a>    <span class="n">formatted_items</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
-</span><span id="dict_to_filename-86"><a href="#dict_to_filename-86"><span class="linenos"> 86</span></a>        <span class="n">format_str</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="n">k</span><span class="p">,</span> <span class="n">val</span><span class="o">=</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
-</span><span id="dict_to_filename-87"><a href="#dict_to_filename-87"><span class="linenos"> 87</span></a>    <span class="p">]</span>
-</span><span id="dict_to_filename-88"><a href="#dict_to_filename-88"><span class="linenos"> 88</span></a>
-</span><span id="dict_to_filename-89"><a href="#dict_to_filename-89"><span class="linenos"> 89</span></a>    <span class="c1"># Join the formatted items using the separator</span>
-</span><span id="dict_to_filename-90"><a href="#dict_to_filename-90"><span class="linenos"> 90</span></a>    <span class="n">joined_str</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">separator</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">formatted_items</span><span class="p">)</span>
-</span><span id="dict_to_filename-91"><a href="#dict_to_filename-91"><span class="linenos"> 91</span></a>
-</span><span id="dict_to_filename-92"><a href="#dict_to_filename-92"><span class="linenos"> 92</span></a>    <span class="c1"># Remove special characters and spaces</span>
-</span><span id="dict_to_filename-93"><a href="#dict_to_filename-93"><span class="linenos"> 93</span></a>    <span class="n">sanitized_str</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">sanitize_fname</span><span class="p">(</span><span class="n">joined_str</span><span class="p">)</span>
-</span><span id="dict_to_filename-94"><a href="#dict_to_filename-94"><span class="linenos"> 94</span></a>
-</span><span id="dict_to_filename-95"><a href="#dict_to_filename-95"><span class="linenos"> 95</span></a>    <span class="c1"># Check if the length is within limits</span>
-</span><span id="dict_to_filename-96"><a href="#dict_to_filename-96"><span class="linenos"> 96</span></a>    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sanitized_str</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">max_length</span><span class="p">:</span>
-</span><span id="dict_to_filename-97"><a href="#dict_to_filename-97"><span class="linenos"> 97</span></a>        <span class="k">return</span> <span class="n">sanitized_str</span>
-</span><span id="dict_to_filename-98"><a href="#dict_to_filename-98"><span class="linenos"> 98</span></a>
-</span><span id="dict_to_filename-99"><a href="#dict_to_filename-99"><span class="linenos"> 99</span></a>    <span class="c1"># If the string is too long, generate a hash</span>
-</span><span id="dict_to_filename-100"><a href="#dict_to_filename-100"><span class="linenos">100</span></a>    <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;h_</span><span class="si">{</span><span class="n">stable_hash</span><span class="p">(</span><span class="n">sanitized_str</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="dict_to_filename-98"><a href="#dict_to_filename-98"><span class="linenos"> 98</span></a><span class="k">def</span><span class="w"> </span><span class="nf">dict_to_filename</span><span class="p">(</span>
+</span><span id="dict_to_filename-99"><a href="#dict_to_filename-99"><span class="linenos"> 99</span></a>    <span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span>
+</span><span id="dict_to_filename-100"><a href="#dict_to_filename-100"><span class="linenos">100</span></a>    <span class="n">format_str</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{key}</span><span class="s2">_</span><span class="si">{val}</span><span class="s2">&quot;</span><span class="p">,</span>
+</span><span id="dict_to_filename-101"><a href="#dict_to_filename-101"><span class="linenos">101</span></a>    <span class="n">separator</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;.&quot;</span><span class="p">,</span>
+</span><span id="dict_to_filename-102"><a href="#dict_to_filename-102"><span class="linenos">102</span></a>    <span class="n">max_length</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">255</span><span class="p">,</span>
+</span><span id="dict_to_filename-103"><a href="#dict_to_filename-103"><span class="linenos">103</span></a><span class="p">):</span>
+</span><span id="dict_to_filename-104"><a href="#dict_to_filename-104"><span class="linenos">104</span></a>    <span class="c1"># Convert the dictionary items to a list of strings using the format string</span>
+</span><span id="dict_to_filename-105"><a href="#dict_to_filename-105"><span class="linenos">105</span></a>    <span class="n">formatted_items</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
+</span><span id="dict_to_filename-106"><a href="#dict_to_filename-106"><span class="linenos">106</span></a>        <span class="n">format_str</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="n">k</span><span class="p">,</span> <span class="n">val</span><span class="o">=</span><span class="n">v</span><span class="p">)</span>
+</span><span id="dict_to_filename-107"><a href="#dict_to_filename-107"><span class="linenos">107</span></a>        <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>  <span class="c1"># pyright: ignore[reportAny]</span>
+</span><span id="dict_to_filename-108"><a href="#dict_to_filename-108"><span class="linenos">108</span></a>    <span class="p">]</span>
+</span><span id="dict_to_filename-109"><a href="#dict_to_filename-109"><span class="linenos">109</span></a>
+</span><span id="dict_to_filename-110"><a href="#dict_to_filename-110"><span class="linenos">110</span></a>    <span class="c1"># Join the formatted items using the separator</span>
+</span><span id="dict_to_filename-111"><a href="#dict_to_filename-111"><span class="linenos">111</span></a>    <span class="n">joined_str</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">separator</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">formatted_items</span><span class="p">)</span>
+</span><span id="dict_to_filename-112"><a href="#dict_to_filename-112"><span class="linenos">112</span></a>
+</span><span id="dict_to_filename-113"><a href="#dict_to_filename-113"><span class="linenos">113</span></a>    <span class="c1"># Remove special characters and spaces</span>
+</span><span id="dict_to_filename-114"><a href="#dict_to_filename-114"><span class="linenos">114</span></a>    <span class="n">sanitized_str</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">sanitize_fname</span><span class="p">(</span><span class="n">joined_str</span><span class="p">)</span>
+</span><span id="dict_to_filename-115"><a href="#dict_to_filename-115"><span class="linenos">115</span></a>
+</span><span id="dict_to_filename-116"><a href="#dict_to_filename-116"><span class="linenos">116</span></a>    <span class="c1"># Check if the length is within limits</span>
+</span><span id="dict_to_filename-117"><a href="#dict_to_filename-117"><span class="linenos">117</span></a>    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sanitized_str</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">max_length</span><span class="p">:</span>
+</span><span id="dict_to_filename-118"><a href="#dict_to_filename-118"><span class="linenos">118</span></a>        <span class="k">return</span> <span class="n">sanitized_str</span>
+</span><span id="dict_to_filename-119"><a href="#dict_to_filename-119"><span class="linenos">119</span></a>
+</span><span id="dict_to_filename-120"><a href="#dict_to_filename-120"><span class="linenos">120</span></a>    <span class="c1"># If the string is too long, generate a hash</span>
+</span><span id="dict_to_filename-121"><a href="#dict_to_filename-121"><span class="linenos">121</span></a>    <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;h_</span><span class="si">{</span><span class="n">stable_hash</span><span class="p">(</span><span class="n">sanitized_str</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
 </span></pre></div>
 
 
@@ -1067,12 +1089,12 @@ sanitized string</li>
 <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">dynamic_docstring</span><span class="signature pdoc-code condensed">(<span class="param"><span class="o">**</span><span class="n">doc_params</span></span><span class="return-annotation">):</span></span>
+        <span class="name">dynamic_docstring</span><span class="signature pdoc-code condensed">(<span class="param"><span class="o">**</span><span class="n">doc_params</span><span class="p">:</span> <span class="nb">str</span></span><span class="return-annotation">) -> <span class="n">Callable</span><span class="p">[[</span><span class="o">~</span><span class="n">T_Callable</span><span class="p">],</span> <span class="o">~</span><span class="n">T_Callable</span><span class="p">]</span>:</span></span>
 
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="dynamic_docstring-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/misc/__init__.py#L102-L108" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.9.0misc/__init__.py#L126-L132" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -1080,13 +1102,13 @@ sanitized string</li>
 
     </div>
     <a class="headerlink" href="#dynamic_docstring"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="dynamic_docstring-103"><a href="#dynamic_docstring-103"><span class="linenos">103</span></a><span class="k">def</span><span class="w"> </span><span class="nf">dynamic_docstring</span><span class="p">(</span><span class="o">**</span><span class="n">doc_params</span><span class="p">):</span>
-</span><span id="dynamic_docstring-104"><a href="#dynamic_docstring-104"><span class="linenos">104</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">decorator</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
-</span><span id="dynamic_docstring-105"><a href="#dynamic_docstring-105"><span class="linenos">105</span></a>        <span class="k">if</span> <span class="n">func</span><span class="o">.</span><span class="vm">__doc__</span><span class="p">:</span>
-</span><span id="dynamic_docstring-106"><a href="#dynamic_docstring-106"><span class="linenos">106</span></a>            <span class="n">func</span><span class="o">.</span><span class="vm">__doc__</span> <span class="o">=</span> <span class="n">func</span><span class="o">.</span><span class="vm">__doc__</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">**</span><span class="n">doc_params</span><span class="p">)</span>
-</span><span id="dynamic_docstring-107"><a href="#dynamic_docstring-107"><span class="linenos">107</span></a>        <span class="k">return</span> <span class="n">func</span>
-</span><span id="dynamic_docstring-108"><a href="#dynamic_docstring-108"><span class="linenos">108</span></a>
-</span><span id="dynamic_docstring-109"><a href="#dynamic_docstring-109"><span class="linenos">109</span></a>    <span class="k">return</span> <span class="n">decorator</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="dynamic_docstring-127"><a href="#dynamic_docstring-127"><span class="linenos">127</span></a><span class="k">def</span><span class="w"> </span><span class="nf">dynamic_docstring</span><span class="p">(</span><span class="o">**</span><span class="n">doc_params</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">T_Callable</span><span class="p">],</span> <span class="n">T_Callable</span><span class="p">]:</span>
+</span><span id="dynamic_docstring-128"><a href="#dynamic_docstring-128"><span class="linenos">128</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">decorator</span><span class="p">(</span><span class="n">func</span><span class="p">:</span> <span class="n">T_Callable</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T_Callable</span><span class="p">:</span>
+</span><span id="dynamic_docstring-129"><a href="#dynamic_docstring-129"><span class="linenos">129</span></a>        <span class="k">if</span> <span class="n">func</span><span class="o">.</span><span class="vm">__doc__</span><span class="p">:</span>
+</span><span id="dynamic_docstring-130"><a href="#dynamic_docstring-130"><span class="linenos">130</span></a>            <span class="n">func</span><span class="o">.</span><span class="vm">__doc__</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="s2">&quot;__doc__&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">**</span><span class="n">doc_params</span><span class="p">)</span>
+</span><span id="dynamic_docstring-131"><a href="#dynamic_docstring-131"><span class="linenos">131</span></a>        <span class="k">return</span> <span class="n">func</span>
+</span><span id="dynamic_docstring-132"><a href="#dynamic_docstring-132"><span class="linenos">132</span></a>
+</span><span id="dynamic_docstring-133"><a href="#dynamic_docstring-133"><span class="linenos">133</span></a>    <span class="k">return</span> <span class="n">decorator</span>
 </span></pre></div>
 
 
@@ -1103,7 +1125,7 @@ sanitized string</li>
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="shorten_numerical_to_str-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/misc/__init__.py#L22-L46" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.9.0misc/__init__.py#L22-L46" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -1157,7 +1179,7 @@ sanitized string</li>
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="str_to_numeric-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/misc/__init__.py#L49-L165" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.9.0misc/__init__.py#L49-L165" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -1192,8 +1214,8 @@ sanitized string</li>
 </span><span id="str_to_numeric-74"><a href="#str_to_numeric-74"><span class="linenos"> 74</span></a><span class="sd">    &quot;&quot;&quot;</span>
 </span><span id="str_to_numeric-75"><a href="#str_to_numeric-75"><span class="linenos"> 75</span></a>
 </span><span id="str_to_numeric-76"><a href="#str_to_numeric-76"><span class="linenos"> 76</span></a>    <span class="c1"># check is string</span>
-</span><span id="str_to_numeric-77"><a href="#str_to_numeric-77"><span class="linenos"> 77</span></a>    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">quantity</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
-</span><span id="str_to_numeric-78"><a href="#str_to_numeric-78"><span class="linenos"> 78</span></a>        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+</span><span id="str_to_numeric-77"><a href="#str_to_numeric-77"><span class="linenos"> 77</span></a>    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">quantity</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>  <span class="c1"># pyright: ignore[reportUnnecessaryIsInstance]</span>
+</span><span id="str_to_numeric-78"><a href="#str_to_numeric-78"><span class="linenos"> 78</span></a>        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>  <span class="c1"># pyright: ignore[reportUnreachable]</span>
 </span><span id="str_to_numeric-79"><a href="#str_to_numeric-79"><span class="linenos"> 79</span></a>            <span class="sa">f</span><span class="s2">&quot;quantity must be a string, got &#39;</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">quantity</span><span class="p">)</span><span class="w"> </span><span class="si">= }</span><span class="s2">&#39; &#39;</span><span class="si">{</span><span class="n">quantity</span><span class="w"> </span><span class="si">= }</span><span class="s2">&#39;&quot;</span>
 </span><span id="str_to_numeric-80"><a href="#str_to_numeric-80"><span class="linenos"> 80</span></a>        <span class="p">)</span>
 </span><span id="str_to_numeric-81"><a href="#str_to_numeric-81"><span class="linenos"> 81</span></a>
@@ -1216,7 +1238,7 @@ sanitized string</li>
 </span><span id="str_to_numeric-98"><a href="#str_to_numeric-98"><span class="linenos"> 98</span></a>    <span class="k">if</span> <span class="n">mapping</span> <span class="ow">is</span> <span class="kc">True</span> <span class="ow">or</span> <span class="n">mapping</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
 </span><span id="str_to_numeric-99"><a href="#str_to_numeric-99"><span class="linenos"> 99</span></a>        <span class="n">_mapping</span> <span class="o">=</span> <span class="n">_REVERSE_SHORTEN_MAP</span>
 </span><span id="str_to_numeric-100"><a href="#str_to_numeric-100"><span class="linenos">100</span></a>    <span class="k">else</span><span class="p">:</span>
-</span><span id="str_to_numeric-101"><a href="#str_to_numeric-101"><span class="linenos">101</span></a>        <span class="n">_mapping</span> <span class="o">=</span> <span class="n">mapping</span>  <span class="c1"># type: ignore[assignment]</span>
+</span><span id="str_to_numeric-101"><a href="#str_to_numeric-101"><span class="linenos">101</span></a>        <span class="n">_mapping</span> <span class="o">=</span> <span class="n">mapping</span>  <span class="c1"># type: ignore[assignment]  # pyright: ignore[reportAssignmentType]</span>
 </span><span id="str_to_numeric-102"><a href="#str_to_numeric-102"><span class="linenos">102</span></a>
 </span><span id="str_to_numeric-103"><a href="#str_to_numeric-103"><span class="linenos">103</span></a>    <span class="n">quantity_original</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">quantity</span>
 </span><span id="str_to_numeric-104"><a href="#str_to_numeric-104"><span class="linenos">104</span></a>
@@ -1331,7 +1353,7 @@ sanitized string</li>
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="FrozenDict-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/misc/__init__.py#L5-L10" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.9.0misc/__init__.py#L5-L10" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -1339,11 +1361,11 @@ sanitized string</li>
 
     </div>
     <a class="headerlink" href="#FrozenDict"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="FrozenDict-6"><a href="#FrozenDict-6"><span class="linenos"> 6</span></a><span class="k">class</span><span class="w"> </span><span class="nc">FrozenDict</span><span class="p">(</span><span class="nb">dict</span><span class="p">):</span>
-</span><span id="FrozenDict-7"><a href="#FrozenDict-7"><span class="linenos"> 7</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="FrozenDict-6"><a href="#FrozenDict-6"><span class="linenos"> 6</span></a><span class="k">class</span><span class="w"> </span><span class="nc">FrozenDict</span><span class="p">(</span><span class="nb">dict</span><span class="p">):</span>  <span class="c1"># type: ignore[type-arg]</span>
+</span><span id="FrozenDict-7"><a href="#FrozenDict-7"><span class="linenos"> 7</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NoReturn</span><span class="p">:</span>
 </span><span id="FrozenDict-8"><a href="#FrozenDict-8"><span class="linenos"> 8</span></a>        <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s2">&quot;dict is frozen&quot;</span><span class="p">)</span>
 </span><span id="FrozenDict-9"><a href="#FrozenDict-9"><span class="linenos"> 9</span></a>
-</span><span id="FrozenDict-10"><a href="#FrozenDict-10"><span class="linenos">10</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__delitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+</span><span id="FrozenDict-10"><a href="#FrozenDict-10"><span class="linenos">10</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__delitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NoReturn</span><span class="p">:</span>
 </span><span id="FrozenDict-11"><a href="#FrozenDict-11"><span class="linenos">11</span></a>        <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s2">&quot;dict is frozen&quot;</span><span class="p">)</span>
 </span></pre></div>
 
@@ -1380,7 +1402,7 @@ sanitized string</li>
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="FrozenList-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/misc/__init__.py#L13-L36" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.9.0misc/__init__.py#L13-L36" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -1388,29 +1410,29 @@ sanitized string</li>
 
     </div>
     <a class="headerlink" href="#FrozenList"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="FrozenList-14"><a href="#FrozenList-14"><span class="linenos">14</span></a><span class="k">class</span><span class="w"> </span><span class="nc">FrozenList</span><span class="p">(</span><span class="nb">list</span><span class="p">):</span>
-</span><span id="FrozenList-15"><a href="#FrozenList-15"><span class="linenos">15</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="FrozenList-14"><a href="#FrozenList-14"><span class="linenos">14</span></a><span class="k">class</span><span class="w"> </span><span class="nc">FrozenList</span><span class="p">(</span><span class="nb">list</span><span class="p">):</span>  <span class="c1"># type: ignore[type-arg]</span>
+</span><span id="FrozenList-15"><a href="#FrozenList-15"><span class="linenos">15</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="n">SupportsIndex</span> <span class="o">|</span> <span class="nb">slice</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NoReturn</span><span class="p">:</span>
 </span><span id="FrozenList-16"><a href="#FrozenList-16"><span class="linenos">16</span></a>        <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s2">&quot;list is frozen&quot;</span><span class="p">)</span>
 </span><span id="FrozenList-17"><a href="#FrozenList-17"><span class="linenos">17</span></a>
-</span><span id="FrozenList-18"><a href="#FrozenList-18"><span class="linenos">18</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__delitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
+</span><span id="FrozenList-18"><a href="#FrozenList-18"><span class="linenos">18</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__delitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="n">SupportsIndex</span> <span class="o">|</span> <span class="nb">slice</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NoReturn</span><span class="p">:</span>
 </span><span id="FrozenList-19"><a href="#FrozenList-19"><span class="linenos">19</span></a>        <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s2">&quot;list is frozen&quot;</span><span class="p">)</span>
 </span><span id="FrozenList-20"><a href="#FrozenList-20"><span class="linenos">20</span></a>
-</span><span id="FrozenList-21"><a href="#FrozenList-21"><span class="linenos">21</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">append</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+</span><span id="FrozenList-21"><a href="#FrozenList-21"><span class="linenos">21</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">append</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NoReturn</span><span class="p">:</span>
 </span><span id="FrozenList-22"><a href="#FrozenList-22"><span class="linenos">22</span></a>        <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s2">&quot;list is frozen&quot;</span><span class="p">)</span>
 </span><span id="FrozenList-23"><a href="#FrozenList-23"><span class="linenos">23</span></a>
-</span><span id="FrozenList-24"><a href="#FrozenList-24"><span class="linenos">24</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">extend</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">iterable</span><span class="p">):</span>
+</span><span id="FrozenList-24"><a href="#FrozenList-24"><span class="linenos">24</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">extend</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">iterable</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">NoReturn</span><span class="p">:</span>
 </span><span id="FrozenList-25"><a href="#FrozenList-25"><span class="linenos">25</span></a>        <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s2">&quot;list is frozen&quot;</span><span class="p">)</span>
 </span><span id="FrozenList-26"><a href="#FrozenList-26"><span class="linenos">26</span></a>
-</span><span id="FrozenList-27"><a href="#FrozenList-27"><span class="linenos">27</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">insert</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+</span><span id="FrozenList-27"><a href="#FrozenList-27"><span class="linenos">27</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">insert</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="n">SupportsIndex</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NoReturn</span><span class="p">:</span>
 </span><span id="FrozenList-28"><a href="#FrozenList-28"><span class="linenos">28</span></a>        <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s2">&quot;list is frozen&quot;</span><span class="p">)</span>
 </span><span id="FrozenList-29"><a href="#FrozenList-29"><span class="linenos">29</span></a>
-</span><span id="FrozenList-30"><a href="#FrozenList-30"><span class="linenos">30</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">remove</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+</span><span id="FrozenList-30"><a href="#FrozenList-30"><span class="linenos">30</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">remove</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NoReturn</span><span class="p">:</span>
 </span><span id="FrozenList-31"><a href="#FrozenList-31"><span class="linenos">31</span></a>        <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s2">&quot;list is frozen&quot;</span><span class="p">)</span>
 </span><span id="FrozenList-32"><a href="#FrozenList-32"><span class="linenos">32</span></a>
-</span><span id="FrozenList-33"><a href="#FrozenList-33"><span class="linenos">33</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">pop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="o">=-</span><span class="mi">1</span><span class="p">):</span>
+</span><span id="FrozenList-33"><a href="#FrozenList-33"><span class="linenos">33</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">pop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="n">SupportsIndex</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NoReturn</span><span class="p">:</span>
 </span><span id="FrozenList-34"><a href="#FrozenList-34"><span class="linenos">34</span></a>        <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s2">&quot;list is frozen&quot;</span><span class="p">)</span>
 </span><span id="FrozenList-35"><a href="#FrozenList-35"><span class="linenos">35</span></a>
-</span><span id="FrozenList-36"><a href="#FrozenList-36"><span class="linenos">36</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">clear</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span id="FrozenList-36"><a href="#FrozenList-36"><span class="linenos">36</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">clear</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NoReturn</span><span class="p">:</span>
 </span><span id="FrozenList-37"><a href="#FrozenList-37"><span class="linenos">37</span></a>        <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s2">&quot;list is frozen&quot;</span><span class="p">)</span>
 </span></pre></div>
 
@@ -1427,12 +1449,12 @@ The argument must be an iterable if specified.</p>
 <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">append</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="n">value</span></span><span class="return-annotation">):</span></span>
+        <span class="name">append</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="n">value</span><span class="p">:</span> <span class="n">Any</span></span><span class="return-annotation">) -> <span class="n">NoReturn</span>:</span></span>
 
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="FrozenList.append-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/misc/__init__.py#L20-L21" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.9.0misc/__init__.py#L20-L21" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -1440,7 +1462,7 @@ The argument must be an iterable if specified.</p>
 
     </div>
     <a class="headerlink" href="#FrozenList.append"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="FrozenList.append-21"><a href="#FrozenList.append-21"><span class="linenos">21</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">append</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="FrozenList.append-21"><a href="#FrozenList.append-21"><span class="linenos">21</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">append</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NoReturn</span><span class="p">:</span>
 </span><span id="FrozenList.append-22"><a href="#FrozenList.append-22"><span class="linenos">22</span></a>        <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s2">&quot;list is frozen&quot;</span><span class="p">)</span>
 </span></pre></div>
 
@@ -1455,12 +1477,12 @@ The argument must be an iterable if specified.</p>
 <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">extend</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="n">iterable</span></span><span class="return-annotation">):</span></span>
+        <span class="name">extend</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="n">iterable</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">Any</span><span class="p">]</span></span><span class="return-annotation">) -> <span class="n">NoReturn</span>:</span></span>
 
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="FrozenList.extend-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/misc/__init__.py#L23-L24" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.9.0misc/__init__.py#L23-L24" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -1468,7 +1490,7 @@ The argument must be an iterable if specified.</p>
 
     </div>
     <a class="headerlink" href="#FrozenList.extend"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="FrozenList.extend-24"><a href="#FrozenList.extend-24"><span class="linenos">24</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">extend</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">iterable</span><span class="p">):</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="FrozenList.extend-24"><a href="#FrozenList.extend-24"><span class="linenos">24</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">extend</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">iterable</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">NoReturn</span><span class="p">:</span>
 </span><span id="FrozenList.extend-25"><a href="#FrozenList.extend-25"><span class="linenos">25</span></a>        <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s2">&quot;list is frozen&quot;</span><span class="p">)</span>
 </span></pre></div>
 
@@ -1483,12 +1505,12 @@ The argument must be an iterable if specified.</p>
 <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">insert</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="n">index</span>, </span><span class="param"><span class="n">value</span></span><span class="return-annotation">):</span></span>
+        <span class="name">insert</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param">index: &lt;class &#x27;SupportsIndex&#x27;&gt;, </span><span class="param"><span class="n">value</span><span class="p">:</span> <span class="n">Any</span></span><span class="return-annotation">) -> <span class="n">NoReturn</span>:</span></span>
 
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="FrozenList.insert-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/misc/__init__.py#L26-L27" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.9.0misc/__init__.py#L26-L27" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -1496,7 +1518,7 @@ The argument must be an iterable if specified.</p>
 
     </div>
     <a class="headerlink" href="#FrozenList.insert"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="FrozenList.insert-27"><a href="#FrozenList.insert-27"><span class="linenos">27</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">insert</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="FrozenList.insert-27"><a href="#FrozenList.insert-27"><span class="linenos">27</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">insert</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="n">SupportsIndex</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NoReturn</span><span class="p">:</span>
 </span><span id="FrozenList.insert-28"><a href="#FrozenList.insert-28"><span class="linenos">28</span></a>        <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s2">&quot;list is frozen&quot;</span><span class="p">)</span>
 </span></pre></div>
 
@@ -1511,12 +1533,12 @@ The argument must be an iterable if specified.</p>
 <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">remove</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="n">value</span></span><span class="return-annotation">):</span></span>
+        <span class="name">remove</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="n">value</span><span class="p">:</span> <span class="n">Any</span></span><span class="return-annotation">) -> <span class="n">NoReturn</span>:</span></span>
 
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="FrozenList.remove-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/misc/__init__.py#L29-L30" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.9.0misc/__init__.py#L29-L30" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -1524,7 +1546,7 @@ The argument must be an iterable if specified.</p>
 
     </div>
     <a class="headerlink" href="#FrozenList.remove"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="FrozenList.remove-30"><a href="#FrozenList.remove-30"><span class="linenos">30</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">remove</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="FrozenList.remove-30"><a href="#FrozenList.remove-30"><span class="linenos">30</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">remove</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NoReturn</span><span class="p">:</span>
 </span><span id="FrozenList.remove-31"><a href="#FrozenList.remove-31"><span class="linenos">31</span></a>        <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s2">&quot;list is frozen&quot;</span><span class="p">)</span>
 </span></pre></div>
 
@@ -1541,12 +1563,12 @@ The argument must be an iterable if specified.</p>
 <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">pop</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="n">index</span><span class="o">=-</span><span class="mi">1</span></span><span class="return-annotation">):</span></span>
+        <span class="name">pop</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param">index: &lt;class &#x27;SupportsIndex&#x27;&gt; = -1</span><span class="return-annotation">) -> <span class="n">NoReturn</span>:</span></span>
 
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="FrozenList.pop-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/misc/__init__.py#L32-L33" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.9.0misc/__init__.py#L32-L33" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -1554,7 +1576,7 @@ The argument must be an iterable if specified.</p>
 
     </div>
     <a class="headerlink" href="#FrozenList.pop"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="FrozenList.pop-33"><a href="#FrozenList.pop-33"><span class="linenos">33</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">pop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="o">=-</span><span class="mi">1</span><span class="p">):</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="FrozenList.pop-33"><a href="#FrozenList.pop-33"><span class="linenos">33</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">pop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="n">SupportsIndex</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NoReturn</span><span class="p">:</span>
 </span><span id="FrozenList.pop-34"><a href="#FrozenList.pop-34"><span class="linenos">34</span></a>        <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s2">&quot;list is frozen&quot;</span><span class="p">)</span>
 </span></pre></div>
 
@@ -1571,12 +1593,12 @@ The argument must be an iterable if specified.</p>
 <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">clear</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span></span><span class="return-annotation">):</span></span>
+        <span class="name">clear</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span></span><span class="return-annotation">) -> <span class="n">NoReturn</span>:</span></span>
 
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="FrozenList.clear-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/misc/__init__.py#L35-L36" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.9.0misc/__init__.py#L35-L36" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -1584,7 +1606,7 @@ The argument must be an iterable if specified.</p>
 
     </div>
     <a class="headerlink" href="#FrozenList.clear"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="FrozenList.clear-36"><a href="#FrozenList.clear-36"><span class="linenos">36</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">clear</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="FrozenList.clear-36"><a href="#FrozenList.clear-36"><span class="linenos">36</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">clear</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NoReturn</span><span class="p">:</span>
 </span><span id="FrozenList.clear-37"><a href="#FrozenList.clear-37"><span class="linenos">37</span></a>        <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s2">&quot;list is frozen&quot;</span><span class="p">)</span>
 </span></pre></div>
 
@@ -1619,7 +1641,7 @@ The argument must be an iterable if specified.</p>
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="freeze-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/misc/__init__.py#L52-L121" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.9.0misc/__init__.py#L52-L121" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -1681,7 +1703,7 @@ The argument must be an iterable if specified.</p>
 </span><span id="freeze-104"><a href="#freeze-104"><span class="linenos">104</span></a>
 </span><span id="freeze-105"><a href="#freeze-105"><span class="linenos">105</span></a>        <span class="c1"># create a new class which inherits from the original class</span>
 </span><span id="freeze-106"><a href="#freeze-106"><span class="linenos">106</span></a>        <span class="k">class</span><span class="w"> </span><span class="nc">FrozenClass</span><span class="p">(</span><span class="n">instance</span><span class="o">.</span><span class="vm">__class__</span><span class="p">):</span>  <span class="c1"># type: ignore[name-defined]</span>
-</span><span id="freeze-107"><a href="#freeze-107"><span class="linenos">107</span></a>            <span class="k">def</span><span class="w"> </span><span class="fm">__setattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+</span><span id="freeze-107"><a href="#freeze-107"><span class="linenos">107</span></a>            <span class="k">def</span><span class="w"> </span><span class="fm">__setattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NoReturn</span><span class="p">:</span>
 </span><span id="freeze-108"><a href="#freeze-108"><span class="linenos">108</span></a>                <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s2">&quot;class is frozen&quot;</span><span class="p">)</span>
 </span><span id="freeze-109"><a href="#freeze-109"><span class="linenos">109</span></a>
 </span><span id="freeze-110"><a href="#freeze-110"><span class="linenos">110</span></a>        <span class="n">FrozenClass</span><span class="o">.</span><span class="vm">__name__</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;FrozenClass__</span><span class="si">{</span><span class="n">instance</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&quot;</span>
@@ -1719,7 +1741,7 @@ The argument must be an iterable if specified.</p>
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="is_abstract-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/misc/__init__.py#L14-L23" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.9.0misc/__init__.py#L14-L23" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -1733,7 +1755,7 @@ The argument must be an iterable if specified.</p>
 </span><span id="is_abstract-18"><a href="#is_abstract-18"><span class="linenos">18</span></a><span class="sd">    &quot;&quot;&quot;</span>
 </span><span id="is_abstract-19"><a href="#is_abstract-19"><span class="linenos">19</span></a>    <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="s2">&quot;__abstractmethods__&quot;</span><span class="p">):</span>
 </span><span id="is_abstract-20"><a href="#is_abstract-20"><span class="linenos">20</span></a>        <span class="k">return</span> <span class="kc">False</span>  <span class="c1"># an ordinary class</span>
-</span><span id="is_abstract-21"><a href="#is_abstract-21"><span class="linenos">21</span></a>    <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">__abstractmethods__</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+</span><span id="is_abstract-21"><a href="#is_abstract-21"><span class="linenos">21</span></a>    <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">__abstractmethods__</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>  <span class="c1"># type: ignore[invalid-argument-type] # pyright: ignore[reportUnknownMemberType, reportUnknownArgumentType]</span>
 </span><span id="is_abstract-22"><a href="#is_abstract-22"><span class="linenos">22</span></a>        <span class="k">return</span> <span class="kc">False</span>  <span class="c1"># a concrete implementation of an abstract class</span>
 </span><span id="is_abstract-23"><a href="#is_abstract-23"><span class="linenos">23</span></a>    <span class="k">else</span><span class="p">:</span>
 </span><span id="is_abstract-24"><a href="#is_abstract-24"><span class="linenos">24</span></a>        <span class="k">return</span> <span class="kc">True</span>  <span class="c1"># an abstract class</span>
@@ -1755,7 +1777,7 @@ The argument must be an iterable if specified.</p>
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="get_all_subclasses-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/misc/__init__.py#L26-L48" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.9.0misc/__init__.py#L26-L48" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -1817,7 +1839,7 @@ It might be valuable to refactor with memoization if the need arises to use this
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="isinstance_by_type_name-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/misc/__init__.py#L51-L61" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.9.0misc/__init__.py#L51-L61" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -1863,7 +1885,7 @@ Generic types are not supported, only types that would appear in <code>type_.__m
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="IsDataclass-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/misc/__init__.py#L68-L72" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.9.0misc/__init__.py#L68-L72" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -1875,7 +1897,7 @@ Generic types are not supported, only types that would appear in <code>type_.__m
 </span><span id="IsDataclass-70"><a href="#IsDataclass-70"><span class="linenos">70</span></a><span class="k">class</span><span class="w"> </span><span class="nc">IsDataclass</span><span class="p">(</span><span class="n">Protocol</span><span class="p">):</span>
 </span><span id="IsDataclass-71"><a href="#IsDataclass-71"><span class="linenos">71</span></a>    <span class="c1"># Generic type for any dataclass instance</span>
 </span><span id="IsDataclass-72"><a href="#IsDataclass-72"><span class="linenos">72</span></a>    <span class="c1"># https://stackoverflow.com/questions/54668000/type-hint-for-an-instance-of-a-non-specific-dataclass</span>
-</span><span id="IsDataclass-73"><a href="#IsDataclass-73"><span class="linenos">73</span></a>    <span class="n">__dataclass_fields__</span><span class="p">:</span> <span class="n">ClassVar</span><span class="p">[</span><span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span>
+</span><span id="IsDataclass-73"><a href="#IsDataclass-73"><span class="linenos">73</span></a>    <span class="n">__dataclass_fields__</span><span class="p">:</span> <span class="n">ClassVar</span><span class="p">[</span><span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span>  <span class="c1"># pyright: ignore[reportExplicitAny]</span>
 </span></pre></div>
 
 
@@ -1924,7 +1946,7 @@ Protocol classes can be generic, they are defined as::</p>
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="IsDataclass.__init__-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/misc/__init__.py#L1944-L1970" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.9.0misc/__init__.py#L1944-L1970" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -1976,7 +1998,7 @@ Protocol classes can be generic, they are defined as::</p>
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="get_hashable_eq_attrs-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/misc/__init__.py#L75-L83" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.9.0misc/__init__.py#L75-L87" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -1984,15 +2006,19 @@ Protocol classes can be generic, they are defined as::</p>
 
     </div>
     <a class="headerlink" href="#get_hashable_eq_attrs"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="get_hashable_eq_attrs-76"><a href="#get_hashable_eq_attrs-76"><span class="linenos">76</span></a><span class="k">def</span><span class="w"> </span><span class="nf">get_hashable_eq_attrs</span><span class="p">(</span><span class="n">dc</span><span class="p">:</span> <span class="n">IsDataclass</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Any</span><span class="p">]:</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="get_hashable_eq_attrs-76"><a href="#get_hashable_eq_attrs-76"><span class="linenos">76</span></a><span class="k">def</span><span class="w"> </span><span class="nf">get_hashable_eq_attrs</span><span class="p">(</span><span class="n">dc</span><span class="p">:</span> <span class="n">IsDataclass</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Any</span><span class="p">]:</span>  <span class="c1"># pyright: ignore[reportExplicitAny]</span>
 </span><span id="get_hashable_eq_attrs-77"><a href="#get_hashable_eq_attrs-77"><span class="linenos">77</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns a tuple of all fields used for equality comparison, including the type of the dataclass itself.</span>
 </span><span id="get_hashable_eq_attrs-78"><a href="#get_hashable_eq_attrs-78"><span class="linenos">78</span></a><span class="sd">    The type is included to preserve the unequal equality behavior of instances of different dataclasses whose fields are identical.</span>
 </span><span id="get_hashable_eq_attrs-79"><a href="#get_hashable_eq_attrs-79"><span class="linenos">79</span></a><span class="sd">    Essentially used to generate a hashable dataclass representation for equality comparison even if it&#39;s not frozen.</span>
 </span><span id="get_hashable_eq_attrs-80"><a href="#get_hashable_eq_attrs-80"><span class="linenos">80</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="get_hashable_eq_attrs-81"><a href="#get_hashable_eq_attrs-81"><span class="linenos">81</span></a>    <span class="k">return</span> <span class="o">*</span><span class="p">(</span>
-</span><span id="get_hashable_eq_attrs-82"><a href="#get_hashable_eq_attrs-82"><span class="linenos">82</span></a>        <span class="nb">getattr</span><span class="p">(</span><span class="n">dc</span><span class="p">,</span> <span class="n">fld</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
-</span><span id="get_hashable_eq_attrs-83"><a href="#get_hashable_eq_attrs-83"><span class="linenos">83</span></a>        <span class="k">for</span> <span class="n">fld</span> <span class="ow">in</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">compare</span><span class="p">,</span> <span class="n">dc</span><span class="o">.</span><span class="n">__dataclass_fields__</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
-</span><span id="get_hashable_eq_attrs-84"><a href="#get_hashable_eq_attrs-84"><span class="linenos">84</span></a>    <span class="p">),</span> <span class="nb">type</span><span class="p">(</span><span class="n">dc</span><span class="p">)</span>
+</span><span id="get_hashable_eq_attrs-81"><a href="#get_hashable_eq_attrs-81"><span class="linenos">81</span></a>    <span class="c1"># TYPING: ty gives @Todo here</span>
+</span><span id="get_hashable_eq_attrs-82"><a href="#get_hashable_eq_attrs-82"><span class="linenos">82</span></a>    <span class="k">return</span> <span class="p">(</span>  <span class="c1"># type: ignore[invalid-return-type]</span>
+</span><span id="get_hashable_eq_attrs-83"><a href="#get_hashable_eq_attrs-83"><span class="linenos">83</span></a>        <span class="o">*</span><span class="p">(</span>
+</span><span id="get_hashable_eq_attrs-84"><a href="#get_hashable_eq_attrs-84"><span class="linenos">84</span></a>            <span class="nb">getattr</span><span class="p">(</span><span class="n">dc</span><span class="p">,</span> <span class="n">fld</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+</span><span id="get_hashable_eq_attrs-85"><a href="#get_hashable_eq_attrs-85"><span class="linenos">85</span></a>            <span class="k">for</span> <span class="n">fld</span> <span class="ow">in</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">compare</span><span class="p">,</span> <span class="n">dc</span><span class="o">.</span><span class="n">__dataclass_fields__</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+</span><span id="get_hashable_eq_attrs-86"><a href="#get_hashable_eq_attrs-86"><span class="linenos">86</span></a>        <span class="p">),</span>
+</span><span id="get_hashable_eq_attrs-87"><a href="#get_hashable_eq_attrs-87"><span class="linenos">87</span></a>        <span class="nb">type</span><span class="p">(</span><span class="n">dc</span><span class="p">),</span>
+</span><span id="get_hashable_eq_attrs-88"><a href="#get_hashable_eq_attrs-88"><span class="linenos">88</span></a>    <span class="p">)</span>
 </span></pre></div>
 
 
@@ -2013,7 +2039,7 @@ Essentially used to generate a hashable dataclass representation for equality co
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="dataclass_set_equals-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/misc/__init__.py#L86-L97" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.9.0misc/__init__.py#L90-L101" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -2021,18 +2047,18 @@ Essentially used to generate a hashable dataclass representation for equality co
 
     </div>
     <a class="headerlink" href="#dataclass_set_equals"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="dataclass_set_equals-87"><a href="#dataclass_set_equals-87"><span class="linenos">87</span></a><span class="k">def</span><span class="w"> </span><span class="nf">dataclass_set_equals</span><span class="p">(</span>
-</span><span id="dataclass_set_equals-88"><a href="#dataclass_set_equals-88"><span class="linenos">88</span></a>    <span class="n">coll1</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">IsDataclass</span><span class="p">],</span> <span class="n">coll2</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">IsDataclass</span><span class="p">]</span>
-</span><span id="dataclass_set_equals-89"><a href="#dataclass_set_equals-89"><span class="linenos">89</span></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-</span><span id="dataclass_set_equals-90"><a href="#dataclass_set_equals-90"><span class="linenos">90</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Compares 2 collections of dataclass instances as if they were sets.</span>
-</span><span id="dataclass_set_equals-91"><a href="#dataclass_set_equals-91"><span class="linenos">91</span></a><span class="sd">    Duplicates are ignored in the same manner as a set.</span>
-</span><span id="dataclass_set_equals-92"><a href="#dataclass_set_equals-92"><span class="linenos">92</span></a><span class="sd">    Unfrozen dataclasses can&#39;t be placed in sets since they&#39;re not hashable.</span>
-</span><span id="dataclass_set_equals-93"><a href="#dataclass_set_equals-93"><span class="linenos">93</span></a><span class="sd">    Collections of them may be compared using this function.</span>
-</span><span id="dataclass_set_equals-94"><a href="#dataclass_set_equals-94"><span class="linenos">94</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="dataclass_set_equals-95"><a href="#dataclass_set_equals-95"><span class="linenos">95</span></a>
-</span><span id="dataclass_set_equals-96"><a href="#dataclass_set_equals-96"><span class="linenos">96</span></a>    <span class="k">return</span> <span class="p">{</span><span class="n">get_hashable_eq_attrs</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">coll1</span><span class="p">}</span> <span class="o">==</span> <span class="p">{</span>
-</span><span id="dataclass_set_equals-97"><a href="#dataclass_set_equals-97"><span class="linenos">97</span></a>        <span class="n">get_hashable_eq_attrs</span><span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">coll2</span>
-</span><span id="dataclass_set_equals-98"><a href="#dataclass_set_equals-98"><span class="linenos">98</span></a>    <span class="p">}</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="dataclass_set_equals-91"><a href="#dataclass_set_equals-91"><span class="linenos"> 91</span></a><span class="k">def</span><span class="w"> </span><span class="nf">dataclass_set_equals</span><span class="p">(</span>
+</span><span id="dataclass_set_equals-92"><a href="#dataclass_set_equals-92"><span class="linenos"> 92</span></a>    <span class="n">coll1</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">IsDataclass</span><span class="p">],</span> <span class="n">coll2</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">IsDataclass</span><span class="p">]</span>
+</span><span id="dataclass_set_equals-93"><a href="#dataclass_set_equals-93"><span class="linenos"> 93</span></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</span><span id="dataclass_set_equals-94"><a href="#dataclass_set_equals-94"><span class="linenos"> 94</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Compares 2 collections of dataclass instances as if they were sets.</span>
+</span><span id="dataclass_set_equals-95"><a href="#dataclass_set_equals-95"><span class="linenos"> 95</span></a><span class="sd">    Duplicates are ignored in the same manner as a set.</span>
+</span><span id="dataclass_set_equals-96"><a href="#dataclass_set_equals-96"><span class="linenos"> 96</span></a><span class="sd">    Unfrozen dataclasses can&#39;t be placed in sets since they&#39;re not hashable.</span>
+</span><span id="dataclass_set_equals-97"><a href="#dataclass_set_equals-97"><span class="linenos"> 97</span></a><span class="sd">    Collections of them may be compared using this function.</span>
+</span><span id="dataclass_set_equals-98"><a href="#dataclass_set_equals-98"><span class="linenos"> 98</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="dataclass_set_equals-99"><a href="#dataclass_set_equals-99"><span class="linenos"> 99</span></a>
+</span><span id="dataclass_set_equals-100"><a href="#dataclass_set_equals-100"><span class="linenos">100</span></a>    <span class="k">return</span> <span class="p">{</span><span class="n">get_hashable_eq_attrs</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">coll1</span><span class="p">}</span> <span class="o">==</span> <span class="p">{</span>
+</span><span id="dataclass_set_equals-101"><a href="#dataclass_set_equals-101"><span class="linenos">101</span></a>        <span class="n">get_hashable_eq_attrs</span><span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">coll2</span>
+</span><span id="dataclass_set_equals-102"><a href="#dataclass_set_equals-102"><span class="linenos">102</span></a>    <span class="p">}</span>
 </span></pre></div>
 
 

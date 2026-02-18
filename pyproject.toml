@@ -2,7 +2,7 @@
 # ==================================================
 [project]
 	name = "muutils"
-	version = "0.8.12"
+	version = "0.9.0"
 	description = "miscellaneous python utilities"
 	readme = "README.md"
 	requires-python = ">=3.8"
@@ -41,7 +41,7 @@
 		"numpy>1.24.4; python_version >= '3.9'",
 		"torch>=1.13.1,<2.5.0; python_version < '3.9'",
 		"torch>=1.13.1; python_version >= '3.9' and python_version < '3.13'",
-		"torch>=2.5.0; python_version >= '3.13' and python_version < '3.14'",
+		"torch>=2.5.0; python_version >= '3.13'",
 		"jaxtyping>=0.2.12",
 	]
 
@@ -61,6 +61,10 @@
 		"tqdm>=4.67.1",
 	]
 
+	web = [
+		"weasyprint>=60.0",
+	]
+
 [dependency-groups]
 	dev = [
 		# typing
@@ -68,7 +72,10 @@
 		"mypy>=1.15; python_version >= '3.9'",
 		"typing-extensions; python_version < '3.11'",
 		"beartype>=0.14.1",
-		"ty",
+		"ty>=0.0.17",
+		"basedpyright",
+		"pandas-stubs>=2.0.0",
+		"types-tqdm",
 		# tests & coverage
 		"pytest>=8.2.2",
 		"pytest-cov>=4.1.0",
@@ -118,9 +125,12 @@
 	]
 	addopts = "--jaxtyping-packages=beartype.beartype"
 
+[tool.coverage.run]
+	omit = ["*/_remote_module_non_scriptable*"]
+
 [tool.ruff]
 	# Exclude the directories specified in the global excludes
-	exclude = ["tests/input_data", "tests/junk_data", "_wip/"]
+	exclude = ["tests/input_data", "tests/junk_data", "_wip/", ".meta/scripts/"]
 	[tool.ruff.lint.per-file-ignores]
 		"muutils/tensor_info.py" = [
 			"E701", # multiple statements on one line (colon)
@@ -132,20 +142,59 @@
 			"F722", # jaxtyping stuff
 		]
 
-[tool.pycln]
-	all = true
-	exclude = ["tests/input_data", "tests/junk_data", "_wip/"]
+[tool.basedpyright]
+	# TODO: change this to strict eventually
+	typeCheckingMode = "standard"
+	# file include/exclude
+	include = ["muutils", "tests"]
+	exclude = [
+		"tests/input_data",
+		"tests/junk_data",
+		"tests/_temp",
+		"_wip",
+		".meta/scripts/",
+		".venv",
+	]
+	# rules
+	reportConstantRedefinition = false # I always use all caps for globals, not just consts
+	reportDeprecated = false # this library is backwards compatible back to 3.8, so we are using lots of deprecated stuff
+	reportUnsupportedDunderAll = false # we use __all__ a lot for docs stuff
+	reportExplicitAny = false # we allow Any in many places. if it's there, it's intentional
+
+[tool.ty.src]
+	exclude = [
+		"tests/input_data/",
+		"tests/junk_data/",
+		"tests/_temp/",
+		"tests/benchmark_parallel.py",
+		"_wip/",
+		".meta/scripts/",
+	]
+
+# TODO: remove this once we clean up the `# type: ignore` comments that are needed
+# for mypy/pyright but not for ty. See https://docs.astral.sh/ty/configuration/
+[tool.ty.rules]
+	# mostly for version compatibility
+	unused-ignore-comment = "ignore"
+	unused-type-ignore-comment = "ignore"
+	ignore-comment-unknown-rule = "ignore"
+
+# [[tool.ty.overrides]]
+# 	include = ["tests/unit/json_serialize/test_json_serialize.py", "tests/unit/test_jsonlines.py"]
+# 	rules = {invalid-argument-type = "ignore", invalid-key = "ignore"}
 
 [tool.mypy]
+	files = ["muutils", "tests"]
 	exclude = [
 		# tests
 		"tests/input_data",
 		"tests/junk_data",
 		"tests/_temp/",
+		"tests/benchmark_parallel.py",
 		# wip stuff
 		"_wip/",
 		# not our problem
-		"docs/resources/make_docs.py",
+		".meta/scripts/",
 	]
 	show_error_codes = true
 	# we disable this in the makefile for old versions

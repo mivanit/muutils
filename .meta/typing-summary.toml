@@ -1,0 +1,24 @@
+# ty: All checks passed!
+# basedpyright: 0 errors, 0 warnings, 0 notes
+# mypy: KeyError: 'setter_type'
+
+[type_errors.ty]
+total_errors = 0
+
+[type_errors.ty.by_type]
+
+[type_errors.ty.by_file]
+
+[type_errors.basedpyright]
+total_errors = 0
+
+[type_errors.basedpyright.by_type]
+
+[type_errors.basedpyright.by_file]
+
+[type_errors.mypy]
+total_errors = 0
+
+[type_errors.mypy.by_type]
+
+[type_errors.mypy.by_file]

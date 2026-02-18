@@ -5,7 +5,7 @@ import sys
 import pytest
 
 from muutils.json_serialize import SerializableDataclass, serializable_dataclass
-from muutils.json_serialize.util import _FORMAT_KEY
+from muutils.json_serialize.types import _FORMAT_KEY
 
 SUPPORTS_KW_ONLY: bool = sys.version_info >= (3, 10)
 
@@ -76,7 +76,7 @@ def test_serialize_titled_person():
 
     if SUPPORTS_KW_ONLY:
         with pytest.raises(TypeError):
-            TitledPerson("Jane", "Smith", "Dr.")
+            TitledPerson("Jane", "Smith", "Dr.")  # type: ignore[too-many-positional-arguments]
 
     serialized = instance.serialize()
 

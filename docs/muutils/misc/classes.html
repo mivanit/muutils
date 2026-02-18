@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="generator" content="pdoc 15.0.4"/>
+    <meta name="generator" content="pdoc 16.0.0"/>
     <title>muutils.misc.classes API documentation</title>
 <link rel="stylesheet" href="../../resources/css/bootstrap-reboot.min.css"><link rel="stylesheet" href="../../resources/css/syntax-highlighting.css"><link rel="stylesheet" href="../../resources/css/theme.css"><link rel="stylesheet" href="../../resources/css/layout.css"><link rel="stylesheet" href="../../resources/css/content.css"><link rel="stylesheet" href="../../resources/css/custom.css"><script>
     window.MathJax = {
@@ -46,7 +46,7 @@
 </script></head>
 <body>
 <div class="package-version">
-    docs for <a href="https://github.com/mivanit/muutils">muutils</a> v0.8.12<br>
+    docs for <a href="https://github.com/mivanit/muutils">muutils</a> v0.9.0<br>
 </div>
     <nav class="pdoc">
         <label id="navtoggle" for="togglestate" class="pdoc-button">
@@ -115,7 +115,7 @@
     </nav>
     <main class="pdoc">
             <section class="module-info">
-                        <a class="pdoc-button git-button" href="https://github.com/mivanit/muutils/blob/0.8.12/misc/classes.py">View Source on GitHub</a>
+                        <a class="pdoc-button git-button" href="https://github.com/mivanit/muutils/blob/0.9.0misc/classes.py">View Source on GitHub</a>
                     <h1 class="modulename">
 <a href="./../../muutils.html">muutils</a><wbr>.<a href="./../misc.html">misc</a><wbr>.classes    </h1>
 
@@ -125,110 +125,114 @@
                         <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="mod-classes-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/misc/classes.py#L0-L96" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.9.0misc/classes.py#L0-L100" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
         </div>
 
                 <br/>
-                        <div class="pdoc-code codehilite"><pre><span></span><span id="L-1"><a href="#L-1"><span class="linenos"> 1</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
-</span><span id="L-2"><a href="#L-2"><span class="linenos"> 2</span></a>
-</span><span id="L-3"><a href="#L-3"><span class="linenos"> 3</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
-</span><span id="L-4"><a href="#L-4"><span class="linenos"> 4</span></a>    <span class="n">Iterable</span><span class="p">,</span>
-</span><span id="L-5"><a href="#L-5"><span class="linenos"> 5</span></a>    <span class="n">Any</span><span class="p">,</span>
-</span><span id="L-6"><a href="#L-6"><span class="linenos"> 6</span></a>    <span class="n">Protocol</span><span class="p">,</span>
-</span><span id="L-7"><a href="#L-7"><span class="linenos"> 7</span></a>    <span class="n">ClassVar</span><span class="p">,</span>
-</span><span id="L-8"><a href="#L-8"><span class="linenos"> 8</span></a>    <span class="n">runtime_checkable</span><span class="p">,</span>
-</span><span id="L-9"><a href="#L-9"><span class="linenos"> 9</span></a><span class="p">)</span>
-</span><span id="L-10"><a href="#L-10"><span class="linenos">10</span></a>
-</span><span id="L-11"><a href="#L-11"><span class="linenos">11</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">muutils.misc.sequence</span><span class="w"> </span><span class="kn">import</span> <span class="n">flatten</span>
-</span><span id="L-12"><a href="#L-12"><span class="linenos">12</span></a>
-</span><span id="L-13"><a href="#L-13"><span class="linenos">13</span></a>
-</span><span id="L-14"><a href="#L-14"><span class="linenos">14</span></a><span class="k">def</span><span class="w"> </span><span class="nf">is_abstract</span><span class="p">(</span><span class="bp">cls</span><span class="p">:</span> <span class="nb">type</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-</span><span id="L-15"><a href="#L-15"><span class="linenos">15</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-16"><a href="#L-16"><span class="linenos">16</span></a><span class="sd">    Returns if a class is abstract.</span>
-</span><span id="L-17"><a href="#L-17"><span class="linenos">17</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="L-18"><a href="#L-18"><span class="linenos">18</span></a>    <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="s2">&quot;__abstractmethods__&quot;</span><span class="p">):</span>
-</span><span id="L-19"><a href="#L-19"><span class="linenos">19</span></a>        <span class="k">return</span> <span class="kc">False</span>  <span class="c1"># an ordinary class</span>
-</span><span id="L-20"><a href="#L-20"><span class="linenos">20</span></a>    <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">__abstractmethods__</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-</span><span id="L-21"><a href="#L-21"><span class="linenos">21</span></a>        <span class="k">return</span> <span class="kc">False</span>  <span class="c1"># a concrete implementation of an abstract class</span>
-</span><span id="L-22"><a href="#L-22"><span class="linenos">22</span></a>    <span class="k">else</span><span class="p">:</span>
-</span><span id="L-23"><a href="#L-23"><span class="linenos">23</span></a>        <span class="k">return</span> <span class="kc">True</span>  <span class="c1"># an abstract class</span>
-</span><span id="L-24"><a href="#L-24"><span class="linenos">24</span></a>
-</span><span id="L-25"><a href="#L-25"><span class="linenos">25</span></a>
-</span><span id="L-26"><a href="#L-26"><span class="linenos">26</span></a><span class="k">def</span><span class="w"> </span><span class="nf">get_all_subclasses</span><span class="p">(</span><span class="n">class_</span><span class="p">:</span> <span class="nb">type</span><span class="p">,</span> <span class="n">include_self</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">set</span><span class="p">[</span><span class="nb">type</span><span class="p">]:</span>
-</span><span id="L-27"><a href="#L-27"><span class="linenos">27</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-28"><a href="#L-28"><span class="linenos">28</span></a><span class="sd">    Returns a set containing all child classes in the subclass graph of `class_`.</span>
-</span><span id="L-29"><a href="#L-29"><span class="linenos">29</span></a><span class="sd">    I.e., includes subclasses of subclasses, etc.</span>
-</span><span id="L-30"><a href="#L-30"><span class="linenos">30</span></a>
-</span><span id="L-31"><a href="#L-31"><span class="linenos">31</span></a><span class="sd">    # Parameters</span>
-</span><span id="L-32"><a href="#L-32"><span class="linenos">32</span></a><span class="sd">    - `include_self`: Whether to include `class_` itself in the returned set</span>
-</span><span id="L-33"><a href="#L-33"><span class="linenos">33</span></a><span class="sd">    - `class_`: Superclass</span>
-</span><span id="L-34"><a href="#L-34"><span class="linenos">34</span></a>
-</span><span id="L-35"><a href="#L-35"><span class="linenos">35</span></a><span class="sd">    # Development</span>
-</span><span id="L-36"><a href="#L-36"><span class="linenos">36</span></a><span class="sd">    Since most class hierarchies are small, the inefficiencies of the existing recursive implementation aren&#39;t problematic.</span>
-</span><span id="L-37"><a href="#L-37"><span class="linenos">37</span></a><span class="sd">    It might be valuable to refactor with memoization if the need arises to use this function on a very large class hierarchy.</span>
-</span><span id="L-38"><a href="#L-38"><span class="linenos">38</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="L-39"><a href="#L-39"><span class="linenos">39</span></a>    <span class="n">subs</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="nb">type</span><span class="p">]</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span>
-</span><span id="L-40"><a href="#L-40"><span class="linenos">40</span></a>        <span class="n">flatten</span><span class="p">(</span>
-</span><span id="L-41"><a href="#L-41"><span class="linenos">41</span></a>            <span class="n">get_all_subclasses</span><span class="p">(</span><span class="n">sub</span><span class="p">,</span> <span class="n">include_self</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</span><span id="L-42"><a href="#L-42"><span class="linenos">42</span></a>            <span class="k">for</span> <span class="n">sub</span> <span class="ow">in</span> <span class="n">class_</span><span class="o">.</span><span class="n">__subclasses__</span><span class="p">()</span>
-</span><span id="L-43"><a href="#L-43"><span class="linenos">43</span></a>            <span class="k">if</span> <span class="n">sub</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
-</span><span id="L-44"><a href="#L-44"><span class="linenos">44</span></a>        <span class="p">)</span>
-</span><span id="L-45"><a href="#L-45"><span class="linenos">45</span></a>    <span class="p">)</span>
-</span><span id="L-46"><a href="#L-46"><span class="linenos">46</span></a>    <span class="k">if</span> <span class="n">include_self</span><span class="p">:</span>
-</span><span id="L-47"><a href="#L-47"><span class="linenos">47</span></a>        <span class="n">subs</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">class_</span><span class="p">)</span>
-</span><span id="L-48"><a href="#L-48"><span class="linenos">48</span></a>    <span class="k">return</span> <span class="n">subs</span>
-</span><span id="L-49"><a href="#L-49"><span class="linenos">49</span></a>
-</span><span id="L-50"><a href="#L-50"><span class="linenos">50</span></a>
-</span><span id="L-51"><a href="#L-51"><span class="linenos">51</span></a><span class="k">def</span><span class="w"> </span><span class="nf">isinstance_by_type_name</span><span class="p">(</span><span class="n">o</span><span class="p">:</span> <span class="nb">object</span><span class="p">,</span> <span class="n">type_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
-</span><span id="L-52"><a href="#L-52"><span class="linenos">52</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Behaves like stdlib `isinstance` except it accepts a string representation of the type rather than the type itself.</span>
-</span><span id="L-53"><a href="#L-53"><span class="linenos">53</span></a><span class="sd">    This is a hacky function intended to circumvent the need to import a type into a module.</span>
-</span><span id="L-54"><a href="#L-54"><span class="linenos">54</span></a><span class="sd">    It is susceptible to type name collisions.</span>
-</span><span id="L-55"><a href="#L-55"><span class="linenos">55</span></a>
-</span><span id="L-56"><a href="#L-56"><span class="linenos">56</span></a><span class="sd">    # Parameters</span>
-</span><span id="L-57"><a href="#L-57"><span class="linenos">57</span></a><span class="sd">    `o`: Object (not the type itself) whose type to interrogate</span>
-</span><span id="L-58"><a href="#L-58"><span class="linenos">58</span></a><span class="sd">    `type_name`: The string returned by `type_.__name__`.</span>
-</span><span id="L-59"><a href="#L-59"><span class="linenos">59</span></a><span class="sd">    Generic types are not supported, only types that would appear in `type_.__mro__`.</span>
-</span><span id="L-60"><a href="#L-60"><span class="linenos">60</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="L-61"><a href="#L-61"><span class="linenos">61</span></a>    <span class="k">return</span> <span class="n">type_name</span> <span class="ow">in</span> <span class="p">{</span><span class="n">s</span><span class="o">.</span><span class="vm">__name__</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">type</span><span class="p">(</span><span class="n">o</span><span class="p">)</span><span class="o">.</span><span class="vm">__mro__</span><span class="p">}</span>
-</span><span id="L-62"><a href="#L-62"><span class="linenos">62</span></a>
-</span><span id="L-63"><a href="#L-63"><span class="linenos">63</span></a>
-</span><span id="L-64"><a href="#L-64"><span class="linenos">64</span></a><span class="c1"># dataclass magic</span>
-</span><span id="L-65"><a href="#L-65"><span class="linenos">65</span></a><span class="c1"># --------------------------------------------------------------------------------</span>
-</span><span id="L-66"><a href="#L-66"><span class="linenos">66</span></a>
-</span><span id="L-67"><a href="#L-67"><span class="linenos">67</span></a>
-</span><span id="L-68"><a href="#L-68"><span class="linenos">68</span></a><span class="nd">@runtime_checkable</span>
-</span><span id="L-69"><a href="#L-69"><span class="linenos">69</span></a><span class="k">class</span><span class="w"> </span><span class="nc">IsDataclass</span><span class="p">(</span><span class="n">Protocol</span><span class="p">):</span>
-</span><span id="L-70"><a href="#L-70"><span class="linenos">70</span></a>    <span class="c1"># Generic type for any dataclass instance</span>
-</span><span id="L-71"><a href="#L-71"><span class="linenos">71</span></a>    <span class="c1"># https://stackoverflow.com/questions/54668000/type-hint-for-an-instance-of-a-non-specific-dataclass</span>
-</span><span id="L-72"><a href="#L-72"><span class="linenos">72</span></a>    <span class="n">__dataclass_fields__</span><span class="p">:</span> <span class="n">ClassVar</span><span class="p">[</span><span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span>
-</span><span id="L-73"><a href="#L-73"><span class="linenos">73</span></a>
-</span><span id="L-74"><a href="#L-74"><span class="linenos">74</span></a>
-</span><span id="L-75"><a href="#L-75"><span class="linenos">75</span></a><span class="k">def</span><span class="w"> </span><span class="nf">get_hashable_eq_attrs</span><span class="p">(</span><span class="n">dc</span><span class="p">:</span> <span class="n">IsDataclass</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Any</span><span class="p">]:</span>
-</span><span id="L-76"><a href="#L-76"><span class="linenos">76</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns a tuple of all fields used for equality comparison, including the type of the dataclass itself.</span>
-</span><span id="L-77"><a href="#L-77"><span class="linenos">77</span></a><span class="sd">    The type is included to preserve the unequal equality behavior of instances of different dataclasses whose fields are identical.</span>
-</span><span id="L-78"><a href="#L-78"><span class="linenos">78</span></a><span class="sd">    Essentially used to generate a hashable dataclass representation for equality comparison even if it&#39;s not frozen.</span>
-</span><span id="L-79"><a href="#L-79"><span class="linenos">79</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="L-80"><a href="#L-80"><span class="linenos">80</span></a>    <span class="k">return</span> <span class="o">*</span><span class="p">(</span>
-</span><span id="L-81"><a href="#L-81"><span class="linenos">81</span></a>        <span class="nb">getattr</span><span class="p">(</span><span class="n">dc</span><span class="p">,</span> <span class="n">fld</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
-</span><span id="L-82"><a href="#L-82"><span class="linenos">82</span></a>        <span class="k">for</span> <span class="n">fld</span> <span class="ow">in</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">compare</span><span class="p">,</span> <span class="n">dc</span><span class="o">.</span><span class="n">__dataclass_fields__</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
-</span><span id="L-83"><a href="#L-83"><span class="linenos">83</span></a>    <span class="p">),</span> <span class="nb">type</span><span class="p">(</span><span class="n">dc</span><span class="p">)</span>
-</span><span id="L-84"><a href="#L-84"><span class="linenos">84</span></a>
-</span><span id="L-85"><a href="#L-85"><span class="linenos">85</span></a>
-</span><span id="L-86"><a href="#L-86"><span class="linenos">86</span></a><span class="k">def</span><span class="w"> </span><span class="nf">dataclass_set_equals</span><span class="p">(</span>
-</span><span id="L-87"><a href="#L-87"><span class="linenos">87</span></a>    <span class="n">coll1</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">IsDataclass</span><span class="p">],</span> <span class="n">coll2</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">IsDataclass</span><span class="p">]</span>
-</span><span id="L-88"><a href="#L-88"><span class="linenos">88</span></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-</span><span id="L-89"><a href="#L-89"><span class="linenos">89</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Compares 2 collections of dataclass instances as if they were sets.</span>
-</span><span id="L-90"><a href="#L-90"><span class="linenos">90</span></a><span class="sd">    Duplicates are ignored in the same manner as a set.</span>
-</span><span id="L-91"><a href="#L-91"><span class="linenos">91</span></a><span class="sd">    Unfrozen dataclasses can&#39;t be placed in sets since they&#39;re not hashable.</span>
-</span><span id="L-92"><a href="#L-92"><span class="linenos">92</span></a><span class="sd">    Collections of them may be compared using this function.</span>
-</span><span id="L-93"><a href="#L-93"><span class="linenos">93</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="L-94"><a href="#L-94"><span class="linenos">94</span></a>
-</span><span id="L-95"><a href="#L-95"><span class="linenos">95</span></a>    <span class="k">return</span> <span class="p">{</span><span class="n">get_hashable_eq_attrs</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">coll1</span><span class="p">}</span> <span class="o">==</span> <span class="p">{</span>
-</span><span id="L-96"><a href="#L-96"><span class="linenos">96</span></a>        <span class="n">get_hashable_eq_attrs</span><span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">coll2</span>
-</span><span id="L-97"><a href="#L-97"><span class="linenos">97</span></a>    <span class="p">}</span>
+                        <div class="pdoc-code codehilite"><pre><span></span><span id="L-1"><a href="#L-1"><span class="linenos">  1</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+</span><span id="L-2"><a href="#L-2"><span class="linenos">  2</span></a>
+</span><span id="L-3"><a href="#L-3"><span class="linenos">  3</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+</span><span id="L-4"><a href="#L-4"><span class="linenos">  4</span></a>    <span class="n">Iterable</span><span class="p">,</span>
+</span><span id="L-5"><a href="#L-5"><span class="linenos">  5</span></a>    <span class="n">Any</span><span class="p">,</span>
+</span><span id="L-6"><a href="#L-6"><span class="linenos">  6</span></a>    <span class="n">Protocol</span><span class="p">,</span>
+</span><span id="L-7"><a href="#L-7"><span class="linenos">  7</span></a>    <span class="n">ClassVar</span><span class="p">,</span>
+</span><span id="L-8"><a href="#L-8"><span class="linenos">  8</span></a>    <span class="n">runtime_checkable</span><span class="p">,</span>
+</span><span id="L-9"><a href="#L-9"><span class="linenos">  9</span></a><span class="p">)</span>
+</span><span id="L-10"><a href="#L-10"><span class="linenos"> 10</span></a>
+</span><span id="L-11"><a href="#L-11"><span class="linenos"> 11</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">muutils.misc.sequence</span><span class="w"> </span><span class="kn">import</span> <span class="n">flatten</span>
+</span><span id="L-12"><a href="#L-12"><span class="linenos"> 12</span></a>
+</span><span id="L-13"><a href="#L-13"><span class="linenos"> 13</span></a>
+</span><span id="L-14"><a href="#L-14"><span class="linenos"> 14</span></a><span class="k">def</span><span class="w"> </span><span class="nf">is_abstract</span><span class="p">(</span><span class="bp">cls</span><span class="p">:</span> <span class="nb">type</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</span><span id="L-15"><a href="#L-15"><span class="linenos"> 15</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-16"><a href="#L-16"><span class="linenos"> 16</span></a><span class="sd">    Returns if a class is abstract.</span>
+</span><span id="L-17"><a href="#L-17"><span class="linenos"> 17</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="L-18"><a href="#L-18"><span class="linenos"> 18</span></a>    <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="s2">&quot;__abstractmethods__&quot;</span><span class="p">):</span>
+</span><span id="L-19"><a href="#L-19"><span class="linenos"> 19</span></a>        <span class="k">return</span> <span class="kc">False</span>  <span class="c1"># an ordinary class</span>
+</span><span id="L-20"><a href="#L-20"><span class="linenos"> 20</span></a>    <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">__abstractmethods__</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>  <span class="c1"># type: ignore[invalid-argument-type] # pyright: ignore[reportUnknownMemberType, reportUnknownArgumentType]</span>
+</span><span id="L-21"><a href="#L-21"><span class="linenos"> 21</span></a>        <span class="k">return</span> <span class="kc">False</span>  <span class="c1"># a concrete implementation of an abstract class</span>
+</span><span id="L-22"><a href="#L-22"><span class="linenos"> 22</span></a>    <span class="k">else</span><span class="p">:</span>
+</span><span id="L-23"><a href="#L-23"><span class="linenos"> 23</span></a>        <span class="k">return</span> <span class="kc">True</span>  <span class="c1"># an abstract class</span>
+</span><span id="L-24"><a href="#L-24"><span class="linenos"> 24</span></a>
+</span><span id="L-25"><a href="#L-25"><span class="linenos"> 25</span></a>
+</span><span id="L-26"><a href="#L-26"><span class="linenos"> 26</span></a><span class="k">def</span><span class="w"> </span><span class="nf">get_all_subclasses</span><span class="p">(</span><span class="n">class_</span><span class="p">:</span> <span class="nb">type</span><span class="p">,</span> <span class="n">include_self</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">set</span><span class="p">[</span><span class="nb">type</span><span class="p">]:</span>
+</span><span id="L-27"><a href="#L-27"><span class="linenos"> 27</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-28"><a href="#L-28"><span class="linenos"> 28</span></a><span class="sd">    Returns a set containing all child classes in the subclass graph of `class_`.</span>
+</span><span id="L-29"><a href="#L-29"><span class="linenos"> 29</span></a><span class="sd">    I.e., includes subclasses of subclasses, etc.</span>
+</span><span id="L-30"><a href="#L-30"><span class="linenos"> 30</span></a>
+</span><span id="L-31"><a href="#L-31"><span class="linenos"> 31</span></a><span class="sd">    # Parameters</span>
+</span><span id="L-32"><a href="#L-32"><span class="linenos"> 32</span></a><span class="sd">    - `include_self`: Whether to include `class_` itself in the returned set</span>
+</span><span id="L-33"><a href="#L-33"><span class="linenos"> 33</span></a><span class="sd">    - `class_`: Superclass</span>
+</span><span id="L-34"><a href="#L-34"><span class="linenos"> 34</span></a>
+</span><span id="L-35"><a href="#L-35"><span class="linenos"> 35</span></a><span class="sd">    # Development</span>
+</span><span id="L-36"><a href="#L-36"><span class="linenos"> 36</span></a><span class="sd">    Since most class hierarchies are small, the inefficiencies of the existing recursive implementation aren&#39;t problematic.</span>
+</span><span id="L-37"><a href="#L-37"><span class="linenos"> 37</span></a><span class="sd">    It might be valuable to refactor with memoization if the need arises to use this function on a very large class hierarchy.</span>
+</span><span id="L-38"><a href="#L-38"><span class="linenos"> 38</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="L-39"><a href="#L-39"><span class="linenos"> 39</span></a>    <span class="n">subs</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="nb">type</span><span class="p">]</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span>
+</span><span id="L-40"><a href="#L-40"><span class="linenos"> 40</span></a>        <span class="n">flatten</span><span class="p">(</span>
+</span><span id="L-41"><a href="#L-41"><span class="linenos"> 41</span></a>            <span class="n">get_all_subclasses</span><span class="p">(</span><span class="n">sub</span><span class="p">,</span> <span class="n">include_self</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span id="L-42"><a href="#L-42"><span class="linenos"> 42</span></a>            <span class="k">for</span> <span class="n">sub</span> <span class="ow">in</span> <span class="n">class_</span><span class="o">.</span><span class="n">__subclasses__</span><span class="p">()</span>
+</span><span id="L-43"><a href="#L-43"><span class="linenos"> 43</span></a>            <span class="k">if</span> <span class="n">sub</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+</span><span id="L-44"><a href="#L-44"><span class="linenos"> 44</span></a>        <span class="p">)</span>
+</span><span id="L-45"><a href="#L-45"><span class="linenos"> 45</span></a>    <span class="p">)</span>
+</span><span id="L-46"><a href="#L-46"><span class="linenos"> 46</span></a>    <span class="k">if</span> <span class="n">include_self</span><span class="p">:</span>
+</span><span id="L-47"><a href="#L-47"><span class="linenos"> 47</span></a>        <span class="n">subs</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">class_</span><span class="p">)</span>
+</span><span id="L-48"><a href="#L-48"><span class="linenos"> 48</span></a>    <span class="k">return</span> <span class="n">subs</span>
+</span><span id="L-49"><a href="#L-49"><span class="linenos"> 49</span></a>
+</span><span id="L-50"><a href="#L-50"><span class="linenos"> 50</span></a>
+</span><span id="L-51"><a href="#L-51"><span class="linenos"> 51</span></a><span class="k">def</span><span class="w"> </span><span class="nf">isinstance_by_type_name</span><span class="p">(</span><span class="n">o</span><span class="p">:</span> <span class="nb">object</span><span class="p">,</span> <span class="n">type_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+</span><span id="L-52"><a href="#L-52"><span class="linenos"> 52</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Behaves like stdlib `isinstance` except it accepts a string representation of the type rather than the type itself.</span>
+</span><span id="L-53"><a href="#L-53"><span class="linenos"> 53</span></a><span class="sd">    This is a hacky function intended to circumvent the need to import a type into a module.</span>
+</span><span id="L-54"><a href="#L-54"><span class="linenos"> 54</span></a><span class="sd">    It is susceptible to type name collisions.</span>
+</span><span id="L-55"><a href="#L-55"><span class="linenos"> 55</span></a>
+</span><span id="L-56"><a href="#L-56"><span class="linenos"> 56</span></a><span class="sd">    # Parameters</span>
+</span><span id="L-57"><a href="#L-57"><span class="linenos"> 57</span></a><span class="sd">    `o`: Object (not the type itself) whose type to interrogate</span>
+</span><span id="L-58"><a href="#L-58"><span class="linenos"> 58</span></a><span class="sd">    `type_name`: The string returned by `type_.__name__`.</span>
+</span><span id="L-59"><a href="#L-59"><span class="linenos"> 59</span></a><span class="sd">    Generic types are not supported, only types that would appear in `type_.__mro__`.</span>
+</span><span id="L-60"><a href="#L-60"><span class="linenos"> 60</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="L-61"><a href="#L-61"><span class="linenos"> 61</span></a>    <span class="k">return</span> <span class="n">type_name</span> <span class="ow">in</span> <span class="p">{</span><span class="n">s</span><span class="o">.</span><span class="vm">__name__</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">type</span><span class="p">(</span><span class="n">o</span><span class="p">)</span><span class="o">.</span><span class="vm">__mro__</span><span class="p">}</span>
+</span><span id="L-62"><a href="#L-62"><span class="linenos"> 62</span></a>
+</span><span id="L-63"><a href="#L-63"><span class="linenos"> 63</span></a>
+</span><span id="L-64"><a href="#L-64"><span class="linenos"> 64</span></a><span class="c1"># dataclass magic</span>
+</span><span id="L-65"><a href="#L-65"><span class="linenos"> 65</span></a><span class="c1"># --------------------------------------------------------------------------------</span>
+</span><span id="L-66"><a href="#L-66"><span class="linenos"> 66</span></a>
+</span><span id="L-67"><a href="#L-67"><span class="linenos"> 67</span></a>
+</span><span id="L-68"><a href="#L-68"><span class="linenos"> 68</span></a><span class="nd">@runtime_checkable</span>
+</span><span id="L-69"><a href="#L-69"><span class="linenos"> 69</span></a><span class="k">class</span><span class="w"> </span><span class="nc">IsDataclass</span><span class="p">(</span><span class="n">Protocol</span><span class="p">):</span>
+</span><span id="L-70"><a href="#L-70"><span class="linenos"> 70</span></a>    <span class="c1"># Generic type for any dataclass instance</span>
+</span><span id="L-71"><a href="#L-71"><span class="linenos"> 71</span></a>    <span class="c1"># https://stackoverflow.com/questions/54668000/type-hint-for-an-instance-of-a-non-specific-dataclass</span>
+</span><span id="L-72"><a href="#L-72"><span class="linenos"> 72</span></a>    <span class="n">__dataclass_fields__</span><span class="p">:</span> <span class="n">ClassVar</span><span class="p">[</span><span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span>  <span class="c1"># pyright: ignore[reportExplicitAny]</span>
+</span><span id="L-73"><a href="#L-73"><span class="linenos"> 73</span></a>
+</span><span id="L-74"><a href="#L-74"><span class="linenos"> 74</span></a>
+</span><span id="L-75"><a href="#L-75"><span class="linenos"> 75</span></a><span class="k">def</span><span class="w"> </span><span class="nf">get_hashable_eq_attrs</span><span class="p">(</span><span class="n">dc</span><span class="p">:</span> <span class="n">IsDataclass</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Any</span><span class="p">]:</span>  <span class="c1"># pyright: ignore[reportExplicitAny]</span>
+</span><span id="L-76"><a href="#L-76"><span class="linenos"> 76</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns a tuple of all fields used for equality comparison, including the type of the dataclass itself.</span>
+</span><span id="L-77"><a href="#L-77"><span class="linenos"> 77</span></a><span class="sd">    The type is included to preserve the unequal equality behavior of instances of different dataclasses whose fields are identical.</span>
+</span><span id="L-78"><a href="#L-78"><span class="linenos"> 78</span></a><span class="sd">    Essentially used to generate a hashable dataclass representation for equality comparison even if it&#39;s not frozen.</span>
+</span><span id="L-79"><a href="#L-79"><span class="linenos"> 79</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="L-80"><a href="#L-80"><span class="linenos"> 80</span></a>    <span class="c1"># TYPING: ty gives @Todo here</span>
+</span><span id="L-81"><a href="#L-81"><span class="linenos"> 81</span></a>    <span class="k">return</span> <span class="p">(</span>  <span class="c1"># type: ignore[invalid-return-type]</span>
+</span><span id="L-82"><a href="#L-82"><span class="linenos"> 82</span></a>        <span class="o">*</span><span class="p">(</span>
+</span><span id="L-83"><a href="#L-83"><span class="linenos"> 83</span></a>            <span class="nb">getattr</span><span class="p">(</span><span class="n">dc</span><span class="p">,</span> <span class="n">fld</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+</span><span id="L-84"><a href="#L-84"><span class="linenos"> 84</span></a>            <span class="k">for</span> <span class="n">fld</span> <span class="ow">in</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">compare</span><span class="p">,</span> <span class="n">dc</span><span class="o">.</span><span class="n">__dataclass_fields__</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+</span><span id="L-85"><a href="#L-85"><span class="linenos"> 85</span></a>        <span class="p">),</span>
+</span><span id="L-86"><a href="#L-86"><span class="linenos"> 86</span></a>        <span class="nb">type</span><span class="p">(</span><span class="n">dc</span><span class="p">),</span>
+</span><span id="L-87"><a href="#L-87"><span class="linenos"> 87</span></a>    <span class="p">)</span>
+</span><span id="L-88"><a href="#L-88"><span class="linenos"> 88</span></a>
+</span><span id="L-89"><a href="#L-89"><span class="linenos"> 89</span></a>
+</span><span id="L-90"><a href="#L-90"><span class="linenos"> 90</span></a><span class="k">def</span><span class="w"> </span><span class="nf">dataclass_set_equals</span><span class="p">(</span>
+</span><span id="L-91"><a href="#L-91"><span class="linenos"> 91</span></a>    <span class="n">coll1</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">IsDataclass</span><span class="p">],</span> <span class="n">coll2</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">IsDataclass</span><span class="p">]</span>
+</span><span id="L-92"><a href="#L-92"><span class="linenos"> 92</span></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</span><span id="L-93"><a href="#L-93"><span class="linenos"> 93</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Compares 2 collections of dataclass instances as if they were sets.</span>
+</span><span id="L-94"><a href="#L-94"><span class="linenos"> 94</span></a><span class="sd">    Duplicates are ignored in the same manner as a set.</span>
+</span><span id="L-95"><a href="#L-95"><span class="linenos"> 95</span></a><span class="sd">    Unfrozen dataclasses can&#39;t be placed in sets since they&#39;re not hashable.</span>
+</span><span id="L-96"><a href="#L-96"><span class="linenos"> 96</span></a><span class="sd">    Collections of them may be compared using this function.</span>
+</span><span id="L-97"><a href="#L-97"><span class="linenos"> 97</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="L-98"><a href="#L-98"><span class="linenos"> 98</span></a>
+</span><span id="L-99"><a href="#L-99"><span class="linenos"> 99</span></a>    <span class="k">return</span> <span class="p">{</span><span class="n">get_hashable_eq_attrs</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">coll1</span><span class="p">}</span> <span class="o">==</span> <span class="p">{</span>
+</span><span id="L-100"><a href="#L-100"><span class="linenos">100</span></a>        <span class="n">get_hashable_eq_attrs</span><span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">coll2</span>
+</span><span id="L-101"><a href="#L-101"><span class="linenos">101</span></a>    <span class="p">}</span>
 </span></pre></div>
 
 
@@ -244,7 +248,7 @@
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="is_abstract-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/misc/classes.py#L14-L23" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.9.0misc/classes.py#L14-L23" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -258,7 +262,7 @@
 </span><span id="is_abstract-18"><a href="#is_abstract-18"><span class="linenos">18</span></a><span class="sd">    &quot;&quot;&quot;</span>
 </span><span id="is_abstract-19"><a href="#is_abstract-19"><span class="linenos">19</span></a>    <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="s2">&quot;__abstractmethods__&quot;</span><span class="p">):</span>
 </span><span id="is_abstract-20"><a href="#is_abstract-20"><span class="linenos">20</span></a>        <span class="k">return</span> <span class="kc">False</span>  <span class="c1"># an ordinary class</span>
-</span><span id="is_abstract-21"><a href="#is_abstract-21"><span class="linenos">21</span></a>    <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">__abstractmethods__</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+</span><span id="is_abstract-21"><a href="#is_abstract-21"><span class="linenos">21</span></a>    <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">__abstractmethods__</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>  <span class="c1"># type: ignore[invalid-argument-type] # pyright: ignore[reportUnknownMemberType, reportUnknownArgumentType]</span>
 </span><span id="is_abstract-22"><a href="#is_abstract-22"><span class="linenos">22</span></a>        <span class="k">return</span> <span class="kc">False</span>  <span class="c1"># a concrete implementation of an abstract class</span>
 </span><span id="is_abstract-23"><a href="#is_abstract-23"><span class="linenos">23</span></a>    <span class="k">else</span><span class="p">:</span>
 </span><span id="is_abstract-24"><a href="#is_abstract-24"><span class="linenos">24</span></a>        <span class="k">return</span> <span class="kc">True</span>  <span class="c1"># an abstract class</span>
@@ -280,7 +284,7 @@
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="get_all_subclasses-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/misc/classes.py#L26-L48" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.9.0misc/classes.py#L26-L48" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -342,7 +346,7 @@ It might be valuable to refactor with memoization if the need arises to use this
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="isinstance_by_type_name-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/misc/classes.py#L51-L61" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.9.0misc/classes.py#L51-L61" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -388,7 +392,7 @@ Generic types are not supported, only types that would appear in <code>type_.__m
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="IsDataclass-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/misc/classes.py#L68-L72" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.9.0misc/classes.py#L68-L72" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -400,7 +404,7 @@ Generic types are not supported, only types that would appear in <code>type_.__m
 </span><span id="IsDataclass-70"><a href="#IsDataclass-70"><span class="linenos">70</span></a><span class="k">class</span><span class="w"> </span><span class="nc">IsDataclass</span><span class="p">(</span><span class="n">Protocol</span><span class="p">):</span>
 </span><span id="IsDataclass-71"><a href="#IsDataclass-71"><span class="linenos">71</span></a>    <span class="c1"># Generic type for any dataclass instance</span>
 </span><span id="IsDataclass-72"><a href="#IsDataclass-72"><span class="linenos">72</span></a>    <span class="c1"># https://stackoverflow.com/questions/54668000/type-hint-for-an-instance-of-a-non-specific-dataclass</span>
-</span><span id="IsDataclass-73"><a href="#IsDataclass-73"><span class="linenos">73</span></a>    <span class="n">__dataclass_fields__</span><span class="p">:</span> <span class="n">ClassVar</span><span class="p">[</span><span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span>
+</span><span id="IsDataclass-73"><a href="#IsDataclass-73"><span class="linenos">73</span></a>    <span class="n">__dataclass_fields__</span><span class="p">:</span> <span class="n">ClassVar</span><span class="p">[</span><span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span>  <span class="c1"># pyright: ignore[reportExplicitAny]</span>
 </span></pre></div>
 
 
@@ -449,7 +453,7 @@ Protocol classes can be generic, they are defined as::</p>
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="IsDataclass.__init__-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/misc/classes.py#L1944-L1970" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.9.0misc/classes.py#L1944-L1970" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -501,7 +505,7 @@ Protocol classes can be generic, they are defined as::</p>
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="get_hashable_eq_attrs-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/misc/classes.py#L75-L83" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.9.0misc/classes.py#L75-L87" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -509,15 +513,19 @@ Protocol classes can be generic, they are defined as::</p>
 
     </div>
     <a class="headerlink" href="#get_hashable_eq_attrs"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="get_hashable_eq_attrs-76"><a href="#get_hashable_eq_attrs-76"><span class="linenos">76</span></a><span class="k">def</span><span class="w"> </span><span class="nf">get_hashable_eq_attrs</span><span class="p">(</span><span class="n">dc</span><span class="p">:</span> <span class="n">IsDataclass</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Any</span><span class="p">]:</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="get_hashable_eq_attrs-76"><a href="#get_hashable_eq_attrs-76"><span class="linenos">76</span></a><span class="k">def</span><span class="w"> </span><span class="nf">get_hashable_eq_attrs</span><span class="p">(</span><span class="n">dc</span><span class="p">:</span> <span class="n">IsDataclass</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Any</span><span class="p">]:</span>  <span class="c1"># pyright: ignore[reportExplicitAny]</span>
 </span><span id="get_hashable_eq_attrs-77"><a href="#get_hashable_eq_attrs-77"><span class="linenos">77</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns a tuple of all fields used for equality comparison, including the type of the dataclass itself.</span>
 </span><span id="get_hashable_eq_attrs-78"><a href="#get_hashable_eq_attrs-78"><span class="linenos">78</span></a><span class="sd">    The type is included to preserve the unequal equality behavior of instances of different dataclasses whose fields are identical.</span>
 </span><span id="get_hashable_eq_attrs-79"><a href="#get_hashable_eq_attrs-79"><span class="linenos">79</span></a><span class="sd">    Essentially used to generate a hashable dataclass representation for equality comparison even if it&#39;s not frozen.</span>
 </span><span id="get_hashable_eq_attrs-80"><a href="#get_hashable_eq_attrs-80"><span class="linenos">80</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="get_hashable_eq_attrs-81"><a href="#get_hashable_eq_attrs-81"><span class="linenos">81</span></a>    <span class="k">return</span> <span class="o">*</span><span class="p">(</span>
-</span><span id="get_hashable_eq_attrs-82"><a href="#get_hashable_eq_attrs-82"><span class="linenos">82</span></a>        <span class="nb">getattr</span><span class="p">(</span><span class="n">dc</span><span class="p">,</span> <span class="n">fld</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
-</span><span id="get_hashable_eq_attrs-83"><a href="#get_hashable_eq_attrs-83"><span class="linenos">83</span></a>        <span class="k">for</span> <span class="n">fld</span> <span class="ow">in</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">compare</span><span class="p">,</span> <span class="n">dc</span><span class="o">.</span><span class="n">__dataclass_fields__</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
-</span><span id="get_hashable_eq_attrs-84"><a href="#get_hashable_eq_attrs-84"><span class="linenos">84</span></a>    <span class="p">),</span> <span class="nb">type</span><span class="p">(</span><span class="n">dc</span><span class="p">)</span>
+</span><span id="get_hashable_eq_attrs-81"><a href="#get_hashable_eq_attrs-81"><span class="linenos">81</span></a>    <span class="c1"># TYPING: ty gives @Todo here</span>
+</span><span id="get_hashable_eq_attrs-82"><a href="#get_hashable_eq_attrs-82"><span class="linenos">82</span></a>    <span class="k">return</span> <span class="p">(</span>  <span class="c1"># type: ignore[invalid-return-type]</span>
+</span><span id="get_hashable_eq_attrs-83"><a href="#get_hashable_eq_attrs-83"><span class="linenos">83</span></a>        <span class="o">*</span><span class="p">(</span>
+</span><span id="get_hashable_eq_attrs-84"><a href="#get_hashable_eq_attrs-84"><span class="linenos">84</span></a>            <span class="nb">getattr</span><span class="p">(</span><span class="n">dc</span><span class="p">,</span> <span class="n">fld</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+</span><span id="get_hashable_eq_attrs-85"><a href="#get_hashable_eq_attrs-85"><span class="linenos">85</span></a>            <span class="k">for</span> <span class="n">fld</span> <span class="ow">in</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">compare</span><span class="p">,</span> <span class="n">dc</span><span class="o">.</span><span class="n">__dataclass_fields__</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+</span><span id="get_hashable_eq_attrs-86"><a href="#get_hashable_eq_attrs-86"><span class="linenos">86</span></a>        <span class="p">),</span>
+</span><span id="get_hashable_eq_attrs-87"><a href="#get_hashable_eq_attrs-87"><span class="linenos">87</span></a>        <span class="nb">type</span><span class="p">(</span><span class="n">dc</span><span class="p">),</span>
+</span><span id="get_hashable_eq_attrs-88"><a href="#get_hashable_eq_attrs-88"><span class="linenos">88</span></a>    <span class="p">)</span>
 </span></pre></div>
 
 
@@ -538,7 +546,7 @@ Essentially used to generate a hashable dataclass representation for equality co
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="dataclass_set_equals-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/misc/classes.py#L86-L97" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.9.0misc/classes.py#L90-L101" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -546,18 +554,18 @@ Essentially used to generate a hashable dataclass representation for equality co
 
     </div>
     <a class="headerlink" href="#dataclass_set_equals"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="dataclass_set_equals-87"><a href="#dataclass_set_equals-87"><span class="linenos">87</span></a><span class="k">def</span><span class="w"> </span><span class="nf">dataclass_set_equals</span><span class="p">(</span>
-</span><span id="dataclass_set_equals-88"><a href="#dataclass_set_equals-88"><span class="linenos">88</span></a>    <span class="n">coll1</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">IsDataclass</span><span class="p">],</span> <span class="n">coll2</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">IsDataclass</span><span class="p">]</span>
-</span><span id="dataclass_set_equals-89"><a href="#dataclass_set_equals-89"><span class="linenos">89</span></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-</span><span id="dataclass_set_equals-90"><a href="#dataclass_set_equals-90"><span class="linenos">90</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Compares 2 collections of dataclass instances as if they were sets.</span>
-</span><span id="dataclass_set_equals-91"><a href="#dataclass_set_equals-91"><span class="linenos">91</span></a><span class="sd">    Duplicates are ignored in the same manner as a set.</span>
-</span><span id="dataclass_set_equals-92"><a href="#dataclass_set_equals-92"><span class="linenos">92</span></a><span class="sd">    Unfrozen dataclasses can&#39;t be placed in sets since they&#39;re not hashable.</span>
-</span><span id="dataclass_set_equals-93"><a href="#dataclass_set_equals-93"><span class="linenos">93</span></a><span class="sd">    Collections of them may be compared using this function.</span>
-</span><span id="dataclass_set_equals-94"><a href="#dataclass_set_equals-94"><span class="linenos">94</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="dataclass_set_equals-95"><a href="#dataclass_set_equals-95"><span class="linenos">95</span></a>
-</span><span id="dataclass_set_equals-96"><a href="#dataclass_set_equals-96"><span class="linenos">96</span></a>    <span class="k">return</span> <span class="p">{</span><span class="n">get_hashable_eq_attrs</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">coll1</span><span class="p">}</span> <span class="o">==</span> <span class="p">{</span>
-</span><span id="dataclass_set_equals-97"><a href="#dataclass_set_equals-97"><span class="linenos">97</span></a>        <span class="n">get_hashable_eq_attrs</span><span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">coll2</span>
-</span><span id="dataclass_set_equals-98"><a href="#dataclass_set_equals-98"><span class="linenos">98</span></a>    <span class="p">}</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="dataclass_set_equals-91"><a href="#dataclass_set_equals-91"><span class="linenos"> 91</span></a><span class="k">def</span><span class="w"> </span><span class="nf">dataclass_set_equals</span><span class="p">(</span>
+</span><span id="dataclass_set_equals-92"><a href="#dataclass_set_equals-92"><span class="linenos"> 92</span></a>    <span class="n">coll1</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">IsDataclass</span><span class="p">],</span> <span class="n">coll2</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">IsDataclass</span><span class="p">]</span>
+</span><span id="dataclass_set_equals-93"><a href="#dataclass_set_equals-93"><span class="linenos"> 93</span></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</span><span id="dataclass_set_equals-94"><a href="#dataclass_set_equals-94"><span class="linenos"> 94</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Compares 2 collections of dataclass instances as if they were sets.</span>
+</span><span id="dataclass_set_equals-95"><a href="#dataclass_set_equals-95"><span class="linenos"> 95</span></a><span class="sd">    Duplicates are ignored in the same manner as a set.</span>
+</span><span id="dataclass_set_equals-96"><a href="#dataclass_set_equals-96"><span class="linenos"> 96</span></a><span class="sd">    Unfrozen dataclasses can&#39;t be placed in sets since they&#39;re not hashable.</span>
+</span><span id="dataclass_set_equals-97"><a href="#dataclass_set_equals-97"><span class="linenos"> 97</span></a><span class="sd">    Collections of them may be compared using this function.</span>
+</span><span id="dataclass_set_equals-98"><a href="#dataclass_set_equals-98"><span class="linenos"> 98</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="dataclass_set_equals-99"><a href="#dataclass_set_equals-99"><span class="linenos"> 99</span></a>
+</span><span id="dataclass_set_equals-100"><a href="#dataclass_set_equals-100"><span class="linenos">100</span></a>    <span class="k">return</span> <span class="p">{</span><span class="n">get_hashable_eq_attrs</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">coll1</span><span class="p">}</span> <span class="o">==</span> <span class="p">{</span>
+</span><span id="dataclass_set_equals-101"><a href="#dataclass_set_equals-101"><span class="linenos">101</span></a>        <span class="n">get_hashable_eq_attrs</span><span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">coll2</span>
+</span><span id="dataclass_set_equals-102"><a href="#dataclass_set_equals-102"><span class="linenos">102</span></a>    <span class="p">}</span>
 </span></pre></div>
 
 

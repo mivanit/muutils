@@ -13,11 +13,15 @@ from muutils.dbg import (
     _process_path,
     _CWD,
     # we do use this as a global in `test_dbg_counter_increments`
-    _COUNTER,  # noqa: F401
+    _COUNTER,
+    dbg_auto,
+    dbg_dict,  # noqa: F401
     grep_repr,
     _normalize_for_loose,
     _compile_pattern,
 )
+
+assert _COUNTER is not None
 
 
 DBG_MODULE_NAME: str = "muutils.dbg"
@@ -135,7 +139,7 @@ def test_dbg_custom_formatter(capsys: pytest.CaptureFixture) -> None:
 
 def test_dbg_complex_expression(capsys: pytest.CaptureFixture) -> None:
     # Test a complex expression (lambda invocation)
-    result: int = dbg((lambda x: x * x)(5))
+    result: int = dbg((lambda x: x * x)(5))  # pyright: ignore[reportCallIssue, reportArgumentType]
     captured: str = capsys.readouterr().err
     assert (
         "lambda" in captured
@@ -217,6 +221,14 @@ def test_dbg_incomplete_expression(
 def test_dbg_non_callable_formatter() -> None:
     with pytest.raises(TypeError):
         dbg(42, formatter="not callable")  # type: ignore
+
+
+def test_misc() -> None:
+    d1 = {"apple": 1, "banana": 2, "cherry": 3}
+    dbg_dict(d1)
+    dbg_auto(d1)
+    l1 = [10, 20, 30]
+    dbg_auto(l1)
 
 
 # # --- Tests for tensor_info_dict and tensor_info ---

@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="generator" content="pdoc 15.0.4"/>
+    <meta name="generator" content="pdoc 16.0.0"/>
     <title>muutils.logger.exception_context API documentation</title>
 <link rel="stylesheet" href="../../resources/css/bootstrap-reboot.min.css"><link rel="stylesheet" href="../../resources/css/syntax-highlighting.css"><link rel="stylesheet" href="../../resources/css/theme.css"><link rel="stylesheet" href="../../resources/css/layout.css"><link rel="stylesheet" href="../../resources/css/content.css"><link rel="stylesheet" href="../../resources/css/custom.css"><script>
     window.MathJax = {
@@ -46,7 +46,7 @@
 </script></head>
 <body>
 <div class="package-version">
-    docs for <a href="https://github.com/mivanit/muutils">muutils</a> v0.8.12<br>
+    docs for <a href="https://github.com/mivanit/muutils">muutils</a> v0.9.0<br>
 </div>
     <nav class="pdoc">
         <label id="navtoggle" for="togglestate" class="pdoc-button">
@@ -65,6 +65,18 @@
 
             <h2>API Documentation</h2>
                 <ul class="memberlist">
+            <li>
+                    <a class="class" href="#WritableStream">WritableStream</a>
+                            <ul class="memberlist">
+                        <li>
+                                <a class="function" href="#WritableStream.__init__">WritableStream</a>
+                        </li>
+                        <li>
+                                <a class="function" href="#WritableStream.write">write</a>
+                        </li>
+                </ul>
+
+            </li>
             <li>
                     <a class="class" href="#ExceptionContext">ExceptionContext</a>
                             <ul class="memberlist">
@@ -103,7 +115,7 @@
     </nav>
     <main class="pdoc">
             <section class="module-info">
-                        <a class="pdoc-button git-button" href="https://github.com/mivanit/muutils/blob/0.8.12/logger/exception_context.py">View Source on GitHub</a>
+                        <a class="pdoc-button git-button" href="https://github.com/mivanit/muutils/blob/0.9.0logger/exception_context.py">View Source on GitHub</a>
                     <h1 class="modulename">
 <a href="./../../muutils.html">muutils</a><wbr>.<a href="./../logger.html">logger</a><wbr>.exception_context    </h1>
 
@@ -113,61 +125,181 @@
                         <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="mod-exception_context-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/logger/exception_context.py#L0-L42" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.9.0logger/exception_context.py#L0-L57" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
         </div>
 
                 <br/>
-                        <div class="pdoc-code codehilite"><pre><span></span><span id="L-1"><a href="#L-1"><span class="linenos"> 1</span></a><span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+                        <div class="pdoc-code codehilite"><pre><span></span><span id="L-1"><a href="#L-1"><span class="linenos"> 1</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
 </span><span id="L-2"><a href="#L-2"><span class="linenos"> 2</span></a>
-</span><span id="L-3"><a href="#L-3"><span class="linenos"> 3</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">muutils.json_serialize</span><span class="w"> </span><span class="kn">import</span> <span class="n">json_serialize</span>
-</span><span id="L-4"><a href="#L-4"><span class="linenos"> 4</span></a>
-</span><span id="L-5"><a href="#L-5"><span class="linenos"> 5</span></a>
-</span><span id="L-6"><a href="#L-6"><span class="linenos"> 6</span></a><span class="k">class</span><span class="w"> </span><span class="nc">ExceptionContext</span><span class="p">:</span>
-</span><span id="L-7"><a href="#L-7"><span class="linenos"> 7</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;context manager which catches all exceptions happening while the context is open, `.write()` the exception trace to the given stream, and then raises the exception</span>
+</span><span id="L-3"><a href="#L-3"><span class="linenos"> 3</span></a><span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+</span><span id="L-4"><a href="#L-4"><span class="linenos"> 4</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">types</span><span class="w"> </span><span class="kn">import</span> <span class="n">TracebackType</span>
+</span><span id="L-5"><a href="#L-5"><span class="linenos"> 5</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Protocol</span>
+</span><span id="L-6"><a href="#L-6"><span class="linenos"> 6</span></a>
+</span><span id="L-7"><a href="#L-7"><span class="linenos"> 7</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">muutils.json_serialize</span><span class="w"> </span><span class="kn">import</span> <span class="n">json_serialize</span>
 </span><span id="L-8"><a href="#L-8"><span class="linenos"> 8</span></a>
 </span><span id="L-9"><a href="#L-9"><span class="linenos"> 9</span></a>
-</span><span id="L-10"><a href="#L-10"><span class="linenos">10</span></a><span class="sd">    for example:</span>
-</span><span id="L-11"><a href="#L-11"><span class="linenos">11</span></a>
-</span><span id="L-12"><a href="#L-12"><span class="linenos">12</span></a><span class="sd">    ```python</span>
-</span><span id="L-13"><a href="#L-13"><span class="linenos">13</span></a><span class="sd">    errorfile = open(&#39;error.log&#39;, &#39;w&#39;)</span>
+</span><span id="L-10"><a href="#L-10"><span class="linenos">10</span></a><span class="k">class</span><span class="w"> </span><span class="nc">WritableStream</span><span class="p">(</span><span class="n">Protocol</span><span class="p">):</span>
+</span><span id="L-11"><a href="#L-11"><span class="linenos">11</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Protocol for objects that support write operations.&quot;&quot;&quot;</span>
+</span><span id="L-12"><a href="#L-12"><span class="linenos">12</span></a>
+</span><span id="L-13"><a href="#L-13"><span class="linenos">13</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">write</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">__s</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span> <span class="o">...</span>
 </span><span id="L-14"><a href="#L-14"><span class="linenos">14</span></a>
-</span><span id="L-15"><a href="#L-15"><span class="linenos">15</span></a><span class="sd">    with ExceptionContext(errorfile):</span>
-</span><span id="L-16"><a href="#L-16"><span class="linenos">16</span></a><span class="sd">            # do something that might throw an exception</span>
-</span><span id="L-17"><a href="#L-17"><span class="linenos">17</span></a><span class="sd">            # if it does, the exception trace will be written to errorfile</span>
-</span><span id="L-18"><a href="#L-18"><span class="linenos">18</span></a><span class="sd">            # and then the exception will be raised</span>
-</span><span id="L-19"><a href="#L-19"><span class="linenos">19</span></a><span class="sd">    ```</span>
-</span><span id="L-20"><a href="#L-20"><span class="linenos">20</span></a>
-</span><span id="L-21"><a href="#L-21"><span class="linenos">21</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="L-22"><a href="#L-22"><span class="linenos">22</span></a>
-</span><span id="L-23"><a href="#L-23"><span class="linenos">23</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stream</span><span class="p">):</span>
-</span><span id="L-24"><a href="#L-24"><span class="linenos">24</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">stream</span> <span class="o">=</span> <span class="n">stream</span>
-</span><span id="L-25"><a href="#L-25"><span class="linenos">25</span></a>
-</span><span id="L-26"><a href="#L-26"><span class="linenos">26</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__enter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-</span><span id="L-27"><a href="#L-27"><span class="linenos">27</span></a>        <span class="k">return</span> <span class="bp">self</span>
-</span><span id="L-28"><a href="#L-28"><span class="linenos">28</span></a>
-</span><span id="L-29"><a href="#L-29"><span class="linenos">29</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__exit__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exc_type</span><span class="p">,</span> <span class="n">exc_value</span><span class="p">,</span> <span class="n">exc_traceback</span><span class="p">):</span>
-</span><span id="L-30"><a href="#L-30"><span class="linenos">30</span></a>        <span class="k">if</span> <span class="n">exc_type</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="L-31"><a href="#L-31"><span class="linenos">31</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">stream</span><span class="o">.</span><span class="n">write</span><span class="p">(</span>
-</span><span id="L-32"><a href="#L-32"><span class="linenos">32</span></a>                <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span>
-</span><span id="L-33"><a href="#L-33"><span class="linenos">33</span></a>                    <span class="n">json_serialize</span><span class="p">(</span>
-</span><span id="L-34"><a href="#L-34"><span class="linenos">34</span></a>                        <span class="p">{</span>
-</span><span id="L-35"><a href="#L-35"><span class="linenos">35</span></a>                            <span class="s2">&quot;exc_type&quot;</span><span class="p">:</span> <span class="n">exc_type</span><span class="p">,</span>
-</span><span id="L-36"><a href="#L-36"><span class="linenos">36</span></a>                            <span class="s2">&quot;exc_value&quot;</span><span class="p">:</span> <span class="n">exc_value</span><span class="p">,</span>
-</span><span id="L-37"><a href="#L-37"><span class="linenos">37</span></a>                            <span class="s2">&quot;exc_traceback&quot;</span><span class="p">:</span> <span class="n">exc_traceback</span><span class="p">,</span>
-</span><span id="L-38"><a href="#L-38"><span class="linenos">38</span></a>                        <span class="p">}</span>
-</span><span id="L-39"><a href="#L-39"><span class="linenos">39</span></a>                    <span class="p">)</span>
-</span><span id="L-40"><a href="#L-40"><span class="linenos">40</span></a>                <span class="p">)</span>
-</span><span id="L-41"><a href="#L-41"><span class="linenos">41</span></a>            <span class="p">)</span>
-</span><span id="L-42"><a href="#L-42"><span class="linenos">42</span></a>            <span class="k">return</span> <span class="kc">False</span>
-</span><span id="L-43"><a href="#L-43"><span class="linenos">43</span></a>        <span class="k">return</span> <span class="kc">True</span>
+</span><span id="L-15"><a href="#L-15"><span class="linenos">15</span></a>
+</span><span id="L-16"><a href="#L-16"><span class="linenos">16</span></a><span class="k">class</span><span class="w"> </span><span class="nc">ExceptionContext</span><span class="p">:</span>
+</span><span id="L-17"><a href="#L-17"><span class="linenos">17</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;context manager which catches all exceptions happening while the context is open, `.write()` the exception trace to the given stream, and then raises the exception</span>
+</span><span id="L-18"><a href="#L-18"><span class="linenos">18</span></a>
+</span><span id="L-19"><a href="#L-19"><span class="linenos">19</span></a>
+</span><span id="L-20"><a href="#L-20"><span class="linenos">20</span></a><span class="sd">    for example:</span>
+</span><span id="L-21"><a href="#L-21"><span class="linenos">21</span></a>
+</span><span id="L-22"><a href="#L-22"><span class="linenos">22</span></a><span class="sd">    ```python</span>
+</span><span id="L-23"><a href="#L-23"><span class="linenos">23</span></a><span class="sd">    errorfile = open(&#39;error.log&#39;, &#39;w&#39;)</span>
+</span><span id="L-24"><a href="#L-24"><span class="linenos">24</span></a>
+</span><span id="L-25"><a href="#L-25"><span class="linenos">25</span></a><span class="sd">    with ExceptionContext(errorfile):</span>
+</span><span id="L-26"><a href="#L-26"><span class="linenos">26</span></a><span class="sd">            # do something that might throw an exception</span>
+</span><span id="L-27"><a href="#L-27"><span class="linenos">27</span></a><span class="sd">            # if it does, the exception trace will be written to errorfile</span>
+</span><span id="L-28"><a href="#L-28"><span class="linenos">28</span></a><span class="sd">            # and then the exception will be raised</span>
+</span><span id="L-29"><a href="#L-29"><span class="linenos">29</span></a><span class="sd">    ```</span>
+</span><span id="L-30"><a href="#L-30"><span class="linenos">30</span></a>
+</span><span id="L-31"><a href="#L-31"><span class="linenos">31</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="L-32"><a href="#L-32"><span class="linenos">32</span></a>
+</span><span id="L-33"><a href="#L-33"><span class="linenos">33</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stream</span><span class="p">:</span> <span class="n">WritableStream</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="L-34"><a href="#L-34"><span class="linenos">34</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">stream</span><span class="p">:</span> <span class="n">WritableStream</span> <span class="o">=</span> <span class="n">stream</span>
+</span><span id="L-35"><a href="#L-35"><span class="linenos">35</span></a>
+</span><span id="L-36"><a href="#L-36"><span class="linenos">36</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__enter__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ExceptionContext</span><span class="p">:</span>
+</span><span id="L-37"><a href="#L-37"><span class="linenos">37</span></a>        <span class="k">return</span> <span class="bp">self</span>
+</span><span id="L-38"><a href="#L-38"><span class="linenos">38</span></a>
+</span><span id="L-39"><a href="#L-39"><span class="linenos">39</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__exit__</span><span class="p">(</span>
+</span><span id="L-40"><a href="#L-40"><span class="linenos">40</span></a>        <span class="bp">self</span><span class="p">,</span>
+</span><span id="L-41"><a href="#L-41"><span class="linenos">41</span></a>        <span class="n">exc_type</span><span class="p">:</span> <span class="nb">type</span><span class="p">[</span><span class="ne">BaseException</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span>
+</span><span id="L-42"><a href="#L-42"><span class="linenos">42</span></a>        <span class="n">exc_value</span><span class="p">:</span> <span class="ne">BaseException</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span>
+</span><span id="L-43"><a href="#L-43"><span class="linenos">43</span></a>        <span class="n">exc_traceback</span><span class="p">:</span> <span class="n">TracebackType</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span>
+</span><span id="L-44"><a href="#L-44"><span class="linenos">44</span></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</span><span id="L-45"><a href="#L-45"><span class="linenos">45</span></a>        <span class="k">if</span> <span class="n">exc_type</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="L-46"><a href="#L-46"><span class="linenos">46</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">stream</span><span class="o">.</span><span class="n">write</span><span class="p">(</span>
+</span><span id="L-47"><a href="#L-47"><span class="linenos">47</span></a>                <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span>
+</span><span id="L-48"><a href="#L-48"><span class="linenos">48</span></a>                    <span class="n">json_serialize</span><span class="p">(</span>
+</span><span id="L-49"><a href="#L-49"><span class="linenos">49</span></a>                        <span class="p">{</span>
+</span><span id="L-50"><a href="#L-50"><span class="linenos">50</span></a>                            <span class="s2">&quot;exc_type&quot;</span><span class="p">:</span> <span class="n">exc_type</span><span class="p">,</span>
+</span><span id="L-51"><a href="#L-51"><span class="linenos">51</span></a>                            <span class="s2">&quot;exc_value&quot;</span><span class="p">:</span> <span class="n">exc_value</span><span class="p">,</span>
+</span><span id="L-52"><a href="#L-52"><span class="linenos">52</span></a>                            <span class="s2">&quot;exc_traceback&quot;</span><span class="p">:</span> <span class="n">exc_traceback</span><span class="p">,</span>
+</span><span id="L-53"><a href="#L-53"><span class="linenos">53</span></a>                        <span class="p">}</span>
+</span><span id="L-54"><a href="#L-54"><span class="linenos">54</span></a>                    <span class="p">)</span>
+</span><span id="L-55"><a href="#L-55"><span class="linenos">55</span></a>                <span class="p">)</span>
+</span><span id="L-56"><a href="#L-56"><span class="linenos">56</span></a>            <span class="p">)</span>
+</span><span id="L-57"><a href="#L-57"><span class="linenos">57</span></a>            <span class="k">return</span> <span class="kc">False</span>
+</span><span id="L-58"><a href="#L-58"><span class="linenos">58</span></a>        <span class="k">return</span> <span class="kc">True</span>
 </span></pre></div>
 
 
                 <br/>
             </section>
+                <section id="WritableStream">
+                            <input id="WritableStream-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr class">
+            
+    <span class="def">class</span>
+    <span class="name">WritableStream</span><wbr>(<span class="base">typing.Protocol</span>):
+
+                <div class="source-button-container">
+            <label class="pdoc-button view-source-button" for="WritableStream-view-source"><span>View Source</span></label>
+            <div class="github-button-wrapper">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.9.0logger/exception_context.py#L10-L13" target="_blank">
+                    <span>View on GitHub</span>
+                </a>
+            </div>
+        </div>
+
+    </div>
+    <a class="headerlink" href="#WritableStream"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="WritableStream-11"><a href="#WritableStream-11"><span class="linenos">11</span></a><span class="k">class</span><span class="w"> </span><span class="nc">WritableStream</span><span class="p">(</span><span class="n">Protocol</span><span class="p">):</span>
+</span><span id="WritableStream-12"><a href="#WritableStream-12"><span class="linenos">12</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Protocol for objects that support write operations.&quot;&quot;&quot;</span>
+</span><span id="WritableStream-13"><a href="#WritableStream-13"><span class="linenos">13</span></a>
+</span><span id="WritableStream-14"><a href="#WritableStream-14"><span class="linenos">14</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">write</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">__s</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span> <span class="o">...</span>
+</span></pre></div>
+
+
+            <div class="docstring"><p>Protocol for objects that support write operations.</p>
+</div>
+
+
+                            <div id="WritableStream.__init__" class="classattr">
+                                        <input id="WritableStream.__init__-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr function">
+            
+        <span class="name">WritableStream</span><span class="signature pdoc-code condensed">(<span class="param"><span class="o">*</span><span class="n">args</span>, </span><span class="param"><span class="o">**</span><span class="n">kwargs</span></span>)</span>
+
+                <div class="source-button-container">
+            <label class="pdoc-button view-source-button" for="WritableStream.__init__-view-source"><span>View Source</span></label>
+            <div class="github-button-wrapper">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.9.0logger/exception_context.py#L1944-L1970" target="_blank">
+                    <span>View on GitHub</span>
+                </a>
+            </div>
+        </div>
+
+    </div>
+    <a class="headerlink" href="#WritableStream.__init__"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="WritableStream.__init__-1945"><a href="#WritableStream.__init__-1945"><span class="linenos">1945</span></a><span class="k">def</span><span class="w"> </span><span class="nf">_no_init_or_replace_init</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+</span><span id="WritableStream.__init__-1946"><a href="#WritableStream.__init__-1946"><span class="linenos">1946</span></a>    <span class="bp">cls</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</span><span id="WritableStream.__init__-1947"><a href="#WritableStream.__init__-1947"><span class="linenos">1947</span></a>
+</span><span id="WritableStream.__init__-1948"><a href="#WritableStream.__init__-1948"><span class="linenos">1948</span></a>    <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_is_protocol</span><span class="p">:</span>
+</span><span id="WritableStream.__init__-1949"><a href="#WritableStream.__init__-1949"><span class="linenos">1949</span></a>        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;Protocols cannot be instantiated&#39;</span><span class="p">)</span>
+</span><span id="WritableStream.__init__-1950"><a href="#WritableStream.__init__-1950"><span class="linenos">1950</span></a>
+</span><span id="WritableStream.__init__-1951"><a href="#WritableStream.__init__-1951"><span class="linenos">1951</span></a>    <span class="c1"># Already using a custom `__init__`. No need to calculate correct</span>
+</span><span id="WritableStream.__init__-1952"><a href="#WritableStream.__init__-1952"><span class="linenos">1952</span></a>    <span class="c1"># `__init__` to call. This can lead to RecursionError. See bpo-45121.</span>
+</span><span id="WritableStream.__init__-1953"><a href="#WritableStream.__init__-1953"><span class="linenos">1953</span></a>    <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="fm">__init__</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">_no_init_or_replace_init</span><span class="p">:</span>
+</span><span id="WritableStream.__init__-1954"><a href="#WritableStream.__init__-1954"><span class="linenos">1954</span></a>        <span class="k">return</span>
+</span><span id="WritableStream.__init__-1955"><a href="#WritableStream.__init__-1955"><span class="linenos">1955</span></a>
+</span><span id="WritableStream.__init__-1956"><a href="#WritableStream.__init__-1956"><span class="linenos">1956</span></a>    <span class="c1"># Initially, `__init__` of a protocol subclass is set to `_no_init_or_replace_init`.</span>
+</span><span id="WritableStream.__init__-1957"><a href="#WritableStream.__init__-1957"><span class="linenos">1957</span></a>    <span class="c1"># The first instantiation of the subclass will call `_no_init_or_replace_init` which</span>
+</span><span id="WritableStream.__init__-1958"><a href="#WritableStream.__init__-1958"><span class="linenos">1958</span></a>    <span class="c1"># searches for a proper new `__init__` in the MRO. The new `__init__`</span>
+</span><span id="WritableStream.__init__-1959"><a href="#WritableStream.__init__-1959"><span class="linenos">1959</span></a>    <span class="c1"># replaces the subclass&#39; old `__init__` (ie `_no_init_or_replace_init`). Subsequent</span>
+</span><span id="WritableStream.__init__-1960"><a href="#WritableStream.__init__-1960"><span class="linenos">1960</span></a>    <span class="c1"># instantiation of the protocol subclass will thus use the new</span>
+</span><span id="WritableStream.__init__-1961"><a href="#WritableStream.__init__-1961"><span class="linenos">1961</span></a>    <span class="c1"># `__init__` and no longer call `_no_init_or_replace_init`.</span>
+</span><span id="WritableStream.__init__-1962"><a href="#WritableStream.__init__-1962"><span class="linenos">1962</span></a>    <span class="k">for</span> <span class="n">base</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="vm">__mro__</span><span class="p">:</span>
+</span><span id="WritableStream.__init__-1963"><a href="#WritableStream.__init__-1963"><span class="linenos">1963</span></a>        <span class="n">init</span> <span class="o">=</span> <span class="n">base</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;__init__&#39;</span><span class="p">,</span> <span class="n">_no_init_or_replace_init</span><span class="p">)</span>
+</span><span id="WritableStream.__init__-1964"><a href="#WritableStream.__init__-1964"><span class="linenos">1964</span></a>        <span class="k">if</span> <span class="n">init</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">_no_init_or_replace_init</span><span class="p">:</span>
+</span><span id="WritableStream.__init__-1965"><a href="#WritableStream.__init__-1965"><span class="linenos">1965</span></a>            <span class="bp">cls</span><span class="o">.</span><span class="fm">__init__</span> <span class="o">=</span> <span class="n">init</span>
+</span><span id="WritableStream.__init__-1966"><a href="#WritableStream.__init__-1966"><span class="linenos">1966</span></a>            <span class="k">break</span>
+</span><span id="WritableStream.__init__-1967"><a href="#WritableStream.__init__-1967"><span class="linenos">1967</span></a>    <span class="k">else</span><span class="p">:</span>
+</span><span id="WritableStream.__init__-1968"><a href="#WritableStream.__init__-1968"><span class="linenos">1968</span></a>        <span class="c1"># should not happen</span>
+</span><span id="WritableStream.__init__-1969"><a href="#WritableStream.__init__-1969"><span class="linenos">1969</span></a>        <span class="bp">cls</span><span class="o">.</span><span class="fm">__init__</span> <span class="o">=</span> <span class="nb">object</span><span class="o">.</span><span class="fm">__init__</span>
+</span><span id="WritableStream.__init__-1970"><a href="#WritableStream.__init__-1970"><span class="linenos">1970</span></a>
+</span><span id="WritableStream.__init__-1971"><a href="#WritableStream.__init__-1971"><span class="linenos">1971</span></a>    <span class="bp">cls</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</span></pre></div>
+
+
+    
+
+                            </div>
+                            <div id="WritableStream.write" class="classattr">
+                                        <input id="WritableStream.write-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr function">
+            
+        <span class="def">def</span>
+        <span class="name">write</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="n">_WritableStream__s</span><span class="p">:</span> <span class="nb">str</span></span><span class="return-annotation">) -> <span class="nb">int</span>:</span></span>
+
+                <div class="source-button-container">
+            <label class="pdoc-button view-source-button" for="WritableStream.write-view-source"><span>View Source</span></label>
+            <div class="github-button-wrapper">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.9.0logger/exception_context.py#L13-L13" target="_blank">
+                    <span>View on GitHub</span>
+                </a>
+            </div>
+        </div>
+
+    </div>
+    <a class="headerlink" href="#WritableStream.write"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="WritableStream.write-14"><a href="#WritableStream.write-14"><span class="linenos">14</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">write</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">__s</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span> <span class="o">...</span>
+</span></pre></div>
+
+
+    
+
+                            </div>
+                </section>
                 <section id="ExceptionContext">
                             <input id="ExceptionContext-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 <div class="attr class">
@@ -178,7 +310,7 @@
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="ExceptionContext-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/logger/exception_context.py#L6-L43" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.9.0logger/exception_context.py#L16-L58" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -186,44 +318,49 @@
 
     </div>
     <a class="headerlink" href="#ExceptionContext"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="ExceptionContext-7"><a href="#ExceptionContext-7"><span class="linenos"> 7</span></a><span class="k">class</span><span class="w"> </span><span class="nc">ExceptionContext</span><span class="p">:</span>
-</span><span id="ExceptionContext-8"><a href="#ExceptionContext-8"><span class="linenos"> 8</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;context manager which catches all exceptions happening while the context is open, `.write()` the exception trace to the given stream, and then raises the exception</span>
-</span><span id="ExceptionContext-9"><a href="#ExceptionContext-9"><span class="linenos"> 9</span></a>
-</span><span id="ExceptionContext-10"><a href="#ExceptionContext-10"><span class="linenos">10</span></a>
-</span><span id="ExceptionContext-11"><a href="#ExceptionContext-11"><span class="linenos">11</span></a><span class="sd">    for example:</span>
-</span><span id="ExceptionContext-12"><a href="#ExceptionContext-12"><span class="linenos">12</span></a>
-</span><span id="ExceptionContext-13"><a href="#ExceptionContext-13"><span class="linenos">13</span></a><span class="sd">    ```python</span>
-</span><span id="ExceptionContext-14"><a href="#ExceptionContext-14"><span class="linenos">14</span></a><span class="sd">    errorfile = open(&#39;error.log&#39;, &#39;w&#39;)</span>
-</span><span id="ExceptionContext-15"><a href="#ExceptionContext-15"><span class="linenos">15</span></a>
-</span><span id="ExceptionContext-16"><a href="#ExceptionContext-16"><span class="linenos">16</span></a><span class="sd">    with ExceptionContext(errorfile):</span>
-</span><span id="ExceptionContext-17"><a href="#ExceptionContext-17"><span class="linenos">17</span></a><span class="sd">            # do something that might throw an exception</span>
-</span><span id="ExceptionContext-18"><a href="#ExceptionContext-18"><span class="linenos">18</span></a><span class="sd">            # if it does, the exception trace will be written to errorfile</span>
-</span><span id="ExceptionContext-19"><a href="#ExceptionContext-19"><span class="linenos">19</span></a><span class="sd">            # and then the exception will be raised</span>
-</span><span id="ExceptionContext-20"><a href="#ExceptionContext-20"><span class="linenos">20</span></a><span class="sd">    ```</span>
-</span><span id="ExceptionContext-21"><a href="#ExceptionContext-21"><span class="linenos">21</span></a>
-</span><span id="ExceptionContext-22"><a href="#ExceptionContext-22"><span class="linenos">22</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="ExceptionContext-23"><a href="#ExceptionContext-23"><span class="linenos">23</span></a>
-</span><span id="ExceptionContext-24"><a href="#ExceptionContext-24"><span class="linenos">24</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stream</span><span class="p">):</span>
-</span><span id="ExceptionContext-25"><a href="#ExceptionContext-25"><span class="linenos">25</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">stream</span> <span class="o">=</span> <span class="n">stream</span>
-</span><span id="ExceptionContext-26"><a href="#ExceptionContext-26"><span class="linenos">26</span></a>
-</span><span id="ExceptionContext-27"><a href="#ExceptionContext-27"><span class="linenos">27</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__enter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-</span><span id="ExceptionContext-28"><a href="#ExceptionContext-28"><span class="linenos">28</span></a>        <span class="k">return</span> <span class="bp">self</span>
-</span><span id="ExceptionContext-29"><a href="#ExceptionContext-29"><span class="linenos">29</span></a>
-</span><span id="ExceptionContext-30"><a href="#ExceptionContext-30"><span class="linenos">30</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__exit__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exc_type</span><span class="p">,</span> <span class="n">exc_value</span><span class="p">,</span> <span class="n">exc_traceback</span><span class="p">):</span>
-</span><span id="ExceptionContext-31"><a href="#ExceptionContext-31"><span class="linenos">31</span></a>        <span class="k">if</span> <span class="n">exc_type</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="ExceptionContext-32"><a href="#ExceptionContext-32"><span class="linenos">32</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">stream</span><span class="o">.</span><span class="n">write</span><span class="p">(</span>
-</span><span id="ExceptionContext-33"><a href="#ExceptionContext-33"><span class="linenos">33</span></a>                <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span>
-</span><span id="ExceptionContext-34"><a href="#ExceptionContext-34"><span class="linenos">34</span></a>                    <span class="n">json_serialize</span><span class="p">(</span>
-</span><span id="ExceptionContext-35"><a href="#ExceptionContext-35"><span class="linenos">35</span></a>                        <span class="p">{</span>
-</span><span id="ExceptionContext-36"><a href="#ExceptionContext-36"><span class="linenos">36</span></a>                            <span class="s2">&quot;exc_type&quot;</span><span class="p">:</span> <span class="n">exc_type</span><span class="p">,</span>
-</span><span id="ExceptionContext-37"><a href="#ExceptionContext-37"><span class="linenos">37</span></a>                            <span class="s2">&quot;exc_value&quot;</span><span class="p">:</span> <span class="n">exc_value</span><span class="p">,</span>
-</span><span id="ExceptionContext-38"><a href="#ExceptionContext-38"><span class="linenos">38</span></a>                            <span class="s2">&quot;exc_traceback&quot;</span><span class="p">:</span> <span class="n">exc_traceback</span><span class="p">,</span>
-</span><span id="ExceptionContext-39"><a href="#ExceptionContext-39"><span class="linenos">39</span></a>                        <span class="p">}</span>
-</span><span id="ExceptionContext-40"><a href="#ExceptionContext-40"><span class="linenos">40</span></a>                    <span class="p">)</span>
-</span><span id="ExceptionContext-41"><a href="#ExceptionContext-41"><span class="linenos">41</span></a>                <span class="p">)</span>
-</span><span id="ExceptionContext-42"><a href="#ExceptionContext-42"><span class="linenos">42</span></a>            <span class="p">)</span>
-</span><span id="ExceptionContext-43"><a href="#ExceptionContext-43"><span class="linenos">43</span></a>            <span class="k">return</span> <span class="kc">False</span>
-</span><span id="ExceptionContext-44"><a href="#ExceptionContext-44"><span class="linenos">44</span></a>        <span class="k">return</span> <span class="kc">True</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="ExceptionContext-17"><a href="#ExceptionContext-17"><span class="linenos">17</span></a><span class="k">class</span><span class="w"> </span><span class="nc">ExceptionContext</span><span class="p">:</span>
+</span><span id="ExceptionContext-18"><a href="#ExceptionContext-18"><span class="linenos">18</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;context manager which catches all exceptions happening while the context is open, `.write()` the exception trace to the given stream, and then raises the exception</span>
+</span><span id="ExceptionContext-19"><a href="#ExceptionContext-19"><span class="linenos">19</span></a>
+</span><span id="ExceptionContext-20"><a href="#ExceptionContext-20"><span class="linenos">20</span></a>
+</span><span id="ExceptionContext-21"><a href="#ExceptionContext-21"><span class="linenos">21</span></a><span class="sd">    for example:</span>
+</span><span id="ExceptionContext-22"><a href="#ExceptionContext-22"><span class="linenos">22</span></a>
+</span><span id="ExceptionContext-23"><a href="#ExceptionContext-23"><span class="linenos">23</span></a><span class="sd">    ```python</span>
+</span><span id="ExceptionContext-24"><a href="#ExceptionContext-24"><span class="linenos">24</span></a><span class="sd">    errorfile = open(&#39;error.log&#39;, &#39;w&#39;)</span>
+</span><span id="ExceptionContext-25"><a href="#ExceptionContext-25"><span class="linenos">25</span></a>
+</span><span id="ExceptionContext-26"><a href="#ExceptionContext-26"><span class="linenos">26</span></a><span class="sd">    with ExceptionContext(errorfile):</span>
+</span><span id="ExceptionContext-27"><a href="#ExceptionContext-27"><span class="linenos">27</span></a><span class="sd">            # do something that might throw an exception</span>
+</span><span id="ExceptionContext-28"><a href="#ExceptionContext-28"><span class="linenos">28</span></a><span class="sd">            # if it does, the exception trace will be written to errorfile</span>
+</span><span id="ExceptionContext-29"><a href="#ExceptionContext-29"><span class="linenos">29</span></a><span class="sd">            # and then the exception will be raised</span>
+</span><span id="ExceptionContext-30"><a href="#ExceptionContext-30"><span class="linenos">30</span></a><span class="sd">    ```</span>
+</span><span id="ExceptionContext-31"><a href="#ExceptionContext-31"><span class="linenos">31</span></a>
+</span><span id="ExceptionContext-32"><a href="#ExceptionContext-32"><span class="linenos">32</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="ExceptionContext-33"><a href="#ExceptionContext-33"><span class="linenos">33</span></a>
+</span><span id="ExceptionContext-34"><a href="#ExceptionContext-34"><span class="linenos">34</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stream</span><span class="p">:</span> <span class="n">WritableStream</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="ExceptionContext-35"><a href="#ExceptionContext-35"><span class="linenos">35</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">stream</span><span class="p">:</span> <span class="n">WritableStream</span> <span class="o">=</span> <span class="n">stream</span>
+</span><span id="ExceptionContext-36"><a href="#ExceptionContext-36"><span class="linenos">36</span></a>
+</span><span id="ExceptionContext-37"><a href="#ExceptionContext-37"><span class="linenos">37</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__enter__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ExceptionContext</span><span class="p">:</span>
+</span><span id="ExceptionContext-38"><a href="#ExceptionContext-38"><span class="linenos">38</span></a>        <span class="k">return</span> <span class="bp">self</span>
+</span><span id="ExceptionContext-39"><a href="#ExceptionContext-39"><span class="linenos">39</span></a>
+</span><span id="ExceptionContext-40"><a href="#ExceptionContext-40"><span class="linenos">40</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__exit__</span><span class="p">(</span>
+</span><span id="ExceptionContext-41"><a href="#ExceptionContext-41"><span class="linenos">41</span></a>        <span class="bp">self</span><span class="p">,</span>
+</span><span id="ExceptionContext-42"><a href="#ExceptionContext-42"><span class="linenos">42</span></a>        <span class="n">exc_type</span><span class="p">:</span> <span class="nb">type</span><span class="p">[</span><span class="ne">BaseException</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span>
+</span><span id="ExceptionContext-43"><a href="#ExceptionContext-43"><span class="linenos">43</span></a>        <span class="n">exc_value</span><span class="p">:</span> <span class="ne">BaseException</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span>
+</span><span id="ExceptionContext-44"><a href="#ExceptionContext-44"><span class="linenos">44</span></a>        <span class="n">exc_traceback</span><span class="p">:</span> <span class="n">TracebackType</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span>
+</span><span id="ExceptionContext-45"><a href="#ExceptionContext-45"><span class="linenos">45</span></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</span><span id="ExceptionContext-46"><a href="#ExceptionContext-46"><span class="linenos">46</span></a>        <span class="k">if</span> <span class="n">exc_type</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="ExceptionContext-47"><a href="#ExceptionContext-47"><span class="linenos">47</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">stream</span><span class="o">.</span><span class="n">write</span><span class="p">(</span>
+</span><span id="ExceptionContext-48"><a href="#ExceptionContext-48"><span class="linenos">48</span></a>                <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span>
+</span><span id="ExceptionContext-49"><a href="#ExceptionContext-49"><span class="linenos">49</span></a>                    <span class="n">json_serialize</span><span class="p">(</span>
+</span><span id="ExceptionContext-50"><a href="#ExceptionContext-50"><span class="linenos">50</span></a>                        <span class="p">{</span>
+</span><span id="ExceptionContext-51"><a href="#ExceptionContext-51"><span class="linenos">51</span></a>                            <span class="s2">&quot;exc_type&quot;</span><span class="p">:</span> <span class="n">exc_type</span><span class="p">,</span>
+</span><span id="ExceptionContext-52"><a href="#ExceptionContext-52"><span class="linenos">52</span></a>                            <span class="s2">&quot;exc_value&quot;</span><span class="p">:</span> <span class="n">exc_value</span><span class="p">,</span>
+</span><span id="ExceptionContext-53"><a href="#ExceptionContext-53"><span class="linenos">53</span></a>                            <span class="s2">&quot;exc_traceback&quot;</span><span class="p">:</span> <span class="n">exc_traceback</span><span class="p">,</span>
+</span><span id="ExceptionContext-54"><a href="#ExceptionContext-54"><span class="linenos">54</span></a>                        <span class="p">}</span>
+</span><span id="ExceptionContext-55"><a href="#ExceptionContext-55"><span class="linenos">55</span></a>                    <span class="p">)</span>
+</span><span id="ExceptionContext-56"><a href="#ExceptionContext-56"><span class="linenos">56</span></a>                <span class="p">)</span>
+</span><span id="ExceptionContext-57"><a href="#ExceptionContext-57"><span class="linenos">57</span></a>            <span class="p">)</span>
+</span><span id="ExceptionContext-58"><a href="#ExceptionContext-58"><span class="linenos">58</span></a>            <span class="k">return</span> <span class="kc">False</span>
+</span><span id="ExceptionContext-59"><a href="#ExceptionContext-59"><span class="linenos">59</span></a>        <span class="k">return</span> <span class="kc">True</span>
 </span></pre></div>
 
 
@@ -247,12 +384,12 @@
                                         <input id="ExceptionContext.__init__-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 <div class="attr function">
             
-        <span class="name">ExceptionContext</span><span class="signature pdoc-code condensed">(<span class="param"><span class="n">stream</span></span>)</span>
+        <span class="name">ExceptionContext</span><span class="signature pdoc-code condensed">(<span class="param"><span class="n">stream</span><span class="p">:</span> <span class="n"><a href="#WritableStream">WritableStream</a></span></span>)</span>
 
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="ExceptionContext.__init__-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/logger/exception_context.py#L23-L24" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.9.0logger/exception_context.py#L33-L34" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -260,8 +397,8 @@
 
     </div>
     <a class="headerlink" href="#ExceptionContext.__init__"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="ExceptionContext.__init__-24"><a href="#ExceptionContext.__init__-24"><span class="linenos">24</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stream</span><span class="p">):</span>
-</span><span id="ExceptionContext.__init__-25"><a href="#ExceptionContext.__init__-25"><span class="linenos">25</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">stream</span> <span class="o">=</span> <span class="n">stream</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="ExceptionContext.__init__-34"><a href="#ExceptionContext.__init__-34"><span class="linenos">34</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stream</span><span class="p">:</span> <span class="n">WritableStream</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="ExceptionContext.__init__-35"><a href="#ExceptionContext.__init__-35"><span class="linenos">35</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">stream</span><span class="p">:</span> <span class="n">WritableStream</span> <span class="o">=</span> <span class="n">stream</span>
 </span></pre></div>
 
 
@@ -270,7 +407,7 @@
                             </div>
                             <div id="ExceptionContext.stream" class="classattr">
                                 <div class="attr variable">
-            <span class="name">stream</span>
+            <span class="name">stream</span><span class="annotation">: <a href="#WritableStream">WritableStream</a></span>
 
         
     </div>

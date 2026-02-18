@@ -8,6 +8,8 @@
 - `muutils.misc.classes` for some weird class utilities
 """
 
+# pyright: reportPrivateUsage=false
+
 from muutils.misc.hashing import stable_hash
 from muutils.misc.sequence import (
     WhenMissing,

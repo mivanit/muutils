@@ -13,18 +13,18 @@ from __future__ import annotations
 
 import json
 import typing
+from typing import Any
 
 import jaxtyping
 import numpy as np
 import torch
 
-from muutils.errormode import ErrorMode
 from muutils.dictmagic import dotlist_to_nested_dict
 
 # pylint: disable=missing-class-docstring
 
 
-TYPE_TO_JAX_DTYPE: dict = {
+TYPE_TO_JAX_DTYPE: dict[Any, Any] = {
     float: jaxtyping.Float,
     int: jaxtyping.Int,
     jaxtyping.Float: jaxtyping.Float,
@@ -68,109 +68,112 @@ TYPE_TO_JAX_DTYPE: dict = {
 }
 "dict mapping python, numpy, and torch types to `jaxtyping` types"
 
-# we check for version here, so it shouldn't error
-if np.version.version < "2.0.0":
-    TYPE_TO_JAX_DTYPE[np.float_] = jaxtyping.Float  # type: ignore[attr-defined]
-    TYPE_TO_JAX_DTYPE[np.int_] = jaxtyping.Int  # type: ignore[attr-defined]
+# np.float_ and np.int_ were deprecated in numpy 1.20 and removed in 2.0
+# use try/except for backwards compatibility and type checker friendliness
+try:
+    TYPE_TO_JAX_DTYPE[np.float_] = jaxtyping.Float  # type: ignore[attr-defined]  # pyright: ignore[reportAttributeAccessIssue]
+    TYPE_TO_JAX_DTYPE[np.int_] = jaxtyping.Int  # type: ignore[attr-defined]  # pyright: ignore[reportAttributeAccessIssue]
+except AttributeError:
+    pass  # numpy 2.0+ removed these deprecated aliases
 
 
 # TODO: add proper type annotations to this signature
 # TODO: maybe get rid of this altogether?
-def jaxtype_factory(
-    name: str,
-    array_type: type,
-    default_jax_dtype=jaxtyping.Float,
-    legacy_mode: typing.Union[ErrorMode, str] = ErrorMode.WARN,
-) -> type:
-    """usage:
-    ```
-    ATensor = jaxtype_factory("ATensor", torch.Tensor, jaxtyping.Float)
-    x: ATensor["dim1 dim2", np.float32]
-    ```
-    """
-    legacy_mode_ = ErrorMode.from_any(legacy_mode)
+# def jaxtype_factory(
+#     name: str,
+#     array_type: type,
+#     default_jax_dtype: type[jaxtyping.Float | jaxtyping.Int | jaxtyping.Bool] = jaxtyping.Float,
+#     legacy_mode: typing.Union[ErrorMode, str] = ErrorMode.WARN,
+# ) -> type:
+#     """usage:
+#     ```
+#     ATensor = jaxtype_factory("ATensor", torch.Tensor, jaxtyping.Float)
+#     x: ATensor["dim1 dim2", np.float32]
+#     ```
+#     """
+#     legacy_mode_ = ErrorMode.from_any(legacy_mode)
 
-    class _BaseArray:
-        """jaxtyping shorthand
-        (backwards compatible with older versions of muutils.tensor_utils)
+#     class _BaseArray:
+#         """jaxtyping shorthand
+#         (backwards compatible with older versions of muutils.tensor_utils)
 
-        default_jax_dtype = {default_jax_dtype}
-        array_type = {array_type}
-        """
+#         default_jax_dtype = {default_jax_dtype}
+#         array_type = {array_type}
+#         """
 
-        def __new__(cls, *args, **kwargs):
-            raise TypeError("Type FArray cannot be instantiated.")
+#         def __new__(cls, *args: Any, **kwargs: Any) -> typing.NoReturn:
+#             raise TypeError("Type FArray cannot be instantiated.")
 
-        def __init_subclass__(cls, *args, **kwargs):
-            raise TypeError(f"Cannot subclass {cls.__name__}")
+#         def __init_subclass__(cls, *args: Any, **kwargs: Any) -> typing.NoReturn:
+#             raise TypeError(f"Cannot subclass {cls.__name__}")
 
-        @classmethod
-        def param_info(cls, params) -> str:
-            """useful for error printing"""
-            return "\n".join(
-                f"{k} = {v}"
-                for k, v in {
-                    "cls.__name__": cls.__name__,
-                    "cls.__doc__": cls.__doc__,
-                    "params": params,
-                    "type(params)": type(params),
-                }.items()
-            )
+#         @classmethod
+#         def param_info(cls, params: typing.Union[str, tuple[Any, ...]]) -> str:
+#             """useful for error printing"""
+#             return "\n".join(
+#                 f"{k} = {v}"
+#                 for k, v in {
+#                     "cls.__name__": cls.__name__,
+#                     "cls.__doc__": cls.__doc__,
+#                     "params": params,
+#                     "type(params)": type(params),
+#                 }.items()
+#             )
 
-        @typing._tp_cache  # type: ignore
-        def __class_getitem__(cls, params: typing.Union[str, tuple]) -> type:  # type: ignore
-            # MyTensor["dim1 dim2"]
-            if isinstance(params, str):
-                return default_jax_dtype[array_type, params]
+#         @typing._tp_cache  # type: ignore[attr-defined]  # pyright: ignore[reportUnknownMemberType, reportAttributeAccessIssue]
+#         def __class_getitem__(cls, params: typing.Union[str, tuple[Any, ...]]) -> type:  # type: ignore[misc]
+#             # MyTensor["dim1 dim2"]
+#             if isinstance(params, str):
+#                 return default_jax_dtype[array_type, params]
 
-            elif isinstance(params, tuple):
-                if len(params) != 2:
-                    raise Exception(
-                        f"unexpected type for params, expected tuple of length 2 here:\n{cls.param_info(params)}"
-                    )
+#             elif isinstance(params, tuple):
+#                 if len(params) != 2:
+#                     raise Exception(
+#                         f"unexpected type for params, expected tuple of length 2 here:\n{cls.param_info(params)}"
+#                     )
 
-                if isinstance(params[0], str):
-                    # MyTensor["dim1 dim2", int]
-                    return TYPE_TO_JAX_DTYPE[params[1]][array_type, params[0]]
+#                 if isinstance(params[0], str):
+#                     # MyTensor["dim1 dim2", int]
+#                     return TYPE_TO_JAX_DTYPE[params[1]][array_type, params[0]]
 
-                elif isinstance(params[0], tuple):
-                    legacy_mode_.process(
-                        f"legacy type annotation was used:\n{cls.param_info(params) = }",
-                        except_cls=Exception,
-                    )
-                    # MyTensor[("dim1", "dim2"), int]
-                    shape_anot: list[str] = list()
-                    for x in params[0]:
-                        if isinstance(x, str):
-                            shape_anot.append(x)
-                        elif isinstance(x, int):
-                            shape_anot.append(str(x))
-                        elif isinstance(x, tuple):
-                            shape_anot.append("".join(str(y) for y in x))
-                        else:
-                            raise Exception(
-                                f"unexpected type for params, expected first part to be str, int, or tuple:\n{cls.param_info(params)}"
-                            )
+#                 elif isinstance(params[0], tuple):
+#                     legacy_mode_.process(
+#                         f"legacy type annotation was used:\n{cls.param_info(params) = }",
+#                         except_cls=Exception,
+#                     )
+#                     # MyTensor[("dim1", "dim2"), int]
+#                     shape_anot: list[str] = list()
+#                     for x in params[0]:
+#                         if isinstance(x, str):
+#                             shape_anot.append(x)
+#                         elif isinstance(x, int):
+#                             shape_anot.append(str(x))
+#                         elif isinstance(x, tuple):
+#                             shape_anot.append("".join(str(y) for y in x))
+#                         else:
+#                             raise Exception(
+#                                 f"unexpected type for params, expected first part to be str, int, or tuple:\n{cls.param_info(params)}"
+#                             )
 
-                    return TYPE_TO_JAX_DTYPE[params[1]][
-                        array_type, " ".join(shape_anot)
-                    ]
-            else:
-                raise Exception(
-                    f"unexpected type for params:\n{cls.param_info(params)}"
-                )
+#                     return TYPE_TO_JAX_DTYPE[params[1]][
+#                         array_type, " ".join(shape_anot)
+#                     ]
+#             else:
+#                 raise Exception(
+#                     f"unexpected type for params:\n{cls.param_info(params)}"
+#                 )
 
-    _BaseArray.__name__ = name
+#     _BaseArray.__name__ = name
 
-    if _BaseArray.__doc__ is None:
-        _BaseArray.__doc__ = "{default_jax_dtype = }\n{array_type = }"
+#     if _BaseArray.__doc__ is None:
+#         _BaseArray.__doc__ = "{default_jax_dtype = }\n{array_type = }"
 
-    _BaseArray.__doc__ = _BaseArray.__doc__.format(
-        default_jax_dtype=repr(default_jax_dtype),
-        array_type=repr(array_type),
-    )
+#     _BaseArray.__doc__ = _BaseArray.__doc__.format(
+#         default_jax_dtype=repr(default_jax_dtype),
+#         array_type=repr(array_type),
+#     )
 
-    return _BaseArray
+#     return _BaseArray
 
 
 if typing.TYPE_CHECKING:
@@ -178,19 +181,19 @@ if typing.TYPE_CHECKING:
     # but they make mypy unhappy and there is no way to only run if not mypy
     # so, later on we have more ignores
     class ATensor(torch.Tensor):
-        @typing._tp_cache  # type: ignore
-        def __class_getitem__(cls, params):
+        @typing._tp_cache  # type: ignore[attr-defined]  # pyright: ignore[reportUnknownMemberType, reportAttributeAccessIssue]
+        def __class_getitem__(cls, params: typing.Union[str, tuple[Any, ...]]) -> type:
             raise NotImplementedError()
 
     class NDArray(torch.Tensor):
-        @typing._tp_cache  # type: ignore
-        def __class_getitem__(cls, params):
+        @typing._tp_cache  # type: ignore[attr-defined]  # pyright: ignore[reportUnknownMemberType, reportAttributeAccessIssue]
+        def __class_getitem__(cls, params: typing.Union[str, tuple[Any, ...]]) -> type:
             raise NotImplementedError()
 
 
-ATensor = jaxtype_factory("ATensor", torch.Tensor, jaxtyping.Float)  # type: ignore[misc, assignment]
+# ATensor = jaxtype_factory("ATensor", torch.Tensor, jaxtyping.Float)  # type: ignore[misc, assignment]
 
-NDArray = jaxtype_factory("NDArray", np.ndarray, jaxtyping.Float)  # type: ignore[misc, assignment]
+# NDArray = jaxtype_factory("NDArray", np.ndarray, jaxtyping.Float)  # type: ignore[misc, assignment]
 
 
 def numpy_to_torch_dtype(dtype: typing.Union[np.dtype, torch.dtype]) -> torch.dtype:
@@ -201,7 +204,7 @@ def numpy_to_torch_dtype(dtype: typing.Union[np.dtype, torch.dtype]) -> torch.dt
         return torch.from_numpy(np.array(0, dtype=dtype)).dtype
 
 
-DTYPE_LIST: list = [
+DTYPE_LIST: list[Any] = [
     *[
         bool,
         int,
@@ -261,16 +264,19 @@ DTYPE_LIST: list = [
 ]
 "list of all the python, numpy, and torch numerical types I could think of"
 
-if np.version.version < "2.0.0":
-    DTYPE_LIST.extend([np.float_, np.int_])  # type: ignore[attr-defined]
+# np.float_ and np.int_ were deprecated in numpy 1.20 and removed in 2.0
+try:
+    DTYPE_LIST.extend([np.float_, np.int_])  # type: ignore[attr-defined]  # pyright: ignore[reportAttributeAccessIssue]
+except AttributeError:
+    pass  # numpy 2.0+ removed these deprecated aliases
 
-DTYPE_MAP: dict = {
+DTYPE_MAP: dict[str, Any] = {
     **{str(x): x for x in DTYPE_LIST},
     **{dtype.__name__: dtype for dtype in DTYPE_LIST if dtype.__module__ == "numpy"},
 }
 "mapping from string representations of types to their type"
 
-TORCH_DTYPE_MAP: dict = {
+TORCH_DTYPE_MAP: dict[str, torch.dtype] = {
     key: numpy_to_torch_dtype(dtype) for key, dtype in DTYPE_MAP.items()
 }
 "mapping from string representations of types to specifically torch types"
@@ -420,7 +426,11 @@ class StateDictValueError(StateDictCompareError):
 
 
 def compare_state_dicts(
-    d1: dict, d2: dict, rtol: float = 1e-5, atol: float = 1e-8, verbose: bool = True
+    d1: dict[str, Any],
+    d2: dict[str, Any],
+    rtol: float = 1e-5,
+    atol: float = 1e-8,
+    verbose: bool = True,
 ) -> None:
     """compare two dicts of tensors
 
@@ -442,11 +452,11 @@ def compare_state_dicts(
      - `StateDictValueError` : values don't match (but keys and shapes do)
     """
     # check keys match
-    d1_keys: set = set(d1.keys())
-    d2_keys: set = set(d2.keys())
-    symmetric_diff: set = set.symmetric_difference(d1_keys, d2_keys)
-    keys_diff_1: set = d1_keys - d2_keys
-    keys_diff_2: set = d2_keys - d1_keys
+    d1_keys: set[str] = set(d1.keys())
+    d2_keys: set[str] = set(d2.keys())
+    symmetric_diff: set[str] = set.symmetric_difference(d1_keys, d2_keys)
+    keys_diff_1: set[str] = d1_keys - d2_keys
+    keys_diff_2: set[str] = d2_keys - d1_keys
     # sort sets for easier debugging
     symmetric_diff = set(sorted(symmetric_diff))
     keys_diff_1 = set(sorted(keys_diff_1))

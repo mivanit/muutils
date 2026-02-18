@@ -9,12 +9,13 @@ import typing
 import warnings
 from itertools import islice
 from pathlib import Path
-from typing import Any, Callable, Optional, TypeVar, Union
+from typing import Any, Callable, Generator, Iterable, Optional, TypeVar, Union
 
 ARRAY_IMPORTS: bool
 try:
     import numpy as np
     import torch
+    import torch.backends.mps
 
     ARRAY_IMPORTS = True
 except ImportError as e:
@@ -35,6 +36,7 @@ def get_device(device: "Union[str,torch.device,None]" = None) -> "torch.device":
         )
     try:
         # if device is given
+        assert torch, "Torch is not available, cannot get device"  # pyright: ignore[reportPossiblyUnboundVariable]
         if device is not None:
             device = torch.device(device)
             if any(
@@ -71,7 +73,7 @@ def get_device(device: "Union[str,torch.device,None]" = None) -> "torch.device":
             f"Error while getting device, falling back to CPU. Error: {e}",
             RuntimeWarning,
         )
-        return torch.device("cpu")
+        return torch.device("cpu")  # pyright: ignore[reportPossiblyUnboundVariable]
 
 
 def set_reproducibility(seed: int = DEFAULT_SEED):
@@ -88,16 +90,29 @@ def set_reproducibility(seed: int = DEFAULT_SEED):
     random.seed(seed)
 
     if ARRAY_IMPORTS:
-        np.random.seed(seed)
-        torch.manual_seed(seed)
+        try:
+            assert np, "Numpy is not available, cannot set seed for numpy"  # pyright: ignore[reportPossiblyUnboundVariable]
+            np.random.seed(seed)
+        except Exception as e:
+            warnings.warn(f"Error while setting seed for numpy: {e}", RuntimeWarning)
 
-        torch.use_deterministic_algorithms(True)
+        try:
+            assert torch, "Torch is not available, cannot set seed for torch"  # pyright: ignore[reportPossiblyUnboundVariable]
+            torch.manual_seed(seed)
+
+            torch.use_deterministic_algorithms(True)
+        except Exception as e:
+            warnings.warn(f"Error while setting seed for torch: {e}", RuntimeWarning)
+
         # Ensure reproducibility for concurrent CUDA streams
         # see https://docs.nvidia.com/cuda/cublas/index.html#cublasApi_reproducibility.
         os.environ["CUBLAS_WORKSPACE_CONFIG"] = ":4096:8"
 
 
-def chunks(it, chunk_size):
+T = TypeVar("T")
+
+
+def chunks(it: Iterable[T], chunk_size: int) -> Generator[list[T], Any, None]:
     """Yield successive chunks from an iterator."""
     # https://stackoverflow.com/a/61435714
     iterator = iter(it)
@@ -153,7 +168,8 @@ def register_method(
                 method_name = method_name_orig
         else:
             method_name = custom_name
-            method.__name__ = custom_name
+            # TYPING: ty complains here
+            method.__name__ = custom_name  # type: ignore[unresolved-attribute]
         assert method_name not in method_dict, (
             f"Method name already exists in method_dict: {method_name = }, {list(method_dict.keys()) = }"
         )

@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="generator" content="pdoc 15.0.4"/>
+    <meta name="generator" content="pdoc 16.0.0"/>
     <title>muutils.nbutils.configure_notebook API documentation</title>
 <link rel="stylesheet" href="../../resources/css/bootstrap-reboot.min.css"><link rel="stylesheet" href="../../resources/css/syntax-highlighting.css"><link rel="stylesheet" href="../../resources/css/theme.css"><link rel="stylesheet" href="../../resources/css/layout.css"><link rel="stylesheet" href="../../resources/css/content.css"><link rel="stylesheet" href="../../resources/css/custom.css"><script>
     window.MathJax = {
@@ -46,7 +46,7 @@
 </script></head>
 <body>
 <div class="package-version">
-    docs for <a href="https://github.com/mivanit/muutils">muutils</a> v0.8.12<br>
+    docs for <a href="https://github.com/mivanit/muutils">muutils</a> v0.9.0<br>
 </div>
     <nav class="pdoc">
         <label id="navtoggle" for="togglestate" class="pdoc-button">
@@ -151,7 +151,7 @@
     </nav>
     <main class="pdoc">
             <section class="module-info">
-                        <a class="pdoc-button git-button" href="https://github.com/mivanit/muutils/blob/0.8.12/nbutils/configure_notebook.py">View Source on GitHub</a>
+                        <a class="pdoc-button git-button" href="https://github.com/mivanit/muutils/blob/0.9.0nbutils/configure_notebook.py">View Source on GitHub</a>
                     <h1 class="modulename">
 <a href="./../../muutils.html">muutils</a><wbr>.<a href="./../nbutils.html">nbutils</a><wbr>.configure_notebook    </h1>
 
@@ -163,7 +163,7 @@
                         <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="mod-configure_notebook-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/nbutils/configure_notebook.py#L0-L319" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.9.0nbutils/configure_notebook.py#L0-L319" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -287,8 +287,8 @@
 </span><span id="L-115"><a href="#L-115"><span class="linenos">115</span></a>
 </span><span id="L-116"><a href="#L-116"><span class="linenos">116</span></a>    <span class="k">if</span> <span class="n">PLOT_MODE</span> <span class="o">==</span> <span class="s2">&quot;inline&quot;</span><span class="p">:</span>
 </span><span id="L-117"><a href="#L-117"><span class="linenos">117</span></a>        <span class="k">if</span> <span class="n">IN_JUPYTER</span><span class="p">:</span>
-</span><span id="L-118"><a href="#L-118"><span class="linenos">118</span></a>            <span class="n">ipython</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>
-</span><span id="L-119"><a href="#L-119"><span class="linenos">119</span></a>            <span class="n">ipython</span><span class="o">.</span><span class="n">magic</span><span class="p">(</span><span class="s2">&quot;matplotlib inline&quot;</span><span class="p">)</span>
+</span><span id="L-118"><a href="#L-118"><span class="linenos">118</span></a>            <span class="n">ipython</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>  <span class="c1"># pyright: ignore[reportPossiblyUnboundVariable]</span>
+</span><span id="L-119"><a href="#L-119"><span class="linenos">119</span></a>            <span class="n">ipython</span><span class="o">.</span><span class="n">magic</span><span class="p">(</span><span class="s2">&quot;matplotlib inline&quot;</span><span class="p">)</span>  <span class="c1"># pyright: ignore[reportAttributeAccessIssue, reportOptionalMemberAccess]</span>
 </span><span id="L-120"><a href="#L-120"><span class="linenos">120</span></a>        <span class="k">else</span><span class="p">:</span>
 </span><span id="L-121"><a href="#L-121"><span class="linenos">121</span></a>            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
 </span><span id="L-122"><a href="#L-122"><span class="linenos">122</span></a>                <span class="sa">f</span><span class="s2">&quot;Cannot use inline plotting outside of Jupyter</span><span class="se">\n</span><span class="si">{</span><span class="n">PLOT_MODE</span><span class="w"> </span><span class="si">= }</span><span class="se">\t</span><span class="si">{</span><span class="n">CONVERSION_PLOTMODE_OVERRIDE</span><span class="w"> </span><span class="si">= }</span><span class="s2">&quot;</span>
@@ -296,8 +296,8 @@
 </span><span id="L-124"><a href="#L-124"><span class="linenos">124</span></a>        <span class="k">return</span>
 </span><span id="L-125"><a href="#L-125"><span class="linenos">125</span></a>    <span class="k">elif</span> <span class="n">PLOT_MODE</span> <span class="o">==</span> <span class="s2">&quot;widget&quot;</span><span class="p">:</span>
 </span><span id="L-126"><a href="#L-126"><span class="linenos">126</span></a>        <span class="k">if</span> <span class="n">IN_JUPYTER</span><span class="p">:</span>
-</span><span id="L-127"><a href="#L-127"><span class="linenos">127</span></a>            <span class="n">ipython</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>
-</span><span id="L-128"><a href="#L-128"><span class="linenos">128</span></a>            <span class="n">ipython</span><span class="o">.</span><span class="n">magic</span><span class="p">(</span><span class="s2">&quot;matplotlib widget&quot;</span><span class="p">)</span>
+</span><span id="L-127"><a href="#L-127"><span class="linenos">127</span></a>            <span class="n">ipython</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>  <span class="c1"># pyright: ignore[reportPossiblyUnboundVariable]</span>
+</span><span id="L-128"><a href="#L-128"><span class="linenos">128</span></a>            <span class="n">ipython</span><span class="o">.</span><span class="n">magic</span><span class="p">(</span><span class="s2">&quot;matplotlib widget&quot;</span><span class="p">)</span>  <span class="c1"># pyright: ignore[reportAttributeAccessIssue, reportOptionalMemberAccess]</span>
 </span><span id="L-129"><a href="#L-129"><span class="linenos">129</span></a>        <span class="k">else</span><span class="p">:</span>
 </span><span id="L-130"><a href="#L-130"><span class="linenos">130</span></a>            <span class="c1"># matplotlib outside of jupyter will bring up a new window by default</span>
 </span><span id="L-131"><a href="#L-131"><span class="linenos">131</span></a>            <span class="k">pass</span>
@@ -362,7 +362,7 @@
 </span><span id="L-190"><a href="#L-190"><span class="linenos">190</span></a>
 </span><span id="L-191"><a href="#L-191"><span class="linenos">191</span></a>
 </span><span id="L-192"><a href="#L-192"><span class="linenos">192</span></a><span class="k">def</span><span class="w"> </span><span class="nf">configure_notebook</span><span class="p">(</span>
-</span><span id="L-193"><a href="#L-193"><span class="linenos">193</span></a>    <span class="o">*</span><span class="n">args</span><span class="p">,</span>
+</span><span id="L-193"><a href="#L-193"><span class="linenos">193</span></a>    <span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Any</span><span class="p">,</span>
 </span><span id="L-194"><a href="#L-194"><span class="linenos">194</span></a>    <span class="n">seed</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">42</span><span class="p">,</span>
 </span><span id="L-195"><a href="#L-195"><span class="linenos">195</span></a>    <span class="n">device</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Any</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>  <span class="c1"># this can be a string, torch.device, or None</span>
 </span><span id="L-196"><a href="#L-196"><span class="linenos">196</span></a>    <span class="n">dark_mode</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
@@ -434,17 +434,17 @@
 </span><span id="L-262"><a href="#L-262"><span class="linenos">262</span></a>
 </span><span id="L-263"><a href="#L-263"><span class="linenos">263</span></a>    <span class="c1"># Reload modules before executing user code</span>
 </span><span id="L-264"><a href="#L-264"><span class="linenos">264</span></a>    <span class="k">if</span> <span class="n">IN_JUPYTER</span><span class="p">:</span>
-</span><span id="L-265"><a href="#L-265"><span class="linenos">265</span></a>        <span class="n">ipython</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>
-</span><span id="L-266"><a href="#L-266"><span class="linenos">266</span></a>        <span class="k">if</span> <span class="s2">&quot;IPython.extensions.autoreload&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">ipython</span><span class="o">.</span><span class="n">extension_manager</span><span class="o">.</span><span class="n">loaded</span><span class="p">:</span>
-</span><span id="L-267"><a href="#L-267"><span class="linenos">267</span></a>            <span class="n">ipython</span><span class="o">.</span><span class="n">magic</span><span class="p">(</span><span class="s2">&quot;load_ext autoreload&quot;</span><span class="p">)</span>
-</span><span id="L-268"><a href="#L-268"><span class="linenos">268</span></a>            <span class="n">ipython</span><span class="o">.</span><span class="n">magic</span><span class="p">(</span><span class="s2">&quot;autoreload 2&quot;</span><span class="p">)</span>
+</span><span id="L-265"><a href="#L-265"><span class="linenos">265</span></a>        <span class="n">ipython</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>  <span class="c1"># pyright: ignore[reportPossiblyUnboundVariable]</span>
+</span><span id="L-266"><a href="#L-266"><span class="linenos">266</span></a>        <span class="k">if</span> <span class="s2">&quot;IPython.extensions.autoreload&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">ipython</span><span class="o">.</span><span class="n">extension_manager</span><span class="o">.</span><span class="n">loaded</span><span class="p">:</span>  <span class="c1"># pyright: ignore[reportOptionalMemberAccess]</span>
+</span><span id="L-267"><a href="#L-267"><span class="linenos">267</span></a>            <span class="n">ipython</span><span class="o">.</span><span class="n">magic</span><span class="p">(</span><span class="s2">&quot;load_ext autoreload&quot;</span><span class="p">)</span>  <span class="c1"># pyright: ignore[reportAttributeAccessIssue, reportOptionalMemberAccess]</span>
+</span><span id="L-268"><a href="#L-268"><span class="linenos">268</span></a>            <span class="n">ipython</span><span class="o">.</span><span class="n">magic</span><span class="p">(</span><span class="s2">&quot;autoreload 2&quot;</span><span class="p">)</span>  <span class="c1"># pyright: ignore[reportAttributeAccessIssue, reportOptionalMemberAccess]</span>
 </span><span id="L-269"><a href="#L-269"><span class="linenos">269</span></a>
 </span><span id="L-270"><a href="#L-270"><span class="linenos">270</span></a>        <span class="c1"># Specify plotly renderer for vscode</span>
 </span><span id="L-271"><a href="#L-271"><span class="linenos">271</span></a>        <span class="k">if</span> <span class="n">PLOTLY_IMPORTED</span><span class="p">:</span>
-</span><span id="L-272"><a href="#L-272"><span class="linenos">272</span></a>            <span class="n">pio</span><span class="o">.</span><span class="n">renderers</span><span class="o">.</span><span class="n">default</span> <span class="o">=</span> <span class="s2">&quot;notebook_connected&quot;</span>
+</span><span id="L-272"><a href="#L-272"><span class="linenos">272</span></a>            <span class="n">pio</span><span class="o">.</span><span class="n">renderers</span><span class="o">.</span><span class="n">default</span> <span class="o">=</span> <span class="s2">&quot;notebook_connected&quot;</span>  <span class="c1"># pyright: ignore[reportPossiblyUnboundVariable]</span>
 </span><span id="L-273"><a href="#L-273"><span class="linenos">273</span></a>
 </span><span id="L-274"><a href="#L-274"><span class="linenos">274</span></a>            <span class="k">if</span> <span class="n">dark_mode</span><span class="p">:</span>
-</span><span id="L-275"><a href="#L-275"><span class="linenos">275</span></a>                <span class="n">pio</span><span class="o">.</span><span class="n">templates</span><span class="o">.</span><span class="n">default</span> <span class="o">=</span> <span class="s2">&quot;plotly_dark&quot;</span>
+</span><span id="L-275"><a href="#L-275"><span class="linenos">275</span></a>                <span class="n">pio</span><span class="o">.</span><span class="n">templates</span><span class="o">.</span><span class="n">default</span> <span class="o">=</span> <span class="s2">&quot;plotly_dark&quot;</span>  <span class="c1"># pyright: ignore[reportPossiblyUnboundVariable]</span>
 </span><span id="L-276"><a href="#L-276"><span class="linenos">276</span></a>                <span class="n">plt</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s2">&quot;dark_background&quot;</span><span class="p">)</span>
 </span><span id="L-277"><a href="#L-277"><span class="linenos">277</span></a>
 </span><span id="L-278"><a href="#L-278"><span class="linenos">278</span></a>    <span class="k">try</span><span class="p">:</span>
@@ -505,7 +505,7 @@
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="PlotlyNotInstalledWarning-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/nbutils/configure_notebook.py#L12-L13" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.9.0nbutils/configure_notebook.py#L12-L13" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -692,7 +692,7 @@
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="UnknownFigureFormatWarning-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/nbutils/configure_notebook.py#L55-L56" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.9.0nbutils/configure_notebook.py#L55-L56" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -735,7 +735,7 @@
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="universal_savefig-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/nbutils/configure_notebook.py#L59-L83" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.9.0nbutils/configure_notebook.py#L59-L83" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -784,7 +784,7 @@
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="setup_plots-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/nbutils/configure_notebook.py#L86-L189" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.9.0nbutils/configure_notebook.py#L86-L189" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -824,8 +824,8 @@
 </span><span id="setup_plots-116"><a href="#setup_plots-116"><span class="linenos">116</span></a>
 </span><span id="setup_plots-117"><a href="#setup_plots-117"><span class="linenos">117</span></a>    <span class="k">if</span> <span class="n">PLOT_MODE</span> <span class="o">==</span> <span class="s2">&quot;inline&quot;</span><span class="p">:</span>
 </span><span id="setup_plots-118"><a href="#setup_plots-118"><span class="linenos">118</span></a>        <span class="k">if</span> <span class="n">IN_JUPYTER</span><span class="p">:</span>
-</span><span id="setup_plots-119"><a href="#setup_plots-119"><span class="linenos">119</span></a>            <span class="n">ipython</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>
-</span><span id="setup_plots-120"><a href="#setup_plots-120"><span class="linenos">120</span></a>            <span class="n">ipython</span><span class="o">.</span><span class="n">magic</span><span class="p">(</span><span class="s2">&quot;matplotlib inline&quot;</span><span class="p">)</span>
+</span><span id="setup_plots-119"><a href="#setup_plots-119"><span class="linenos">119</span></a>            <span class="n">ipython</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>  <span class="c1"># pyright: ignore[reportPossiblyUnboundVariable]</span>
+</span><span id="setup_plots-120"><a href="#setup_plots-120"><span class="linenos">120</span></a>            <span class="n">ipython</span><span class="o">.</span><span class="n">magic</span><span class="p">(</span><span class="s2">&quot;matplotlib inline&quot;</span><span class="p">)</span>  <span class="c1"># pyright: ignore[reportAttributeAccessIssue, reportOptionalMemberAccess]</span>
 </span><span id="setup_plots-121"><a href="#setup_plots-121"><span class="linenos">121</span></a>        <span class="k">else</span><span class="p">:</span>
 </span><span id="setup_plots-122"><a href="#setup_plots-122"><span class="linenos">122</span></a>            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
 </span><span id="setup_plots-123"><a href="#setup_plots-123"><span class="linenos">123</span></a>                <span class="sa">f</span><span class="s2">&quot;Cannot use inline plotting outside of Jupyter</span><span class="se">\n</span><span class="si">{</span><span class="n">PLOT_MODE</span><span class="w"> </span><span class="si">= }</span><span class="se">\t</span><span class="si">{</span><span class="n">CONVERSION_PLOTMODE_OVERRIDE</span><span class="w"> </span><span class="si">= }</span><span class="s2">&quot;</span>
@@ -833,8 +833,8 @@
 </span><span id="setup_plots-125"><a href="#setup_plots-125"><span class="linenos">125</span></a>        <span class="k">return</span>
 </span><span id="setup_plots-126"><a href="#setup_plots-126"><span class="linenos">126</span></a>    <span class="k">elif</span> <span class="n">PLOT_MODE</span> <span class="o">==</span> <span class="s2">&quot;widget&quot;</span><span class="p">:</span>
 </span><span id="setup_plots-127"><a href="#setup_plots-127"><span class="linenos">127</span></a>        <span class="k">if</span> <span class="n">IN_JUPYTER</span><span class="p">:</span>
-</span><span id="setup_plots-128"><a href="#setup_plots-128"><span class="linenos">128</span></a>            <span class="n">ipython</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>
-</span><span id="setup_plots-129"><a href="#setup_plots-129"><span class="linenos">129</span></a>            <span class="n">ipython</span><span class="o">.</span><span class="n">magic</span><span class="p">(</span><span class="s2">&quot;matplotlib widget&quot;</span><span class="p">)</span>
+</span><span id="setup_plots-128"><a href="#setup_plots-128"><span class="linenos">128</span></a>            <span class="n">ipython</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>  <span class="c1"># pyright: ignore[reportPossiblyUnboundVariable]</span>
+</span><span id="setup_plots-129"><a href="#setup_plots-129"><span class="linenos">129</span></a>            <span class="n">ipython</span><span class="o">.</span><span class="n">magic</span><span class="p">(</span><span class="s2">&quot;matplotlib widget&quot;</span><span class="p">)</span>  <span class="c1"># pyright: ignore[reportAttributeAccessIssue, reportOptionalMemberAccess]</span>
 </span><span id="setup_plots-130"><a href="#setup_plots-130"><span class="linenos">130</span></a>        <span class="k">else</span><span class="p">:</span>
 </span><span id="setup_plots-131"><a href="#setup_plots-131"><span class="linenos">131</span></a>            <span class="c1"># matplotlib outside of jupyter will bring up a new window by default</span>
 </span><span id="setup_plots-132"><a href="#setup_plots-132"><span class="linenos">132</span></a>            <span class="k">pass</span>
@@ -909,12 +909,12 @@
 <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">configure_notebook</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="o">*</span><span class="n">args</span>,</span><span class="param">	<span class="n">seed</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">42</span>,</span><span class="param">	<span class="n">device</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">dark_mode</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>,</span><span class="param">	<span class="n">plot_mode</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s1">&#39;ignore&#39;</span><span class="p">,</span> <span class="s1">&#39;inline&#39;</span><span class="p">,</span> <span class="s1">&#39;widget&#39;</span><span class="p">,</span> <span class="s1">&#39;save&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;inline&#39;</span>,</span><span class="param">	<span class="n">fig_output_fmt</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="s1">&#39;pdf&#39;</span>,</span><span class="param">	<span class="n">fig_numbered_fname</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;figure-</span><span class="si">{num}</span><span class="s1">&#39;</span>,</span><span class="param">	<span class="n">fig_config</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">fig_basepath</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">close_after_plotshow</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span></span><span class="return-annotation">) -> <span class="n">torch</span><span class="o">.</span><span class="n">device</span> <span class="o">|</span> <span class="kc">None</span>:</span></span>
+        <span class="name">configure_notebook</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">Any</span>,</span><span class="param">	<span class="n">seed</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">42</span>,</span><span class="param">	<span class="n">device</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">dark_mode</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>,</span><span class="param">	<span class="n">plot_mode</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s1">&#39;ignore&#39;</span><span class="p">,</span> <span class="s1">&#39;inline&#39;</span><span class="p">,</span> <span class="s1">&#39;widget&#39;</span><span class="p">,</span> <span class="s1">&#39;save&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;inline&#39;</span>,</span><span class="param">	<span class="n">fig_output_fmt</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="s1">&#39;pdf&#39;</span>,</span><span class="param">	<span class="n">fig_numbered_fname</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;figure-</span><span class="si">{num}</span><span class="s1">&#39;</span>,</span><span class="param">	<span class="n">fig_config</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">fig_basepath</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">close_after_plotshow</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span></span><span class="return-annotation">) -> <span class="n">torch</span><span class="o">.</span><span class="n">device</span> <span class="o">|</span> <span class="kc">None</span>:</span></span>
 
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="configure_notebook-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/nbutils/configure_notebook.py#L192-L284" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.9.0nbutils/configure_notebook.py#L192-L284" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -923,7 +923,7 @@
     </div>
     <a class="headerlink" href="#configure_notebook"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="configure_notebook-193"><a href="#configure_notebook-193"><span class="linenos">193</span></a><span class="k">def</span><span class="w"> </span><span class="nf">configure_notebook</span><span class="p">(</span>
-</span><span id="configure_notebook-194"><a href="#configure_notebook-194"><span class="linenos">194</span></a>    <span class="o">*</span><span class="n">args</span><span class="p">,</span>
+</span><span id="configure_notebook-194"><a href="#configure_notebook-194"><span class="linenos">194</span></a>    <span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Any</span><span class="p">,</span>
 </span><span id="configure_notebook-195"><a href="#configure_notebook-195"><span class="linenos">195</span></a>    <span class="n">seed</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">42</span><span class="p">,</span>
 </span><span id="configure_notebook-196"><a href="#configure_notebook-196"><span class="linenos">196</span></a>    <span class="n">device</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Any</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>  <span class="c1"># this can be a string, torch.device, or None</span>
 </span><span id="configure_notebook-197"><a href="#configure_notebook-197"><span class="linenos">197</span></a>    <span class="n">dark_mode</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
@@ -995,17 +995,17 @@
 </span><span id="configure_notebook-263"><a href="#configure_notebook-263"><span class="linenos">263</span></a>
 </span><span id="configure_notebook-264"><a href="#configure_notebook-264"><span class="linenos">264</span></a>    <span class="c1"># Reload modules before executing user code</span>
 </span><span id="configure_notebook-265"><a href="#configure_notebook-265"><span class="linenos">265</span></a>    <span class="k">if</span> <span class="n">IN_JUPYTER</span><span class="p">:</span>
-</span><span id="configure_notebook-266"><a href="#configure_notebook-266"><span class="linenos">266</span></a>        <span class="n">ipython</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>
-</span><span id="configure_notebook-267"><a href="#configure_notebook-267"><span class="linenos">267</span></a>        <span class="k">if</span> <span class="s2">&quot;IPython.extensions.autoreload&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">ipython</span><span class="o">.</span><span class="n">extension_manager</span><span class="o">.</span><span class="n">loaded</span><span class="p">:</span>
-</span><span id="configure_notebook-268"><a href="#configure_notebook-268"><span class="linenos">268</span></a>            <span class="n">ipython</span><span class="o">.</span><span class="n">magic</span><span class="p">(</span><span class="s2">&quot;load_ext autoreload&quot;</span><span class="p">)</span>
-</span><span id="configure_notebook-269"><a href="#configure_notebook-269"><span class="linenos">269</span></a>            <span class="n">ipython</span><span class="o">.</span><span class="n">magic</span><span class="p">(</span><span class="s2">&quot;autoreload 2&quot;</span><span class="p">)</span>
+</span><span id="configure_notebook-266"><a href="#configure_notebook-266"><span class="linenos">266</span></a>        <span class="n">ipython</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>  <span class="c1"># pyright: ignore[reportPossiblyUnboundVariable]</span>
+</span><span id="configure_notebook-267"><a href="#configure_notebook-267"><span class="linenos">267</span></a>        <span class="k">if</span> <span class="s2">&quot;IPython.extensions.autoreload&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">ipython</span><span class="o">.</span><span class="n">extension_manager</span><span class="o">.</span><span class="n">loaded</span><span class="p">:</span>  <span class="c1"># pyright: ignore[reportOptionalMemberAccess]</span>
+</span><span id="configure_notebook-268"><a href="#configure_notebook-268"><span class="linenos">268</span></a>            <span class="n">ipython</span><span class="o">.</span><span class="n">magic</span><span class="p">(</span><span class="s2">&quot;load_ext autoreload&quot;</span><span class="p">)</span>  <span class="c1"># pyright: ignore[reportAttributeAccessIssue, reportOptionalMemberAccess]</span>
+</span><span id="configure_notebook-269"><a href="#configure_notebook-269"><span class="linenos">269</span></a>            <span class="n">ipython</span><span class="o">.</span><span class="n">magic</span><span class="p">(</span><span class="s2">&quot;autoreload 2&quot;</span><span class="p">)</span>  <span class="c1"># pyright: ignore[reportAttributeAccessIssue, reportOptionalMemberAccess]</span>
 </span><span id="configure_notebook-270"><a href="#configure_notebook-270"><span class="linenos">270</span></a>
 </span><span id="configure_notebook-271"><a href="#configure_notebook-271"><span class="linenos">271</span></a>        <span class="c1"># Specify plotly renderer for vscode</span>
 </span><span id="configure_notebook-272"><a href="#configure_notebook-272"><span class="linenos">272</span></a>        <span class="k">if</span> <span class="n">PLOTLY_IMPORTED</span><span class="p">:</span>
-</span><span id="configure_notebook-273"><a href="#configure_notebook-273"><span class="linenos">273</span></a>            <span class="n">pio</span><span class="o">.</span><span class="n">renderers</span><span class="o">.</span><span class="n">default</span> <span class="o">=</span> <span class="s2">&quot;notebook_connected&quot;</span>
+</span><span id="configure_notebook-273"><a href="#configure_notebook-273"><span class="linenos">273</span></a>            <span class="n">pio</span><span class="o">.</span><span class="n">renderers</span><span class="o">.</span><span class="n">default</span> <span class="o">=</span> <span class="s2">&quot;notebook_connected&quot;</span>  <span class="c1"># pyright: ignore[reportPossiblyUnboundVariable]</span>
 </span><span id="configure_notebook-274"><a href="#configure_notebook-274"><span class="linenos">274</span></a>
 </span><span id="configure_notebook-275"><a href="#configure_notebook-275"><span class="linenos">275</span></a>            <span class="k">if</span> <span class="n">dark_mode</span><span class="p">:</span>
-</span><span id="configure_notebook-276"><a href="#configure_notebook-276"><span class="linenos">276</span></a>                <span class="n">pio</span><span class="o">.</span><span class="n">templates</span><span class="o">.</span><span class="n">default</span> <span class="o">=</span> <span class="s2">&quot;plotly_dark&quot;</span>
+</span><span id="configure_notebook-276"><a href="#configure_notebook-276"><span class="linenos">276</span></a>                <span class="n">pio</span><span class="o">.</span><span class="n">templates</span><span class="o">.</span><span class="n">default</span> <span class="o">=</span> <span class="s2">&quot;plotly_dark&quot;</span>  <span class="c1"># pyright: ignore[reportPossiblyUnboundVariable]</span>
 </span><span id="configure_notebook-277"><a href="#configure_notebook-277"><span class="linenos">277</span></a>                <span class="n">plt</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s2">&quot;dark_background&quot;</span><span class="p">)</span>
 </span><span id="configure_notebook-278"><a href="#configure_notebook-278"><span class="linenos">278</span></a>
 </span><span id="configure_notebook-279"><a href="#configure_notebook-279"><span class="linenos">279</span></a>    <span class="k">try</span><span class="p">:</span>
@@ -1080,7 +1080,7 @@ the device set, if torch is installed</li>
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="plotshow-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/nbutils/configure_notebook.py#L287-L320" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.9.0nbutils/configure_notebook.py#L287-L320" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>

@@ -1,12 +1,18 @@
 from collections import namedtuple
+from dataclasses import dataclass, field
 from typing import NamedTuple
 
 import pytest
 
+# pyright: reportPrivateUsage=false
+
 # Module code assumed to be imported from my_module
+from muutils.json_serialize.types import _FORMAT_KEY
 from muutils.json_serialize.util import (
     UniversalContainer,
     _recursive_hashify,
+    array_safe_eq,
+    dc_eq,
     isinstance_namedtuple,
     safe_getsource,
     string_as_lines,
@@ -77,3 +83,299 @@ def test_safe_getsource():
     print(f"Source of wrapped_func: {error_source}")
     # Check for the original function's source since the decorator doesn't change this
     assert any("def raises_error():" in line for line in error_source)
+
+
+# Additional tests from TODO.md
+
+
+def test_try_catch_exception_handling():
+    """Test that try_catch properly catches exceptions and returns default error message."""
+
+    @try_catch
+    def raises_runtime_error():
+        raise RuntimeError("runtime error message")
+
+    @try_catch
+    def raises_key_error():
+        raise KeyError("missing key")
+
+    @try_catch
+    def raises_zero_division():
+        return 1 / 0
+
+    # Test that exceptions are caught and serialized
+    assert raises_runtime_error() == "RuntimeError: runtime error message"
+    assert raises_key_error() == "KeyError: 'missing key'"
+    result = raises_zero_division()
+    assert "ZeroDivisionError" in result  # pyright: ignore[reportOperatorIssue]
+
+    # Test with arguments
+    @try_catch
+    def func_with_args(a, b):
+        if a == 0:
+            raise ValueError(f"a cannot be 0, got {a}")
+        return a + b
+
+    assert func_with_args(1, 2) == 3
+    assert func_with_args(0, 2) == "ValueError: a cannot be 0, got 0"
+
+
+def test_array_safe_eq():
+    """Test array_safe_eq with numpy arrays, torch tensors, and nested arrays."""
+    # Basic types
+    assert array_safe_eq(1, 1) is True
+    assert array_safe_eq(1, 2) is False
+    # Note: strings are treated as sequences by array_safe_eq, so we test differently
+    assert array_safe_eq(1.5, 1.5) is True
+    assert array_safe_eq(True, True) is True
+
+    # Lists and sequences
+    assert array_safe_eq([1, 2, 3], [1, 2, 3]) is True
+    assert array_safe_eq([1, 2, 3], [1, 2, 4]) is False
+    assert array_safe_eq([], []) is True
+    assert array_safe_eq((1, 2, 3), (1, 2, 3)) is True
+
+    # Nested arrays
+    assert array_safe_eq([[1, 2], [3, 4]], [[1, 2], [3, 4]]) is True
+    assert array_safe_eq([[1, 2], [3, 4]], [[1, 2], [3, 5]]) is False
+    assert array_safe_eq([[[1]], [[2]]], [[[1]], [[2]]]) is True
+
+    # Dicts
+    assert array_safe_eq({"a": 1, "b": 2}, {"a": 1, "b": 2}) is True
+    assert array_safe_eq({"a": 1, "b": 2}, {"a": 1, "b": 3}) is False
+    assert array_safe_eq({}, {}) is True
+
+    # Mixed nested structures
+    assert (
+        array_safe_eq({"a": [1, 2], "b": {"c": 3}}, {"a": [1, 2], "b": {"c": 3}})
+        is True
+    )
+    assert (
+        array_safe_eq({"a": [1, 2], "b": {"c": 3}}, {"a": [1, 2], "b": {"c": 4}})
+        is False
+    )
+
+    # Identity check
+    obj = {"a": 1}
+    assert array_safe_eq(obj, obj) is True
+
+    # Type mismatch
+    assert array_safe_eq(1, 1.0) is False  # Different types
+    assert array_safe_eq([1, 2], (1, 2)) is False
+
+    # Try with numpy if available (note: numpy returns np.True_ not Python True)
+    try:
+        import numpy as np
+
+        arr1 = np.array([1, 2, 3])
+        arr2 = np.array([1, 2, 3])
+        arr3 = np.array([1, 2, 4])
+        assert array_safe_eq(arr1, arr2)  # Use == not is for numpy bool
+        assert not array_safe_eq(arr1, arr3)
+    except ImportError:
+        pass  # Skip numpy tests if not available
+
+    # Try with torch if available (note: torch also may return tensor bool)
+    try:
+        import torch
+
+        t1 = torch.tensor([1.0, 2.0, 3.0])
+        t2 = torch.tensor([1.0, 2.0, 3.0])
+        t3 = torch.tensor([1.0, 2.0, 4.0])
+        assert array_safe_eq(t1, t2)  # Use == not is for torch bool
+        assert not array_safe_eq(t1, t3)
+    except ImportError:
+        pass  # Skip torch tests if not available
+
+
+def test_dc_eq():
+    """Test dc_eq for dataclasses equal and unequal cases."""
+
+    @dataclass
+    class Point:
+        x: int
+        y: int
+
+    @dataclass
+    class Point3D:
+        x: int
+        y: int
+        z: int
+
+    @dataclass
+    class PointWithArray:
+        x: int
+        coords: list
+
+    # Equal dataclasses
+    p1 = Point(1, 2)
+    p2 = Point(1, 2)
+    assert dc_eq(p1, p2) is True
+
+    # Unequal dataclasses
+    p3 = Point(1, 3)
+    assert dc_eq(p1, p3) is False
+
+    # Identity
+    assert dc_eq(p1, p1) is True
+
+    # Different classes - default behavior (false_when_class_mismatch=True)
+    p3d = Point3D(1, 2, 3)
+    assert dc_eq(p1, p3d) is False
+
+    # Different classes - except_when_class_mismatch=True
+    with pytest.raises(
+        TypeError, match="Cannot compare dataclasses of different classes"
+    ):
+        dc_eq(p1, p3d, except_when_class_mismatch=True)
+
+    # Dataclasses with arrays
+    pa1 = PointWithArray(1, [1, 2, 3])
+    pa2 = PointWithArray(1, [1, 2, 3])
+    pa3 = PointWithArray(1, [1, 2, 4])
+    assert dc_eq(pa1, pa2) is True
+    assert dc_eq(pa1, pa3) is False
+
+    # Test with nested structures
+    @dataclass
+    class Container:
+        items: list
+        metadata: dict
+
+    c1 = Container([1, 2, 3], {"name": "test"})
+    c2 = Container([1, 2, 3], {"name": "test"})
+    c3 = Container([1, 2, 3], {"name": "other"})
+    assert dc_eq(c1, c2) is True
+    assert dc_eq(c1, c3) is False
+
+    # Test except_when_field_mismatch with different classes and different fields
+    # Must set false_when_class_mismatch=False to reach the field check
+    with pytest.raises(AttributeError, match="different fields"):
+        dc_eq(p1, p3d, except_when_field_mismatch=True, false_when_class_mismatch=False)
+
+    # Test except_when_field_mismatch with different classes but SAME fields - should NOT raise
+    @dataclass
+    class Point2D:
+        x: int
+        y: int
+
+    p2d = Point2D(1, 2)
+    # Same fields, different classes, same values - should return True
+    result = dc_eq(
+        p1, p2d, except_when_field_mismatch=True, false_when_class_mismatch=False
+    )
+    assert result is True
+
+    # Different classes, same fields, different values - should return False
+    p2d_diff = Point2D(1, 99)
+    assert (
+        dc_eq(
+            p2d_diff,
+            p1,
+            false_when_class_mismatch=False,
+            except_when_field_mismatch=True,
+        )
+        is False
+    )
+
+    # Test parameter precedence: except_when_class_mismatch takes precedence over false_when_class_mismatch
+    with pytest.raises(
+        TypeError, match="Cannot compare dataclasses of different classes"
+    ):
+        dc_eq(p1, p3d, except_when_class_mismatch=True, false_when_class_mismatch=True)
+
+    # Test parameter precedence: except_when_class_mismatch takes precedence over except_when_field_mismatch
+    with pytest.raises(
+        TypeError, match="Cannot compare dataclasses of different classes"
+    ):
+        dc_eq(p1, p3d, except_when_class_mismatch=True, except_when_field_mismatch=True)
+
+    # Test with empty dataclasses
+    @dataclass
+    class Empty:
+        pass
+
+    @dataclass
+    class AlsoEmpty:
+        pass
+
+    e1, e2 = Empty(), Empty()
+    assert dc_eq(e1, e2) is True
+
+    # Different empty classes - same fields (none), should be equal when allowing cross-class comparison
+    ae = AlsoEmpty()
+    assert dc_eq(e1, ae, false_when_class_mismatch=False) is True
+
+    # Test with compare=False fields - these should be ignored in comparison
+    @dataclass
+    class WithIgnored:
+        x: int
+        ignored: int = field(compare=False)
+
+    w1 = WithIgnored(1, 100)
+    w2 = WithIgnored(1, 999)  # ignored field differs
+    assert (
+        dc_eq(w1, w2) is True
+    )  # Should still be equal since ignored field is not compared
+
+    # Test with non-dataclass objects - should raise TypeError
+    class NotADataclass:
+        def __init__(self, x: int):
+            self.x = x
+
+    with pytest.raises(TypeError):
+        dc_eq(NotADataclass(1), NotADataclass(1))
+
+
+def test_FORMAT_KEY():
+    """Test that FORMAT_KEY constant is accessible and has expected value."""
+    # Test that the format key exists and is a string
+    assert isinstance(_FORMAT_KEY, str)
+    assert _FORMAT_KEY == "__muutils_format__"
+
+    # Test that it can be used in dictionaries (common use case)
+    data = {_FORMAT_KEY: "custom_type", "value": 42}
+    assert data[_FORMAT_KEY] == "custom_type"
+    assert _FORMAT_KEY in data
+
+
+def test_edge_cases():
+    """Test edge cases for utility functions: None values, empty containers, mixed types."""
+    # string_as_lines with None
+    assert string_as_lines(None) == []
+    # Empty string splits to empty list (splitlines behavior)
+    assert string_as_lines("") == []
+    assert string_as_lines("single") == ["single"]
+
+    # _recursive_hashify with empty containers
+    assert _recursive_hashify([]) == ()
+    assert _recursive_hashify({}) == ()
+    assert _recursive_hashify(()) == ()
+
+    # _recursive_hashify with mixed nested types
+    mixed = {"list": [1, 2], "dict": {"nested": True}, "tuple": (3, 4)}
+    result = _recursive_hashify(mixed)
+    assert isinstance(result, tuple)
+
+    # array_safe_eq with empty containers
+    assert array_safe_eq([], []) is True
+    assert array_safe_eq({}, {}) is True
+    assert array_safe_eq((), ()) is True
+
+    # array_safe_eq with None
+    assert array_safe_eq(None, None) is True
+    assert array_safe_eq(None, 0) is False
+
+    # try_catch with function returning None
+    @try_catch
+    def returns_none():
+        return None
+
+    assert returns_none() is None
+
+    # UniversalContainer with various types
+    uc = UniversalContainer()
+    assert None in uc
+    assert [] in uc
+    assert {} in uc
+    assert object() in uc

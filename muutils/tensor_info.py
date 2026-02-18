@@ -3,7 +3,15 @@
 from __future__ import annotations
 
 import numpy as np
-from typing import Union, Any, Literal, List, Dict, overload, Optional
+from typing import Union, Any, Literal, List, Dict, overload, Optional, TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from typing import TypedDict
+else:
+    try:
+        from typing import TypedDict
+    except ImportError:
+        from typing_extensions import TypedDict
 
 # Global color definitions
 COLORS: Dict[str, Dict[str, str]] = {
@@ -66,6 +74,25 @@ COLORS: Dict[str, Dict[str, str]] = {
 }
 
 OutputFormat = Literal["unicode", "latex", "ascii"]
+
+
+class ArraySummarySettings(TypedDict):
+    """Type definition for array_summary default settings."""
+
+    fmt: OutputFormat
+    precision: int
+    stats: bool
+    shape: bool
+    dtype: bool
+    device: bool
+    requires_grad: bool
+    sparkline: bool
+    sparkline_bins: int
+    sparkline_logy: Optional[bool]
+    colored: bool
+    as_list: bool
+    eq_char: str
+
 
 SYMBOLS: Dict[OutputFormat, Dict[str, str]] = {
     "latex": {
@@ -186,7 +213,7 @@ def array_info(
                 cpu_tensor = A
             try:
                 # For CPU tensor, just detach and convert
-                detached = getattr(cpu_tensor, "detach", lambda: cpu_tensor)()
+                detached = getattr(cpu_tensor, "detach", lambda: cpu_tensor)()  # pyright: ignore[reportPossiblyUnboundVariable]
                 A_np = getattr(detached, "numpy", lambda: np.array([]))()
             except:  # noqa: E722
                 A_np = np.array([])
@@ -225,8 +252,9 @@ def array_info(
         nan_mask = np.isnan(A_flat)
         result["nan_count"] = np.sum(nan_mask)
         result["has_nans"] = result["nan_count"] > 0
-        if result["size"] > 0:
-            result["nan_percent"] = (result["nan_count"] / result["size"]) * 100
+        result_size: int = result["size"]  # ty: ignore[invalid-assignment]
+        if result_size > 0:
+            result["nan_percent"] = (result["nan_count"] / result_size) * 100
     except:  # noqa: E722
         pass
 
@@ -246,7 +274,8 @@ def array_info(
             result["range"] = (result["min"], result["max"])
 
             # Remove NaNs for histogram
-            A_hist = A_flat[~nan_mask]
+            # TYPING: nan mask will def be bound on this branch, idk why it thinks the operator is bad
+            A_hist = A_flat[~nan_mask]  # pyright: ignore[reportOperatorIssue, reportPossiblyUnboundVariable]
         else:
             result["min"] = float(np.min(A_flat))
             result["max"] = float(np.max(A_flat))
@@ -275,9 +304,12 @@ def array_info(
     return result
 
 
+SparklineFormat = Literal["unicode", "latex", "ascii"]
+
+
 def generate_sparkline(
     histogram: np.ndarray,
-    format: Literal["unicode", "latex", "ascii"] = "unicode",
+    format: SparklineFormat = "unicode",
     log_y: Optional[bool] = None,
 ) -> tuple[str, bool]:
     """Generate a sparkline visualization of the histogram.
@@ -338,21 +370,21 @@ def generate_sparkline(
     return spark, log_y
 
 
-DEFAULT_SETTINGS: Dict[str, Any] = dict(
-    fmt="unicode",
-    precision=2,
-    stats=True,
-    shape=True,
-    dtype=True,
-    device=True,
-    requires_grad=True,
-    sparkline=False,
-    sparkline_bins=5,
-    sparkline_logy=None,
-    colored=False,
-    as_list=False,
-    eq_char="=",
-)
+DEFAULT_SETTINGS: ArraySummarySettings = {
+    "fmt": "unicode",
+    "precision": 2,
+    "stats": True,
+    "shape": True,
+    "dtype": True,
+    "device": True,
+    "requires_grad": True,
+    "sparkline": False,
+    "sparkline_bins": 5,
+    "sparkline_logy": None,
+    "colored": False,
+    "as_list": False,
+    "eq_char": "=",
+}
 
 
 def apply_color(
@@ -395,7 +427,9 @@ def colorize_dtype(dtype_str: str, colors: Dict[str, str], using_tex: bool) -> s
         return type_colored
 
 
-def format_shape_colored(shape_val, colors: Dict[str, str], using_tex: bool) -> str:
+def format_shape_colored(
+    shape_val: Any, colors: Dict[str, str], using_tex: bool
+) -> str:
     """Format shape with proper coloring for both 1D and multi-D arrays."""
 
     def apply_color(text: str, color_key: str) -> str:
@@ -447,30 +481,70 @@ _USE_DEFAULT = _UseDefaultType()
 @overload
 def array_summary(
     array: Any,
+    fmt: OutputFormat = ...,
+    precision: int = ...,
+    stats: bool = ...,
+    shape: bool = ...,
+    dtype: bool = ...,
+    device: bool = ...,
+    requires_grad: bool = ...,
+    sparkline: bool = ...,
+    sparkline_bins: int = ...,
+    sparkline_logy: Optional[bool] = ...,
+    colored: bool = ...,
+    eq_char: str = ...,
+    *,
     as_list: Literal[True],
-    **kwargs,
 ) -> List[str]: ...
 @overload
 def array_summary(
     array: Any,
-    as_list: Literal[False],
-    **kwargs,
+    fmt: OutputFormat = ...,
+    precision: int = ...,
+    stats: bool = ...,
+    shape: bool = ...,
+    dtype: bool = ...,
+    device: bool = ...,
+    requires_grad: bool = ...,
+    sparkline: bool = ...,
+    sparkline_bins: int = ...,
+    sparkline_logy: Optional[bool] = ...,
+    colored: bool = ...,
+    eq_char: str = ...,
+    as_list: Literal[False] = ...,
 ) -> str: ...
-def array_summary(  # type: ignore[misc]
-    array,
-    fmt: OutputFormat = _USE_DEFAULT,  # type: ignore[assignment]
-    precision: int = _USE_DEFAULT,  # type: ignore[assignment]
-    stats: bool = _USE_DEFAULT,  # type: ignore[assignment]
-    shape: bool = _USE_DEFAULT,  # type: ignore[assignment]
-    dtype: bool = _USE_DEFAULT,  # type: ignore[assignment]
-    device: bool = _USE_DEFAULT,  # type: ignore[assignment]
-    requires_grad: bool = _USE_DEFAULT,  # type: ignore[assignment]
-    sparkline: bool = _USE_DEFAULT,  # type: ignore[assignment]
-    sparkline_bins: int = _USE_DEFAULT,  # type: ignore[assignment]
-    sparkline_logy: Optional[bool] = _USE_DEFAULT,  # type: ignore[assignment]
-    colored: bool = _USE_DEFAULT,  # type: ignore[assignment]
-    eq_char: str = _USE_DEFAULT,  # type: ignore[assignment]
-    as_list: bool = _USE_DEFAULT,  # type: ignore[assignment]
+@overload
+def array_summary(
+    array: Any,
+    fmt: OutputFormat = ...,
+    precision: int = ...,
+    stats: bool = ...,
+    shape: bool = ...,
+    dtype: bool = ...,
+    device: bool = ...,
+    requires_grad: bool = ...,
+    sparkline: bool = ...,
+    sparkline_bins: int = ...,
+    sparkline_logy: Optional[bool] = ...,
+    colored: bool = ...,
+    eq_char: str = ...,
+    as_list: bool = ...,
+) -> Union[str, List[str]]: ...
+def array_summary(
+    array: Any,
+    fmt: Union[OutputFormat, _UseDefaultType] = _USE_DEFAULT,
+    precision: Union[int, _UseDefaultType] = _USE_DEFAULT,
+    stats: Union[bool, _UseDefaultType] = _USE_DEFAULT,
+    shape: Union[bool, _UseDefaultType] = _USE_DEFAULT,
+    dtype: Union[bool, _UseDefaultType] = _USE_DEFAULT,
+    device: Union[bool, _UseDefaultType] = _USE_DEFAULT,
+    requires_grad: Union[bool, _UseDefaultType] = _USE_DEFAULT,
+    sparkline: Union[bool, _UseDefaultType] = _USE_DEFAULT,
+    sparkline_bins: Union[int, _UseDefaultType] = _USE_DEFAULT,
+    sparkline_logy: Union[Optional[bool], _UseDefaultType] = _USE_DEFAULT,
+    colored: Union[bool, _UseDefaultType] = _USE_DEFAULT,
+    eq_char: Union[str, _UseDefaultType] = _USE_DEFAULT,
+    as_list: Union[bool, _UseDefaultType] = _USE_DEFAULT,
 ) -> Union[str, List[str]]:
     """Format array information into a readable summary.
 
@@ -506,31 +580,31 @@ def array_summary(  # type: ignore[misc]
      - `Union[str, List[str]]`
             Formatted statistical summary, either as string or list of strings
     """
-    if fmt is _USE_DEFAULT:
+    if isinstance(fmt, _UseDefaultType):
         fmt = DEFAULT_SETTINGS["fmt"]
-    if precision is _USE_DEFAULT:
+    if isinstance(precision, _UseDefaultType):
         precision = DEFAULT_SETTINGS["precision"]
-    if stats is _USE_DEFAULT:
+    if isinstance(stats, _UseDefaultType):
         stats = DEFAULT_SETTINGS["stats"]
-    if shape is _USE_DEFAULT:
+    if isinstance(shape, _UseDefaultType):
         shape = DEFAULT_SETTINGS["shape"]
-    if dtype is _USE_DEFAULT:
+    if isinstance(dtype, _UseDefaultType):
         dtype = DEFAULT_SETTINGS["dtype"]
-    if device is _USE_DEFAULT:
+    if isinstance(device, _UseDefaultType):
         device = DEFAULT_SETTINGS["device"]
-    if requires_grad is _USE_DEFAULT:
+    if isinstance(requires_grad, _UseDefaultType):
         requires_grad = DEFAULT_SETTINGS["requires_grad"]
-    if sparkline is _USE_DEFAULT:
+    if isinstance(sparkline, _UseDefaultType):
         sparkline = DEFAULT_SETTINGS["sparkline"]
-    if sparkline_bins is _USE_DEFAULT:
+    if isinstance(sparkline_bins, _UseDefaultType):
         sparkline_bins = DEFAULT_SETTINGS["sparkline_bins"]
-    if sparkline_logy is _USE_DEFAULT:
+    if isinstance(sparkline_logy, _UseDefaultType):
         sparkline_logy = DEFAULT_SETTINGS["sparkline_logy"]
-    if colored is _USE_DEFAULT:
+    if isinstance(colored, _UseDefaultType):
         colored = DEFAULT_SETTINGS["colored"]
-    if as_list is _USE_DEFAULT:
+    if isinstance(as_list, _UseDefaultType):
         as_list = DEFAULT_SETTINGS["as_list"]
-    if eq_char is _USE_DEFAULT:
+    if isinstance(eq_char, _UseDefaultType):
         eq_char = DEFAULT_SETTINGS["eq_char"]
 
     array_data: Dict[str, Any] = array_info(array, hist_bins=sparkline_bins)

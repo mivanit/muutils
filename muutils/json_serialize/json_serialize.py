@@ -43,7 +43,12 @@ else:
             ImportWarning,
         )
 
-from muutils.json_serialize.types import _FORMAT_KEY, Hashableitem  # pyright: ignore[reportPrivateUsage]
+from muutils.json_serialize.types import (
+    _FORMAT_KEY,
+    Hashableitem,
+    _SerializedFrozenset,
+    _SerializedSet,
+)  # pyright: ignore[reportPrivateUsage]
 
 from muutils.json_serialize.util import (
     JSONdict,
@@ -327,6 +332,12 @@ class JsonSerializer:
     @overload
     def json_serialize(self, obj: list, path: ObjectPath = ()) -> list: ...
     @overload
+    def json_serialize(self, obj: set, path: ObjectPath = ()) -> _SerializedSet: ...
+    @overload
+    def json_serialize(
+        self, obj: frozenset, path: ObjectPath = ()
+    ) -> _SerializedFrozenset: ...
+    @overload
     def json_serialize(self, obj: Any, path: ObjectPath = ()) -> JSONitem: ...
     def json_serialize(
         self,
@@ -383,6 +394,10 @@ GLOBAL_JSON_SERIALIZER: JsonSerializer = JsonSerializer()
 def json_serialize(obj: Mapping[str, Any], path: ObjectPath = ()) -> JSONdict: ...
 @overload
 def json_serialize(obj: list, path: ObjectPath = ()) -> list: ...
+@overload
+def json_serialize(obj: set, path: ObjectPath = ()) -> _SerializedSet: ...
+@overload
+def json_serialize(obj: frozenset, path: ObjectPath = ()) -> _SerializedFrozenset: ...
 @overload
 def json_serialize(obj: Any, path: ObjectPath = ()) -> JSONitem: ...
 def json_serialize(obj: Any, path: ObjectPath = ()) -> JSONitem:  # pyright: ignore[reportAny]

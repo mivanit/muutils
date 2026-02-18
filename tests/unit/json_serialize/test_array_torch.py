@@ -199,22 +199,22 @@ def test_torch_serialization_integration():
     # Check structure is preserved
     assert isinstance(serialized["model_weights"], dict)
     assert _FORMAT_KEY in serialized["model_weights"]
-    assert serialized["model_weights"]["shape"] == [10, 5]
+    assert serialized["model_weights"]["shape"] == [10, 5] # pyright: ignore[reportGeneralTypeIssues]
 
     serialized_biases = serialized["biases"]
     assert isinstance(serialized_biases, dict)
-    assert serialized_biases["shape"] == [5]
+    assert serialized_biases["shape"] == [5] # pyright: ignore[reportGeneralTypeIssues]
 
     serialized_metadata = serialized["metadata"]
     assert isinstance(serialized_metadata, dict)
-    assert serialized_metadata["epochs"] == 10
+    assert serialized_metadata["epochs"] == 10 # pyright: ignore[reportGeneralTypeIssues]
 
     # Check nested tensors
     serialized_history = serialized["history"]
     assert isinstance(serialized_history, list)
     history_item_0 = serialized_history[0]
     assert isinstance(history_item_0, dict)
-    history_item_0_loss = history_item_0["loss"]
+    history_item_0_loss = history_item_0["loss"] # pyright: ignore[reportGeneralTypeIssues]
     assert isinstance(history_item_0_loss, dict)
     assert _FORMAT_KEY in history_item_0_loss
 

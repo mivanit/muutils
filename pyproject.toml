@@ -174,8 +174,10 @@
 # TODO: remove this once we clean up the `# type: ignore` comments that are needed
 # for mypy/pyright but not for ty. See https://docs.astral.sh/ty/configuration/
 [tool.ty.rules]
+	# mostly for version compatibility
+	unused-ignore-comment = "ignore"
 	unused-type-ignore-comment = "ignore"
-	ignore-comment-unknown-rule = "ignore" # versions of ty for python 3.11 don't know about this?
+	ignore-comment-unknown-rule = "ignore"
 
 # [[tool.ty.overrides]]
 # 	include = ["tests/unit/json_serialize/test_json_serialize.py", "tests/unit/test_jsonlines.py"]

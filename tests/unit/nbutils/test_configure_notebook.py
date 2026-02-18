@@ -1,4 +1,5 @@
 import os
+import sys
 import warnings
 
 import matplotlib.pyplot as plt  # type: ignore[import]
@@ -103,6 +104,9 @@ def test_no_warn_unknown_format_2():
 def test_no_warn_pdf_format():
     with warnings.catch_warnings():
         warnings.simplefilter("error")
+        # Filter matplotlib/Pillow internal deprecation on Python 3.9
+        if sys.version_info[:2] == (3, 9):
+            warnings.filterwarnings("ignore", message="'mode' parameter", category=DeprecationWarning)
         setup_plots(
             plot_mode="save",
             fig_basepath=JUNK_DATA_PATH,

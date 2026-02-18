@@ -106,7 +106,9 @@ def test_no_warn_pdf_format():
         warnings.simplefilter("error")
         # Filter matplotlib/Pillow internal deprecation on Python 3.9
         if sys.version_info[:2] == (3, 9):
-            warnings.filterwarnings("ignore", message="'mode' parameter", category=DeprecationWarning)
+            warnings.filterwarnings(
+                "ignore", message="'mode' parameter", category=DeprecationWarning
+            )
         setup_plots(
             plot_mode="save",
             fig_basepath=JUNK_DATA_PATH,

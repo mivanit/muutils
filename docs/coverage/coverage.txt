@@ -1,30 +1,33 @@
 Name                                                                              Stmts   Miss  Cover   Missing
 ---------------------------------------------------------------------------------------------------------------
 muutils/__init__.py                                                                   2      2     0%   5-7
-muutils/collect_warnings.py                                                          38     38     0%   1-132
+muutils/cli/arg_bool.py                                                              84     14    83%   11, 23-28, 160, 166, 177, 183-188, 195
+muutils/cli/command.py                                                               50      1    98%   89
+muutils/collect_warnings.py                                                          38      0   100%
 muutils/console_unicode.py                                                            7      0   100%
-muutils/dbg.py                                                                      203     63    69%   130, 144-164, 235-247, 260-299, 306-313, 331, 342, 456, 477, 490
-muutils/dictmagic.py                                                                160     23    86%   37-42, 45-50, 309, 469-473, 477, 510-522
-muutils/errormode.py                                                                 74     30    59%   10-34, 43, 78-91, 144, 149, 160-163, 197, 200, 203, 206-207, 215-241
+muutils/dbg.py                                                                      225     30    87%   159, 173-193, 266-270, 314, 316, 318, 337-340, 483, 504, 517
+muutils/dictmagic.py                                                                160     23    86%   39-44, 47-52, 311, 473-477, 481, 514-526
+muutils/errormode.py                                                                 74     27    64%   10-34, 78-91, 160-163, 197, 200, 203, 206-207, 215-241
 muutils/group_equiv.py                                                               29      0   100%
-muutils/interval.py                                                                 278      6    98%   122, 164, 172, 229, 311, 459
+muutils/interval.py                                                                 277      6    98%   120, 162, 170, 227, 309, 457
 muutils/json_serialize/__init__.py                                                    6      6     0%   16-31
-muutils/json_serialize/array.py                                                      95     36    62%   9-38, 42-48, 59, 99, 133-136, 145, 149, 153, 156, 160, 164-167, 171, 178, 189, 213-218, 223, 226
+muutils/json_serialize/array.py                                                     114     46    60%   9-69, 79-102, 134, 224-233, 247, 252, 257, 260, 264, 268, 288, 295-298, 305, 316, 339-345, 350, 353
 muutils/json_serialize/dataclass_transform_mock.py                                    8      8     0%   1-29
-muutils/json_serialize/json_serialize.py                                             64     46    28%   11-93, 140, 235-261, 271, 283, 298-331
-muutils/json_serialize/serializable_dataclass.py                                    256    112    56%   52-103, 127-153, 180, 186, 204-218, 231, 235-245, 264-266, 270, 282, 294-366, 376-383, 412, 423-424, 428-429, 435, 446-450, 455, 467, 484-488, 495-496, 501, 507, 510-512, 522-561, 678, 686-692, 721, 745-746, 780, 822
-muutils/json_serialize/serializable_field.py                                         45     25    44%   9-46, 83, 89, 93-96, 110, 121-201, 282-291
-muutils/json_serialize/util.py                                                      115     65    43%   3-79, 83, 94, 98, 114, 123, 128-132, 143, 146-151, 172, 187-192, 263, 267-272
-muutils/jsonlines.py                                                                 32     32     0%   3-77
+muutils/json_serialize/json_serialize.py                                             67     33    51%   11-65, 83-110, 168, 278-304, 340, 363, 375, 388-401
+muutils/json_serialize/serializable_dataclass.py                                    261    114    56%   52-116, 142-168, 195, 219-233, 246, 250-260, 279-281, 285, 297, 309-389, 399-406, 435, 446-447, 451-452, 458, 469-473, 478, 482-483, 494, 511-515, 522-523, 528, 534, 537-539, 549-588, 705, 713-719, 748, 773-774, 811, 855
+muutils/json_serialize/serializable_field.py                                         45     16    64%   9-46, 89, 93-96, 121-122, 141-201
+muutils/json_serialize/types.py                                                      16     16     0%   3-45
+muutils/json_serialize/util.py                                                      114     57    50%   3-92, 96, 107, 112-115, 134, 143, 148-152, 163, 166-171, 192, 207-213
+muutils/jsonlines.py                                                                 32      0   100%
 muutils/kappa.py                                                                     15      0   100%
 muutils/logger/__init__.py                                                            7      0   100%
-muutils/logger/exception_context.py                                                  12      6    50%   24, 27, 30-43
+muutils/logger/exception_context.py                                                  16      6    62%   34, 37, 45-58
 muutils/logger/headerfuncs.py                                                        18      1    94%   55
-muutils/logger/log_util.py                                                           33     33     0%   1-81
-muutils/logger/logger.py                                                             98     25    74%   28-36, 87, 90, 135, 155-156, 194, 227, 237, 257-261, 277-280, 295, 299, 306
-muutils/logger/loggingstream.py                                                      40     12    70%   43-76, 81, 91-92
-muutils/logger/simplelogger.py                                                       41     19    54%   16, 20, 24, 28, 55-65, 69-81
-muutils/logger/timing.py                                                             39     18    54%   27-30, 43-48, 52-54, 67-70, 81-87
+muutils/logger/log_util.py                                                           35      0   100%
+muutils/logger/logger.py                                                            100     27    73%   28-36, 87, 90, 135, 155-159, 198, 231, 241, 261-265, 281-284, 299, 303, 310
+muutils/logger/loggingstream.py                                                      45     13    71%   11, 49-82, 87, 97-98
+muutils/logger/simplelogger.py                                                       42     20    52%   16, 20, 24, 28, 55-65, 69-84
+muutils/logger/timing.py                                                             40     18    55%   33-36, 49-54, 58-60, 73-76, 87-93
 muutils/math/__init__.py                                                              1      0   100%
 muutils/math/bins.py                                                                 32      0   100%
 muutils/math/matrix_powers.py                                                        65      2    97%   112, 123
@@ -32,12 +35,13 @@ muutils/misc/__init__.py                                                        
 muutils/misc/b64_decode.py                                                            8      8     0%   1-9
 muutils/misc/classes.py                                                              23      5    78%   18-23
 muutils/misc/freezing.py                                                             63      8    87%   18, 27, 30, 63-64, 77, 116-117
-muutils/misc/func.py                                                                 86     14    84%   11, 15-21, 132, 201, 205, 213-220
-muutils/misc/hashing.py                                                              19      8    58%   15, 22, 32-38
+muutils/misc/func.py                                                                 86     14    84%   17-24, 139, 208, 212, 220-227
+muutils/misc/hashing.py                                                              20      8    60%   16, 23, 33-39
 muutils/misc/numerical.py                                                            68      3    96%   46, 77, 127
 muutils/misc/sequence.py                                                             59      1    98%   42
-muutils/misc/string.py                                                               34      5    85%   103-108
-muutils/mlutils.py                                                                   72     44    39%   3-30, 33, 39-53, 59-62, 69-77, 100, 108, 132-135, 146-151, 155-156, 166-167
+muutils/misc/string.py                                                               36      5    86%   127-132
+muutils/misc/typing_breakdown.py                                                    191    191     0%   12-393
+muutils/mlutils.py                                                                   82     49    40%   3-30, 33, 40-54, 60-63, 70-78, 95-96, 103-104, 111-114, 122, 146-149, 160-165, 169-171, 181-182
 muutils/nbutils/__init__.py                                                           2      2     0%   10-12
 muutils/nbutils/configure_notebook.py                                               133     80    40%   3-59, 77-86, 108, 118-119, 124, 127-128, 148-151, 156, 162-171, 178-183, 192, 265-276, 282-287, 310-317, 320
 muutils/nbutils/convert_ipynb_to_script.py                                          125     41    67%   70, 85, 98, 112-146, 235-237, 243, 270, 302-304, 311-364
@@ -45,55 +49,71 @@ muutils/nbutils/mermaid.py                                                      
 muutils/nbutils/print_tex.py                                                         10     10     0%   3-21
 muutils/nbutils/run_notebook_tests.py                                                87     32    63%   94-101, 127, 129, 133, 137, 143, 151, 185, 191-196, 201-214, 221-250
 muutils/parallel.py                                                                  92      6    93%   50-52, 64, 223, 227-228
-muutils/spinner.py                                                                  147     10    93%   280, 307, 370-371, 417, 420, 423, 465, 469, 508
+muutils/spinner.py                                                                  149     10    93%   284, 311, 374-375, 421, 424, 432, 479, 483, 522
 muutils/statcounter.py                                                               89     32    64%   30-41, 56, 82, 110, 122, 132, 149-179, 199, 209, 212, 217-222, 231
 muutils/sysinfo.py                                                                   79     14    82%   22-25, 77-78, 127-128, 169-178, 190, 208-210
-muutils/tensor_info.py                                                              246     26    89%   165-166, 176-177, 180-184, 196-197, 205-206, 220-221, 235-236, 268-269, 299, 306, 330, 362, 384, 403, 426, 435
-muutils/tensor_utils.py                                                             124     13    90%   73-74, 102, 105, 124, 128, 145, 148-151, 159, 166, 265
-muutils/timeit_fancy.py                                                              33      2    94%   90-91
-muutils/validate_type.py                                                             90     59    34%   3-54, 58, 97-99, 121, 124, 130, 138, 141, 158-223, 228-229
+muutils/tensor_info.py                                                              266     28    89%   13-14, 192-193, 203-204, 207-211, 223-224, 232-233, 247-248, 263-264, 297-298, 331, 338, 362, 394, 416, 437, 460, 469
+muutils/tensor_utils.py                                                              89      1    99%   75
+muutils/timeit_fancy.py                                                              34      2    94%   92-93
+muutils/validate_type.py                                                             95     26    73%   3-40, 57, 61, 200, 203, 223-230, 235-238
 muutils/web/__init__.py                                                               1      0   100%
 muutils/web/bundle_html.py                                                          147     39    73%   100-101, 146-148, 192, 198, 200, 202, 206-208, 211, 302-313, 320-382
-tests/conftest.py                                                                    14      3    79%   15-19
-tests/unit/errormode/test_errormode_functionality.py                                 62      1    98%   87
+muutils/web/html_to_pdf.py                                                           16     16     0%   1-38
+tests/conftest.py                                                                    14      6    57%   15-19, 23-27
+tests/unit/benchmark_parallel/__init__.py                                             0      0   100%
+tests/unit/benchmark_parallel/benchmark_parallel.py                                 181     15    92%   22-25, 48-50, 281, 307, 340, 397, 430-433
+tests/unit/benchmark_parallel/test_benchmark_demo.py                                  4      0   100%
+tests/unit/cli/test_arg_bool.py                                                     239      0   100%
+tests/unit/cli/test_command.py                                                       74      0   100%
+tests/unit/errormode/test_errormode_functionality.py                                425      5    99%   87, 178, 647, 662, 782
 tests/unit/errormode/test_errormode_init.py                                          68      0   100%
 tests/unit/json_serialize/serializable_dataclass/test_helpers_torch.py              102      0   100%
 tests/unit/json_serialize/serializable_dataclass/test_methods_no_override.py        113      1    99%   103
 tests/unit/json_serialize/serializable_dataclass/test_sdc_defaults.py                33      0   100%
 tests/unit/json_serialize/serializable_dataclass/test_sdc_properties_nested.py       45      1    98%   48
 tests/unit/json_serialize/serializable_dataclass/test_serializable_dataclass.py     489     61    88%   583-600, 723, 727, 730, 836-855, 936-940, 978-1010, 1046-1062
-tests/unit/json_serialize/test_array.py                                              40      0   100%
-tests/unit/json_serialize/test_util.py                                               49      2    96%   66, 73
+tests/unit/json_serialize/test_array.py                                             125      0   100%
+tests/unit/json_serialize/test_array_torch.py                                       125      1    99%   165
+tests/unit/json_serialize/test_json_serialize.py                                    346      7    98%   524, 528, 702-710
+tests/unit/json_serialize/test_serializable_field.py                                182      4    98%   71, 74, 96, 293
+tests/unit/json_serialize/test_util.py                                              216      6    97%   72, 79, 175-176, 187-188
+tests/unit/logger/test_log_util.py                                                   79      0   100%
 tests/unit/logger/test_logger.py                                                     11      0   100%
 tests/unit/logger/test_timer_context.py                                              11      0   100%
 tests/unit/math/test_bins.py                                                         63      0   100%
 tests/unit/math/test_matrix_powers_torch.py                                          91      2    98%   181, 185
 tests/unit/misc/test_freeze.py                                                      121      0   100%
-tests/unit/misc/test_func.py                                                        175      7    96%   48, 87, 145, 156, 285, 297, 309
+tests/unit/misc/test_func.py                                                        175      7    96%   51, 90, 148, 159, 288, 300, 312
 tests/unit/misc/test_misc.py                                                        148      5    97%   239, 247, 255, 354-355
 tests/unit/misc/test_numerical_conversions.py                                        43      0   100%
 tests/unit/misc/test_sequence.py                                                     73      0   100%
-tests/unit/nbutils/test_configure_notebook.py                                        67      0   100%
+tests/unit/nbutils/test_configure_notebook.py                                        70     17    76%   3, 6-14, 26, 30, 33, 38, 50, 60, 79, 90, 101, 119-122
 tests/unit/nbutils/test_configure_notebook_torch.py                                   5      0   100%
 tests/unit/nbutils/test_conversion.py                                                47      2    96%   105-106
 tests/unit/test_chunks.py                                                            31      0   100%
+tests/unit/test_collect_warnings.py                                                 256      1    99%   209
 tests/unit/test_console_unicode.py                                                    8      0   100%
-tests/unit/test_dbg.py                                                              287      2    99%   39, 51
+tests/unit/test_dbg.py                                                              294      2    99%   43, 55
 tests/unit/test_dictmagic.py                                                        131      0   100%
 tests/unit/test_group_equiv.py                                                       13      0   100%
 tests/unit/test_import_torch.py                                                       4      0   100%
-tests/unit/test_interval.py                                                         899      1    99%   12
+tests/unit/test_interval.py                                                         898      1    99%   12
+tests/unit/test_jsonlines.py                                                         95      0   100%
 tests/unit/test_kappa.py                                                             39      0   100%
 tests/unit/test_mlutils.py                                                           43      6    86%   35, 39, 47, 50, 57-58
 tests/unit/test_parallel.py                                                         132      5    96%   27, 33, 44, 48-49
 tests/unit/test_spinner.py                                                          295      8    97%   352-362
-tests/unit/test_statcounter.py                                                       14      0   100%
+tests/unit/test_statcounter.py                                                       15      0   100%
 tests/unit/test_sysinfo.py                                                            6      0   100%
 tests/unit/test_tensor_info.py                                                       35      2    94%   65-67
 tests/unit/test_tensor_info_torch.py                                                109      9    92%   21-22, 49, 56, 58, 63, 256, 331-333
-tests/unit/test_tensor_utils_torch.py                                                51      0   100%
+tests/unit/test_tensor_utils_torch.py                                                41      0   100%
 tests/unit/test_timeit_fancy.py                                                      69      0   100%
-tests/unit/web/test_bundle_html.py                                                  202      0   100%
+tests/unit/validate_type/test_get_kwargs.py                                          53     13    75%   8, 15, 22, 29, 36, 43, 51-52, 58-59, 66, 78, 87
+tests/unit/validate_type/test_validate_type.py                                      206     45    78%   49-50, 74-75, 101-102, 124-125, 146-147, 176-177, 202-203, 236-237, 254, 273-274, 335-336, 360-361, 431-432, 460-461, 465-466, 480-498
+tests/unit/validate_type/test_validate_type_GENERATED.py                            206     45    78%   50-51, 75-76, 102-103, 125-126, 147-148, 177-178, 203-204, 237-238, 255, 274-275, 336-337, 361-362, 432-433, 461-462, 466-467, 481-499
+tests/unit/validate_type/test_validate_type_special.py                               15      3    80%   34-35, 57
+tests/unit/web/test_bundle_html.py                                                  204      0   100%
 tests/util/test_fire.py                                                               8      6    25%   2-5, 9-11
 ---------------------------------------------------------------------------------------------------------------
-TOTAL                                                                              7914   1205    85%
+TOTAL                                                                             11017   1414    87%

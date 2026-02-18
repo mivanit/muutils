@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="generator" content="pdoc 15.0.4"/>
+    <meta name="generator" content="pdoc 16.0.0"/>
     <title>muutils.collect_warnings API documentation</title>
 <link rel="stylesheet" href="../resources/css/bootstrap-reboot.min.css"><link rel="stylesheet" href="../resources/css/syntax-highlighting.css"><link rel="stylesheet" href="../resources/css/theme.css"><link rel="stylesheet" href="../resources/css/layout.css"><link rel="stylesheet" href="../resources/css/content.css"><link rel="stylesheet" href="../resources/css/custom.css"><script>
     window.MathJax = {
@@ -46,7 +46,7 @@
 </script></head>
 <body>
 <div class="package-version">
-    docs for <a href="https://github.com/mivanit/muutils">muutils</a> v0.8.12<br>
+    docs for <a href="https://github.com/mivanit/muutils">muutils</a> v0.9.0<br>
 </div>
     <nav class="pdoc">
         <label id="navtoggle" for="togglestate" class="pdoc-button">
@@ -109,7 +109,7 @@
     </nav>
     <main class="pdoc">
             <section class="module-info">
-                        <a class="pdoc-button git-button" href="https://github.com/mivanit/muutils/blob/0.8.12/collect_warnings.py">View Source on GitHub</a>
+                        <a class="pdoc-button git-button" href="https://github.com/mivanit/muutils/blob/0.9.0collect_warnings.py">View Source on GitHub</a>
                     <h1 class="modulename">
 <a href="./../muutils.html">muutils</a><wbr>.collect_warnings    </h1>
 
@@ -119,7 +119,7 @@
                         <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="mod-collect_warnings-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/collect_warnings.py#L0-L131" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.9.0collect_warnings.py#L0-L131" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -136,7 +136,7 @@
 </span><span id="L-8"><a href="#L-8"><span class="linenos">  8</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Literal</span>
 </span><span id="L-9"><a href="#L-9"><span class="linenos">  9</span></a>
 </span><span id="L-10"><a href="#L-10"><span class="linenos"> 10</span></a>
-</span><span id="L-11"><a href="#L-11"><span class="linenos"> 11</span></a><span class="k">class</span><span class="w"> </span><span class="nc">CollateWarnings</span><span class="p">(</span><span class="n">AbstractContextManager</span><span class="p">[</span><span class="s2">&quot;CollateWarnings&quot;</span><span class="p">]):</span>
+</span><span id="L-11"><a href="#L-11"><span class="linenos"> 11</span></a><span class="k">class</span><span class="w"> </span><span class="nc">CollateWarnings</span><span class="p">(</span><span class="n">AbstractContextManager</span><span class="p">):</span>  <span class="c1"># type: ignore[type-arg]</span>
 </span><span id="L-12"><a href="#L-12"><span class="linenos"> 12</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Capture every warning issued inside a `with` block and print a collated</span>
 </span><span id="L-13"><a href="#L-13"><span class="linenos"> 13</span></a><span class="sd">    summary when the block exits.</span>
 </span><span id="L-14"><a href="#L-14"><span class="linenos"> 14</span></a>
@@ -268,12 +268,12 @@
 <div class="attr class">
             
     <span class="def">class</span>
-    <span class="name">CollateWarnings</span><wbr>(<span class="base">contextlib.AbstractContextManager[&#39;CollateWarnings&#39;]</span>):
+    <span class="name">CollateWarnings</span><wbr>(<span class="base">contextlib.AbstractContextManager</span>):
 
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="CollateWarnings-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/collect_warnings.py#L11-L132" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.9.0collect_warnings.py#L11-L132" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -281,7 +281,7 @@
 
     </div>
     <a class="headerlink" href="#CollateWarnings"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="CollateWarnings-12"><a href="#CollateWarnings-12"><span class="linenos"> 12</span></a><span class="k">class</span><span class="w"> </span><span class="nc">CollateWarnings</span><span class="p">(</span><span class="n">AbstractContextManager</span><span class="p">[</span><span class="s2">&quot;CollateWarnings&quot;</span><span class="p">]):</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="CollateWarnings-12"><a href="#CollateWarnings-12"><span class="linenos"> 12</span></a><span class="k">class</span><span class="w"> </span><span class="nc">CollateWarnings</span><span class="p">(</span><span class="n">AbstractContextManager</span><span class="p">):</span>  <span class="c1"># type: ignore[type-arg]</span>
 </span><span id="CollateWarnings-13"><a href="#CollateWarnings-13"><span class="linenos"> 13</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Capture every warning issued inside a `with` block and print a collated</span>
 </span><span id="CollateWarnings-14"><a href="#CollateWarnings-14"><span class="linenos"> 14</span></a><span class="sd">    summary when the block exits.</span>
 </span><span id="CollateWarnings-15"><a href="#CollateWarnings-15"><span class="linenos"> 15</span></a>
@@ -474,7 +474,7 @@ The context-manager instance.  After exit, the attribute
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="CollateWarnings.__init__-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/collect_warnings.py#L73-L82" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.9.0collect_warnings.py#L73-L82" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>

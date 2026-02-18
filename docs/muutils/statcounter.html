@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="generator" content="pdoc 15.0.4"/>
+    <meta name="generator" content="pdoc 16.0.0"/>
     <title>muutils.statcounter API documentation</title>
 <link rel="stylesheet" href="../resources/css/bootstrap-reboot.min.css"><link rel="stylesheet" href="../resources/css/syntax-highlighting.css"><link rel="stylesheet" href="../resources/css/theme.css"><link rel="stylesheet" href="../resources/css/layout.css"><link rel="stylesheet" href="../resources/css/content.css"><link rel="stylesheet" href="../resources/css/custom.css"><script>
     window.MathJax = {
@@ -46,7 +46,7 @@
 </script></head>
 <body>
 <div class="package-version">
-    docs for <a href="https://github.com/mivanit/muutils">muutils</a> v0.8.12<br>
+    docs for <a href="https://github.com/mivanit/muutils">muutils</a> v0.9.0<br>
 </div>
     <nav class="pdoc">
         <label id="navtoggle" for="togglestate" class="pdoc-button">
@@ -145,7 +145,7 @@
     </nav>
     <main class="pdoc">
             <section class="module-info">
-                        <a class="pdoc-button git-button" href="https://github.com/mivanit/muutils/blob/0.8.12/statcounter.py">View Source on GitHub</a>
+                        <a class="pdoc-button git-button" href="https://github.com/mivanit/muutils/blob/0.9.0statcounter.py">View Source on GitHub</a>
                     <h1 class="modulename">
 <a href="./../muutils.html">muutils</a><wbr>.statcounter    </h1>
 
@@ -159,7 +159,7 @@
                         <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="mod-statcounter-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/statcounter.py#L0-L230" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.9.0statcounter.py#L0-L230" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -177,7 +177,7 @@
 </span><span id="L-9"><a href="#L-9"><span class="linenos">  9</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">collections</span><span class="w"> </span><span class="kn">import</span> <span class="n">Counter</span>
 </span><span id="L-10"><a href="#L-10"><span class="linenos"> 10</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">functools</span><span class="w"> </span><span class="kn">import</span> <span class="n">cached_property</span>
 </span><span id="L-11"><a href="#L-11"><span class="linenos"> 11</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">itertools</span><span class="w"> </span><span class="kn">import</span> <span class="n">chain</span>
-</span><span id="L-12"><a href="#L-12"><span class="linenos"> 12</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Union</span>
+</span><span id="L-12"><a href="#L-12"><span class="linenos"> 12</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Union</span>
 </span><span id="L-13"><a href="#L-13"><span class="linenos"> 13</span></a>
 </span><span id="L-14"><a href="#L-14"><span class="linenos"> 14</span></a>
 </span><span id="L-15"><a href="#L-15"><span class="linenos"> 15</span></a><span class="c1"># _GeneralArray = Union[np.ndarray, &quot;torch.Tensor&quot;]</span>
@@ -392,8 +392,8 @@
 </span><span id="L-224"><a href="#L-224"><span class="linenos">224</span></a>    <span class="nd">@classmethod</span>
 </span><span id="L-225"><a href="#L-225"><span class="linenos">225</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">from_list_arrays</span><span class="p">(</span>
 </span><span id="L-226"><a href="#L-226"><span class="linenos">226</span></a>        <span class="bp">cls</span><span class="p">,</span>
-</span><span id="L-227"><a href="#L-227"><span class="linenos">227</span></a>        <span class="n">arr</span><span class="p">,</span>
-</span><span id="L-228"><a href="#L-228"><span class="linenos">228</span></a>        <span class="n">map_func</span><span class="p">:</span> <span class="n">Callable</span> <span class="o">=</span> <span class="nb">float</span><span class="p">,</span>
+</span><span id="L-227"><a href="#L-227"><span class="linenos">227</span></a>        <span class="n">arr</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
+</span><span id="L-228"><a href="#L-228"><span class="linenos">228</span></a>        <span class="n">map_func</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">Any</span><span class="p">],</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">,</span>
 </span><span id="L-229"><a href="#L-229"><span class="linenos">229</span></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;StatCounter&quot;</span><span class="p">:</span>
 </span><span id="L-230"><a href="#L-230"><span class="linenos">230</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;calls `map_func` on each element of `universal_flatten(arr)`&quot;&quot;&quot;</span>
 </span><span id="L-231"><a href="#L-231"><span class="linenos">231</span></a>        <span class="k">return</span> <span class="bp">cls</span><span class="p">([</span><span class="n">map_func</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">universal_flatten</span><span class="p">(</span><span class="n">arr</span><span class="p">)])</span>
@@ -424,7 +424,7 @@
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="universal_flatten-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/statcounter.py#L24-L41" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.9.0statcounter.py#L24-L41" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -468,7 +468,7 @@
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="StatCounter-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/statcounter.py#L48-L231" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.9.0statcounter.py#L48-L231" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -655,8 +655,8 @@
 </span><span id="StatCounter-225"><a href="#StatCounter-225"><span class="linenos">225</span></a>    <span class="nd">@classmethod</span>
 </span><span id="StatCounter-226"><a href="#StatCounter-226"><span class="linenos">226</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">from_list_arrays</span><span class="p">(</span>
 </span><span id="StatCounter-227"><a href="#StatCounter-227"><span class="linenos">227</span></a>        <span class="bp">cls</span><span class="p">,</span>
-</span><span id="StatCounter-228"><a href="#StatCounter-228"><span class="linenos">228</span></a>        <span class="n">arr</span><span class="p">,</span>
-</span><span id="StatCounter-229"><a href="#StatCounter-229"><span class="linenos">229</span></a>        <span class="n">map_func</span><span class="p">:</span> <span class="n">Callable</span> <span class="o">=</span> <span class="nb">float</span><span class="p">,</span>
+</span><span id="StatCounter-228"><a href="#StatCounter-228"><span class="linenos">228</span></a>        <span class="n">arr</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
+</span><span id="StatCounter-229"><a href="#StatCounter-229"><span class="linenos">229</span></a>        <span class="n">map_func</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">Any</span><span class="p">],</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">,</span>
 </span><span id="StatCounter-230"><a href="#StatCounter-230"><span class="linenos">230</span></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;StatCounter&quot;</span><span class="p">:</span>
 </span><span id="StatCounter-231"><a href="#StatCounter-231"><span class="linenos">231</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;calls `map_func` on each element of `universal_flatten(arr)`&quot;&quot;&quot;</span>
 </span><span id="StatCounter-232"><a href="#StatCounter-232"><span class="linenos">232</span></a>        <span class="k">return</span> <span class="bp">cls</span><span class="p">([</span><span class="n">map_func</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">universal_flatten</span><span class="p">(</span><span class="n">arr</span><span class="p">)])</span>
@@ -679,7 +679,7 @@
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="StatCounter.validate-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/statcounter.py#L54-L56" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.9.0statcounter.py#L54-L56" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -708,7 +708,7 @@
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="StatCounter.min-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/statcounter.py#L58-L60" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.9.0statcounter.py#L58-L60" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -737,7 +737,7 @@
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="StatCounter.max-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/statcounter.py#L62-L64" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.9.0statcounter.py#L62-L64" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -766,7 +766,7 @@
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="StatCounter.total-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/statcounter.py#L66-L68" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.9.0statcounter.py#L66-L68" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -793,7 +793,7 @@
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="StatCounter.keys_sorted-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/statcounter.py#L70-L73" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.9.0statcounter.py#L70-L73" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -823,7 +823,7 @@
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="StatCounter.percentile-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/statcounter.py#L75-L122" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.9.0statcounter.py#L75-L122" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -899,7 +899,7 @@
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="StatCounter.median-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/statcounter.py#L124-L125" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.9.0statcounter.py#L124-L125" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -925,7 +925,7 @@
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="StatCounter.mean-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/statcounter.py#L127-L129" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.9.0statcounter.py#L127-L129" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -954,7 +954,7 @@
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="StatCounter.mode-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/statcounter.py#L131-L132" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.9.0statcounter.py#L131-L132" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -980,7 +980,7 @@
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="StatCounter.std-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/statcounter.py#L134-L139" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.9.0statcounter.py#L134-L139" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -1012,7 +1012,7 @@
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="StatCounter.summary-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/statcounter.py#L141-L179" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.9.0statcounter.py#L141-L179" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -1077,7 +1077,7 @@
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="StatCounter.serialize-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/statcounter.py#L181-L205" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.9.0statcounter.py#L181-L205" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -1137,7 +1137,7 @@
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="StatCounter.load-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/statcounter.py#L214-L222" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.9.0statcounter.py#L214-L222" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -1168,12 +1168,12 @@
                     <div class="decorator">@classmethod</div>
 
         <span class="def">def</span>
-        <span class="name">from_list_arrays</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="bp">cls</span>,</span><span class="param">	<span class="n">arr</span>,</span><span class="param">	map_func: Callable = &lt;class &#x27;float&#x27;&gt;</span><span class="return-annotation">) -> <span class="n"><a href="#StatCounter">StatCounter</a></span>:</span></span>
+        <span class="name">from_list_arrays</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="bp">cls</span>,</span><span class="param">	<span class="n">arr</span><span class="p">:</span> <span class="n">Any</span>,</span><span class="param">	map_func: Callable[[Any], float] = &lt;class &#x27;float&#x27;&gt;</span><span class="return-annotation">) -> <span class="n"><a href="#StatCounter">StatCounter</a></span>:</span></span>
 
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="StatCounter.from_list_arrays-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/statcounter.py#L224-L231" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.9.0statcounter.py#L224-L231" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -1184,8 +1184,8 @@
             <div class="pdoc-code codehilite"><pre><span></span><span id="StatCounter.from_list_arrays-225"><a href="#StatCounter.from_list_arrays-225"><span class="linenos">225</span></a>    <span class="nd">@classmethod</span>
 </span><span id="StatCounter.from_list_arrays-226"><a href="#StatCounter.from_list_arrays-226"><span class="linenos">226</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">from_list_arrays</span><span class="p">(</span>
 </span><span id="StatCounter.from_list_arrays-227"><a href="#StatCounter.from_list_arrays-227"><span class="linenos">227</span></a>        <span class="bp">cls</span><span class="p">,</span>
-</span><span id="StatCounter.from_list_arrays-228"><a href="#StatCounter.from_list_arrays-228"><span class="linenos">228</span></a>        <span class="n">arr</span><span class="p">,</span>
-</span><span id="StatCounter.from_list_arrays-229"><a href="#StatCounter.from_list_arrays-229"><span class="linenos">229</span></a>        <span class="n">map_func</span><span class="p">:</span> <span class="n">Callable</span> <span class="o">=</span> <span class="nb">float</span><span class="p">,</span>
+</span><span id="StatCounter.from_list_arrays-228"><a href="#StatCounter.from_list_arrays-228"><span class="linenos">228</span></a>        <span class="n">arr</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
+</span><span id="StatCounter.from_list_arrays-229"><a href="#StatCounter.from_list_arrays-229"><span class="linenos">229</span></a>        <span class="n">map_func</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">Any</span><span class="p">],</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">,</span>
 </span><span id="StatCounter.from_list_arrays-230"><a href="#StatCounter.from_list_arrays-230"><span class="linenos">230</span></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;StatCounter&quot;</span><span class="p">:</span>
 </span><span id="StatCounter.from_list_arrays-231"><a href="#StatCounter.from_list_arrays-231"><span class="linenos">231</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;calls `map_func` on each element of `universal_flatten(arr)`&quot;&quot;&quot;</span>
 </span><span id="StatCounter.from_list_arrays-232"><a href="#StatCounter.from_list_arrays-232"><span class="linenos">232</span></a>        <span class="k">return</span> <span class="bp">cls</span><span class="p">([</span><span class="n">map_func</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">universal_flatten</span><span class="p">(</span><span class="n">arr</span><span class="p">)])</span>

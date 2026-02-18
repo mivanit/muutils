@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="generator" content="pdoc 15.0.4"/>
+    <meta name="generator" content="pdoc 16.0.0"/>
     <title>muutils.misc.freezing API documentation</title>
 <link rel="stylesheet" href="../../resources/css/bootstrap-reboot.min.css"><link rel="stylesheet" href="../../resources/css/syntax-highlighting.css"><link rel="stylesheet" href="../../resources/css/theme.css"><link rel="stylesheet" href="../../resources/css/layout.css"><link rel="stylesheet" href="../../resources/css/content.css"><link rel="stylesheet" href="../../resources/css/custom.css"><script>
     window.MathJax = {
@@ -46,7 +46,7 @@
 </script></head>
 <body>
 <div class="package-version">
-    docs for <a href="https://github.com/mivanit/muutils">muutils</a> v0.8.12<br>
+    docs for <a href="https://github.com/mivanit/muutils">muutils</a> v0.9.0<br>
 </div>
     <nav class="pdoc">
         <label id="navtoggle" for="togglestate" class="pdoc-button">
@@ -124,7 +124,7 @@
     </nav>
     <main class="pdoc">
             <section class="module-info">
-                        <a class="pdoc-button git-button" href="https://github.com/mivanit/muutils/blob/0.8.12/misc/freezing.py">View Source on GitHub</a>
+                        <a class="pdoc-button git-button" href="https://github.com/mivanit/muutils/blob/0.9.0misc/freezing.py">View Source on GitHub</a>
                     <h1 class="modulename">
 <a href="./../../muutils.html">muutils</a><wbr>.<a href="./../misc.html">misc</a><wbr>.freezing    </h1>
 
@@ -134,7 +134,7 @@
                         <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="mod-freezing-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/misc/freezing.py#L0-L120" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.9.0misc/freezing.py#L0-L120" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -142,40 +142,40 @@
 
                 <br/>
                         <div class="pdoc-code codehilite"><pre><span></span><span id="L-1"><a href="#L-1"><span class="linenos">  1</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
-</span><span id="L-2"><a href="#L-2"><span class="linenos">  2</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">TypeVar</span><span class="p">,</span> <span class="n">overload</span>
+</span><span id="L-2"><a href="#L-2"><span class="linenos">  2</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">NoReturn</span><span class="p">,</span> <span class="n">SupportsIndex</span><span class="p">,</span> <span class="n">TypeVar</span><span class="p">,</span> <span class="n">overload</span>
 </span><span id="L-3"><a href="#L-3"><span class="linenos">  3</span></a>
 </span><span id="L-4"><a href="#L-4"><span class="linenos">  4</span></a>
-</span><span id="L-5"><a href="#L-5"><span class="linenos">  5</span></a><span class="k">class</span><span class="w"> </span><span class="nc">FrozenDict</span><span class="p">(</span><span class="nb">dict</span><span class="p">):</span>
-</span><span id="L-6"><a href="#L-6"><span class="linenos">  6</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+</span><span id="L-5"><a href="#L-5"><span class="linenos">  5</span></a><span class="k">class</span><span class="w"> </span><span class="nc">FrozenDict</span><span class="p">(</span><span class="nb">dict</span><span class="p">):</span>  <span class="c1"># type: ignore[type-arg]</span>
+</span><span id="L-6"><a href="#L-6"><span class="linenos">  6</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NoReturn</span><span class="p">:</span>
 </span><span id="L-7"><a href="#L-7"><span class="linenos">  7</span></a>        <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s2">&quot;dict is frozen&quot;</span><span class="p">)</span>
 </span><span id="L-8"><a href="#L-8"><span class="linenos">  8</span></a>
-</span><span id="L-9"><a href="#L-9"><span class="linenos">  9</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__delitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+</span><span id="L-9"><a href="#L-9"><span class="linenos">  9</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__delitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NoReturn</span><span class="p">:</span>
 </span><span id="L-10"><a href="#L-10"><span class="linenos"> 10</span></a>        <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s2">&quot;dict is frozen&quot;</span><span class="p">)</span>
 </span><span id="L-11"><a href="#L-11"><span class="linenos"> 11</span></a>
 </span><span id="L-12"><a href="#L-12"><span class="linenos"> 12</span></a>
-</span><span id="L-13"><a href="#L-13"><span class="linenos"> 13</span></a><span class="k">class</span><span class="w"> </span><span class="nc">FrozenList</span><span class="p">(</span><span class="nb">list</span><span class="p">):</span>
-</span><span id="L-14"><a href="#L-14"><span class="linenos"> 14</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+</span><span id="L-13"><a href="#L-13"><span class="linenos"> 13</span></a><span class="k">class</span><span class="w"> </span><span class="nc">FrozenList</span><span class="p">(</span><span class="nb">list</span><span class="p">):</span>  <span class="c1"># type: ignore[type-arg]</span>
+</span><span id="L-14"><a href="#L-14"><span class="linenos"> 14</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="n">SupportsIndex</span> <span class="o">|</span> <span class="nb">slice</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NoReturn</span><span class="p">:</span>
 </span><span id="L-15"><a href="#L-15"><span class="linenos"> 15</span></a>        <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s2">&quot;list is frozen&quot;</span><span class="p">)</span>
 </span><span id="L-16"><a href="#L-16"><span class="linenos"> 16</span></a>
-</span><span id="L-17"><a href="#L-17"><span class="linenos"> 17</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__delitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
+</span><span id="L-17"><a href="#L-17"><span class="linenos"> 17</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__delitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="n">SupportsIndex</span> <span class="o">|</span> <span class="nb">slice</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NoReturn</span><span class="p">:</span>
 </span><span id="L-18"><a href="#L-18"><span class="linenos"> 18</span></a>        <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s2">&quot;list is frozen&quot;</span><span class="p">)</span>
 </span><span id="L-19"><a href="#L-19"><span class="linenos"> 19</span></a>
-</span><span id="L-20"><a href="#L-20"><span class="linenos"> 20</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">append</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+</span><span id="L-20"><a href="#L-20"><span class="linenos"> 20</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">append</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NoReturn</span><span class="p">:</span>
 </span><span id="L-21"><a href="#L-21"><span class="linenos"> 21</span></a>        <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s2">&quot;list is frozen&quot;</span><span class="p">)</span>
 </span><span id="L-22"><a href="#L-22"><span class="linenos"> 22</span></a>
-</span><span id="L-23"><a href="#L-23"><span class="linenos"> 23</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">extend</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">iterable</span><span class="p">):</span>
+</span><span id="L-23"><a href="#L-23"><span class="linenos"> 23</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">extend</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">iterable</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">NoReturn</span><span class="p">:</span>
 </span><span id="L-24"><a href="#L-24"><span class="linenos"> 24</span></a>        <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s2">&quot;list is frozen&quot;</span><span class="p">)</span>
 </span><span id="L-25"><a href="#L-25"><span class="linenos"> 25</span></a>
-</span><span id="L-26"><a href="#L-26"><span class="linenos"> 26</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">insert</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+</span><span id="L-26"><a href="#L-26"><span class="linenos"> 26</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">insert</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="n">SupportsIndex</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NoReturn</span><span class="p">:</span>
 </span><span id="L-27"><a href="#L-27"><span class="linenos"> 27</span></a>        <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s2">&quot;list is frozen&quot;</span><span class="p">)</span>
 </span><span id="L-28"><a href="#L-28"><span class="linenos"> 28</span></a>
-</span><span id="L-29"><a href="#L-29"><span class="linenos"> 29</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">remove</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+</span><span id="L-29"><a href="#L-29"><span class="linenos"> 29</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">remove</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NoReturn</span><span class="p">:</span>
 </span><span id="L-30"><a href="#L-30"><span class="linenos"> 30</span></a>        <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s2">&quot;list is frozen&quot;</span><span class="p">)</span>
 </span><span id="L-31"><a href="#L-31"><span class="linenos"> 31</span></a>
-</span><span id="L-32"><a href="#L-32"><span class="linenos"> 32</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">pop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="o">=-</span><span class="mi">1</span><span class="p">):</span>
+</span><span id="L-32"><a href="#L-32"><span class="linenos"> 32</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">pop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="n">SupportsIndex</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NoReturn</span><span class="p">:</span>
 </span><span id="L-33"><a href="#L-33"><span class="linenos"> 33</span></a>        <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s2">&quot;list is frozen&quot;</span><span class="p">)</span>
 </span><span id="L-34"><a href="#L-34"><span class="linenos"> 34</span></a>
-</span><span id="L-35"><a href="#L-35"><span class="linenos"> 35</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">clear</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span id="L-35"><a href="#L-35"><span class="linenos"> 35</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">clear</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NoReturn</span><span class="p">:</span>
 </span><span id="L-36"><a href="#L-36"><span class="linenos"> 36</span></a>        <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s2">&quot;list is frozen&quot;</span><span class="p">)</span>
 </span><span id="L-37"><a href="#L-37"><span class="linenos"> 37</span></a>
 </span><span id="L-38"><a href="#L-38"><span class="linenos"> 38</span></a>
@@ -246,7 +246,7 @@
 </span><span id="L-103"><a href="#L-103"><span class="linenos">103</span></a>
 </span><span id="L-104"><a href="#L-104"><span class="linenos">104</span></a>        <span class="c1"># create a new class which inherits from the original class</span>
 </span><span id="L-105"><a href="#L-105"><span class="linenos">105</span></a>        <span class="k">class</span><span class="w"> </span><span class="nc">FrozenClass</span><span class="p">(</span><span class="n">instance</span><span class="o">.</span><span class="vm">__class__</span><span class="p">):</span>  <span class="c1"># type: ignore[name-defined]</span>
-</span><span id="L-106"><a href="#L-106"><span class="linenos">106</span></a>            <span class="k">def</span><span class="w"> </span><span class="fm">__setattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+</span><span id="L-106"><a href="#L-106"><span class="linenos">106</span></a>            <span class="k">def</span><span class="w"> </span><span class="fm">__setattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NoReturn</span><span class="p">:</span>
 </span><span id="L-107"><a href="#L-107"><span class="linenos">107</span></a>                <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s2">&quot;class is frozen&quot;</span><span class="p">)</span>
 </span><span id="L-108"><a href="#L-108"><span class="linenos">108</span></a>
 </span><span id="L-109"><a href="#L-109"><span class="linenos">109</span></a>        <span class="n">FrozenClass</span><span class="o">.</span><span class="vm">__name__</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;FrozenClass__</span><span class="si">{</span><span class="n">instance</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&quot;</span>
@@ -277,7 +277,7 @@
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="FrozenDict-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/misc/freezing.py#L5-L10" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.9.0misc/freezing.py#L5-L10" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -285,11 +285,11 @@
 
     </div>
     <a class="headerlink" href="#FrozenDict"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="FrozenDict-6"><a href="#FrozenDict-6"><span class="linenos"> 6</span></a><span class="k">class</span><span class="w"> </span><span class="nc">FrozenDict</span><span class="p">(</span><span class="nb">dict</span><span class="p">):</span>
-</span><span id="FrozenDict-7"><a href="#FrozenDict-7"><span class="linenos"> 7</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="FrozenDict-6"><a href="#FrozenDict-6"><span class="linenos"> 6</span></a><span class="k">class</span><span class="w"> </span><span class="nc">FrozenDict</span><span class="p">(</span><span class="nb">dict</span><span class="p">):</span>  <span class="c1"># type: ignore[type-arg]</span>
+</span><span id="FrozenDict-7"><a href="#FrozenDict-7"><span class="linenos"> 7</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NoReturn</span><span class="p">:</span>
 </span><span id="FrozenDict-8"><a href="#FrozenDict-8"><span class="linenos"> 8</span></a>        <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s2">&quot;dict is frozen&quot;</span><span class="p">)</span>
 </span><span id="FrozenDict-9"><a href="#FrozenDict-9"><span class="linenos"> 9</span></a>
-</span><span id="FrozenDict-10"><a href="#FrozenDict-10"><span class="linenos">10</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__delitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+</span><span id="FrozenDict-10"><a href="#FrozenDict-10"><span class="linenos">10</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__delitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NoReturn</span><span class="p">:</span>
 </span><span id="FrozenDict-11"><a href="#FrozenDict-11"><span class="linenos">11</span></a>        <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s2">&quot;dict is frozen&quot;</span><span class="p">)</span>
 </span></pre></div>
 
@@ -326,7 +326,7 @@
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="FrozenList-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/misc/freezing.py#L13-L36" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.9.0misc/freezing.py#L13-L36" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -334,29 +334,29 @@
 
     </div>
     <a class="headerlink" href="#FrozenList"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="FrozenList-14"><a href="#FrozenList-14"><span class="linenos">14</span></a><span class="k">class</span><span class="w"> </span><span class="nc">FrozenList</span><span class="p">(</span><span class="nb">list</span><span class="p">):</span>
-</span><span id="FrozenList-15"><a href="#FrozenList-15"><span class="linenos">15</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="FrozenList-14"><a href="#FrozenList-14"><span class="linenos">14</span></a><span class="k">class</span><span class="w"> </span><span class="nc">FrozenList</span><span class="p">(</span><span class="nb">list</span><span class="p">):</span>  <span class="c1"># type: ignore[type-arg]</span>
+</span><span id="FrozenList-15"><a href="#FrozenList-15"><span class="linenos">15</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="n">SupportsIndex</span> <span class="o">|</span> <span class="nb">slice</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NoReturn</span><span class="p">:</span>
 </span><span id="FrozenList-16"><a href="#FrozenList-16"><span class="linenos">16</span></a>        <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s2">&quot;list is frozen&quot;</span><span class="p">)</span>
 </span><span id="FrozenList-17"><a href="#FrozenList-17"><span class="linenos">17</span></a>
-</span><span id="FrozenList-18"><a href="#FrozenList-18"><span class="linenos">18</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__delitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
+</span><span id="FrozenList-18"><a href="#FrozenList-18"><span class="linenos">18</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__delitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="n">SupportsIndex</span> <span class="o">|</span> <span class="nb">slice</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NoReturn</span><span class="p">:</span>
 </span><span id="FrozenList-19"><a href="#FrozenList-19"><span class="linenos">19</span></a>        <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s2">&quot;list is frozen&quot;</span><span class="p">)</span>
 </span><span id="FrozenList-20"><a href="#FrozenList-20"><span class="linenos">20</span></a>
-</span><span id="FrozenList-21"><a href="#FrozenList-21"><span class="linenos">21</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">append</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+</span><span id="FrozenList-21"><a href="#FrozenList-21"><span class="linenos">21</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">append</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NoReturn</span><span class="p">:</span>
 </span><span id="FrozenList-22"><a href="#FrozenList-22"><span class="linenos">22</span></a>        <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s2">&quot;list is frozen&quot;</span><span class="p">)</span>
 </span><span id="FrozenList-23"><a href="#FrozenList-23"><span class="linenos">23</span></a>
-</span><span id="FrozenList-24"><a href="#FrozenList-24"><span class="linenos">24</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">extend</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">iterable</span><span class="p">):</span>
+</span><span id="FrozenList-24"><a href="#FrozenList-24"><span class="linenos">24</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">extend</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">iterable</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">NoReturn</span><span class="p">:</span>
 </span><span id="FrozenList-25"><a href="#FrozenList-25"><span class="linenos">25</span></a>        <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s2">&quot;list is frozen&quot;</span><span class="p">)</span>
 </span><span id="FrozenList-26"><a href="#FrozenList-26"><span class="linenos">26</span></a>
-</span><span id="FrozenList-27"><a href="#FrozenList-27"><span class="linenos">27</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">insert</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+</span><span id="FrozenList-27"><a href="#FrozenList-27"><span class="linenos">27</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">insert</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="n">SupportsIndex</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NoReturn</span><span class="p">:</span>
 </span><span id="FrozenList-28"><a href="#FrozenList-28"><span class="linenos">28</span></a>        <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s2">&quot;list is frozen&quot;</span><span class="p">)</span>
 </span><span id="FrozenList-29"><a href="#FrozenList-29"><span class="linenos">29</span></a>
-</span><span id="FrozenList-30"><a href="#FrozenList-30"><span class="linenos">30</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">remove</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+</span><span id="FrozenList-30"><a href="#FrozenList-30"><span class="linenos">30</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">remove</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NoReturn</span><span class="p">:</span>
 </span><span id="FrozenList-31"><a href="#FrozenList-31"><span class="linenos">31</span></a>        <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s2">&quot;list is frozen&quot;</span><span class="p">)</span>
 </span><span id="FrozenList-32"><a href="#FrozenList-32"><span class="linenos">32</span></a>
-</span><span id="FrozenList-33"><a href="#FrozenList-33"><span class="linenos">33</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">pop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="o">=-</span><span class="mi">1</span><span class="p">):</span>
+</span><span id="FrozenList-33"><a href="#FrozenList-33"><span class="linenos">33</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">pop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="n">SupportsIndex</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NoReturn</span><span class="p">:</span>
 </span><span id="FrozenList-34"><a href="#FrozenList-34"><span class="linenos">34</span></a>        <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s2">&quot;list is frozen&quot;</span><span class="p">)</span>
 </span><span id="FrozenList-35"><a href="#FrozenList-35"><span class="linenos">35</span></a>
-</span><span id="FrozenList-36"><a href="#FrozenList-36"><span class="linenos">36</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">clear</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span id="FrozenList-36"><a href="#FrozenList-36"><span class="linenos">36</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">clear</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NoReturn</span><span class="p">:</span>
 </span><span id="FrozenList-37"><a href="#FrozenList-37"><span class="linenos">37</span></a>        <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s2">&quot;list is frozen&quot;</span><span class="p">)</span>
 </span></pre></div>
 
@@ -373,12 +373,12 @@ The argument must be an iterable if specified.</p>
 <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">append</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="n">value</span></span><span class="return-annotation">):</span></span>
+        <span class="name">append</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="n">value</span><span class="p">:</span> <span class="n">Any</span></span><span class="return-annotation">) -> <span class="n">NoReturn</span>:</span></span>
 
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="FrozenList.append-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/misc/freezing.py#L20-L21" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.9.0misc/freezing.py#L20-L21" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -386,7 +386,7 @@ The argument must be an iterable if specified.</p>
 
     </div>
     <a class="headerlink" href="#FrozenList.append"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="FrozenList.append-21"><a href="#FrozenList.append-21"><span class="linenos">21</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">append</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="FrozenList.append-21"><a href="#FrozenList.append-21"><span class="linenos">21</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">append</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NoReturn</span><span class="p">:</span>
 </span><span id="FrozenList.append-22"><a href="#FrozenList.append-22"><span class="linenos">22</span></a>        <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s2">&quot;list is frozen&quot;</span><span class="p">)</span>
 </span></pre></div>
 
@@ -401,12 +401,12 @@ The argument must be an iterable if specified.</p>
 <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">extend</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="n">iterable</span></span><span class="return-annotation">):</span></span>
+        <span class="name">extend</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="n">iterable</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">Any</span><span class="p">]</span></span><span class="return-annotation">) -> <span class="n">NoReturn</span>:</span></span>
 
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="FrozenList.extend-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/misc/freezing.py#L23-L24" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.9.0misc/freezing.py#L23-L24" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -414,7 +414,7 @@ The argument must be an iterable if specified.</p>
 
     </div>
     <a class="headerlink" href="#FrozenList.extend"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="FrozenList.extend-24"><a href="#FrozenList.extend-24"><span class="linenos">24</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">extend</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">iterable</span><span class="p">):</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="FrozenList.extend-24"><a href="#FrozenList.extend-24"><span class="linenos">24</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">extend</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">iterable</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">NoReturn</span><span class="p">:</span>
 </span><span id="FrozenList.extend-25"><a href="#FrozenList.extend-25"><span class="linenos">25</span></a>        <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s2">&quot;list is frozen&quot;</span><span class="p">)</span>
 </span></pre></div>
 
@@ -429,12 +429,12 @@ The argument must be an iterable if specified.</p>
 <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">insert</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="n">index</span>, </span><span class="param"><span class="n">value</span></span><span class="return-annotation">):</span></span>
+        <span class="name">insert</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param">index: &lt;class &#x27;SupportsIndex&#x27;&gt;, </span><span class="param"><span class="n">value</span><span class="p">:</span> <span class="n">Any</span></span><span class="return-annotation">) -> <span class="n">NoReturn</span>:</span></span>
 
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="FrozenList.insert-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/misc/freezing.py#L26-L27" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.9.0misc/freezing.py#L26-L27" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -442,7 +442,7 @@ The argument must be an iterable if specified.</p>
 
     </div>
     <a class="headerlink" href="#FrozenList.insert"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="FrozenList.insert-27"><a href="#FrozenList.insert-27"><span class="linenos">27</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">insert</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="FrozenList.insert-27"><a href="#FrozenList.insert-27"><span class="linenos">27</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">insert</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="n">SupportsIndex</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NoReturn</span><span class="p">:</span>
 </span><span id="FrozenList.insert-28"><a href="#FrozenList.insert-28"><span class="linenos">28</span></a>        <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s2">&quot;list is frozen&quot;</span><span class="p">)</span>
 </span></pre></div>
 
@@ -457,12 +457,12 @@ The argument must be an iterable if specified.</p>
 <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">remove</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="n">value</span></span><span class="return-annotation">):</span></span>
+        <span class="name">remove</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="n">value</span><span class="p">:</span> <span class="n">Any</span></span><span class="return-annotation">) -> <span class="n">NoReturn</span>:</span></span>
 
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="FrozenList.remove-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/misc/freezing.py#L29-L30" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.9.0misc/freezing.py#L29-L30" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -470,7 +470,7 @@ The argument must be an iterable if specified.</p>
 
     </div>
     <a class="headerlink" href="#FrozenList.remove"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="FrozenList.remove-30"><a href="#FrozenList.remove-30"><span class="linenos">30</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">remove</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="FrozenList.remove-30"><a href="#FrozenList.remove-30"><span class="linenos">30</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">remove</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NoReturn</span><span class="p">:</span>
 </span><span id="FrozenList.remove-31"><a href="#FrozenList.remove-31"><span class="linenos">31</span></a>        <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s2">&quot;list is frozen&quot;</span><span class="p">)</span>
 </span></pre></div>
 
@@ -487,12 +487,12 @@ The argument must be an iterable if specified.</p>
 <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">pop</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="n">index</span><span class="o">=-</span><span class="mi">1</span></span><span class="return-annotation">):</span></span>
+        <span class="name">pop</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param">index: &lt;class &#x27;SupportsIndex&#x27;&gt; = -1</span><span class="return-annotation">) -> <span class="n">NoReturn</span>:</span></span>
 
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="FrozenList.pop-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/misc/freezing.py#L32-L33" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.9.0misc/freezing.py#L32-L33" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -500,7 +500,7 @@ The argument must be an iterable if specified.</p>
 
     </div>
     <a class="headerlink" href="#FrozenList.pop"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="FrozenList.pop-33"><a href="#FrozenList.pop-33"><span class="linenos">33</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">pop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="o">=-</span><span class="mi">1</span><span class="p">):</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="FrozenList.pop-33"><a href="#FrozenList.pop-33"><span class="linenos">33</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">pop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="n">SupportsIndex</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NoReturn</span><span class="p">:</span>
 </span><span id="FrozenList.pop-34"><a href="#FrozenList.pop-34"><span class="linenos">34</span></a>        <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s2">&quot;list is frozen&quot;</span><span class="p">)</span>
 </span></pre></div>
 
@@ -517,12 +517,12 @@ The argument must be an iterable if specified.</p>
 <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">clear</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span></span><span class="return-annotation">):</span></span>
+        <span class="name">clear</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span></span><span class="return-annotation">) -> <span class="n">NoReturn</span>:</span></span>
 
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="FrozenList.clear-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/misc/freezing.py#L35-L36" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.9.0misc/freezing.py#L35-L36" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -530,7 +530,7 @@ The argument must be an iterable if specified.</p>
 
     </div>
     <a class="headerlink" href="#FrozenList.clear"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="FrozenList.clear-36"><a href="#FrozenList.clear-36"><span class="linenos">36</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">clear</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="FrozenList.clear-36"><a href="#FrozenList.clear-36"><span class="linenos">36</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">clear</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NoReturn</span><span class="p">:</span>
 </span><span id="FrozenList.clear-37"><a href="#FrozenList.clear-37"><span class="linenos">37</span></a>        <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s2">&quot;list is frozen&quot;</span><span class="p">)</span>
 </span></pre></div>
 
@@ -565,7 +565,7 @@ The argument must be an iterable if specified.</p>
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="freeze-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/misc/freezing.py#L52-L121" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.9.0misc/freezing.py#L52-L121" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -627,7 +627,7 @@ The argument must be an iterable if specified.</p>
 </span><span id="freeze-104"><a href="#freeze-104"><span class="linenos">104</span></a>
 </span><span id="freeze-105"><a href="#freeze-105"><span class="linenos">105</span></a>        <span class="c1"># create a new class which inherits from the original class</span>
 </span><span id="freeze-106"><a href="#freeze-106"><span class="linenos">106</span></a>        <span class="k">class</span><span class="w"> </span><span class="nc">FrozenClass</span><span class="p">(</span><span class="n">instance</span><span class="o">.</span><span class="vm">__class__</span><span class="p">):</span>  <span class="c1"># type: ignore[name-defined]</span>
-</span><span id="freeze-107"><a href="#freeze-107"><span class="linenos">107</span></a>            <span class="k">def</span><span class="w"> </span><span class="fm">__setattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+</span><span id="freeze-107"><a href="#freeze-107"><span class="linenos">107</span></a>            <span class="k">def</span><span class="w"> </span><span class="fm">__setattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NoReturn</span><span class="p">:</span>
 </span><span id="freeze-108"><a href="#freeze-108"><span class="linenos">108</span></a>                <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s2">&quot;class is frozen&quot;</span><span class="p">)</span>
 </span><span id="freeze-109"><a href="#freeze-109"><span class="linenos">109</span></a>
 </span><span id="freeze-110"><a href="#freeze-110"><span class="linenos">110</span></a>        <span class="n">FrozenClass</span><span class="o">.</span><span class="vm">__name__</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;FrozenClass__</span><span class="si">{</span><span class="n">instance</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&quot;</span>

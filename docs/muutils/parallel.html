@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="generator" content="pdoc 15.0.4"/>
+    <meta name="generator" content="pdoc 16.0.0"/>
     <title>muutils.parallel API documentation</title>
 <link rel="stylesheet" href="../resources/css/bootstrap-reboot.min.css"><link rel="stylesheet" href="../resources/css/syntax-highlighting.css"><link rel="stylesheet" href="../resources/css/theme.css"><link rel="stylesheet" href="../resources/css/layout.css"><link rel="stylesheet" href="../resources/css/content.css"><link rel="stylesheet" href="../resources/css/custom.css"><script>
     window.MathJax = {
@@ -46,7 +46,7 @@
 </script></head>
 <body>
 <div class="package-version">
-    docs for <a href="https://github.com/mivanit/muutils">muutils</a> v0.8.12<br>
+    docs for <a href="https://github.com/mivanit/muutils">muutils</a> v0.9.0<br>
 </div>
     <nav class="pdoc">
         <label id="navtoggle" for="togglestate" class="pdoc-button">
@@ -121,7 +121,7 @@
     </nav>
     <main class="pdoc">
             <section class="module-info">
-                        <a class="pdoc-button git-button" href="https://github.com/mivanit/muutils/blob/0.8.12/parallel.py">View Source on GitHub</a>
+                        <a class="pdoc-button git-button" href="https://github.com/mivanit/muutils/blob/0.9.0parallel.py">View Source on GitHub</a>
                     <h1 class="modulename">
 <a href="./../muutils.html">muutils</a><wbr>.parallel    </h1>
 
@@ -133,7 +133,7 @@
                         <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="mod-parallel-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/parallel.py#L0-L278" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.9.0parallel.py#L0-L279" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -173,7 +173,7 @@
 </span><span id="L-31"><a href="#L-31"><span class="linenos"> 31</span></a><span class="k">class</span><span class="w"> </span><span class="nc">ProgressBarFunction</span><span class="p">(</span><span class="n">Protocol</span><span class="p">):</span>
 </span><span id="L-32"><a href="#L-32"><span class="linenos"> 32</span></a>    <span class="s2">&quot;a protocol for a progress bar function&quot;</span>
 </span><span id="L-33"><a href="#L-33"><span class="linenos"> 33</span></a>
-</span><span id="L-34"><a href="#L-34"><span class="linenos"> 34</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">iterable</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterable</span><span class="p">:</span> <span class="o">...</span>
+</span><span id="L-34"><a href="#L-34"><span class="linenos"> 34</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">iterable</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">Any</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">Any</span><span class="p">]:</span> <span class="o">...</span>
 </span><span id="L-35"><a href="#L-35"><span class="linenos"> 35</span></a>
 </span><span id="L-36"><a href="#L-36"><span class="linenos"> 36</span></a>
 </span><span id="L-37"><a href="#L-37"><span class="linenos"> 37</span></a><span class="n">ProgressBarOption</span> <span class="o">=</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;tqdm&quot;</span><span class="p">,</span> <span class="s2">&quot;spinner&quot;</span><span class="p">,</span> <span class="s2">&quot;none&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span>
@@ -185,7 +185,7 @@
 </span><span id="L-43"><a href="#L-43"><span class="linenos"> 43</span></a>
 </span><span id="L-44"><a href="#L-44"><span class="linenos"> 44</span></a><span class="k">try</span><span class="p">:</span>
 </span><span id="L-45"><a href="#L-45"><span class="linenos"> 45</span></a>    <span class="c1"># use tqdm if it&#39;s available</span>
-</span><span id="L-46"><a href="#L-46"><span class="linenos"> 46</span></a>    <span class="kn">import</span><span class="w"> </span><span class="nn">tqdm</span>  <span class="c1"># type: ignore[import-untyped]</span>
+</span><span id="L-46"><a href="#L-46"><span class="linenos"> 46</span></a>    <span class="kn">import</span><span class="w"> </span><span class="nn">tqdm</span>
 </span><span id="L-47"><a href="#L-47"><span class="linenos"> 47</span></a>
 </span><span id="L-48"><a href="#L-48"><span class="linenos"> 48</span></a>    <span class="n">DEFAULT_PBAR_FN</span> <span class="o">=</span> <span class="s2">&quot;tqdm&quot;</span>
 </span><span id="L-49"><a href="#L-49"><span class="linenos"> 49</span></a>
@@ -194,7 +194,7 @@
 </span><span id="L-52"><a href="#L-52"><span class="linenos"> 52</span></a>    <span class="n">DEFAULT_PBAR_FN</span> <span class="o">=</span> <span class="s2">&quot;spinner&quot;</span>
 </span><span id="L-53"><a href="#L-53"><span class="linenos"> 53</span></a>
 </span><span id="L-54"><a href="#L-54"><span class="linenos"> 54</span></a>
-</span><span id="L-55"><a href="#L-55"><span class="linenos"> 55</span></a><span class="k">def</span><span class="w"> </span><span class="nf">spinner_fn_wrap</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">:</span>
+</span><span id="L-55"><a href="#L-55"><span class="linenos"> 55</span></a><span class="k">def</span><span class="w"> </span><span class="nf">spinner_fn_wrap</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">Any</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Any</span><span class="p">]:</span>
 </span><span id="L-56"><a href="#L-56"><span class="linenos"> 56</span></a>    <span class="s2">&quot;spinner wrapper&quot;</span>
 </span><span id="L-57"><a href="#L-57"><span class="linenos"> 57</span></a>    <span class="n">spinnercontext_allowed_kwargs</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">get_fn_allowed_kwargs</span><span class="p">(</span>
 </span><span id="L-58"><a href="#L-58"><span class="linenos"> 58</span></a>        <span class="n">SpinnerContext</span><span class="o">.</span><span class="fm">__init__</span>
@@ -214,9 +214,9 @@
 </span><span id="L-72"><a href="#L-72"><span class="linenos"> 72</span></a>    <span class="k">return</span> <span class="n">output</span>
 </span><span id="L-73"><a href="#L-73"><span class="linenos"> 73</span></a>
 </span><span id="L-74"><a href="#L-74"><span class="linenos"> 74</span></a>
-</span><span id="L-75"><a href="#L-75"><span class="linenos"> 75</span></a><span class="k">def</span><span class="w"> </span><span class="nf">map_kwargs_for_tqdm</span><span class="p">(</span><span class="n">kwargs</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+</span><span id="L-75"><a href="#L-75"><span class="linenos"> 75</span></a><span class="k">def</span><span class="w"> </span><span class="nf">map_kwargs_for_tqdm</span><span class="p">(</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
 </span><span id="L-76"><a href="#L-76"><span class="linenos"> 76</span></a>    <span class="s2">&quot;map kwargs for tqdm, cant wrap because the pbar dissapears?&quot;</span>
-</span><span id="L-77"><a href="#L-77"><span class="linenos"> 77</span></a>    <span class="n">tqdm_allowed_kwargs</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">get_fn_allowed_kwargs</span><span class="p">(</span><span class="n">tqdm</span><span class="o">.</span><span class="n">tqdm</span><span class="o">.</span><span class="fm">__init__</span><span class="p">)</span>
+</span><span id="L-77"><a href="#L-77"><span class="linenos"> 77</span></a>    <span class="n">tqdm_allowed_kwargs</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">get_fn_allowed_kwargs</span><span class="p">(</span><span class="n">tqdm</span><span class="o">.</span><span class="n">tqdm</span><span class="o">.</span><span class="fm">__init__</span><span class="p">)</span>  <span class="c1"># pyright: ignore[reportPossiblyUnboundVariable]</span>
 </span><span id="L-78"><a href="#L-78"><span class="linenos"> 78</span></a>    <span class="n">mapped_kwargs</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">tqdm_allowed_kwargs</span><span class="p">}</span>
 </span><span id="L-79"><a href="#L-79"><span class="linenos"> 79</span></a>
 </span><span id="L-80"><a href="#L-80"><span class="linenos"> 80</span></a>    <span class="k">if</span> <span class="s2">&quot;desc&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
@@ -228,7 +228,7 @@
 </span><span id="L-86"><a href="#L-86"><span class="linenos"> 86</span></a>    <span class="k">return</span> <span class="n">mapped_kwargs</span>
 </span><span id="L-87"><a href="#L-87"><span class="linenos"> 87</span></a>
 </span><span id="L-88"><a href="#L-88"><span class="linenos"> 88</span></a>
-</span><span id="L-89"><a href="#L-89"><span class="linenos"> 89</span></a><span class="k">def</span><span class="w"> </span><span class="nf">no_progress_fn_wrap</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterable</span><span class="p">:</span>
+</span><span id="L-89"><a href="#L-89"><span class="linenos"> 89</span></a><span class="k">def</span><span class="w"> </span><span class="nf">no_progress_fn_wrap</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">Any</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">Any</span><span class="p">]:</span>
 </span><span id="L-90"><a href="#L-90"><span class="linenos"> 90</span></a>    <span class="s2">&quot;fallback to no progress bar&quot;</span>
 </span><span id="L-91"><a href="#L-91"><span class="linenos"> 91</span></a>    <span class="k">return</span> <span class="n">x</span>
 </span><span id="L-92"><a href="#L-92"><span class="linenos"> 92</span></a>
@@ -236,8 +236,8 @@
 </span><span id="L-94"><a href="#L-94"><span class="linenos"> 94</span></a><span class="k">def</span><span class="w"> </span><span class="nf">set_up_progress_bar_fn</span><span class="p">(</span>
 </span><span id="L-95"><a href="#L-95"><span class="linenos"> 95</span></a>    <span class="n">pbar</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">ProgressBarFunction</span><span class="p">,</span> <span class="n">ProgressBarOption</span><span class="p">],</span>
 </span><span id="L-96"><a href="#L-96"><span class="linenos"> 96</span></a>    <span class="n">pbar_kwargs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-</span><span id="L-97"><a href="#L-97"><span class="linenos"> 97</span></a>    <span class="o">**</span><span class="n">extra_kwargs</span><span class="p">,</span>
-</span><span id="L-98"><a href="#L-98"><span class="linenos"> 98</span></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">ProgressBarFunction</span><span class="p">,</span> <span class="nb">dict</span><span class="p">]:</span>
+</span><span id="L-97"><a href="#L-97"><span class="linenos"> 97</span></a>    <span class="o">**</span><span class="n">extra_kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
+</span><span id="L-98"><a href="#L-98"><span class="linenos"> 98</span></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">ProgressBarFunction</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]:</span>
 </span><span id="L-99"><a href="#L-99"><span class="linenos"> 99</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;set up the progress bar function and its kwargs</span>
 </span><span id="L-100"><a href="#L-100"><span class="linenos">100</span></a>
 </span><span id="L-101"><a href="#L-101"><span class="linenos">101</span></a><span class="sd">    # Parameters:</span>
@@ -268,7 +268,7 @@
 </span><span id="L-126"><a href="#L-126"><span class="linenos">126</span></a>    <span class="c1"># if `pbar` is a different string, figure out which progress bar to use</span>
 </span><span id="L-127"><a href="#L-127"><span class="linenos">127</span></a>    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">pbar</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
 </span><span id="L-128"><a href="#L-128"><span class="linenos">128</span></a>        <span class="k">if</span> <span class="n">pbar</span> <span class="o">==</span> <span class="s2">&quot;tqdm&quot;</span><span class="p">:</span>
-</span><span id="L-129"><a href="#L-129"><span class="linenos">129</span></a>            <span class="n">pbar_fn</span> <span class="o">=</span> <span class="n">tqdm</span><span class="o">.</span><span class="n">tqdm</span>
+</span><span id="L-129"><a href="#L-129"><span class="linenos">129</span></a>            <span class="n">pbar_fn</span> <span class="o">=</span> <span class="n">tqdm</span><span class="o">.</span><span class="n">tqdm</span>  <span class="c1"># pyright: ignore[reportPossiblyUnboundVariable]</span>
 </span><span id="L-130"><a href="#L-130"><span class="linenos">130</span></a>            <span class="n">pbar_kwargs</span> <span class="o">=</span> <span class="n">map_kwargs_for_tqdm</span><span class="p">(</span><span class="n">pbar_kwargs</span><span class="p">)</span>
 </span><span id="L-131"><a href="#L-131"><span class="linenos">131</span></a>        <span class="k">elif</span> <span class="n">pbar</span> <span class="o">==</span> <span class="s2">&quot;spinner&quot;</span><span class="p">:</span>
 </span><span id="L-132"><a href="#L-132"><span class="linenos">132</span></a>            <span class="n">pbar_fn</span> <span class="o">=</span> <span class="n">functools</span><span class="o">.</span><span class="n">partial</span><span class="p">(</span><span class="n">spinner_fn_wrap</span><span class="p">,</span> <span class="o">**</span><span class="n">pbar_kwargs</span><span class="p">)</span>
@@ -380,45 +380,46 @@
 </span><span id="L-238"><a href="#L-238"><span class="linenos">238</span></a>    <span class="p">]</span>
 </span><span id="L-239"><a href="#L-239"><span class="linenos">239</span></a>    <span class="k">if</span> <span class="n">parallel</span><span class="p">:</span>
 </span><span id="L-240"><a href="#L-240"><span class="linenos">240</span></a>        <span class="c1"># use `mp.Pool` since we might want to use `multiprocess` instead of `multiprocessing`</span>
-</span><span id="L-241"><a href="#L-241"><span class="linenos">241</span></a>        <span class="n">pool</span> <span class="o">=</span> <span class="n">mp</span><span class="o">.</span><span class="n">Pool</span><span class="p">(</span><span class="n">num_processes</span><span class="p">)</span>
-</span><span id="L-242"><a href="#L-242"><span class="linenos">242</span></a>
-</span><span id="L-243"><a href="#L-243"><span class="linenos">243</span></a>        <span class="c1"># use `imap` if we want to keep the order, otherwise use `imap_unordered`</span>
-</span><span id="L-244"><a href="#L-244"><span class="linenos">244</span></a>        <span class="k">if</span> <span class="n">keep_ordered</span><span class="p">:</span>
-</span><span id="L-245"><a href="#L-245"><span class="linenos">245</span></a>            <span class="n">do_map</span> <span class="o">=</span> <span class="n">pool</span><span class="o">.</span><span class="n">imap</span>
-</span><span id="L-246"><a href="#L-246"><span class="linenos">246</span></a>        <span class="k">else</span><span class="p">:</span>
-</span><span id="L-247"><a href="#L-247"><span class="linenos">247</span></a>            <span class="n">do_map</span> <span class="o">=</span> <span class="n">pool</span><span class="o">.</span><span class="n">imap_unordered</span>
-</span><span id="L-248"><a href="#L-248"><span class="linenos">248</span></a>
-</span><span id="L-249"><a href="#L-249"><span class="linenos">249</span></a>        <span class="c1"># figure out a smart chunksize if one is not given</span>
-</span><span id="L-250"><a href="#L-250"><span class="linenos">250</span></a>        <span class="n">chunksize_int</span><span class="p">:</span> <span class="nb">int</span>
-</span><span id="L-251"><a href="#L-251"><span class="linenos">251</span></a>        <span class="k">if</span> <span class="n">chunksize</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="L-252"><a href="#L-252"><span class="linenos">252</span></a>            <span class="n">chunksize_int</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">n_inputs</span> <span class="o">//</span> <span class="n">num_processes</span><span class="p">)</span>
-</span><span id="L-253"><a href="#L-253"><span class="linenos">253</span></a>        <span class="k">else</span><span class="p">:</span>
-</span><span id="L-254"><a href="#L-254"><span class="linenos">254</span></a>            <span class="n">chunksize_int</span> <span class="o">=</span> <span class="n">chunksize</span>
-</span><span id="L-255"><a href="#L-255"><span class="linenos">255</span></a>
-</span><span id="L-256"><a href="#L-256"><span class="linenos">256</span></a>        <span class="c1"># set the chunksize</span>
-</span><span id="L-257"><a href="#L-257"><span class="linenos">257</span></a>        <span class="n">do_map</span> <span class="o">=</span> <span class="n">functools</span><span class="o">.</span><span class="n">partial</span><span class="p">(</span><span class="n">do_map</span><span class="p">,</span> <span class="n">chunksize</span><span class="o">=</span><span class="n">chunksize_int</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
-</span><span id="L-258"><a href="#L-258"><span class="linenos">258</span></a>
-</span><span id="L-259"><a href="#L-259"><span class="linenos">259</span></a>    <span class="k">else</span><span class="p">:</span>
-</span><span id="L-260"><a href="#L-260"><span class="linenos">260</span></a>        <span class="n">do_map</span> <span class="o">=</span> <span class="nb">map</span>
-</span><span id="L-261"><a href="#L-261"><span class="linenos">261</span></a>
-</span><span id="L-262"><a href="#L-262"><span class="linenos">262</span></a>    <span class="c1"># run the map function with a progress bar</span>
-</span><span id="L-263"><a href="#L-263"><span class="linenos">263</span></a>    <span class="n">output</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">OutputType</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span>
-</span><span id="L-264"><a href="#L-264"><span class="linenos">264</span></a>        <span class="n">pbar_fn</span><span class="p">(</span>
-</span><span id="L-265"><a href="#L-265"><span class="linenos">265</span></a>            <span class="n">do_map</span><span class="p">(</span>
-</span><span id="L-266"><a href="#L-266"><span class="linenos">266</span></a>                <span class="n">func</span><span class="p">,</span>
-</span><span id="L-267"><a href="#L-267"><span class="linenos">267</span></a>                <span class="n">iterable</span><span class="p">,</span>
-</span><span id="L-268"><a href="#L-268"><span class="linenos">268</span></a>            <span class="p">),</span>
-</span><span id="L-269"><a href="#L-269"><span class="linenos">269</span></a>            <span class="o">**</span><span class="n">pbar_kwargs_processed</span><span class="p">,</span>
-</span><span id="L-270"><a href="#L-270"><span class="linenos">270</span></a>        <span class="p">)</span>
-</span><span id="L-271"><a href="#L-271"><span class="linenos">271</span></a>    <span class="p">)</span>
-</span><span id="L-272"><a href="#L-272"><span class="linenos">272</span></a>
-</span><span id="L-273"><a href="#L-273"><span class="linenos">273</span></a>    <span class="c1"># close the pool if we used one</span>
-</span><span id="L-274"><a href="#L-274"><span class="linenos">274</span></a>    <span class="k">if</span> <span class="n">parallel</span><span class="p">:</span>
-</span><span id="L-275"><a href="#L-275"><span class="linenos">275</span></a>        <span class="n">pool</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-</span><span id="L-276"><a href="#L-276"><span class="linenos">276</span></a>        <span class="n">pool</span><span class="o">.</span><span class="n">join</span><span class="p">()</span>
-</span><span id="L-277"><a href="#L-277"><span class="linenos">277</span></a>
-</span><span id="L-278"><a href="#L-278"><span class="linenos">278</span></a>    <span class="c1"># return the output as a list</span>
-</span><span id="L-279"><a href="#L-279"><span class="linenos">279</span></a>    <span class="k">return</span> <span class="n">output</span>
+</span><span id="L-241"><a href="#L-241"><span class="linenos">241</span></a>        <span class="c1"># TYPING: messy here</span>
+</span><span id="L-242"><a href="#L-242"><span class="linenos">242</span></a>        <span class="n">pool</span> <span class="o">=</span> <span class="n">mp</span><span class="o">.</span><span class="n">Pool</span><span class="p">(</span><span class="n">num_processes</span><span class="p">)</span>  <span class="c1"># type: ignore[possibly-missing-attribute] # pyright: ignore[reportAttributeAccessIssue, reportUnknownMemberType, reportUnknownVariableType]</span>
+</span><span id="L-243"><a href="#L-243"><span class="linenos">243</span></a>
+</span><span id="L-244"><a href="#L-244"><span class="linenos">244</span></a>        <span class="c1"># use `imap` if we want to keep the order, otherwise use `imap_unordered`</span>
+</span><span id="L-245"><a href="#L-245"><span class="linenos">245</span></a>        <span class="k">if</span> <span class="n">keep_ordered</span><span class="p">:</span>
+</span><span id="L-246"><a href="#L-246"><span class="linenos">246</span></a>            <span class="n">do_map</span> <span class="o">=</span> <span class="n">pool</span><span class="o">.</span><span class="n">imap</span>
+</span><span id="L-247"><a href="#L-247"><span class="linenos">247</span></a>        <span class="k">else</span><span class="p">:</span>
+</span><span id="L-248"><a href="#L-248"><span class="linenos">248</span></a>            <span class="n">do_map</span> <span class="o">=</span> <span class="n">pool</span><span class="o">.</span><span class="n">imap_unordered</span>
+</span><span id="L-249"><a href="#L-249"><span class="linenos">249</span></a>
+</span><span id="L-250"><a href="#L-250"><span class="linenos">250</span></a>        <span class="c1"># figure out a smart chunksize if one is not given</span>
+</span><span id="L-251"><a href="#L-251"><span class="linenos">251</span></a>        <span class="n">chunksize_int</span><span class="p">:</span> <span class="nb">int</span>
+</span><span id="L-252"><a href="#L-252"><span class="linenos">252</span></a>        <span class="k">if</span> <span class="n">chunksize</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="L-253"><a href="#L-253"><span class="linenos">253</span></a>            <span class="n">chunksize_int</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">n_inputs</span> <span class="o">//</span> <span class="n">num_processes</span><span class="p">)</span>
+</span><span id="L-254"><a href="#L-254"><span class="linenos">254</span></a>        <span class="k">else</span><span class="p">:</span>
+</span><span id="L-255"><a href="#L-255"><span class="linenos">255</span></a>            <span class="n">chunksize_int</span> <span class="o">=</span> <span class="n">chunksize</span>
+</span><span id="L-256"><a href="#L-256"><span class="linenos">256</span></a>
+</span><span id="L-257"><a href="#L-257"><span class="linenos">257</span></a>        <span class="c1"># set the chunksize</span>
+</span><span id="L-258"><a href="#L-258"><span class="linenos">258</span></a>        <span class="n">do_map</span> <span class="o">=</span> <span class="n">functools</span><span class="o">.</span><span class="n">partial</span><span class="p">(</span><span class="n">do_map</span><span class="p">,</span> <span class="n">chunksize</span><span class="o">=</span><span class="n">chunksize_int</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+</span><span id="L-259"><a href="#L-259"><span class="linenos">259</span></a>
+</span><span id="L-260"><a href="#L-260"><span class="linenos">260</span></a>    <span class="k">else</span><span class="p">:</span>
+</span><span id="L-261"><a href="#L-261"><span class="linenos">261</span></a>        <span class="n">do_map</span> <span class="o">=</span> <span class="nb">map</span>
+</span><span id="L-262"><a href="#L-262"><span class="linenos">262</span></a>
+</span><span id="L-263"><a href="#L-263"><span class="linenos">263</span></a>    <span class="c1"># run the map function with a progress bar</span>
+</span><span id="L-264"><a href="#L-264"><span class="linenos">264</span></a>    <span class="n">output</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">OutputType</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span>
+</span><span id="L-265"><a href="#L-265"><span class="linenos">265</span></a>        <span class="n">pbar_fn</span><span class="p">(</span>
+</span><span id="L-266"><a href="#L-266"><span class="linenos">266</span></a>            <span class="n">do_map</span><span class="p">(</span>
+</span><span id="L-267"><a href="#L-267"><span class="linenos">267</span></a>                <span class="n">func</span><span class="p">,</span>
+</span><span id="L-268"><a href="#L-268"><span class="linenos">268</span></a>                <span class="n">iterable</span><span class="p">,</span>
+</span><span id="L-269"><a href="#L-269"><span class="linenos">269</span></a>            <span class="p">),</span>
+</span><span id="L-270"><a href="#L-270"><span class="linenos">270</span></a>            <span class="o">**</span><span class="n">pbar_kwargs_processed</span><span class="p">,</span>
+</span><span id="L-271"><a href="#L-271"><span class="linenos">271</span></a>        <span class="p">)</span>
+</span><span id="L-272"><a href="#L-272"><span class="linenos">272</span></a>    <span class="p">)</span>
+</span><span id="L-273"><a href="#L-273"><span class="linenos">273</span></a>
+</span><span id="L-274"><a href="#L-274"><span class="linenos">274</span></a>    <span class="c1"># close the pool if we used one</span>
+</span><span id="L-275"><a href="#L-275"><span class="linenos">275</span></a>    <span class="k">if</span> <span class="n">parallel</span><span class="p">:</span>
+</span><span id="L-276"><a href="#L-276"><span class="linenos">276</span></a>        <span class="n">pool</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>  <span class="c1"># pyright: ignore[reportPossiblyUnboundVariable]</span>
+</span><span id="L-277"><a href="#L-277"><span class="linenos">277</span></a>        <span class="n">pool</span><span class="o">.</span><span class="n">join</span><span class="p">()</span>  <span class="c1"># pyright: ignore[reportPossiblyUnboundVariable]</span>
+</span><span id="L-278"><a href="#L-278"><span class="linenos">278</span></a>
+</span><span id="L-279"><a href="#L-279"><span class="linenos">279</span></a>    <span class="c1"># return the output as a list</span>
+</span><span id="L-280"><a href="#L-280"><span class="linenos">280</span></a>    <span class="k">return</span> <span class="n">output</span>
 </span></pre></div>
 
 
@@ -434,7 +435,7 @@
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="ProgressBarFunction-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/parallel.py#L31-L34" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.9.0parallel.py#L31-L34" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -445,7 +446,7 @@
             <div class="pdoc-code codehilite"><pre><span></span><span id="ProgressBarFunction-32"><a href="#ProgressBarFunction-32"><span class="linenos">32</span></a><span class="k">class</span><span class="w"> </span><span class="nc">ProgressBarFunction</span><span class="p">(</span><span class="n">Protocol</span><span class="p">):</span>
 </span><span id="ProgressBarFunction-33"><a href="#ProgressBarFunction-33"><span class="linenos">33</span></a>    <span class="s2">&quot;a protocol for a progress bar function&quot;</span>
 </span><span id="ProgressBarFunction-34"><a href="#ProgressBarFunction-34"><span class="linenos">34</span></a>
-</span><span id="ProgressBarFunction-35"><a href="#ProgressBarFunction-35"><span class="linenos">35</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">iterable</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterable</span><span class="p">:</span> <span class="o">...</span>
+</span><span id="ProgressBarFunction-35"><a href="#ProgressBarFunction-35"><span class="linenos">35</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">iterable</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">Any</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">Any</span><span class="p">]:</span> <span class="o">...</span>
 </span></pre></div>
 
 
@@ -462,7 +463,7 @@
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="ProgressBarFunction.__init__-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/parallel.py#L1944-L1970" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.9.0parallel.py#L1770-L1796" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -470,33 +471,33 @@
 
     </div>
     <a class="headerlink" href="#ProgressBarFunction.__init__"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="ProgressBarFunction.__init__-1945"><a href="#ProgressBarFunction.__init__-1945"><span class="linenos">1945</span></a><span class="k">def</span><span class="w"> </span><span class="nf">_no_init_or_replace_init</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-</span><span id="ProgressBarFunction.__init__-1946"><a href="#ProgressBarFunction.__init__-1946"><span class="linenos">1946</span></a>    <span class="bp">cls</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
-</span><span id="ProgressBarFunction.__init__-1947"><a href="#ProgressBarFunction.__init__-1947"><span class="linenos">1947</span></a>
-</span><span id="ProgressBarFunction.__init__-1948"><a href="#ProgressBarFunction.__init__-1948"><span class="linenos">1948</span></a>    <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_is_protocol</span><span class="p">:</span>
-</span><span id="ProgressBarFunction.__init__-1949"><a href="#ProgressBarFunction.__init__-1949"><span class="linenos">1949</span></a>        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;Protocols cannot be instantiated&#39;</span><span class="p">)</span>
-</span><span id="ProgressBarFunction.__init__-1950"><a href="#ProgressBarFunction.__init__-1950"><span class="linenos">1950</span></a>
-</span><span id="ProgressBarFunction.__init__-1951"><a href="#ProgressBarFunction.__init__-1951"><span class="linenos">1951</span></a>    <span class="c1"># Already using a custom `__init__`. No need to calculate correct</span>
-</span><span id="ProgressBarFunction.__init__-1952"><a href="#ProgressBarFunction.__init__-1952"><span class="linenos">1952</span></a>    <span class="c1"># `__init__` to call. This can lead to RecursionError. See bpo-45121.</span>
-</span><span id="ProgressBarFunction.__init__-1953"><a href="#ProgressBarFunction.__init__-1953"><span class="linenos">1953</span></a>    <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="fm">__init__</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">_no_init_or_replace_init</span><span class="p">:</span>
-</span><span id="ProgressBarFunction.__init__-1954"><a href="#ProgressBarFunction.__init__-1954"><span class="linenos">1954</span></a>        <span class="k">return</span>
-</span><span id="ProgressBarFunction.__init__-1955"><a href="#ProgressBarFunction.__init__-1955"><span class="linenos">1955</span></a>
-</span><span id="ProgressBarFunction.__init__-1956"><a href="#ProgressBarFunction.__init__-1956"><span class="linenos">1956</span></a>    <span class="c1"># Initially, `__init__` of a protocol subclass is set to `_no_init_or_replace_init`.</span>
-</span><span id="ProgressBarFunction.__init__-1957"><a href="#ProgressBarFunction.__init__-1957"><span class="linenos">1957</span></a>    <span class="c1"># The first instantiation of the subclass will call `_no_init_or_replace_init` which</span>
-</span><span id="ProgressBarFunction.__init__-1958"><a href="#ProgressBarFunction.__init__-1958"><span class="linenos">1958</span></a>    <span class="c1"># searches for a proper new `__init__` in the MRO. The new `__init__`</span>
-</span><span id="ProgressBarFunction.__init__-1959"><a href="#ProgressBarFunction.__init__-1959"><span class="linenos">1959</span></a>    <span class="c1"># replaces the subclass&#39; old `__init__` (ie `_no_init_or_replace_init`). Subsequent</span>
-</span><span id="ProgressBarFunction.__init__-1960"><a href="#ProgressBarFunction.__init__-1960"><span class="linenos">1960</span></a>    <span class="c1"># instantiation of the protocol subclass will thus use the new</span>
-</span><span id="ProgressBarFunction.__init__-1961"><a href="#ProgressBarFunction.__init__-1961"><span class="linenos">1961</span></a>    <span class="c1"># `__init__` and no longer call `_no_init_or_replace_init`.</span>
-</span><span id="ProgressBarFunction.__init__-1962"><a href="#ProgressBarFunction.__init__-1962"><span class="linenos">1962</span></a>    <span class="k">for</span> <span class="n">base</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="vm">__mro__</span><span class="p">:</span>
-</span><span id="ProgressBarFunction.__init__-1963"><a href="#ProgressBarFunction.__init__-1963"><span class="linenos">1963</span></a>        <span class="n">init</span> <span class="o">=</span> <span class="n">base</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;__init__&#39;</span><span class="p">,</span> <span class="n">_no_init_or_replace_init</span><span class="p">)</span>
-</span><span id="ProgressBarFunction.__init__-1964"><a href="#ProgressBarFunction.__init__-1964"><span class="linenos">1964</span></a>        <span class="k">if</span> <span class="n">init</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">_no_init_or_replace_init</span><span class="p">:</span>
-</span><span id="ProgressBarFunction.__init__-1965"><a href="#ProgressBarFunction.__init__-1965"><span class="linenos">1965</span></a>            <span class="bp">cls</span><span class="o">.</span><span class="fm">__init__</span> <span class="o">=</span> <span class="n">init</span>
-</span><span id="ProgressBarFunction.__init__-1966"><a href="#ProgressBarFunction.__init__-1966"><span class="linenos">1966</span></a>            <span class="k">break</span>
-</span><span id="ProgressBarFunction.__init__-1967"><a href="#ProgressBarFunction.__init__-1967"><span class="linenos">1967</span></a>    <span class="k">else</span><span class="p">:</span>
-</span><span id="ProgressBarFunction.__init__-1968"><a href="#ProgressBarFunction.__init__-1968"><span class="linenos">1968</span></a>        <span class="c1"># should not happen</span>
-</span><span id="ProgressBarFunction.__init__-1969"><a href="#ProgressBarFunction.__init__-1969"><span class="linenos">1969</span></a>        <span class="bp">cls</span><span class="o">.</span><span class="fm">__init__</span> <span class="o">=</span> <span class="nb">object</span><span class="o">.</span><span class="fm">__init__</span>
-</span><span id="ProgressBarFunction.__init__-1970"><a href="#ProgressBarFunction.__init__-1970"><span class="linenos">1970</span></a>
-</span><span id="ProgressBarFunction.__init__-1971"><a href="#ProgressBarFunction.__init__-1971"><span class="linenos">1971</span></a>    <span class="bp">cls</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="ProgressBarFunction.__init__-1771"><a href="#ProgressBarFunction.__init__-1771"><span class="linenos">1771</span></a><span class="k">def</span><span class="w"> </span><span class="nf">_no_init_or_replace_init</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+</span><span id="ProgressBarFunction.__init__-1772"><a href="#ProgressBarFunction.__init__-1772"><span class="linenos">1772</span></a>    <span class="bp">cls</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</span><span id="ProgressBarFunction.__init__-1773"><a href="#ProgressBarFunction.__init__-1773"><span class="linenos">1773</span></a>
+</span><span id="ProgressBarFunction.__init__-1774"><a href="#ProgressBarFunction.__init__-1774"><span class="linenos">1774</span></a>    <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_is_protocol</span><span class="p">:</span>
+</span><span id="ProgressBarFunction.__init__-1775"><a href="#ProgressBarFunction.__init__-1775"><span class="linenos">1775</span></a>        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;Protocols cannot be instantiated&#39;</span><span class="p">)</span>
+</span><span id="ProgressBarFunction.__init__-1776"><a href="#ProgressBarFunction.__init__-1776"><span class="linenos">1776</span></a>
+</span><span id="ProgressBarFunction.__init__-1777"><a href="#ProgressBarFunction.__init__-1777"><span class="linenos">1777</span></a>    <span class="c1"># Already using a custom `__init__`. No need to calculate correct</span>
+</span><span id="ProgressBarFunction.__init__-1778"><a href="#ProgressBarFunction.__init__-1778"><span class="linenos">1778</span></a>    <span class="c1"># `__init__` to call. This can lead to RecursionError. See bpo-45121.</span>
+</span><span id="ProgressBarFunction.__init__-1779"><a href="#ProgressBarFunction.__init__-1779"><span class="linenos">1779</span></a>    <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="fm">__init__</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">_no_init_or_replace_init</span><span class="p">:</span>
+</span><span id="ProgressBarFunction.__init__-1780"><a href="#ProgressBarFunction.__init__-1780"><span class="linenos">1780</span></a>        <span class="k">return</span>
+</span><span id="ProgressBarFunction.__init__-1781"><a href="#ProgressBarFunction.__init__-1781"><span class="linenos">1781</span></a>
+</span><span id="ProgressBarFunction.__init__-1782"><a href="#ProgressBarFunction.__init__-1782"><span class="linenos">1782</span></a>    <span class="c1"># Initially, `__init__` of a protocol subclass is set to `_no_init_or_replace_init`.</span>
+</span><span id="ProgressBarFunction.__init__-1783"><a href="#ProgressBarFunction.__init__-1783"><span class="linenos">1783</span></a>    <span class="c1"># The first instantiation of the subclass will call `_no_init_or_replace_init` which</span>
+</span><span id="ProgressBarFunction.__init__-1784"><a href="#ProgressBarFunction.__init__-1784"><span class="linenos">1784</span></a>    <span class="c1"># searches for a proper new `__init__` in the MRO. The new `__init__`</span>
+</span><span id="ProgressBarFunction.__init__-1785"><a href="#ProgressBarFunction.__init__-1785"><span class="linenos">1785</span></a>    <span class="c1"># replaces the subclass&#39; old `__init__` (ie `_no_init_or_replace_init`). Subsequent</span>
+</span><span id="ProgressBarFunction.__init__-1786"><a href="#ProgressBarFunction.__init__-1786"><span class="linenos">1786</span></a>    <span class="c1"># instantiation of the protocol subclass will thus use the new</span>
+</span><span id="ProgressBarFunction.__init__-1787"><a href="#ProgressBarFunction.__init__-1787"><span class="linenos">1787</span></a>    <span class="c1"># `__init__` and no longer call `_no_init_or_replace_init`.</span>
+</span><span id="ProgressBarFunction.__init__-1788"><a href="#ProgressBarFunction.__init__-1788"><span class="linenos">1788</span></a>    <span class="k">for</span> <span class="n">base</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="vm">__mro__</span><span class="p">:</span>
+</span><span id="ProgressBarFunction.__init__-1789"><a href="#ProgressBarFunction.__init__-1789"><span class="linenos">1789</span></a>        <span class="n">init</span> <span class="o">=</span> <span class="n">base</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;__init__&#39;</span><span class="p">,</span> <span class="n">_no_init_or_replace_init</span><span class="p">)</span>
+</span><span id="ProgressBarFunction.__init__-1790"><a href="#ProgressBarFunction.__init__-1790"><span class="linenos">1790</span></a>        <span class="k">if</span> <span class="n">init</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">_no_init_or_replace_init</span><span class="p">:</span>
+</span><span id="ProgressBarFunction.__init__-1791"><a href="#ProgressBarFunction.__init__-1791"><span class="linenos">1791</span></a>            <span class="bp">cls</span><span class="o">.</span><span class="fm">__init__</span> <span class="o">=</span> <span class="n">init</span>
+</span><span id="ProgressBarFunction.__init__-1792"><a href="#ProgressBarFunction.__init__-1792"><span class="linenos">1792</span></a>            <span class="k">break</span>
+</span><span id="ProgressBarFunction.__init__-1793"><a href="#ProgressBarFunction.__init__-1793"><span class="linenos">1793</span></a>    <span class="k">else</span><span class="p">:</span>
+</span><span id="ProgressBarFunction.__init__-1794"><a href="#ProgressBarFunction.__init__-1794"><span class="linenos">1794</span></a>        <span class="c1"># should not happen</span>
+</span><span id="ProgressBarFunction.__init__-1795"><a href="#ProgressBarFunction.__init__-1795"><span class="linenos">1795</span></a>        <span class="bp">cls</span><span class="o">.</span><span class="fm">__init__</span> <span class="o">=</span> <span class="nb">object</span><span class="o">.</span><span class="fm">__init__</span>
+</span><span id="ProgressBarFunction.__init__-1796"><a href="#ProgressBarFunction.__init__-1796"><span class="linenos">1796</span></a>
+</span><span id="ProgressBarFunction.__init__-1797"><a href="#ProgressBarFunction.__init__-1797"><span class="linenos">1797</span></a>    <span class="bp">cls</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 </span></pre></div>
 
 
@@ -533,12 +534,12 @@
 <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">spinner_fn_wrap</span><span class="signature pdoc-code condensed">(<span class="param"><span class="n">x</span><span class="p">:</span> <span class="n">Iterable</span>, </span><span class="param"><span class="o">**</span><span class="n">kwargs</span></span><span class="return-annotation">) -> <span class="n">List</span>:</span></span>
+        <span class="name">spinner_fn_wrap</span><span class="signature pdoc-code condensed">(<span class="param"><span class="n">x</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">Any</span><span class="p">]</span>, </span><span class="param"><span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span></span><span class="return-annotation">) -> <span class="n">List</span><span class="p">[</span><span class="n">Any</span><span class="p">]</span>:</span></span>
 
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="spinner_fn_wrap-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/parallel.py#L55-L72" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.9.0parallel.py#L55-L72" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -546,7 +547,7 @@
 
     </div>
     <a class="headerlink" href="#spinner_fn_wrap"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="spinner_fn_wrap-56"><a href="#spinner_fn_wrap-56"><span class="linenos">56</span></a><span class="k">def</span><span class="w"> </span><span class="nf">spinner_fn_wrap</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">:</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="spinner_fn_wrap-56"><a href="#spinner_fn_wrap-56"><span class="linenos">56</span></a><span class="k">def</span><span class="w"> </span><span class="nf">spinner_fn_wrap</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">Any</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Any</span><span class="p">]:</span>
 </span><span id="spinner_fn_wrap-57"><a href="#spinner_fn_wrap-57"><span class="linenos">57</span></a>    <span class="s2">&quot;spinner wrapper&quot;</span>
 </span><span id="spinner_fn_wrap-58"><a href="#spinner_fn_wrap-58"><span class="linenos">58</span></a>    <span class="n">spinnercontext_allowed_kwargs</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">get_fn_allowed_kwargs</span><span class="p">(</span>
 </span><span id="spinner_fn_wrap-59"><a href="#spinner_fn_wrap-59"><span class="linenos">59</span></a>        <span class="n">SpinnerContext</span><span class="o">.</span><span class="fm">__init__</span>
@@ -577,12 +578,12 @@
 <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">map_kwargs_for_tqdm</span><span class="signature pdoc-code condensed">(<span class="param"><span class="n">kwargs</span><span class="p">:</span> <span class="nb">dict</span></span><span class="return-annotation">) -> <span class="nb">dict</span>:</span></span>
+        <span class="name">map_kwargs_for_tqdm</span><span class="signature pdoc-code condensed">(<span class="param"><span class="n">kwargs</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span></span><span class="return-annotation">) -> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span>:</span></span>
 
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="map_kwargs_for_tqdm-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/parallel.py#L75-L86" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.9.0parallel.py#L75-L86" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -590,9 +591,9 @@
 
     </div>
     <a class="headerlink" href="#map_kwargs_for_tqdm"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="map_kwargs_for_tqdm-76"><a href="#map_kwargs_for_tqdm-76"><span class="linenos">76</span></a><span class="k">def</span><span class="w"> </span><span class="nf">map_kwargs_for_tqdm</span><span class="p">(</span><span class="n">kwargs</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="map_kwargs_for_tqdm-76"><a href="#map_kwargs_for_tqdm-76"><span class="linenos">76</span></a><span class="k">def</span><span class="w"> </span><span class="nf">map_kwargs_for_tqdm</span><span class="p">(</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
 </span><span id="map_kwargs_for_tqdm-77"><a href="#map_kwargs_for_tqdm-77"><span class="linenos">77</span></a>    <span class="s2">&quot;map kwargs for tqdm, cant wrap because the pbar dissapears?&quot;</span>
-</span><span id="map_kwargs_for_tqdm-78"><a href="#map_kwargs_for_tqdm-78"><span class="linenos">78</span></a>    <span class="n">tqdm_allowed_kwargs</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">get_fn_allowed_kwargs</span><span class="p">(</span><span class="n">tqdm</span><span class="o">.</span><span class="n">tqdm</span><span class="o">.</span><span class="fm">__init__</span><span class="p">)</span>
+</span><span id="map_kwargs_for_tqdm-78"><a href="#map_kwargs_for_tqdm-78"><span class="linenos">78</span></a>    <span class="n">tqdm_allowed_kwargs</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">get_fn_allowed_kwargs</span><span class="p">(</span><span class="n">tqdm</span><span class="o">.</span><span class="n">tqdm</span><span class="o">.</span><span class="fm">__init__</span><span class="p">)</span>  <span class="c1"># pyright: ignore[reportPossiblyUnboundVariable]</span>
 </span><span id="map_kwargs_for_tqdm-79"><a href="#map_kwargs_for_tqdm-79"><span class="linenos">79</span></a>    <span class="n">mapped_kwargs</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">tqdm_allowed_kwargs</span><span class="p">}</span>
 </span><span id="map_kwargs_for_tqdm-80"><a href="#map_kwargs_for_tqdm-80"><span class="linenos">80</span></a>
 </span><span id="map_kwargs_for_tqdm-81"><a href="#map_kwargs_for_tqdm-81"><span class="linenos">81</span></a>    <span class="k">if</span> <span class="s2">&quot;desc&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
@@ -615,12 +616,12 @@
 <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">no_progress_fn_wrap</span><span class="signature pdoc-code condensed">(<span class="param"><span class="n">x</span><span class="p">:</span> <span class="n">Iterable</span>, </span><span class="param"><span class="o">**</span><span class="n">kwargs</span></span><span class="return-annotation">) -> <span class="n">Iterable</span>:</span></span>
+        <span class="name">no_progress_fn_wrap</span><span class="signature pdoc-code condensed">(<span class="param"><span class="n">x</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">Any</span><span class="p">]</span>, </span><span class="param"><span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span></span><span class="return-annotation">) -> <span class="n">Iterable</span><span class="p">[</span><span class="n">Any</span><span class="p">]</span>:</span></span>
 
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="no_progress_fn_wrap-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/parallel.py#L89-L91" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.9.0parallel.py#L89-L91" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -628,7 +629,7 @@
 
     </div>
     <a class="headerlink" href="#no_progress_fn_wrap"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="no_progress_fn_wrap-90"><a href="#no_progress_fn_wrap-90"><span class="linenos">90</span></a><span class="k">def</span><span class="w"> </span><span class="nf">no_progress_fn_wrap</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterable</span><span class="p">:</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="no_progress_fn_wrap-90"><a href="#no_progress_fn_wrap-90"><span class="linenos">90</span></a><span class="k">def</span><span class="w"> </span><span class="nf">no_progress_fn_wrap</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">Any</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">Any</span><span class="p">]:</span>
 </span><span id="no_progress_fn_wrap-91"><a href="#no_progress_fn_wrap-91"><span class="linenos">91</span></a>    <span class="s2">&quot;fallback to no progress bar&quot;</span>
 </span><span id="no_progress_fn_wrap-92"><a href="#no_progress_fn_wrap-92"><span class="linenos">92</span></a>    <span class="k">return</span> <span class="n">x</span>
 </span></pre></div>
@@ -644,12 +645,12 @@
 <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">set_up_progress_bar_fn</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">pbar</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n"><a href="#ProgressBarFunction">ProgressBarFunction</a></span><span class="p">,</span> <span class="n">Literal</span><span class="p">[</span><span class="s1">&#39;tqdm&#39;</span><span class="p">,</span> <span class="s1">&#39;spinner&#39;</span><span class="p">,</span> <span class="s1">&#39;none&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">]]</span>,</span><span class="param">	<span class="n">pbar_kwargs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="o">**</span><span class="n">extra_kwargs</span></span><span class="return-annotation">) -> <span class="n">Tuple</span><span class="p">[</span><span class="n"><a href="#ProgressBarFunction">ProgressBarFunction</a></span><span class="p">,</span> <span class="nb">dict</span><span class="p">]</span>:</span></span>
+        <span class="name">set_up_progress_bar_fn</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">pbar</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n"><a href="#ProgressBarFunction">ProgressBarFunction</a></span><span class="p">,</span> <span class="n">Literal</span><span class="p">[</span><span class="s1">&#39;tqdm&#39;</span><span class="p">,</span> <span class="s1">&#39;spinner&#39;</span><span class="p">,</span> <span class="s1">&#39;none&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">]]</span>,</span><span class="param">	<span class="n">pbar_kwargs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="o">**</span><span class="n">extra_kwargs</span><span class="p">:</span> <span class="n">Any</span></span><span class="return-annotation">) -> <span class="n">Tuple</span><span class="p">[</span><span class="n"><a href="#ProgressBarFunction">ProgressBarFunction</a></span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span>:</span></span>
 
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="set_up_progress_bar_fn-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/parallel.py#L94-L142" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.9.0parallel.py#L94-L142" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -660,8 +661,8 @@
             <div class="pdoc-code codehilite"><pre><span></span><span id="set_up_progress_bar_fn-95"><a href="#set_up_progress_bar_fn-95"><span class="linenos"> 95</span></a><span class="k">def</span><span class="w"> </span><span class="nf">set_up_progress_bar_fn</span><span class="p">(</span>
 </span><span id="set_up_progress_bar_fn-96"><a href="#set_up_progress_bar_fn-96"><span class="linenos"> 96</span></a>    <span class="n">pbar</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">ProgressBarFunction</span><span class="p">,</span> <span class="n">ProgressBarOption</span><span class="p">],</span>
 </span><span id="set_up_progress_bar_fn-97"><a href="#set_up_progress_bar_fn-97"><span class="linenos"> 97</span></a>    <span class="n">pbar_kwargs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-</span><span id="set_up_progress_bar_fn-98"><a href="#set_up_progress_bar_fn-98"><span class="linenos"> 98</span></a>    <span class="o">**</span><span class="n">extra_kwargs</span><span class="p">,</span>
-</span><span id="set_up_progress_bar_fn-99"><a href="#set_up_progress_bar_fn-99"><span class="linenos"> 99</span></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">ProgressBarFunction</span><span class="p">,</span> <span class="nb">dict</span><span class="p">]:</span>
+</span><span id="set_up_progress_bar_fn-98"><a href="#set_up_progress_bar_fn-98"><span class="linenos"> 98</span></a>    <span class="o">**</span><span class="n">extra_kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
+</span><span id="set_up_progress_bar_fn-99"><a href="#set_up_progress_bar_fn-99"><span class="linenos"> 99</span></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">ProgressBarFunction</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]:</span>
 </span><span id="set_up_progress_bar_fn-100"><a href="#set_up_progress_bar_fn-100"><span class="linenos">100</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;set up the progress bar function and its kwargs</span>
 </span><span id="set_up_progress_bar_fn-101"><a href="#set_up_progress_bar_fn-101"><span class="linenos">101</span></a>
 </span><span id="set_up_progress_bar_fn-102"><a href="#set_up_progress_bar_fn-102"><span class="linenos">102</span></a><span class="sd">    # Parameters:</span>
@@ -692,7 +693,7 @@
 </span><span id="set_up_progress_bar_fn-127"><a href="#set_up_progress_bar_fn-127"><span class="linenos">127</span></a>    <span class="c1"># if `pbar` is a different string, figure out which progress bar to use</span>
 </span><span id="set_up_progress_bar_fn-128"><a href="#set_up_progress_bar_fn-128"><span class="linenos">128</span></a>    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">pbar</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
 </span><span id="set_up_progress_bar_fn-129"><a href="#set_up_progress_bar_fn-129"><span class="linenos">129</span></a>        <span class="k">if</span> <span class="n">pbar</span> <span class="o">==</span> <span class="s2">&quot;tqdm&quot;</span><span class="p">:</span>
-</span><span id="set_up_progress_bar_fn-130"><a href="#set_up_progress_bar_fn-130"><span class="linenos">130</span></a>            <span class="n">pbar_fn</span> <span class="o">=</span> <span class="n">tqdm</span><span class="o">.</span><span class="n">tqdm</span>
+</span><span id="set_up_progress_bar_fn-130"><a href="#set_up_progress_bar_fn-130"><span class="linenos">130</span></a>            <span class="n">pbar_fn</span> <span class="o">=</span> <span class="n">tqdm</span><span class="o">.</span><span class="n">tqdm</span>  <span class="c1"># pyright: ignore[reportPossiblyUnboundVariable]</span>
 </span><span id="set_up_progress_bar_fn-131"><a href="#set_up_progress_bar_fn-131"><span class="linenos">131</span></a>            <span class="n">pbar_kwargs</span> <span class="o">=</span> <span class="n">map_kwargs_for_tqdm</span><span class="p">(</span><span class="n">pbar_kwargs</span><span class="p">)</span>
 </span><span id="set_up_progress_bar_fn-132"><a href="#set_up_progress_bar_fn-132"><span class="linenos">132</span></a>        <span class="k">elif</span> <span class="n">pbar</span> <span class="o">==</span> <span class="s2">&quot;spinner&quot;</span><span class="p">:</span>
 </span><span id="set_up_progress_bar_fn-133"><a href="#set_up_progress_bar_fn-133"><span class="linenos">133</span></a>            <span class="n">pbar_fn</span> <span class="o">=</span> <span class="n">functools</span><span class="o">.</span><span class="n">partial</span><span class="p">(</span><span class="n">spinner_fn_wrap</span><span class="p">,</span> <span class="o">**</span><span class="n">pbar_kwargs</span><span class="p">)</span>
@@ -747,7 +748,7 @@ a tuple of the progress bar function and its kwargs</li>
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="run_maybe_parallel-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/parallel.py#L146-L279" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.9.0parallel.py#L146-L280" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -850,45 +851,46 @@ a tuple of the progress bar function and its kwargs</li>
 </span><span id="run_maybe_parallel-239"><a href="#run_maybe_parallel-239"><span class="linenos">239</span></a>    <span class="p">]</span>
 </span><span id="run_maybe_parallel-240"><a href="#run_maybe_parallel-240"><span class="linenos">240</span></a>    <span class="k">if</span> <span class="n">parallel</span><span class="p">:</span>
 </span><span id="run_maybe_parallel-241"><a href="#run_maybe_parallel-241"><span class="linenos">241</span></a>        <span class="c1"># use `mp.Pool` since we might want to use `multiprocess` instead of `multiprocessing`</span>
-</span><span id="run_maybe_parallel-242"><a href="#run_maybe_parallel-242"><span class="linenos">242</span></a>        <span class="n">pool</span> <span class="o">=</span> <span class="n">mp</span><span class="o">.</span><span class="n">Pool</span><span class="p">(</span><span class="n">num_processes</span><span class="p">)</span>
-</span><span id="run_maybe_parallel-243"><a href="#run_maybe_parallel-243"><span class="linenos">243</span></a>
-</span><span id="run_maybe_parallel-244"><a href="#run_maybe_parallel-244"><span class="linenos">244</span></a>        <span class="c1"># use `imap` if we want to keep the order, otherwise use `imap_unordered`</span>
-</span><span id="run_maybe_parallel-245"><a href="#run_maybe_parallel-245"><span class="linenos">245</span></a>        <span class="k">if</span> <span class="n">keep_ordered</span><span class="p">:</span>
-</span><span id="run_maybe_parallel-246"><a href="#run_maybe_parallel-246"><span class="linenos">246</span></a>            <span class="n">do_map</span> <span class="o">=</span> <span class="n">pool</span><span class="o">.</span><span class="n">imap</span>
-</span><span id="run_maybe_parallel-247"><a href="#run_maybe_parallel-247"><span class="linenos">247</span></a>        <span class="k">else</span><span class="p">:</span>
-</span><span id="run_maybe_parallel-248"><a href="#run_maybe_parallel-248"><span class="linenos">248</span></a>            <span class="n">do_map</span> <span class="o">=</span> <span class="n">pool</span><span class="o">.</span><span class="n">imap_unordered</span>
-</span><span id="run_maybe_parallel-249"><a href="#run_maybe_parallel-249"><span class="linenos">249</span></a>
-</span><span id="run_maybe_parallel-250"><a href="#run_maybe_parallel-250"><span class="linenos">250</span></a>        <span class="c1"># figure out a smart chunksize if one is not given</span>
-</span><span id="run_maybe_parallel-251"><a href="#run_maybe_parallel-251"><span class="linenos">251</span></a>        <span class="n">chunksize_int</span><span class="p">:</span> <span class="nb">int</span>
-</span><span id="run_maybe_parallel-252"><a href="#run_maybe_parallel-252"><span class="linenos">252</span></a>        <span class="k">if</span> <span class="n">chunksize</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="run_maybe_parallel-253"><a href="#run_maybe_parallel-253"><span class="linenos">253</span></a>            <span class="n">chunksize_int</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">n_inputs</span> <span class="o">//</span> <span class="n">num_processes</span><span class="p">)</span>
-</span><span id="run_maybe_parallel-254"><a href="#run_maybe_parallel-254"><span class="linenos">254</span></a>        <span class="k">else</span><span class="p">:</span>
-</span><span id="run_maybe_parallel-255"><a href="#run_maybe_parallel-255"><span class="linenos">255</span></a>            <span class="n">chunksize_int</span> <span class="o">=</span> <span class="n">chunksize</span>
-</span><span id="run_maybe_parallel-256"><a href="#run_maybe_parallel-256"><span class="linenos">256</span></a>
-</span><span id="run_maybe_parallel-257"><a href="#run_maybe_parallel-257"><span class="linenos">257</span></a>        <span class="c1"># set the chunksize</span>
-</span><span id="run_maybe_parallel-258"><a href="#run_maybe_parallel-258"><span class="linenos">258</span></a>        <span class="n">do_map</span> <span class="o">=</span> <span class="n">functools</span><span class="o">.</span><span class="n">partial</span><span class="p">(</span><span class="n">do_map</span><span class="p">,</span> <span class="n">chunksize</span><span class="o">=</span><span class="n">chunksize_int</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
-</span><span id="run_maybe_parallel-259"><a href="#run_maybe_parallel-259"><span class="linenos">259</span></a>
-</span><span id="run_maybe_parallel-260"><a href="#run_maybe_parallel-260"><span class="linenos">260</span></a>    <span class="k">else</span><span class="p">:</span>
-</span><span id="run_maybe_parallel-261"><a href="#run_maybe_parallel-261"><span class="linenos">261</span></a>        <span class="n">do_map</span> <span class="o">=</span> <span class="nb">map</span>
-</span><span id="run_maybe_parallel-262"><a href="#run_maybe_parallel-262"><span class="linenos">262</span></a>
-</span><span id="run_maybe_parallel-263"><a href="#run_maybe_parallel-263"><span class="linenos">263</span></a>    <span class="c1"># run the map function with a progress bar</span>
-</span><span id="run_maybe_parallel-264"><a href="#run_maybe_parallel-264"><span class="linenos">264</span></a>    <span class="n">output</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">OutputType</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span>
-</span><span id="run_maybe_parallel-265"><a href="#run_maybe_parallel-265"><span class="linenos">265</span></a>        <span class="n">pbar_fn</span><span class="p">(</span>
-</span><span id="run_maybe_parallel-266"><a href="#run_maybe_parallel-266"><span class="linenos">266</span></a>            <span class="n">do_map</span><span class="p">(</span>
-</span><span id="run_maybe_parallel-267"><a href="#run_maybe_parallel-267"><span class="linenos">267</span></a>                <span class="n">func</span><span class="p">,</span>
-</span><span id="run_maybe_parallel-268"><a href="#run_maybe_parallel-268"><span class="linenos">268</span></a>                <span class="n">iterable</span><span class="p">,</span>
-</span><span id="run_maybe_parallel-269"><a href="#run_maybe_parallel-269"><span class="linenos">269</span></a>            <span class="p">),</span>
-</span><span id="run_maybe_parallel-270"><a href="#run_maybe_parallel-270"><span class="linenos">270</span></a>            <span class="o">**</span><span class="n">pbar_kwargs_processed</span><span class="p">,</span>
-</span><span id="run_maybe_parallel-271"><a href="#run_maybe_parallel-271"><span class="linenos">271</span></a>        <span class="p">)</span>
-</span><span id="run_maybe_parallel-272"><a href="#run_maybe_parallel-272"><span class="linenos">272</span></a>    <span class="p">)</span>
-</span><span id="run_maybe_parallel-273"><a href="#run_maybe_parallel-273"><span class="linenos">273</span></a>
-</span><span id="run_maybe_parallel-274"><a href="#run_maybe_parallel-274"><span class="linenos">274</span></a>    <span class="c1"># close the pool if we used one</span>
-</span><span id="run_maybe_parallel-275"><a href="#run_maybe_parallel-275"><span class="linenos">275</span></a>    <span class="k">if</span> <span class="n">parallel</span><span class="p">:</span>
-</span><span id="run_maybe_parallel-276"><a href="#run_maybe_parallel-276"><span class="linenos">276</span></a>        <span class="n">pool</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-</span><span id="run_maybe_parallel-277"><a href="#run_maybe_parallel-277"><span class="linenos">277</span></a>        <span class="n">pool</span><span class="o">.</span><span class="n">join</span><span class="p">()</span>
-</span><span id="run_maybe_parallel-278"><a href="#run_maybe_parallel-278"><span class="linenos">278</span></a>
-</span><span id="run_maybe_parallel-279"><a href="#run_maybe_parallel-279"><span class="linenos">279</span></a>    <span class="c1"># return the output as a list</span>
-</span><span id="run_maybe_parallel-280"><a href="#run_maybe_parallel-280"><span class="linenos">280</span></a>    <span class="k">return</span> <span class="n">output</span>
+</span><span id="run_maybe_parallel-242"><a href="#run_maybe_parallel-242"><span class="linenos">242</span></a>        <span class="c1"># TYPING: messy here</span>
+</span><span id="run_maybe_parallel-243"><a href="#run_maybe_parallel-243"><span class="linenos">243</span></a>        <span class="n">pool</span> <span class="o">=</span> <span class="n">mp</span><span class="o">.</span><span class="n">Pool</span><span class="p">(</span><span class="n">num_processes</span><span class="p">)</span>  <span class="c1"># type: ignore[possibly-missing-attribute] # pyright: ignore[reportAttributeAccessIssue, reportUnknownMemberType, reportUnknownVariableType]</span>
+</span><span id="run_maybe_parallel-244"><a href="#run_maybe_parallel-244"><span class="linenos">244</span></a>
+</span><span id="run_maybe_parallel-245"><a href="#run_maybe_parallel-245"><span class="linenos">245</span></a>        <span class="c1"># use `imap` if we want to keep the order, otherwise use `imap_unordered`</span>
+</span><span id="run_maybe_parallel-246"><a href="#run_maybe_parallel-246"><span class="linenos">246</span></a>        <span class="k">if</span> <span class="n">keep_ordered</span><span class="p">:</span>
+</span><span id="run_maybe_parallel-247"><a href="#run_maybe_parallel-247"><span class="linenos">247</span></a>            <span class="n">do_map</span> <span class="o">=</span> <span class="n">pool</span><span class="o">.</span><span class="n">imap</span>
+</span><span id="run_maybe_parallel-248"><a href="#run_maybe_parallel-248"><span class="linenos">248</span></a>        <span class="k">else</span><span class="p">:</span>
+</span><span id="run_maybe_parallel-249"><a href="#run_maybe_parallel-249"><span class="linenos">249</span></a>            <span class="n">do_map</span> <span class="o">=</span> <span class="n">pool</span><span class="o">.</span><span class="n">imap_unordered</span>
+</span><span id="run_maybe_parallel-250"><a href="#run_maybe_parallel-250"><span class="linenos">250</span></a>
+</span><span id="run_maybe_parallel-251"><a href="#run_maybe_parallel-251"><span class="linenos">251</span></a>        <span class="c1"># figure out a smart chunksize if one is not given</span>
+</span><span id="run_maybe_parallel-252"><a href="#run_maybe_parallel-252"><span class="linenos">252</span></a>        <span class="n">chunksize_int</span><span class="p">:</span> <span class="nb">int</span>
+</span><span id="run_maybe_parallel-253"><a href="#run_maybe_parallel-253"><span class="linenos">253</span></a>        <span class="k">if</span> <span class="n">chunksize</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="run_maybe_parallel-254"><a href="#run_maybe_parallel-254"><span class="linenos">254</span></a>            <span class="n">chunksize_int</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">n_inputs</span> <span class="o">//</span> <span class="n">num_processes</span><span class="p">)</span>
+</span><span id="run_maybe_parallel-255"><a href="#run_maybe_parallel-255"><span class="linenos">255</span></a>        <span class="k">else</span><span class="p">:</span>
+</span><span id="run_maybe_parallel-256"><a href="#run_maybe_parallel-256"><span class="linenos">256</span></a>            <span class="n">chunksize_int</span> <span class="o">=</span> <span class="n">chunksize</span>
+</span><span id="run_maybe_parallel-257"><a href="#run_maybe_parallel-257"><span class="linenos">257</span></a>
+</span><span id="run_maybe_parallel-258"><a href="#run_maybe_parallel-258"><span class="linenos">258</span></a>        <span class="c1"># set the chunksize</span>
+</span><span id="run_maybe_parallel-259"><a href="#run_maybe_parallel-259"><span class="linenos">259</span></a>        <span class="n">do_map</span> <span class="o">=</span> <span class="n">functools</span><span class="o">.</span><span class="n">partial</span><span class="p">(</span><span class="n">do_map</span><span class="p">,</span> <span class="n">chunksize</span><span class="o">=</span><span class="n">chunksize_int</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+</span><span id="run_maybe_parallel-260"><a href="#run_maybe_parallel-260"><span class="linenos">260</span></a>
+</span><span id="run_maybe_parallel-261"><a href="#run_maybe_parallel-261"><span class="linenos">261</span></a>    <span class="k">else</span><span class="p">:</span>
+</span><span id="run_maybe_parallel-262"><a href="#run_maybe_parallel-262"><span class="linenos">262</span></a>        <span class="n">do_map</span> <span class="o">=</span> <span class="nb">map</span>
+</span><span id="run_maybe_parallel-263"><a href="#run_maybe_parallel-263"><span class="linenos">263</span></a>
+</span><span id="run_maybe_parallel-264"><a href="#run_maybe_parallel-264"><span class="linenos">264</span></a>    <span class="c1"># run the map function with a progress bar</span>
+</span><span id="run_maybe_parallel-265"><a href="#run_maybe_parallel-265"><span class="linenos">265</span></a>    <span class="n">output</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">OutputType</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span>
+</span><span id="run_maybe_parallel-266"><a href="#run_maybe_parallel-266"><span class="linenos">266</span></a>        <span class="n">pbar_fn</span><span class="p">(</span>
+</span><span id="run_maybe_parallel-267"><a href="#run_maybe_parallel-267"><span class="linenos">267</span></a>            <span class="n">do_map</span><span class="p">(</span>
+</span><span id="run_maybe_parallel-268"><a href="#run_maybe_parallel-268"><span class="linenos">268</span></a>                <span class="n">func</span><span class="p">,</span>
+</span><span id="run_maybe_parallel-269"><a href="#run_maybe_parallel-269"><span class="linenos">269</span></a>                <span class="n">iterable</span><span class="p">,</span>
+</span><span id="run_maybe_parallel-270"><a href="#run_maybe_parallel-270"><span class="linenos">270</span></a>            <span class="p">),</span>
+</span><span id="run_maybe_parallel-271"><a href="#run_maybe_parallel-271"><span class="linenos">271</span></a>            <span class="o">**</span><span class="n">pbar_kwargs_processed</span><span class="p">,</span>
+</span><span id="run_maybe_parallel-272"><a href="#run_maybe_parallel-272"><span class="linenos">272</span></a>        <span class="p">)</span>
+</span><span id="run_maybe_parallel-273"><a href="#run_maybe_parallel-273"><span class="linenos">273</span></a>    <span class="p">)</span>
+</span><span id="run_maybe_parallel-274"><a href="#run_maybe_parallel-274"><span class="linenos">274</span></a>
+</span><span id="run_maybe_parallel-275"><a href="#run_maybe_parallel-275"><span class="linenos">275</span></a>    <span class="c1"># close the pool if we used one</span>
+</span><span id="run_maybe_parallel-276"><a href="#run_maybe_parallel-276"><span class="linenos">276</span></a>    <span class="k">if</span> <span class="n">parallel</span><span class="p">:</span>
+</span><span id="run_maybe_parallel-277"><a href="#run_maybe_parallel-277"><span class="linenos">277</span></a>        <span class="n">pool</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>  <span class="c1"># pyright: ignore[reportPossiblyUnboundVariable]</span>
+</span><span id="run_maybe_parallel-278"><a href="#run_maybe_parallel-278"><span class="linenos">278</span></a>        <span class="n">pool</span><span class="o">.</span><span class="n">join</span><span class="p">()</span>  <span class="c1"># pyright: ignore[reportPossiblyUnboundVariable]</span>
+</span><span id="run_maybe_parallel-279"><a href="#run_maybe_parallel-279"><span class="linenos">279</span></a>
+</span><span id="run_maybe_parallel-280"><a href="#run_maybe_parallel-280"><span class="linenos">280</span></a>    <span class="c1"># return the output as a list</span>
+</span><span id="run_maybe_parallel-281"><a href="#run_maybe_parallel-281"><span class="linenos">281</span></a>    <span class="k">return</span> <span class="n">output</span>
 </span></pre></div>
 
 

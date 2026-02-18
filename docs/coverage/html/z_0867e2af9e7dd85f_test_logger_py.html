@@ -3,21 +3,21 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>Coverage for tests/unit/logger/test_logger.py: 100%</title>
-    <link rel="icon" sizes="32x32" href="favicon_32_cb_58284776.png">
-    <link rel="stylesheet" href="style_cb_6b508a39.css" type="text/css">
-    <script src="coverage_html_cb_6fb7b396.js" defer></script>
+    <link rel="icon" sizes="32x32" href="favicon_32_cb_c827f16f.png">
+    <link rel="stylesheet" href="style_cb_9ff733b0.css" type="text/css">
+    <script src="coverage_html_cb_dd2e7eb5.js" defer></script>
 </head>
 <body class="pyfile">
 <header>
     <div class="content">
         <h1>
-            <span class="text">Coverage for </span><b>tests/unit/logger/test_logger.py</b>:
+            <span class="text">Coverage for </span><b>tests&#8201;/&#8201;unit&#8201;/&#8201;logger&#8201;/&#8201;test_logger.py</b>:
             <span class="pc_cov">100%</span>
         </h1>
         <aside id="help_panel_wrapper">
             <input id="help_panel_state" type="checkbox">
             <label for="help_panel_state">
-                <img id="keyboard_icon" src="keybd_closed_cb_ce680311.png" alt="Show/hide keyboard shortcuts">
+                <img id="keyboard_icon" src="keybd_closed_cb_900cfef5.png" alt="Show/hide keyboard shortcuts">
             </label>
             <div id="help_panel">
                 <p class="legend">Shortcuts on this page</p>
@@ -60,12 +60,12 @@
             <button type="button" class="exc show_exc button_toggle_exc" value="exc" data-shortcut="x" title="Toggle lines excluded">0<span class="text"> excluded</span></button>
         </h2>
         <p class="text">
-            <a id="prevFileLink" class="nav" href="z_4f7aee8ac633ed44_test_util_py.html">&#xab; prev</a> &nbsp; &nbsp;
+            <a id="prevFileLink" class="nav" href="z_0867e2af9e7dd85f_test_log_util_py.html">&#xab; prev</a> &nbsp; &nbsp;
             <a id="indexLink" class="nav" href="index.html">&Hat; index</a> &nbsp; &nbsp;
             <a id="nextFileLink" class="nav" href="z_0867e2af9e7dd85f_test_timer_context_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
-            <a class="nav" href="https://coverage.readthedocs.io/en/7.11.0">coverage.py v7.11.0</a>,
-            created at 2025-10-28 17:24 +0000
+            <a class="nav" href="https://coverage.readthedocs.io/en/7.13.4">coverage.py v7.13.4</a>,
+            created at 2026-02-18 02:17 -0700
         </p>
         <aside class="hidden">
             <button type="button" class="button_next_chunk" data-shortcut="j"></button>
@@ -95,20 +95,20 @@
     <p class="run"><span class="n"><a id="t13" href="#t13">13</a></span><span class="t">    <span class="nam">logger</span><span class="op">.</span><span class="nam">mystream</span><span class="op">(</span><span class="str">"hello mystream"</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t14" href="#t14">14</a></span><span class="t">    <span class="nam">logger</span><span class="op">.</span><span class="nam">mystream</span><span class="op">(</span><span class="str">"hello mystream, again"</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t15" href="#t15">15</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t16" href="#t16">16</a></span><span class="t">    <span class="nam">logger</span><span class="op">.</span><span class="nam">log</span><span class="op">(</span><span class="str">"something is wrong!"</span><span class="op">,</span> <span class="op">-</span><span class="num">10</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t17" href="#t17">17</a></span><span class="t">    <span class="nam">logger</span><span class="op">.</span><span class="nam">log</span><span class="op">(</span><span class="str">"something is very wrong!"</span><span class="op">,</span> <span class="op">-</span><span class="num">30</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t16" href="#t16">16</a></span><span class="t">    <span class="nam">logger</span><span class="op">.</span><span class="nam">log</span><span class="op">(</span><span class="str">"something is wrong!"</span><span class="op">,</span> <span class="nam">lvl</span><span class="op">=</span><span class="op">-</span><span class="num">10</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t17" href="#t17">17</a></span><span class="t">    <span class="nam">logger</span><span class="op">.</span><span class="nam">log</span><span class="op">(</span><span class="str">"something is very wrong!"</span><span class="op">,</span> <span class="nam">lvl</span><span class="op">=</span><span class="op">-</span><span class="num">30</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t18" href="#t18">18</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t19" href="#t19">19</a></span><span class="t">    <span class="nam">logger</span><span class="op">.</span><span class="nam">log</span><span class="op">(</span><span class="str">"not very important"</span><span class="op">,</span> <span class="num">50</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t19" href="#t19">19</a></span><span class="t">    <span class="nam">logger</span><span class="op">.</span><span class="nam">log</span><span class="op">(</span><span class="str">"not very important"</span><span class="op">,</span> <span class="nam">lvl</span><span class="op">=</span><span class="num">50</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
 </main>
 <footer>
     <div class="content">
         <p>
-            <a class="nav" href="z_4f7aee8ac633ed44_test_util_py.html">&#xab; prev</a> &nbsp; &nbsp;
+            <a class="nav" href="z_0867e2af9e7dd85f_test_log_util_py.html">&#xab; prev</a> &nbsp; &nbsp;
             <a class="nav" href="index.html">&Hat; index</a> &nbsp; &nbsp;
             <a class="nav" href="z_0867e2af9e7dd85f_test_timer_context_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
-            <a class="nav" href="https://coverage.readthedocs.io/en/7.11.0">coverage.py v7.11.0</a>,
-            created at 2025-10-28 17:24 +0000
+            <a class="nav" href="https://coverage.readthedocs.io/en/7.13.4">coverage.py v7.13.4</a>,
+            created at 2026-02-18 02:17 -0700
         </p>
     </div>
 </footer>

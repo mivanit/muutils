@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="generator" content="pdoc 15.0.4"/>
+    <meta name="generator" content="pdoc 16.0.0"/>
     <title>muutils.logger.headerfuncs API documentation</title>
 <link rel="stylesheet" href="../../resources/css/bootstrap-reboot.min.css"><link rel="stylesheet" href="../../resources/css/syntax-highlighting.css"><link rel="stylesheet" href="../../resources/css/theme.css"><link rel="stylesheet" href="../../resources/css/layout.css"><link rel="stylesheet" href="../../resources/css/content.css"><link rel="stylesheet" href="../../resources/css/custom.css"><script>
     window.MathJax = {
@@ -46,7 +46,7 @@
 </script></head>
 <body>
 <div class="package-version">
-    docs for <a href="https://github.com/mivanit/muutils">muutils</a> v0.8.12<br>
+    docs for <a href="https://github.com/mivanit/muutils">muutils</a> v0.9.0<br>
 </div>
     <nav class="pdoc">
         <label id="navtoggle" for="togglestate" class="pdoc-button">
@@ -106,7 +106,7 @@
     </nav>
     <main class="pdoc">
             <section class="module-info">
-                        <a class="pdoc-button git-button" href="https://github.com/mivanit/muutils/blob/0.8.12/logger/headerfuncs.py">View Source on GitHub</a>
+                        <a class="pdoc-button git-button" href="https://github.com/mivanit/muutils/blob/0.9.0logger/headerfuncs.py">View Source on GitHub</a>
                     <h1 class="modulename">
 <a href="./../../muutils.html">muutils</a><wbr>.<a href="./../logger.html">logger</a><wbr>.headerfuncs    </h1>
 
@@ -116,7 +116,7 @@
                         <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="mod-headerfuncs-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/logger/headerfuncs.py#L0-L67" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.9.0logger/headerfuncs.py#L0-L67" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -135,7 +135,7 @@
 </span><span id="L-10"><a href="#L-10"><span class="linenos">10</span></a>
 </span><span id="L-11"><a href="#L-11"><span class="linenos">11</span></a>
 </span><span id="L-12"><a href="#L-12"><span class="linenos">12</span></a><span class="k">class</span><span class="w"> </span><span class="nc">HeaderFunction</span><span class="p">(</span><span class="n">Protocol</span><span class="p">):</span>
-</span><span id="L-13"><a href="#L-13"><span class="linenos">13</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">msg</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">lvl</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span> <span class="o">...</span>
+</span><span id="L-13"><a href="#L-13"><span class="linenos">13</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">msg</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">lvl</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span> <span class="o">...</span>
 </span><span id="L-14"><a href="#L-14"><span class="linenos">14</span></a>
 </span><span id="L-15"><a href="#L-15"><span class="linenos">15</span></a>
 </span><span id="L-16"><a href="#L-16"><span class="linenos">16</span></a><span class="k">def</span><span class="w"> </span><span class="nf">md_header_function</span><span class="p">(</span>
@@ -144,7 +144,7 @@
 </span><span id="L-19"><a href="#L-19"><span class="linenos">19</span></a>    <span class="n">stream</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 </span><span id="L-20"><a href="#L-20"><span class="linenos">20</span></a>    <span class="n">indent_lvl</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;  &quot;</span><span class="p">,</span>
 </span><span id="L-21"><a href="#L-21"><span class="linenos">21</span></a>    <span class="n">extra_indent</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
-</span><span id="L-22"><a href="#L-22"><span class="linenos">22</span></a>    <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+</span><span id="L-22"><a href="#L-22"><span class="linenos">22</span></a>    <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
 </span><span id="L-23"><a href="#L-23"><span class="linenos">23</span></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 </span><span id="L-24"><a href="#L-24"><span class="linenos">24</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;standard header function. will output</span>
 </span><span id="L-25"><a href="#L-25"><span class="linenos">25</span></a>
@@ -206,7 +206,7 @@
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="HeaderFunction-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/logger/headerfuncs.py#L12-L13" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.9.0logger/headerfuncs.py#L12-L13" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -215,7 +215,7 @@
     </div>
     <a class="headerlink" href="#HeaderFunction"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="HeaderFunction-13"><a href="#HeaderFunction-13"><span class="linenos">13</span></a><span class="k">class</span><span class="w"> </span><span class="nc">HeaderFunction</span><span class="p">(</span><span class="n">Protocol</span><span class="p">):</span>
-</span><span id="HeaderFunction-14"><a href="#HeaderFunction-14"><span class="linenos">14</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">msg</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">lvl</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span> <span class="o">...</span>
+</span><span id="HeaderFunction-14"><a href="#HeaderFunction-14"><span class="linenos">14</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">msg</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">lvl</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span> <span class="o">...</span>
 </span></pre></div>
 
 
@@ -264,7 +264,7 @@ Protocol classes can be generic, they are defined as::</p>
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="HeaderFunction.__init__-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/logger/headerfuncs.py#L1944-L1970" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.9.0logger/headerfuncs.py#L1770-L1796" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -272,33 +272,33 @@ Protocol classes can be generic, they are defined as::</p>
 
     </div>
     <a class="headerlink" href="#HeaderFunction.__init__"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="HeaderFunction.__init__-1945"><a href="#HeaderFunction.__init__-1945"><span class="linenos">1945</span></a><span class="k">def</span><span class="w"> </span><span class="nf">_no_init_or_replace_init</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-</span><span id="HeaderFunction.__init__-1946"><a href="#HeaderFunction.__init__-1946"><span class="linenos">1946</span></a>    <span class="bp">cls</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
-</span><span id="HeaderFunction.__init__-1947"><a href="#HeaderFunction.__init__-1947"><span class="linenos">1947</span></a>
-</span><span id="HeaderFunction.__init__-1948"><a href="#HeaderFunction.__init__-1948"><span class="linenos">1948</span></a>    <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_is_protocol</span><span class="p">:</span>
-</span><span id="HeaderFunction.__init__-1949"><a href="#HeaderFunction.__init__-1949"><span class="linenos">1949</span></a>        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;Protocols cannot be instantiated&#39;</span><span class="p">)</span>
-</span><span id="HeaderFunction.__init__-1950"><a href="#HeaderFunction.__init__-1950"><span class="linenos">1950</span></a>
-</span><span id="HeaderFunction.__init__-1951"><a href="#HeaderFunction.__init__-1951"><span class="linenos">1951</span></a>    <span class="c1"># Already using a custom `__init__`. No need to calculate correct</span>
-</span><span id="HeaderFunction.__init__-1952"><a href="#HeaderFunction.__init__-1952"><span class="linenos">1952</span></a>    <span class="c1"># `__init__` to call. This can lead to RecursionError. See bpo-45121.</span>
-</span><span id="HeaderFunction.__init__-1953"><a href="#HeaderFunction.__init__-1953"><span class="linenos">1953</span></a>    <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="fm">__init__</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">_no_init_or_replace_init</span><span class="p">:</span>
-</span><span id="HeaderFunction.__init__-1954"><a href="#HeaderFunction.__init__-1954"><span class="linenos">1954</span></a>        <span class="k">return</span>
-</span><span id="HeaderFunction.__init__-1955"><a href="#HeaderFunction.__init__-1955"><span class="linenos">1955</span></a>
-</span><span id="HeaderFunction.__init__-1956"><a href="#HeaderFunction.__init__-1956"><span class="linenos">1956</span></a>    <span class="c1"># Initially, `__init__` of a protocol subclass is set to `_no_init_or_replace_init`.</span>
-</span><span id="HeaderFunction.__init__-1957"><a href="#HeaderFunction.__init__-1957"><span class="linenos">1957</span></a>    <span class="c1"># The first instantiation of the subclass will call `_no_init_or_replace_init` which</span>
-</span><span id="HeaderFunction.__init__-1958"><a href="#HeaderFunction.__init__-1958"><span class="linenos">1958</span></a>    <span class="c1"># searches for a proper new `__init__` in the MRO. The new `__init__`</span>
-</span><span id="HeaderFunction.__init__-1959"><a href="#HeaderFunction.__init__-1959"><span class="linenos">1959</span></a>    <span class="c1"># replaces the subclass&#39; old `__init__` (ie `_no_init_or_replace_init`). Subsequent</span>
-</span><span id="HeaderFunction.__init__-1960"><a href="#HeaderFunction.__init__-1960"><span class="linenos">1960</span></a>    <span class="c1"># instantiation of the protocol subclass will thus use the new</span>
-</span><span id="HeaderFunction.__init__-1961"><a href="#HeaderFunction.__init__-1961"><span class="linenos">1961</span></a>    <span class="c1"># `__init__` and no longer call `_no_init_or_replace_init`.</span>
-</span><span id="HeaderFunction.__init__-1962"><a href="#HeaderFunction.__init__-1962"><span class="linenos">1962</span></a>    <span class="k">for</span> <span class="n">base</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="vm">__mro__</span><span class="p">:</span>
-</span><span id="HeaderFunction.__init__-1963"><a href="#HeaderFunction.__init__-1963"><span class="linenos">1963</span></a>        <span class="n">init</span> <span class="o">=</span> <span class="n">base</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;__init__&#39;</span><span class="p">,</span> <span class="n">_no_init_or_replace_init</span><span class="p">)</span>
-</span><span id="HeaderFunction.__init__-1964"><a href="#HeaderFunction.__init__-1964"><span class="linenos">1964</span></a>        <span class="k">if</span> <span class="n">init</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">_no_init_or_replace_init</span><span class="p">:</span>
-</span><span id="HeaderFunction.__init__-1965"><a href="#HeaderFunction.__init__-1965"><span class="linenos">1965</span></a>            <span class="bp">cls</span><span class="o">.</span><span class="fm">__init__</span> <span class="o">=</span> <span class="n">init</span>
-</span><span id="HeaderFunction.__init__-1966"><a href="#HeaderFunction.__init__-1966"><span class="linenos">1966</span></a>            <span class="k">break</span>
-</span><span id="HeaderFunction.__init__-1967"><a href="#HeaderFunction.__init__-1967"><span class="linenos">1967</span></a>    <span class="k">else</span><span class="p">:</span>
-</span><span id="HeaderFunction.__init__-1968"><a href="#HeaderFunction.__init__-1968"><span class="linenos">1968</span></a>        <span class="c1"># should not happen</span>
-</span><span id="HeaderFunction.__init__-1969"><a href="#HeaderFunction.__init__-1969"><span class="linenos">1969</span></a>        <span class="bp">cls</span><span class="o">.</span><span class="fm">__init__</span> <span class="o">=</span> <span class="nb">object</span><span class="o">.</span><span class="fm">__init__</span>
-</span><span id="HeaderFunction.__init__-1970"><a href="#HeaderFunction.__init__-1970"><span class="linenos">1970</span></a>
-</span><span id="HeaderFunction.__init__-1971"><a href="#HeaderFunction.__init__-1971"><span class="linenos">1971</span></a>    <span class="bp">cls</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="HeaderFunction.__init__-1771"><a href="#HeaderFunction.__init__-1771"><span class="linenos">1771</span></a><span class="k">def</span><span class="w"> </span><span class="nf">_no_init_or_replace_init</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+</span><span id="HeaderFunction.__init__-1772"><a href="#HeaderFunction.__init__-1772"><span class="linenos">1772</span></a>    <span class="bp">cls</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</span><span id="HeaderFunction.__init__-1773"><a href="#HeaderFunction.__init__-1773"><span class="linenos">1773</span></a>
+</span><span id="HeaderFunction.__init__-1774"><a href="#HeaderFunction.__init__-1774"><span class="linenos">1774</span></a>    <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_is_protocol</span><span class="p">:</span>
+</span><span id="HeaderFunction.__init__-1775"><a href="#HeaderFunction.__init__-1775"><span class="linenos">1775</span></a>        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;Protocols cannot be instantiated&#39;</span><span class="p">)</span>
+</span><span id="HeaderFunction.__init__-1776"><a href="#HeaderFunction.__init__-1776"><span class="linenos">1776</span></a>
+</span><span id="HeaderFunction.__init__-1777"><a href="#HeaderFunction.__init__-1777"><span class="linenos">1777</span></a>    <span class="c1"># Already using a custom `__init__`. No need to calculate correct</span>
+</span><span id="HeaderFunction.__init__-1778"><a href="#HeaderFunction.__init__-1778"><span class="linenos">1778</span></a>    <span class="c1"># `__init__` to call. This can lead to RecursionError. See bpo-45121.</span>
+</span><span id="HeaderFunction.__init__-1779"><a href="#HeaderFunction.__init__-1779"><span class="linenos">1779</span></a>    <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="fm">__init__</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">_no_init_or_replace_init</span><span class="p">:</span>
+</span><span id="HeaderFunction.__init__-1780"><a href="#HeaderFunction.__init__-1780"><span class="linenos">1780</span></a>        <span class="k">return</span>
+</span><span id="HeaderFunction.__init__-1781"><a href="#HeaderFunction.__init__-1781"><span class="linenos">1781</span></a>
+</span><span id="HeaderFunction.__init__-1782"><a href="#HeaderFunction.__init__-1782"><span class="linenos">1782</span></a>    <span class="c1"># Initially, `__init__` of a protocol subclass is set to `_no_init_or_replace_init`.</span>
+</span><span id="HeaderFunction.__init__-1783"><a href="#HeaderFunction.__init__-1783"><span class="linenos">1783</span></a>    <span class="c1"># The first instantiation of the subclass will call `_no_init_or_replace_init` which</span>
+</span><span id="HeaderFunction.__init__-1784"><a href="#HeaderFunction.__init__-1784"><span class="linenos">1784</span></a>    <span class="c1"># searches for a proper new `__init__` in the MRO. The new `__init__`</span>
+</span><span id="HeaderFunction.__init__-1785"><a href="#HeaderFunction.__init__-1785"><span class="linenos">1785</span></a>    <span class="c1"># replaces the subclass&#39; old `__init__` (ie `_no_init_or_replace_init`). Subsequent</span>
+</span><span id="HeaderFunction.__init__-1786"><a href="#HeaderFunction.__init__-1786"><span class="linenos">1786</span></a>    <span class="c1"># instantiation of the protocol subclass will thus use the new</span>
+</span><span id="HeaderFunction.__init__-1787"><a href="#HeaderFunction.__init__-1787"><span class="linenos">1787</span></a>    <span class="c1"># `__init__` and no longer call `_no_init_or_replace_init`.</span>
+</span><span id="HeaderFunction.__init__-1788"><a href="#HeaderFunction.__init__-1788"><span class="linenos">1788</span></a>    <span class="k">for</span> <span class="n">base</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="vm">__mro__</span><span class="p">:</span>
+</span><span id="HeaderFunction.__init__-1789"><a href="#HeaderFunction.__init__-1789"><span class="linenos">1789</span></a>        <span class="n">init</span> <span class="o">=</span> <span class="n">base</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;__init__&#39;</span><span class="p">,</span> <span class="n">_no_init_or_replace_init</span><span class="p">)</span>
+</span><span id="HeaderFunction.__init__-1790"><a href="#HeaderFunction.__init__-1790"><span class="linenos">1790</span></a>        <span class="k">if</span> <span class="n">init</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">_no_init_or_replace_init</span><span class="p">:</span>
+</span><span id="HeaderFunction.__init__-1791"><a href="#HeaderFunction.__init__-1791"><span class="linenos">1791</span></a>            <span class="bp">cls</span><span class="o">.</span><span class="fm">__init__</span> <span class="o">=</span> <span class="n">init</span>
+</span><span id="HeaderFunction.__init__-1792"><a href="#HeaderFunction.__init__-1792"><span class="linenos">1792</span></a>            <span class="k">break</span>
+</span><span id="HeaderFunction.__init__-1793"><a href="#HeaderFunction.__init__-1793"><span class="linenos">1793</span></a>    <span class="k">else</span><span class="p">:</span>
+</span><span id="HeaderFunction.__init__-1794"><a href="#HeaderFunction.__init__-1794"><span class="linenos">1794</span></a>        <span class="c1"># should not happen</span>
+</span><span id="HeaderFunction.__init__-1795"><a href="#HeaderFunction.__init__-1795"><span class="linenos">1795</span></a>        <span class="bp">cls</span><span class="o">.</span><span class="fm">__init__</span> <span class="o">=</span> <span class="nb">object</span><span class="o">.</span><span class="fm">__init__</span>
+</span><span id="HeaderFunction.__init__-1796"><a href="#HeaderFunction.__init__-1796"><span class="linenos">1796</span></a>
+</span><span id="HeaderFunction.__init__-1797"><a href="#HeaderFunction.__init__-1797"><span class="linenos">1797</span></a>    <span class="bp">cls</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 </span></pre></div>
 
 
@@ -311,12 +311,12 @@ Protocol classes can be generic, they are defined as::</p>
 <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">md_header_function</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">msg</span><span class="p">:</span> <span class="n">Any</span>,</span><span class="param">	<span class="n">lvl</span><span class="p">:</span> <span class="nb">int</span>,</span><span class="param">	<span class="n">stream</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">indent_lvl</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;  &#39;</span>,</span><span class="param">	<span class="n">extra_indent</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>,</span><span class="param">	<span class="o">**</span><span class="n">kwargs</span></span><span class="return-annotation">) -> <span class="nb">str</span>:</span></span>
+        <span class="name">md_header_function</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">msg</span><span class="p">:</span> <span class="n">Any</span>,</span><span class="param">	<span class="n">lvl</span><span class="p">:</span> <span class="nb">int</span>,</span><span class="param">	<span class="n">stream</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">indent_lvl</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;  &#39;</span>,</span><span class="param">	<span class="n">extra_indent</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>,</span><span class="param">	<span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span></span><span class="return-annotation">) -> <span class="nb">str</span>:</span></span>
 
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="md_header_function-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.8.12/logger/headerfuncs.py#L16-L63" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.9.0logger/headerfuncs.py#L16-L63" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -330,7 +330,7 @@ Protocol classes can be generic, they are defined as::</p>
 </span><span id="md_header_function-20"><a href="#md_header_function-20"><span class="linenos">20</span></a>    <span class="n">stream</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 </span><span id="md_header_function-21"><a href="#md_header_function-21"><span class="linenos">21</span></a>    <span class="n">indent_lvl</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;  &quot;</span><span class="p">,</span>
 </span><span id="md_header_function-22"><a href="#md_header_function-22"><span class="linenos">22</span></a>    <span class="n">extra_indent</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
-</span><span id="md_header_function-23"><a href="#md_header_function-23"><span class="linenos">23</span></a>    <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+</span><span id="md_header_function-23"><a href="#md_header_function-23"><span class="linenos">23</span></a>    <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
 </span><span id="md_header_function-24"><a href="#md_header_function-24"><span class="linenos">24</span></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 </span><span id="md_header_function-25"><a href="#md_header_function-25"><span class="linenos">25</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;standard header function. will output</span>
 </span><span id="md_header_function-26"><a href="#md_header_function-26"><span class="linenos">26</span></a>

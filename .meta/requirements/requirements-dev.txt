@@ -2,11 +2,13 @@
 #    uv export --no-hashes --group dev --group lint
 -e .
     # via lmcat
+annotated-doc==0.0.4 ; python_full_version >= '3.9'
+    # via typer
 anyio==4.5.2 ; python_full_version < '3.9'
     # via
     #   httpx
     #   jupyter-server
-anyio==4.11.0 ; python_full_version >= '3.9'
+anyio==4.12.1 ; python_full_version >= '3.9'
     # via
     #   httpx
     #   jupyter-server
@@ -22,13 +24,15 @@ argon2-cffi-bindings==25.1.0 ; python_full_version >= '3.9'
     # via argon2-cffi
 arrow==1.4.0
     # via isoduration
-asttokens==3.0.0
+asttokens==3.0.1
     # via stack-data
 astunparse==1.6.3 ; python_full_version < '3.9'
     # via pdoc
 async-lru==2.0.4 ; python_full_version < '3.9'
     # via jupyterlab
-async-lru==2.0.5 ; python_full_version >= '3.9'
+async-lru==2.0.5 ; python_full_version == '3.9.*'
+    # via jupyterlab
+async-lru==2.1.0 ; python_full_version >= '3.10'
     # via jupyterlab
 attrs==25.3.0 ; python_full_version < '3.9'
     # via
@@ -39,7 +43,7 @@ attrs==25.4.0 ; python_full_version >= '3.9'
     #   igittigitt
     #   jsonschema
     #   referencing
-babel==2.17.0
+babel==2.18.0
     # via jupyterlab-server
 backcall==0.2.0 ; python_full_version < '3.9'
     # via ipython
@@ -47,21 +51,17 @@ backports-tarfile==1.2.0 ; python_full_version < '3.12' and platform_machine != 
     # via jaraco-context
 backports-zoneinfo==0.2.1 ; python_full_version < '3.9'
     # via arrow
-basedpyright==1.32.1
+basedpyright==1.38.0
 beartype==0.19.0 ; python_full_version < '3.9'
 beartype==0.22.2 ; python_full_version == '3.9.*'
-beartype==0.22.4 ; python_full_version >= '3.10'
-beautifulsoup4==4.14.2
+beartype==0.22.9 ; python_full_version >= '3.10'
+beautifulsoup4==4.14.3
     # via nbconvert
-bleach==6.1.0 ; python_full_version < '3.9'
-    # via nbconvert
-bleach==6.2.0 ; python_full_version == '3.9.*'
-    # via nbconvert
-bleach==6.3.0 ; python_full_version >= '3.10'
+bleach==4.1.0
     # via nbconvert
 bracex==2.6 ; python_full_version >= '3.11'
     # via wcmatch
-certifi==2025.10.5
+certifi==2026.1.4
     # via
     #   httpcore
     #   httpx
@@ -82,16 +82,18 @@ cli-exit-tools==1.2.7 ; python_full_version >= '3.11'
     # via igittigitt
 click==8.1.8 ; python_full_version < '3.10'
     # via typer
-click==8.3.0 ; python_full_version >= '3.10'
+click==8.3.1 ; python_full_version >= '3.10'
     # via
     #   cli-exit-tools
     #   igittigitt
+    #   rich-click
     #   typer
 colorama==0.4.6 ; sys_platform == 'win32'
     # via
     #   click
     #   ipython
     #   pytest
+    #   rich-click
 comm==0.2.3
     # via
     #   ipykernel
@@ -112,16 +114,16 @@ coverage==7.10.7 ; python_full_version == '3.9.*'
     # via
     #   coverage-badge
     #   pytest-cov
-coverage==7.11.0 ; python_full_version >= '3.10'
+coverage==7.13.4 ; python_full_version >= '3.10'
     # via
     #   coverage-badge
     #   pytest-cov
 coverage-badge==1.1.2
-cryptography==46.0.3 ; platform_machine != 'ppc64le' and platform_machine != 's390x' and sys_platform == 'linux'
+cryptography==46.0.5 ; platform_machine != 'ppc64le' and platform_machine != 's390x' and sys_platform == 'linux'
     # via secretstorage
 cycler==0.12.1
     # via matplotlib
-debugpy==1.8.17
+debugpy==1.8.20
     # via ipykernel
 decorator==5.2.1
     # via ipython
@@ -129,9 +131,9 @@ defusedxml==0.7.1
     # via nbconvert
 docutils==0.20.1 ; python_full_version < '3.9'
     # via readme-renderer
-docutils==0.22.2 ; python_full_version >= '3.9'
+docutils==0.22.4 ; python_full_version >= '3.9'
     # via readme-renderer
-exceptiongroup==1.3.0 ; python_full_version < '3.11'
+exceptiongroup==1.3.1 ; python_full_version < '3.11'
     # via
     #   anyio
     #   ipython
@@ -142,7 +144,9 @@ fastjsonschema==2.21.2
     # via nbformat
 fonttools==4.57.0 ; python_full_version < '3.9'
     # via matplotlib
-fonttools==4.60.1 ; python_full_version >= '3.9'
+fonttools==4.60.2 ; python_full_version == '3.9.*'
+    # via matplotlib
+fonttools==4.61.1 ; python_full_version >= '3.10'
     # via matplotlib
 fqdn==1.5.1
     # via jsonschema
@@ -152,7 +156,9 @@ httpcore==1.0.9
     # via httpx
 httpx==0.28.1
     # via jupyterlab
-id==1.5.0
+id==1.5.0 ; python_full_version < '3.9'
+    # via twine
+id==1.6.1 ; python_full_version >= '3.9'
     # via twine
 idna==3.11
     # via
@@ -171,7 +177,7 @@ importlib-metadata==8.5.0 ; python_full_version < '3.9'
     #   keyring
     #   nbconvert
     #   twine
-importlib-metadata==8.7.0 ; (python_full_version >= '3.9' and python_full_version < '3.12' and platform_machine != 'ppc64le' and platform_machine != 's390x') or (python_full_version == '3.9.*' and platform_machine == 'ppc64le') or (python_full_version == '3.9.*' and platform_machine == 's390x')
+importlib-metadata==8.7.1 ; (python_full_version >= '3.9' and python_full_version < '3.12' and platform_machine != 'ppc64le' and platform_machine != 's390x') or (python_full_version == '3.9.*' and platform_machine == 'ppc64le') or (python_full_version == '3.9.*' and platform_machine == 's390x')
     # via
     #   jupyter-client
     #   jupyter-lsp
@@ -203,7 +209,7 @@ ipykernel==6.31.0 ; python_full_version == '3.9.*'
     #   jupyter
     #   jupyter-console
     #   jupyterlab
-ipykernel==7.1.0 ; python_full_version >= '3.10'
+ipykernel==7.2.0 ; python_full_version >= '3.10'
     # via
     #   jupyter
     #   jupyter-console
@@ -218,29 +224,31 @@ ipython==8.18.1 ; python_full_version == '3.9.*'
     #   ipykernel
     #   ipywidgets
     #   jupyter-console
-ipython==8.37.0 ; python_full_version == '3.10.*'
+ipython==8.38.0 ; python_full_version == '3.10.*'
     # via
     #   ipykernel
     #   ipywidgets
     #   jupyter-console
-ipython==9.6.0 ; python_full_version >= '3.11'
+ipython==9.10.0 ; python_full_version >= '3.11'
     # via
     #   ipykernel
     #   ipywidgets
     #   jupyter-console
 ipython-pygments-lexers==1.1.1 ; python_full_version >= '3.11'
     # via ipython
-ipywidgets==8.1.7
+ipywidgets==8.1.8
     # via jupyter
 isoduration==20.11.0
     # via jsonschema
 jaraco-classes==3.4.0 ; platform_machine != 'ppc64le' and platform_machine != 's390x'
     # via keyring
-jaraco-context==6.0.1 ; platform_machine != 'ppc64le' and platform_machine != 's390x'
+jaraco-context==6.0.1 ; python_full_version < '3.9' and platform_machine != 'ppc64le' and platform_machine != 's390x'
+    # via keyring
+jaraco-context==6.1.0 ; python_full_version >= '3.9' and platform_machine != 'ppc64le' and platform_machine != 's390x'
     # via keyring
 jaraco-functools==4.1.0 ; python_full_version < '3.9' and platform_machine != 'ppc64le' and platform_machine != 's390x'
     # via keyring
-jaraco-functools==4.3.0 ; python_full_version >= '3.9' and platform_machine != 'ppc64le' and platform_machine != 's390x'
+jaraco-functools==4.4.0 ; python_full_version >= '3.9' and platform_machine != 'ppc64le' and platform_machine != 's390x'
     # via keyring
 jedi==0.19.2
     # via ipython
@@ -255,7 +263,7 @@ jinja2==3.1.6
     #   jupyterlab-server
     #   nbconvert
     #   pdoc
-json5==0.12.1
+json5==0.13.0
     # via jupyterlab-server
 jsonpointer==3.0.0
     # via jsonschema
@@ -264,7 +272,12 @@ jsonschema==4.23.0 ; python_full_version < '3.9'
     #   jupyter-events
     #   jupyterlab-server
     #   nbformat
-jsonschema==4.25.1 ; python_full_version >= '3.9'
+jsonschema==4.25.1 ; python_full_version == '3.9.*'
+    # via
+    #   jupyter-events
+    #   jupyterlab-server
+    #   nbformat
+jsonschema==4.26.0 ; python_full_version >= '3.10'
     # via
     #   jupyter-events
     #   jupyterlab-server
@@ -274,7 +287,13 @@ jsonschema-specifications==2023.12.1 ; python_full_version < '3.9'
 jsonschema-specifications==2025.9.1 ; python_full_version >= '3.9'
     # via jsonschema
 jupyter==1.1.1
-jupyter-client==8.6.3
+jupyter-client==8.6.3 ; python_full_version < '3.10'
+    # via
+    #   ipykernel
+    #   jupyter-console
+    #   jupyter-server
+    #   nbclient
+jupyter-client==8.8.0 ; python_full_version >= '3.10'
     # via
     #   ipykernel
     #   jupyter-console
@@ -322,13 +341,13 @@ jupyter-server==2.17.0 ; python_full_version >= '3.9'
     #   jupyterlab-server
     #   notebook
     #   notebook-shim
-jupyter-server-terminals==0.5.3
+jupyter-server-terminals==0.5.4
     # via jupyter-server
 jupyterlab==4.3.8 ; python_full_version < '3.9'
     # via
     #   jupyter
     #   notebook
-jupyterlab==4.4.10 ; python_full_version >= '3.9'
+jupyterlab==4.5.4 ; python_full_version >= '3.9'
     # via
     #   jupyter
     #   notebook
@@ -338,11 +357,11 @@ jupyterlab-server==2.28.0
     # via
     #   jupyterlab
     #   notebook
-jupyterlab-widgets==3.0.15
+jupyterlab-widgets==3.0.16
     # via ipywidgets
 keyring==25.5.0 ; python_full_version < '3.9' and platform_machine != 'ppc64le' and platform_machine != 's390x'
     # via twine
-keyring==25.6.0 ; python_full_version >= '3.9' and platform_machine != 'ppc64le' and platform_machine != 's390x'
+keyring==25.7.0 ; python_full_version >= '3.9' and platform_machine != 'ppc64le' and platform_machine != 's390x'
     # via twine
 kiwisolver==1.4.7 ; python_full_version < '3.10'
     # via matplotlib
@@ -350,19 +369,23 @@ kiwisolver==1.4.9 ; python_full_version >= '3.10'
     # via matplotlib
 lark==1.3.1 ; python_full_version >= '3.9'
     # via rfc3987-syntax
-lib-detect-testenv==2.0.8 ; python_full_version >= '3.11'
+lib-detect-testenv==3.0.1 ; python_full_version >= '3.11'
     # via
     #   cli-exit-tools
     #   igittigitt
 libcst==1.1.0 ; python_full_version < '3.9'
     # via pycln
-libcst==1.8.5 ; python_full_version >= '3.9'
+libcst==1.8.6 ; python_full_version >= '3.9'
     # via pycln
+librt==0.8.1 ; python_full_version >= '3.9' and platform_python_implementation != 'PyPy'
+    # via mypy
 lmcat==0.2.0 ; python_full_version >= '3.11'
 markdown-it-py==3.0.0 ; python_full_version < '3.10'
     # via rich
 markdown-it-py==4.0.0 ; python_full_version >= '3.10'
     # via rich
+markdown2==2.5.4 ; python_full_version >= '3.10'
+    # via pdoc
 markupsafe==2.1.5 ; python_full_version < '3.9'
     # via
     #   jinja2
@@ -375,7 +398,7 @@ markupsafe==3.0.3 ; python_full_version >= '3.9'
     #   pdoc
 matplotlib==3.7.5 ; python_full_version < '3.9'
 matplotlib==3.9.4 ; python_full_version == '3.9.*'
-matplotlib==3.10.7 ; python_full_version >= '3.10'
+matplotlib==3.10.8 ; python_full_version >= '3.10'
 matplotlib-inline==0.1.7 ; python_full_version < '3.9'
     # via
     #   ipykernel
@@ -386,7 +409,7 @@ matplotlib-inline==0.2.1 ; python_full_version >= '3.9'
     #   ipython
 mdurl==0.1.2
     # via markdown-it-py
-mistune==3.1.4
+mistune==3.2.0
     # via nbconvert
 more-itertools==10.5.0 ; python_full_version < '3.9' and platform_machine != 'ppc64le' and platform_machine != 's390x'
     # via
@@ -397,20 +420,26 @@ more-itertools==10.8.0 ; python_full_version >= '3.9' and platform_machine != 'p
     #   jaraco-classes
     #   jaraco-functools
 mypy==1.14.1 ; python_full_version < '3.9'
-mypy==1.18.2 ; python_full_version >= '3.9'
+mypy==1.19.1 ; python_full_version >= '3.9'
 mypy-extensions==1.1.0
     # via
     #   mypy
     #   typing-inspect
 narwhals==1.42.1 ; python_full_version < '3.9'
     # via plotly
-narwhals==2.10.0 ; python_full_version >= '3.9'
+narwhals==2.16.0 ; python_full_version >= '3.9'
     # via plotly
 nbclient==0.10.1 ; python_full_version < '3.9'
     # via nbconvert
-nbclient==0.10.2 ; python_full_version >= '3.9'
+nbclient==0.10.2 ; python_full_version == '3.9.*'
     # via nbconvert
-nbconvert==7.16.6
+nbclient==0.10.4 ; python_full_version >= '3.10'
+    # via nbconvert
+nbconvert==7.16.6 ; python_full_version < '3.9'
+    # via
+    #   jupyter
+    #   jupyter-server
+nbconvert==7.17.0 ; python_full_version >= '3.9'
     # via
     #   jupyter
     #   jupyter-server
@@ -421,13 +450,13 @@ nbformat==5.10.4
     #   nbconvert
 nest-asyncio==1.6.0
     # via ipykernel
-nh3==0.3.1
+nh3==0.3.3
     # via readme-renderer
-nodejs-wheel-binaries==22.20.0
+nodejs-wheel-binaries==24.13.1
     # via basedpyright
 notebook==7.3.3 ; python_full_version < '3.9'
     # via jupyter
-notebook==7.4.7 ; python_full_version >= '3.9'
+notebook==7.5.3 ; python_full_version >= '3.9'
     # via jupyter
 notebook-shim==0.2.4
     # via
@@ -448,15 +477,16 @@ numpy==2.2.6 ; python_full_version == '3.10.*'
     #   contourpy
     #   matplotlib
     #   pandas
-numpy==2.3.4 ; python_full_version >= '3.11'
+numpy==2.4.2 ; python_full_version >= '3.11'
     # via
     #   contourpy
     #   matplotlib
     #   pandas
 overrides==7.7.0 ; python_full_version < '3.12'
     # via jupyter-server
-packaging==25.0
+packaging==26.0
     # via
+    #   bleach
     #   ipykernel
     #   jupyter-events
     #   jupyter-server
@@ -468,17 +498,21 @@ packaging==25.0
     #   pytest
     #   twine
 pandas==2.0.3 ; python_full_version < '3.9'
-pandas==2.3.3 ; python_full_version >= '3.9'
+pandas==2.3.3 ; python_full_version >= '3.9' and python_full_version < '3.11'
+pandas==3.0.1 ; python_full_version >= '3.11'
 pandocfilters==1.5.1
     # via nbconvert
-parso==0.8.5
+parso==0.8.6
     # via jedi
-pathspec==0.12.1
+pathspec==0.12.1 ; python_full_version < '3.9'
+    # via pycln
+pathspec==1.0.4 ; python_full_version >= '3.9'
     # via
     #   mypy
     #   pycln
 pdoc==14.7.0 ; python_full_version < '3.9'
-pdoc==15.0.4 ; python_full_version >= '3.9'
+pdoc==15.0.4 ; python_full_version == '3.9.*'
+pdoc==16.0.0 ; python_full_version >= '3.10'
 pexpect==4.9.0 ; (python_full_version < '3.10' and sys_platform == 'emscripten') or (sys_platform != 'emscripten' and sys_platform != 'win32')
     # via ipython
 pickleshare==0.7.5 ; python_full_version < '3.9'
@@ -487,7 +521,7 @@ pillow==10.4.0 ; python_full_version < '3.9'
     # via matplotlib
 pillow==11.3.0 ; python_full_version == '3.9.*'
     # via matplotlib
-pillow==12.0.0 ; python_full_version >= '3.10'
+pillow==12.1.1 ; python_full_version >= '3.10'
     # via matplotlib
 pkgutil-resolve-name==1.3.10 ; python_full_version < '3.9'
     # via jsonschema
@@ -495,9 +529,9 @@ platformdirs==4.3.6 ; python_full_version < '3.9'
     # via jupyter-core
 platformdirs==4.4.0 ; python_full_version == '3.9.*'
     # via jupyter-core
-platformdirs==4.5.0 ; python_full_version >= '3.10'
+platformdirs==4.9.2 ; python_full_version >= '3.10'
     # via jupyter-core
-plotly==6.3.1
+plotly==6.5.2
 pluggy==1.5.0 ; python_full_version < '3.9'
     # via pytest
 pluggy==1.6.0 ; python_full_version >= '3.9'
@@ -506,13 +540,13 @@ pluggy==1.6.0 ; python_full_version >= '3.9'
     #   pytest-cov
 prometheus-client==0.21.1 ; python_full_version < '3.9'
     # via jupyter-server
-prometheus-client==0.23.1 ; python_full_version >= '3.9'
+prometheus-client==0.24.1 ; python_full_version >= '3.9'
     # via jupyter-server
 prompt-toolkit==3.0.52
     # via
     #   ipython
     #   jupyter-console
-psutil==7.1.2
+psutil==7.2.2
     # via ipykernel
 ptyprocess==0.7.0 ; (python_full_version < '3.10' and sys_platform == 'emscripten') or os_name != 'nt' or (sys_platform != 'emscripten' and sys_platform != 'win32')
     # via
@@ -522,7 +556,9 @@ pure-eval==0.2.3
     # via stack-data
 pycln==2.5.0 ; python_full_version < '3.9'
 pycln==2.6.0 ; python_full_version >= '3.9'
-pycparser==2.23 ; python_full_version < '3.9' or implementation_name != 'PyPy'
+pycparser==2.23 ; (python_full_version < '3.10' and implementation_name != 'PyPy') or (python_full_version < '3.9' and implementation_name == 'PyPy')
+    # via cffi
+pycparser==3.0 ; python_full_version >= '3.10' and implementation_name != 'PyPy'
     # via cffi
 pygments==2.19.2
     # via
@@ -536,11 +572,13 @@ pygments==2.19.2
     #   rich
 pyparsing==3.1.4 ; python_full_version < '3.9'
     # via matplotlib
-pyparsing==3.2.5 ; python_full_version >= '3.9'
+pyparsing==3.3.2 ; python_full_version >= '3.9'
     # via matplotlib
 pytest==8.3.5 ; python_full_version < '3.9'
     # via pytest-cov
-pytest==8.4.2 ; python_full_version >= '3.9'
+pytest==8.4.2 ; python_full_version == '3.9.*'
+    # via pytest-cov
+pytest==9.0.2 ; python_full_version >= '3.10'
     # via pytest-cov
 pytest-cov==5.0.0 ; python_full_version < '3.9'
 pytest-cov==7.0.0 ; python_full_version >= '3.9'
@@ -552,7 +590,7 @@ python-dateutil==2.9.0.post0
     #   pandas
 python-json-logger==4.0.0
     # via jupyter-events
-pytz==2025.2
+pytz==2025.2 ; python_full_version < '3.11'
     # via
     #   babel
     #   pandas
@@ -565,7 +603,7 @@ pywinpty==2.0.14 ; python_full_version < '3.9' and os_name == 'nt'
     #   jupyter-server
     #   jupyter-server-terminals
     #   terminado
-pywinpty==3.0.2 ; python_full_version >= '3.9' and os_name == 'nt'
+pywinpty==3.0.3 ; python_full_version >= '3.9' and os_name == 'nt'
     # via
     #   jupyter-server
     #   jupyter-server-terminals
@@ -575,7 +613,7 @@ pyyaml==6.0.3
     #   jupyter-events
     #   libcst
     #   pycln
-pyyaml-ft==8.0.0 ; python_full_version >= '3.13'
+pyyaml-ft==8.0.0 ; python_full_version == '3.13.*'
     # via libcst
 pyzmq==27.1.0
     # via
@@ -610,7 +648,6 @@ requests==2.32.4 ; python_full_version < '3.9'
     #   twine
 requests==2.32.5 ; python_full_version >= '3.9'
     # via
-    #   id
     #   jupyterlab-server
     #   requests-toolbelt
     #   twine
@@ -628,10 +665,13 @@ rfc3986-validator==0.1.1
     #   jupyter-events
 rfc3987-syntax==1.1.0 ; python_full_version >= '3.9'
     # via jsonschema
-rich==14.2.0
+rich==14.3.2
     # via
+    #   rich-click
     #   twine
     #   typer
+rich-click==1.9.7 ; python_full_version >= '3.11'
+    # via lib-detect-testenv
 rpds-py==0.20.1 ; python_full_version < '3.9'
     # via
     #   jsonschema
@@ -640,22 +680,22 @@ rpds-py==0.27.1 ; python_full_version == '3.9.*'
     # via
     #   jsonschema
     #   referencing
-rpds-py==0.28.0 ; python_full_version >= '3.10'
+rpds-py==0.30.0 ; python_full_version >= '3.10'
     # via
     #   jsonschema
     #   referencing
-ruff==0.14.2
+ruff==0.15.1
 secretstorage==3.3.3 ; python_full_version < '3.10' and platform_machine != 'ppc64le' and platform_machine != 's390x' and sys_platform == 'linux'
     # via keyring
-secretstorage==3.4.0 ; python_full_version >= '3.10' and platform_machine != 'ppc64le' and platform_machine != 's390x' and sys_platform == 'linux'
+secretstorage==3.5.0 ; python_full_version >= '3.10' and platform_machine != 'ppc64le' and platform_machine != 's390x' and sys_platform == 'linux'
     # via keyring
-send2trash==1.8.3
+send2trash==2.1.0
     # via jupyter-server
-setuptools==75.3.2 ; python_full_version < '3.9'
+setuptools==75.3.4 ; python_full_version < '3.9'
     # via
     #   coverage-badge
     #   jupyterlab
-setuptools==80.9.0 ; python_full_version >= '3.9'
+setuptools==82.0.0 ; python_full_version >= '3.9'
     # via
     #   coverage-badge
     #   jupyterlab
@@ -667,11 +707,11 @@ six==1.17.0
     #   bleach
     #   python-dateutil
     #   rfc3339-validator
-sniffio==1.3.1
+sniffio==1.3.1 ; python_full_version < '3.9'
     # via anyio
 soupsieve==2.7 ; python_full_version < '3.9'
     # via beautifulsoup4
-soupsieve==2.8 ; python_full_version >= '3.9'
+soupsieve==2.8.3 ; python_full_version >= '3.9'
     # via beautifulsoup4
 stack-data==0.6.3
     # via ipython
@@ -679,17 +719,15 @@ terminado==0.18.1
     # via
     #   jupyter-server
     #   jupyter-server-terminals
-tinycss2==1.2.1 ; python_full_version < '3.9'
-    # via bleach
-tinycss2==1.4.0 ; python_full_version >= '3.9'
-    # via bleach
-tomli==2.3.0 ; python_full_version <= '3.11'
+tomli==2.4.0 ; python_full_version <= '3.11'
     # via
     #   coverage
     #   jupyterlab
     #   mypy
     #   pytest
-tomlkit==0.13.3
+tomlkit==0.13.3 ; python_full_version < '3.9'
+    # via pycln
+tomlkit==0.14.0 ; python_full_version >= '3.9'
     # via pycln
 tornado==6.4.2 ; python_full_version < '3.9'
     # via
@@ -699,7 +737,7 @@ tornado==6.4.2 ; python_full_version < '3.9'
     #   jupyterlab
     #   notebook
     #   terminado
-tornado==6.5.2 ; python_full_version >= '3.9'
+tornado==6.5.4 ; python_full_version >= '3.9'
     # via
     #   ipykernel
     #   jupyter-client
@@ -724,8 +762,12 @@ traitlets==5.14.3
     #   nbformat
 twine==6.1.0 ; python_full_version < '3.9'
 twine==6.2.0 ; python_full_version >= '3.9'
-ty==0.0.12
-typer==0.20.0
+ty==0.0.17
+typer==0.20.1 ; python_full_version < '3.9'
+    # via pycln
+typer==0.23.2 ; python_full_version == '3.9.*'
+    # via pycln
+typer==0.24.0 ; python_full_version >= '3.10'
     # via pycln
 typing-extensions==4.13.2 ; python_full_version < '3.9'
     # via
@@ -754,10 +796,9 @@ typing-extensions==4.15.0 ; python_full_version >= '3.9'
     #   mypy
     #   python-json-logger
     #   referencing
-    #   typer
 typing-inspect==0.9.0 ; python_full_version < '3.9'
     # via libcst
-tzdata==2025.2
+tzdata==2025.3
     # via
     #   arrow
     #   pandas
@@ -767,29 +808,30 @@ urllib3==2.2.3 ; python_full_version < '3.9'
     # via
     #   requests
     #   twine
-urllib3==2.5.0 ; python_full_version >= '3.9'
+urllib3==2.6.3 ; python_full_version >= '3.9'
     # via
+    #   id
     #   requests
     #   twine
 wcmatch==10.1 ; python_full_version >= '3.11'
     # via igittigitt
-wcwidth==0.2.14
+wcwidth==0.6.0
     # via prompt-toolkit
 webcolors==24.8.0 ; python_full_version < '3.9'
     # via jsonschema
-webcolors==24.11.1 ; python_full_version >= '3.9'
+webcolors==24.11.1 ; python_full_version == '3.9.*'
+    # via jsonschema
+webcolors==25.10.0 ; python_full_version >= '3.10'
     # via jsonschema
 webencodings==0.5.1
-    # via
-    #   bleach
-    #   tinycss2
+    # via bleach
 websocket-client==1.8.0 ; python_full_version < '3.9'
     # via jupyter-server
 websocket-client==1.9.0 ; python_full_version >= '3.9'
     # via jupyter-server
 wheel==0.45.1 ; python_full_version < '3.9'
     # via astunparse
-widgetsnbextension==4.0.14
+widgetsnbextension==4.0.15
     # via ipywidgets
 zipp==3.20.2 ; python_full_version < '3.9'
     # via

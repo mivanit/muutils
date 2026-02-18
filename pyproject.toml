@@ -171,9 +171,9 @@
 [tool.ty.rules]
 	unused-type-ignore-comment = "ignore"
 
-	[[tool.ty.overrides]]
-		include = ["tests/unit/test_jsonlines.py"]
-		rules = {invalid-argument-type = "ignore"}
+# [[tool.ty.overrides]]
+# 	include = ["tests/unit/json_serialize/test_json_serialize.py", "tests/unit/test_jsonlines.py"]
+# 	rules = {invalid-argument-type = "ignore", invalid-key = "ignore"}
 
 [tool.mypy]
 	files = ["muutils", "tests"]

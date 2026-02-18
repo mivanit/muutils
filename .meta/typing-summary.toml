@@ -1,35 +1,34 @@
-# ty: Found 28 diagnostics
-# basedpyright: 142 errors, 3 warnings, 0 notes
-# mypy: KeyError: 'setter_type'
+# ty: Found 20 diagnostics
+# basedpyright: 36 errors, 2 warnings, 0 notes
+# mypy: Found 11 errors in 2 files (checked 117 source files)
 
 [type_errors.ty]
-total_errors = 28
+total_errors = 20
 
 [type_errors.ty.by_type]
-"invalid-argument-type" = 28
+"invalid-argument-type" = 17
+"invalid-key" = 3
 
 [type_errors.ty.by_file]
-"tests/unit/json_serialize/test_json_serialize.py" = 28
+"tests/unit/json_serialize/test_json_serialize.py" = 16
+"tests/unit/test_jsonlines.py" = 4
 
 [type_errors.basedpyright]
-total_errors = 142
+total_errors = 36
 
 [type_errors.basedpyright.by_type]
-"reportInvalidTypeForm" = 48
-"reportPossiblyUnboundVariable" = 34
-"reportCallIssue" = 31
-"reportArgumentType" = 11
-"reportAttributeAccessIssue" = 8
-"reportOptionalMemberAccess" = 6
+"reportPossiblyUnboundVariable" = 15
+"reportInconsistentOverload" = 4
+"reportAttributeAccessIssue" = 4
+"reportArgumentType" = 4
+"reportCallIssue" = 3
+"reportOverlappingOverload" = 2
 "reportOperatorIssue" = 2
 "reportAssignmentType" = 1
 "reportGeneralTypeIssues" = 1
 
 [type_errors.basedpyright.by_file]
-"muutils/misc/func.py" = 49
-"tests/unit/misc/test_func.py" = 34
-"muutils/nbutils/configure_notebook.py" = 15
-"muutils/mlutils.py" = 14
+"muutils/json_serialize/json_serialize.py" = 6
 "muutils/json_serialize/serializable_dataclass.py" = 5
 "tests/unit/benchmark_parallel/benchmark_parallel.py" = 5
 "muutils/parallel.py" = 4
@@ -45,19 +44,22 @@ total_errors = 142
 "tests/unit/test_timeit_fancy.py" = 1
 
 [type_warnings.basedpyright]
-total_warnings = 3
+total_warnings = 2
 
 [type_warnings.basedpyright.by_type]
 "reportUnusedExpression" = 2
-"reportInvalidTypeVarUse" = 1
 
 [type_warnings.basedpyright.by_file]
 "tests/unit/test_interval.py" = 2
-"muutils/misc/func.py" = 1
 
 [type_errors.mypy]
-total_errors = 0
+total_errors = 11
 
 [type_errors.mypy.by_type]
+"assignment" = 5
+"misc" = 4
+"literal-required" = 2
 
 [type_errors.mypy.by_file]
+"tests/unit/json_serialize/test_json_serialize.py" = 7
+"muutils/json_serialize/json_serialize.py" = 4

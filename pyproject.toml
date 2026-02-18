@@ -125,6 +125,9 @@
 	]
 	addopts = "--jaxtyping-packages=beartype.beartype"
 
+[tool.coverage.run]
+	omit = ["*/_remote_module_non_scriptable*"]
+
 [tool.ruff]
 	# Exclude the directories specified in the global excludes
 	exclude = ["tests/input_data", "tests/junk_data", "_wip/", ".meta/scripts/"]

@@ -40,10 +40,10 @@ def test_jsonl_load():
     assert len(loaded_data) == 4
     loaded_item_0 = loaded_data[0]
     assert isinstance(loaded_item_0, dict)
-    assert loaded_item_0["name"] == "Alice"  # ty: ignore[invalid-argument-type]
+    assert loaded_item_0["name"] == "Alice"  # ty: ignore[invalid-argument-type, invalid-key]
     loaded_item_3 = loaded_data[3]
     assert isinstance(loaded_item_3, dict)
-    loaded_item_3_nested = loaded_item_3["nested"]  # ty: ignore[invalid-argument-type]
+    loaded_item_3_nested = loaded_item_3["nested"]  # ty: ignore[invalid-argument-type, invalid-key]
     assert isinstance(loaded_item_3_nested, dict)
     assert loaded_item_3_nested["b"] == 2
 

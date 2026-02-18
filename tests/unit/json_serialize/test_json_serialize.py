@@ -128,8 +128,8 @@ def test_json_serialize_serialize_method():
 
     # Should use the custom serialize method
     assert result == {"custom_value": 10, "custom_name": "TEST"}
-    assert result["custom_value"] == obj.value * 2  # ty: ignore[invalid-argument-type]
-    assert result["custom_name"] == obj.name.upper()  # ty: ignore[invalid-argument-type]
+    assert result["custom_value"] == obj.value * 2  # ty: ignore[invalid-argument-type, invalid-key]
+    assert result["custom_name"] == obj.name.upper()  # ty: ignore[invalid-argument-type, invalid-key]
 
 
 def test_serialize_method_priority():
@@ -507,7 +507,7 @@ def test_write_only_format():
     assert isinstance(result2, dict)
     assert _FORMAT_KEY not in result2
     assert "__write_format__" in result2
-    assert result2["__write_format__"] == "custom_format"  # ty: ignore[invalid-argument-type]
+    assert result2["__write_format__"] == "custom_format"  # ty: ignore[invalid-argument-type, invalid-key]
     assert result2["data"] == "test"  # ty: ignore[invalid-argument-type]
 
 

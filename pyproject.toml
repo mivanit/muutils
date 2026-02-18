@@ -171,6 +171,10 @@
 [tool.ty.rules]
 	unused-type-ignore-comment = "ignore"
 
+	[[tool.ty.overrides]]
+		include = ["tests/unit/test_jsonlines.py"]
+		rules = {invalid-argument-type = "ignore"}
+
 [tool.mypy]
 	files = ["muutils", "tests"]
 	exclude = [

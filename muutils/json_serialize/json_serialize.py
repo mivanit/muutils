@@ -14,7 +14,7 @@ import inspect
 import warnings
 from dataclasses import dataclass, is_dataclass
 from pathlib import Path
-from typing import TYPE_CHECKING, Any, Callable, Iterable, Mapping, Set, Union, cast
+from typing import TYPE_CHECKING, Any, Callable, Iterable, Mapping, Set, Union, cast, overload
 
 from muutils.errormode import ErrorMode
 
@@ -308,6 +308,12 @@ class JsonSerializer:
             handlers_default
         )
 
+    @overload
+    def json_serialize(self, obj: Mapping[str, Any], path: ObjectPath = ()) -> JSONdict: ...
+    @overload
+    def json_serialize(self, obj: list, path: ObjectPath = ()) -> list: ...
+    @overload
+    def json_serialize(self, obj: Any, path: ObjectPath = ()) -> JSONitem: ...
     def json_serialize(
         self,
         obj: Any,  # pyright: ignore[reportAny]
@@ -359,6 +365,12 @@ class JsonSerializer:
 GLOBAL_JSON_SERIALIZER: JsonSerializer = JsonSerializer()
 
 
+@overload
+def json_serialize(obj: Mapping[str, Any], path: ObjectPath = ()) -> JSONdict: ...
+@overload
+def json_serialize(obj: list, path: ObjectPath = ()) -> list: ...
+@overload
+def json_serialize(obj: Any, path: ObjectPath = ()) -> JSONitem: ...
 def json_serialize(obj: Any, path: ObjectPath = ()) -> JSONitem:  # pyright: ignore[reportAny]
     """serialize object to json-serializable object with default config"""
     return GLOBAL_JSON_SERIALIZER.json_serialize(obj, path=path)

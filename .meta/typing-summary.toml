@@ -1,25 +1,15 @@
-# ty: Found 94 diagnostics
+# ty: Found 28 diagnostics
 # basedpyright: 142 errors, 3 warnings, 0 notes
-# mypy: Success: no issues found in 117 source files
+# mypy: KeyError: 'setter_type'
 
 [type_errors.ty]
-total_errors = 94
+total_errors = 28
 
 [type_errors.ty.by_type]
-"invalid-argument-type" = 86
-"unresolved-reference" = 5
-"unresolved-import" = 1
-"invalid-assignment" = 1
-"unsupported-operator" = 1
+"invalid-argument-type" = 28
 
 [type_errors.ty.by_file]
-"muutils/json_serialize/array.py" = 28
 "tests/unit/json_serialize/test_json_serialize.py" = 28
-"tests/unit/json_serialize/test_array_torch.py" = 24
-"docs/resources/make_docs.py" = 7
-"tests/unit/test_jsonlines.py" = 4
-"tests/unit/json_serialize/test_array.py" = 2
-"muutils/tensor_info.py" = 1
 
 [type_errors.basedpyright]
 total_errors = 142

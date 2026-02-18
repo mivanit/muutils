@@ -57,10 +57,12 @@ jobs:
             torch: "1.13.1"
             numpy: "1.24.4"
             pandas: "2.0.3"
+            pillow: "10.4.0"
           - group: "latest"
             torch: ""
             numpy: ""
             pandas: ""
+            pillow: ""
         exclude:
           - python: "3.12"
             pkg:
@@ -94,13 +96,9 @@ jobs:
         run: |
           uv pip install torch==${{ matrix.pkg.torch }}+cpu --extra-index-url https://download.pytorch.org/whl/cpu
       
-      - name: Install different numpy version
-        if: ${{ matrix.pkg.numpy != '' }}
-        run: uv pip install numpy==${{ matrix.pkg.numpy }}
-
-      - name: Install different pandas version
-        if: ${{ matrix.pkg.pandas != '' }}
-        run: uv pip install pandas==${{ matrix.pkg.pandas }}
+      - name: Install legacy package versions
+        if: ${{ matrix.pkg.group == 'legacy' }}
+        run: uv pip install numpy==${{ matrix.pkg.numpy }} pandas==${{ matrix.pkg.pandas }} pillow==${{ matrix.pkg.pillow }}
 
       - name: tests
         run: make test UV_NOSYNC=1

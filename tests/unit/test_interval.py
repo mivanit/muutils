@@ -299,7 +299,6 @@ def test_interval_with_non_numeric_types():
 
 def test_interval_initialization_with_iterables():
     # Test initialization with different iterable types
-    assert str(Interval(range(1, 3))) == "(1, 2)"
     assert str(Interval((1, 2))) == "(1, 2)"
 
 

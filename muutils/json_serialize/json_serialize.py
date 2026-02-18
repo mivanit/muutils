@@ -343,7 +343,7 @@ class JsonSerializer:
         self,
         obj: Any,  # pyright: ignore[reportAny]
         path: ObjectPath = (),
-    ) -> JSONitem:
+    ) -> JSONitem | _SerializedSet | _SerializedFrozenset:
         handler = None
         try:
             for handler in self.handlers:
@@ -400,6 +400,8 @@ def json_serialize(obj: set, path: ObjectPath = ()) -> _SerializedSet: ...
 def json_serialize(obj: frozenset, path: ObjectPath = ()) -> _SerializedFrozenset: ...
 @overload
 def json_serialize(obj: Any, path: ObjectPath = ()) -> JSONitem: ...
-def json_serialize(obj: Any, path: ObjectPath = ()) -> JSONitem:  # pyright: ignore[reportAny]
+def json_serialize(
+    obj: Any, path: ObjectPath = ()
+) -> JSONitem | _SerializedSet | _SerializedFrozenset:  # pyright: ignore[reportAny]
     """serialize object to json-serializable object with default config"""
     return GLOBAL_JSON_SERIALIZER.json_serialize(obj, path=path)

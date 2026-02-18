@@ -13,7 +13,7 @@ from typing import Any, Callable, Iterable, TypeVar, Union
 from muutils.json_serialize.types import BaseType, Hashableitem
 
 if typing.TYPE_CHECKING:
-    from muutils.json_serialize.types import _SerializedFrozenset, _SerializedSet
+    pass
 
 _NUMPY_WORKING: bool
 try:
@@ -43,8 +43,9 @@ JSONitem = Union[
     BaseType,
     typing.Sequence["JSONitem"],
     typing.Dict[str, "JSONitem"],
-    "_SerializedSet",
-    "_SerializedFrozenset",
+    # TODO: figure this out
+    # "_SerializedSet",
+    # "_SerializedFrozenset",
 ]
 
 JSONdict = typing.Dict[str, JSONitem]

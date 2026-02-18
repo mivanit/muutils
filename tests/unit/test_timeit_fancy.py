@@ -53,7 +53,8 @@ def test_timeit_fancy_no_return():
     assert result.return_value is None
     assert isinstance(result.timings, StatCounter)
     assert result.profile is None
-    assert all(t > 0 for t in result.timings.values())
+    # TYPING: unsure here
+    assert all(t > 0 for t in result.timings.values()) # pyright: ignore[reportGeneralTypeIssues]
 
 
 def test_timeit_fancy_with_repeats():

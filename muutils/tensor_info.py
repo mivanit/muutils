@@ -213,7 +213,7 @@ def array_info(
                 cpu_tensor = A
             try:
                 # For CPU tensor, just detach and convert
-                detached = getattr(cpu_tensor, "detach", lambda: cpu_tensor)()
+                detached = getattr(cpu_tensor, "detach", lambda: cpu_tensor)() # pyright: ignore[reportPossiblyUnboundVariable]
                 A_np = getattr(detached, "numpy", lambda: np.array([]))()
             except:  # noqa: E722
                 A_np = np.array([])
@@ -274,7 +274,8 @@ def array_info(
             result["range"] = (result["min"], result["max"])
 
             # Remove NaNs for histogram
-            A_hist = A_flat[~nan_mask]
+            # TYPING: nan mask will def be bound on this branch, idk why it thinks the operator is bad
+            A_hist = A_flat[~nan_mask] # pyright: ignore[reportOperatorIssue, reportPossiblyUnboundVariable]
         else:
             result["min"] = float(np.min(A_flat))
             result["max"] = float(np.max(A_flat))

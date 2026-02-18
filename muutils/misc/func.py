@@ -77,7 +77,11 @@ def process_kwarg(
     return decorator
 
 
-@process_kwarg("action", ErrorMode.from_any)
+# TYPING: error: Argument of type "(kwarg_name: str, validator: (T_kwarg@validate_kwarg) -> bool, description: str | None = None, action: ErrorMode = ErrorMode.EXCEPT) -> (((() -> ReturnType@validate_kwarg)) -> (() -> ReturnType@validate_kwarg))" cannot be assigned to parameter of type "() -> ReturnType@process_kwarg"
+# Type "(kwarg_name: str, validator: (T_kwarg@validate_kwarg) -> bool, description: str | None = None, action: ErrorMode = ErrorMode.EXCEPT) -> (((() -> ReturnType@validate_kwarg)) -> (() -> ReturnType@validate_kwarg))" is not assignable to type "() -> ReturnType@process_kwarg"
+#   Extra parameter "kwarg_name"
+#   Extra parameter "validator" (reportArgumentType)
+@process_kwarg("action", ErrorMode.from_any) # pyright: ignore[reportArgumentType]
 def validate_kwarg(
     kwarg_name: str,
     validator: Callable[[T_kwarg], bool],
@@ -230,7 +234,7 @@ LambdaArgsTypes = TypeVar("LambdaArgsTypes", bound=Tuple[type, ...])
 
 def typed_lambda(  # pyright: ignore[reportUnknownParameterType]
     fn: Callable[[Unpack[LambdaArgs]], ReturnType],
-    in_types: LambdaArgsTypes,
+    in_types: LambdaArgsTypes, # pyright: ignore[reportInvalidTypeVarUse]
     out_type: type[ReturnType],
 ) -> Callable[[Unpack[LambdaArgs]], ReturnType]:
     """Wraps a lambda function with type hints.

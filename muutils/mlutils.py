@@ -15,6 +15,7 @@ ARRAY_IMPORTS: bool
 try:
     import numpy as np
     import torch
+    import torch.backends.mps
 
     ARRAY_IMPORTS = True
 except ImportError as e:

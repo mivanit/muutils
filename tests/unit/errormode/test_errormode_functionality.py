@@ -176,7 +176,7 @@ def test_ErrorMode_process_except_from():
         assert str(e.__cause__) == "base error"
     else:
         # TYPING: ty bug on python <= 3.9
-        pytest.fail("Expected RuntimeError to be raised")  # ty: ignore[arg-type]
+        pytest.fail("Expected RuntimeError to be raised")  # ty: ignore[arg-type,invalid-argument-type]
 
 
 def test_ErrorMode_process_except_from_different_types():
@@ -646,7 +646,7 @@ def test_exception_traceback_attached():
         assert e.__traceback__ is not None
     else:
         # TYPING: ty bug on python <= 3.9
-        pytest.fail("Expected ValueError to be raised")  # ty: ignore[arg-type]
+        pytest.fail("Expected ValueError to be raised")  # ty: ignore[arg-type,invalid-argument-type]
 
 
 def test_exception_traceback_with_chaining():
@@ -662,7 +662,7 @@ def test_exception_traceback_with_chaining():
         assert e.__cause__ is base
     else:
         # TYPING: ty bug on python <= 3.9
-        pytest.fail("Expected ValueError to be raised")  # ty: ignore[arg-type]
+        pytest.fail("Expected ValueError to be raised")  # ty: ignore[arg-type,invalid-argument-type]
 
 
 def test_warn_with_default_warn_func():

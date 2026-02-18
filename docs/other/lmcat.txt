@@ -1,8 +1,8 @@
 # Stats
 - 69 files
-- 14074 (14K) lines
-- 493422 (493K) chars
-- 52401 (52K) `whitespace-split` tokens
+- 14082 (14K) lines
+- 493606 (494K) chars
+- 52418 (52K) `whitespace-split` tokens
 
 # File Tree
 
@@ -51,13 +51,13 @@ muutils
 │   │   ├── string.py                    [132L  3,635C   404T]
 │   │   └── typing_breakdown.py          [393L 14,834C 1,310T]
 │   ├── ml                               
-│   │   └── cuda_mem_info.py             [ 53L  1,729C   194T]
+│   │   └── cuda_mem_info.py             [ 55L  1,765C   198T]
 │   ├── nbutils                          
 │   │   ├── __init__.py                  [ 21L    488C    51T]
 │   │   ├── configure_notebook.py        [320L 10,401C 1,073T]
 │   │   ├── convert_ipynb_to_script.py   [374L 13,400C 1,219T]
 │   │   ├── mermaid.py                   [ 20L    634C    58T]
-│   │   ├── print_tex.py                 [ 21L    735C    88T]
+│   │   ├── print_tex.py                 [ 23L    771C    92T]
 │   │   └── run_notebook_tests.py        [255L  9,334C   829T]
 │   ├── web                              
 │   │   ├── __init__.py                  [  3L     33C     5T]
@@ -73,7 +73,7 @@ muutils
 │   ├── interval.py                      [530L 18,387C 1,750T]
 │   ├── jsonlines.py                     [ 77L  1,993C   246T]
 │   ├── kappa.py                         [ 48L  1,464C   182T]
-│   ├── mlutils.py                       [182L  6,076C   585T]
+│   ├── mlutils.py                       [183L  6,106C   587T]
 │   ├── parallel.py                      [280L  9,659C 1,118T]
 │   ├── py.typed                         [  0L      0C     0T]
 │   ├── spinner.py                       [525L 18,312C 1,738T]
@@ -88,7 +88,7 @@ muutils
 ├── README.md                            [ 72L  5,710C   460T]
 ├── TODO.md                              [ 28L  1,388C   235T]
 ├── makefile                             [755L 30,080C 3,866T]
-├── pyproject.toml                       [270L  7,950C   908T]
+├── pyproject.toml                       [273L  8,032C   915T]
 ```
 
 # File Contents
@@ -5834,6 +5834,8 @@ if __name__ == "__main__":
 ``````{ end_of_file="muutils/misc/typing_breakdown.py" }
 
 ``````{ path="muutils/ml/cuda_mem_info.py"  }
+from __future__ import annotations
+
 import torch
 
 # pyright: reportUnreachable=false, reportUnnecessaryIsInstance=false
@@ -6643,6 +6645,8 @@ def mm(graph: str) -> None:
 
 ``````{ path="muutils/nbutils/print_tex.py"  }
 """quickly print a sympy expression in latex"""
+
+from __future__ import annotations
 
 import sympy as sp  # type: ignore  # pyright: ignore[reportMissingTypeStubs]
 from IPython.display import Math, display  # type: ignore  # pyright: ignore[reportUnknownVariableType]
@@ -9655,6 +9659,7 @@ ARRAY_IMPORTS: bool
 try:
     import numpy as np
     import torch
+    import torch.backends.mps
 
     ARRAY_IMPORTS = True
 except ImportError as e:
@@ -13850,7 +13855,7 @@ help:
 		"numpy>1.24.4; python_version >= '3.9'",
 		"torch>=1.13.1,<2.5.0; python_version < '3.9'",
 		"torch>=1.13.1; python_version >= '3.9' and python_version < '3.13'",
-		"torch>=2.5.0; python_version >= '3.13' and python_version < '3.14'",
+		"torch>=2.5.0; python_version >= '3.13'",
 		"jaxtyping>=0.2.12",
 	]
 
@@ -13881,7 +13886,7 @@ help:
 		"mypy>=1.15; python_version >= '3.9'",
 		"typing-extensions; python_version < '3.11'",
 		"beartype>=0.14.1",
-		"ty>=0.0.12",
+		"ty>=0.0.17",
 		"basedpyright",
 		"pandas-stubs>=2.0.0",
 		"types-tqdm",
@@ -13983,7 +13988,10 @@ help:
 # TODO: remove this once we clean up the `# type: ignore` comments that are needed
 # for mypy/pyright but not for ty. See https://docs.astral.sh/ty/configuration/
 [tool.ty.rules]
+	# mostly for version compatibility
+	unused-ignore-comment = "ignore"
 	unused-type-ignore-comment = "ignore"
+	ignore-comment-unknown-rule = "ignore"
 
 # [[tool.ty.overrides]]
 # 	include = ["tests/unit/json_serialize/test_json_serialize.py", "tests/unit/test_jsonlines.py"]

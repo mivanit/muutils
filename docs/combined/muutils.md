@@ -8,7 +8,7 @@
 
 [![Checks](https://github.com/mivanit/muutils/actions/workflows/checks.yml/badge.svg)](https://github.com/mivanit/muutils/actions/workflows/checks.yml)
 [![Checks](https://github.com/mivanit/muutils/actions/workflows/make-docs.yml/badge.svg)](https://github.com/mivanit/muutils/actions/workflows/make-docs.yml)
-[![Coverage](data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAiIGhlaWdodD0iMjAiPgogICAgPGNsaXBQYXRoIGlkPSJyIj48cmVjdCB3aWR0aD0iMTAwIiBoZWlnaHQ9IjIwIiByeD0iMyIvPjwvY2xpcFBhdGg+CiAgICA8ZyBjbGlwLXBhdGg9InVybCgjcikiPgogICAgICAgIDxyZWN0IHdpZHRoPSI2NiIgaGVpZ2h0PSIyMCIgZmlsbD0iIzU1NSIvPgogICAgICAgIDxyZWN0IHg9IjY2IiB3aWR0aD0iMzQiIGhlaWdodD0iMjAiIGZpbGw9IiM0YzEiLz4KICAgIDwvZz4KICAgIDxnIGZpbGw9IiNmZmYiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtZmFtaWx5PSJEZWphVnUgU2FucyxWZXJkYW5hLEdlbmV2YSxzYW5zLXNlcmlmIiBmb250LXNpemU9IjExIj4KICAgICAgICA8dGV4dCB4PSIzMy4wIiB5PSIxNCI+Y292ZXJhZ2U8L3RleHQ+CiAgICAgICAgPHRleHQgeD0iODMuMCIgeT0iMTQiPjg3JTwvdGV4dD4KICAgIDwvZz4KPC9zdmc+Cgo=)](docs/coverage/html/)
+[![Coverage](data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAiIGhlaWdodD0iMjAiPgogICAgPGNsaXBQYXRoIGlkPSJyIj48cmVjdCB3aWR0aD0iMTAwIiBoZWlnaHQ9IjIwIiByeD0iMyIvPjwvY2xpcFBhdGg+CiAgICA8ZyBjbGlwLXBhdGg9InVybCgjcikiPgogICAgICAgIDxyZWN0IHdpZHRoPSI2NiIgaGVpZ2h0PSIyMCIgZmlsbD0iIzU1NSIvPgogICAgICAgIDxyZWN0IHg9IjY2IiB3aWR0aD0iMzQiIGhlaWdodD0iMjAiIGZpbGw9IiM0YzEiLz4KICAgIDwvZz4KICAgIDxnIGZpbGw9IiNmZmYiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtZmFtaWx5PSJEZWphVnUgU2FucyxWZXJkYW5hLEdlbmV2YSxzYW5zLXNlcmlmIiBmb250LXNpemU9IjExIj4KICAgICAgICA8dGV4dCB4PSIzMy4wIiB5PSIxNCI+Y292ZXJhZ2U8L3RleHQ+CiAgICAgICAgPHRleHQgeD0iODMuMCIgeT0iMTQiPjg1JTwvdGV4dD4KICAgIDwvZz4KPC9zdmc+Cgo=)](docs/coverage/html/)
 
 ![GitHub commits](https://img.shields.io/github/commit-activity/t/mivanit/muutils)
 ![GitHub commit activity](https://img.shields.io/github/commit-activity/m/mivanit/muutils)
@@ -117,7 +117,7 @@ There are a couple work-in-progress utilities in [`_wip`](https://github.com/miv
 
 [![Checks](https://github.com/mivanit/muutils/actions/workflows/checks.yml/badge.svg)](https://github.com/mivanit/muutils/actions/workflows/checks.yml)
 [![Checks](https://github.com/mivanit/muutils/actions/workflows/make-docs.yml/badge.svg)](https://github.com/mivanit/muutils/actions/workflows/make-docs.yml)
-[![Coverage](data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAiIGhlaWdodD0iMjAiPgogICAgPGNsaXBQYXRoIGlkPSJyIj48cmVjdCB3aWR0aD0iMTAwIiBoZWlnaHQ9IjIwIiByeD0iMyIvPjwvY2xpcFBhdGg+CiAgICA8ZyBjbGlwLXBhdGg9InVybCgjcikiPgogICAgICAgIDxyZWN0IHdpZHRoPSI2NiIgaGVpZ2h0PSIyMCIgZmlsbD0iIzU1NSIvPgogICAgICAgIDxyZWN0IHg9IjY2IiB3aWR0aD0iMzQiIGhlaWdodD0iMjAiIGZpbGw9IiM0YzEiLz4KICAgIDwvZz4KICAgIDxnIGZpbGw9IiNmZmYiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtZmFtaWx5PSJEZWphVnUgU2FucyxWZXJkYW5hLEdlbmV2YSxzYW5zLXNlcmlmIiBmb250LXNpemU9IjExIj4KICAgICAgICA8dGV4dCB4PSIzMy4wIiB5PSIxNCI+Y292ZXJhZ2U8L3RleHQ+CiAgICAgICAgPHRleHQgeD0iODMuMCIgeT0iMTQiPjg3JTwvdGV4dD4KICAgIDwvZz4KPC9zdmc+Cgo=)](docs/coverage/html/)
+[![Coverage](data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAiIGhlaWdodD0iMjAiPgogICAgPGNsaXBQYXRoIGlkPSJyIj48cmVjdCB3aWR0aD0iMTAwIiBoZWlnaHQ9IjIwIiByeD0iMyIvPjwvY2xpcFBhdGg+CiAgICA8ZyBjbGlwLXBhdGg9InVybCgjcikiPgogICAgICAgIDxyZWN0IHdpZHRoPSI2NiIgaGVpZ2h0PSIyMCIgZmlsbD0iIzU1NSIvPgogICAgICAgIDxyZWN0IHg9IjY2IiB3aWR0aD0iMzQiIGhlaWdodD0iMjAiIGZpbGw9IiM0YzEiLz4KICAgIDwvZz4KICAgIDxnIGZpbGw9IiNmZmYiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtZmFtaWx5PSJEZWphVnUgU2FucyxWZXJkYW5hLEdlbmV2YSxzYW5zLXNlcmlmIiBmb250LXNpemU9IjExIj4KICAgICAgICA8dGV4dCB4PSIzMy4wIiB5PSIxNCI+Y292ZXJhZ2U8L3RleHQ+CiAgICAgICAgPHRleHQgeD0iODMuMCIgeT0iMTQiPjg1JTwvdGV4dD4KICAgIDwvZz4KPC9zdmc+Cgo=)](docs/coverage/html/)
 
 ![GitHub commits](https://img.shields.io/github/commit-activity/t/mivanit/muutils)
 ![GitHub commit activity](https://img.shields.io/github/commit-activity/m/mivanit/muutils)
@@ -684,7 +684,7 @@ as well as the passed expression and what the expression evaluates to:
 
 
 
-- `TENSOR_STR_TYPES: Set[str] = {"<class 'torch.Tensor'>", "<class 'numpy.ndarray'>"}`
+- `TENSOR_STR_TYPES: Set[str] = {"<class 'numpy.ndarray'>", "<class 'torch.Tensor'>"}`
 
 
 
@@ -1297,7 +1297,7 @@ Protocol classes can be generic, they are defined as::
 (*args, **kwargs)
 ```
 
-[View Source on GitHub](https://github.com/mivanit/muutils/blob/0.9.0errormode.py#L1770-L1796)
+[View Source on GitHub](https://github.com/mivanit/muutils/blob/0.9.0errormode.py#L1944-L1970)
 
 
 
@@ -4746,7 +4746,7 @@ Protocol for objects that support write operations.
 (*args, **kwargs)
 ```
 
-[View Source on GitHub](https://github.com/mivanit/muutils/blob/0.9.0logger/exception_context.py#L1770-L1796)
+[View Source on GitHub](https://github.com/mivanit/muutils/blob/0.9.0logger/exception_context.py#L1944-L1970)
 
 
 
@@ -4864,7 +4864,7 @@ Protocol classes can be generic, they are defined as::
 (*args, **kwargs)
 ```
 
-[View Source on GitHub](https://github.com/mivanit/muutils/blob/0.9.0logger/headerfuncs.py#L1770-L1796)
+[View Source on GitHub](https://github.com/mivanit/muutils/blob/0.9.0logger/headerfuncs.py#L1944-L1970)
 
 
 
@@ -6380,7 +6380,7 @@ Protocol classes can be generic, they are defined as::
 (*args, **kwargs)
 ```
 
-[View Source on GitHub](https://github.com/mivanit/muutils/blob/0.9.0misc/__init__.py#L1770-L1796)
+[View Source on GitHub](https://github.com/mivanit/muutils/blob/0.9.0misc/__init__.py#L1944-L1970)
 
 
 
@@ -6539,7 +6539,7 @@ Protocol classes can be generic, they are defined as::
 (*args, **kwargs)
 ```
 
-[View Source on GitHub](https://github.com/mivanit/muutils/blob/0.9.0misc/classes.py#L1770-L1796)
+[View Source on GitHub](https://github.com/mivanit/muutils/blob/0.9.0misc/classes.py#L1944-L1970)
 
 
 
@@ -7488,7 +7488,7 @@ miscellaneous utilities for ML pipelines
 
 miscellaneous utilities for ML pipelines
 
-[View Source on GitHub](https://github.com/mivanit/muutils/blob/0.9.0mlutils.py#L0-L181)
+[View Source on GitHub](https://github.com/mivanit/muutils/blob/0.9.0mlutils.py#L0-L182)
 
 
 
@@ -7513,7 +7513,7 @@ miscellaneous utilities for ML pipelines
 ```
 
 
-[View Source on GitHub](https://github.com/mivanit/muutils/blob/0.9.0mlutils.py#L30-L75)
+[View Source on GitHub](https://github.com/mivanit/muutils/blob/0.9.0mlutils.py#L31-L76)
 
 
 Get the torch.device instance on which `torch.Tensor`s should be allocated.
@@ -7525,7 +7525,7 @@ Get the torch.device instance on which `torch.Tensor`s should be allocated.
 ```
 
 
-[View Source on GitHub](https://github.com/mivanit/muutils/blob/0.9.0mlutils.py#L78-L108)
+[View Source on GitHub](https://github.com/mivanit/muutils/blob/0.9.0mlutils.py#L79-L109)
 
 
 Improve model reproducibility. See https://github.com/NVIDIA/framework-determinism for more information.
@@ -7540,7 +7540,7 @@ off performance for reproducibility. Set use_deterministic_algorithms to True to
 ```
 
 
-[View Source on GitHub](https://github.com/mivanit/muutils/blob/0.9.0mlutils.py#L114-L119)
+[View Source on GitHub](https://github.com/mivanit/muutils/blob/0.9.0mlutils.py#L115-L120)
 
 
 Yield successive chunks from an iterator.
@@ -7549,14 +7549,14 @@ Yield successive chunks from an iterator.
 ### `def get_checkpoint_paths_for_run` { #get_checkpoint_paths_for_run }
 ```python
 (
-    run_path: pathlib.Path,
+    run_path: pathlib._local.Path,
     extension: Literal['pt', 'zanj'],
     checkpoints_format: str = 'checkpoints/model.iter_*.{extension}'
-) -> list[tuple[int, pathlib.Path]]
+) -> list[tuple[int, pathlib._local.Path]]
 ```
 
 
-[View Source on GitHub](https://github.com/mivanit/muutils/blob/0.9.0mlutils.py#L122-L143)
+[View Source on GitHub](https://github.com/mivanit/muutils/blob/0.9.0mlutils.py#L123-L144)
 
 
 get checkpoints of the format from the run_path
@@ -7575,7 +7575,7 @@ note that `checkpoints_format` should contain a glob pattern with:
 ```
 
 
-[View Source on GitHub](https://github.com/mivanit/muutils/blob/0.9.0mlutils.py#L149-L178)
+[View Source on GitHub](https://github.com/mivanit/muutils/blob/0.9.0mlutils.py#L150-L179)
 
 
 Decorator to add a method to the method_dict
@@ -7587,7 +7587,7 @@ Decorator to add a method to the method_dict
 ```
 
 
-[View Source on GitHub](https://github.com/mivanit/muutils/blob/0.9.0mlutils.py#L181-L182)
+[View Source on GitHub](https://github.com/mivanit/muutils/blob/0.9.0mlutils.py#L182-L183)
 
 
 
@@ -7995,8 +7995,8 @@ Convert Jupyter Notebook to a script, doing some basic filtering and formatting.
 ### `def process_dir` { #process_dir }
 ```python
 (
-    input_dir: Union[str, pathlib.Path],
-    output_dir: Union[str, pathlib.Path],
+    input_dir: Union[str, pathlib._local.Path],
+    output_dir: Union[str, pathlib._local.Path],
     strip_md_cells: bool = False,
     header_comment: str = '#%%',
     disable_plots: bool = False,
@@ -8080,7 +8080,7 @@ quickly print a sympy expression in latex
 
 quickly print a sympy expression in latex
 
-[View Source on GitHub](https://github.com/mivanit/muutils/blob/0.9.0nbutils/print_tex.py#L0-L20)
+[View Source on GitHub](https://github.com/mivanit/muutils/blob/0.9.0nbutils/print_tex.py#L0-L22)
 
 
 
@@ -8095,7 +8095,7 @@ quickly print a sympy expression in latex
 ```
 
 
-[View Source on GitHub](https://github.com/mivanit/muutils/blob/0.9.0nbutils/print_tex.py#L7-L21)
+[View Source on GitHub](https://github.com/mivanit/muutils/blob/0.9.0nbutils/print_tex.py#L9-L23)
 
 
 function for easily rendering a sympy expression in latex
@@ -8172,8 +8172,8 @@ Common base class for all non-exit exceptions.
 ### `def run_notebook_tests` { #run_notebook_tests }
 ```python
 (
-    notebooks_dir: pathlib.Path,
-    converted_notebooks_temp_dir: pathlib.Path,
+    notebooks_dir: pathlib._local.Path,
+    converted_notebooks_temp_dir: pathlib._local.Path,
     CI_output_suffix: str = '.CI-output.txt',
     run_python_cmd: Optional[str] = None,
     run_python_cmd_fmt: str = '{python_tool} run python',
@@ -8285,7 +8285,7 @@ a protocol for a progress bar function
 (*args, **kwargs)
 ```
 
-[View Source on GitHub](https://github.com/mivanit/muutils/blob/0.9.0parallel.py#L1770-L1796)
+[View Source on GitHub](https://github.com/mivanit/muutils/blob/0.9.0parallel.py#L1944-L1970)
 
 
 
@@ -10276,7 +10276,7 @@ far more robust BS4 mode by passing `InlineConfig(use_bs4=True)`.
 
 
 
-- `DEFAULT_ALLOWED_EXTENSIONS: Final[set[Literal['.css', '.js', '.svg', '.png']]] = {'.js', '.svg', '.png', '.css'}`
+- `DEFAULT_ALLOWED_EXTENSIONS: Final[set[Literal['.css', '.js', '.svg', '.png']]] = {'.svg', '.js', '.css', '.png'}`
 
 
 
@@ -10372,7 +10372,7 @@ High-level configuration for the inliner.
 (
     html: str,
     *,
-    base_path: pathlib.Path,
+    base_path: pathlib._local.Path,
     config: muutils.web.bundle_html.InlineConfig | None = None,
     prettify: bool = False
 ) -> str
@@ -10402,12 +10402,12 @@ Inline permitted external assets inside *html*.
 ### `def inline_html_file` { #inline_html_file }
 ```python
 (
-    html_path: pathlib.Path,
-    output_path: pathlib.Path,
-    base_path: pathlib.Path | None = None,
+    html_path: pathlib._local.Path,
+    output_path: pathlib._local.Path,
+    base_path: pathlib._local.Path | None = None,
     config: muutils.web.bundle_html.InlineConfig | None = None,
     prettify: bool = False
-) -> pathlib.Path
+) -> pathlib._local.Path
 ```
 
 

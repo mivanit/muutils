@@ -3,8 +3,7 @@
 from __future__ import annotations
 
 import math
-import typing
-from typing import Optional, Iterable, Sequence, Union, Any
+from typing import Optional, Sequence, Union, Any
 
 from muutils.misc import str_to_numeric
 

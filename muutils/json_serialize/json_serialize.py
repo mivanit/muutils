@@ -14,7 +14,17 @@ import inspect
 import warnings
 from dataclasses import dataclass, is_dataclass
 from pathlib import Path
-from typing import TYPE_CHECKING, Any, Callable, Iterable, Mapping, Set, Union, cast, overload
+from typing import (
+    TYPE_CHECKING,
+    Any,
+    Callable,
+    Iterable,
+    Mapping,
+    Set,
+    Union,
+    cast,
+    overload,
+)
 
 from muutils.errormode import ErrorMode
 
@@ -166,8 +176,9 @@ def _serialize_override_serialize_func(
 DEFAULT_HANDLERS: MonoTuple[SerializerHandler] = tuple(BASE_HANDLERS) + (
     SerializerHandler(
         # TODO: allow for custom serialization handler name
-        check=lambda self, obj, path: hasattr(obj, "serialize")
-        and callable(obj.serialize),
+        check=lambda self, obj, path: (
+            hasattr(obj, "serialize") and callable(obj.serialize)
+        ),
         serialize_func=_serialize_override_serialize_func,
         uid=".serialize override",
         desc="objects with .serialize method",
@@ -240,8 +251,9 @@ DEFAULT_HANDLERS: MonoTuple[SerializerHandler] = tuple(BASE_HANDLERS) + (
         desc="sets as dicts with format key",
     ),
     SerializerHandler(
-        check=lambda self, obj, path: isinstance(obj, Iterable)
-        and not isinstance(obj, (list, tuple, str)),
+        check=lambda self, obj, path: (
+            isinstance(obj, Iterable) and not isinstance(obj, (list, tuple, str))
+        ),
         serialize_func=lambda self, obj, path: [
             self.json_serialize(x, tuple(path) + (i,)) for i, x in enumerate(obj)
         ],
@@ -309,7 +321,9 @@ class JsonSerializer:
         )
 
     @overload
-    def json_serialize(self, obj: Mapping[str, Any], path: ObjectPath = ()) -> JSONdict: ...
+    def json_serialize(
+        self, obj: Mapping[str, Any], path: ObjectPath = ()
+    ) -> JSONdict: ...
     @overload
     def json_serialize(self, obj: list, path: ObjectPath = ()) -> list: ...
     @overload

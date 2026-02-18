@@ -242,17 +242,17 @@ def infer_array_mode(
         # _FORMAT_KEY always maps to a string
         fmt: str = arr.get(_FORMAT_KEY, "")  # type: ignore
         if fmt.endswith(":array_list_meta"):
-            arr_data = arr["data"] # ty: ignore[invalid-argument-type]
+            arr_data = arr["data"]  # ty: ignore[invalid-argument-type]
             if not isinstance(arr_data, Iterable):
                 raise ValueError(f"invalid list format: {type(arr_data) = }\t{arr}")
             return_mode = "array_list_meta"
         elif fmt.endswith(":array_hex_meta"):
-            arr_data = arr["data"] # ty: ignore[invalid-argument-type]
+            arr_data = arr["data"]  # ty: ignore[invalid-argument-type]
             if not isinstance(arr_data, str):
                 raise ValueError(f"invalid hex format: {type(arr_data) = }\t{arr}")
             return_mode = "array_hex_meta"
         elif fmt.endswith(":array_b64_meta"):
-            arr_data = arr["data"] # ty: ignore[invalid-argument-type]
+            arr_data = arr["data"]  # ty: ignore[invalid-argument-type]
             if not isinstance(arr_data, str):
                 raise ValueError(f"invalid b64 format: {type(arr_data) = }\t{arr}")
             return_mode = "array_b64_meta"
@@ -345,7 +345,7 @@ def load_array(
         return arr["data"]  # type: ignore[return-value] # pyright: ignore[reportReturnType]
     elif array_mode == "zero_dim":
         assert isinstance(arr, typing.Mapping)
-        data = np.array(arr["data"]) # ty: ignore[invalid-argument-type]
+        data = np.array(arr["data"])  # ty: ignore[invalid-argument-type]
         if tuple(arr["shape"]) != tuple(data.shape):  # type: ignore
             raise ValueError(f"invalid shape: {arr}")
         return data

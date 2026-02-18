@@ -252,7 +252,7 @@ def array_info(
         nan_mask = np.isnan(A_flat)
         result["nan_count"] = np.sum(nan_mask)
         result["has_nans"] = result["nan_count"] > 0
-        result_size: int = result["size"] # ty: ignore[invalid-assignment]
+        result_size: int = result["size"]  # ty: ignore[invalid-assignment]
         if result_size > 0:
             result["nan_percent"] = (result["nan_count"] / result_size) * 100
     except:  # noqa: E722

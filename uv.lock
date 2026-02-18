@@ -4860,7 +4860,7 @@ dev = [
     { name = "tomli", marker = "python_full_version < '3.11'", specifier = ">=2.1.0" },
     { name = "tornado", marker = "python_full_version >= '3.9'", specifier = ">=6.5" },
     { name = "twine" },
-    { name = "ty", specifier = ">=0.0.12" },
+    { name = "ty", specifier = ">=0.0.17" },
     { name = "types-tqdm" },
     { name = "typing-extensions", marker = "python_full_version < '3.11'" },
 ]

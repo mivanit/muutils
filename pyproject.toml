@@ -223,6 +223,7 @@
 # [tool.makefile]
 # =================================================================
 [tool.makefile.docs]
+	no_clean = ["changelogs"]
 	warnings_ignore = [
 		"Error parsing type annotation .* for muutils\\..*\\. Import of np failed:",
 		"Error parsing type annotation .* for muutils\\..*\\. Import of JsonSerializer failed:",

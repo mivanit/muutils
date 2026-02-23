@@ -1,7 +1,8 @@
+Type system overhaul, better Python 3.14 support, new `Command` class, bugfixes.
 
 Type system overhaul achieving full compliance with ty, basedpyright, and mypy (thanks to updated makefile). Python 3.14 support added, 3.8 compatibility maintained. New `Command` class. Serialization fixes for sets, frozensets, and namedtuples. Test suite expanded.
 
-165 commits since `c812aaf`
+167 commits since `c812aaf`
 
 ## Added
 
@@ -12,7 +13,7 @@ Type system overhaul achieving full compliance with ty, basedpyright, and mypy (
 - **`typing_breakdown` module** - CLI tool for analyzing mypy/basedpyright/ty outputs and generating error breakdowns
 - **`@overload` signatures** - Added to `serialize_array()`, `load_array()`, `infer_array_mode()`, `json_serialize()` for better type narrowing (`494cd9d`)
 - **TypedDict definitions** - `ArrayMetadata`, `SerializedArrayWithMeta`, `NumericList`, `_SerializedSet`, `_SerializedFrozenset`, `DBGDictDefaultsType`, `DBGListDefaultsType`, `DBGTensorArraySummaryDefaultsType`
-- **New tests** - `test_collect_warnings.py`, `test_jsonlines.py`, `test_tensor_info_torch.py`, `test_configure_notebook_torch.py`, `test_json_serialize.py`, `test_serializable_field.py`, `test_arg_bool.py`, `test_command.py` (`573ef83`)
+- **New tests** - `test_collect_warnings.py`, `test_jsonlines.py`, `test_json_serialize.py`, `test_serializable_field.py`, `test_arg_bool.py`, `test_command.py`, `test_errormode_functionality.py`, `test_array.py`, `test_array_torch.py`, `test_util.py`, `test_log_util.py` (`573ef83`); `test_tensor_info_torch.py`, `test_configure_notebook_torch.py` (`f432bd1`)
 
 ## Changed
 
@@ -38,6 +39,8 @@ Type system overhaul achieving full compliance with ty, basedpyright, and mypy (
   logger.log("message", lvl=-10)  # lvl as keyword arg
   ```
 
+- **`muutils.logger`**: `Logger.log_elapsed_last()` return type changed from `float` to `None`. The method no longer returns the elapsed time value.
+- **`muutils.logger`**: `Logger.exception_context()` now falls back to `sys.stderr` when stream handler is `None`
 
 ## Fixed
 
@@ -56,6 +59,12 @@ Type system overhaul achieving full compliance with ty, basedpyright, and mypy (
 - **`muutils.json_serialize.util.dc_eq`**: Fixed docstring that incorrectly stated `except_when_field_mismatch` defaults to `True` (actual default is `False`), and that it raises `TypeError` (it actually raises `AttributeError`)
 - **`muutils.json_serialize.util.dc_eq`**: Updated flowchart in docstring to accurately reflect the control flow, including the missing `false_when_class_mismatch` decision branch
 
+## Removed
+
+- `demo.py` - Old demo script (`d626f20`)
+- `docs/resources/make_docs.py` - Replaced by makefile recipes
+- `tests/benchmark_parallel.py`, `tests/test_benchmark_demo.py` - Consolidated benchmark tests
+
 ## Python Compatibility
 
 - **Python 3.8** - Type hint fixes, legacy package pins (pandas 2.0.3, pillow 10.4.0) (`4e085ff`, `08fe412`)
@@ -68,4 +77,4 @@ Type system overhaul achieving full compliance with ty, basedpyright, and mypy (
 
 - Updated `uv.lock`
 - Bumped ty dev dependency (`a9fc10d`)
-- Added stubs (dev) (`e31eea0`)
+- Added pandas-stubs (dev) (`e31eea0`)

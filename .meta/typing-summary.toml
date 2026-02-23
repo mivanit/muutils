@@ -1,6 +1,6 @@
 # ty: All checks passed!
 # basedpyright: 0 errors, 0 warnings, 0 notes
-# mypy: KeyError: 'setter_type'
+# mypy: Success: no issues found in 117 source files
 
 [type_errors.ty]
 total_errors = 0

@@ -8,7 +8,7 @@
 
 [![Checks](https://github.com/mivanit/muutils/actions/workflows/checks.yml/badge.svg)](https://github.com/mivanit/muutils/actions/workflows/checks.yml)
 [![Checks](https://github.com/mivanit/muutils/actions/workflows/make-docs.yml/badge.svg)](https://github.com/mivanit/muutils/actions/workflows/make-docs.yml)
-[![Coverage](data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAiIGhlaWdodD0iMjAiPgogICAgPGNsaXBQYXRoIGlkPSJyIj48cmVjdCB3aWR0aD0iMTAwIiBoZWlnaHQ9IjIwIiByeD0iMyIvPjwvY2xpcFBhdGg+CiAgICA8ZyBjbGlwLXBhdGg9InVybCgjcikiPgogICAgICAgIDxyZWN0IHdpZHRoPSI2NiIgaGVpZ2h0PSIyMCIgZmlsbD0iIzU1NSIvPgogICAgICAgIDxyZWN0IHg9IjY2IiB3aWR0aD0iMzQiIGhlaWdodD0iMjAiIGZpbGw9IiM0YzEiLz4KICAgIDwvZz4KICAgIDxnIGZpbGw9IiNmZmYiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtZmFtaWx5PSJEZWphVnUgU2FucyxWZXJkYW5hLEdlbmV2YSxzYW5zLXNlcmlmIiBmb250LXNpemU9IjExIj4KICAgICAgICA8dGV4dCB4PSIzMy4wIiB5PSIxNCI+Y292ZXJhZ2U8L3RleHQ+CiAgICAgICAgPHRleHQgeD0iODMuMCIgeT0iMTQiPjg1JTwvdGV4dD4KICAgIDwvZz4KPC9zdmc+Cgo=)](docs/coverage/html/)
+[![Coverage](data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAiIGhlaWdodD0iMjAiPgogICAgPGNsaXBQYXRoIGlkPSJyIj48cmVjdCB3aWR0aD0iMTAwIiBoZWlnaHQ9IjIwIiByeD0iMyIvPjwvY2xpcFBhdGg+CiAgICA8ZyBjbGlwLXBhdGg9InVybCgjcikiPgogICAgICAgIDxyZWN0IHdpZHRoPSI2NiIgaGVpZ2h0PSIyMCIgZmlsbD0iIzU1NSIvPgogICAgICAgIDxyZWN0IHg9IjY2IiB3aWR0aD0iMzQiIGhlaWdodD0iMjAiIGZpbGw9IiM0YzEiLz4KICAgIDwvZz4KICAgIDxnIGZpbGw9IiNmZmYiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtZmFtaWx5PSJEZWphVnUgU2FucyxWZXJkYW5hLEdlbmV2YSxzYW5zLXNlcmlmIiBmb250LXNpemU9IjExIj4KICAgICAgICA8dGV4dCB4PSIzMy4wIiB5PSIxNCI+Y292ZXJhZ2U8L3RleHQ+CiAgICAgICAgPHRleHQgeD0iODMuMCIgeT0iMTQiPjg3JTwvdGV4dD4KICAgIDwvZz4KPC9zdmc+Cgo=)](docs/coverage/html/)
 
 ![GitHub commits](https://img.shields.io/github/commit-activity/t/mivanit/muutils)
 ![GitHub commit activity](https://img.shields.io/github/commit-activity/m/mivanit/muutils)
@@ -117,7 +117,7 @@ There are a couple work-in-progress utilities in [`_wip`](https://github.com/miv
 
 [![Checks](https://github.com/mivanit/muutils/actions/workflows/checks.yml/badge.svg)](https://github.com/mivanit/muutils/actions/workflows/checks.yml)
 [![Checks](https://github.com/mivanit/muutils/actions/workflows/make-docs.yml/badge.svg)](https://github.com/mivanit/muutils/actions/workflows/make-docs.yml)
-[![Coverage](data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAiIGhlaWdodD0iMjAiPgogICAgPGNsaXBQYXRoIGlkPSJyIj48cmVjdCB3aWR0aD0iMTAwIiBoZWlnaHQ9IjIwIiByeD0iMyIvPjwvY2xpcFBhdGg+CiAgICA8ZyBjbGlwLXBhdGg9InVybCgjcikiPgogICAgICAgIDxyZWN0IHdpZHRoPSI2NiIgaGVpZ2h0PSIyMCIgZmlsbD0iIzU1NSIvPgogICAgICAgIDxyZWN0IHg9IjY2IiB3aWR0aD0iMzQiIGhlaWdodD0iMjAiIGZpbGw9IiM0YzEiLz4KICAgIDwvZz4KICAgIDxnIGZpbGw9IiNmZmYiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtZmFtaWx5PSJEZWphVnUgU2FucyxWZXJkYW5hLEdlbmV2YSxzYW5zLXNlcmlmIiBmb250LXNpemU9IjExIj4KICAgICAgICA8dGV4dCB4PSIzMy4wIiB5PSIxNCI+Y292ZXJhZ2U8L3RleHQ+CiAgICAgICAgPHRleHQgeD0iODMuMCIgeT0iMTQiPjg1JTwvdGV4dD4KICAgIDwvZz4KPC9zdmc+Cgo=)](docs/coverage/html/)
+[![Coverage](data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAiIGhlaWdodD0iMjAiPgogICAgPGNsaXBQYXRoIGlkPSJyIj48cmVjdCB3aWR0aD0iMTAwIiBoZWlnaHQ9IjIwIiByeD0iMyIvPjwvY2xpcFBhdGg+CiAgICA8ZyBjbGlwLXBhdGg9InVybCgjcikiPgogICAgICAgIDxyZWN0IHdpZHRoPSI2NiIgaGVpZ2h0PSIyMCIgZmlsbD0iIzU1NSIvPgogICAgICAgIDxyZWN0IHg9IjY2IiB3aWR0aD0iMzQiIGhlaWdodD0iMjAiIGZpbGw9IiM0YzEiLz4KICAgIDwvZz4KICAgIDxnIGZpbGw9IiNmZmYiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtZmFtaWx5PSJEZWphVnUgU2FucyxWZXJkYW5hLEdlbmV2YSxzYW5zLXNlcmlmIiBmb250LXNpemU9IjExIj4KICAgICAgICA8dGV4dCB4PSIzMy4wIiB5PSIxNCI+Y292ZXJhZ2U8L3RleHQ+CiAgICAgICAgPHRleHQgeD0iODMuMCIgeT0iMTQiPjg3JTwvdGV4dD4KICAgIDwvZz4KPC9zdmc+Cgo=)](docs/coverage/html/)
 
 ![GitHub commits](https://img.shields.io/github/commit-activity/t/mivanit/muutils)
 ![GitHub commit activity](https://img.shields.io/github/commit-activity/m/mivanit/muutils)
@@ -684,7 +684,7 @@ as well as the passed expression and what the expression evaluates to:
 
 
 
-- `TENSOR_STR_TYPES: Set[str] = {"<class 'numpy.ndarray'>", "<class 'torch.Tensor'>"}`
+- `TENSOR_STR_TYPES: Set[str] = {"<class 'torch.Tensor'>", "<class 'numpy.ndarray'>"}`
 
 
 
@@ -10276,7 +10276,7 @@ far more robust BS4 mode by passing `InlineConfig(use_bs4=True)`.
 
 
 
-- `DEFAULT_ALLOWED_EXTENSIONS: Final[set[Literal['.css', '.js', '.svg', '.png']]] = {'.svg', '.js', '.css', '.png'}`
+- `DEFAULT_ALLOWED_EXTENSIONS: Final[set[Literal['.css', '.js', '.svg', '.png']]] = {'.js', '.svg', '.css', '.png'}`
 
 
 

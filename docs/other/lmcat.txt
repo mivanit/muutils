@@ -1,8 +1,8 @@
 # Stats
-- 69 files
-- 14082 (14K) lines
-- 493606 (494K) chars
-- 52418 (52K) `whitespace-split` tokens
+- 68 files
+- 14056 (14K) lines
+- 492647 (493K) chars
+- 52311 (52K) `whitespace-split` tokens
 
 # File Tree
 
@@ -83,12 +83,11 @@ muutils
 │   ├── tensor_utils.py                  [506L 16,115C 1,615T]
 │   ├── timeit_fancy.py                  [113L  4,329C   521T]
 │   └── validate_type.py                 [244L  8,661C   931T]
-├── CHANGELOG.md                         [ 22L    853C    98T]
 ├── LICENSE                              [674L 35,149C 5,644T]
 ├── README.md                            [ 72L  5,710C   460T]
 ├── TODO.md                              [ 28L  1,388C   235T]
 ├── makefile                             [755L 30,080C 3,866T]
-├── pyproject.toml                       [273L  8,032C   915T]
+├── pyproject.toml                       [274L  8,059C   918T]
 ```
 
 # File Contents
@@ -12698,32 +12697,6 @@ def get_fn_allowed_kwargs(fn: typing.Callable[..., Any]) -> typing.Set[str]:
 
 ``````{ end_of_file="muutils/validate_type.py" }
 
-``````{ path="CHANGELOG.md"  }
-# Changelog
-
-## [Unreleased]
-
-### Fixed
-
-- **`muutils.json_serialize.util.dc_eq`**: Fixed docstring that incorrectly stated `except_when_field_mismatch` defaults to `True` (actual default is `False`), and that it raises `TypeError` (it actually raises `AttributeError`)
-- **`muutils.json_serialize.util.dc_eq`**: Updated flowchart in docstring to accurately reflect the control flow, including the missing `false_when_class_mismatch` decision branch
-
-### Breaking Changes
-
-- **`muutils.logger`**: `Logger.log()` and `SimpleLogger.log()` now require keyword arguments for all parameters after `msg`. This change was made to fix type checker compatibility between the two classes.
-
-  **Before:**
-  ```python
-  logger.log("message", -10)  # lvl as positional arg
-  ```
-
-  **After:**
-  ```python
-  logger.log("message", lvl=-10)  # lvl as keyword arg
-  ```
-
-``````{ end_of_file="CHANGELOG.md" }
-
 ``````{ path="LICENSE"  }
                     GNU GENERAL PUBLIC LICENSE
                        Version 3, 29 June 2007
@@ -14037,6 +14010,7 @@ help:
 # [tool.makefile]
 # =================================================================
 [tool.makefile.docs]
+	no_clean = ["changelogs"]
 	warnings_ignore = [
 		"Error parsing type annotation .* for muutils\\..*\\. Import of np failed:",
 		"Error parsing type annotation .* for muutils\\..*\\. Import of JsonSerializer failed:",

@@ -140,7 +140,7 @@ def validate_type(
                 return _return_func(False)
             # check all items in list are of the correct type
             item_type = args[0]
-            return all(validate_type(item, item_type) for item in value)
+            return _return_func(all(validate_type(item, item_type) for item in value))
 
         if origin is dict:
             # no args

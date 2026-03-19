@@ -283,6 +283,31 @@ def test_validate_type_tuple(value, expected_type, expected_result):
         ({"x": 1, "y": 2}, typing.Dict[typing.Literal["x", "y"], int], True),
         ({"x": 1, "z": 2}, typing.Dict[typing.Literal["x", "y"], int], False),
         ({}, typing.Dict[typing.Literal["x", "y"], int], True),
+        # Set[Literal[...]]
+        ({"a", "b"}, typing.Set[typing.Literal["a", "b", "c"]], True),
+        ({"a", "d"}, typing.Set[typing.Literal["a", "b", "c"]], False),
+        (set(), typing.Set[typing.Literal["a", "b"]], True),
+        # Tuple[Literal[...], Literal[...]]
+        (
+            ("fast", 1),
+            typing.Tuple[typing.Literal["fast", "slow"], typing.Literal[1, 2]],
+            True,
+        ),
+        (
+            ("fast", 3),
+            typing.Tuple[typing.Literal["fast", "slow"], typing.Literal[1, 2]],
+            False,
+        ),
+        (
+            ("bad", 1),
+            typing.Tuple[typing.Literal["fast", "slow"], typing.Literal[1, 2]],
+            False,
+        ),
+        # bool/int Literal ambiguity: mirrors Python's bool-is-int semantics (True == 1, False == 0)
+        (True, typing.Literal[1], True),
+        (False, typing.Literal[0], True),
+        (1, typing.Literal[True], True),
+        (0, typing.Literal[False], True),
     ],
 )
 def test_validate_type_literal(value, expected_type, expected_result):
@@ -298,6 +323,21 @@ def test_validate_type_literal_do_except():
     assert validate_type("a", typing.Literal["a", "b"], do_except=True)
     with pytest.raises(IncorrectTypeException):
         validate_type("c", typing.Literal["a", "b"], do_except=True)
+
+
+def test_validate_type_list_do_except():
+    # valid list — no raise
+    assert validate_type([1, 2, 3], typing.List[int], do_except=True)
+    assert validate_type(
+        ["a", "b"], typing.List[typing.Literal["a", "b"]], do_except=True
+    )
+    # bad element — must raise, not return False
+    with pytest.raises(IncorrectTypeException):
+        validate_type([1, "bad"], typing.List[int], do_except=True)
+    with pytest.raises(IncorrectTypeException):
+        validate_type(
+            ["a", "bad"], typing.List[typing.Literal["a", "b"]], do_except=True
+        )
 
 
 @pytest.mark.parametrize(

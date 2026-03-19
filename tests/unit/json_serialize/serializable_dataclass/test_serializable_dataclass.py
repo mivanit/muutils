@@ -860,8 +860,10 @@ def test_literal_field_typecheck():
 
     @serializable_dataclass(on_typecheck_mismatch=ErrorMode.EXCEPT)
     class LiteralFieldClass(SerializableDataclass):
-        mode: typing.Literal["fast", "slow", "auto"] = "fast"
-        count: typing.Literal[1, 2, 3] = 1
+        mode: typing.Literal["fast", "slow", "auto"] = serializable_field(
+            default="fast"
+        )
+        count: typing.Literal[1, 2, 3] = serializable_field(default=1)
 
     # valid values — validate_fields_types returns True
     obj = LiteralFieldClass(mode="fast", count=2)

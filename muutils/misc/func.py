@@ -72,7 +72,7 @@ def process_kwarg(
                 kwargs[kwarg_name] = processor(kwargs[kwarg_name])
             return func(*args, **kwargs)  # type: ignore[arg-type]
 
-        return cast(Callable[FuncParams, ReturnType], wrapper)
+        return cast(Callable[FuncParams, ReturnType], wrapper)  # ty: ignore[invalid-type-form]
 
     return decorator
 

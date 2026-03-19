@@ -186,7 +186,7 @@ def test_array_serialization_handlers():
     serialized_array = serialized["array"]
     assert isinstance(serialized_array, dict)
     assert _FORMAT_KEY in serialized_array
-    assert serialized_array["shape"] == [4]
+    assert serialized_array["shape"] == [4]  # ty: ignore[invalid-argument-type]
 
     # Array in a list
     data_list = [

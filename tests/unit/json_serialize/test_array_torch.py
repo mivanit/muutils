@@ -202,15 +202,15 @@ def test_torch_serialization_integration():
     # Check structure is preserved
     assert isinstance(serialized["model_weights"], dict)
     assert _FORMAT_KEY in serialized["model_weights"]
-    assert serialized["model_weights"]["shape"] == [10, 5]  # pyright: ignore[reportGeneralTypeIssues]
+    assert serialized["model_weights"]["shape"] == [10, 5]  # pyright: ignore[reportGeneralTypeIssues]  # ty: ignore[invalid-argument-type]
 
     serialized_biases = serialized["biases"]
     assert isinstance(serialized_biases, dict)
-    assert serialized_biases["shape"] == [5]  # pyright: ignore[reportGeneralTypeIssues]
+    assert serialized_biases["shape"] == [5]  # pyright: ignore[reportGeneralTypeIssues]  # ty: ignore[invalid-argument-type]
 
     serialized_metadata = serialized["metadata"]
     assert isinstance(serialized_metadata, dict)
-    assert serialized_metadata["epochs"] == 10  # pyright: ignore[reportGeneralTypeIssues]
+    assert serialized_metadata["epochs"] == 10  # pyright: ignore[reportGeneralTypeIssues]  # ty: ignore[invalid-argument-type]
 
     # Check nested tensors
     serialized_history = serialized["history"]
@@ -245,10 +245,10 @@ def test_mixed_numpy_torch():
     assert _FORMAT_KEY in serialized["torch_tensor"]
 
     # Check format strings identify the type
-    numpy_format = serialized["numpy_array"][_FORMAT_KEY]
+    numpy_format = serialized["numpy_array"][_FORMAT_KEY]  # ty: ignore[invalid-argument-type]
     assert isinstance(numpy_format, str)
     assert "numpy" in numpy_format
 
-    torch_format = serialized["torch_tensor"][_FORMAT_KEY]
+    torch_format = serialized["torch_tensor"][_FORMAT_KEY]  # ty: ignore[invalid-argument-type]
     assert isinstance(torch_format, str)
     assert "torch" in torch_format

@@ -85,6 +85,7 @@ _NoExpPassed = _NoExpPassedSentinel()
 # global variables
 _CWD: Path = Path.cwd().absolute()
 _COUNTER: int = 0
+_DBG_MODULE_FILE: str = str(Path(__file__).resolve())
 
 # configuration
 PATH_MODE: typing.Literal["relative", "absolute"] = "relative"
@@ -156,6 +157,8 @@ def dbg(
     dbg_frame: typing.Optional[inspect.FrameInfo] = None
     for frame in inspect.stack():
         if frame.code_context is None:
+            continue
+        if str(Path(frame.filename).resolve()) == _DBG_MODULE_FILE:
             continue
         line: str = frame.code_context[0]
         if "dbg" in line:

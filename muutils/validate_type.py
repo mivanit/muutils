@@ -122,6 +122,9 @@ def validate_type(
     # generic alias, more complicated
     item_type: type
     if isinstance(expected_type, GenericAliasTypes):
+        if origin is typing.Literal:
+            return _return_func(value in args)
+
         if origin is list:
             # no args
             if len(args) == 0:

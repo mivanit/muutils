@@ -240,6 +240,67 @@ def test_validate_type_tuple(value, expected_type, expected_result):
 
 
 @pytest.mark.parametrize(
+    "value, expected_type, expected_result",
+    [
+        # basic string literals
+        ("a", typing.Literal["a", "b"], True),
+        ("b", typing.Literal["a", "b"], True),
+        ("c", typing.Literal["a", "b"], False),
+        # basic int literals
+        (1, typing.Literal[1, 2, 3], True),
+        (4, typing.Literal[1, 2, 3], False),
+        # single-value literal
+        ("a", typing.Literal["a"], True),
+        ("b", typing.Literal["a"], False),
+        # mixed-type literal
+        ("a", typing.Literal["a", 1], True),
+        (1, typing.Literal["a", 1], True),
+        (2, typing.Literal["a", 1], False),
+        # None in literal
+        (None, typing.Literal[None, "x"], True),
+        ("x", typing.Literal[None, "x"], True),
+        (1, typing.Literal[None, "x"], False),
+        # bool literal (note: True == 1 in Python, so True in Literal[True] is True)
+        (True, typing.Literal[True], True),
+        (False, typing.Literal[True], False),
+        # Literal nested in Optional
+        (None, typing.Optional[typing.Literal["a", "b"]], True),
+        ("a", typing.Optional[typing.Literal["a", "b"]], True),
+        ("c", typing.Optional[typing.Literal["a", "b"]], False),
+        # Literal nested in Union
+        ("a", typing.Union[typing.Literal["a", "b"], int], True),
+        (1, typing.Union[typing.Literal["a", "b"], int], True),
+        ("c", typing.Union[typing.Literal["a", "b"], int], False),
+        # List[Literal[...]]
+        (["a", "b"], typing.List[typing.Literal["a", "b", "c"]], True),
+        (["a", "d"], typing.List[typing.Literal["a", "b", "c"]], False),
+        ([], typing.List[typing.Literal["a", "b"]], True),
+        # Dict[str, Literal[...]]
+        ({"k": "a"}, typing.Dict[str, typing.Literal["a", "b"]], True),
+        ({"k": "c"}, typing.Dict[str, typing.Literal["a", "b"]], False),
+        ({}, typing.Dict[str, typing.Literal["a", "b"]], True),
+        # Dict[Literal[...], int]
+        ({"x": 1, "y": 2}, typing.Dict[typing.Literal["x", "y"], int], True),
+        ({"x": 1, "z": 2}, typing.Dict[typing.Literal["x", "y"], int], False),
+        ({}, typing.Dict[typing.Literal["x", "y"], int], True),
+    ],
+)
+def test_validate_type_literal(value, expected_type, expected_result):
+    try:
+        assert validate_type(value, expected_type) == expected_result
+    except Exception as e:
+        raise Exception(
+            f"{value = }, {expected_type = }, {expected_result = }, {e}"
+        ) from e
+
+
+def test_validate_type_literal_do_except():
+    assert validate_type("a", typing.Literal["a", "b"], do_except=True)
+    with pytest.raises(IncorrectTypeException):
+        validate_type("c", typing.Literal["a", "b"], do_except=True)
+
+
+@pytest.mark.parametrize(
     "value, expected_type",
     [
         (43, typing.Callable),

@@ -855,6 +855,95 @@ def test_generic_types():
     assert loaded2 == str_container
 
 
+def test_literal_field_typecheck():
+    """Literal fields should validate correctly without suppressing type errors."""
+
+    @serializable_dataclass(on_typecheck_mismatch=ErrorMode.EXCEPT)
+    class LiteralFieldClass(SerializableDataclass):
+        mode: typing.Literal["fast", "slow", "auto"] = "fast"
+        count: typing.Literal[1, 2, 3] = 1
+
+    # valid values — validate_fields_types returns True
+    obj = LiteralFieldClass(mode="fast", count=2)
+    assert obj.validate_fields_types() is True
+
+    # invalid literal value — validate_fields_types returns False
+    obj2 = LiteralFieldClass.__new__(LiteralFieldClass)
+    object.__setattr__(obj2, "mode", "invalid")
+    object.__setattr__(obj2, "count", 1)
+    assert obj2.validate_fields_types() is False
+
+    # loading invalid literal via load() raises due to on_typecheck_mismatch=EXCEPT
+    with pytest.raises(Exception):
+        LiteralFieldClass.load({"mode": "invalid", "count": 1})
+
+
+def test_literal_roundtrip():
+    """Round-trip serialize/load for dataclasses with Literal fields of various kinds."""
+
+    @serializable_dataclass(on_typecheck_mismatch=ErrorMode.EXCEPT)
+    class LiteralRoundtrip(SerializableDataclass):
+        mode: typing.Literal["fast", "slow"] = serializable_field(default="fast")
+        count: typing.Literal[1, 2, 3] = serializable_field(default=1)
+        tag: typing.Optional[typing.Literal["a", "b"]] = serializable_field(
+            default=None
+        )
+        items: typing.List[typing.Literal["x", "y", "z"]] = serializable_field(
+            default_factory=list
+        )
+        scores: typing.Dict[str, typing.Literal[0, 1]] = serializable_field(
+            default_factory=dict
+        )
+        flags: typing.Dict[typing.Literal["on", "off"], int] = serializable_field(
+            default_factory=dict
+        )
+
+    cases = [
+        LiteralRoundtrip(),
+        LiteralRoundtrip(mode="slow", count=2, tag="a"),
+        LiteralRoundtrip(mode="fast", count=3, tag="b", items=["x", "y", "z"]),
+        LiteralRoundtrip(
+            mode="slow",
+            count=1,
+            tag=None,
+            items=["z", "x"],
+            scores={"win": 1, "loss": 0},
+            flags={"on": 100, "off": 0},
+        ),
+    ]
+    for obj in cases:
+        serialized = obj.serialize()
+        loaded = LiteralRoundtrip.load(serialized)
+        assert loaded == obj
+        assert loaded.validate_fields_types() is True
+
+    # invalid Literal string value raises on load
+    with pytest.raises(Exception):
+        LiteralRoundtrip.load({"mode": "turbo", "count": 1})
+
+    # invalid Literal int value raises on load
+    with pytest.raises(Exception):
+        LiteralRoundtrip.load({"mode": "fast", "count": 99})
+
+    # invalid list element raises on load
+    with pytest.raises(Exception):
+        LiteralRoundtrip.load({"mode": "fast", "count": 1, "items": ["x", "bad"]})
+
+    # invalid dict value raises on load
+    with pytest.raises(Exception):
+        LiteralRoundtrip.load({"mode": "fast", "count": 1, "scores": {"win": 99}})
+
+    # invalid dict key (Literal key) — validate_fields_types returns False
+    obj_bad_key = LiteralRoundtrip.__new__(LiteralRoundtrip)
+    object.__setattr__(obj_bad_key, "mode", "fast")
+    object.__setattr__(obj_bad_key, "count", 1)
+    object.__setattr__(obj_bad_key, "tag", None)
+    object.__setattr__(obj_bad_key, "items", [])
+    object.__setattr__(obj_bad_key, "scores", {})
+    object.__setattr__(obj_bad_key, "flags", {"maybe": 1})
+    assert obj_bad_key.validate_fields_types() is False
+
+
 # Test custom serialization/deserialization
 class CustomObject:
     def __init__(self, value):

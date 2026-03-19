@@ -1,8 +1,8 @@
 # Stats
 - 68 files
-- 14056 (14K) lines
-- 492647 (493K) chars
-- 52311 (52K) `whitespace-split` tokens
+- 14060 (14K) lines
+- 492922 (493K) chars
+- 52334 (52K) `whitespace-split` tokens
 
 # File Tree
 
@@ -31,7 +31,7 @@ muutils
 │   │   ├── exception_context.py         [ 58L  1,597C   157T]
 │   │   ├── headerfuncs.py               [ 68L  1,705C   209T]
 │   │   ├── log_util.py                  [ 86L  2,306C   287T]
-│   │   ├── logger.py                    [310L 10,890C 1,111T]
+│   │   ├── logger.py                    [308L 10,890C 1,114T]
 │   │   ├── loggingstream.py             [102L  3,995C   429T]
 │   │   ├── simplelogger.py              [ 84L  2,333C   253T]
 │   │   └── timing.py                    [ 93L  2,756C   272T]
@@ -44,7 +44,7 @@ muutils
 │   │   ├── b64_decode.py                [  9L    319C    33T]
 │   │   ├── classes.py                   [101L  3,718C   433T]
 │   │   ├── freezing.py                  [121L  4,055C   422T]
-│   │   ├── func.py                      [285L 10,254C 1,071T]
+│   │   ├── func.py                      [285L 10,287C 1,074T]
 │   │   ├── hashing.py                   [ 39L  1,146C   132T]
 │   │   ├── numerical.py                 [165L  4,728C   531T]
 │   │   ├── sequence.py                  [234L  7,251C   877T]
@@ -66,7 +66,7 @@ muutils
 │   ├── __init__.py                      [ 34L    544C    43T]
 │   ├── collect_warnings.py              [132L  4,080C   378T]
 │   ├── console_unicode.py               [ 34L  1,074C   135T]
-│   ├── dbg.py                           [543L 16,533C 1,808T]
+│   ├── dbg.py                           [546L 16,676C 1,817T]
 │   ├── dictmagic.py                     [526L 18,246C 1,982T]
 │   ├── errormode.py                     [241L  7,939C   816T]
 │   ├── group_equiv.py                   [ 66L  2,060C   246T]
@@ -82,7 +82,7 @@ muutils
 │   ├── tensor_info.py                   [725L 23,964C 2,367T]
 │   ├── tensor_utils.py                  [506L 16,115C 1,615T]
 │   ├── timeit_fancy.py                  [113L  4,329C   521T]
-│   └── validate_type.py                 [244L  8,661C   931T]
+│   └── validate_type.py                 [247L  8,760C   939T]
 ├── LICENSE                              [674L 35,149C 5,644T]
 ├── README.md                            [ 72L  5,710C   460T]
 ├── TODO.md                              [ 28L  1,388C   235T]
@@ -3482,9 +3482,7 @@ class Logger(SimpleLogger):
 
         # set up streams
         self._streams: dict[str | None, LoggingStream] = (
-            streams
-            if isinstance(streams, typing.Mapping)
-            else {s.name: s for s in streams}
+            streams if isinstance(streams, dict) else {s.name: s for s in streams}  # ty: ignore[invalid-assignment]
         )
         # default error stream
         if "error" not in self._streams:
@@ -4635,7 +4633,7 @@ def process_kwarg(
                 kwargs[kwarg_name] = processor(kwargs[kwarg_name])
             return func(*args, **kwargs)  # type: ignore[arg-type]
 
-        return cast(Callable[FuncParams, ReturnType], wrapper)
+        return cast(Callable[FuncParams, ReturnType], wrapper)  # ty: ignore[invalid-type-form]
 
     return decorator
 
@@ -7669,6 +7667,7 @@ _NoExpPassed = _NoExpPassedSentinel()
 # global variables
 _CWD: Path = Path.cwd().absolute()
 _COUNTER: int = 0
+_DBG_MODULE_FILE: str = str(Path(__file__).resolve())
 
 # configuration
 PATH_MODE: typing.Literal["relative", "absolute"] = "relative"
@@ -7740,6 +7739,8 @@ def dbg(
     dbg_frame: typing.Optional[inspect.FrameInfo] = None
     for frame in inspect.stack():
         if frame.code_context is None:
+            continue
+        if str(Path(frame.filename).resolve()) == _DBG_MODULE_FILE:
             continue
         line: str = frame.code_context[0]
         if "dbg" in line:
@@ -12574,6 +12575,9 @@ def validate_type(
     # generic alias, more complicated
     item_type: type
     if isinstance(expected_type, GenericAliasTypes):
+        if origin is typing.Literal:
+            return _return_func(value in args)
+
         if origin is list:
             # no args
             if len(args) == 0:
@@ -12589,7 +12593,7 @@ def validate_type(
                 return _return_func(False)
             # check all items in list are of the correct type
             item_type = args[0]
-            return all(validate_type(item, item_type) for item in value)
+            return _return_func(all(validate_type(item, item_type) for item in value))
 
         if origin is dict:
             # no args
@@ -13789,7 +13793,7 @@ help:
 # ==================================================
 [project]
 	name = "muutils"
-	version = "0.9.0"
+	version = "0.9.1"
 	description = "miscellaneous python utilities"
 	readme = "README.md"
 	requires-python = ">=3.8"
@@ -13859,7 +13863,7 @@ help:
 		"mypy>=1.15; python_version >= '3.9'",
 		"typing-extensions; python_version < '3.11'",
 		"beartype>=0.14.1",
-		"ty>=0.0.17",
+		"ty>=0.0.23",
 		"basedpyright",
 		"pandas-stubs>=2.0.0",
 		"types-tqdm",

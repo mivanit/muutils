@@ -46,7 +46,7 @@
 </script></head>
 <body>
 <div class="package-version">
-    docs for <a href="https://github.com/mivanit/muutils">muutils</a> v0.9.0<br>
+    docs for <a href="https://github.com/mivanit/muutils">muutils</a> v0.9.1<br>
 </div>
     <nav class="pdoc">
         <label id="navtoggle" for="togglestate" class="pdoc-button">
@@ -124,7 +124,7 @@
     </nav>
     <main class="pdoc">
             <section class="module-info">
-                        <a class="pdoc-button git-button" href="https://github.com/mivanit/muutils/blob/0.9.0misc/func.py">View Source on GitHub</a>
+                        <a class="pdoc-button git-button" href="https://github.com/mivanit/muutils/blob/v0.9.1/muutils/misc/func.py">View Source on GitHub</a>
                     <h1 class="modulename">
 <a href="./../../muutils.html">muutils</a><wbr>.<a href="./../misc.html">misc</a><wbr>.func    </h1>
 
@@ -134,7 +134,7 @@
                         <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="mod-func-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.9.0misc/func.py#L0-L284" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/v0.9.1/muutils/misc/func.py#L0-L284" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -215,7 +215,7 @@
 </span><span id="L-72"><a href="#L-72"><span class="linenos"> 72</span></a>                <span class="n">kwargs</span><span class="p">[</span><span class="n">kwarg_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">processor</span><span class="p">(</span><span class="n">kwargs</span><span class="p">[</span><span class="n">kwarg_name</span><span class="p">])</span>
 </span><span id="L-73"><a href="#L-73"><span class="linenos"> 73</span></a>            <span class="k">return</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>  <span class="c1"># type: ignore[arg-type]</span>
 </span><span id="L-74"><a href="#L-74"><span class="linenos"> 74</span></a>
-</span><span id="L-75"><a href="#L-75"><span class="linenos"> 75</span></a>        <span class="k">return</span> <span class="n">cast</span><span class="p">(</span><span class="n">Callable</span><span class="p">[</span><span class="n">FuncParams</span><span class="p">,</span> <span class="n">ReturnType</span><span class="p">],</span> <span class="n">wrapper</span><span class="p">)</span>
+</span><span id="L-75"><a href="#L-75"><span class="linenos"> 75</span></a>        <span class="k">return</span> <span class="n">cast</span><span class="p">(</span><span class="n">Callable</span><span class="p">[</span><span class="n">FuncParams</span><span class="p">,</span> <span class="n">ReturnType</span><span class="p">],</span> <span class="n">wrapper</span><span class="p">)</span>  <span class="c1"># ty: ignore[invalid-type-form]</span>
 </span><span id="L-76"><a href="#L-76"><span class="linenos"> 76</span></a>
 </span><span id="L-77"><a href="#L-77"><span class="linenos"> 77</span></a>    <span class="k">return</span> <span class="n">decorator</span>
 </span><span id="L-78"><a href="#L-78"><span class="linenos"> 78</span></a>
@@ -465,7 +465,7 @@
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="process_kwarg-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.9.0misc/func.py#L40-L77" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/v0.9.1/muutils/misc/func.py#L40-L77" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -508,7 +508,7 @@
 </span><span id="process_kwarg-73"><a href="#process_kwarg-73"><span class="linenos">73</span></a>                <span class="n">kwargs</span><span class="p">[</span><span class="n">kwarg_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">processor</span><span class="p">(</span><span class="n">kwargs</span><span class="p">[</span><span class="n">kwarg_name</span><span class="p">])</span>
 </span><span id="process_kwarg-74"><a href="#process_kwarg-74"><span class="linenos">74</span></a>            <span class="k">return</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>  <span class="c1"># type: ignore[arg-type]</span>
 </span><span id="process_kwarg-75"><a href="#process_kwarg-75"><span class="linenos">75</span></a>
-</span><span id="process_kwarg-76"><a href="#process_kwarg-76"><span class="linenos">76</span></a>        <span class="k">return</span> <span class="n">cast</span><span class="p">(</span><span class="n">Callable</span><span class="p">[</span><span class="n">FuncParams</span><span class="p">,</span> <span class="n">ReturnType</span><span class="p">],</span> <span class="n">wrapper</span><span class="p">)</span>
+</span><span id="process_kwarg-76"><a href="#process_kwarg-76"><span class="linenos">76</span></a>        <span class="k">return</span> <span class="n">cast</span><span class="p">(</span><span class="n">Callable</span><span class="p">[</span><span class="n">FuncParams</span><span class="p">,</span> <span class="n">ReturnType</span><span class="p">],</span> <span class="n">wrapper</span><span class="p">)</span>  <span class="c1"># ty: ignore[invalid-type-form]</span>
 </span><span id="process_kwarg-77"><a href="#process_kwarg-77"><span class="linenos">77</span></a>
 </span><span id="process_kwarg-78"><a href="#process_kwarg-78"><span class="linenos">78</span></a>    <span class="k">return</span> <span class="n">decorator</span>
 </span></pre></div>
@@ -552,7 +552,7 @@ into one of type <code>Callable[InputParams, ReturnType]</code> (accepting <code
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="validate_kwarg-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.9.0misc/func.py#L84-L146" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/v0.9.1/muutils/misc/func.py#L84-L146" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -685,7 +685,7 @@ Otherwise, raises a ValueError.</li>
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="replace_kwarg-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.9.0misc/func.py#L149-L200" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/v0.9.1/muutils/misc/func.py#L149-L200" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -800,7 +800,7 @@ A decorator that replaces the keyword argument value.</li>
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="is_none-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.9.0misc/func.py#L203-L204" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/v0.9.1/muutils/misc/func.py#L203-L204" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -826,7 +826,7 @@ A decorator that replaces the keyword argument value.</li>
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="always_true-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.9.0misc/func.py#L207-L208" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/v0.9.1/muutils/misc/func.py#L207-L208" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -852,7 +852,7 @@ A decorator that replaces the keyword argument value.</li>
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="always_false-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.9.0misc/func.py#L211-L212" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/v0.9.1/muutils/misc/func.py#L211-L212" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -878,7 +878,7 @@ A decorator that replaces the keyword argument value.</li>
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="format_docstring-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.9.0misc/func.py#L215-L227" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/v0.9.1/muutils/misc/func.py#L215-L227" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>
@@ -929,7 +929,7 @@ A decorator that replaces the keyword argument value.</li>
                 <div class="source-button-container">
             <label class="pdoc-button view-source-button" for="typed_lambda-view-source"><span>View Source</span></label>
             <div class="github-button-wrapper">
-                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/0.9.0misc/func.py#L235-L285" target="_blank">
+                <a class="pdoc-button github-link-button" href="https://github.com/mivanit/muutils/blob/v0.9.1/muutils/misc/func.py#L235-L285" target="_blank">
                     <span>View on GitHub</span>
                 </a>
             </div>

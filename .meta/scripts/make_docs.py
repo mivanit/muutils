@@ -141,7 +141,7 @@ class Config:
 	def package_code_url(self) -> str:
 		"link to the code on the repo"
 		if "unknown" not in (self.package_name, self.package_version):
-			return self.package_repo_url + "/blob/" + self.package_version
+			return self.package_repo_url + "/blob/v" + self.package_version + "/" + self.module_name + "/"
 		else:
 			return "unknown"
 

@@ -248,7 +248,7 @@ write-proj-version:
 .PHONY: gen-version-info
 gen-version-info: write-proj-version
 	@mkdir -p $(LOCAL_DIR)
-	$(eval PROJ_VERSION := $(shell cat $(VERSION_FILE)) )
+	$(eval PROJ_VERSION := $(shell cat $(VERSION_FILE)))
 	$(eval LAST_VERSION := $(shell [ -f $(LAST_VERSION_FILE) ] && cat $(LAST_VERSION_FILE) || echo NULL) )
 	$(eval PYTHON_VERSION := $(shell $(PYTHON) -c "import sys; print(f'{sys.version_info.major}.{sys.version_info.minor}.{sys.version_info.micro}')") )
 
@@ -691,7 +691,7 @@ info: gen-version-info
 	@echo "    PYTHON = $(PYTHON)"
 	@echo "    PYTHON_VERSION = $(PYTHON_VERSION)"
 	@echo "    PACKAGE_NAME = $(PACKAGE_NAME)"
-	@echo "    PROJ_VERSION = $(PROJ_VERSION)"
+	@echo "    PROJ_VERSION = '$(PROJ_VERSION)'"
 	@echo "    LAST_VERSION = $(LAST_VERSION)"
 	@echo "    PYTEST_OPTIONS = $(PYTEST_OPTIONS)"
 

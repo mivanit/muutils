@@ -34,9 +34,9 @@ pyyaml==6.0.3
     #   pycln
 pyyaml-ft==8.0.0 ; python_full_version == '3.13.*'
     # via libcst
-rich==14.3.2
+rich==14.3.3
     # via typer
-ruff==0.15.1
+ruff==0.15.6
 shellingham==1.5.4
     # via typer
 tomlkit==0.13.3 ; python_full_version < '3.9'
@@ -47,7 +47,7 @@ typer==0.20.1 ; python_full_version < '3.9'
     # via pycln
 typer==0.23.2 ; python_full_version == '3.9.*'
     # via pycln
-typer==0.24.0 ; python_full_version >= '3.10'
+typer==0.24.1 ; python_full_version >= '3.10'
     # via pycln
 typing-extensions==4.13.2 ; python_full_version < '3.9'
     # via
